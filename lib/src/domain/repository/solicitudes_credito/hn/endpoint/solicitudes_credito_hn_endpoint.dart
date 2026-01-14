@@ -262,8 +262,10 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'EstadoSolicitudCodigo': estadoCredito.codigo,
         'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
-        if (numeroSolicitud != null) 'Numero': numeroSolicitud,
-        if (cedulaCliente != null) 'Cedula': cedulaCliente,
+        if (numeroSolicitud != null && numeroSolicitud!.isNotEmpty)
+          'Numero': numeroSolicitud,
+        if (cedulaCliente != null && cedulaCliente!.isNotEmpty)
+          'Cedula': cedulaCliente,
         if (pagina != null) 'Pagina': pagina.toString(),
       };
 }

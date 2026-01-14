@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,9 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
               const Gap(10),
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
+              ),
+              const AnalisisFilterContentWidget(
+                estadoCredito: EstadoCredito.registrada,
               ),
               BlocBuilder<SolicitudesByEstadoHnCubit,
                   SolicitudesByEstadoHnState>(

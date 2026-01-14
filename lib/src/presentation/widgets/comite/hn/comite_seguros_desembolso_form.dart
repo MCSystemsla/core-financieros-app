@@ -1,14 +1,17 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
 class ComiteSegurosDesembolsoForm extends StatelessWidget {
+  final ComiteSolicitudData data;
   const ComiteSegurosDesembolsoForm({
     super.key,
+    required this.data,
   });
 
   @override
@@ -41,12 +44,13 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
             ),
             const Gap(12),
             OutlineTextfieldWidget(
+              readOnly: true,
+              initialValue: data.tasaSaldoDeudor?.toCurrencyString(),
               title: 'Tasa Saldo deudor:',
               icon: Icon(
                 Icons.percent_outlined,
                 color: AppColors.getPrimaryColor(),
               ),
-              validator: (value) => ClassValidator.validateRequired(value),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -59,7 +63,6 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
                 Icons.agriculture_outlined,
                 color: AppColors.getPrimaryColor(),
               ),
-              validator: (value) => ClassValidator.validateRequired(value),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -67,12 +70,13 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
             ),
             const Gap(12),
             OutlineTextfieldWidget(
+              readOnly: true,
+              initialValue: data.montoSeguroVida?.toCurrencyString(),
               title: 'Monto seguro de vida:',
               icon: Icon(
                 Icons.percent_outlined,
                 color: AppColors.getPrimaryColor(),
               ),
-              validator: (value) => ClassValidator.validateRequired(value),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -85,7 +89,6 @@ class ComiteSegurosDesembolsoForm extends StatelessWidget {
                 Icons.security,
                 color: AppColors.getPrimaryColor(),
               ),
-              validator: (value) => ClassValidator.validateRequired(value),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],

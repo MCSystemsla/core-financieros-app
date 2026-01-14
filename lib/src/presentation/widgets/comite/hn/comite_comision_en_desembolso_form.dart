@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
@@ -49,6 +48,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
+            readOnly: true,
             initialValue:
                 data.tasaComision?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Tasa %',
@@ -56,7 +56,6 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
               Icons.percent_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -64,6 +63,7 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            readOnly: true,
             initialValue:
                 data.montoSinComision?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Monto',
@@ -71,7 +71,6 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
               Icons.payments_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -79,13 +78,13 @@ class ComiteComisionEnDesembolsoForm extends StatelessWidget {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            readOnly: true,
             initialValue: data.monto?.toCurrencyString().toNullIfEmptyOrZero(),
             title: 'Monto de comisión',
             icon: Icon(
               Icons.request_quote_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],

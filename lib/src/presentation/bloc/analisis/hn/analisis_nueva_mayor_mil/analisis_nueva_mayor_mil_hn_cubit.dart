@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -87,10 +88,14 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
       0,
       (total, e) => total + e.abonoCredito,
     );
-    final porcentajeDeVenta = (state.inventario.fold(
-                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-            (state.inventario.length))
-        .toStringAsFixed(2);
+    final porcentajeDeVenta = state.inventario.isEmpty
+        ? 0.0.toSafeString(2)
+        : (state.inventario.fold<double>(
+                  0.0,
+                  (sum, e) => sum + e.costoVentaPorcentaje,
+                ) /
+                state.inventario.length)
+            .toSafeString(2);
 
     final totalIngresos = (ventasDeContado + recuperaciones).round();
 
@@ -100,16 +105,16 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
 
     final totalCostosOperativos = subContratos +
-        (state.gastosPersonalAlimentacion +
-            state.alquilerlocal +
-            state.agua +
-            state.combustible +
-            state.transporte +
-            state.pagoCuotaCredito +
-            state.impuesto +
-            state.otros);
+        state.gastosPersonalAlimentacion +
+        state.alquilerlocal +
+        state.agua +
+        state.combustible +
+        state.transporte +
+        state.pagoCuotaCredito +
+        state.impuesto +
+        state.otros;
     final resultadoLiquido = utilidadBruta - totalCostosOperativos;
-    final totalConsumoFamiliar = (state.alimentacionFam +
+    final totalConsumoFamiliar = state.alimentacionFam +
         state.educacionFam +
         state.aguaFam +
         state.alquilerFam +
@@ -117,7 +122,7 @@ class AnalisisNuevaMayorMilHnCubit extends Cubit<AnalisisNuevaMayorMilHnState> {
         state.vestimentaCalzadoFam +
         state.transporteFam +
         state.otrosGastosFam +
-        state.pagoCreditosFam);
+        state.pagoCreditosFam;
     final ingresosFueraDeNegocio = state.ingeresosFamilaresFueraNegocio
         .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
 

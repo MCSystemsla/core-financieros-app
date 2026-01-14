@@ -2,12 +2,16 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ComiteParametrosForm2 extends StatelessWidget {
+class ComiteParametrosForm2 extends StatefulWidget {
   final ComiteSolicitudData data;
 
   const ComiteParametrosForm2({
@@ -16,7 +20,39 @@ class ComiteParametrosForm2 extends StatelessWidget {
   });
 
   @override
+  State<ComiteParametrosForm2> createState() => _ComiteParametrosForm2State();
+}
+
+class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
+  String? formadePago;
+  String? estado;
+  String? monedaDesembolso;
+  String? periodicidadPrincipalCodigo;
+  String? observaciones;
+
+  @override
+  void initState() {
+    super.initState();
+    formadePago = widget.data.formaDePagoCodigo;
+    estado = widget.data.estadoComiteCodigo;
+    monedaDesembolso = widget.data.monedaNombre;
+    periodicidadPrincipalCodigo = widget.data.periodicidadCodigo;
+    observaciones = widget.data.observacion;
+    final cubit = context.read<ComiteAprobacionCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        fromaPagoCodigo: formadePago,
+        estadoSolicitudCodigo: estado,
+        periodicidadPrinicipalCodigo: periodicidadPrincipalCodigo,
+        observacion: observaciones,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ComiteAprobacionCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -44,13 +80,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.monedaCodigo,
+            initialValue: monedaDesembolso,
+            readOnly: true,
             title: 'Moneda de desembolso',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -58,63 +94,64 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.estadoComiteCodigo,
+            initialValue: estado,
             title: 'Estado',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
             onChange: (value) {},
           ),
           const Gap(12),
-          OutlineTextfieldWidget(
-            initialValue: data.formaDePagoCodigo,
+          CatalogoFrecuenciaPagoDropdown(
+            selectedItem: CatalogoFrecuenciaItem(
+              valor: formadePago ?? '',
+              nombre: formadePago ?? '',
+              meses: '',
+            ),
             title: 'Forma de pago',
-            icon: Icon(
-              Icons.inventory_2_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            validator: (value) => ClassValidator.validateRequired(value),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
+            validator: (value) => ClassValidator.validateRequired(value?.valor),
+            onChanged: (value) {
+              if (value == null) return;
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  fromaPagoCodigo: value.valor,
+                ),
+              );
+            },
           ),
           const Gap(12),
-          OutlineTextfieldWidget(
-            initialValue: data.periodicidadCodigo,
+          CatalogoFrecuenciaPagoDropdown(
             title: 'Periodicidad principal',
-            icon: Icon(
-              Icons.inventory_2_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            validator: (value) => ClassValidator.validateRequired(value),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
+            validator: (value) => ClassValidator.validateRequired(value?.valor),
+            onChanged: (value) {
+              if (value == null) return;
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  periodicidadPrinicipalCodigo: value.valor,
+                ),
+              );
+            },
           ),
           const Gap(12),
-          OutlineTextfieldWidget(
-            initialValue: data.periodoGracia.toString().toNullIfEmptyOrZero(),
+          CatalogoFrecuenciaPagoDropdown(
+            onChanged: (item) {
+              if (item == null) return;
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  periodicidadInteresCodigo: item.valor,
+                ),
+              );
+            },
             title: 'Periodicidad interes',
-            icon: Icon(
-              Icons.inventory_2_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            validator: (value) => ClassValidator.validateRequired(value),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.sectorCodigo,
+            initialValue: widget.data.sectorNombre,
+            readOnly: true,
             title: 'Sector',
             icon: Icon(
               Icons.inventory_2_outlined,
@@ -128,13 +165,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.actividadCodigo,
+            readOnly: true,
+            initialValue: widget.data.actividadNombre,
             title: 'Actividad',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -142,13 +179,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.nombreOficialCredito,
+            readOnly: true,
+            initialValue: widget.data.nombreOficialCredito,
             title: 'Promotor',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -156,13 +193,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.fuenteFinanciamientoCodigo,
+            initialValue: widget.data.fuenteFinanciamientoNombre,
             title: 'Fuente de financiamiento',
+            readOnly: true,
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -170,13 +207,14 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.periodoGracia.toString().toNullIfEmptyOrZero(),
+            readOnly: true,
+            initialValue:
+                widget.data.periodoGracia.toString().toNullIfEmptyOrZero(),
             title: 'Periodo de gracia',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -184,13 +222,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.tipoCreditoNombre,
+            readOnly: true,
+            initialValue: widget.data.tipoCreditoNombre,
             title: 'Tipo de crédito',
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -198,13 +236,13 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.tipoProgramaCodigo,
+            initialValue: widget.data.tipoProgramaNombre,
             title: 'Programa',
+            readOnly: true,
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
@@ -212,17 +250,23 @@ class ComiteParametrosForm2 extends StatelessWidget {
           ),
           const Gap(12),
           OutlineTextfieldWidget(
-            initialValue: data.observacion,
+            initialValue: observaciones,
             title: 'Observaciones',
+            validator: (value) => ClassValidator.validateRequired(value),
             icon: Icon(
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],
-            onChange: (value) {},
+            onChange: (value) {
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  observacion: value,
+                ),
+              );
+            },
           ),
           const Gap(20),
         ],

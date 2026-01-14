@@ -200,9 +200,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                         UpperCaseTextFormatter(),
                       ],
                       textEditingController: segundoNombreController,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
-                      ),
                       icon: Icon(
                         Icons.person,
                         color: AppColors.getPrimaryColor(),
@@ -233,10 +230,6 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
-                      textEditingController: segundoApellidoController,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
-                      ),
                       icon: Icon(
                         Icons.person,
                         color: AppColors.getPrimaryColor(),

@@ -2,6 +2,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,6 +56,9 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
               ),
+              const AnalisisFilterContentWidget(
+                estadoCredito: EstadoCredito.asignada,
+              ),
               const CerrarAnalisisListener(),
               BlocBuilder<SolicitudesByEstadoHnCubit,
                   SolicitudesByEstadoHnState>(
@@ -92,7 +96,7 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String tipoSolicitud,
   required String monto,
 }) {
-  final montoInt = int.tryParse(monto) ?? 0;
+  final montoInt = double.tryParse(monto) ?? 0;
   final nuevaMenorMil =
       global<SolicitudesHnBoxService>().getParametroByName(nombre: 'MENORMIL');
   final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;

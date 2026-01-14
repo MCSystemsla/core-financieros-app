@@ -7,12 +7,20 @@ class SolicitudesByEstadoHnState extends Equatable {
   final List<SolicitudEstado> solicitudes;
   final bool isAsignadaToAsesorCredito;
   final bool hasMore;
+  final String numeroSolicitud;
+  final String cedulaCliente;
+  final bool isNumeroSolicitudFilter;
+  final bool isCedulaSolicitudFilter;
   const SolicitudesByEstadoHnState({
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.solicitudes = const [],
     this.isAsignadaToAsesorCredito = false,
     this.hasMore = false,
+    this.isNumeroSolicitudFilter = false,
+    this.isCedulaSolicitudFilter = false,
+    this.numeroSolicitud = '',
+    this.cedulaCliente = '',
   });
 
   @override
@@ -22,6 +30,10 @@ class SolicitudesByEstadoHnState extends Equatable {
         solicitudes,
         isAsignadaToAsesorCredito,
         hasMore,
+        isNumeroSolicitudFilter,
+        isCedulaSolicitudFilter,
+        numeroSolicitud,
+        cedulaCliente,
       ];
 
   SolicitudesByEstadoHnState copyWith({
@@ -30,6 +42,10 @@ class SolicitudesByEstadoHnState extends Equatable {
     List<SolicitudEstado>? solicitudes,
     bool? isAsignadaToAsesorCredito,
     bool? hasMore,
+    String? numeroSolicitud,
+    String? cedulaCliente,
+    bool? isNumeroSolicitudFilter,
+    bool? isCedulaSolicitudFilter,
   }) {
     return SolicitudesByEstadoHnState(
       status: status ?? this.status,
@@ -38,6 +54,12 @@ class SolicitudesByEstadoHnState extends Equatable {
       isAsignadaToAsesorCredito:
           isAsignadaToAsesorCredito ?? this.isAsignadaToAsesorCredito,
       hasMore: hasMore ?? this.hasMore,
+      numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
+      cedulaCliente: cedulaCliente ?? this.cedulaCliente,
+      isNumeroSolicitudFilter:
+          isNumeroSolicitudFilter ?? this.isNumeroSolicitudFilter,
+      isCedulaSolicitudFilter:
+          isCedulaSolicitudFilter ?? this.isCedulaSolicitudFilter,
     );
   }
 }

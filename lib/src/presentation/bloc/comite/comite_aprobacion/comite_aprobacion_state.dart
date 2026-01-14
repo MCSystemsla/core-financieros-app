@@ -6,7 +6,6 @@ class ComiteAprobacionState extends Equatable {
   final Status status;
   final bool isMenorMil;
   final String estadoSolicitudCodigo;
-  final String database;
   final int numeroSolicitud;
   final bool alVencimiento;
   final String fromaPagoCodigo;
@@ -23,7 +22,6 @@ class ComiteAprobacionState extends Equatable {
     this.aprobacionDigital = false,
     this.alVencimiento = false,
     this.estadoSolicitudCodigo = '',
-    this.database = '',
     this.numeroSolicitud = 0,
     this.fromaPagoCodigo = '',
     this.periodicidadPrinicipalCodigo = '',
@@ -42,7 +40,6 @@ class ComiteAprobacionState extends Equatable {
         esRecalculado,
         aprobacionDigital,
         estadoSolicitudCodigo,
-        database,
         numeroSolicitud,
         alVencimiento,
         fromaPagoCodigo,
@@ -59,7 +56,6 @@ class ComiteAprobacionState extends Equatable {
     Status? status,
     bool? isMenorMil,
     String? estadoSolicitudCodigo,
-    String? database,
     int? numeroSolicitud,
     bool? alVencimiento,
     String? fromaPagoCodigo,
@@ -77,7 +73,6 @@ class ComiteAprobacionState extends Equatable {
       isMenorMil: isMenorMil ?? this.isMenorMil,
       estadoSolicitudCodigo:
           estadoSolicitudCodigo ?? this.estadoSolicitudCodigo,
-      database: database ?? this.database,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       alVencimiento: alVencimiento ?? this.alVencimiento,
       fromaPagoCodigo: fromaPagoCodigo ?? this.fromaPagoCodigo,

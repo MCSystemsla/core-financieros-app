@@ -24,8 +24,8 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       final resp = await _repository.getSolicitudesByEstado(
         estadoCredito: estadoCredito,
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
-        numeroSolicitud: null,
-        cedulaCliente: null,
+        numeroSolicitud: state.numeroSolicitud,
+        cedulaCliente: state.cedulaCliente,
         pagina: pagina,
       );
       emit(state.copyWith(
@@ -39,5 +39,19 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void cleanState() {
+    emit(state.copyWith(
+      isAsignadaToAsesorCredito: true,
+      isNumeroSolicitudFilter: false,
+      isCedulaSolicitudFilter: false,
+      numeroSolicitud: '',
+      cedulaCliente: '',
+    ));
+  }
+
+  void onFieldChanged(SolicitudesByEstadoHnState Function() copyWithFn) {
+    emit(copyWithFn());
   }
 }

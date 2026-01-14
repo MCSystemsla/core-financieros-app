@@ -1,11 +1,13 @@
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitud/comite_solicitud_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_comision_en_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_datos_del_credito_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_seguros_desembolso_form.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_sending_aprobacion_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/skeleton_card/skeleton_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -28,13 +30,25 @@ class ComiteFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    return BlocProvider(
-      create: (ctx) => ComiteSolicitudCubit(
-        ComiteRepositoryHNImpl(),
-      )..getComiteSolicitud(
-          numeroSolicitud: numeroSolicitud,
-          tipoSolicitud: tipoSolicitud,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) => ComiteSolicitudCubit(
+            ComiteRepositoryHNImpl(),
+          )..getComiteSolicitud(
+              numeroSolicitud: numeroSolicitud,
+              tipoSolicitud: tipoSolicitud,
+            ),
         ),
+        BlocProvider(
+          create: (ctx) => ComiteAprobacionCubit(
+            ComiteRepositoryHNImpl(),
+          )..setNumeroSolicitudAndTipoSolicitud(
+              numeroSolicitud: numeroSolicitud,
+              tipoSolicitud: tipoSolicitud,
+            ),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Crear Comité'),
@@ -104,7 +118,9 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
                     ),
               ),
             ),
-            const ComiteSegurosDesembolsoForm(),
+            ComiteSegurosDesembolsoForm(
+              data: widget.data,
+            ),
             AnalisisCardListHn(
               title: 'Bienes Adjudicados',
               onTap: () {},
@@ -121,14 +137,21 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
               child: CustomElevatedButton(
-                // enabled: state.status != Status.inProgress,
-                // text: state.status == Status.inProgress
-                //     ? 'Creando...'
-                //     : 'Crear',
                 // ignore: deprecated_member_use
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<ComiteAprobacionCubit>(),
+                        child: ComiteSendingAprobacionWidget(
+                          monto: widget.data.monto.toString(),
+                        ),
+                      ),
+                    ),
+                  );
                 },
                 text: 'Siguiente',
               ),
@@ -176,7 +199,9 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
                     ),
               ),
             ),
-            const ComiteParametrosForm(),
+            ComiteParametrosForm(
+              data: widget.data,
+            ),
             const Gap(12),
             ComiteDatosDelCreditoForm(
               data: widget.data,

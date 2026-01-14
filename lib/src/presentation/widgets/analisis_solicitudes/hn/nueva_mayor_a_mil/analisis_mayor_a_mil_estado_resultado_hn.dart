@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_n
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,10 +51,14 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
           0,
           (total, e) => total + e.abonoCredito,
         );
-        final porcentajeDeVenta = (state.inventario.fold(0.0,
-                    (sum, element) => sum + (element.costoVentaPorcentaje)) /
-                (state.inventario.length))
-            .toStringAsFixed(2);
+        final porcentajeDeVenta = state.inventario.isEmpty
+            ? 0.0.toSafeString(2)
+            : (state.inventario.fold<double>(
+                      0.0,
+                      (sum, e) => sum + e.costoVentaPorcentaje,
+                    ) /
+                    state.inventario.length)
+                .toSafeString(2);
 
         final totalIngresos = (ventasDeContado + recuperaciones);
 
@@ -63,18 +68,18 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
             state.costoDePersonal.fold(0, (sum, e) => sum + e.salarioMensual);
 
         final totalCostosOperativos = subContratos +
-            (state.gastosPersonalAlimentacion +
-                state.alquilerlocal +
-                state.agua +
-                state.combustible +
-                state.transporte +
-                state.pagoCuotaCredito +
-                state.impuesto +
-                state.otros);
+            state.gastosPersonalAlimentacion +
+            state.alquilerlocal +
+            state.agua +
+            state.combustible +
+            state.transporte +
+            state.pagoCuotaCredito +
+            state.impuesto +
+            state.otros;
 
         final resultadoLiquido = utilidadBruta - totalCostosOperativos;
 
-        final totalConsumoFamiliar = (state.alimentacionFam +
+        final totalConsumoFamiliar = state.alimentacionFam +
             state.educacionFam +
             state.aguaFam +
             state.alquilerFam +
@@ -82,7 +87,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
             state.vestimentaCalzadoFam +
             state.transporteFam +
             state.otrosGastosFam +
-            state.pagoCreditosFam);
+            state.pagoCreditosFam;
         final ingresosFueraDeNegocio = state.ingeresosFamilaresFueraNegocio
             .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
 
@@ -158,7 +163,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -180,7 +184,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -203,7 +206,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -226,7 +228,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -258,7 +259,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -281,7 +281,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -304,7 +303,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -326,7 +324,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -349,7 +346,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -372,7 +368,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -395,7 +390,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -417,7 +411,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -439,7 +432,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -461,7 +453,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -484,7 +475,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -506,7 +496,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -528,7 +517,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {
@@ -551,7 +539,6 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                     inputFormatters: [
                       CurrencyInputFormatter(
                         mantissaLength: 0,
-                        leadingSymbol: 'L',
                       )
                     ],
                     onChange: (value) {

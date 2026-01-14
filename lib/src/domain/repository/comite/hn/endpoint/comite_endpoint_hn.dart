@@ -98,7 +98,7 @@ class ComiteCrearAprobacionEndpoint extends Endpoint {
   ComiteCrearAprobacionEndpoint({required this.data});
 
   @override
-  Method get method => Method.post;
+  Method get method => Method.patch;
 
   @override
   String get path => '/cartera/comite/aprobar';
