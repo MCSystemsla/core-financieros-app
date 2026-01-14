@@ -70,6 +70,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
+                // TODO: VOLVER A DESCOMENTAR
                 // visible:
                 // (actions.contains(TypeAction.llenarSolicitudes.codigo)),
                 onTap: () {

@@ -147,6 +147,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               );
             },
             title: 'Periodicidad interes',
+            validator: (value) => ClassValidator.validateRequired(value?.valor),
           ),
           const Gap(12),
           OutlineTextfieldWidget(

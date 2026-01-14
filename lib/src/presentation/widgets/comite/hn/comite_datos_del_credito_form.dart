@@ -119,6 +119,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm> {
           ),
           const Gap(20),
           OutlineTextfieldWidget(
+            readOnly: true,
             initialValue: widget.data.montoSinComision?.toCurrencyString(),
             title: 'Monto de aprobación',
             icon: Icon(
