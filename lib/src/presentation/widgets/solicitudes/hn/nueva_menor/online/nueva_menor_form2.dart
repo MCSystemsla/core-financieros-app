@@ -198,7 +198,6 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   initialValue: widget.userByDocumentHn.direccion,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Dirección Casa',
@@ -219,7 +218,6 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Casa',

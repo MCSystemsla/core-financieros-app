@@ -64,70 +64,72 @@ class _TimePickerBottomSheetState extends State<TimePickerBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        children: [
-          const Gap(12),
-          Container(
-            width: 40,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          const Gap(12),
-          FadeIn(
-            key: ValueKey(step),
-            duration: const Duration(milliseconds: 300),
-            child: Text(
-              step == _PickerStep.hourA
-                  ? 'Ingrese hora inicial'
-                  : 'Ingrese hora final',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w200,
-                color: Colors.black,
+    return SafeArea(
+      child: Container(
+        height: 400,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            const Gap(12),
+            Container(
+              width: 40,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-          ),
-          const Gap(10),
-          const Divider(height: 1),
-          Expanded(
-            child: FadeIn(
+            const Gap(12),
+            FadeIn(
               key: ValueKey(step),
               duration: const Duration(milliseconds: 300),
-              child: _buildPicker(),
-            ),
-          ),
-          const Divider(height: 1),
-          CupertinoButton(
-            child: const Text(
-              'Aceptar',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
+              child: Text(
+                step == _PickerStep.hourA
+                    ? 'Ingrese hora inicial'
+                    : 'Ingrese hora final',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w200,
+                  color: Colors.black,
+                ),
               ),
             ),
-            onPressed: () {
-              if (step == _PickerStep.hourA) {
-                setState(() {
-                  step = _PickerStep.hourB;
-                });
-                return;
-              }
+            const Gap(10),
+            const Divider(height: 1),
+            Expanded(
+              child: FadeIn(
+                key: ValueKey(step),
+                duration: const Duration(milliseconds: 300),
+                child: _buildPicker(),
+              ),
+            ),
+            const Divider(height: 1),
+            CupertinoButton(
+              child: const Text(
+                'Aceptar',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onPressed: () {
+                if (step == _PickerStep.hourA) {
+                  setState(() {
+                    step = _PickerStep.hourB;
+                  });
+                  return;
+                }
 
-              widget.onSelected(_format(hourA, hourB));
+                widget.onSelected(_format(hourA, hourB));
 
-              Navigator.of(context, rootNavigator: true).pop();
-            },
-          ),
-        ],
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

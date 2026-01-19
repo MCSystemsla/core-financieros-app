@@ -35,7 +35,9 @@ class UpdateAppDialog extends OdsDialog {
         color: AppColors.getPrimaryColor(),
         onPressed: () async {
           if (isHondurasApp) {
-            await openGooglePlayUpdate(url: apkUrl);
+            await openGooglePlayUpdate(
+                url:
+                    'https://play.google.com/store/apps/details?id=com.mcsystem.core_financiero_app.hnd');
             return;
           }
           Navigator.pushReplacement(
@@ -56,7 +58,7 @@ class UpdateAppDialog extends OdsDialog {
   Future showDialog(
     BuildContext context, {
     AnimType animType = AnimType.scale,
-    DialogType dialogType = DialogType.warning,
+    DialogType dialogType = DialogType.infoReverse,
     Widget? customHeader,
   }) {
     return super.showDialog(

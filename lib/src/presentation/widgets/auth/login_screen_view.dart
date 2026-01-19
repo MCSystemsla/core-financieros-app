@@ -13,7 +13,6 @@ import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cu
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
@@ -74,14 +73,16 @@ class _LoginScreenViewState extends State<LoginScreenView>
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
-          if (state is AutoupdateSuccess) {
-            UpdateAppDialog(
-              apkUrl: state.apkVersion,
-              context: context,
-              title: 'Para continuar, es necesario actualizar la aplicación.',
-              versionName: state.apkVersionName,
-            ).showDialog(context);
-          }
+          // TODO: DESCOMENTAR CUANDO SE SUBA A SUCURSALES CON LINK GITHUB
+          // if (state is AutoupdateSuccess) {
+          //   UpdateAppDialog(
+          //     isHondurasApp: flavor == Flavor.honduras,
+          //     apkUrl: state.apkVersion,
+          //     context: context,
+          //     title: 'Para continuar, es necesario actualizar la aplicación.',
+          //     versionName: state.apkVersionName,
+          //   ).showDialog(context);
+          // }
         },
         builder: (context, state) {
           return Scaffold(

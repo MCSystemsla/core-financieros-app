@@ -172,7 +172,6 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   title: 'Caserio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(
@@ -212,7 +211,6 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                   title: 'Barrio de Casa',
                   inputFormatters: [
                     UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(100),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(

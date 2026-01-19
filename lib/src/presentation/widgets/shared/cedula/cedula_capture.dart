@@ -22,48 +22,50 @@ class CedulaCaptureView extends StatelessWidget {
         centerTitle: true,
         title: const Text('Foto Tomada'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 5,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.file(cedulaCapturedImage),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.file(cedulaCapturedImage),
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: CustomElevatedButton(
-                      onPressed: () => context.pop(),
-                      text: 'Repetir',
-                      icon: const Icon(Icons.replay),
-                      color: AppColors.red,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CustomElevatedButton(
+                        onPressed: () => context.pop(),
+                        text: 'Repetir',
+                        icon: const Icon(Icons.replay),
+                        color: AppColors.red,
+                      ),
                     ),
-                  ),
-                  const Gap(10),
-                  Expanded(
-                    child: CustomElevatedButton(
-                      onPressed: () {
-                        onImageTaken(cedulaCapturedImage.path);
-                        context.pop();
-                        context.pop();
-                      },
-                      text: 'Aceptar',
-                      color: AppColors.getPrimaryColor(),
+                    const Gap(10),
+                    Expanded(
+                      child: CustomElevatedButton(
+                        onPressed: () {
+                          onImageTaken(cedulaCapturedImage.path);
+                          context.pop();
+                          context.pop();
+                        },
+                        text: 'Aceptar',
+                        color: AppColors.getPrimaryColor(),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

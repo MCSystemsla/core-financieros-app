@@ -156,62 +156,64 @@ class _CameraWidgetsState extends State<CameraWidgets> {
   bool flashMode = false;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.white.withOpacity(0.85),
-                foregroundColor: Colors.black,
-              ),
-              onPressed: () {
-                // controller.setFlashMode(FlashMode.camw);
-              },
-              child: const Icon(Icons.cameraswitch_rounded, size: 30),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(18),
-                backgroundColor: Colors.white.withOpacity(0.85),
-                foregroundColor: Colors.black,
-              ),
-              onPressed: widget.isLoading ? null : widget.onTakePhoto,
-              child: const Icon(Icons.camera_alt, size: 32),
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.white.withOpacity(0.85),
-                foregroundColor: Colors.black,
-              ),
-              onPressed: () {
-                flashMode = !flashMode;
-                final flashModeData =
-                    flashMode ? FlashMode.always : FlashMode.off;
-                setState(() {});
-                widget.controller.setFlashMode(flashModeData);
-              },
-              child: Icon(
-                flashMode ? Icons.flash_on : Icons.flash_off,
-                size: 30,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(10),
+                  backgroundColor: Colors.white.withOpacity(0.85),
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: () {
+                  // controller.setFlashMode(FlashMode.camw);
+                },
+                child: const Icon(Icons.cameraswitch_rounded, size: 30),
               ),
             ),
-          ),
-        ],
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(18),
+                  backgroundColor: Colors.white.withOpacity(0.85),
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: widget.isLoading ? null : widget.onTakePhoto,
+                child: const Icon(Icons.camera_alt, size: 32),
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  padding: const EdgeInsets.all(10),
+                  backgroundColor: Colors.white.withOpacity(0.85),
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: () {
+                  flashMode = !flashMode;
+                  final flashModeData =
+                      flashMode ? FlashMode.always : FlashMode.off;
+                  setState(() {});
+                  widget.controller.setFlashMode(flashModeData);
+                },
+                child: Icon(
+                  flashMode ? Icons.flash_on : Icons.flash_off,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
