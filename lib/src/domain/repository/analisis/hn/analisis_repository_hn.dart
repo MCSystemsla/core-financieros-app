@@ -85,6 +85,7 @@ abstract class AnalisisRepositoryHn {
   Future<EvaluadorCnbsResponse> getEvaluadoresGarantia();
   Future<FiadoresResponse> getFiadoresByNumeroSolicitud({
     required String tipoFiadorCodigo,
+    required int numeroSolicitud,
   });
 }
 
@@ -501,9 +502,11 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   @override
   Future<FiadoresResponse> getFiadoresByNumeroSolicitud({
     required String tipoFiadorCodigo,
+    required int numeroSolicitud,
   }) async {
     final endpoint = GetFiadoresByNumeroSolicitudHNEndpoint(
       tipoFiadorCodigo: tipoFiadorCodigo,
+      numeroSolicitud: numeroSolicitud,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

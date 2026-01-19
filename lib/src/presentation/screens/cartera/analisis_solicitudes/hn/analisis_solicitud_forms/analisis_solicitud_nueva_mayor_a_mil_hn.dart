@@ -66,44 +66,46 @@ class AnalisisSolicitudNuevaMayorAMilHn extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: PageView(
-                controller: pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  AnalisisMayorAMilCicloDeVentasHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisMayorAMilCuentasPorCobrarHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMayorAMilCicloDeCompras(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMayorAMilConsumoFamiliares(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMayorAMilConstanciasLicenciasPermisosHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisMayorAMilCreditosHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMayorAMilReferenciasHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisMayorAMilBalanceGeneralHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMayorAMilEstadoResultadoHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                ],
+              child: SafeArea(
+                child: PageView(
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    AnalisisMayorAMilCicloDeVentasHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisMayorAMilCuentasPorCobrarHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMayorAMilCicloDeCompras(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMayorAMilConsumoFamiliares(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMayorAMilConstanciasLicenciasPermisosHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisMayorAMilCreditosHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMayorAMilReferenciasHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisMayorAMilBalanceGeneralHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMayorAMilEstadoResultadoHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                  ],
+                ),
               ),
             )
           ],

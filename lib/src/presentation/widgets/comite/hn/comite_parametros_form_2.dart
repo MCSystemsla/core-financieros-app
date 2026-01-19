@@ -158,7 +158,6 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               Icons.inventory_2_outlined,
               color: AppColors.getPrimaryColor(),
             ),
-            validator: (value) => ClassValidator.validateRequired(value),
             inputFormatters: [
               UpperCaseTextFormatter(),
             ],

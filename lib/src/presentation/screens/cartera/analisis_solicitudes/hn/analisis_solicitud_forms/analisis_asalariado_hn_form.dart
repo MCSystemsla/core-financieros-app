@@ -60,23 +60,25 @@ class AnalisisAsalariadoHnForm extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: PageView(
-                controller: pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  AnalisisAsalariadoActivosHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisAsalariadoPasivosHn(
-                    pageController: pageController,
-                  ),
-                  AnalisisAsalariadoEstadoResultadoHn(
-                    pageController: pageController,
-                  ),
-                  AnalisisAsalariadoReferenciasHn(
-                    pageController: pageController,
-                  ),
-                ],
+              child: SafeArea(
+                child: PageView(
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    AnalisisAsalariadoActivosHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisAsalariadoPasivosHn(
+                      pageController: pageController,
+                    ),
+                    AnalisisAsalariadoEstadoResultadoHn(
+                      pageController: pageController,
+                    ),
+                    AnalisisAsalariadoReferenciasHn(
+                      pageController: pageController,
+                    ),
+                  ],
+                ),
               ),
             )
           ],

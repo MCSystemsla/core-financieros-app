@@ -12,13 +12,14 @@ class FiadoresGarantiaCubit extends Cubit<FiadoresGarantiaState> {
   FiadoresGarantiaCubit(this._repository) : super(FiadoresGarantiaInitial());
 
   Future<void> getFiadoresByNumeroSolicitud({
-    required String numeroSolicitud,
+    required int numeroSolicitud,
     required String tipoFiadorCodigo,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       final resp = await _repository.getFiadoresByNumeroSolicitud(
         tipoFiadorCodigo: tipoFiadorCodigo,
+        numeroSolicitud: numeroSolicitud,
       );
       emit(state.copyWith(
         status: Status.done,

@@ -413,8 +413,12 @@ class GetEvaluadoresGarantiaHnEndpoint extends Endpoint {
 
 class GetFiadoresByNumeroSolicitudHNEndpoint extends Endpoint {
   final String tipoFiadorCodigo;
+  final int numeroSolicitud;
 
-  GetFiadoresByNumeroSolicitudHNEndpoint({required this.tipoFiadorCodigo});
+  GetFiadoresByNumeroSolicitudHNEndpoint({
+    required this.tipoFiadorCodigo,
+    required this.numeroSolicitud,
+  });
   @override
   Method get method => Method.get;
 
@@ -429,5 +433,6 @@ class GetFiadoresByNumeroSolicitudHNEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
         'TipoFiadorCodigo': tipoFiadorCodigo,
+        'NumeroSolicitud': numeroSolicitud.toString(),
       };
 }

@@ -105,6 +105,7 @@ class _LoginScreenViewState extends State<LoginScreenView>
                           ),
                           const Gap(5),
                           const LoginFormWidget(),
+                          const Gap(20),
                         ],
                       ),
                     ),

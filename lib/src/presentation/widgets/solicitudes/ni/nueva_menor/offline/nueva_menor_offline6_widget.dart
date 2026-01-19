@@ -67,8 +67,6 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
   final formKey = GlobalKey<FormState>();
   final List<DateTime> holidays = [
     DateTime(2025, 1, 1), // Año Nuevo
-    DateTime(2025, 4, 17), // Jueves Santo
-    DateTime(2025, 4, 18), // Viernes Santo
     DateTime(2025, 5, 1), // Día del Trabajo
     DateTime(2025, 5, 30), // Día de la Madre
     DateTime(2025, 7, 19), // Revolución

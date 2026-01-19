@@ -41,6 +41,12 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
   String? cedulaFiador;
   String? fiadorId;
   @override
+  void initState() {
+    super.initState();
+    cedulaFiador = widget.cedulaCliente;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedPadding(
       duration: const Duration(milliseconds: 150),
@@ -108,8 +114,7 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                         context
                             .read<FiadoresGarantiaCubit>()
                             .getFiadoresByNumeroSolicitud(
-                              numeroSolicitud:
-                                  widget.numeroSolicitud.toString(),
+                              numeroSolicitud: widget.numeroSolicitud,
                               tipoFiadorCodigo: v?.value,
                             );
                       },

@@ -28,48 +28,50 @@ class NuevaMenorForm extends StatelessWidget {
           title: 'Crear nueva Solicitud Nueva Menor',
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: pageController,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorCubit>().saveCedula(
-                        cedulaFrontPath: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorCubit>().saveCedula(
-                        cedulaBackPath: imagePath,
-                      );
-                },
-              ),
-              NuevaMenorDataClientWidget(
-                controller: pageController,
-              ),
-              NuevaMenorWorkingDataWidget(
-                controller: pageController,
-              ),
-              NuevaMenorMontoWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorBusinessDataWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorEsPepsWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorCreditoWidget(
-                pageController: pageController,
-              ),
-              NuevaMenorHistorialCrediticio(
-                controller: pageController,
-              ),
-              NuevaMenorBeneficiarioWidget(
-                pageController: pageController,
-              ),
-            ],
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: pageController,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudNuevaMenorCubit>().saveCedula(
+                          cedulaFrontPath: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudNuevaMenorCubit>().saveCedula(
+                          cedulaBackPath: imagePath,
+                        );
+                  },
+                ),
+                NuevaMenorDataClientWidget(
+                  controller: pageController,
+                ),
+                NuevaMenorWorkingDataWidget(
+                  controller: pageController,
+                ),
+                NuevaMenorMontoWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorBusinessDataWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorEsPepsWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorCreditoWidget(
+                  pageController: pageController,
+                ),
+                NuevaMenorHistorialCrediticio(
+                  controller: pageController,
+                ),
+                NuevaMenorBeneficiarioWidget(
+                  pageController: pageController,
+                ),
+              ],
+            ),
           ),
         ),
       ],

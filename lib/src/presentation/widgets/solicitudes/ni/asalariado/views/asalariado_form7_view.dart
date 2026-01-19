@@ -78,8 +78,6 @@ class __FormContentState extends State<_FormContent> {
   final formKey = GlobalKey<FormState>();
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
-    DateTime(DateTime.now().year, 4, 17), // Jueves Santo
-    DateTime(DateTime.now().year, 4, 18), // Viernes Santo
     DateTime(DateTime.now().year, 5, 1), // Día del Trabajo
     DateTime(DateTime.now().year, 5, 30), // Día de la Madre
     DateTime(DateTime.now().year, 7, 19), // Revolución

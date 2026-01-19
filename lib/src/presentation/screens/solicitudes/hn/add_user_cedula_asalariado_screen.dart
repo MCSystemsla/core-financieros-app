@@ -85,35 +85,60 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Form(
-        key: formKey,
-        child: Center(
-          child: BlocConsumer<UserByDocumentAsalariadoCubit,
-              UserByDocumentAsalariadoState>(
-            listener: (context, state) {
-              if (state.status == UserByDocumentStatus.isNewUser) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => BlocProvider.value(
-                      value: context.read<UserByDocumentAsalariadoCubit>(),
-                      child: CrearSolicitudHnScreen(
-                        typeForm: widget.typeForm,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+          key: formKey,
+          child: Center(
+            child: BlocConsumer<UserByDocumentAsalariadoCubit,
+                UserByDocumentAsalariadoState>(
+              listener: (context, state) {
+                if (state.status == UserByDocumentStatus.isNewUser) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => BlocProvider.value(
+                        value: context.read<UserByDocumentAsalariadoCubit>(),
+                        child: CrearSolicitudHnScreen(
+                          typeForm: widget.typeForm,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-              if (state.status == UserByDocumentStatus.error) {
-                CustomAlertDialog(
-                  context: context,
-                  title: state.errorMsg.contains('Sin conexión a internet')
-                      ? 'No tienes conexión a internet, pero aun puedes crear solicitudes'
-                      : state.errorMsg,
-                  onDone: () {
-                    if (state.errorMsg.contains('Sin conexión a internet')) {
+                  );
+                }
+                if (state.status == UserByDocumentStatus.error) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: state.errorMsg.contains('Sin conexión a internet')
+                        ? 'No tienes conexión a internet, pero aun puedes crear solicitudes'
+                        : state.errorMsg,
+                    onDone: () {
+                      if (state.errorMsg.contains('Sin conexión a internet')) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => BlocProvider.value(
+                              value:
+                                  context.read<UserByDocumentAsalariadoCubit>(),
+                              child: CrearSolicitudHnScreen(
+                                typeForm: widget.typeForm,
+                              ),
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+                      context.pop();
+                    },
+                  ).showDialog(context);
+                }
+                if (state.status == UserByDocumentStatus.done) {
+                  CustomAlertDialog(
+                    context: context,
+                    title:
+                        '${state.primerNombre} ${state.primerApellido} listo para crear solicitud!!',
+                    onDone: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -126,188 +151,166 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                           ),
                         ),
                       );
-                      return;
-                    }
-                    context.pop();
-                  },
-                ).showDialog(context);
-              }
-              if (state.status == UserByDocumentStatus.done) {
-                CustomAlertDialog(
-                  context: context,
-                  title:
-                      '${state.primerNombre} ${state.primerApellido} listo para crear solicitud!!',
-                  onDone: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => BlocProvider.value(
-                          value: context.read<UserByDocumentAsalariadoCubit>(),
-                          child: CrearSolicitudHnScreen(
-                            typeForm: widget.typeForm,
-                          ),
-                        ),
+                    },
+                  ).showDialog(context, dialogType: DialogType.success);
+                }
+              },
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        height: 200,
+                        ImageAsset.nuevaAddDni,
                       ),
-                    );
-                  },
-                ).showDialog(context, dialogType: DialogType.success);
-              }
-            },
-            builder: (context, state) {
-              return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      height: 200,
-                      ImageAsset.nuevaAddDni,
-                    ),
-                    const Gap(30),
-                    Text(
-                      'Ingresar Usuario a solicitar Solicitud de Crédito',
-                      style: Theme.of(context).textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(10),
-                    Text(
-                      'Ingresa los datos requeridos',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      isRequired: true,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      textEditingController: primerNombreController,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
+                      const Gap(30),
+                      Text(
+                        'Ingresar Usuario a solicitar Solicitud de Crédito',
+                        style: Theme.of(context).textTheme.titleMedium,
+                        textAlign: TextAlign.center,
                       ),
-                      icon: Icon(
-                        Icons.person,
-                        color: AppColors.getPrimaryColor(),
+                      const Gap(10),
+                      Text(
+                        'Ingresa los datos requeridos',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
                       ),
-                      title: 'Primer Nombre de cliente',
-                      hintText: 'Ingrese el nombre de cliente',
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      isRequired: true,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      textEditingController: segundoNombreController,
-                      icon: Icon(
-                        Icons.person,
-                        color: AppColors.getPrimaryColor(),
-                      ),
-                      title: 'Segundo Nombre de cliente',
-                      hintText: 'Ingrese el nombre de cliente',
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      isRequired: true,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      textEditingController: primerApellidoController,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
-                      ),
-                      icon: Icon(
-                        Icons.person,
-                        color: AppColors.getPrimaryColor(),
-                      ),
-                      title: 'Primer Apellido de cliente',
-                      hintText: 'Ingrese el nombre de cliente',
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      isRequired: true,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      icon: Icon(
-                        Icons.person,
-                        color: AppColors.getPrimaryColor(),
-                      ),
-                      title: 'Segundo Apellido de cliente',
-                      hintText: 'Ingrese el nombre de cliente',
-                    ),
-                    const Gap(20),
-                    SearchDropdownWidget(
-                      isRequired: true,
-                      hintText: 'input.select_option'.tr(),
-                      codigo: 'TIPODOCUMENTOPERSONA',
-                      onChanged: (item) {
-                        tipoDocumento = item;
-                        log(item?.value);
-                        setState(() {});
-                      },
-                      title: 'Tipo Documento',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                    ),
-                    if (tipoDocumento != null) ...[
                       const Gap(20),
                       OutlineTextfieldWidget(
-                        textInputType: determineInputType(
-                          tipoDocumento: tipoDocumento?.value,
-                        ),
+                        isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
                         ],
-                        textEditingController: cedulaController,
-                        validator: (value) =>
-                            ClassValidator.hondurasDocumentValidator(
+                        textEditingController: primerNombreController,
+                        validator: (value) => ClassValidator.validateRequired(
                           value,
-                          tipoDocumento?.value,
                         ),
                         icon: Icon(
-                          Icons.credit_card_outlined,
+                          Icons.person,
                           color: AppColors.getPrimaryColor(),
                         ),
-                        title: 'Documento',
-                        hintText: 'Ingresa Documento de cliente',
+                        title: 'Primer Nombre de cliente',
+                        hintText: 'Ingrese el nombre de cliente',
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        isRequired: true,
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        textEditingController: segundoNombreController,
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        title: 'Segundo Nombre de cliente',
+                        hintText: 'Ingrese el nombre de cliente',
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        isRequired: true,
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        textEditingController: primerApellidoController,
+                        validator: (value) => ClassValidator.validateRequired(
+                          value,
+                        ),
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        title: 'Primer Apellido de cliente',
+                        hintText: 'Ingrese el nombre de cliente',
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        isRequired: true,
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                        ],
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        title: 'Segundo Apellido de cliente',
+                        hintText: 'Ingrese el nombre de cliente',
+                      ),
+                      const Gap(20),
+                      SearchDropdownWidget(
+                        isRequired: true,
+                        hintText: 'input.select_option'.tr(),
+                        codigo: 'TIPODOCUMENTOPERSONA',
+                        onChanged: (item) {
+                          tipoDocumento = item;
+                          log(item?.value);
+                          setState(() {});
+                        },
+                        title: 'Tipo Documento',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                      ),
+                      if (tipoDocumento != null) ...[
+                        const Gap(20),
+                        OutlineTextfieldWidget(
+                          textInputType: determineInputType(
+                            tipoDocumento: tipoDocumento?.value,
+                          ),
+                          inputFormatters: [
+                            UpperCaseTextFormatter(),
+                          ],
+                          textEditingController: cedulaController,
+                          validator: (value) =>
+                              ClassValidator.hondurasDocumentValidator(
+                            value,
+                            tipoDocumento?.value,
+                          ),
+                          icon: Icon(
+                            Icons.credit_card_outlined,
+                            color: AppColors.getPrimaryColor(),
+                          ),
+                          title: 'Documento',
+                          hintText: 'Ingresa Documento de cliente',
+                        ),
+                      ],
+                      const Gap(20),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        child: CustomElevatedButton(
+                          enabled:
+                              state.status != UserByDocumentStatus.inProgress,
+                          text: state.status == UserByDocumentStatus.inProgress
+                              ? 'Cargando...'
+                              : 'Enviar',
+                          color: AppColors.greenLatern.withOpacity(0.4),
+                          onPressed: () {
+                            if (!formKey.currentState!.validate()) return;
+                            context
+                                .read<UserByDocumentAsalariadoCubit>()
+                                .getUserByDocument(
+                                  cedula: cedulaController.text.trim(),
+                                  primerNombre:
+                                      primerNombreController.text.trim(),
+                                  segundoNombre:
+                                      segundoNombreController.text.trim(),
+                                  primerApellido:
+                                      primerApellidoController.text.trim(),
+                                  segundoApellido:
+                                      segundoApellidoController.text.trim(),
+                                  tipoDocumentoCodigo: tipoDocumento?.value,
+                                );
+                          },
+                        ),
                       ),
                     ],
-                    const Gap(20),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      child: CustomElevatedButton(
-                        enabled:
-                            state.status != UserByDocumentStatus.inProgress,
-                        text: state.status == UserByDocumentStatus.inProgress
-                            ? 'Cargando...'
-                            : 'Enviar',
-                        color: AppColors.greenLatern.withOpacity(0.4),
-                        onPressed: () {
-                          if (!formKey.currentState!.validate()) return;
-                          context
-                              .read<UserByDocumentAsalariadoCubit>()
-                              .getUserByDocument(
-                                cedula: cedulaController.text.trim(),
-                                primerNombre:
-                                    primerNombreController.text.trim(),
-                                segundoNombre:
-                                    segundoNombreController.text.trim(),
-                                primerApellido:
-                                    primerApellidoController.text.trim(),
-                                segundoApellido:
-                                    segundoApellidoController.text.trim(),
-                                tipoDocumentoCodigo: tipoDocumento?.value,
-                              );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

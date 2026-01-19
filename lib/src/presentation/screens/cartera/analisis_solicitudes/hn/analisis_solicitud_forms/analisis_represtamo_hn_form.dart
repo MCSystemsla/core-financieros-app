@@ -59,35 +59,37 @@ class AnalisisReprestamoHnForm extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: pageController,
-                children: [
-                  AnalisisCicloVentasReprestamoHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisComprasReprestamoHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisBalanceGeneralReprestamoHN(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisEstadoResultadoReprestamoHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisConstanciaPermisosReprestamoHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisCreditosPermisosReprestamoHN(
-                    pageController: pageController,
-                  ),
-                  AnalisisReferenciasReprestamoHN(
-                    pageController: pageController,
-                  ),
-                ],
+              child: SafeArea(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController,
+                  children: [
+                    AnalisisCicloVentasReprestamoHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisComprasReprestamoHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisBalanceGeneralReprestamoHN(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisEstadoResultadoReprestamoHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisConstanciaPermisosReprestamoHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisCreditosPermisosReprestamoHN(
+                      pageController: pageController,
+                    ),
+                    AnalisisReferenciasReprestamoHN(
+                      pageController: pageController,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

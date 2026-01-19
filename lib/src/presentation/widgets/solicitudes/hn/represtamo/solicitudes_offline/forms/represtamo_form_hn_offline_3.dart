@@ -75,9 +75,6 @@ class _ReprestamoFormHnOffline3State extends State<ReprestamoFormHnOffline3>
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
     DateTime(DateTime.now().year, 4, 14), // Día de las Américas
-    DateTime(DateTime.now().year, 4, 17), // Jueves Santo
-    DateTime(DateTime.now().year, 4, 18), // Viernes Santo
-    DateTime(DateTime.now().year, 4, 19), // Sábado Santo
     DateTime(DateTime.now().year, 5, 1), // Día del Trabajo
     DateTime(DateTime.now().year, 9, 15), // Día de la Independencia
     DateTime(DateTime.now().year, 12, 25), // Navidad

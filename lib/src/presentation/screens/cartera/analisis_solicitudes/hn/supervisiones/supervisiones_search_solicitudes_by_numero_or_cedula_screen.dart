@@ -37,7 +37,9 @@ class SupervisionesSearchSolicitudesByNumeroOrCedulaScreen
         SupervisionesRepositoryHnImpl(),
       ),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: const Text('Crear Supervision'),
+        ),
         body: _UserCedulaForm(
           tipoSupervisor: tipoSupervisor,
         ),

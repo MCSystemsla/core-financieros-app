@@ -59,7 +59,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
   String? observacion;
   String? ubicacion;
   DateTime? fechaPrimerPago;
-  DateTime? fechaDesembolso;
+  DateTime fechaDesembolso = DateTime.now();
   double? tasaInteres;
   num? montoMinimo;
   double? montoMaximo;
@@ -67,8 +67,6 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
 
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
-    DateTime(DateTime.now().year, 4, 17), // Jueves Santo
-    DateTime(DateTime.now().year, 4, 18), // Viernes Santo
     DateTime(DateTime.now().year, 5, 1), // Día del Trabajo
     DateTime(DateTime.now().year, 5, 30), // Día de la Madre
     DateTime(DateTime.now().year, 7, 19), // Revolución
@@ -106,7 +104,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+      if (picked.isAtSameMomentAs(fechaDesembolso)) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
@@ -164,7 +162,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
       fechaDesembolso = picked;
       context.read<SolicitudAsalariadoCubit>().onFieldChanged(
             () => context.read<SolicitudAsalariadoCubit>().state.copyWith(
-                  fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                  fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 ),
           );
       setState(() {});
@@ -198,7 +196,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
     observacion = solicitud?.observacion;
     ubicacion = solicitud?.ubicacion;
     fechaPrimerPago = solicitud?.fechaPrimerPagoSolicitud;
-    fechaDesembolso = solicitud?.fechaDesembolso;
+    fechaDesembolso = solicitud?.fechaDesembolso ?? DateTime.now();
     tasaInteres = solicitud?.tasaInteres;
     montoMinimo = solicitud?.montoMinimo;
     montoMaximo = solicitud?.montoMaximo?.toDouble();
@@ -217,7 +215,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                 plazoSolicitud: int.tryParse(plazoSolicitud ?? '0'),
                 fechaPrimerPagoSolicitud:
                     fechaPrimerPago?.toUtc().toIso8601String(),
-                fechaDesembolso: fechaDesembolso?.toUtc().toIso8601String(),
+                fechaDesembolso: fechaDesembolso.toUtc().toIso8601String(),
                 tasaInteres: tasaInteres,
                 montoMinimo: montoMinimo?.toInt(),
                 montoMaximo: montoMaximo?.toInt(),
@@ -292,15 +290,14 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
-                  initialValue: fechaDesembolso?.selectorFormat(),
+                  initialValue: fechaDesembolso.selectorFormat(),
                   readOnly: true,
                   icon: Icon(
                     Icons.price_change,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Desembolso',
-                  hintText: fechaDesembolso?.selectorFormat() ??
-                      'Ingresar fecha desembolso',
+                  hintText: fechaDesembolso.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaPrimerPago?.selectorFormat()),
                   isValid: null,
@@ -499,7 +496,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                         return;
                       }
                       calcularCuotaProvider.calcularCantidadCuotas(
-                        fechaDesembolso: fechaDesembolso!,
+                        fechaDesembolso: fechaDesembolso,
                         fechaPrimeraCuota: fechaPrimerPago!,
                         plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
                         frecuenciaPago: frecuenciaDePago?.meses ?? '0',

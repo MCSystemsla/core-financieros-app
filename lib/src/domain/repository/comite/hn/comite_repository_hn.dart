@@ -120,7 +120,7 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
     final endpoint = ComiteCrearAprobacionEndpoint(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) {
+      if (resp['statusCode'] != 200) {
         _logger.i(endpoint.body);
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());

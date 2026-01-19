@@ -27,56 +27,58 @@ class ReprestamoHnForm extends StatelessWidget {
           title: 'Crear nueva Solicitud Represtamo',
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: pageController,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudReprestamoHnCubit>().saveCedula(
-                        cedulaFrontPath: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudReprestamoHnCubit>().saveCedula(
-                        cedulaBackPath: imagePath,
-                      );
-                },
-              ),
-              ReprestamoFormHn1(
-                controller: pageController,
-                userByDocumentReprestamoData: UserByDocumentReprestamoData(
-                  id: userByDocumentProvider.id,
-                  nombreCompleto: userByDocumentProvider.nombreCompleto,
-                  cedula: userByDocumentProvider.cedula,
-                  tipoDocumento: userByDocumentProvider.tipoDocumento,
-                  tipoPersona: userByDocumentProvider.tipoPersona,
-                  paisEmisorCedula: userByDocumentProvider.paisEmisorCedula,
-                  fechaVencimientoCedula: DateTime.tryParse(
-                    userByDocumentProvider.fechaVencimientoCedula,
-                  ),
-                  fechaEmisionCedula: DateTime.tryParse(
-                    userByDocumentProvider.fechaEmisionCedula,
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: pageController,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudReprestamoHnCubit>().saveCedula(
+                          cedulaFrontPath: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudReprestamoHnCubit>().saveCedula(
+                          cedulaBackPath: imagePath,
+                        );
+                  },
+                ),
+                ReprestamoFormHn1(
+                  controller: pageController,
+                  userByDocumentReprestamoData: UserByDocumentReprestamoData(
+                    id: userByDocumentProvider.id,
+                    nombreCompleto: userByDocumentProvider.nombreCompleto,
+                    cedula: userByDocumentProvider.cedula,
+                    tipoDocumento: userByDocumentProvider.tipoDocumento,
+                    tipoPersona: userByDocumentProvider.tipoPersona,
+                    paisEmisorCedula: userByDocumentProvider.paisEmisorCedula,
+                    fechaVencimientoCedula: DateTime.tryParse(
+                      userByDocumentProvider.fechaVencimientoCedula,
+                    ),
+                    fechaEmisionCedula: DateTime.tryParse(
+                      userByDocumentProvider.fechaEmisionCedula,
+                    ),
                   ),
                 ),
-              ),
-              ReprestamoFormHn2(
-                controller: pageController,
-              ),
-              ReprestamoFormHn3(
-                controller: pageController,
-              ),
-              // ReprestamoFormHn4(
-              //   controller: pageController,
-              // ),
-              ReprestamoHistorialCreditoHn(
-                controller: pageController,
-              ),
-              ReprestamoFormHn5(
-                controller: pageController,
-              ),
-            ],
+                ReprestamoFormHn2(
+                  controller: pageController,
+                ),
+                ReprestamoFormHn3(
+                  controller: pageController,
+                ),
+                // ReprestamoFormHn4(
+                //   controller: pageController,
+                // ),
+                ReprestamoHistorialCreditoHn(
+                  controller: pageController,
+                ),
+                ReprestamoFormHn5(
+                  controller: pageController,
+                ),
+              ],
+            ),
           ),
         ),
       ],

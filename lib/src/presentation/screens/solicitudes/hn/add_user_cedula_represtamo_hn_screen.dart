@@ -82,22 +82,47 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Form(
-        key: formKey,
-        child: Center(
-          child: BlocConsumer<UserByDocumentReprestamoCubit,
-              UserByDocumentReprestamoState>(
-            listener: (context, state) {
-              if (state.status == Status.error) {
-                CustomAlertDialog(
-                  context: context,
-                  title: state.errorMsg.contains('Sin conexión a internet')
-                      ? 'No tienes conexion a internet, pero aun puedes crear solicitudes'
-                      : state.errorMsg,
-                  onDone: () {
-                    if (state.errorMsg.contains('Sin conexión a internet')) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Form(
+          key: formKey,
+          child: Center(
+            child: BlocConsumer<UserByDocumentReprestamoCubit,
+                UserByDocumentReprestamoState>(
+              listener: (context, state) {
+                if (state.status == Status.error) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: state.errorMsg.contains('Sin conexión a internet')
+                        ? 'No tienes conexion a internet, pero aun puedes crear solicitudes'
+                        : state.errorMsg,
+                    onDone: () {
+                      if (state.errorMsg.contains('Sin conexión a internet')) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => BlocProvider.value(
+                              value:
+                                  context.read<UserByDocumentReprestamoCubit>(),
+                              child: CrearSolicitudHnScreen(
+                                typeForm: widget.typeForm,
+                              ),
+                            ),
+                          ),
+                        );
+                        return;
+                      }
+                      context.pop();
+                    },
+                  ).showDialog(context);
+                }
+                if (state.status == Status.done) {
+                  CustomAlertDialog(
+                    context: context,
+                    title:
+                        '${state.nombreCompleto} listo para crear solicitud!!',
+                    onDone: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -110,136 +135,115 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
                           ),
                         ),
                       );
-                      return;
-                    }
-                    context.pop();
-                  },
-                ).showDialog(context);
-              }
-              if (state.status == Status.done) {
-                CustomAlertDialog(
-                  context: context,
-                  title: '${state.nombreCompleto} listo para crear solicitud!!',
-                  onDone: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => BlocProvider.value(
-                          value: context.read<UserByDocumentReprestamoCubit>(),
-                          child: CrearSolicitudHnScreen(
-                            typeForm: widget.typeForm,
-                          ),
-                        ),
+                    },
+                  ).showDialog(context, dialogType: DialogType.success);
+                }
+              },
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        height: 200,
+                        ImageAsset.nuevaAddDni,
                       ),
-                    );
-                  },
-                ).showDialog(context, dialogType: DialogType.success);
-              }
-            },
-            builder: (context, state) {
-              return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      height: 200,
-                      ImageAsset.nuevaAddDni,
-                    ),
-                    const Gap(30),
-                    Text(
-                      'Ingresar Usuario a solicitar Solicitud de Credito',
-                      style: Theme.of(context).textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(10),
-                    Text(
-                      'Ingresa los datos requeridos',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      isRequired: true,
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      textEditingController: nombreController,
-                      validator: (value) => ClassValidator.validateRequired(
-                        value,
+                      const Gap(30),
+                      Text(
+                        'Ingresar Usuario a solicitar Solicitud de Credito',
+                        style: Theme.of(context).textTheme.titleMedium,
+                        textAlign: TextAlign.center,
                       ),
-                      icon: Icon(
-                        Icons.person,
-                        color: AppColors.getPrimaryColor(),
+                      const Gap(10),
+                      Text(
+                        'Ingresa los datos requeridos',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
                       ),
-                      title: 'Nombre de cliente',
-                      hintText: 'Ingrese el nombre de cliente',
-                    ),
-                    const Gap(20),
-                    SearchDropdownWidget(
-                      isRequired: true,
-                      hintText: 'input.select_option'.tr(),
-                      codigo: 'TIPODOCUMENTOPERSONA',
-                      onChanged: (item) {
-                        tipoDocumento = item;
-                        log(item?.value);
-                        setState(() {});
-                      },
-                      title: 'Tipo Documento',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                    ),
-                    if (tipoDocumento != null) ...[
                       const Gap(20),
                       OutlineTextfieldWidget(
                         isRequired: true,
-                        textInputType: determineInputType(
-                          tipoDocumento: tipoDocumento?.value,
-                        ),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
                         ],
-                        textEditingController: cedulaController,
-                        validator: (value) =>
-                            ClassValidator.hondurasDocumentValidator(
+                        textEditingController: nombreController,
+                        validator: (value) => ClassValidator.validateRequired(
                           value,
-                          tipoDocumento?.value,
                         ),
                         icon: Icon(
-                          Icons.credit_card_outlined,
+                          Icons.person,
                           color: AppColors.getPrimaryColor(),
                         ),
-                        title: 'Documento',
-                        hintText: 'Ingresa Documento de cliente',
+                        title: 'Nombre de cliente',
+                        hintText: 'Ingrese el nombre de cliente',
+                      ),
+                      const Gap(20),
+                      SearchDropdownWidget(
+                        isRequired: true,
+                        hintText: 'input.select_option'.tr(),
+                        codigo: 'TIPODOCUMENTOPERSONA',
+                        onChanged: (item) {
+                          tipoDocumento = item;
+                          log(item?.value);
+                          setState(() {});
+                        },
+                        title: 'Tipo Documento',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                      ),
+                      if (tipoDocumento != null) ...[
+                        const Gap(20),
+                        OutlineTextfieldWidget(
+                          isRequired: true,
+                          textInputType: determineInputType(
+                            tipoDocumento: tipoDocumento?.value,
+                          ),
+                          inputFormatters: [
+                            UpperCaseTextFormatter(),
+                          ],
+                          textEditingController: cedulaController,
+                          validator: (value) =>
+                              ClassValidator.hondurasDocumentValidator(
+                            value,
+                            tipoDocumento?.value,
+                          ),
+                          icon: Icon(
+                            Icons.credit_card_outlined,
+                            color: AppColors.getPrimaryColor(),
+                          ),
+                          title: 'Documento',
+                          hintText: 'Ingresa Documento de cliente',
+                        ),
+                      ],
+                      const Gap(20),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        child: CustomElevatedButton(
+                          enabled: state.status != Status.inProgress,
+                          text: state.status == Status.inProgress
+                              ? 'Cargando...'
+                              : 'Enviar',
+                          color: AppColors.greenLatern.withOpacity(0.4),
+                          onPressed: () {
+                            if (!formKey.currentState!.validate()) return;
+                            context
+                                .read<UserByDocumentReprestamoCubit>()
+                                .getUserByDocument(
+                                  cedula: cedulaController.text.trim(),
+                                  nombre: nombreController.text.trim(),
+                                  tipoDocumentoCodigo: tipoDocumento?.value,
+                                );
+                          },
+                        ),
                       ),
                     ],
-                    const Gap(20),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      width: double.infinity,
-                      child: CustomElevatedButton(
-                        enabled: state.status != Status.inProgress,
-                        text: state.status == Status.inProgress
-                            ? 'Cargando...'
-                            : 'Enviar',
-                        color: AppColors.greenLatern.withOpacity(0.4),
-                        onPressed: () {
-                          if (!formKey.currentState!.validate()) return;
-                          context
-                              .read<UserByDocumentReprestamoCubit>()
-                              .getUserByDocument(
-                                cedula: cedulaController.text.trim(),
-                                nombre: nombreController.text.trim(),
-                                tipoDocumentoCodigo: tipoDocumento?.value,
-                              );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

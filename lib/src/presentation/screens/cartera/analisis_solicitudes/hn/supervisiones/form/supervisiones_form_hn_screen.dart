@@ -49,33 +49,35 @@ class SupervisionesFormHnScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Crear Supervision'),
         ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pagecontroller,
-          children: [
-            SupervisionFormHN1(
-              pageController: pagecontroller,
-              data: data,
-              nombreCoordinador: nombreCoordinador,
-            ),
-            SupervisionFormHN2(
-              pageController: pagecontroller,
-            ),
-            SupervisionFormHN3(
-              pageController: pagecontroller,
-              cuota: cuota,
-              razonEndeudamiento: razonEndeudamiento,
-            ),
-            SupervisionFormHN4(
-              pageController: pagecontroller,
-              tipoSolicitud: tipoSolicitud,
-              montoSolicitud: data.monto.toInt(),
-              cuotaSolicitud: data.cuota.toInt(),
-              plazoSolicitud: data.plazoSolicitud,
-              producto: data.producto,
-              frecuenciaPago: data.frecuenciaPago,
-            ),
-          ],
+        body: SafeArea(
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pagecontroller,
+            children: [
+              SupervisionFormHN1(
+                pageController: pagecontroller,
+                data: data,
+                nombreCoordinador: nombreCoordinador,
+              ),
+              SupervisionFormHN2(
+                pageController: pagecontroller,
+              ),
+              SupervisionFormHN3(
+                pageController: pagecontroller,
+                cuota: cuota,
+                razonEndeudamiento: razonEndeudamiento,
+              ),
+              SupervisionFormHN4(
+                pageController: pagecontroller,
+                tipoSolicitud: tipoSolicitud,
+                montoSolicitud: data.monto.toInt(),
+                cuotaSolicitud: data.cuota.toInt(),
+                plazoSolicitud: data.plazoSolicitud,
+                producto: data.producto,
+                frecuenciaPago: data.frecuenciaPago,
+              ),
+            ],
+          ),
         ),
       ),
     );

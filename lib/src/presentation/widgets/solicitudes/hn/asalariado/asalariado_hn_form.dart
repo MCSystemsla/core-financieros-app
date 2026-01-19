@@ -30,86 +30,88 @@ class AsalariadoHnForm extends StatelessWidget {
           title: 'Crear nueva Solicitud Asalariado',
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: pageController,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                        imagenFrontal: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                        imagenTrasera: imagePath,
-                      );
-                },
-              ),
-              AsalariadoHnForm1(
-                controller: pageController,
-                userByDocumentHnData: UserDocumentDataHN(
-                  cedula: userByDocumentProvider.cedula,
-                  primerNombre: userByDocumentProvider.primerNombre,
-                  segundoNombre: userByDocumentProvider.segundoNombre,
-                  primerApellido: userByDocumentProvider.primerApellido,
-                  segundoApellido: userByDocumentProvider.segundoApellido,
-                  fechaNacimiento:
-                      DateTime.tryParse(userByDocumentProvider.fechaNacimiento),
-                  sexo: userByDocumentProvider.sexo,
-                  direccion: userByDocumentProvider.direccion,
-                  fechaEmision:
-                      DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                  fechaExpira:
-                      DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: pageController,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                          imagenFrontal: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                          imagenTrasera: imagePath,
+                        );
+                  },
                 ),
-              ),
-              AsalariadoHnForm2(
-                controller: pageController,
-                userByDocumentHnData: UserDocumentDataHN(
-                  cedula: userByDocumentProvider.cedula,
-                  primerNombre: userByDocumentProvider.primerNombre,
-                  segundoNombre: userByDocumentProvider.segundoNombre,
-                  primerApellido: userByDocumentProvider.primerApellido,
-                  segundoApellido: userByDocumentProvider.segundoApellido,
-                  fechaNacimiento:
-                      DateTime.tryParse(userByDocumentProvider.fechaNacimiento),
-                  sexo: userByDocumentProvider.sexo,
-                  direccion: userByDocumentProvider.direccion,
-                  fechaEmision:
-                      DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                  fechaExpira:
-                      DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+                AsalariadoHnForm1(
+                  controller: pageController,
+                  userByDocumentHnData: UserDocumentDataHN(
+                    cedula: userByDocumentProvider.cedula,
+                    primerNombre: userByDocumentProvider.primerNombre,
+                    segundoNombre: userByDocumentProvider.segundoNombre,
+                    primerApellido: userByDocumentProvider.primerApellido,
+                    segundoApellido: userByDocumentProvider.segundoApellido,
+                    fechaNacimiento: DateTime.tryParse(
+                        userByDocumentProvider.fechaNacimiento),
+                    sexo: userByDocumentProvider.sexo,
+                    direccion: userByDocumentProvider.direccion,
+                    fechaEmision:
+                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
+                    fechaExpira:
+                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                    tipoDocumento: userByDocumentProvider.tipoDocumento,
+                  ),
                 ),
-              ),
-              AsalariadoHnForm3(
-                controller: pageController,
-              ),
-              AsalariadoHnForm4(
-                controller: pageController,
-              ),
-              AsalariadoHnForm5(
-                controller: pageController,
-              ),
-              AsalariadoHnForm6(
-                controller: pageController,
-              ),
-              AsalariadoHnForm7(
-                controller: pageController,
-              ),
-              AsalariadoHnForm8(
-                controller: pageController,
-              ),
-              AsalariadoHistorialCreditoHn(
-                controller: pageController,
-              ),
-              AsalariadoHnForm9(
-                controller: pageController,
-              ),
-            ],
+                AsalariadoHnForm2(
+                  controller: pageController,
+                  userByDocumentHnData: UserDocumentDataHN(
+                    cedula: userByDocumentProvider.cedula,
+                    primerNombre: userByDocumentProvider.primerNombre,
+                    segundoNombre: userByDocumentProvider.segundoNombre,
+                    primerApellido: userByDocumentProvider.primerApellido,
+                    segundoApellido: userByDocumentProvider.segundoApellido,
+                    fechaNacimiento: DateTime.tryParse(
+                        userByDocumentProvider.fechaNacimiento),
+                    sexo: userByDocumentProvider.sexo,
+                    direccion: userByDocumentProvider.direccion,
+                    fechaEmision:
+                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
+                    fechaExpira:
+                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                    tipoDocumento: userByDocumentProvider.tipoDocumento,
+                  ),
+                ),
+                AsalariadoHnForm3(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm4(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm5(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm6(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm7(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm8(
+                  controller: pageController,
+                ),
+                AsalariadoHistorialCreditoHn(
+                  controller: pageController,
+                ),
+                AsalariadoHnForm9(
+                  controller: pageController,
+                ),
+              ],
+            ),
           ),
         ),
       ],

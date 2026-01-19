@@ -13,7 +13,7 @@ class AnalisisFiadoresHn {
   final String nombre2;
   final String apellido1;
   final String apellido2;
-  final DateTime fechaNacimiento;
+  final DateTime? fechaNacimiento;
   final String cedula;
   final String telefono;
   final String celular;
@@ -74,7 +74,7 @@ class AnalisisFiadoresHn {
   final String ocupacionCodigo;
   final String profesionCodigo;
   final String paisNacimientoCodigo;
-  final DateTime fechaEmisionCedula;
+  final DateTime? fechaEmisionCedula;
   final DateTime? fechaVencimientoCedula;
   final String nacionalidad1Codigo;
   final String nacionalidad2Codigo;
@@ -113,7 +113,7 @@ class AnalisisFiadoresHn {
     required this.nombre2,
     required this.apellido1,
     required this.apellido2,
-    required this.fechaNacimiento,
+    this.fechaNacimiento,
     required this.cedula,
     required this.telefono,
     required this.celular,
@@ -174,7 +174,7 @@ class AnalisisFiadoresHn {
     required this.ocupacionCodigo,
     required this.profesionCodigo,
     required this.paisNacimientoCodigo,
-    required this.fechaEmisionCedula,
+    this.fechaEmisionCedula,
     this.fechaVencimientoCedula,
     required this.nacionalidad1Codigo,
     required this.nacionalidad2Codigo,
@@ -215,7 +215,7 @@ class AnalisisFiadoresHn {
       'Nombre2': nombre2,
       'Apellido1': apellido1,
       'Apellido2': apellido2,
-      'FechaNacimiento': fechaNacimiento.toUtc().toIso8601String(),
+      'FechaNacimiento': fechaNacimiento?.toUtc().toIso8601String(),
       'Cedula': cedula,
       'Telefono': telefono,
       'Celular': celular,
@@ -276,7 +276,7 @@ class AnalisisFiadoresHn {
       'OcupacionCodigo': ocupacionCodigo,
       'ProfesionCodigo': profesionCodigo,
       'PaisNacimientoCodigo': paisNacimientoCodigo,
-      'FechaEmisionCedula': fechaEmisionCedula.toUtc().toIso8601String(),
+      'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String(),
       'FechaVencimientoCedula':
           fechaVencimientoCedula?.toUtc().toIso8601String(),
       'Nacionalidad1codigo': nacionalidad1Codigo,

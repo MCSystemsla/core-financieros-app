@@ -40,37 +40,39 @@ class SupervisionesFormCreditoHnScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Crear Supervision Credito'),
         ),
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pagecontroller,
-          children: [
-            SupervisionCreditoForm1(
-              pagecontroller: pagecontroller,
-              data: data,
-            ),
-            SupervisionCreditoForm2(
-              pagecontroller: pagecontroller,
-              data: data,
-            ),
-            SupervisionCreditoForm3(
-              pagecontroller: pagecontroller,
-              data: data,
-            ),
-            SupervisionCreditoForm4(
-              pagecontroller: pagecontroller,
-            ),
-            SupervisionCreditoForm5(
-              pagecontroller: pagecontroller,
-            ),
-            SupervisionCreditoForm6(
-              pagecontroller: pagecontroller,
-              data: data,
-            ),
-            SupervisionesCreditoForm7(
-              pagecontroller: pagecontroller,
-              data: data,
-            ),
-          ],
+        body: SafeArea(
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pagecontroller,
+            children: [
+              SupervisionCreditoForm1(
+                pagecontroller: pagecontroller,
+                data: data,
+              ),
+              SupervisionCreditoForm2(
+                pagecontroller: pagecontroller,
+                data: data,
+              ),
+              SupervisionCreditoForm3(
+                pagecontroller: pagecontroller,
+                data: data,
+              ),
+              SupervisionCreditoForm4(
+                pagecontroller: pagecontroller,
+              ),
+              SupervisionCreditoForm5(
+                pagecontroller: pagecontroller,
+              ),
+              SupervisionCreditoForm6(
+                pagecontroller: pagecontroller,
+                data: data,
+              ),
+              SupervisionesCreditoForm7(
+                pagecontroller: pagecontroller,
+                data: data,
+              ),
+            ],
+          ),
         ),
       ),
     );

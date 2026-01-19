@@ -31,7 +31,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           nombre2: state.nombre2,
           apellido1: state.apellido1,
           apellido2: state.apellido2,
-          fechaNacimiento: DateTime.parse(state.fechaNacimiento),
+          fechaNacimiento: DateTime.tryParse(state.fechaNacimiento),
           cedula: state.cedula,
           telefono: state.telefono,
           celular: state.celular,
@@ -93,7 +93,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           ocupacionCodigo: state.ocupacionCodigo,
           profesionCodigo: state.profesionCodigo,
           paisNacimientoCodigo: state.paisNacimientoCodigo,
-          fechaEmisionCedula: DateTime.parse(state.fechaEmisionCedula),
+          fechaEmisionCedula: DateTime.tryParse(state.fechaEmisionCedula),
           fechaVencimientoCedula:
               DateTime.tryParse(state.fechaVencimientoCedula),
           nacionalidad1Codigo: state.nacionalidad1Codigo,

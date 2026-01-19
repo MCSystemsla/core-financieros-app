@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum FiadoresHnFormType {
-  conyugue('TFD1'),
-  aval('TFD2'),
+  conyugue('TFD2'),
+  aval('TFD1'),
   codeudor('TFD3');
 
   final String codigo;
@@ -51,39 +51,41 @@ class FiadoresHnFormScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Crear Fiador'),
             ),
-            body: PageView(
-              controller: pageController,
-              children: [
-                AnalisisFiadoresDatosGenerales(
-                  pageController: pageController,
-                  cedula: state.cedula,
-                  primerNombre: state.primerNombre,
-                  segundoNombre: state.segundoNombre,
-                  primerApellido: state.primerApellido,
-                  segundoApellido: state.segundoApellido,
-                  fechaNacimiento: DateTime.tryParse(state.fechaNacimiento),
-                  sexo: state.sexo,
-                  pais: state.pais,
-                  departamento: state.departamento,
-                  municipio: state.municipio,
-                  direccion: state.direccion,
-                  fechaEmision: DateTime.tryParse(state.fechaEmision),
-                  fechaExpira: DateTime.tryParse(state.fechaExpira),
-                  tipoDocumento: state.tipoDocumento,
-                ),
-                AnalisisFiadoresDatosPersonales(
-                  pageController: pageController,
-                ),
-                AnalisisFiadoresActividades(
-                  pageController: pageController,
-                ),
-                AnalisisDatosDeActividad(
-                  pageController: pageController,
-                ),
-                AnalisisFiadoresDatosDeIngresos(
-                  pageController: pageController,
-                ),
-              ],
+            body: SafeArea(
+              child: PageView(
+                controller: pageController,
+                children: [
+                  AnalisisFiadoresDatosGenerales(
+                    pageController: pageController,
+                    cedula: state.cedula,
+                    primerNombre: state.primerNombre,
+                    segundoNombre: state.segundoNombre,
+                    primerApellido: state.primerApellido,
+                    segundoApellido: state.segundoApellido,
+                    fechaNacimiento: DateTime.tryParse(state.fechaNacimiento),
+                    sexo: state.sexo,
+                    pais: state.pais,
+                    departamento: state.departamento,
+                    municipio: state.municipio,
+                    direccion: state.direccion,
+                    fechaEmision: DateTime.tryParse(state.fechaEmision),
+                    fechaExpira: DateTime.tryParse(state.fechaExpira),
+                    tipoDocumento: state.tipoDocumento,
+                  ),
+                  AnalisisFiadoresDatosPersonales(
+                    pageController: pageController,
+                  ),
+                  AnalisisFiadoresActividades(
+                    pageController: pageController,
+                  ),
+                  AnalisisDatosDeActividad(
+                    pageController: pageController,
+                  ),
+                  AnalisisFiadoresDatosDeIngresos(
+                    pageController: pageController,
+                  ),
+                ],
+              ),
             ),
           ),
         );

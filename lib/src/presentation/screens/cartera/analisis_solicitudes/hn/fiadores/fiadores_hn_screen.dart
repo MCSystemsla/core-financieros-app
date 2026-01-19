@@ -94,7 +94,7 @@ class FiadoresHnScreen extends StatelessWidget {
                   const Gap(10),
                   SelectableCardItem(
                     isLoading: state.status == Status.inProgress,
-                    userHaveDataAlready: state.tieneFiador,
+                    userHaveDataAlready: state.tieneCodeudor,
                     color: const Color(0xFF26A69A),
                     icon: Icons.group_add,
                     title: 'Codeudor',

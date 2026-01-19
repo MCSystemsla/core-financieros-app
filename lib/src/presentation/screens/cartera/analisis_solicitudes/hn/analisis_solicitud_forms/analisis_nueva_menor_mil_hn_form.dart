@@ -60,29 +60,31 @@ class AnalisisNuevaMenorMilHnForm extends StatelessWidget {
             ),
             Expanded(
               flex: 3,
-              child: PageView(
-                controller: pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  AnalisisMenorMilForm1(
-                    pageController: pageController,
-                    numeroSolicitud: numeroSolicitud,
-                  ),
-                  AnalisisMenorMilForm2(
-                    pageController: pageController,
-                    tipoSolicitud: tipoSolicitud,
-                  ),
-                  AnalisisMenorMilForm3(
-                    pageController: pageController,
-                  ),
-                  AnalisisMenorMilForm4(
-                    pageController: pageController,
-                  ),
-                  AnalisisMenorMilForm5(
-                    pageController: pageController,
-                    tipoSolicitud: tipoSolicitud,
-                  ),
-                ],
+              child: SafeArea(
+                child: PageView(
+                  controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    AnalisisMenorMilForm1(
+                      pageController: pageController,
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                    AnalisisMenorMilForm2(
+                      pageController: pageController,
+                      tipoSolicitud: tipoSolicitud,
+                    ),
+                    AnalisisMenorMilForm3(
+                      pageController: pageController,
+                    ),
+                    AnalisisMenorMilForm4(
+                      pageController: pageController,
+                    ),
+                    AnalisisMenorMilForm5(
+                      pageController: pageController,
+                      tipoSolicitud: tipoSolicitud,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

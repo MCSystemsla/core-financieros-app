@@ -38,8 +38,10 @@ enum ErrorNetworkCode {
   }
 
   if (msg.contains('validation failed')) {
+    final errorMsg = resp['message']['errors'][0]['message'];
+    final pathField = resp['message']['errors'][0]['path'].toString();
     return (
-      '${resp['message']['message']} algunos campos no cumplen con el formato requerido',
+      'Advertencia antes de continuar verifica: $errorMsg $pathField',
       ErrorNetworkCode.unauthorized
     );
   }
