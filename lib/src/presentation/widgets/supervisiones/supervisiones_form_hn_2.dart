@@ -65,7 +65,7 @@ class _SupervisionFormHN2State extends State<SupervisionFormHN2>
               SheetSearchDropdown(
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value.toString()),
-                title: 'Referencias en el buro de credito',
+                title: 'Referencias en el buró de credito',
                 isRequired: true,
                 onChanged: (v) {
                   cubit.onFieldChanged(
@@ -128,7 +128,7 @@ class _SupervisionFormHN2State extends State<SupervisionFormHN2>
               SheetSearchDropdown(
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value.toString()),
-                title: 'Referencias en el buro de credito',
+                title: 'La referencia es:',
                 isRequired: true,
                 onChanged: (v) {},
                 hintText: 'input.select_option'.tr(),
@@ -183,7 +183,7 @@ class _SupervisionFormHN2State extends State<SupervisionFormHN2>
               ),
               const Gap(10),
               SheetSearchDropdown(
-                title: 'Referencias en el buro de credito',
+                title: 'La referencia es:',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value.toString()),
                 isRequired: true,

@@ -189,7 +189,7 @@ class _Referencia2 extends StatelessWidget {
         ),
         OutlineTextfieldWidget(
           initialValue: cubit.aniosConocerReferido2.toString(),
-          title: 'Anos de conocer referido:',
+          title: 'Años de conocer referido:',
           icon: const Icon(Icons.person_3_sharp),
           onChange: (value) => onFieldChanged.onFieldChanged(
             () {
@@ -301,7 +301,7 @@ class _Referencia1 extends StatelessWidget {
         ),
         OutlineTextfieldWidget(
           initialValue: cubit.aniosConocerReferido1.toString(),
-          title: 'Anos de conocer referido:',
+          title: 'Años de conocer referido:',
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,
           ],

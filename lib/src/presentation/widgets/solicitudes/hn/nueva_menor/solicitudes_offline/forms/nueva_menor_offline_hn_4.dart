@@ -372,7 +372,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           cubit.state.ingresosNetos.toCurrencyString(),
                       isRequired: true,
                       validator: (value) =>
-                          ClassValidator.validateRequired(value),
+                          ClassValidator.positiveNumberValidator(value),
                       hintText: 'Ingresos Netos',
                       icon: Icon(Icons.wallet,
                           color: AppColors.getPrimaryColor()),

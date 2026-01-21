@@ -28,83 +28,85 @@ class NuevaMenorHnForm extends StatelessWidget {
           title: 'Crear nueva Solicitud Nueva Menor',
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: pageController,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorHnCubit>().saveCedula(
-                        cedulaFrontPath: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudNuevaMenorHnCubit>().saveCedula(
-                        cedulaBackPath: imagePath,
-                      );
-                },
-              ),
-              NuevaMenorForm1(
-                controller: pageController,
-                userByDocumentHn: UserDocumentDataHN(
-                  cedula: userByDocumentProvider.cedula,
-                  primerNombre: userByDocumentProvider.primerNombre,
-                  segundoNombre: userByDocumentProvider.segundoNombre,
-                  primerApellido: userByDocumentProvider.primerApellido,
-                  segundoApellido: userByDocumentProvider.segundoApellido,
-                  fechaNacimiento:
-                      DateTime.tryParse(userByDocumentProvider.fechaNacimiento),
-                  sexo: userByDocumentProvider.sexo,
-                  direccion: userByDocumentProvider.direccion,
-                  fechaEmision:
-                      DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                  fechaExpira:
-                      DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: pageController,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudNuevaMenorHnCubit>().saveCedula(
+                          cedulaFrontPath: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudNuevaMenorHnCubit>().saveCedula(
+                          cedulaBackPath: imagePath,
+                        );
+                  },
                 ),
-              ),
-              NuevaMenorForm2(
-                controller: pageController,
-                userByDocumentHn: UserDocumentDataHN(
-                  cedula: userByDocumentProvider.cedula,
-                  primerNombre: userByDocumentProvider.primerNombre,
-                  segundoNombre: userByDocumentProvider.segundoNombre,
-                  primerApellido: userByDocumentProvider.primerApellido,
-                  segundoApellido: userByDocumentProvider.segundoApellido,
-                  fechaNacimiento:
-                      DateTime.tryParse(userByDocumentProvider.fechaNacimiento),
-                  sexo: userByDocumentProvider.sexo,
-                  direccion: userByDocumentProvider.direccion,
-                  fechaEmision:
-                      DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                  fechaExpira:
-                      DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                  tipoDocumento: userByDocumentProvider.tipoDocumento,
+                NuevaMenorForm1(
+                  controller: pageController,
+                  userByDocumentHn: UserDocumentDataHN(
+                    cedula: userByDocumentProvider.cedula,
+                    primerNombre: userByDocumentProvider.primerNombre,
+                    segundoNombre: userByDocumentProvider.segundoNombre,
+                    primerApellido: userByDocumentProvider.primerApellido,
+                    segundoApellido: userByDocumentProvider.segundoApellido,
+                    fechaNacimiento: DateTime.tryParse(
+                        userByDocumentProvider.fechaNacimiento),
+                    sexo: userByDocumentProvider.sexo,
+                    direccion: userByDocumentProvider.direccion,
+                    fechaEmision:
+                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
+                    fechaExpira:
+                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                    tipoDocumento: userByDocumentProvider.tipoDocumento,
+                  ),
                 ),
-              ),
-              NuevaMenorForm3(
-                controller: pageController,
-              ),
-              NuevaMenorForm4(
-                controller: pageController,
-              ),
-              NuevaMenorForm5(
-                controller: pageController,
-              ),
-              NuevaMenorForm6(
-                controller: pageController,
-              ),
-              NuevaMenorForm7(
-                controller: pageController,
-              ),
-              NuevaMenorHistorialCrediticioHn(
-                controller: pageController,
-              ),
-              NuevaMenorForm8(
-                controller: pageController,
-              ),
-            ],
+                NuevaMenorForm2(
+                  controller: pageController,
+                  userByDocumentHn: UserDocumentDataHN(
+                    cedula: userByDocumentProvider.cedula,
+                    primerNombre: userByDocumentProvider.primerNombre,
+                    segundoNombre: userByDocumentProvider.segundoNombre,
+                    primerApellido: userByDocumentProvider.primerApellido,
+                    segundoApellido: userByDocumentProvider.segundoApellido,
+                    fechaNacimiento: DateTime.tryParse(
+                        userByDocumentProvider.fechaNacimiento),
+                    sexo: userByDocumentProvider.sexo,
+                    direccion: userByDocumentProvider.direccion,
+                    fechaEmision:
+                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
+                    fechaExpira:
+                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                    tipoDocumento: userByDocumentProvider.tipoDocumento,
+                  ),
+                ),
+                NuevaMenorForm3(
+                  controller: pageController,
+                ),
+                NuevaMenorForm4(
+                  controller: pageController,
+                ),
+                NuevaMenorForm5(
+                  controller: pageController,
+                ),
+                NuevaMenorForm6(
+                  controller: pageController,
+                ),
+                NuevaMenorForm7(
+                  controller: pageController,
+                ),
+                NuevaMenorHistorialCrediticioHn(
+                  controller: pageController,
+                ),
+                NuevaMenorForm8(
+                  controller: pageController,
+                ),
+              ],
+            ),
           ),
         ),
       ],

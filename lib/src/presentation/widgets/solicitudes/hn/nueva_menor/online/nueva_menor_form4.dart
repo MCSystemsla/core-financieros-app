@@ -342,7 +342,8 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
+                  validator: (value) =>
+                      ClassValidator.positiveNumberValidator(value),
                   hintText: 'Ingresos Netos',
                   icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,

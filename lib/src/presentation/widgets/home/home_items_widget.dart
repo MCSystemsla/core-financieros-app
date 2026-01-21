@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/push_with_sync_check/push_with_sync_check.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -30,7 +31,7 @@ class HomeItemsWidget extends StatelessWidget {
 
     List<HomeItemCard> homeItemData = [
       HomeItemCard(
-        // visible: actions.contains(TypeAction.menuCartera.codigo),
+        visible: actions.contains(TypeAction.menuCartera.codigo),
         title: 'home.item5'.tr(),
         subtitle: 'Descripcion',
         icon: const Icon(

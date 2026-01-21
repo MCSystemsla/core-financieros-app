@@ -48,7 +48,7 @@ class AuthCubit extends Cubit<AuthState> {
             .setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       }
       final actions = await repository.getActions(database: dbName);
-      LocalStorage().setActions(actions.data);
+      await LocalStorage().setActions(actions.data);
       emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));

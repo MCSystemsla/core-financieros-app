@@ -151,7 +151,7 @@ class _AnalisisReferencia2 extends StatelessWidget {
           icon: Icon(Icons.person_3_sharp),
         ),
         OutlineTextfieldWidget(
-          title: 'Anos de conocer referido:',
+          title: 'Años de conocer referido:',
           icon: Icon(Icons.person_3_sharp),
         ),
       ],

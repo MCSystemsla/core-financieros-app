@@ -36,7 +36,11 @@ class LocalStorage {
   }
 
   String get lastDeleteDate {
-    return prefs.getString('last_delete_date') ?? '';
+    return prefs.getString('lastDeleteDate') ?? '';
+  }
+
+  int get lastActiveTime {
+    return prefs.getInt('lastActiveTime') ?? 0;
   }
 
   String get currentUserName {
@@ -77,5 +81,9 @@ class LocalStorage {
 
   Future<void> setLastDeleteDate(String lastDeleteDate) async {
     await prefs.setString('last_delete_date', lastDeleteDate);
+  }
+
+  Future<void> setLastActiveTime(int lastActiveTime) async {
+    await prefs.setInt('lastActiveTime', lastActiveTime);
   }
 }

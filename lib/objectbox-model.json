@@ -6830,9 +6830,98 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "44:134851175495867505",
+      "lastPropertyId": "16:3264443481684242195",
+      "name": "AnalisisListDataHn",
+      "properties": [
+        {
+          "id": "1:2867605684201067283",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:6365070580639051136",
+          "name": "idAnalisis",
+          "type": 9
+        },
+        {
+          "id": "3:4521494400330575381",
+          "name": "numero",
+          "type": 9
+        },
+        {
+          "id": "4:3134174624250085343",
+          "name": "objTipoSolicitudId",
+          "type": 6
+        },
+        {
+          "id": "5:4809598166512181963",
+          "name": "objEstadoSolicitudId",
+          "type": 6
+        },
+        {
+          "id": "6:6662024653940480911",
+          "name": "monto",
+          "type": 9
+        },
+        {
+          "id": "7:2139651298326929553",
+          "name": "sucursal",
+          "type": 9
+        },
+        {
+          "id": "8:2853785965049392274",
+          "name": "observacion",
+          "type": 9
+        },
+        {
+          "id": "9:4246458290695303531",
+          "name": "cuota",
+          "type": 8
+        },
+        {
+          "id": "10:794100971482328840",
+          "name": "nombreCompleto",
+          "type": 9
+        },
+        {
+          "id": "11:4863993679326454911",
+          "name": "estado",
+          "type": 9
+        },
+        {
+          "id": "12:7918037623893605150",
+          "name": "tipoSolicitud",
+          "type": 9
+        },
+        {
+          "id": "13:2826446974184870444",
+          "name": "nombrePromotor",
+          "type": 9
+        },
+        {
+          "id": "14:8115469335359859344",
+          "name": "fechaSolicitud",
+          "type": 10
+        },
+        {
+          "id": "15:158748515438998235",
+          "name": "cedulaCliente",
+          "type": 9
+        },
+        {
+          "id": "16:3264443481684242195",
+          "name": "tipoPersonaCodigo",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "43:2540163283677868796",
+  "lastEntityId": "44:134851175495867505",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

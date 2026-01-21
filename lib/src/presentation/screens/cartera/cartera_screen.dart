@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
@@ -69,9 +70,8 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
-                // TODO: VOLVER A DESCOMENTAR
-                // visible:
-                // (actions.contains(TypeAction.llenarSolicitudes.codigo)),
+                visible:
+                    (actions.contains(TypeAction.llenarSolicitudes.codigo)),
                 onTap: () {
                   context.push('/solicitudes');
                 },
@@ -88,12 +88,20 @@ class _CarteraContentWidget extends StatelessWidget {
               ModuleCard(
                 visible: (!isProdMode),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AnalisisInterceptorByFlavor(),
-                    ),
-                  );
+                  state.connectionStatus == ConnectionStatus.connected
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AnalisisInterceptorByFlavor(),
+                          ),
+                        )
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const AnalisisSolicitudesHnOfflineScreen(),
+                          ),
+                        );
                 },
                 title: 'Analisis'.tr(),
                 subtitle: 'Analisis de solicitudes de crédito',

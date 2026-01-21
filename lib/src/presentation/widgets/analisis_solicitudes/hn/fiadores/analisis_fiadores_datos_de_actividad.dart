@@ -220,7 +220,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
-                    title: 'Anos de funcionamiento',
+                    title: 'Años de funcionamiento',
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),

@@ -1,6 +1,10 @@
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_actividad_cnbs_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/catalogo_aldea_local_db.dart';
@@ -12,6 +16,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catal
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nacionalidad/catalogo_nacionalidad.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
@@ -69,6 +74,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       await saveCatalogoFrecuenciaPago();
 
       await getAndSaveParametros();
+      await guardarAnalisisAsignados();
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {
@@ -519,5 +525,43 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       log('Error al guardar actividades economicas alias: $e, $s');
       rethrow;
     }
+  }
+
+  Future<void> guardarAnalisisAsignados() async {
+    final analisisListData = await _repository.getSolicitudesByEstado(
+      estadoCredito: EstadoCredito.asignada,
+      isAsignadaToAsesorCredito: true,
+      cedulaCliente: '',
+      pagina: 1,
+      numeroSolicitud: '',
+    );
+
+    final analisisLocalDbProvider = global<AnalisisBoxServiceHn>();
+
+    analisisLocalDbProvider.saveAnalisisListDataHn(
+      analisisListDataHn: analisisListData.data
+          .map((e) => _mapToAnalisisListDataHn(e))
+          .toList(),
+    );
+  }
+
+  AnalisisListDataHn _mapToAnalisisListDataHn(SolicitudEstado e) {
+    return AnalisisListDataHn(
+      numero: e.numero,
+      objTipoSolicitudId: e.objTipoSolicitudId,
+      objEstadoSolicitudId: e.objEstadoSolicitudId,
+      monto: e.monto,
+      sucursal: e.sucursal,
+      observacion: e.observacion,
+      cuota: e.cuota,
+      nombreCompleto: e.nombreCompleto,
+      estado: e.estado,
+      tipoSolicitud: e.tipoSolicitud,
+      nombrePromotor: e.nombrePromotor,
+      fechaSolicitud: e.fechaSolicitud,
+      cedulaCliente: e.cedulaCliente,
+      tipoPersonaCodigo: e.tipoPersonaCodigo,
+      idAnalisis: e.id,
+    );
   }
 }

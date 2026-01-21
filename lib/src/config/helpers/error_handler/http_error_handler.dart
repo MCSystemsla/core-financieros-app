@@ -19,7 +19,7 @@ enum ErrorNetworkCode {
       msg.contains('failed host lookup') ||
       msg.contains('no address associated with hostname')) {
     return (
-      'Sin conexión a internet, $errorMsg',
+      'Sin conexión a internet, Revisa tu conexion a internet, $errorMsg',
       ErrorNetworkCode.noConnection
     );
   }
@@ -42,6 +42,12 @@ enum ErrorNetworkCode {
     final pathField = resp['message']['errors'][0]['path'].toString();
     return (
       'Advertencia antes de continuar verifica: $errorMsg $pathField',
+      ErrorNetworkCode.unauthorized
+    );
+  }
+  if (msg.contains('unauthorized')) {
+    return (
+      'Acceso Denegado: ${resp['message']}',
       ErrorNetworkCode.unauthorized
     );
   }

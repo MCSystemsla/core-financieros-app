@@ -425,7 +425,7 @@ class _RucFormState extends State<_RucForm> {
               Container(
                 margin: const EdgeInsets.all(18),
                 child: Text(
-                  'RUC',
+                  'RTN',
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
@@ -434,7 +434,7 @@ class _RucFormState extends State<_RucForm> {
               ),
               OutlineTextfieldWidget(
                 initialValue: state.numeroRuc,
-                title: 'Numero de RUC',
+                title: 'Numero de RTN',
                 icon: const Icon(Icons.add_box),
                 onChange: (value) {
                   cubit.onFieldChanged(
@@ -464,7 +464,7 @@ class _RucFormState extends State<_RucForm> {
               OutlineTextfieldWidget(
                 hintText: fechaEmision?.selectorFormat(),
                 readOnly: true,
-                title: 'Fecha de emisión de RUC',
+                title: 'Fecha de emisión de RTN',
                 onTap: () => selectDateFechaEmision(context),
                 icon: const Icon(Icons.wallet),
               ),
@@ -472,7 +472,7 @@ class _RucFormState extends State<_RucForm> {
               OutlineTextfieldWidget(
                 hintText: fechaVencimiento?.selectorFormat(),
                 readOnly: true,
-                title: 'Fecha de vencimiento de RUC',
+                title: 'Fecha de vencimiento de RTN',
                 icon: const Icon(Icons.wallet),
                 textInputType: TextInputType.number,
                 onTap: () => selectDateFechaVencimiento(context),

@@ -76,7 +76,7 @@ class _LoginScreenViewState extends State<LoginScreenView>
           // TODO: DESCOMENTAR CUANDO SE SUBA A SUCURSALES CON LINK GITHUB
           // if (state is AutoupdateSuccess) {
           //   UpdateAppDialog(
-          //     isHondurasApp: flavor == Flavor.honduras,
+          //     // isHondurasApp: flavor == Flavor.honduras,
           //     apkUrl: state.apkVersion,
           //     context: context,
           //     title: 'Para continuar, es necesario actualizar la aplicación.',
