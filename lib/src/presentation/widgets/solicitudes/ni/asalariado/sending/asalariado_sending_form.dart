@@ -47,7 +47,7 @@ class _AsalariadoSendingFormState extends State<AsalariadoSendingForm> {
                 ),
               );
           context.read<SolicitudAsalariadoCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
+                numeroSolicitud: int.tryParse(state.numeroSolicitud) ?? 0,
               );
           // dbProvider.removeSolicitudAsalariadoWhenisUploaded(
           //   solicitudId: widget.solicitudId,

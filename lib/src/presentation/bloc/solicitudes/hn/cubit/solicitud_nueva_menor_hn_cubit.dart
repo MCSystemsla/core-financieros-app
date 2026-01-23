@@ -174,13 +174,18 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     }
   }
 
-  sendCedulaImages({required String numeroSolicitud}) async {
+  sendCedulaImages({
+    required String numeroSolicitud,
+    required String cedulaCliente,
+    required String imagenFrontal,
+    required String imagenTrasera,
+  }) async {
     try {
       await _repository.sendCedulaImageWhenSolicitudCreditoCreated(
         numeroSolicitud: int.parse(numeroSolicitud),
-        cedulaCliente: state.cedula,
-        imagenFrontal: state.cedulaFrontPath,
-        imagenTrasera: state.cedulaBackPath,
+        cedulaCliente: cedulaCliente,
+        imagenFrontal: imagenFrontal,
+        imagenTrasera: imagenTrasera,
       );
     } catch (_) {}
   }

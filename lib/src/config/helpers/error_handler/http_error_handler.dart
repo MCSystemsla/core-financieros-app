@@ -51,7 +51,12 @@ enum ErrorNetworkCode {
       ErrorNetworkCode.unauthorized
     );
   }
-
+  if (msg.contains('handshakeexception') || msg.contains('handshake')) {
+    return (
+      'La red actual ha bloqueado la conexión, Cambia a una conexión más estable para continuar',
+      ErrorNetworkCode.unknownError,
+    );
+  }
   return (
     resp['message']?.toString() ?? resp.toString(),
     ErrorNetworkCode.unknownError

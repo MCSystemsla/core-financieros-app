@@ -178,7 +178,6 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                     ),
                     const Gap(10),
                     SearchDropdownWidget(
-                      enabled: !isConnected,
                       selectedItem: Item(
                         name: tipoPersonaCredito ?? '',
                         value: tipoPersonaCredito,

@@ -8,20 +8,20 @@ class ReprestamoUserCedula {
   final String nombreCompleto;
   final String cedula;
   final String? tipoDocumento;
-  final String tipoPersona;
-  final String paisEmisorDocumento;
-  final DateTime fechaVencimientoDocumento;
-  final DateTime fechaEmisionDocumento;
+  final String? tipoPersona;
+  final String? paisEmisorDocumento;
+  final DateTime? fechaVencimientoDocumento;
+  final DateTime? fechaEmisionDocumento;
 
   ReprestamoUserCedula({
     required this.id,
     required this.nombreCompleto,
     required this.cedula,
     this.tipoDocumento,
-    required this.tipoPersona,
-    required this.paisEmisorDocumento,
-    required this.fechaVencimientoDocumento,
-    required this.fechaEmisionDocumento,
+    this.tipoPersona,
+    this.paisEmisorDocumento,
+    this.fechaVencimientoDocumento,
+    this.fechaEmisionDocumento,
   });
 
   factory ReprestamoUserCedula.fromJson(Map<String, dynamic> json) =>

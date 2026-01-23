@@ -31,9 +31,12 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
           // dbProvider.removeSolicitudWhenisUploaded(
           //   solicitudId: widget.solicitudId,
           // );
-          // context.read<SolicitudNuevaMenorHnCubit>().sendCedulaImages(
-          //       numeroSolicitud: state.numeroSolicitud,
-          //     );
+          context.read<SolicitudNuevaMenorHnCubit>().sendCedulaImages(
+                numeroSolicitud: state.numeroSolicitud,
+                cedulaCliente: state.cedula,
+                imagenFrontal: state.cedulaFrontPath,
+                imagenTrasera: state.cedulaBackPath,
+              );
           // context
           //     .read<SolicitudNuevaMenorCubit>()
           //     .onFieldChanged(() => state.copyWith(

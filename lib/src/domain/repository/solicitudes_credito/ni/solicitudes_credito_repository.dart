@@ -131,8 +131,9 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
+        final (errorMsg, _) = getErrorMessage(resp);
 
-        return (false, (resp['message'] as String), null, null, null);
+        return (false, errorMsg, null, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
@@ -261,7 +262,9 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       if (resp['statusCode'] == 409) {
         _logger.i(endpoint.body);
         AppException(optionalMsg: resp.toString());
-        return (false, resp.toString(), null, null, null);
+        final (errorMsg, _) = getErrorMessage(resp);
+
+        return (false, errorMsg, null, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);

@@ -70,15 +70,14 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
                   cedula: state.represtamoUserCedula.cedula,
                   primerNombre: state.represtamoUserCedula.nombreCompleto,
                   segundoApellido: state.represtamoUserCedula.nombreCompleto,
-                  tipoDocumento:
-                      state.represtamoUserCedula.tipoDocumento ?? 'N/A',
+                  tipoDocumento: state.represtamoUserCedula.tipoDocumento ?? '',
                   tipoPersona: state.represtamoUserCedula.tipoPersona,
                   fechaEmision:
                       state.represtamoUserCedula.fechaEmisionDocumento,
                   fechaVencimiento:
                       state.represtamoUserCedula.fechaVencimientoDocumento,
                   paisEmisor: Item(
-                    name: state.represtamoUserCedula.paisEmisorDocumento,
+                    name: state.represtamoUserCedula.paisEmisorDocumento ?? '',
                     value: state.represtamoUserCedula.paisEmisorDocumento,
                   ),
                 ),

@@ -98,11 +98,11 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     }
   }
 
-  void sendCedulaImages({required String numeroSolicitud}) async {
+  void sendCedulaImages({required int numeroSolicitud}) async {
     try {
       await _solicitudesCreditoRepository
           .sendCedulaImageWhenSolicitudCreditoCreated(
-        numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+        numeroSolicitud: numeroSolicitud,
         cedulaCliente: state.cedula,
         imagenFrontal: state.cedulaFrontPath,
         imagenTrasera: state.cedulaBackPath,

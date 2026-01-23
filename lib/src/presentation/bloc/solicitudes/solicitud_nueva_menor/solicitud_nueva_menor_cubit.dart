@@ -141,9 +141,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     }
   }
 
-  void sendCedulaImages({required String numeroSolicitud}) async {
+  void sendCedulaImages({required int numeroSolicitud}) async {
     await repository.sendCedulaImageWhenSolicitudCreditoCreated(
-      numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+      numeroSolicitud: numeroSolicitud,
       cedulaCliente: state.cedula,
       imagenFrontal: state.cedulaFrontPath,
       imagenTrasera: state.cedulaBackPath,

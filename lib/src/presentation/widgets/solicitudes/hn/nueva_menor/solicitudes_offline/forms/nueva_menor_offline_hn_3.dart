@@ -361,6 +361,9 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'Horario de Atención',
+                  validator: (value) => ClassValidator.validateRequired(
+                    cubit.state.horarioTrabajo,
+                  ),
                   readOnly: true,
                   onTap: () => {
                     showCupertinoModalPopup(
@@ -394,6 +397,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                 OutlineTextfieldWidget(
                   initialValue: cubit.state.horarioVisita,
                   hintText: 'Ingresa Horario Visita',
+                  validator: (value) => ClassValidator.validateRequired(value),
                   icon:
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,

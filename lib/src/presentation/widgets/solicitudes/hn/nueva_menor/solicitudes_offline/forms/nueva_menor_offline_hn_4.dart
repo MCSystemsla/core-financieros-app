@@ -129,6 +129,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         state.estadoCivilCodigo == 'CAS') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
+                        initialValue: cubit.state.nombreConyugue,
                         isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -152,6 +153,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
+                        initialValue: cubit.state.apellidosConyugue,
                         isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -372,7 +374,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           cubit.state.ingresosNetos.toCurrencyString(),
                       isRequired: true,
                       validator: (value) =>
-                          ClassValidator.positiveNumberValidator(value),
+                          ClassValidator.validateNotZero(value),
                       hintText: 'Ingresos Netos',
                       icon: Icon(Icons.wallet,
                           color: AppColors.getPrimaryColor()),

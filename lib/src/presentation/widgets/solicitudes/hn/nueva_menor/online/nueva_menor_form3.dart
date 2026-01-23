@@ -331,6 +331,8 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
                       title: 'Horario de Atención',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(state.horarioTrabajo),
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                         LengthLimitingTextInputFormatter(50),
@@ -362,6 +364,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
                     UpperCaseTextFormatter(),
                     LengthLimitingTextInputFormatter(50),

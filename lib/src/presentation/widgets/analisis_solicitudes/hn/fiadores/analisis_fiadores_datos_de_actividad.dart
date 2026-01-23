@@ -287,6 +287,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     title: 'Horario de visita',
                     hintText: state.horarioVisita,
                     icon: const Icon(Icons.watch_later_sharp),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],
@@ -313,6 +315,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     title: 'Horario de trabajo',
                     hintText: state.horarioTrabajo,
                     icon: const Icon(Icons.watch_later_sharp),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(state.horarioTrabajo),
                     readOnly: true,
                     onTap: () => {
                       showCupertinoModalPopup(

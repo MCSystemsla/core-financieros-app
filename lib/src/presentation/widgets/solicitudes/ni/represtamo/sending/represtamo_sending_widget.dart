@@ -55,7 +55,7 @@ class _ReprestamoSendingWidgetState extends State<ReprestamoSendingWidget> {
                 ),
               );
           context.read<SolicitudReprestamoCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
+                numeroSolicitud: int.tryParse(state.numeroSolicitud) ?? 0,
               );
           // dbProvider.removeSolicitudReprestamoWhenisUploaded(
           //   solicitudId: widget.solicitudId,

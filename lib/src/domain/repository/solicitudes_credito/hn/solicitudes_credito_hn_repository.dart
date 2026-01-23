@@ -127,7 +127,7 @@ class SolicitudesCreditoHnRepositoryImpl
       return (
         true,
         resp['message'] as String,
-        resp['NumeroSolicitud'] as String,
+        resp['data']['NumeroSolicitud'] as String,
       );
     } catch (e) {
       _logger.e(e.toString());
@@ -315,7 +315,8 @@ class SolicitudesCreditoHnRepositoryImpl
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
-    const url = '$protocol://$apiUrl/solicitudes/general/subir-fotos-cedula';
+    const url =
+        '$protocol://$apiUrl/cartera/solicitudes/general/subir-fotos-cedula';
 
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
