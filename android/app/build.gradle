@@ -85,14 +85,14 @@ android {
             // signingConfig = signingConfigs.release
             minifyEnabled true
             shrinkResources true
-    //     splits {
-    //     abi {
-    //         enable true
-    //         reset()
-    //         include "arm64-v8a", "armeabi-v7a"
-    //         universalApk false
-    //     }
-    // }
+        splits {
+        abi {
+            enable true
+            reset()
+            include "arm64-v8a", "armeabi-v7a"
+            universalApk false
+        }
+    }
         }
     }
     flavorDimensions "country"
@@ -120,8 +120,8 @@ android {
             // applicationId "com.mcsystem.core_financiero_app.hn"
             applicationId "com.mcsystem.core_financiero_app.hnd"
             signingConfig signingConfigs.debug
-            versionName "1.0.9"
-            versionCode 10
+            versionName "1.0.10"
+            versionCode 11
             // versionCode flutterVersionCode.toInteger() + 1
         }
         micreditoCostaRica {

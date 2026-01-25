@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
@@ -12,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/represt
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,6 +151,8 @@ class _SelectSolicitud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+
     return Padding(
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
@@ -177,8 +181,10 @@ class _SelectSolicitud extends StatelessWidget {
             const _SolicitudesCardsRow2(),
             const Gap(20),
             const _MySolicitudesAsignmentsCard(),
-            const Gap(20),
-            const _SolicitudesCardsRow3(),
+            if (actions.contains(TypeAction.asignacion.codigo)) ...[
+              const Gap(20),
+              const _SolicitudesCardsRow3(),
+            ],
             const Gap(20),
             // const _SolicitudesCardsRow4(),
             // const Gap(20),

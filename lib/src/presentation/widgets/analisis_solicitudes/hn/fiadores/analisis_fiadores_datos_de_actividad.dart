@@ -288,7 +288,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     hintText: state.horarioVisita,
                     icon: const Icon(Icons.watch_later_sharp),
                     validator: (value) =>
-                        ClassValidator.validateRequired(value),
+                        ClassValidator.validateRequired(state.horarioVisita),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],

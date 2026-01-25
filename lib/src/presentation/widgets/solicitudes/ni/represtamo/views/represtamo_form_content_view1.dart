@@ -22,7 +22,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
-import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,7 +46,7 @@ class ReprestamoFormContentView1 extends StatefulWidget {
 
 class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
     with AutomaticKeepAliveClientMixin {
-  DateTime? _selectedDate;
+  // DateTime? _selectedDate;
   String? ubicacion;
   String? initialValue;
   String? paisEmisorDocumento;
@@ -72,7 +71,7 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
     super.initState();
     cedula = widget.userByCedulaSolicitud.cedula;
     tipoPersonaCredito = widget.userByCedulaSolicitud.tipoPersona;
-    _selectedDate = widget.userByCedulaSolicitud.fechaEmision;
+    // _selectedDate = widget.userByCedulaSolicitud.fechaEmision;
     fechaVencimiento = widget.userByCedulaSolicitud.fechaVencimiento;
     paisEmisorDocumento = widget.userByCedulaSolicitud.paisEmisor?.value;
     nombreCliente = widget.userByCedulaSolicitud.primerNombre;
@@ -242,44 +241,44 @@ class _ReprestamoFormContentView1State extends State<ReprestamoFormContentView1>
                         );
                       },
                     ),
-                    if (isConnected) ...[
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        initialValue: paisEmisorDocumento,
-                        readOnly: true,
-                        icon: Icon(
-                          Icons.map,
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        title: 'Pais Emisor Documento',
-                        isRequired: false,
-                        isValid: null,
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        readOnly: true,
-                        icon: Icon(
-                          Icons.calendar_today,
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        title: 'Fecha Emisión Documento',
-                        isRequired: false,
-                        initialValue: _selectedDate?.selectorFormat(),
-                        isValid: null,
-                      ),
-                      const Gap(30),
-                      OutlineTextfieldWidget(
-                        readOnly: true,
-                        icon: Icon(
-                          Icons.calendar_today,
-                          color: AppColors.getPrimaryColor(),
-                        ),
-                        title: 'Fecha Vencimiento Documento',
-                        isRequired: false,
-                        initialValue: fechaVencimiento?.selectorFormat(),
-                        isValid: null,
-                      ),
-                    ],
+                    // if (isConnected) ...[
+                    // const Gap(30),
+                    // OutlineTextfieldWidget(
+                    //   initialValue: paisEmisorDocumento,
+                    //   readOnly: true,
+                    //   icon: Icon(
+                    //     Icons.map,
+                    //     color: AppColors.getPrimaryColor(),
+                    //   ),
+                    //   title: 'Pais Emisor Documento',
+                    //   isRequired: false,
+                    //   isValid: null,
+                    // ),
+                    // const Gap(30),
+                    // OutlineTextfieldWidget(
+                    //   readOnly: true,
+                    //   icon: Icon(
+                    //     Icons.calendar_today,
+                    //     color: AppColors.getPrimaryColor(),
+                    //   ),
+                    //   title: 'Fecha Emisión Documento',
+                    //   isRequired: false,
+                    //   initialValue: _selectedDate?.selectorFormat(),
+                    //   isValid: null,
+                    // ),
+                    // const Gap(30),
+                    // OutlineTextfieldWidget(
+                    //   readOnly: true,
+                    //   icon: Icon(
+                    //     Icons.calendar_today,
+                    //     color: AppColors.getPrimaryColor(),
+                    //   ),
+                    //   title: 'Fecha Vencimiento Documento',
+                    //   isRequired: false,
+                    //   initialValue: fechaVencimiento?.selectorFormat(),
+                    //   isValid: null,
+                    // ),
+                    // ],
                     const Gap(30),
                     CountryInput(
                       validator: (value) =>
