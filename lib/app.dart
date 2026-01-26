@@ -43,7 +43,7 @@ class _AppState extends State<App> {
     super.initState();
 
     _lifecycleService = AppLifecycleService(
-      maxBackgroundTime: const Duration(hours: 8),
+      maxBackgroundTime: const Duration(hours: 5),
       onSessionExpired: () {
         router.go('/loading');
       },
