@@ -278,6 +278,22 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                     ),
                   ],
                   const Gap(30),
+                  SearchDropdownWidget(
+                    codigo: 'TIPODOCUMENTOPERSONA',
+                    isRequired: true,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value?.value),
+                    hintText: 'Tipo Documento Cónyuge',
+                    title: 'Tipo de Documento del Cónyuge',
+                    onChanged: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          tipoDocumentoConyugue: value?.value,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
                   OutlineTextfieldWidget(
                     isRequired: true,
                     validator: (value) =>
@@ -296,22 +312,6 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           documentoConyuge: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  SearchDropdownWidget(
-                    codigo: 'TIPODOCUMENTOPERSONA',
-                    isRequired: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    hintText: 'Tipo Documento Cónyuge',
-                    title: 'Tipo de Documento del Cónyuge',
-                    onChanged: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          tipoDocumentoConyugue: value?.value,
                         ),
                       );
                     },
@@ -342,8 +342,7 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.positiveNumberValidator(value),
+                  validator: (value) => ClassValidator.validateNotZero(value),
                   hintText: 'Ingresos Netos',
                   icon: Icon(Icons.wallet, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.number,

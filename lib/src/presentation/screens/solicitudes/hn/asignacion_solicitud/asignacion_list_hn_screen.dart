@@ -55,20 +55,20 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
   }
 
   void _onScroll() async {
-    final state = context.read<SolicitudesByEstadoHnCubit>().state;
+    final cubit = context.read<SolicitudesByEstadoHnCubit>();
     // final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
-    final hasMore = state.hasMore;
+    final hasMore = cubit.state.hasMore;
     final isAtBottom = _scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200;
 
     if (isAtBottom && hasMore && !isLoadingMore) {
       setState(() => isLoadingMore = true);
-      pagina++;
+      cubit.changePage(cubit.state.pagina + 1);
+
       if (!context.mounted || !mounted) return;
 
       context.read<SolicitudesByEstadoHnCubit>().getSolicitudesByEstado(
-            pagina: pagina,
-            isAsignadaToAsesorCredito: state.isAsignadaToAsesorCredito,
+            isAsignadaToAsesorCredito: cubit.state.isAsignadaToAsesorCredito,
           );
       if (!mounted) return;
 

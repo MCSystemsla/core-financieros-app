@@ -39,7 +39,7 @@ class _SendingFormWidgetState extends State<SendingFormWidget> {
                     isDone: true,
                   ));
           context.read<SolicitudNuevaMenorCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
+                numeroSolicitud: int.tryParse(state.numeroSolicitud) ?? 0,
               );
         }
       },

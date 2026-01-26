@@ -98,11 +98,11 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     }
   }
 
-  void sendCedulaImages({required String numeroSolicitud}) async {
+  void sendCedulaImages({required int numeroSolicitud}) async {
     try {
       await _solicitudesCreditoRepository
           .sendCedulaImageWhenSolicitudCreditoCreated(
-        numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+        numeroSolicitud: numeroSolicitud,
         cedulaCliente: state.cedula,
         imagenFrontal: state.cedulaFrontPath,
         imagenTrasera: state.cedulaBackPath,
@@ -212,9 +212,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
           _prefer(state.objFrecuenciaIdVer, prev?.objFrecuenciaIdVer),
       fechaDesembolso:
           _preferDate(state.fechaDesembolso, prev?.fechaDesembolso),
-      hasVerified:
-          !state.hasVerified ? (prev?.hasVerified ?? false) : state.hasVerified,
-      isDone: !state.isDone ? (prev?.isDone ?? false) : state.isDone,
+      hasVerified: boolPrefer(state.hasVerified, prev?.hasVerified),
+      isDone: boolPrefer(state.isDone, prev?.isDone),
       prestamoInteres: state.tasaInteres == 0
           ? (prev?.prestamoInteres ?? 0)
           : state.tasaInteres,
@@ -284,6 +283,10 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       telefonoBeneficiario:
           _prefer(state.telefonoBeneficiario, prev?.telefonoBeneficiario),
     );
+  }
+
+  bool boolPrefer(bool stateValue, bool? prevValue) {
+    return stateValue ? true : (prevValue ?? false);
   }
 
   void onFieldChanged(SolicitudReprestamoState Function() copyWithFn) {

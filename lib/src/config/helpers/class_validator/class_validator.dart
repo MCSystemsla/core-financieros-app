@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 class ClassValidator {
   static String? validateEmail(String? value) {
@@ -27,6 +28,21 @@ class ClassValidator {
         trimmedValue == 'input.select_option'.tr()) {
       return 'input.input_validator'.tr();
     }
+    return null;
+  }
+
+  static String? validateNotZero(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'input.input_validator'.tr();
+    }
+
+    final cleanedValue = toNumericString(value, allowPeriod: true);
+    final numValue = num.tryParse(cleanedValue);
+
+    if (numValue == null || numValue <= 0) {
+      return 'Ingresa un valor mayor que 0';
+    }
+
     return null;
   }
 
@@ -107,16 +123,6 @@ class ClassValidator {
     final numValue = num.tryParse(value.trim());
     if (numValue == null || numValue <= 0) {
       return 'Ingresa un número mayor que 0';
-    }
-
-    return null;
-  }
-
-  static String? positiveNumberValidator(String? value) {
-    if (value == null || value.trim().isEmpty) return null;
-    final numValue = num.tryParse(value.trim());
-    if (numValue == null || numValue <= 0) {
-      return 'Ingresa un monto mayor que 0';
     }
 
     return null;

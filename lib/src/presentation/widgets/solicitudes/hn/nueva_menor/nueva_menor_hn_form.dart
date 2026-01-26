@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nuev
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form7.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form8.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_historial_crediticio_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
@@ -30,7 +31,7 @@ class NuevaMenorHnForm extends StatelessWidget {
         Expanded(
           child: SafeArea(
             child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
+              // physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               children: [
                 AddCedulaPhotosScreen(
@@ -105,6 +106,9 @@ class NuevaMenorHnForm extends StatelessWidget {
                 NuevaMenorForm8(
                   controller: pageController,
                 ),
+                SolicitudSignatureNueva(
+                  pageController: pageController,
+                )
               ],
             ),
           ),

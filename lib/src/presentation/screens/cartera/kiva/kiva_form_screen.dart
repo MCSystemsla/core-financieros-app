@@ -1,4 +1,3 @@
-import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
@@ -60,19 +59,6 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
           listener: (context, state) async {
             final solicitudesProvider =
                 context.read<SolicitudesPendientesLocalDbCubit>();
-            if (state.status == Status.error &&
-                state.errorMsg.contains('Acceso Denegado')) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                customSnackbar(
-                  title: 'Tu sesion a caducado, inicia sesión nuevamente',
-                  icon: const Icon(Icons.logout, color: Colors.white),
-                ),
-              );
-              context.pushReplacement('/login');
-            }
-            if (state.isColletionTablesDelted) {
-              solicitudesProvider.deleteAllSolicitudes();
-            }
 
             if (state.status == Status.done) {
               await solicitudesProvider.saveSolicitudesPendientes(

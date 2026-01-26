@@ -612,6 +612,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                   icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.phone,
                   textCapitalization: TextCapitalization.none,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   title: 'Telefono',
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,

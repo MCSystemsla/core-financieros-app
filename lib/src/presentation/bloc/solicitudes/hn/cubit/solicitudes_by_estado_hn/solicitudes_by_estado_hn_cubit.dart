@@ -14,7 +14,6 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       : super(SolicitudesByEstadoHnInitial());
 
   Future<void> getSolicitudesByEstado({
-    int pagina = 1,
     bool isAsignadaToAsesorCredito = false,
     EstadoCredito estadoCredito = EstadoCredito.registrada,
   }) async {
@@ -26,13 +25,18 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
         numeroSolicitud: state.numeroSolicitud,
         cedulaCliente: state.cedulaCliente,
-        pagina: pagina,
+        pagina: state.pagina,
       );
+      final hasUserAppliedFilter =
+          state.isNumeroSolicitudFilter || state.isCedulaSolicitudFilter;
       emit(state.copyWith(
         status: Status.done,
-        solicitudes: resp.data,
+        solicitudes: hasUserAppliedFilter
+            ? resp.data
+            : [...state.solicitudes, ...resp.data],
         hasMore: resp.metaDataPagination.hasMore,
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+        pagina: resp.metaDataPagination.paginaActual,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
@@ -48,10 +52,15 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       isCedulaSolicitudFilter: false,
       numeroSolicitud: '',
       cedulaCliente: '',
+      solicitudes: [],
     ));
   }
 
   void onFieldChanged(SolicitudesByEstadoHnState Function() copyWithFn) {
     emit(copyWithFn());
+  }
+
+  void changePage(int page) {
+    emit(state.copyWith(pagina: page));
   }
 }

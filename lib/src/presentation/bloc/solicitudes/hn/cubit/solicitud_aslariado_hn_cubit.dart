@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/hn/aslariado_hn_autosave.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
@@ -173,6 +175,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   }
 
   sendCedulaImages({required String numeroSolicitud}) async {
+    log('Enviando imagen de la cédula');
     try {
       await _repository.sendCedulaImageWhenSolicitudCreditoCreated(
         numeroSolicitud: int.parse(numeroSolicitud),

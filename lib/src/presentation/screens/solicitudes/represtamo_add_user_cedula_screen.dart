@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/represtamo_user_by_cedula/represta_user_by_cedula_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -24,17 +25,39 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void showSuccessDialog({required UserByCedulaSolicitud userByCedula}) {
+    void showSuccessDialog({
+      required String id,
+      required String nombreCompleto,
+      required String cedula,
+      required String tipoDocumento,
+      required String tipoPersona,
+      required String paisEmisorDocumento,
+      required String fechaVencimientoDocumento,
+      required String fechaEmisionDocumento,
+    }) {
       CustomAlertDialog(
         context: context,
-        title: '${userByCedula.primerNombre} listo para crear solicitud!!',
+        title: '$nombreCompleto listo para crear solicitud!!',
         onDone: () {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: ((_) => CrearSolicitudScreenNi(
                     typeForm: typeForm,
-                    userByCedulaSolicitud: userByCedula,
+                    userByCedulaSolicitud: UserByCedulaSolicitud(
+                      cedula: cedula,
+                      primerNombre: nombreCompleto,
+                      segundoApellido: nombreCompleto,
+                      tipoDocumento: tipoDocumento,
+                      tipoPersona: tipoPersona,
+                      fechaEmision: DateTime.tryParse(fechaEmisionDocumento),
+                      fechaVencimiento:
+                          DateTime.tryParse(fechaVencimientoDocumento),
+                      paisEmisor: Item(
+                        name: paisEmisorDocumento,
+                        value: paisEmisorDocumento,
+                      ),
+                    ),
                   )),
             ),
           );
@@ -61,27 +84,19 @@ class ReprestamoAddUserCedulaScreen extends StatelessWidget {
         body:
             BlocConsumer<ReprestaUserByCedulaCubit, ReprestaUserByCedulaState>(
           listener: (context, state) {
-            if (state is OnReprestaUserByCedulaError) {
+            if (state.status == Status.error) {
               showErrorDialog(errorMsg: state.errorMsg);
             }
-            if (state is OnReprestaUserByCedulaSuccess) {
+            if (state.status == Status.done) {
               showSuccessDialog(
-                userByCedula: UserByCedulaSolicitud(
-                  cedula: state.represtamoUserCedula.cedula,
-                  primerNombre: state.represtamoUserCedula.nombreCompleto,
-                  segundoApellido: state.represtamoUserCedula.nombreCompleto,
-                  tipoDocumento:
-                      state.represtamoUserCedula.tipoDocumento ?? 'N/A',
-                  tipoPersona: state.represtamoUserCedula.tipoPersona,
-                  fechaEmision:
-                      state.represtamoUserCedula.fechaEmisionDocumento,
-                  fechaVencimiento:
-                      state.represtamoUserCedula.fechaVencimientoDocumento,
-                  paisEmisor: Item(
-                    name: state.represtamoUserCedula.paisEmisorDocumento,
-                    value: state.represtamoUserCedula.paisEmisorDocumento,
-                  ),
-                ),
+                nombreCompleto: state.nombreCompleto,
+                cedula: state.cedula,
+                tipoDocumento: state.tipoDocumento,
+                tipoPersona: state.tipoPersona,
+                paisEmisorDocumento: state.paisEmisorDocumento,
+                fechaEmisionDocumento: state.fechaEmisionDocumento,
+                fechaVencimientoDocumento: state.fechaVencimientoDocumento,
+                id: state.id,
               );
             }
           },
@@ -148,8 +163,8 @@ class _ReprestamoAddUserWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: CustomElevatedButton(
-                    enabled: state is! OnReprestaUserByCedulaLoading,
-                    text: state is OnReprestaUserByCedulaLoading
+                    enabled: state.status != Status.inProgress,
+                    text: state.status == Status.inProgress
                         ? 'Cargando...'
                         : 'Enviar',
                     color: AppColors.greenLatern.withOpacity(0.4),

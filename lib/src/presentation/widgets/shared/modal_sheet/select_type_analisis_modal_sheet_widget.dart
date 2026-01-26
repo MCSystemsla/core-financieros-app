@@ -166,6 +166,17 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                             },
                           ),
                           SelectableCardItem(
+                            userHaveDataAlready: false,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.photo_library_outlined,
+                            color: const Color(0xff455A64),
+                            title: 'Registrar Imágenes del negocio',
+                            subtitle: 'Ingresa fotografías del negocio',
+                            onTap: () {
+                              // navegación
+                            },
+                          ),
+                          SelectableCardItem(
                             userHaveDataAlready: state.tieneFiadores,
                             isLoading: state.status == Status.inProgress,
                             icon: Icons.swap_horiz_rounded,
