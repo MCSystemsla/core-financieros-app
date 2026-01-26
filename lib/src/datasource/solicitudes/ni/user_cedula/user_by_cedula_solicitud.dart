@@ -23,9 +23,9 @@ class UserByCedulaSolicitud {
     this.fechaEmision,
     this.fechaVencimiento,
     this.fechaNacimiento,
-    this.tipoDocumento,
+    this.tipoDocumento = '',
     this.paisEmisor,
-    this.tipoPersona,
-    this.sexo,
+    this.tipoPersona = '',
+    this.sexo = '',
   });
 }

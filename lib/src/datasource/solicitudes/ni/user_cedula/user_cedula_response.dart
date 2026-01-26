@@ -17,18 +17,18 @@ class UserCedulaData {
 
 class UserCedulaResponse {
   final String cedula;
-  final String primerNombre;
-  final String segundoNombre;
-  final String primerApellido;
-  final String segundoApellido;
-  final DateTime fechaNacimiento;
-  final String sexo;
+  final String? primerNombre;
+  final String? segundoNombre;
+  final String? primerApellido;
+  final String? segundoApellido;
+  final DateTime? fechaNacimiento;
+  final String? sexo;
   final String? pais;
   final String? departamento;
   final String? municipio;
-  final String direccion;
-  final DateTime fechaEmision;
-  final DateTime fechaExpira;
+  final String? direccion;
+  final DateTime? fechaEmision;
+  final DateTime? fechaExpira;
   final String? tipoDocumento;
 
   UserCedulaResponse({
@@ -42,27 +42,33 @@ class UserCedulaResponse {
     this.pais,
     this.departamento,
     this.municipio,
-    required this.direccion,
-    required this.fechaEmision,
-    required this.fechaExpira,
-    this.tipoDocumento,
+    this.direccion,
+    this.fechaEmision,
+    this.fechaExpira,
+    this.tipoDocumento = '',
   });
 
   factory UserCedulaResponse.fromJson(Map<String, dynamic> json) =>
       UserCedulaResponse(
-        cedula: json['Cedula'],
-        primerNombre: json['PrimerNombre'],
-        segundoNombre: json['SegundoNombre'],
-        primerApellido: json['PrimerApellido'],
-        segundoApellido: json['SegundoApellido'],
-        fechaNacimiento: DateTime.parse(json['FechaNacimiento']),
-        sexo: json['Sexo'],
-        pais: json['Pais'],
-        departamento: json['Departamento'],
-        municipio: json['Municipio'],
-        direccion: json['Direccion'],
-        fechaEmision: DateTime.parse(json['FechaEmision']),
-        fechaExpira: DateTime.parse(json['FechaExpira']),
-        tipoDocumento: json['TipoDocumento'],
+        cedula: json['Cedula'] ?? '',
+        primerNombre: json['PrimerNombre'] ?? '',
+        segundoNombre: json['SegundoNombre'] ?? '',
+        primerApellido: json['PrimerApellido'] ?? '',
+        segundoApellido: json['SegundoApellido'] ?? '',
+        fechaNacimiento: json['FechaNacimiento'] != null
+            ? DateTime.tryParse(json['FechaNacimiento'].toString())
+            : null,
+        sexo: json['Sexo'] ?? '',
+        pais: json['Pais'] ?? '',
+        departamento: json['Departamento'] ?? '',
+        municipio: json['Municipio'] ?? '',
+        direccion: json['Direccion'] ?? '',
+        fechaEmision: json['FechaEmision'] != null
+            ? DateTime.tryParse(json['FechaEmision'].toString())
+            : null,
+        fechaExpira: json['FechaExpira'] != null
+            ? DateTime.tryParse(json['FechaExpira'].toString())
+            : null,
+        tipoDocumento: json['TipoDocumento'] ?? '',
       );
 }

@@ -32,13 +32,22 @@ class NuevaMenorOfflineHn2 extends StatefulWidget {
 
 class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
     with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+  String? depWhereClause;
+  String? munWhereClause;
+  String? aldeaWhereClause;
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    depWhereClause = cubit.state.paisCasaCodigo;
+    munWhereClause = cubit.state.departamentoCasaCodigo;
+    aldeaWhereClause = cubit.state.municipioCasaCodigo;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final formKey = GlobalKey<FormState>();
-    String? depWhereClause;
-    String? munWhereClause;
-    String? aldeaWhereClause;
 
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(

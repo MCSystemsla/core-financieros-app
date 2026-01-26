@@ -280,6 +280,7 @@ class __FormContentState extends State<_FormContent> {
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   title: 'Producto',
+                  isAsalariado: true,
                   onChanged: (item) {
                     if (item == null) return;
                     producto = item;

@@ -305,6 +305,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                 ),
                 const Gap(20),
                 CatalogoProductoDropdown(
+                  isAsalariado: true,
                   selectedItem: Item(
                     name: producto?.name ?? '',
                     value: producto?.value,

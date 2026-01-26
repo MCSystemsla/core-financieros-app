@@ -144,7 +144,7 @@ class _CatalogoValorNacionalidadState extends State<CatalogoValorNacionalidad> {
                     listItemBuilder: (index, dataItem) {
                       return ListTile(
                         title: Text(
-                          dataItem.data.nombre,
+                          '${dataItem.data.nombre} - ${dataItem.data.valor}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,

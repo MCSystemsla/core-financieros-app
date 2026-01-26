@@ -216,7 +216,6 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       initialValue: entidad,
                       title: 'Nombre de la Entidad',
                       icon: const Icon(Icons.wallet),
-                      textInputType: TextInputType.number,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [

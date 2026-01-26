@@ -539,7 +539,6 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                         name: tipoDocumento ?? '',
                         value: tipoDocumento,
                       ),
-                      enabled: false,
                       hintText: tipoDocumento ?? 'input.select_option'.tr(),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),

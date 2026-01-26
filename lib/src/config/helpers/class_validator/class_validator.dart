@@ -163,7 +163,7 @@ class ClassValidator {
         }
         break;
 
-      case 'CEDULARESIDENCIA':
+      case 'CARNETRESIDENCIA':
         if (!carnetRegex.hasMatch(input)) {
           return 'El carnét de residencia debe tener entre 6 y 15 caracteres alfanuméricos';
         }

@@ -359,7 +359,6 @@ class __FormContentState extends State<_FormContent> {
                     name: tipoDocumento ?? '',
                     value: tipoDocumento,
                   ),
-                  enabled: false,
                   hintText: tipoDocumento ?? '',
                   validator: (value) =>
                       ClassValidator.validateRequired(tipoDocumento),

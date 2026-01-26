@@ -189,12 +189,27 @@ class ObjectBoxService {
     return results;
   }
 
-  List<CatalogoLocalDb> getCatalogoProductos({bool isRecurrente = false}) {
+  List<CatalogoLocalDb> getCatalogoProductos({
+    bool isRecurrente = false,
+    bool isAsalariado = false,
+  }) {
+    if (!isAsalariado) {
+      final query = catalogoBox
+          .query(
+            CatalogoLocalDb_.type.equals('PRODUCTO').and(
+                  CatalogoLocalDb_.isRecurrente.equals(isRecurrente),
+                ),
+          )
+          .build();
+
+      final results = query.find();
+      query.close();
+
+      return results;
+    }
     final query = catalogoBox
         .query(
-          CatalogoLocalDb_.type.equals('PRODUCTO').and(
-                CatalogoLocalDb_.isRecurrente.equals(isRecurrente),
-              ),
+          CatalogoLocalDb_.type.equals('PRODUCTO'),
         )
         .build();
 

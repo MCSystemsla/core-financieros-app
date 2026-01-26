@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 enum ClientSignatureStatus { yes, noPossible, unknown }
@@ -202,6 +205,15 @@ class _SolicitudSignatureClientWidgetState
                       ).showDialog(context);
                       return;
                     }
+                    final signatureImage = await controller.toPngBytes();
+                    final directory = await getApplicationDocumentsDirectory();
+                    final filePath =
+                        '${directory.path}/solicitud_signature.png';
+
+                    // Guarda la imagen en el archivo
+                    final file = File(filePath);
+                    await file.writeAsBytes(signatureImage!);
+                    if (!context.mounted) return;
 
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
