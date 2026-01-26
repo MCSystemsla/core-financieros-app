@@ -37,7 +37,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SlideInLeft(
+    return FadeIn(
       duration: animate ? const Duration(milliseconds: 500) : Duration.zero,
       delay: animate ? Duration(milliseconds: 100 * index) : Duration.zero,
       child: Hero(

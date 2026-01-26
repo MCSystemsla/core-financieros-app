@@ -53,14 +53,7 @@ class _AnalisisFilterContentWidgetState
                   const Gap(10),
                   Expanded(
                     child: FilterView(
-                      onTap: () {
-                        // showFilterCreditosByEstadoHN(
-                        //   context,
-                        //   EstadoCredito.registrada,
-                        //   state.isAsignadaToAsesorCredito,
-                        //   context.read<SolicitudesByEstadoHnCubit>(),
-                        // );
-                      },
+                      onTap: () {},
                     ),
                   ),
                 ],
@@ -208,6 +201,31 @@ void showFilterGetByCedualAndNumeroSolicitud(
                                 ],
                               ),
                             ),
+                          const Gap(20),
+                          SwitchListTile(
+                            value: false,
+                            onChanged: (value) {},
+                            title: const Text('Nombre de cliente'),
+                            subtitle: const Text(
+                              'Filtrar por nombre de cliente',
+                            ),
+                          ),
+                          // if (state.isNumeroSolicitudFilter)
+                          //   FadeIn(
+                          //     child: OutlineTextfieldWidget(
+                          //       initialValue: state.numeroSolicitud,
+                          //       onChange: (value) {},
+                          //       validator: (value) =>
+                          //           ClassValidator.validateRequired(value),
+                          //       title: 'Ingresa el nombre del cliente',
+                          //       hintText: 'Ej: Dery Galeas',
+                          //       icon: const Icon(Icons.request_page),
+                          //       textInputType: TextInputType.number,
+                          //       inputFormatters: [
+                          //         FilteringTextInputFormatter.digitsOnly,
+                          //       ],
+                          //     ),
+                          //   ),
                           const Gap(20),
                           CustomElevatedButton(
                             onPressed: () {

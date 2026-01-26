@@ -162,6 +162,45 @@ class _ListDataWidget extends StatefulWidget {
 }
 
 class _ListDataWidgetState extends State<_ListDataWidget> {
+  bool isLoadingMore = false;
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() async {
+    final cubit = context.read<SolicitudesByEstadoHnCubit>();
+    final isSuccess = cubit.state.status == Status.done;
+    final hasMore = isSuccess ? cubit.state.hasMore : false;
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200;
+
+    if (isAtBottom && hasMore && !isLoadingMore) {
+      setState(() => isLoadingMore = true);
+
+      cubit.changePage(cubit.state.pagina + 1);
+
+      if (!context.mounted || !mounted) return;
+
+      context.read<SolicitudesByEstadoHnCubit>().getSolicitudesByEstado(
+            isAsignadaToAsesorCredito:
+                isSuccess ? cubit.state.isAsignadaToAsesorCredito : false,
+            estadoCredito: EstadoCredito.asignada,
+          );
+      if (!mounted) return;
+
+      setState(() => isLoadingMore = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.data.isEmpty) {
@@ -171,8 +210,8 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
     return Expanded(
       flex: 4,
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: widget.data.length,
-        shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return AnalisisCreditCardHn(
             monto: widget.data[index].monto!,
