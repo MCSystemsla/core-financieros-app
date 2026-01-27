@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -151,6 +154,7 @@ class _SolicitudSignatureClientWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<SolicitudesHnBoxService>();
     final internetConnectionCubit =
         context.read<InternetConnectionCubit>().state.connectionStatus;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
@@ -208,11 +212,18 @@ class _SolicitudSignatureClientWidgetState
                     final signatureImage = await controller.toPngBytes();
                     final directory = await getApplicationDocumentsDirectory();
                     final filePath =
-                        '${directory.path}/solicitud_signature.png';
+                        '${directory.path}/solicitud_signature_${DateTime.now().millisecondsSinceEpoch}.png';
 
                     // Guarda la imagen en el archivo
                     final file = File(filePath);
                     await file.writeAsBytes(signatureImage!);
+
+                    final clientSignature = SignatureClientDb(
+                      typeSolicitud: 'NUEVA',
+                      cedula: cubit.state.cedula,
+                      imageSignature: filePath,
+                    );
+                    localDbProvider.saveClientSignature(clientSignature);
                     if (!context.mounted) return;
 
                     cubit.onFieldChanged(

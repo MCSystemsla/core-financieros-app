@@ -31,7 +31,7 @@ class NuevaMenorHnForm extends StatelessWidget {
         Expanded(
           child: SafeArea(
             child: PageView(
-              // physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               children: [
                 AddCedulaPhotosScreen(

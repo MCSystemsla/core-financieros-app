@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catal
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_mun.db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -40,6 +41,7 @@ class SolicitudesHnBoxService {
   late final Box<HistorialCrediticioLocalDb> historialCrediticioBox;
   late final Box<ActividadesEconomicasAliasFilteredLocalDb>
       actividadesEconomicasAliasFilteredBox;
+  late final Box<SignatureClientDb> signatureClientBox;
 
   SolicitudesHnBoxService._create(this._store) {
     solicitudesAsalariadoBox = _store.box<SolicitudAsalariadoHnDbLocal>();
@@ -58,6 +60,7 @@ class SolicitudesHnBoxService {
     actividadesEconomicasAliasFilteredBox =
         _store.box<ActividadesEconomicasAliasFilteredLocalDb>();
     historialCrediticioBox = _store.box<HistorialCrediticioLocalDb>();
+    signatureClientBox = _store.box<SignatureClientDb>();
   }
 
   static Future<SolicitudesHnBoxService> init() async {
@@ -457,5 +460,24 @@ class SolicitudesHnBoxService {
             .lessThan(now.millisecondsSinceEpoch))
         .build()
         .remove();
+  }
+
+  void saveClientSignature(SignatureClientDb clientSignature) {
+    try {
+      signatureClientBox.put(clientSignature);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  SignatureClientDb? getSignatureByCedula(String cedula) {
+    final query = signatureClientBox
+        .query(SignatureClientDb_.cedula.equals(cedula))
+        .build();
+
+    final result = query.findFirst();
+    query.close();
+
+    return result;
   }
 }
