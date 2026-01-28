@@ -79,72 +79,74 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
                   title: 'Crear nueva Solicitud Asalariado',
                 ),
                 Expanded(
-                  child: PageView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: pageController,
-                    children: [
-                      Hero(
-                        transitionOnUserGestures: true,
-                        tag: 'cedulaFrontal',
-                        child: PhotoCedulaClientWidget(
-                          onNextPressed: () {},
-                          controller: pageController,
-                          fotoCedulaFrontal: XFile(
-                              imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                          fotoCedulaTrasera:
-                              XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                          onCedulaFrontalPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageFrontCedula ?? '',
+                  child: SafeArea(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pageController,
+                      children: [
+                        Hero(
+                          transitionOnUserGestures: true,
+                          tag: 'cedulaFrontal',
+                          child: PhotoCedulaClientWidget(
+                            onNextPressed: () {},
+                            controller: pageController,
+                            fotoCedulaFrontal: XFile(
+                                imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                            fotoCedulaTrasera: XFile(
+                                imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                            onCedulaFrontalPressed: () {
+                              context.pushTransparentRoute(
+                                PhotoCedulaImagePreview(
+                                  imagesCedula: File(
+                                    imagesCedula?.imageFrontCedula ?? '',
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          onCedulaTraseraPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageBackCedula ?? '',
+                              );
+                            },
+                            onCedulaTraseraPressed: () {
+                              context.pushTransparentRoute(
+                                PhotoCedulaImagePreview(
+                                  imagesCedula: File(
+                                    imagesCedula?.imageBackCedula ?? '',
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      SolicitudAsalariadoOffline1(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline2(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline3(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline4(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline5(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline6(
-                        controller: pageController,
-                      ),
-                      SolcitudAsalariadoOffline7(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoOffline8(
-                        controller: pageController,
-                      ),
-                      SolicitudAsalariadoHistorialCreditoOfflineHn(
-                        controller: pageController,
-                        uuid: solicitudAsalariadoHnDbLocal.uuid ?? '',
-                      ),
-                      SolicitudAsalariadoOffline9(
-                        controller: pageController,
-                      ),
-                    ],
+                        SolicitudAsalariadoOffline1(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline2(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline3(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline4(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline5(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline6(
+                          controller: pageController,
+                        ),
+                        SolcitudAsalariadoOffline7(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoOffline8(
+                          controller: pageController,
+                        ),
+                        SolicitudAsalariadoHistorialCreditoOfflineHn(
+                          controller: pageController,
+                          uuid: solicitudAsalariadoHnDbLocal.uuid ?? '',
+                        ),
+                        SolicitudAsalariadoOffline9(
+                          controller: pageController,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -61,6 +61,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
         BlocProvider(
           create: (ctx) => AnalisisChecksCubit(repository)
             ..checkAnalisis(
+              cedulaCliente: cedulaCliente,
               numeroSolicitud: int.parse(numeroSolicitud),
               tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString() ?? '',
             ),
@@ -94,6 +95,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                   'Plan de inversión': state.tienePlanInversion,
                   'Fiadores': state.tieneFiadores,
                   'Garantia': state.tieneGarantia,
+                  'Ubicacion': state.tieneUbicacion,
                 };
                 return Column(
                   children: [
@@ -231,6 +233,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                             },
                           ),
                           SelectableCardItem(
+                            userHaveDataAlready: state.tieneUbicacion,
                             isLoading: state.status == Status.inProgress,
                             icon: Icons.place_rounded,
                             color: const Color(0xFF0EA5E9),

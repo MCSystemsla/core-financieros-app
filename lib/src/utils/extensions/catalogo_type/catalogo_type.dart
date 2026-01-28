@@ -25,7 +25,9 @@ enum CatalogoType {
   ubicacionGPS('UBICACIONGPS'),
   actividadesEconomicasCNBS('ACTIVIDADESECONOMICASCNBS'),
   empleados('EMPLEADOS'),
-  producto('PRODUCTO');
+  producto('PRODUCTO'),
+  cargosDisponibles('CARGOSDISPONIBLES'),
+  gruposActivos('GRUPOSACTIVOS');
 
   final String codigo;
 

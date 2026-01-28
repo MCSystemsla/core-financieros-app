@@ -8,6 +8,8 @@ import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_cre
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/cargos_disponible_response.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
@@ -95,6 +97,12 @@ abstract class SolicitudesCreditoHnRepository {
     required int numeroSolicitud,
     required String tipoSolicitud,
   });
+  Future<GruposActivosResponse> getGruposActivos();
+
+  Future<void> crearGrupoCredito({
+    required String nombre,
+  });
+  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles();
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -688,6 +696,71 @@ class SolicitudesCreditoHnRepositoryImpl
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GruposActivosResponse> getGruposActivos() async {
+    final endpoint = SolciitudGrupalGruposActivos();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'Tienes problemas de conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = GruposActivosResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> crearGrupoCredito({required String nombre}) async {
+    final endpoint = SolicitudesGrupalCreateGrupoCreditoEndpoint(
+      nombre: nombre,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles() async {
+    final endpoint = SolicitudesGrupalesGetCargosDisponiblesEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = GrupalesCargosDisponiblesResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

@@ -397,3 +397,55 @@ class AutorizarSolicitudCreditoHNEndpoint extends Endpoint {
         'TipoSolicitud': tipoSolicitud,
       };
 }
+
+class SolciitudGrupalGruposActivos extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/grupales/grupos-activos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
+
+class SolicitudesGrupalCreateGrupoCreditoEndpoint extends Endpoint {
+  final String nombre;
+
+  SolicitudesGrupalCreateGrupoCreditoEndpoint({required this.nombre});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/grupales/crear-grupo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'Nombre': nombre,
+      };
+}
+
+class SolicitudesGrupalesGetCargosDisponiblesEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/grupales/cargos-disponibles';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

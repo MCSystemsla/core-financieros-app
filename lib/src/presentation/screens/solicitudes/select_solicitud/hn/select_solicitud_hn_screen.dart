@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_grupo_credito_grupal/crear_grupo_credito_grupal_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -63,12 +64,9 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             const _SolicitudesCardsRow2(),
             const Gap(20),
-            // const _MySolicitudesAsignmentsCard(),
-            // const Gap(20),
-            if (actions.contains(TypeAction.asignacion.codigo)) ...[
-              const _SolicitudesCardsRow3(),
-              const Gap(20),
-            ],
+
+            const _SolicitudesCardsRow3(),
+            const Gap(20),
 
             if (actions.contains(TypeAction.autorizacion.codigo)) ...[
               const _SolicitudesCardsRow4(),
@@ -86,23 +84,43 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+
     return Row(
       children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg5,
-            title: 'Asignación de Solicitudes Crédito',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AsignacionListHnScreen()),
-                ),
-              );
-            },
+        if (actions.contains(TypeAction.asignacion.codigo)) ...[
+          const Gap(10),
+          Expanded(
+            child: SolicitudCard(
+              svgPath: ImageAsset.nuevaMenorBg5,
+              title: 'Asignación de Solicitudes Crédito',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const AsignacionListHnScreen()),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
+        ],
+        if (actions.contains(TypeAction.crearGrupoCredito.codigo)) ...[
+          Expanded(
+            child: SolicitudCard(
+              svgPath: ImageAsset.nuevaMenorBg6,
+              title: 'Crear Grupo de Crédito',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const CrearGrupoCreditoGrupalScreen()),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
         const Gap(10),
       ],
     );

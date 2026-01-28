@@ -4,7 +4,8 @@ enum TypeAction {
   cerrar('ANALISISSOLICITUDCREDITOCERRAR'),
   menuCartera('MENUCARTERAMOVIL'),
   llenarSolicitudes('LLENARSOLICITUDESMOVIL'),
-  llenarKiva('LLENARKIVAMOVIL');
+  llenarKiva('LLENARKIVAMOVIL'),
+  crearGrupoCredito('CREARGRUPOCREDITO');
 
   final String codigo;
 

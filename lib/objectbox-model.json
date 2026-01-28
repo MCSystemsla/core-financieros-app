@@ -2942,7 +2942,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "163:1511711255960257124",
+      "lastPropertyId": "168:4360154849385421371",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3759,6 +3759,31 @@
         {
           "id": "163:1511711255960257124",
           "name": "tipoDocumentoConyugeCodigo",
+          "type": 9
+        },
+        {
+          "id": "164:1606715754420161115",
+          "name": "grupoCodigo",
+          "type": 9
+        },
+        {
+          "id": "165:5727794340423333935",
+          "name": "cargoGrupoCodigo",
+          "type": 9
+        },
+        {
+          "id": "166:675096186477396715",
+          "name": "esGrupal",
+          "type": 9
+        },
+        {
+          "id": "167:1545807862191175515",
+          "name": "cargoGrupoNombre",
+          "type": 9
+        },
+        {
+          "id": "168:4360154849385421371",
+          "name": "grupoCodigoNombre",
           "type": 9
         }
       ],

@@ -13,10 +13,12 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
   Future<void> checkAnalisis({
     required int numeroSolicitud,
     required String tipoSolicitud,
+    required String cedulaCliente,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       final data = await _repository.analisisChecks(
+        cedulaCliente: cedulaCliente,
         numeroSolicitud: numeroSolicitud,
         tipoSolicitud: tipoSolicitud,
       );
@@ -26,6 +28,7 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
         tieneGarantia: data.data.tieneGarantia,
         tieneFiadores: data.data.tieneFiadores,
         tieneAnalisis: data.data.tieneAnalisis,
+        tieneUbicacion: data.data.tieneUbicacion,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

@@ -8,6 +8,7 @@ class AnalisisChecksState extends Equatable {
   final bool tieneGarantia;
   final bool tieneFiadores;
   final bool tieneAnalisis;
+  final bool tieneUbicacion;
   const AnalisisChecksState({
     this.errorMsg = '',
     this.status = Status.notStarted,
@@ -15,6 +16,7 @@ class AnalisisChecksState extends Equatable {
     this.tieneGarantia = false,
     this.tieneFiadores = false,
     this.tieneAnalisis = false,
+    this.tieneUbicacion = false,
   });
 
   @override
@@ -24,6 +26,7 @@ class AnalisisChecksState extends Equatable {
         tieneGarantia,
         tieneFiadores,
         tieneAnalisis,
+        tieneUbicacion,
         errorMsg,
       ];
 
@@ -34,6 +37,7 @@ class AnalisisChecksState extends Equatable {
     bool? tieneGarantia,
     bool? tieneFiadores,
     bool? tieneAnalisis,
+    bool? tieneUbicacion,
   }) {
     return AnalisisChecksState(
       errorMsg: errorMsg ?? this.errorMsg,
@@ -42,6 +46,7 @@ class AnalisisChecksState extends Equatable {
       tieneGarantia: tieneGarantia ?? this.tieneGarantia,
       tieneFiadores: tieneFiadores ?? this.tieneFiadores,
       tieneAnalisis: tieneAnalisis ?? this.tieneAnalisis,
+      tieneUbicacion: tieneUbicacion ?? this.tieneUbicacion,
     );
   }
 }

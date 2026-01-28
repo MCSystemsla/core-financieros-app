@@ -306,10 +306,12 @@ class CloseAnalisisEndpointHN extends Endpoint {
 class GetAnalsisChecksEndpointHN extends Endpoint {
   final int numeroSolicitud;
   final String tipoSolicitud;
+  final String cedulaCliente;
 
   GetAnalsisChecksEndpointHN({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
+    required this.cedulaCliente,
   });
 
   @override
@@ -326,6 +328,7 @@ class GetAnalsisChecksEndpointHN extends Endpoint {
         'NumeroSolicitud': numeroSolicitud.toString(),
         'database': LocalStorage().database,
         'TipoSolicitud': tipoSolicitud,
+        'DocumentoCliente': cedulaCliente,
       };
 }
 

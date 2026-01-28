@@ -168,8 +168,18 @@ class SolicitudNuevaMenorHnLocalDb {
   bool hasVerified = false;
   String? apellidosConyugue;
   String? tipoDocumentoConyugeCodigo;
+  String? grupoCodigo;
+  String? cargoGrupoCodigo;
+  String? esGrupal;
+  String? cargoGrupoNombre;
+  String? grupoCodigoNombre;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
+    this.esGrupal,
+    this.grupoCodigo,
+    this.cargoGrupoCodigo,
+    this.cargoGrupoNombre,
+    this.grupoCodigoNombre,
     this.uuid,
     this.database,
     this.origenSolicitudCodigo,

@@ -27,6 +27,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       final (isOk, msg, numeroSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
+          cargoGrupoCodigo: state.cargoGrupoCodigo,
+          grupoCodigo: state.grupoCodigo,
           historialCredito: state.historialCredito,
           actividadEconomicaCnbs3Codigo: state.actividadEconomicaCnbs3Codigo,
           email: state.email,
@@ -216,6 +218,12 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     return SolicitudNuevaMenorHnLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
+      cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
+      grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
+      cargoGrupoNombre: _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
+      grupoCodigoNombre:
+          _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
       database: _prefer(state.database, prev?.database),
       apellido2: _prefer(state.apellido2, prev?.apellido2),
       nombre2: _prefer(state.nombre2, prev?.nombre2),
@@ -753,6 +761,12 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         apellidosConyugue: solicitud.apellidosConyugue,
         caserioCasa: solicitud.caserioCasa,
         nombrePublico: solicitud.nombrePublico,
+        grupoCodigo: solicitud.grupoCodigo,
+        cargoGrupoCodigo: solicitud.cargoGrupoCodigo,
+        tipoDocumentoConyugue: solicitud.tipoDocumentoConyugeCodigo,
+        esGrupal: solicitud.esGrupal,
+        cargoGrupoNombre: solicitud.cargoGrupoNombre,
+        grupoCodigoNombre: solicitud.grupoCodigoNombre,
       ),
     );
   }

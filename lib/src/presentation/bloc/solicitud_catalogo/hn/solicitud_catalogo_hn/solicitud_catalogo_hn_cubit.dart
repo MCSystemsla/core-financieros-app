@@ -75,6 +75,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
 
       await getAndSaveParametros();
       await guardarAnalisisAsignados();
+      await saveCatalogosSolicitudesGrupal();
       LocalStorage().setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {
@@ -97,32 +98,6 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     }
   }
 
-  // static const List<String> _codigos = [
-  //   'TIPOSPERSONACREDITO',
-  //   'SEXO',
-  //   'MONEDA',
-  //   'TIPODOCUMENTOPERSONA',
-  //   'TIPOVIVIENDA',
-  //   'ESTADOCIVIL',
-  //   'ESCOLARIDAD',
-  //   'TIPOPERSONACNBS',
-  //   'TIPOCLIENTE',
-  //   'OCUPACION',
-  //   'NIVELAPROXIMADOINGRESOS',
-  //   'TIPOSOLICITUDCREDITO',
-  //   'ESTATUSCLIENTE',
-  //   'PROFESION',
-  //   'DESTINOCREDITO',
-  //   'SECTORECONOMICO',
-  //   'ACTIVIDADECONOMICA',
-  //   'MEDIDASCONOCIMIENTO',
-  //   'PARENTESCO',
-  //   'ESTADOPRESTAMO',
-  //   'RELACIONPERSONAS',
-  //   'TIPOGARANTIA',
-  //   'TIPOPERSONA',
-  //   'UBICACIONGPS',
-  // ];
   static const List<CatalogoType> _codigos = [
     CatalogoType.tipoPersonaCredito,
     CatalogoType.sexo,
@@ -239,6 +214,38 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       );
     } catch (e, stack) {
       log('Error general al guardar catálogos: $e\n$stack');
+      rethrow;
+    }
+  }
+
+  Future<void> saveCatalogosSolicitudesGrupal() async {
+    try {
+      final catalogoGrupo = await _repository.getGruposActivos();
+      final catalogoCargos = await _repository.getCargosDisponibles();
+      final listGrupos = catalogoGrupo.data.map((e) {
+        return CatalogoLocalDb(
+          valor: e.codigo,
+          nombre: e.nombreCompleto,
+          interes: 0,
+          montoMaximo: 0,
+          montoMinimo: 0,
+          type: CatalogoType.gruposActivos.codigo,
+        );
+      }).toList();
+      final listCargos = catalogoCargos.data.map((e) {
+        return CatalogoLocalDb(
+          valor: e.valor,
+          nombre: e.nombre,
+          interes: 0,
+          montoMaximo: 0,
+          montoMinimo: 0,
+          type: CatalogoType.cargosDisponibles.codigo,
+        );
+      }).toList();
+
+      _objectBoxService.catalogoLocalBox.putMany(listCargos);
+      _objectBoxService.catalogoLocalBox.putMany(listGrupos);
+    } catch (e) {
       rethrow;
     }
   }

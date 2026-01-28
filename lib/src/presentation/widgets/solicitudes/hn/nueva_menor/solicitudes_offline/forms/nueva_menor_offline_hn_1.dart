@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,8 +172,86 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                 const Gap(30),
                 Column(
                   children: [
+                    SheetSearchDropdown(
+                      key: const Key('esGrupalDropdown'),
+                      selectedItem: Item(
+                        name: state.esGrupal,
+                        value: state.esGrupal,
+                      ),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      enabled: true,
+                      hintText: 'Ingresa si el solicitante es de tipo Grupal',
+                      title: 'La solicitud es de tipo Grupal?',
+                      onChanged: (Item<dynamic>? item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            esGrupal: item.value,
+                          ),
+                        );
+                      },
+                      items: [
+                        Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                        Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                      ],
+                    ),
+                    if (state.esGrupal == 'input.yes'.tr()) ...[
+                      const Gap(30),
+                      SearchDropdownWidget(
+                        key: const Key('grupoDropdown'),
+                        selectedItem: Item(
+                          name: cubit.state.grupoCodigoNombre,
+                          value: cubit.state.grupoCodigo,
+                        ),
+                        isRequired: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        enabled: true,
+                        flavor: global<FlavorCubit>().state.flavor,
+                        codigo: CatalogoType.gruposActivos.codigo,
+                        hintText: 'Ingresa Grupo',
+                        title: 'Tipo de Grupo',
+                        onChanged: (Item<dynamic>? item) {
+                          if (item == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              grupoCodigo: item.value,
+                              grupoCodigoNombre: item.name,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      SearchDropdownWidget(
+                        key: const Key('cargoGrupoDropdown'),
+                        selectedItem: Item(
+                          name: cubit.state.cargoGrupoNombre,
+                          value: cubit.state.cargoGrupoCodigo,
+                        ),
+                        isRequired: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        enabled: true,
+                        flavor: global<FlavorCubit>().state.flavor,
+                        codigo: CatalogoType.cargosDisponibles.codigo,
+                        hintText: 'Ingresa Cargo',
+                        title: 'Tipo de Cargo en el grupo',
+                        onChanged: (Item<dynamic>? item) {
+                          if (item == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              cargoGrupoCodigo: item.value,
+                              cargoGrupoNombre: item.name,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const Key('tipoPersonaDropdown'),
                       selectedItem: Item(
                         name: cubit.state.tipoPersonaCodigoNombre,
                         value: cubit.state.tipoPersonaCodigo,

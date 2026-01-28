@@ -87,90 +87,92 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                   title: 'Crear nueva Solicitud Nueva',
                 ),
                 Expanded(
-                  child: PageView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: pageController,
-                    children: [
-                      Hero(
-                        transitionOnUserGestures: true,
-                        tag: 'cedulaFrontal',
-                        child: PhotoCedulaClientWidget(
-                          onNextPressed: () {},
-                          controller: pageController,
-                          fotoCedulaFrontal: XFile(
-                              imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                          fotoCedulaTrasera:
-                              XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                          onCedulaFrontalPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageFrontCedula ?? '',
+                  child: SafeArea(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pageController,
+                      children: [
+                        Hero(
+                          transitionOnUserGestures: true,
+                          tag: 'cedulaFrontal',
+                          child: PhotoCedulaClientWidget(
+                            onNextPressed: () {},
+                            controller: pageController,
+                            fotoCedulaFrontal: XFile(
+                                imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                            fotoCedulaTrasera: XFile(
+                                imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                            onCedulaFrontalPressed: () {
+                              context.pushTransparentRoute(
+                                PhotoCedulaImagePreview(
+                                  imagesCedula: File(
+                                    imagesCedula?.imageFrontCedula ?? '',
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          onCedulaTraseraPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageBackCedula ?? '',
+                              );
+                            },
+                            onCedulaTraseraPressed: () {
+                              context.pushTransparentRoute(
+                                PhotoCedulaImagePreview(
+                                  imagesCedula: File(
+                                    imagesCedula?.imageBackCedula ?? '',
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      NuevaMenorOfflineHn1(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn2(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn3(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn4(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn5(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn6(
-                        controller: pageController,
-                      ),
-                      NuevaMenorOfflineHn7(
-                        controller: pageController,
-                      ),
-                      NuevaMenorHistorialCrediticioOfflineHn(
-                        controller: pageController,
-                        uuid: solicitudNuevaMenorHnLocalDb.uuid ?? '',
-                      ),
-                      // PhootoSignatureWidget(
-                      //   controller: pageController,
-                      //   fotoSignature: signatureImage != null
-                      //       ? XFile(signatureImage.imageSignature ?? 'NO PATH')
-                      //       : null,
-                      //   onPhotoSignaturePressed: () {},
-                      //   onNextPressed: () {
-                      //     if (signatureImage == null) {
-                      //       CustomAlertDialog(
-                      //         context: context,
-                      //         title: 'Ingresa una firma válida',
-                      //         onDone: () => context.pop(),
-                      //       ).showDialog(context);
-                      //       return;
-                      //     }
-                      //     pageController.nextPage(
-                      //       duration: const Duration(milliseconds: 300),
-                      //       curve: Curves.easeIn,
-                      //     );
-                      //   },
-                      // ),
-                      NuevaMenorOfflineHn8(
-                        controller: pageController,
-                      ),
-                    ],
+                        NuevaMenorOfflineHn1(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn2(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn3(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn4(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn5(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn6(
+                          controller: pageController,
+                        ),
+                        NuevaMenorOfflineHn7(
+                          controller: pageController,
+                        ),
+                        NuevaMenorHistorialCrediticioOfflineHn(
+                          controller: pageController,
+                          uuid: solicitudNuevaMenorHnLocalDb.uuid ?? '',
+                        ),
+                        // PhootoSignatureWidget(
+                        //   controller: pageController,
+                        //   fotoSignature: signatureImage != null
+                        //       ? XFile(signatureImage.imageSignature ?? 'NO PATH')
+                        //       : null,
+                        //   onPhotoSignaturePressed: () {},
+                        //   onNextPressed: () {
+                        //     if (signatureImage == null) {
+                        //       CustomAlertDialog(
+                        //         context: context,
+                        //         title: 'Ingresa una firma válida',
+                        //         onDone: () => context.pop(),
+                        //       ).showDialog(context);
+                        //       return;
+                        //     }
+                        //     pageController.nextPage(
+                        //       duration: const Duration(milliseconds: 300),
+                        //       curve: Curves.easeIn,
+                        //     );
+                        //   },
+                        // ),
+                        NuevaMenorOfflineHn8(
+                          controller: pageController,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

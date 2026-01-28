@@ -2,6 +2,11 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final String esGrupal;
+  final String cargoGrupoCodigo;
+  final String cargoGrupoNombre;
+  final String grupoCodigo;
+  final String grupoCodigoNombre;
   final List<HistorialCredito> historialCredito;
   final String actividadEconomicaCnbs1CodigoNombre;
   final String actividadEconomicaCnbs2CodigoNombre;
@@ -171,6 +176,11 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String tipoDocumentoConyugue;
 
   const SolicitudNuevaMenorHnState({
+    this.grupoCodigoNombre = '',
+    this.cargoGrupoNombre = '',
+    this.esGrupal = '',
+    this.cargoGrupoCodigo = '',
+    this.grupoCodigo = '',
     this.historialCredito = const [],
     this.actividadEconomicaCnbs1CodigoNombre = '',
     this.actividadEconomicaCnbs2CodigoNombre = '',
@@ -342,6 +352,11 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        grupoCodigoNombre,
+        cargoGrupoNombre,
+        esGrupal,
+        cargoGrupoCodigo,
+        grupoCodigo,
         apellidosConyugue,
         historialCredito,
         actividadEconomicaCnbs1CodigoNombre,
@@ -511,6 +526,11 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    String? esGrupal,
+    String? cargoGrupoCodigo,
+    String? cargoGrupoNombre,
+    String? grupoCodigo,
+    String? grupoCodigoNombre,
     List<HistorialCredito>? historialCredito,
     String? actividadEconomicaCnbs1CodigoNombre,
     String? actividadEconomicaCnbs2CodigoNombre,
@@ -680,6 +700,11 @@ class SolicitudNuevaMenorHnState extends Equatable {
     String? tipoDocumentoConyugue,
   }) {
     return SolicitudNuevaMenorHnState(
+      esGrupal: esGrupal ?? this.esGrupal,
+      cargoGrupoCodigo: cargoGrupoCodigo ?? this.cargoGrupoCodigo,
+      cargoGrupoNombre: cargoGrupoNombre ?? this.cargoGrupoNombre,
+      grupoCodigo: grupoCodigo ?? this.grupoCodigo,
+      grupoCodigoNombre: grupoCodigoNombre ?? this.grupoCodigoNombre,
       historialCredito: historialCredito ?? this.historialCredito,
       actividadEconomicaCnbs1CodigoNombre:
           actividadEconomicaCnbs1CodigoNombre ??
