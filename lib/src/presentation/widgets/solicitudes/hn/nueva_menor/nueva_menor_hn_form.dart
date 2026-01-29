@@ -47,6 +47,9 @@ class NuevaMenorHnForm extends StatelessWidget {
                         );
                   },
                 ),
+                SolicitudSignatureNueva(
+                  pageController: pageController,
+                ),
                 NuevaMenorForm1(
                   controller: pageController,
                   userByDocumentHn: UserDocumentDataHN(
@@ -106,9 +109,6 @@ class NuevaMenorHnForm extends StatelessWidget {
                 NuevaMenorForm8(
                   controller: pageController,
                 ),
-                SolicitudSignatureNueva(
-                  pageController: pageController,
-                )
               ],
             ),
           ),

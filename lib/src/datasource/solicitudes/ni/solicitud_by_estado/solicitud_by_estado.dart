@@ -36,6 +36,9 @@ class SolicitudEstado {
   final DateTime fechaSolicitud;
   final String cedulaCliente;
   final String tipoPersonaCodigo;
+  final int? cicloGrupoID;
+  final bool esSolicitudGrupal;
+  final String? grupoCodigo;
 
   SolicitudEstado({
     required this.id,
@@ -53,6 +56,9 @@ class SolicitudEstado {
     required this.fechaSolicitud,
     this.nombrePromotor,
     required this.cedulaCliente,
+    this.cicloGrupoID,
+    required this.esSolicitudGrupal,
+    this.grupoCodigo,
   });
 
   factory SolicitudEstado.fromJson(Map<String, dynamic> json) =>
@@ -72,6 +78,9 @@ class SolicitudEstado {
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
         cedulaCliente: (json['CedulaCliente'] ?? '') as String,
         tipoPersonaCodigo: (json['TipoPersonaCodigo'] ?? '') as String,
+        cicloGrupoID: json['CicloGrupoID'],
+        esSolicitudGrupal: json['EsSolicitudGrupal'],
+        grupoCodigo: json['GrupoCodigo'],
       );
 }
 

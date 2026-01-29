@@ -1,13 +1,10 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/client_signature_list_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -64,7 +61,9 @@ class VerifyClientSignatureSheet extends StatelessWidget {
                   context.pop();
                   context.pushTransparentRoute(BlocProvider.value(
                     value: context.read<SolicitudNuevaMenorHnCubit>(),
-                    child: const VerifyClientIfNotPossibleToSignWidget(),
+                    child: VerifyClientIfNotPossibleToSignWidget(
+                      controller: pageController,
+                    ),
                   ));
                 },
                 onClientPossibleSignatureTap: () {
@@ -72,8 +71,9 @@ class VerifyClientSignatureSheet extends StatelessWidget {
                   context.pushTransparentRoute(
                     BlocProvider.value(
                       value: context.read<SolicitudNuevaMenorHnCubit>(),
-                      child: const SolicitudSignatureClientWidget(
+                      child: SolicitudSignatureClientWidget(
                         clientSignatureStatus: ClientSignatureStatus.yes,
+                        pageController: pageController,
                       ),
                     ),
                   );
@@ -88,7 +88,11 @@ class VerifyClientSignatureSheet extends StatelessWidget {
 }
 
 class VerifyClientIfNotPossibleToSignWidget extends StatefulWidget {
-  const VerifyClientIfNotPossibleToSignWidget({super.key});
+  final PageController controller;
+  const VerifyClientIfNotPossibleToSignWidget({
+    super.key,
+    required this.controller,
+  });
 
   @override
   State<VerifyClientIfNotPossibleToSignWidget> createState() =>
@@ -101,9 +105,6 @@ class _VerifyClientIfNotPossibleToSignWidgetState
   String? selectedImage1Path;
   @override
   Widget build(BuildContext context) {
-    final internetConnectionCubit =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verificar Boleta de autorizacion'),
@@ -140,38 +141,20 @@ class _VerifyClientIfNotPossibleToSignWidgetState
               color: context.primaryColor(),
               onPressed: () async {
                 FocusScope.of(context).unfocus();
-
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    isDone: true,
-                  ),
-                );
-                if (internetConnectionCubit == ConnectionStatus.disconnected) {
-                  cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
-                      isOffline: true,
-                      errorMsg:
-                          'No tienes conexión a internet, La solicitud se a guardado de manera local',
-                      isDone: true,
-                    ),
-                  );
+                if (selectedImage == null) {
                   CustomAlertDialog(
                     context: context,
-                    title:
-                        'No tienes conexión a internet, La solicitud se a guardado de manera local',
-                    onDone: () => context.pushReplacement('/solicitudes'),
-                  ).showDialog(context, dialogType: DialogType.infoReverse);
+                    title: 'La foto de autorizacion firmada es obligatoria',
+                    onDone: () => context.pop(),
+                  ).showDialog(context);
                   return;
                 }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) => BlocProvider.value(
-                      value: context.read<SolicitudNuevaMenorHnCubit>(),
-                      child: const SendingFormWidgetHN(),
-                    ),
-                  ),
+                widget.controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
                 );
+                if (!context.mounted) return;
+                context.pop();
               },
             ),
             const Gap(10),

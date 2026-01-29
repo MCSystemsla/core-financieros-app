@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
@@ -19,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_sending_form_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/material.dart';
@@ -168,6 +170,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
     super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    final internetConnectionCubit =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -472,11 +476,39 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                         () => cubit.state.copyWith(
                           cuota: calcularCuotaProvider.state.montoPrimeraCuota
                               .toInt(),
+                          isDone: true,
                         ),
                       );
-                      widget.controller.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn,
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(),
+                      );
+                      if (internetConnectionCubit ==
+                          ConnectionStatus.disconnected) {
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            errorMsg:
+                                'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                            isOffline: true,
+                            isDone: true,
+                          ),
+                        );
+                        CustomAlertDialog(
+                          context: context,
+                          title:
+                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
+                          onDone: () => context.pushReplacement('/solicitudes'),
+                        ).showDialog(context,
+                            dialogType: DialogType.infoReverse);
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => BlocProvider.value(
+                            value: context.read<SolicitudAslariadoHnCubit>(),
+                            child: const AsalariadoSendingFormWidget(),
+                          ),
+                        ),
                       );
                     },
                   ).showDialog(context);

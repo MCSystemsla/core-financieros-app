@@ -1,8 +1,6 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
@@ -10,7 +8,6 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_sending_form_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_historial_credito_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form2.dart';
@@ -23,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form9.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/client_signature_list_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/verify_client_signature_nueva_sheet.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,6 +60,9 @@ class AsalariadoHnForm extends StatelessWidget {
                           imagenTrasera: imagePath,
                         );
                   },
+                ),
+                SolicitudSignatureAsalariado(
+                  pageController: pageController,
                 ),
                 AsalariadoHnForm1(
                   controller: pageController,
@@ -124,9 +125,6 @@ class AsalariadoHnForm extends StatelessWidget {
                 ),
                 AsalariadoHnForm9(
                   controller: pageController,
-                ),
-                SolicitudSignatureAsalariado(
-                  pageController: pageController,
                 ),
               ],
             ),
@@ -240,8 +238,8 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
                   context.pop();
                   context.pushTransparentRoute(BlocProvider.value(
                     value: context.read<SolicitudAslariadoHnCubit>(),
-                    child: const SolicitudSignatureClientWidgetAsalariado(
-                      clientSignatureStatus: ClientSignatureStatus.noPossible,
+                    child: VerifyClientIfNotPossibleToSignWidget(
+                      controller: pageController,
                     ),
                   ));
                 },
@@ -250,8 +248,9 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
                   context.pushTransparentRoute(
                     BlocProvider.value(
                       value: context.read<SolicitudAslariadoHnCubit>(),
-                      child: const SolicitudSignatureClientWidgetAsalariado(
+                      child: SolicitudSignatureClientWidgetAsalariado(
                         clientSignatureStatus: ClientSignatureStatus.yes,
+                        pageController: pageController,
                       ),
                     ),
                   );
@@ -267,9 +266,11 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
 
 class SolicitudSignatureClientWidgetAsalariado extends StatefulWidget {
   final ClientSignatureStatus clientSignatureStatus;
+  final PageController pageController;
   const SolicitudSignatureClientWidgetAsalariado({
     super.key,
     required this.clientSignatureStatus,
+    required this.pageController,
   });
 
   @override
@@ -284,9 +285,6 @@ class _SolicitudSignatureClientWidgetAsalariadoState
 
   @override
   Widget build(BuildContext context) {
-    final internetConnectionCubit =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
-    final cubit = context.read<SolicitudAslariadoHnCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firma'),
@@ -338,39 +336,12 @@ class _SolicitudSignatureClientWidgetAsalariadoState
                       ).showDialog(context);
                       return;
                     }
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        isDone: true,
-                      ),
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
                     );
-                    if (internetConnectionCubit ==
-                        ConnectionStatus.disconnected) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          errorMsg:
-                              'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                          isOffline: true,
-                          isDone: true,
-                        ),
-                      );
-                      CustomAlertDialog(
-                        context: context,
-                        title:
-                            'No tienes conexion a internet, La solicitud se a guardado de manera local',
-                        onDone: () => context.pushReplacement('/solicitudes'),
-                      ).showDialog(context, dialogType: DialogType.infoReverse);
-                      return;
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => BlocProvider.value(
-                          value: context.read<SolicitudAslariadoHnCubit>(),
-                          child: const AsalariadoSendingFormWidget(),
-                        ),
-                      ),
-                    );
+                    if (!context.mounted) return;
+                    context.pop();
                   },
                 ),
                 const Gap(10),

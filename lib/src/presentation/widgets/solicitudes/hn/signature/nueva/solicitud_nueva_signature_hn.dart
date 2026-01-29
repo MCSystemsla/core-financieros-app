@@ -1,18 +1,14 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/asalariado_hn_form.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/verify_client_signature_nueva_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -137,9 +133,11 @@ class _ClientSignatureSolicitudState extends State<ClientSignatureSolicitud> {
 
 class SolicitudSignatureClientWidget extends StatefulWidget {
   final ClientSignatureStatus clientSignatureStatus;
+  final PageController pageController;
   const SolicitudSignatureClientWidget({
     super.key,
     required this.clientSignatureStatus,
+    required this.pageController,
   });
 
   @override
@@ -155,8 +153,6 @@ class _SolicitudSignatureClientWidgetState
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
-    final internetConnectionCubit =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return Scaffold(
       appBar: AppBar(
@@ -224,40 +220,12 @@ class _SolicitudSignatureClientWidgetState
                       imageSignature: filePath,
                     );
                     localDbProvider.saveClientSignature(clientSignature);
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
                     if (!context.mounted) return;
-
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        isDone: true,
-                      ),
-                    );
-                    if (internetConnectionCubit ==
-                        ConnectionStatus.disconnected) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          isOffline: true,
-                          errorMsg:
-                              'No tienes conexión a internet, La solicitud se a guardado de manera local',
-                          isDone: true,
-                        ),
-                      );
-                      CustomAlertDialog(
-                        context: context,
-                        title:
-                            'No tienes conexión a internet, La solicitud se a guardado de manera local',
-                        onDone: () => context.pushReplacement('/solicitudes'),
-                      ).showDialog(context, dialogType: DialogType.infoReverse);
-                      return;
-                    }
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => BlocProvider.value(
-                          value: context.read<SolicitudNuevaMenorHnCubit>(),
-                          child: const SendingFormWidgetHN(),
-                        ),
-                      ),
-                    );
+                    context.pop();
                   },
                 ),
                 const Gap(10),

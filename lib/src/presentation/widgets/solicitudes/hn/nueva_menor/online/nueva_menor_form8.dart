@@ -1,18 +1,23 @@
 // ignore_for_file: deprecated_member_use
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class NuevaMenorForm8 extends StatefulWidget {
   final PageController controller;
@@ -36,6 +41,8 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
   bool isApnfd3 = false;
   @override
   Widget build(BuildContext context) {
+    final internetConnectionCubit =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return SingleChildScrollView(
@@ -217,6 +224,39 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      isDone: true,
+                    ),
+                  );
+                  if (internetConnectionCubit ==
+                      ConnectionStatus.disconnected) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        isOffline: true,
+                        errorMsg:
+                            'No tienes conexión a internet, La solicitud se a guardado de manera local',
+                        isDone: true,
+                      ),
+                    );
+                    CustomAlertDialog(
+                      context: context,
+                      title:
+                          'No tienes conexión a internet, La solicitud se a guardado de manera local',
+                      onDone: () => context.pushReplacement('/solicitudes'),
+                    ).showDialog(context, dialogType: DialogType.infoReverse);
+                    return;
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => BlocProvider.value(
+                        value: context.read<SolicitudNuevaMenorHnCubit>(),
+                        child: const SendingFormWidgetHN(),
+                      ),
+                    ),
+                  );
 
                   widget.controller.nextPage(
                     duration: const Duration(milliseconds: 300),
