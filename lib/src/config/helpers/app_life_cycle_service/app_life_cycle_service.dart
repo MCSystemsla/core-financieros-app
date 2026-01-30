@@ -1,13 +1,13 @@
+import 'dart:developer';
+
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AppLifecycleService with WidgetsBindingObserver {
-  DateTime? _backgroundTime;
-
-  final Duration maxBackgroundTime;
   final VoidCallback onSessionExpired;
 
   AppLifecycleService({
-    required this.maxBackgroundTime,
     required this.onSessionExpired,
   });
 
@@ -21,22 +21,15 @@ class AppLifecycleService with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _backgroundTime ??= DateTime.now();
-    }
+    if (state != AppLifecycleState.resumed) return;
 
-    if (state == AppLifecycleState.resumed) {
-      if (_backgroundTime == null) return;
+    final jwt = LocalStorage().jwt;
+    if (jwt.isEmpty) return;
+    log('Session active');
 
-      final diff = DateTime.now().difference(_backgroundTime!);
-      debugPrint('Tiempo en background: $diff');
-
-      if (diff >= maxBackgroundTime) {
-        debugPrint('Session expired due to inactivity.');
-        onSessionExpired();
-      }
-
-      _backgroundTime = null;
+    if (JwtDecoder.isExpired(jwt)) {
+      log('Session expired');
+      onSessionExpired();
     }
   }
 }

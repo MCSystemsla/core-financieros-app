@@ -49,19 +49,28 @@ class RiskControlScreen extends StatelessWidget {
           tipoOrganizacion: tipoOrganizacion,
         ),
       child: Scaffold(
-        body: BlocBuilder<RiskControlCubit, RiskControlState>(
-          builder: (context, state) {
-            return switch (state.status) {
-              Status.inProgress => const LoadingWidget(),
-              Status.done => SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _RiskControlTitle(),
-                      _PdfView(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _RiskControlTitle(),
+              BlocBuilder<RiskControlCubit, RiskControlState>(
+                builder: (context, state) {
+                  return switch (state.status) {
+                    Status.inProgress => const LoadingWidget(),
+                    Status.done => _PdfView(
                         filePath: state.filePath!,
                       ),
-                      Container(
+                    Status.error =>
+                      Text('Error al generar el reporte: ${state.errorMsg}'),
+                    _ => const SizedBox.shrink(),
+                  };
+                },
+              ),
+              BlocBuilder<RiskControlCubit, RiskControlState>(
+                builder: (context, state) {
+                  return switch (state.status) {
+                    Status.done => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         width: double.infinity,
                         child: CustomElevatedButton(
@@ -77,44 +86,44 @@ class RiskControlScreen extends StatelessWidget {
                           },
                         ),
                       ),
-                      const Gap(30),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        width: double.infinity,
-                        child: CustomElevatedButton(
-                          text: 'Siguiente',
-                          // ignore: deprecated_member_use
-                          color: AppColors.greenLatern.withOpacity(0.4),
-                          onPressed: () {
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          },
-                        ),
-                      ),
-                      const Gap(20),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CustomOutLineButton(
-                          onPressed: () {
-                            pageController.previousPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          },
-                          text: 'Anterior',
-                          textColor: AppColors.red,
-                          color: AppColors.red,
-                        ),
-                      ),
-                      const Gap(20),
-                    ],
-                  ),
+                    _ => const SizedBox.shrink(),
+                  };
+                },
+              ),
+              const Gap(30),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  text: 'Siguiente',
+                  // ignore: deprecated_member_use
+                  color: AppColors.greenLatern.withOpacity(0.4),
+                  onPressed: () {
+                    pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
                 ),
-              _ => const Center(child: Text('Error al generar el PDF')),
-            };
-          },
+              ),
+              const Gap(20),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomOutLineButton(
+                  onPressed: () {
+                    pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  text: 'Anterior',
+                  textColor: AppColors.red,
+                  color: AppColors.red,
+                ),
+              ),
+              const Gap(20),
+            ],
+          ),
         ),
       ),
     );
