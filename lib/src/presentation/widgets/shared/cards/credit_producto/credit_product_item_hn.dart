@@ -1,11 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_solicitud_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asign_solicitud_asesor/hn/bottom_sheet/ahow_asignar_solicitud_bottom_sheet_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -23,6 +26,7 @@ class CreditProductItemHN extends StatelessWidget {
   final String? tipoSolicitud;
   final bool isAsesorAsignado;
   final VoidCallback? onTap;
+  final bool isGrupal;
 
   const CreditProductItemHN({
     super.key,
@@ -36,6 +40,7 @@ class CreditProductItemHN extends StatelessWidget {
     this.nombrePromotor,
     this.tipoSolicitud,
     this.isAsesorAsignado = false,
+    this.isGrupal = false,
     this.onTap,
   });
 
@@ -72,13 +77,18 @@ class CreditProductItemHN extends StatelessWidget {
                     ).showDialog(context);
                     return;
                   }
-                  if (estadoCodigo != 'REG') {
+                  if (estadoCodigo != EstadoCredito.registrada.codigo) {
                     CustomAlertDialog(
                       context: context,
                       title:
                           'Solo se puede asignar una solicitud cuando el estado es REGISTRADA',
                       onDone: () => context.pop(),
                     ).showDialog(context);
+                    return;
+                  }
+                  if (isGrupal) {
+                    context.pushTransparentRoute(
+                        const AsignacionSolicitudGrupalHnScreen());
                     return;
                   }
                   showAsignarSolicitudBottomSheetHN(

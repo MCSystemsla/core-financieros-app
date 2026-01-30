@@ -51,7 +51,6 @@ dependencies:
   drop_down_list: ^2.0.0
 
 
-
    # Logic
   go_router: ^14.8.0
   bloc: ^9.0.0
@@ -88,6 +87,7 @@ dependencies:
   # Intl
   intl: 0.20.2
   flutter_translate: ^3.1.0
+  pdfrx: ^2.1.5
 
   # Firebase
   # firebase_core: ^3.3.0

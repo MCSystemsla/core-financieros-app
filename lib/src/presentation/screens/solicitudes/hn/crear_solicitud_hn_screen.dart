@@ -15,6 +15,8 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/repr
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
+
 class CrearSolicitudHnScreen extends StatelessWidget {
   final TypeForm typeForm;
   const CrearSolicitudHnScreen({
@@ -52,6 +54,11 @@ class CrearSolicitudHnScreen extends StatelessWidget {
           create: (ctx) => GeolocationCubit(
             GeolocationService(),
           ),
+        ),
+        BlocProvider(
+          create: (ctx) => GruposActivosCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+          )..getGruposActivos(),
         ),
       ],
       child: PopScope(

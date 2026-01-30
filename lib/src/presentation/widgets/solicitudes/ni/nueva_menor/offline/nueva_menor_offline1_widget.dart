@@ -433,7 +433,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
-                  enabled: false,
+                  enabled: true,
                   selectedItem: Item(
                     name: tipoDocumentoVer ?? '',
                     value: tipoDocumento,
@@ -480,7 +480,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
-                  enabled: false,
+                  enabled: true,
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: paisEmisor ?? '',
@@ -516,7 +516,6 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Emision Cedula',
-                  // initialValue: fechaEmisionCedula,
                   hintText: DateTime.tryParse(fechaEmisionCedula ?? '0')
                           ?.selectorFormat() ??
                       'Ingrese fecha de Emision',

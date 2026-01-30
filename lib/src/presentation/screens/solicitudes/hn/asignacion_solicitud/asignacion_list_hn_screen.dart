@@ -56,7 +56,6 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
 
   void _onScroll() async {
     final cubit = context.read<SolicitudesByEstadoHnCubit>();
-    // final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
     final hasMore = cubit.state.hasMore;
     final isAtBottom = _scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200;

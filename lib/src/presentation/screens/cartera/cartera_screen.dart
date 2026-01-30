@@ -1,7 +1,10 @@
 // ignore_for_file: deprecated_member_use
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
@@ -41,9 +44,8 @@ class _CarteraScreenState extends State<CarteraScreen> {
 class _CarteraContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const isProdMode = bool.fromEnvironment('isProdMode');
-
     final actions = LocalStorage().currentActions;
+    final flavor = global<FlavorCubit>().state.flavor;
 
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
@@ -86,7 +88,7 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
-                visible: (!isProdMode),
+                visible: flavor == Flavor.honduras,
                 onTap: () {
                   state.connectionStatus == ConnectionStatus.connected
                       ? Navigator.push(
@@ -114,7 +116,8 @@ class _CarteraContentWidget extends StatelessWidget {
                 ),
               ),
               ModuleCard(
-                visible: (!isProdMode),
+                visible: (flavor == Flavor.honduras &&
+                    state.connectionStatus == ConnectionStatus.connected),
                 onTap: () {
                   Navigator.push(
                     context,

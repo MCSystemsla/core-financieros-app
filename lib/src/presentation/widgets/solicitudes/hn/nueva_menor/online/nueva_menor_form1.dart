@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_docume
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -31,6 +32,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
 
 class NuevaMenorForm1 extends StatefulWidget {
   final PageController controller;
@@ -219,6 +222,8 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    final gruposActivos =
+        context.read<GruposActivosCubit>().state.gruposActivos;
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -258,17 +263,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 ),
                 if (isSolicitudGrupal) ...[
                   const Gap(30),
-                  SearchDropdownWidget(
-                    key: const Key('grupoDropdown'),
-                    isRequired: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    enabled: true,
-                    flavor: global<FlavorCubit>().state.flavor,
-                    codigo: CatalogoType.gruposActivos.codigo,
-                    hintText: 'Ingresa Grupo',
-                    title: 'Tipo de Grupo',
-                    onChanged: (Item<dynamic>? item) {
+                  GrupoSolicitudDropdown(
+                    items: gruposActivos
+                        .map((e) =>
+                            Item(name: e.nombreCompleto, value: e.codigo))
+                        .toList(),
+                    onChanged: (item) {
                       if (item == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
@@ -931,4 +931,62 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class GrupoSolicitudDropdown extends StatefulWidget {
+  final Function(Item<dynamic>?) onChanged;
+  final List<Item<dynamic>> items;
+  const GrupoSolicitudDropdown({
+    super.key,
+    required this.onChanged,
+    required this.items,
+  });
+
+  @override
+  State<GrupoSolicitudDropdown> createState() => _GrupoSolicitudDropdownState();
+}
+
+class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return switch (state.connectionStatus) {
+          ConnectionStatus.disconnected => SearchDropdownWidget(
+              key: const Key('grupoDropdown'),
+              isRequired: true,
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              enabled: true,
+              flavor: global<FlavorCubit>().state.flavor,
+              codigo: CatalogoType.gruposActivos.codigo,
+              hintText: 'Ingresa Grupo',
+              title: 'Tipo de Grupo',
+              onChanged: widget.onChanged,
+            ),
+          ConnectionStatus.handleOfflineActivation => SearchDropdownWidget(
+              key: const Key('grupoDropdown'),
+              isRequired: true,
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
+              enabled: true,
+              flavor: global<FlavorCubit>().state.flavor,
+              codigo: CatalogoType.gruposActivos.codigo,
+              hintText: 'Ingresa Grupo',
+              title: 'Tipo de Grupo',
+              onChanged: widget.onChanged,
+            ),
+          ConnectionStatus.connected => SheetSearchDropdown(
+              title: 'Tipo de Grupo',
+              isRequired: true,
+              onChanged: widget.onChanged,
+              hintText: 'Ingresa Grupo',
+              enabled: true,
+              items: widget.items,
+            ),
+          _ => const SizedBox.shrink(),
+        };
+      },
+    );
+  }
 }

@@ -427,7 +427,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             ),
             const Gap(30),
             SearchDropdownWidget(
-              enabled: false,
               hintText: tipoDocumento?.name ?? 'input.select_option'.tr(),
               codigo: 'TIPODOCUMENTOPERSONA',
               onChanged: (item) {
@@ -446,7 +445,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             const Gap(30),
             CatalogoValorNacionalidad(
               hintText: paisEmisor?.name ?? 'input.select_option'.tr(),
-              enabled: false,
               title: 'País Emisor',
               onChanged: (item) {
                 if (item == null || !mounted) return;
@@ -487,7 +485,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             OutlineTextfieldWidget(
               validator: (value) => ClassValidator.validateRequired(
                   fechaEmisionCedula?.selectorFormat()),
-              initialValue: fechaEmisionCedula?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -505,7 +502,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: _selectedDate?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],
@@ -526,7 +522,6 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
             ),
             const Gap(30),
             OutlineTextfieldWidget(
-              initialValue: fechaNacimiento?.selectorFormat(),
               inputFormatters: [
                 UpperCaseTextFormatter(),
               ],

@@ -518,7 +518,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                         nombre: paisEmisor ?? '',
                         relacion: '',
                       ),
-                      enabled: false,
+                      enabled: true,
                       hintText: 'Ingresa Pais',
                       onChanged: (item) {
                         paisEmisor = item?.valor;

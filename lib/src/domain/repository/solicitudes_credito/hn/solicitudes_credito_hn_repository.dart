@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:typed_data';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/acti
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/cargos_disponible_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
@@ -103,6 +104,19 @@ abstract class SolicitudesCreditoHnRepository {
     required String nombre,
   });
   Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles();
+
+  Future<void> solicitudesGrupalesAsignarPromotor({
+    required SolicitudGrupalesAsignarSolicitudToPromotor data,
+  });
+  Future<Uint8List> getRiskControlByUserInfo({
+    required String nombre1,
+    required String nombre2,
+    required String apellido1,
+    required String apellido2,
+    required String tipoIdentificacionCodigo,
+    required String identificacion,
+    required String tipoOrganizacionCodigo,
+  });
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -761,6 +775,83 @@ class SolicitudesCreditoHnRepositoryImpl
       }
       final data = GrupalesCargosDisponiblesResponse.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> solicitudesGrupalesAsignarPromotor({
+    required SolicitudGrupalesAsignarSolicitudToPromotor data,
+  }) async {
+    final endpoint = SolicitudesGrupalesAsignarPromotorEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Uint8List> getRiskControlByUserInfo({
+    required String nombre1,
+    required String nombre2,
+    required String apellido1,
+    required String apellido2,
+    required String tipoIdentificacionCodigo,
+    required String identificacion,
+    required String tipoOrganizacionCodigo,
+  }) async {
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
+    final headers = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${LocalStorage().jwt}',
+      'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+      'CF-Access-Client-Secret':
+          const String.fromEnvironment('CFAccessClientSecret'),
+    };
+    final body = {
+      'Nombre1': nombre1,
+      'Nombre2': nombre2,
+      'Apellido1': apellido1,
+      'Apellido2': apellido2,
+      'TipoIdentificacionCodigo': tipoIdentificacionCodigo,
+      'Identificacion': identificacion,
+      'TipoOrganizacionCodigo': tipoOrganizacionCodigo,
+    };
+    try {
+      const url =
+          '$protocol://$apiUrl/pla/risk-control/busqueda-id-verification';
+      final resp = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+
+      if (resp.statusCode != 201) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+
+      final result = resp.bodyBytes;
+      return result;
     } catch (e) {
       _logger.e(e);
       rethrow;

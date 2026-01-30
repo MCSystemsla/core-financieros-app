@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 
@@ -448,4 +449,23 @@ class SolicitudesGrupalesGetCargosDisponiblesEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
       };
+}
+
+class SolicitudesGrupalesAsignarPromotorEndpoint extends Endpoint {
+  final SolicitudGrupalesAsignarSolicitudToPromotor data;
+  SolicitudesGrupalesAsignarPromotorEndpoint({
+    required this.data,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path =>
+      '/cartera/solicitudes/general/asignar-solicitudes-promotor';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
 }

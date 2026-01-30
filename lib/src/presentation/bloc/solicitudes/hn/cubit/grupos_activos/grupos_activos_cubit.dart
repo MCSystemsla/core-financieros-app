@@ -26,7 +26,6 @@ class GruposActivosCubit extends Cubit<GruposActivosState> {
   Future<void> createGrupoCredito({required String nombre}) async {
     emit(state.copyWith(createStatus: Status.inProgress));
     try {
-      await _repository.crearGrupoCredito(nombre: nombre);
       emit(state.copyWith(createStatus: Status.done));
     } on AppException catch (e) {
       emit(state.copyWith(createStatus: Status.error, errorMsg: e.optionalMsg));
