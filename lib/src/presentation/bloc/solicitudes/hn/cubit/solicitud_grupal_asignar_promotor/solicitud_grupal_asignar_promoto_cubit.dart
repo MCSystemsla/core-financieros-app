@@ -13,16 +13,13 @@ class SolicitudGrupalAsignarPromotoCubit
   SolicitudGrupalAsignarPromotoCubit(this._repository)
       : super(SolicitudGrupalAsignarPromotoInitial());
 
-  Future<void> solicitudGrupalAsignarPromoto({
-    required int idPromotor,
-    required List<SolicitudAsignadaData> solicitudeData,
-  }) async {
+  Future<void> solicitudGrupalAsignarPromoto() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.solicitudesGrupalesAsignarPromotor(
         data: SolicitudGrupalesAsignarSolicitudToPromotor(
-          idPromotor: idPromotor,
-          solicitudeData: solicitudeData,
+          idPromotor: state.idPromotor,
+          solicitudeData: state.solicitudeData,
         ),
       );
       emit(state.copyWith(
@@ -39,5 +36,21 @@ class SolicitudGrupalAsignarPromotoCubit
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  void setIdPromotor(int idPromotor) {
+    emit(state.copyWith(idPromotor: idPromotor));
+  }
+
+  void saveSolicitudesData(SolicitudAsignadaData data) {
+    emit(state.copyWith(solicitudeData: [...state.solicitudeData, data]));
+  }
+
+  void deleteSolicitudesData(int idSolicitud) {
+    emit(state.copyWith(
+      solicitudeData: state.solicitudeData
+          .where((e) => e.idSolicitud != idSolicitud)
+          .toList(),
+    ));
   }
 }

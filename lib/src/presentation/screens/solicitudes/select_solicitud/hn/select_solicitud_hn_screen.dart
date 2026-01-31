@@ -104,12 +104,13 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
               },
             ),
           ),
+          const Gap(10),
         ],
         if (actions.contains(TypeAction.crearGrupoCredito.codigo)) ...[
           Expanded(
             child: SolicitudCard(
               svgPath: ImageAsset.nuevaMenorBg6,
-              title: 'Crear Grupo de Crédito',
+              title: 'Solicitudes Grupales',
               onPressed: () {
                 Navigator.push(
                   context,

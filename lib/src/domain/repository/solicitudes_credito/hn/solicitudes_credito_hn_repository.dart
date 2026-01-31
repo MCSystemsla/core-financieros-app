@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/cargos_disponible_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
@@ -71,6 +72,7 @@ abstract class SolicitudesCreditoHnRepository {
     required String? numeroSolicitud,
     required String? cedulaCliente,
     required int pagina,
+    required int? codigoGrupo,
   });
   Future<(bool, String)> asignSolicitudToAsesor({
     required int idSolicitud,
@@ -107,6 +109,9 @@ abstract class SolicitudesCreditoHnRepository {
 
   Future<void> solicitudesGrupalesAsignarPromotor({
     required SolicitudGrupalesAsignarSolicitudToPromotor data,
+  });
+  Future<void> solicitudesGrupalesAutorizar({
+    required SolicitudGrupalesAutorizarSolicitudToPromotor data,
   });
   Future<Uint8List> getRiskControlByUserInfo({
     required String nombre1,
@@ -499,6 +504,7 @@ class SolicitudesCreditoHnRepositoryImpl
     required String? numeroSolicitud,
     required String? cedulaCliente,
     required int pagina,
+    required int? codigoGrupo,
   }) async {
     final endpoint = GetSolicitudesByEstadoEndpoint(
       estadoCredito: estadoCredito,
@@ -506,6 +512,7 @@ class SolicitudesCreditoHnRepositoryImpl
       numeroSolicitud: numeroSolicitud,
       cedulaCliente: cedulaCliente,
       pagina: pagina,
+      codigoGrupo: codigoGrupo,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -854,6 +861,29 @@ class SolicitudesCreditoHnRepositoryImpl
       return result;
     } catch (e) {
       _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> solicitudesGrupalesAutorizar({
+    required SolicitudGrupalesAutorizarSolicitudToPromotor data,
+  }) async {
+    final endpoint = SolicitudesGrupalesAutorizarEndpoint(
+      data: data,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
       rethrow;
     }
   }

@@ -541,6 +541,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       cedulaCliente: '',
       pagina: 1,
       numeroSolicitud: '',
+      codigoGrupo: null,
     );
 
     final analisisLocalDbProvider = global<AnalisisBoxServiceHn>();

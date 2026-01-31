@@ -4,12 +4,14 @@ part of 'solicitud_grupal_asignar_promoto_cubit.dart';
 class SolicitudGrupalAsignarPromotoState extends Equatable {
   final Status status;
   final String errorMsg;
+  final int idPromotor;
   final List<SolicitudAsignadaData> solicitudeData;
 
   const SolicitudGrupalAsignarPromotoState({
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.solicitudeData = const [],
+    this.idPromotor = 0,
   });
 
   @override
@@ -17,16 +19,19 @@ class SolicitudGrupalAsignarPromotoState extends Equatable {
         status,
         errorMsg,
         solicitudeData,
+        idPromotor,
       ];
 
   SolicitudGrupalAsignarPromotoState copyWith({
     Status? status,
     String? errorMsg,
+    int? idPromotor,
     List<SolicitudAsignadaData>? solicitudeData,
   }) {
     return SolicitudGrupalAsignarPromotoState(
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
+      idPromotor: idPromotor ?? this.idPromotor,
       solicitudeData: solicitudeData ?? this.solicitudeData,
     );
   }

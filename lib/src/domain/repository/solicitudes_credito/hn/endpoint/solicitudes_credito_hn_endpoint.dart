@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_cre
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 
@@ -241,12 +242,14 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final String? numeroSolicitud;
   final String? cedulaCliente;
   final int? pagina;
+  final int? codigoGrupo;
   GetSolicitudesByEstadoEndpoint({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
     this.numeroSolicitud,
     this.cedulaCliente,
     this.pagina,
+    this.codigoGrupo,
   });
   @override
   Method get method => Method.get;
@@ -268,6 +271,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
         if (cedulaCliente != null && cedulaCliente!.isNotEmpty)
           'Cedula': cedulaCliente,
         if (pagina != null) 'Pagina': pagina.toString(),
+        if (codigoGrupo != null) 'GrupoCodigo': codigoGrupo.toString(),
       };
 }
 
@@ -462,6 +466,24 @@ class SolicitudesGrupalesAsignarPromotorEndpoint extends Endpoint {
   @override
   String get path =>
       '/cartera/solicitudes/general/asignar-solicitudes-promotor';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class SolicitudesGrupalesAutorizarEndpoint extends Endpoint {
+  final SolicitudGrupalesAutorizarSolicitudToPromotor data;
+  SolicitudesGrupalesAutorizarEndpoint({
+    required this.data,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/autorizar/bulk';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

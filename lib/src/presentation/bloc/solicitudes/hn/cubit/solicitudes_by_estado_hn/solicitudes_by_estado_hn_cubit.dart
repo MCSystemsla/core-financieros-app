@@ -16,6 +16,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
   Future<void> getSolicitudesByEstado({
     bool isAsignadaToAsesorCredito = false,
     EstadoCredito estadoCredito = EstadoCredito.registrada,
+    int? codigoGrupo,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
 
@@ -26,6 +27,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         numeroSolicitud: state.numeroSolicitud,
         cedulaCliente: state.cedulaCliente,
         pagina: state.pagina,
+        codigoGrupo: codigoGrupo,
       );
       final hasUserAppliedFilter =
           state.isNumeroSolicitudFilter || state.isCedulaSolicitudFilter;
