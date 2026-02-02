@@ -92,7 +92,7 @@ class AsignacionSolicitudGrupalHnScreen extends StatelessWidget {
                                 .setIdPromotor(value?.value);
                           },
                         ),
-                      _ => const SizedBox(),
+                      _ => const SizedBox.shrink(),
                     };
                   },
                 ),
