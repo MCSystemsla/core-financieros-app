@@ -78,15 +78,15 @@ class SelectTipoSupervisionHnScreen extends StatelessWidget {
               title: 'Riesgo',
               subtitle: 'Crear Supervisión de Riesgo',
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) =>
-                //         const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
-                //       tipoSupervisor: TipoSupervisorEnum.riesgo,
-                //     ),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        const SupervisionesSearchSolicitudesByNumeroOrCedulaScreen(
+                      tipoSupervisor: TipoSupervisorEnum.riesgo,
+                    ),
+                  ),
+                );
               },
             ),
           ],

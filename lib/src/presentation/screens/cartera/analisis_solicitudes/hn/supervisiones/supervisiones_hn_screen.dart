@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/get_supervisiones/get_supervisiones_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_credito_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_riesgo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_dynamic_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
@@ -209,6 +210,13 @@ class SupervisionsHnIncerptorHn extends StatelessWidget {
           tipoSolicitud: tipoSolicitud,
         ),
       TipoSupervisorEnum.credito => SupervisionesFormCreditoHnScreen(
+          data: data,
+          nombreCoordinador: nombreCoordinador,
+          cuota: cuota,
+          razonEndeudamiento: razonEndeudamiento,
+          tipoSolicitud: tipoSolicitud,
+        ),
+      TipoSupervisorEnum.riesgo => SupervisionesFormRiesgoHnScreen(
           data: data,
           nombreCoordinador: nombreCoordinador,
           cuota: cuota,

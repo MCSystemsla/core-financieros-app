@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/plan_inversion_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -86,6 +87,9 @@ abstract class AnalisisRepositoryHn {
   Future<EvaluadorCnbsResponse> getEvaluadoresGarantia();
   Future<FiadoresResponse> getFiadoresByNumeroSolicitud({
     required String tipoFiadorCodigo,
+    required int numeroSolicitud,
+  });
+  Future<PlanInversionResponse> getPlanInversionAnalisis({
     required int numeroSolicitud,
   });
 }
@@ -520,6 +524,29 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
 
       final data = FiadoresResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PlanInversionResponse> getPlanInversionAnalisis({
+    required int numeroSolicitud,
+  }) async {
+    final endpoint = GetPlanInversionAnalisisHNEndpoint(
+      numeroSolicitud: numeroSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = PlanInversionResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

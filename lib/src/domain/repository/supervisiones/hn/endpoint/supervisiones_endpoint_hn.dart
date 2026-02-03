@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_coordinador.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_credito.dart';
+import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_riesgo.dart';
 
 class GetSolicitudesByNumeroOrCedulaEndpointHN extends Endpoint {
   final int? numeroSolicitud;
@@ -89,4 +90,25 @@ class CreateSupervisionCreditoEndpointHN extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => createSupervisionCredito.toJson();
+}
+
+class CreateSupervisionRiesgoEndpointHN extends Endpoint {
+  final CreateSupervisionRiesgo createSupervisionRiesgo;
+
+  CreateSupervisionRiesgoEndpointHN({
+    required this.createSupervisionRiesgo,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/supervisiones/create-supervision-riesgo';
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => createSupervisionRiesgo.toJson();
 }

@@ -439,3 +439,25 @@ class GetFiadoresByNumeroSolicitudHNEndpoint extends Endpoint {
         'NumeroSolicitud': numeroSolicitud.toString(),
       };
 }
+
+class GetPlanInversionAnalisisHNEndpoint extends Endpoint {
+  final int numeroSolicitud;
+
+  GetPlanInversionAnalisisHNEndpoint({
+    required this.numeroSolicitud,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-plan-inversion/asociado-a-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud.toString(),
+      };
+}
