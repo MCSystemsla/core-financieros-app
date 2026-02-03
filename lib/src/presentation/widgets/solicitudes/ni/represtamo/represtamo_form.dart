@@ -31,35 +31,37 @@ class ReprestamoForm extends StatelessWidget {
           imageUrl: ImageAsset.represtamoBg,
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: controller,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: controller,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudReprestamoCubit>().saveCedula(
-                        cedulaFrontPath: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudReprestamoCubit>().saveCedula(
-                        cedulaBackPath: imagePath,
-                      );
-                },
-              ),
-              ReprestamoForm1(
-                controller: controller,
-                userByCedulaSolicitud: userByCedulaSolicitud,
-              ),
-              ReprestamoForm2(controller: controller),
-              ReprestamoForm3(controller: controller),
-              ReprestamoForm4(controller: controller),
-              ReprestamoHistorialCredito(
-                controller: controller,
-              ),
-              ReprestamoForm5(controller: controller),
-            ],
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: controller,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: controller,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudReprestamoCubit>().saveCedula(
+                          cedulaFrontPath: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudReprestamoCubit>().saveCedula(
+                          cedulaBackPath: imagePath,
+                        );
+                  },
+                ),
+                ReprestamoForm1(
+                  controller: controller,
+                  userByCedulaSolicitud: userByCedulaSolicitud,
+                ),
+                ReprestamoForm2(controller: controller),
+                ReprestamoForm3(controller: controller),
+                ReprestamoForm4(controller: controller),
+                ReprestamoHistorialCredito(
+                  controller: controller,
+                ),
+                ReprestamoForm5(controller: controller),
+              ],
+            ),
           ),
         ),
       ],

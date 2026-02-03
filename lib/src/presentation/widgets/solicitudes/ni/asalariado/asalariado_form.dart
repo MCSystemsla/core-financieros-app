@@ -30,48 +30,50 @@ class AsalariadoForm extends StatelessWidget {
           imageUrl: ImageAsset.represtamoBg,
         ),
         Expanded(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: controller,
-            children: [
-              AddCedulaPhotosScreen(
-                controller: controller,
-                onCedulaFrontTaken: (imagePath) {
-                  context.read<SolicitudAsalariadoCubit>().saveCedula(
-                        cedulaFrontPath: imagePath,
-                      );
-                },
-                onCedulaBackTaken: (imagePath) {
-                  context.read<SolicitudAsalariadoCubit>().saveCedula(
-                        cedulaBackPath: imagePath,
-                      );
-                },
-              ),
-              AsalariadoForm1(
-                controller: controller,
-              ),
-              AsalariadoForm2(
-                controller: controller,
-              ),
-              AsalariadoForm3(
-                controller: controller,
-              ),
-              AsalariadoForm4(
-                controller: controller,
-              ),
-              AsalariadoForm5(
-                controller: controller,
-              ),
-              AsalariadoForm6(
-                controller: controller,
-              ),
-              AsalariadoHistorialCredito(
-                controller: controller,
-              ),
-              AsalariadoForm7(
-                controller: controller,
-              ),
-            ],
+          child: SafeArea(
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: controller,
+              children: [
+                AddCedulaPhotosScreen(
+                  controller: controller,
+                  onCedulaFrontTaken: (imagePath) {
+                    context.read<SolicitudAsalariadoCubit>().saveCedula(
+                          cedulaFrontPath: imagePath,
+                        );
+                  },
+                  onCedulaBackTaken: (imagePath) {
+                    context.read<SolicitudAsalariadoCubit>().saveCedula(
+                          cedulaBackPath: imagePath,
+                        );
+                  },
+                ),
+                AsalariadoForm1(
+                  controller: controller,
+                ),
+                AsalariadoForm2(
+                  controller: controller,
+                ),
+                AsalariadoForm3(
+                  controller: controller,
+                ),
+                AsalariadoForm4(
+                  controller: controller,
+                ),
+                AsalariadoForm5(
+                  controller: controller,
+                ),
+                AsalariadoForm6(
+                  controller: controller,
+                ),
+                AsalariadoHistorialCredito(
+                  controller: controller,
+                ),
+                AsalariadoForm7(
+                  controller: controller,
+                ),
+              ],
+            ),
           ),
         ),
       ],

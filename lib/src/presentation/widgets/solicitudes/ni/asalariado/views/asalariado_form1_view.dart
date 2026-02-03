@@ -337,6 +337,7 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  enabled: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'TIPOSPERSONACREDITO',
@@ -355,6 +356,7 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  enabled: true,
                   selectedItem: Item(
                     name: tipoDocumento ?? '',
                     value: tipoDocumento,
@@ -377,7 +379,7 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
-                  enabled: false,
+                  enabled: true,
                   validator: (value) =>
                       ClassValidator.validateRequired(paisEmisor?.value),
                   hintText: paisEmisor?.name ?? 'input.select_option'.tr(),
@@ -504,7 +506,7 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),
-                  initialValue: fechaNacimiento?.selectorFormat(),
+                  // initialValue: fechaNacimiento?.selectorFormat(),
                   onTap: () => selectFechaNacimiento(context),
                   hintText: fechaNacimiento?.selectorFormat(),
                   readOnly: true,
@@ -549,7 +551,7 @@ class __FormContentState extends State<_FormContent> {
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateRequired(
                       fechaEmisionCedula?.selectorFormat()),
-                  initialValue: fechaEmisionCedula?.selectorFormat(),
+                  // initialValue: fechaEmisionCedula?.selectorFormat(),
                   onTap: () => selectFechaEmisionCedula(context),
                   hintText: fechaEmisionCedula?.selectorFormat(),
                   readOnly: true,
@@ -563,7 +565,7 @@ class __FormContentState extends State<_FormContent> {
                   hintText: fechaVencimientoCedula?.selectorFormat(),
                   readOnly: true,
                   onTap: () => selectFechaVencimientoCedula(context),
-                  initialValue: fechaVencimientoCedula?.selectorFormat(),
+                  // initialValue: fechaVencimientoCedula?.selectorFormat(),
                   title: 'Fecha Vencimiento documento',
                   icon: const Icon(Icons.calendar_today),
                 ),
