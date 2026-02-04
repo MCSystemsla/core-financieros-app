@@ -203,6 +203,7 @@ class AnalisisBoxServiceHn {
   void saveAnalisisListDataHn({
     required List<AnalisisListDataHn> analisisListDataHn,
   }) {
+    analisisListDataHnBox.removeAll();
     analisisListDataHnBox.putMany(analisisListDataHn);
   }
 }

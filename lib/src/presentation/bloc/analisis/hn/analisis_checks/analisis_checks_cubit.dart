@@ -29,6 +29,7 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
         tieneFiadores: data.data.tieneFiadores,
         tieneAnalisis: data.data.tieneAnalisis,
         tieneUbicacion: data.data.tieneUbicacion,
+        tieneFotoNegocio: data.data.tieneFotoNegocio,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

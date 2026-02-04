@@ -47,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final needsSync = CatalogoSync.needToSync();
 
       setState(() {
-        _shouldSync = needsSync && connection.isConnected;
+        _shouldSync = needsSync &&
+            connection.connectionStatus == ConnectionStatus.connected;
         _isChecking = false;
       });
     }

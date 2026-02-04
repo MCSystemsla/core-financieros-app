@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -95,6 +96,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                   'Fiadores': state.tieneFiadores,
                   'Garantia': state.tieneGarantia,
                   'Ubicacion': state.tieneUbicacion,
+                  'Imagenes del negocio': state.tieneFotoNegocio,
                 };
                 return Column(
                   children: [
@@ -167,24 +169,25 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               ),
                             },
                           ),
-                          // SelectableCardItem(
-                          //   userHaveDataAlready: false,
-                          //   isLoading: state.status == Status.inProgress,
-                          //   icon: Icons.photo_library_outlined,
-                          //   color: const Color(0xff455A64),
-                          //   title: 'Registrar Imágenes del negocio',
-                          //   subtitle: 'Ingresa fotografías del negocio',
-                          //   onTap: () {
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (ctx) => ImagenesNegocioHnScreen(
-                          //           numeroSolicitud: numeroSolicitud,
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tieneFotoNegocio,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.photo_library_outlined,
+                            color: const Color(0xff455A64),
+                            title: 'Registrar Imágenes del negocio',
+                            subtitle: 'Ingresa fotografías del negocio',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (ctx) => ImagenesNegocioHnScreen(
+                                    numeroSolicitud: numeroSolicitud,
+                                    cedulaCliente: cedulaCliente,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                           SelectableCardItem(
                             userHaveDataAlready: state.tieneFiadores,
                             isLoading: state.status == Status.inProgress,
