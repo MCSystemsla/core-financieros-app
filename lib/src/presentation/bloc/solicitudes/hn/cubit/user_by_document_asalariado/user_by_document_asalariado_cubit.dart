@@ -50,7 +50,7 @@ class UserByDocumentAsalariadoCubit
         fechaExpira: resp?.data.fechaExpira?.toUtc().toIso8601String(),
         departamento: resp?.data.departamento,
         direccion: resp?.data.direccion,
-        fechaEmision: resp?.data.fechaEmision?.toUtc().toIso8601String(),
+        fechaEmision: resp?.data.fechaEmision?.toUtc().toIso8601String() ?? '',
         municipio: resp?.data.municipio,
         pais: resp?.data.pais,
         primerApellido: resp?.data.primerApellido ?? primerApellido,

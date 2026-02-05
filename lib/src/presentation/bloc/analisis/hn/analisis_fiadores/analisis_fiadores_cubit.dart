@@ -16,7 +16,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
     final totalIngresosFamiliares =
         state.salarioNetoCordoba + state.otrosIngresosCordoba;
     final ganaciasNegocio =
-        state.ventaNegocio + state.costoVenta - state.gastosOperativos;
+        state.ventaNegocio - state.costoVenta - state.gastosOperativos;
     final saldoDisponible = totalIngresosFamiliares +
         ganaciasNegocio +
         state.otrosIngresos -

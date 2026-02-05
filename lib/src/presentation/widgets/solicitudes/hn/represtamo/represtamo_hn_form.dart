@@ -10,16 +10,37 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/repr
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_form_hn_3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_form_hn_5.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/online/represtamo_historial_credito_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/user_identification_alert/user_identification_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ReprestamoHnForm extends StatelessWidget {
+import '../../../../bloc/solicitudes/hn/cubit/user_have_cedula/user_have_cedula_cubit.dart';
+
+class ReprestamoHnForm extends StatefulWidget {
   const ReprestamoHnForm({super.key});
+
+  @override
+  State<ReprestamoHnForm> createState() => _ReprestamoHnFormState();
+}
+
+class _ReprestamoHnFormState extends State<ReprestamoHnForm> {
+  @override
+  void initState() {
+    super.initState();
+    final userByDocumentProvider =
+        context.read<UserByDocumentReprestamoCubit>().state;
+
+    context
+        .read<UserHaveCedulaCubit>()
+        .userHaveCedula(documentoCliente: userByDocumentProvider.cedula);
+  }
 
   @override
   Widget build(BuildContext context) {
     final userByDocumentProvider =
         context.read<UserByDocumentReprestamoCubit>().state;
+    final userHaveCedulaAlready = context.watch<UserHaveCedulaCubit>().state;
+
     final pageController = PageController();
     return Column(
       children: [
@@ -32,19 +53,25 @@ class ReprestamoHnForm extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               controller: pageController,
               children: [
-                AddCedulaPhotosScreen(
-                  controller: pageController,
-                  onCedulaFrontTaken: (imagePath) {
-                    context.read<SolicitudReprestamoHnCubit>().saveCedula(
-                          cedulaFrontPath: imagePath,
-                        );
-                  },
-                  onCedulaBackTaken: (imagePath) {
-                    context.read<SolicitudReprestamoHnCubit>().saveCedula(
-                          cedulaBackPath: imagePath,
-                        );
-                  },
-                ),
+                if (userHaveCedulaAlready.tieneFotoCedula)
+                  UserIdentificationAlertDialog(
+                    pageController: pageController,
+                  ),
+                if (userHaveCedulaAlready.isUserSelectUpdateImage ||
+                    !userHaveCedulaAlready.tieneFotoCedula)
+                  AddCedulaPhotosScreen(
+                    controller: pageController,
+                    onCedulaFrontTaken: (imagePath) {
+                      context.read<SolicitudReprestamoHnCubit>().saveCedula(
+                            cedulaFrontPath: imagePath,
+                          );
+                    },
+                    onCedulaBackTaken: (imagePath) {
+                      context.read<SolicitudReprestamoHnCubit>().saveCedula(
+                            cedulaBackPath: imagePath,
+                          );
+                    },
+                  ),
                 ReprestamoFormHn1(
                   controller: pageController,
                   userByDocumentReprestamoData: UserByDocumentReprestamoData(
@@ -76,6 +103,9 @@ class ReprestamoHnForm extends StatelessWidget {
                 ),
                 ReprestamoFormHn5(
                   controller: pageController,
+                  isUserSelectUpdateImage:
+                      userHaveCedulaAlready.isUserSelectUpdateImage,
+                  tieneFotoCedula: userHaveCedulaAlready.tieneFotoCedula,
                 ),
               ],
             ),

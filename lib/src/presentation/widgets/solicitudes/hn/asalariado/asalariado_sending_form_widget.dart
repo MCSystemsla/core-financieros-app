@@ -9,7 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AsalariadoSendingFormWidget extends StatefulWidget {
-  const AsalariadoSendingFormWidget({super.key});
+  final bool isUserSelectUpdateImage;
+  final bool tieneFotoCedula;
+  const AsalariadoSendingFormWidget({
+    super.key,
+    this.isUserSelectUpdateImage = false,
+    this.tieneFotoCedula = false,
+  });
 
   @override
   State<AsalariadoSendingFormWidget> createState() =>
@@ -29,17 +35,11 @@ class _AsalariadoSendingFormWidgetState
     return BlocConsumer<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
       listener: (context, state) {
         if (state.status == Status.done) {
-          // dbProvider.removeSolicitudWhenisUploaded(
-          //   solicitudId: widget.solicitudId,
-          // );
-          context.read<SolicitudAslariadoHnCubit>().sendCedulaImages(
-                numeroSolicitud: state.numeroSolicitud,
-              );
-          // context
-          //     .read<SolicitudNuevaMenorCubit>()
-          //     .onFieldChanged(() => state.copyWith(
-          //           hasVerified: true,
-          //         ));
+          if (widget.isUserSelectUpdateImage || !widget.tieneFotoCedula) {
+            context.read<SolicitudAslariadoHnCubit>().sendCedulaImages(
+                  numeroSolicitud: state.numeroSolicitud,
+                );
+          }
         }
       },
       builder: (context, state) {

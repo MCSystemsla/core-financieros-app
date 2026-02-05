@@ -22,6 +22,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/client_signature_list_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/verify_client_signature_nueva_sheet.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/user_identification_alert/user_identification_alert_dialog.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,13 +31,33 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:signature/signature.dart';
 
-class AsalariadoHnForm extends StatelessWidget {
+import '../../../../bloc/solicitudes/hn/cubit/user_have_cedula/user_have_cedula_cubit.dart';
+
+class AsalariadoHnForm extends StatefulWidget {
   const AsalariadoHnForm({super.key});
+
+  @override
+  State<AsalariadoHnForm> createState() => _AsalariadoHnFormState();
+}
+
+class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
+  @override
+  void initState() {
+    super.initState();
+    final userByDocumentProvider =
+        context.read<UserByDocumentAsalariadoCubit>().state;
+
+    context
+        .read<UserHaveCedulaCubit>()
+        .userHaveCedula(documentoCliente: userByDocumentProvider.cedula);
+  }
 
   @override
   Widget build(BuildContext context) {
     final userByDocumentProvider =
         context.read<UserByDocumentAsalariadoCubit>().state;
+    final userHaveCedulaAlready = context.watch<UserHaveCedulaCubit>().state;
+
     final pageController = PageController();
     return Column(
       children: [
@@ -52,19 +73,25 @@ class AsalariadoHnForm extends StatelessWidget {
                 SolicitudSignatureAsalariado(
                   pageController: pageController,
                 ),
-                AddCedulaPhotosScreen(
-                  controller: pageController,
-                  onCedulaFrontTaken: (imagePath) {
-                    context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                          imagenFrontal: imagePath,
-                        );
-                  },
-                  onCedulaBackTaken: (imagePath) {
-                    context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                          imagenTrasera: imagePath,
-                        );
-                  },
-                ),
+                if (userHaveCedulaAlready.tieneFotoCedula)
+                  UserIdentificationAlertDialog(
+                    pageController: pageController,
+                  ),
+                if (userHaveCedulaAlready.isUserSelectUpdateImage ||
+                    !userHaveCedulaAlready.tieneFotoCedula)
+                  AddCedulaPhotosScreen(
+                    controller: pageController,
+                    onCedulaFrontTaken: (imagePath) {
+                      context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                            imagenFrontal: imagePath,
+                          );
+                    },
+                    onCedulaBackTaken: (imagePath) {
+                      context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                            imagenTrasera: imagePath,
+                          );
+                    },
+                  ),
                 RiskControlScreen(
                   nombre1: userByDocumentProvider.primerNombre,
                   nombre2: userByDocumentProvider.segundoNombre,
@@ -136,6 +163,9 @@ class AsalariadoHnForm extends StatelessWidget {
                 ),
                 AsalariadoHnForm9(
                   controller: pageController,
+                  isUserSelectUpdateImage:
+                      userHaveCedulaAlready.isUserSelectUpdateImage,
+                  tieneFotoCedula: userHaveCedulaAlready.tieneFotoCedula,
                 ),
               ],
             ),

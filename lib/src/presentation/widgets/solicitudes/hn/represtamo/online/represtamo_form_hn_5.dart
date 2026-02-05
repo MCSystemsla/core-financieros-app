@@ -22,10 +22,15 @@ import 'package:go_router/go_router.dart';
 import '../../../../../bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 
 class ReprestamoFormHn5 extends StatefulWidget {
+  final bool isUserSelectUpdateImage;
+  final bool tieneFotoCedula;
+
   final PageController controller;
   const ReprestamoFormHn5({
     super.key,
     required this.controller,
+    required this.isUserSelectUpdateImage,
+    required this.tieneFotoCedula,
   });
 
   @override
@@ -294,7 +299,11 @@ class _ReprestamoFormHn5State extends State<ReprestamoFormHn5>
                     MaterialPageRoute(
                       builder: (ctx) => BlocProvider.value(
                         value: context.read<SolicitudReprestamoHnCubit>(),
-                        child: const ReprestamoSendingFormWidget(),
+                        child: ReprestamoSendingFormWidget(
+                          isUserSelectUpdateImage:
+                              widget.isUserSelectUpdateImage,
+                          tieneFotoCedula: widget.tieneFotoCedula,
+                        ),
                       ),
                     ),
                   );

@@ -32,10 +32,14 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class AsalariadoHnForm9 extends StatefulWidget {
+  final bool isUserSelectUpdateImage;
+  final bool tieneFotoCedula;
   final PageController controller;
   const AsalariadoHnForm9({
     super.key,
     required this.controller,
+    required this.isUserSelectUpdateImage,
+    required this.tieneFotoCedula,
   });
 
   @override

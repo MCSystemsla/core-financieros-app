@@ -22,10 +22,15 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class ReprestamoFormHnOffline4 extends StatefulWidget {
+  final bool isUserSelectUpdateImage;
+  final bool tieneFotoCedula;
   final PageController controller;
+
   const ReprestamoFormHnOffline4({
     super.key,
     required this.controller,
+    this.isUserSelectUpdateImage = false,
+    this.tieneFotoCedula = false,
   });
 
   @override
@@ -320,7 +325,11 @@ class _ReprestamoFormHnOffline4State extends State<ReprestamoFormHnOffline4>
                         MaterialPageRoute(
                           builder: (ctx) => BlocProvider.value(
                             value: context.read<SolicitudReprestamoHnCubit>(),
-                            child: const ReprestamoSendingFormWidget(),
+                            child: ReprestamoSendingFormWidget(
+                              isUserSelectUpdateImage:
+                                  widget.isUserSelectUpdateImage,
+                              tieneFotoCedula: widget.tieneFotoCedula,
+                            ),
                           ),
                         ),
                       );

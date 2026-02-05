@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nu
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_have_cedula/user_have_cedula_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asesor/asesor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo/catalogo_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
@@ -121,6 +122,10 @@ abstract class SolicitudesCreditoHnRepository {
     required String tipoIdentificacionCodigo,
     required String identificacion,
     required String tipoOrganizacionCodigo,
+  });
+
+  Future<UserHaveCedulaResponse> userHaveCedula({
+    required String documentoCliente,
   });
 }
 
@@ -883,6 +888,31 @@ class SolicitudesCreditoHnRepositoryImpl
         );
         throw AppException(optionalMsg: errorMsg);
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserHaveCedulaResponse> userHaveCedula({
+    required String documentoCliente,
+  }) async {
+    final endpoint = UserHaveCedulaEndpoint(
+      documentoCliente: documentoCliente,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = UserHaveCedulaResponse.fromJson(resp);
+      return data;
     } catch (e) {
       rethrow;
     }

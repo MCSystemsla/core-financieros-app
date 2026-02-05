@@ -57,4 +57,6 @@ abstract class ImageAsset {
 
   static const String mySolicitudesAssignments =
       'assets/images/my_solicitudes_asignadas.svg';
+
+  static const String identification = 'assets/images/indentification.svg';
 }

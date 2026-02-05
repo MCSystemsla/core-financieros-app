@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
+import '../../../bloc/solicitudes/hn/cubit/user_have_cedula/user_have_cedula_cubit.dart';
 
 class CrearSolicitudHnScreen extends StatelessWidget {
   final TypeForm typeForm;
@@ -27,6 +28,7 @@ class CrearSolicitudHnScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -59,6 +61,11 @@ class CrearSolicitudHnScreen extends StatelessWidget {
           create: (ctx) => GruposActivosCubit(
             SolicitudesCreditoHnRepositoryImpl(),
           )..getGruposActivos(),
+        ),
+        BlocProvider(
+          create: (ctx) => UserHaveCedulaCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+          ),
         ),
       ],
       child: PopScope(

@@ -17,12 +17,18 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navba
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form1.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NuevaMenorHnForm extends StatelessWidget {
+class NuevaMenorHnForm extends StatefulWidget {
   const NuevaMenorHnForm({super.key});
 
   @override
+  State<NuevaMenorHnForm> createState() => _NuevaMenorHnFormState();
+}
+
+class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
+  @override
   Widget build(BuildContext context) {
     final userByDocumentProvider = context.read<UserByDocumentCubit>().state;
+
     final pageController = PageController();
     return Column(
       children: [

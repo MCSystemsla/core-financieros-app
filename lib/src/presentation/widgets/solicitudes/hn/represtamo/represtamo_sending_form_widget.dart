@@ -10,7 +10,13 @@ import 'package:go_router/go_router.dart';
 import '../../../../bloc/solicitudes/hn/cubit/solicitud_represtamo_hn/solicitud_represtamo_hn_cubit.dart';
 
 class ReprestamoSendingFormWidget extends StatefulWidget {
-  const ReprestamoSendingFormWidget({super.key});
+  final bool isUserSelectUpdateImage;
+  final bool tieneFotoCedula;
+  const ReprestamoSendingFormWidget({
+    super.key,
+    required this.isUserSelectUpdateImage,
+    required this.tieneFotoCedula,
+  });
 
   @override
   State<ReprestamoSendingFormWidget> createState() =>

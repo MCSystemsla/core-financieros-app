@@ -62,7 +62,9 @@ class UserDocumentDataHN {
         departamento: json['Departamento'],
         municipio: json['Municipio'],
         direccion: json['Direccion'],
-        fechaEmision: DateTime.parse(json['FechaEmision']),
+        fechaEmision: (json['FechaEmision'] != null)
+            ? DateTime.parse(json['FechaEmision'])
+            : null,
         fechaExpira: DateTime.parse(json['FechaExpira']),
         tipoDocumento: json['TipoDocumento'],
       );

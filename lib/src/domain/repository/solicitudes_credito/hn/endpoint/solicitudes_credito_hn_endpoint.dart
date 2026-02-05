@@ -491,3 +491,25 @@ class SolicitudesGrupalesAutorizarEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => data.toJson();
 }
+
+class UserHaveCedulaEndpoint extends Endpoint {
+  final String documentoCliente;
+
+  UserHaveCedulaEndpoint({
+    required this.documentoCliente,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/cedula/foto/existe';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'DocumentoCliente': documentoCliente,
+        'database': LocalStorage().database,
+      };
+}
