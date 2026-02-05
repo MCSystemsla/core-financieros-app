@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/app_life_cycle_service/app_life_cycle_service.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/theme/app_theme.dart';
@@ -27,35 +26,9 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   final Flavor flavor;
   const App({super.key, required this.flavor});
-
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  late final AppLifecycleService _lifecycleService;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _lifecycleService = AppLifecycleService(
-      onSessionExpired: () {
-        router.go('/loading');
-      },
-    );
-
-    _lifecycleService.start();
-  }
-
-  @override
-  void dispose() {
-    _lifecycleService.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
