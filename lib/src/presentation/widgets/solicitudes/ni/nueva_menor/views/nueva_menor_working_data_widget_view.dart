@@ -1,15 +1,10 @@
 // ignore_for_file: deprecated_member_use
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/origin/origin.dart';
-import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
@@ -21,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:go_router/go_router.dart';
 
 class NuevaMenorWorkingDataWidgetView extends StatefulWidget {
   final PageController controller;
@@ -40,72 +33,16 @@ class _NuevaMenorWorkingDataWidgetViewState
     extends State<NuevaMenorWorkingDataWidgetView> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GeolocationCubit, GeolocationState>(
-      listener: (context, state) {
-        if (state is OnGeolocationPermissionDenied) {
-          CustomAlertDialog(
-            context: context,
-            title: 'No se ha concedido el permiso de ubicación',
-            onDone: () async {
-              final isOpen = await Geolocator.openLocationSettings();
-              if (!context.mounted) return;
-              if (isOpen) {
-                context.pop();
-              }
-            },
-          ).showDialog(context);
-        }
-        if (state is OnGeolocationServiceDisabled) {
-          CustomAlertDialog(
-            context: context,
-            title: 'Gps de dispositivo desactivado',
-            onDone: () async {
-              final isOpen = await Geolocator.openLocationSettings();
-              if (!context.mounted) return;
-              if (isOpen) {
-                context.pop();
-              }
-            },
-          ).showDialog(context);
-        }
-        if (state is OnGeolocationServiceError) {
-          CustomAlertDialog(
-            context: context,
-            title: state.errorMsg,
-            onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
-        }
-        if (state is OnGeolocationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnackbar(
-              icon: const Icon(
-                Icons.location_pin,
-                color: Colors.white,
-              ),
-              title: 'Ubicacion registrada exitosamente',
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        return _FormContent(
-          controller: widget.controller,
-          state: state,
-          position: state is OnGeolocationSuccess ? state.position : null,
-        );
-      },
+    return _FormContent(
+      controller: widget.controller,
     );
   }
 }
 
 class _FormContent extends StatefulWidget {
-  final GeolocationState state;
   final PageController controller;
-  final Position? position;
   const _FormContent({
-    required this.state,
     required this.controller,
-    this.position,
   });
 
   @override
@@ -326,24 +263,11 @@ class __FormContentState extends State<_FormContent> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: CustomElevatedButton(
-                    enabled: widget.state is! OnGeolocationLoading,
                     text: 'Siguiente',
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () async {
                       if (!formKey.currentState!.validate()) return;
 
-                      if (widget.position == null) {
-                        context.read<GeolocationCubit>().getCurrentLocation();
-                        return;
-                      }
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          ubicacionLongitud:
-                              widget.position?.longitude.toString(),
-                          ubicacionLatitud:
-                              widget.position?.latitude.toString(),
-                        ),
-                      );
                       widget.controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,

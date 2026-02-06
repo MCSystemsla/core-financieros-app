@@ -177,6 +177,18 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                             title: 'Registrar Imágenes del negocio',
                             subtitle: 'Ingresa fotografías del negocio',
                             onTap: () {
+                              if (state.tieneFotoNegocio) {
+                                CustomAlertDialog(
+                                  context: context,
+                                  title:
+                                      'No es posible continuar: las imagenes del negocio ya figuran como registrado en sistema.',
+                                  onDone: () => context.pop(),
+                                ).showDialog(
+                                  context,
+                                  dialogType: DialogType.infoReverse,
+                                );
+                                return;
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

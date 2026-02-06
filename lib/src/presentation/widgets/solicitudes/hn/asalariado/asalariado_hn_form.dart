@@ -47,9 +47,9 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
     final userByDocumentProvider =
         context.read<UserByDocumentAsalariadoCubit>().state;
 
-    context
-        .read<UserHaveCedulaCubit>()
-        .userHaveCedula(documentoCliente: userByDocumentProvider.cedula);
+    context.read<UserHaveCedulaCubit>().userHaveCedula(
+          documentoCliente: userByDocumentProvider.cedula,
+        );
   }
 
   @override

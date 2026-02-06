@@ -337,14 +337,14 @@ class __FormContentState extends State<_FormContent> {
                   ),
                   title: 'Persona a cargo',
                   hintText: 'Ingresa la persona a cargo',
-                  validator: (value) => ClassValidator.validateIntValue(value),
+                  validator: (value) => ClassValidator.validateRequired(value),
                   textInputType: TextInputType.number,
                   isValid: null,
                   onChange: (value) {
                     personasACargo = value;
                     cubit.onFieldChanged(
                       () => cubit.state
-                          .copyWith(personasACargo: int.tryParse(value)),
+                          .copyWith(personasACargo: int.tryParse(value) ?? 0),
                     );
                   },
                 ),
