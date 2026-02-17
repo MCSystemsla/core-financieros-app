@@ -21,13 +21,13 @@ class EvaluadorCnbsData {
   final int id;
   final String cedula;
   final String nombreValuador;
-  final String codigoCnbs;
+  final String? codigoCnbs;
 
   EvaluadorCnbsData({
     required this.id,
     required this.cedula,
     required this.nombreValuador,
-    required this.codigoCnbs,
+    this.codigoCnbs,
   });
 
   factory EvaluadorCnbsData.fromJson(Map<String, dynamic> json) =>

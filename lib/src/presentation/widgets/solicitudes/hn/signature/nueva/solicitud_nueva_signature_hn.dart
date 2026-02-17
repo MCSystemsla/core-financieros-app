@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
@@ -21,8 +22,10 @@ import 'package:signature/signature.dart';
 enum ClientSignatureStatus { yes, noPossible, unknown }
 
 class SolicitudSignatureNueva extends StatelessWidget {
+  final String cedula;
   final PageController pageController;
-  const SolicitudSignatureNueva({super.key, required this.pageController});
+  const SolicitudSignatureNueva(
+      {super.key, required this.pageController, required this.cedula});
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,8 @@ class SolicitudSignatureNueva extends StatelessWidget {
                   value: context.read<SolicitudNuevaMenorHnCubit>(),
                   child: VerifyClientSignatureSheet(
                     pageController: pageController,
+                    cedula: cedula,
+                    typeform: TypeForm.nueva,
                   ),
                 ),
               ),
@@ -134,10 +139,12 @@ class _ClientSignatureSolicitudState extends State<ClientSignatureSolicitud> {
 class SolicitudSignatureClientWidget extends StatefulWidget {
   final ClientSignatureStatus clientSignatureStatus;
   final PageController pageController;
+  final String cedula;
   const SolicitudSignatureClientWidget({
     super.key,
     required this.clientSignatureStatus,
     required this.pageController,
+    required this.cedula,
   });
 
   @override
@@ -153,7 +160,6 @@ class _SolicitudSignatureClientWidgetState
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
-    final cubit = context.read<SolicitudNuevaMenorHnCubit>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firma'),
@@ -215,8 +221,8 @@ class _SolicitudSignatureClientWidgetState
                     await file.writeAsBytes(signatureImage!);
 
                     final clientSignature = SignatureClientDb(
-                      typeSolicitud: 'NUEVA',
-                      cedula: cubit.state.cedula,
+                      typeSolicitud: TypeForm.nueva.codigo,
+                      cedula: widget.cedula,
                       imageSignature: filePath,
                     );
                     localDbProvider.saveClientSignature(clientSignature);

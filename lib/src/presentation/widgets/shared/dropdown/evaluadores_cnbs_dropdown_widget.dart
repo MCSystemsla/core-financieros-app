@@ -28,7 +28,7 @@ class EvaluadoresCnbsDropdownWidget extends StatelessWidget {
         final dropdownItems = state.evaluadoresCnbs
             .map((e) => Item(
                   name: e.nombreValuador,
-                  value: e.codigoCnbs,
+                  value: e.id.toString(),
                 ))
             .toList();
 

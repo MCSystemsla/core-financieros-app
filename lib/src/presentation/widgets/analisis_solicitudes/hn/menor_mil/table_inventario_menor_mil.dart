@@ -83,7 +83,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMil> {
                     return AnalisisCardVentasDay(
                       subtitle: e.articulo,
                       title:
-                          'Costo de venta: ${e.costoVentaPorcentaje.toStringAsFixed(2)}%',
+                          'Costo de venta: ${e.costoVentaPorcentaje.toStringAsFixed(2)}',
                       description: e.precioVenta.toCurrencyString(),
                       onTap: () {
                         showHistorialCreditoOptionsBottomSheet(

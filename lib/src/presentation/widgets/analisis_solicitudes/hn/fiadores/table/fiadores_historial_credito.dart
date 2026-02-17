@@ -47,7 +47,7 @@ class FiadoresHistorialCredito extends StatelessWidget {
               color: Colors.white,
             ),
             Text(
-              'Agregar Inventario',
+              'Historial crediticio',
               style: TextStyle(color: Colors.white),
             ),
           ],

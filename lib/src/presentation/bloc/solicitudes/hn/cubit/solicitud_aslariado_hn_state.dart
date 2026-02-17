@@ -2,6 +2,7 @@
 part of 'solicitud_aslariado_hn_cubit.dart';
 
 class SolicitudAslariadoHnState extends Equatable {
+  final String idSolicitud;
   final String frecuenciaMeses;
   final double tasaInteres;
   final String fechaDesembolso;
@@ -131,6 +132,7 @@ class SolicitudAslariadoHnState extends Equatable {
   final String cedulaConyuge;
   final String tipoDocumentoConyugeCodigo;
   const SolicitudAslariadoHnState({
+    this.idSolicitud = '',
     this.frecuenciaMeses = '',
     this.tasaInteres = 0,
     this.fechaDesembolso = '',
@@ -263,6 +265,7 @@ class SolicitudAslariadoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        idSolicitud,
         historialCredito,
         frecuenciaMeses,
         tasaInteres,
@@ -391,6 +394,7 @@ class SolicitudAslariadoHnState extends Equatable {
       ];
 
   SolicitudAslariadoHnState copyWith({
+    String? idSolicitud,
     String? frecuenciaMeses,
     double? tasaInteres,
     String? fechaDesembolso,
@@ -521,6 +525,7 @@ class SolicitudAslariadoHnState extends Equatable {
     String? tipoDocumentoConyugeCodigo,
   }) {
     return SolicitudAslariadoHnState(
+      idSolicitud: idSolicitud ?? this.idSolicitud,
       frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
       tasaInteres: tasaInteres ?? this.tasaInteres,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,

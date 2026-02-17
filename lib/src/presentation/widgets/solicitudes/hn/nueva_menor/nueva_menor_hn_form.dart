@@ -43,6 +43,7 @@ class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
               children: [
                 SolicitudSignatureNueva(
                   pageController: pageController,
+                  cedula: userByDocumentProvider.cedula,
                 ),
                 AddCedulaPhotosScreen(
                   controller: pageController,

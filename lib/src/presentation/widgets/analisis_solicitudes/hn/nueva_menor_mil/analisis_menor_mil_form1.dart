@@ -159,18 +159,18 @@ class _PasivosForm extends StatelessWidget {
               ),
               const Gap(10),
               OutlineTextfieldWidget(
-                initialValue: state.cuentasXCobrar
+                initialValue: state.cuentasXPagar
                     .toCurrencyString()
                     .toNullIfEmptyOrZero(),
                 textAlign: TextAlign.end,
-                title: 'Cuentas por cobrar',
+                title: 'Cuentas por pagar',
                 textInputType: TextInputType.number,
                 icon: const Icon(Icons.account_balance),
                 onChange: (value) {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      cuentasXCobrar: double.tryParse(newValue) ?? 0,
+                      cuentasXPagar: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },

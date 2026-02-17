@@ -200,8 +200,8 @@ class _AnalisisGarantiaFormPrendarioTaxiState
                 onChanged: (value) {
                   evaluadorCodigo = value?.value;
                 },
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
+                // validator: (value) =>
+                // ClassValidator.validateRequired(value?.value),
               ),
               const Gap(20),
               OutlineTextfieldWidget(

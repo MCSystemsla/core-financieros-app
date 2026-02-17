@@ -25,7 +25,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
           cedulaConyuge: state.cedulaConyuge,
@@ -163,6 +163,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       emit(state.copyWith(
         status: Status.done,
         numeroSolicitud: numeroSolicitud,
+        idSolicitud: idSolicitud,
       ));
     } catch (e) {
       emit(
@@ -182,6 +183,20 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         cedulaCliente: state.cedula,
         imagenFrontal: state.imagenFrontal,
         imagenTrasera: state.imagenTrasera,
+      );
+    } catch (_) {}
+  }
+
+  Future<void> sendClientSignatureWhenSolicitudCreditoCreated({
+    required int idSolicitud,
+    required String tipoSolicitud,
+    required String firmaCliente,
+  }) async {
+    try {
+      await _repository.sendClientSignatureWhenSolicitudCreditoCreated(
+        idSolicitud: idSolicitud,
+        tipoSolicitud: tipoSolicitud,
+        firmaCliente: firmaCliente,
       );
     } catch (_) {}
   }

@@ -229,10 +229,10 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
               const Gap(20),
               EvaluadoresCnbsDropdownWidget(
                 onChanged: (value) {
-                  evaluadorCodigo = value?.value;
+                  evaluadorCodigo = value?.value.toString();
                 },
-                validator: (value) =>
-                    ClassValidator.validateRequired(value?.value),
+                // validator: (value) =>
+                // ClassValidator.validateRequired(value?.value),
               ),
               const Gap(20),
               OutlineTextfieldWidget(

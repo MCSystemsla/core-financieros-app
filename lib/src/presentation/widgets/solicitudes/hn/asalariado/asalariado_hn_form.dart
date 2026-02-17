@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/risk_control/risk_control_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
@@ -29,6 +35,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
 import '../../../../bloc/solicitudes/hn/cubit/user_have_cedula/user_have_cedula_cubit.dart';
@@ -72,6 +79,7 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
               children: [
                 SolicitudSignatureAsalariado(
                   pageController: pageController,
+                  cedula: userByDocumentProvider.cedula,
                 ),
                 if (userHaveCedulaAlready.tieneFotoCedula)
                   UserIdentificationAlertDialog(
@@ -178,7 +186,12 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
 
 class SolicitudSignatureAsalariado extends StatelessWidget {
   final PageController pageController;
-  const SolicitudSignatureAsalariado({super.key, required this.pageController});
+  final String cedula;
+  const SolicitudSignatureAsalariado({
+    super.key,
+    required this.pageController,
+    required this.cedula,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -219,6 +232,8 @@ class SolicitudSignatureAsalariado extends StatelessWidget {
                   value: context.read<SolicitudAslariadoHnCubit>(),
                   child: VerifyClientSignatureSheetAsalariado(
                     pageController: pageController,
+                    cedula: cedula,
+                    typeform: TypeForm.asalariado,
                   ),
                 ),
               ),
@@ -234,9 +249,13 @@ class SolicitudSignatureAsalariado extends StatelessWidget {
 
 class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
   final PageController pageController;
+  final String cedula;
+  final TypeForm typeform;
   const VerifyClientSignatureSheetAsalariado({
     super.key,
     required this.pageController,
+    required this.cedula,
+    required this.typeform,
   });
 
   @override
@@ -281,6 +300,8 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
                     value: context.read<SolicitudAslariadoHnCubit>(),
                     child: VerifyClientIfNotPossibleToSignWidget(
                       controller: pageController,
+                      cedula: cedula,
+                      typeform: typeform,
                     ),
                   ));
                 },
@@ -292,6 +313,7 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
                       child: SolicitudSignatureClientWidgetAsalariado(
                         clientSignatureStatus: ClientSignatureStatus.yes,
                         pageController: pageController,
+                        cedula: cedula,
                       ),
                     ),
                   );
@@ -308,10 +330,12 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
 class SolicitudSignatureClientWidgetAsalariado extends StatefulWidget {
   final ClientSignatureStatus clientSignatureStatus;
   final PageController pageController;
+  final String cedula;
   const SolicitudSignatureClientWidgetAsalariado({
     super.key,
     required this.clientSignatureStatus,
     required this.pageController,
+    required this.cedula,
   });
 
   @override
@@ -326,6 +350,8 @@ class _SolicitudSignatureClientWidgetAsalariadoState
 
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<SolicitudesHnBoxService>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Firma'),
@@ -377,6 +403,25 @@ class _SolicitudSignatureClientWidgetAsalariadoState
                       ).showDialog(context);
                       return;
                     }
+                    final signatureImage = await controller.toPngBytes();
+                    final directory = await getApplicationDocumentsDirectory();
+                    final filePath =
+                        '${directory.path}/solicitud_signature_${DateTime.now().millisecondsSinceEpoch}.png';
+
+                    // Guarda la imagen en el archivo
+                    final file = File(filePath);
+                    await file.writeAsBytes(signatureImage!);
+
+                    final clientSignature = SignatureClientDb(
+                      typeSolicitud: TypeForm.asalariado.codigo,
+                      cedula: widget.cedula,
+                      imageSignature: filePath,
+                    );
+                    localDbProvider.saveClientSignature(clientSignature);
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
                     widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeIn,

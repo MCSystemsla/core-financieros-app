@@ -1,6 +1,9 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -32,6 +35,12 @@ class _AsalariadoSendingFormWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final dbProvider = global<SolicitudesHnBoxService>();
+    final cedula = context.read<SolicitudAslariadoHnCubit>().state.cedula;
+    final signatureFile = dbProvider.getSignatureByCedula(
+      cedula,
+      TypeForm.asalariado,
+    );
     return BlocConsumer<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
       listener: (context, state) {
         if (state.status == Status.done) {
@@ -40,6 +49,13 @@ class _AsalariadoSendingFormWidgetState
                   numeroSolicitud: state.numeroSolicitud,
                 );
           }
+          context
+              .read<SolicitudAslariadoHnCubit>()
+              .sendClientSignatureWhenSolicitudCreditoCreated(
+                firmaCliente: signatureFile?.imageSignature ?? 'NO PATH',
+                idSolicitud: int.tryParse(state.idSolicitud) ?? 0,
+                tipoSolicitud: 'ASALARIADO',
+              );
         }
       },
       builder: (context, state) {

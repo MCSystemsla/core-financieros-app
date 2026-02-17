@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/actualizacion_solicitud/actualizacion_solicitud_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
@@ -64,14 +65,14 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             const _SolicitudesCardsRow2(),
             const Gap(20),
-
             const _SolicitudesCardsRow3(),
             const Gap(20),
-
             if (actions.contains(TypeAction.autorizacion.codigo)) ...[
               const _SolicitudesCardsRow4(),
             ],
-            // const Gap(20),
+            const Gap(20),
+            const _SolicitudesCardsRow5(),
+            const Gap(20),
           ],
         ),
       ),
@@ -122,6 +123,34 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
             ),
           ),
         ],
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _SolicitudesCardsRow5 extends StatelessWidget {
+  const _SolicitudesCardsRow5();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            svgPath: ImageAsset.nuevaMenorBg5,
+            title: 'Actualizacion de solicitudes crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const ActualizacionSolicitudHn()),
+                ),
+              );
+            },
+          ),
+        ),
         const Gap(10),
       ],
     );

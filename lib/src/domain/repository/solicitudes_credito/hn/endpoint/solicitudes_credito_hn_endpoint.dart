@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -287,7 +288,7 @@ class AsignSolicitudToAsesorAsalariadoHNEndpoint extends Endpoint {
   Method get method => Method.patch;
 
   @override
-  String get path => '/solicitud-asalariado/asignar-solicitud';
+  String get path => '/cartera/solicitud-asalariado/asignar-solicitud';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -511,5 +512,105 @@ class UserHaveCedulaEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'DocumentoCliente': documentoCliente,
         'database': LocalStorage().database,
+      };
+}
+
+class UpdateSolicitudNuevaMenorEndpoint extends Endpoint {
+  final SolicitudNuevaMenorHn solicitudNuevaMenorHn;
+  final int idSolicitud;
+  UpdateSolicitudNuevaMenorEndpoint({
+    required this.solicitudNuevaMenorHn,
+    required this.idSolicitud,
+  });
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitud-nueva-menor/actualizar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        ...solicitudNuevaMenorHn.toJson(),
+        'ID': idSolicitud,
+      };
+}
+
+class UpdateSolicitudAsalariadoEndpoint extends Endpoint {
+  final SolicitudAsalariadoHn solicitudAsalariadoHn;
+  final int idSolicitud;
+  UpdateSolicitudAsalariadoEndpoint({
+    required this.solicitudAsalariadoHn,
+    required this.idSolicitud,
+  });
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitud-asalariado/actualizar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        ...solicitudAsalariadoHn.toJson(),
+        'ID': idSolicitud,
+      };
+}
+
+class UpdateSolicitudReprestamoEndpoint extends Endpoint {
+  final SolicitudReprestamoHn solicitudReprestamoHn;
+  final String tipoSolicitud;
+  final int idSolicitud;
+  UpdateSolicitudReprestamoEndpoint({
+    required this.solicitudReprestamoHn,
+    required this.tipoSolicitud,
+    required this.idSolicitud,
+  });
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitud-represtamo/actualizar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        ...solicitudReprestamoHn.toJson(),
+        'TipoSolicitud': tipoSolicitud,
+        'SolicitudID': idSolicitud,
+      };
+}
+
+class GetSolicitudDataNuevaEndpoint extends Endpoint {
+  final String tipoSolicitud;
+  final int idSolicitud;
+  GetSolicitudDataNuevaEndpoint({
+    required this.tipoSolicitud,
+    required this.idSolicitud,
+  });
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/solicitud-data-by-id';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'TipoSolicitud': tipoSolicitud,
+        'SolicitudID': idSolicitud.toString(),
       };
 }

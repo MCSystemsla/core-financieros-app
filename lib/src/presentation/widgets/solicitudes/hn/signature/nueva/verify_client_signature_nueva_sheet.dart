@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -13,12 +19,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path_provider/path_provider.dart';
 
 class VerifyClientSignatureSheet extends StatelessWidget {
   final PageController pageController;
+  final String cedula;
+  final TypeForm typeform;
   const VerifyClientSignatureSheet({
     super.key,
     required this.pageController,
+    required this.cedula,
+    required this.typeform,
   });
 
   @override
@@ -63,6 +74,8 @@ class VerifyClientSignatureSheet extends StatelessWidget {
                     value: context.read<SolicitudNuevaMenorHnCubit>(),
                     child: VerifyClientIfNotPossibleToSignWidget(
                       controller: pageController,
+                      cedula: cedula,
+                      typeform: typeform,
                     ),
                   ));
                 },
@@ -74,6 +87,7 @@ class VerifyClientSignatureSheet extends StatelessWidget {
                       child: SolicitudSignatureClientWidget(
                         clientSignatureStatus: ClientSignatureStatus.yes,
                         pageController: pageController,
+                        cedula: cedula,
                       ),
                     ),
                   );
@@ -89,9 +103,13 @@ class VerifyClientSignatureSheet extends StatelessWidget {
 
 class VerifyClientIfNotPossibleToSignWidget extends StatefulWidget {
   final PageController controller;
+  final String cedula;
+  final TypeForm typeform;
   const VerifyClientIfNotPossibleToSignWidget({
     super.key,
     required this.controller,
+    required this.cedula,
+    required this.typeform,
   });
 
   @override
@@ -105,6 +123,7 @@ class _VerifyClientIfNotPossibleToSignWidgetState
   String? selectedImage1Path;
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<SolicitudesHnBoxService>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verificar Boleta de autorizacion'),
@@ -149,6 +168,21 @@ class _VerifyClientIfNotPossibleToSignWidgetState
                   ).showDialog(context);
                   return;
                 }
+                final directory = await getApplicationDocumentsDirectory();
+                final filePath =
+                    '${directory.path}/solicitud_signature_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+                final file = File(filePath);
+                final bytes = await selectedImage?.readAsBytes();
+                if (bytes == null) return;
+                await file.writeAsBytes(bytes);
+
+                final clientSignature = SignatureClientDb(
+                  typeSolicitud: widget.typeform.codigo,
+                  cedula: widget.cedula,
+                  imageSignature: filePath,
+                );
+                localDbProvider.saveClientSignature(clientSignature);
                 widget.controller.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,

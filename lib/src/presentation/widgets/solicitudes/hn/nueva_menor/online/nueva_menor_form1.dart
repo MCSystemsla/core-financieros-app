@@ -941,10 +941,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
 class GrupoSolicitudDropdown extends StatefulWidget {
   final Function(Item<dynamic>?) onChanged;
   final List<Item<dynamic>> items;
+  final Item? selectedItem;
   const GrupoSolicitudDropdown({
     super.key,
     required this.onChanged,
     required this.items,
+    this.selectedItem,
   });
 
   @override
@@ -958,6 +960,7 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
       builder: (context, state) {
         return switch (state.connectionStatus) {
           ConnectionStatus.disconnected => SearchDropdownWidget(
+              selectedItem: widget.selectedItem,
               key: const Key('grupoDropdown'),
               isRequired: true,
               validator: (value) =>
@@ -970,6 +973,7 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
               onChanged: widget.onChanged,
             ),
           ConnectionStatus.handleOfflineActivation => SearchDropdownWidget(
+              selectedItem: widget.selectedItem,
               key: const Key('grupoDropdown'),
               isRequired: true,
               validator: (value) =>
@@ -982,6 +986,7 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
               onChanged: widget.onChanged,
             ),
           ConnectionStatus.connected => SheetSearchDropdown(
+              selectedItem: widget.selectedItem,
               title: 'Tipo de Grupo',
               isRequired: true,
               onChanged: widget.onChanged,

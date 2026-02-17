@@ -1,6 +1,11 @@
+import 'dart:developer';
+
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -24,10 +29,16 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
 
   @override
   Widget build(BuildContext context) {
-    // final dbProvider = global<ObjectBoxService>();
+    final dbProvider = global<SolicitudesHnBoxService>();
+    final cedula = context.read<SolicitudNuevaMenorHnCubit>().state.cedula;
+    final signatureFile = dbProvider.getSignatureByCedula(
+      cedula,
+      TypeForm.nueva,
+    );
     return BlocConsumer<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
       listener: (context, state) {
         if (state.status == Status.done) {
+          log('signatureFile: ${signatureFile?.imageSignature} - ${signatureFile?.cedula}');
           // dbProvider.removeSolicitudWhenisUploaded(
           //   solicitudId: widget.solicitudId,
           // );
@@ -37,6 +48,14 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
                 imagenFrontal: state.cedulaFrontPath,
                 imagenTrasera: state.cedulaBackPath,
               );
+          context
+              .read<SolicitudNuevaMenorHnCubit>()
+              .sendClientSignatureWhenSolicitudCreditoCreated(
+                firmaCliente: signatureFile?.imageSignature ?? 'NO PATH',
+                idSolicitud: int.tryParse(state.idSolicitud) ?? 0,
+                tipoSolicitud: 'NUEVAMENOR',
+              );
+
           // context
           //     .read<SolicitudNuevaMenorCubit>()
           //     .onFieldChanged(() => state.copyWith(

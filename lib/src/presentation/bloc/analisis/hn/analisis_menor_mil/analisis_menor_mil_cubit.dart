@@ -77,9 +77,10 @@ class AnalisisMenorMilCubit extends Cubit<AnalisisMenorMilState> {
         state.otrosIngresos -
         state.gastosUnidadFamiliar;
 
+    final relacionMinRazonCuotaPercent =
+        (int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) / 100;
     final relacionMinRazonCuotaCalc =
-        ((int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) *
-            saldoDisponibleUnidadFamiliarCalc);
+        (relacionMinRazonCuotaPercent * saldoDisponibleUnidadFamiliarCalc);
 
     try {
       await _repository.createAnalisisMenorMilByTipoSolicitud(

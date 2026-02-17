@@ -128,6 +128,7 @@ class SolicitudNuevaMenorHn {
   final List<HistorialCredito> historialCredito;
   final String grupoCodigo;
   final String cargoGrupoCodigo;
+  final int? grupoCicloID;
   SolicitudNuevaMenorHn({
     required this.actividadEconomicaCnbs3Codigo,
     required this.database,
@@ -250,6 +251,7 @@ class SolicitudNuevaMenorHn {
     required this.tipoDocumentoConyugeCodigo,
     required this.grupoCodigo,
     required this.cargoGrupoCodigo,
+    this.grupoCicloID,
   });
 
   Map<String, dynamic> toJson() {
@@ -378,6 +380,7 @@ class SolicitudNuevaMenorHn {
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
       'GrupoCodigo': grupoCodigo,
       'CargoGrupoCodigo': cargoGrupoCodigo,
+      'objCicloGrupoID': grupoCicloID,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

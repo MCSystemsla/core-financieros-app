@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catal
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_nacionalidad_pais_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signature_client/signature_client_db.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -470,9 +471,13 @@ class SolicitudesHnBoxService {
     }
   }
 
-  SignatureClientDb? getSignatureByCedula(String cedula) {
+  SignatureClientDb? getSignatureByCedula(String cedula, TypeForm typeForm) {
     final query = signatureClientBox
-        .query(SignatureClientDb_.cedula.equals(cedula))
+        .query(
+          SignatureClientDb_.cedula
+              .equals(cedula)
+              .and(SignatureClientDb_.typeSolicitud.equals(typeForm.codigo)),
+        )
         .build();
 
     final result = query.findFirst();

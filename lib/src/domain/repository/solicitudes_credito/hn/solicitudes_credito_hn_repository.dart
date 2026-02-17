@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/gr
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/update_solicitudes/nueva_menor/update_solicitud_nueva_menor_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_have_cedula/user_have_cedula_response.dart';
@@ -32,10 +33,10 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
 abstract class SolicitudesCreditoHnRepository {
-  Future<(bool, String, String?)> createSolicitudAsalariado({
+  Future<(bool, String, String?, String?)> createSolicitudAsalariado({
     required SolicitudAsalariadoHn solicitud,
   });
-  Future<(bool, String, String?)> createSolicitudNuevaMenor({
+  Future<(bool, String, String?, String?)> createSolicitudNuevaMenor({
     required SolicitudNuevaMenorHn solicitud,
   });
   Future<(bool, String)> createSolicitudReprestamo({
@@ -127,6 +128,30 @@ abstract class SolicitudesCreditoHnRepository {
   Future<UserHaveCedulaResponse> userHaveCedula({
     required String documentoCliente,
   });
+
+  Future<void> updateSolicitudNuevaMenor({
+    required int idSolicitud,
+    required SolicitudNuevaMenorHn solicitudNuevaMenor,
+  });
+  Future<void> updateSolicitudReprestamo({
+    required int idSolicitud,
+    required String tipoSolicitud,
+    required SolicitudReprestamoHn solicitudReprestamo,
+  });
+  Future<void> updateSolicitudAsalariado({
+    required int idSolicitud,
+    required SolicitudAsalariadoHn solicitudAsalariado,
+  });
+  Future<UpdateSolicitudNuevaResponse> getSolicitudDataById({
+    required String tipoSolicitud,
+    required int idSolicitud,
+  });
+
+  Future<(bool, String)> sendClientSignatureWhenSolicitudCreditoCreated({
+    required int idSolicitud,
+    required String tipoSolicitud,
+    required String firmaCliente,
+  });
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -134,7 +159,7 @@ class SolicitudesCreditoHnRepositoryImpl
   final _api = global<APIRepository>();
   final _logger = Logger();
   @override
-  Future<(bool, String, String?)> createSolicitudAsalariado({
+  Future<(bool, String, String?, String?)> createSolicitudAsalariado({
     required SolicitudAsalariadoHn solicitud,
   }) async {
     final endpoint = CrearSolciitudAsalariadoHNEndpoint(
@@ -146,13 +171,13 @@ class SolicitudesCreditoHnRepositoryImpl
         _logger.i(endpoint.body);
         final errorMsg = resp['message']?.toString() ??
             'Error de validacion ${resp.toString()}';
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
         final (errorMsg, errorCode) = getErrorMessage(resp);
 
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null);
       }
 
       _logger.i(endpoint.body);
@@ -160,10 +185,11 @@ class SolicitudesCreditoHnRepositoryImpl
         true,
         resp['message'] as String,
         resp['data']['NumeroSolicitud'] as String,
+        resp['data']['ID'] as String,
       );
     } catch (e) {
       _logger.e(e.toString());
-      return (false, e.toString(), null);
+      return (false, e.toString(), null, null);
     }
   }
 
@@ -191,7 +217,7 @@ class SolicitudesCreditoHnRepositoryImpl
   }
 
   @override
-  Future<(bool, String, String?)> createSolicitudNuevaMenor({
+  Future<(bool, String, String?, String?)> createSolicitudNuevaMenor({
     required SolicitudNuevaMenorHn solicitud,
   }) async {
     final endpoint = CrearSolciitudNuevaMenorHNEndpoint(
@@ -203,24 +229,25 @@ class SolicitudesCreditoHnRepositoryImpl
         _logger.i(endpoint.body);
         final errorMsg = resp['message']?.toString() ??
             'Error de validacion ${resp.toString()}';
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null);
       }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
 
         final (errorMsg, errorCode) = getErrorMessage(resp);
 
-        return (false, errorMsg, null);
+        return (false, errorMsg, null, null);
       }
       _logger.i(endpoint.body);
       return (
         true,
         resp['message'] as String,
         resp['data']['NumeroSolicitud'] as String,
+        resp['data']['ID'] as String,
       );
     } catch (e) {
       _logger.e(e.toString());
-      return (false, e.toString(), null);
+      return (false, e.toString(), null, null);
     }
   }
 
@@ -915,6 +942,170 @@ class SolicitudesCreditoHnRepositoryImpl
       return data;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateSolicitudAsalariado({
+    required int idSolicitud,
+    required SolicitudAsalariadoHn solicitudAsalariado,
+  }) async {
+    final endpoint = UpdateSolicitudAsalariadoEndpoint(
+      solicitudAsalariadoHn: solicitudAsalariado,
+      idSolicitud: idSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateSolicitudNuevaMenor({
+    required int idSolicitud,
+    required SolicitudNuevaMenorHn solicitudNuevaMenor,
+  }) async {
+    final endpoint = UpdateSolicitudNuevaMenorEndpoint(
+      solicitudNuevaMenorHn: solicitudNuevaMenor,
+      idSolicitud: idSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateSolicitudReprestamo({
+    required int idSolicitud,
+    required String tipoSolicitud,
+    required SolicitudReprestamoHn solicitudReprestamo,
+  }) async {
+    final endpoint = UpdateSolicitudReprestamoEndpoint(
+      solicitudReprestamoHn: solicitudReprestamo,
+      tipoSolicitud: tipoSolicitud,
+      idSolicitud: idSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UpdateSolicitudNuevaResponse> getSolicitudDataById({
+    required String tipoSolicitud,
+    required int idSolicitud,
+  }) async {
+    final endpoint = GetSolicitudDataNuevaEndpoint(
+      tipoSolicitud: tipoSolicitud,
+      idSolicitud: idSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = UpdateSolicitudNuevaResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, String)> sendClientSignatureWhenSolicitudCreditoCreated({
+    required int idSolicitud,
+    required String tipoSolicitud,
+    required String firmaCliente,
+  }) async {
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
+    const url =
+        '$protocol://$apiUrl/cartera/solicitudes/general/subir-firma-digital';
+
+    try {
+      var request = http.MultipartRequest('PATCH', Uri.parse(url));
+      request.fields['TipoSolicitud'] = tipoSolicitud;
+      request.fields['IdSolicitud'] = idSolicitud.toString();
+      request.fields['database'] = LocalStorage().database;
+      request.files.add(await http.MultipartFile.fromPath(
+        'FirmaPreImpresa',
+        firmaCliente,
+        filename: firmaCliente,
+      ));
+
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
+      });
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('imagen Firma enviada exitosamente: ${responseBody.body}');
+      } else {
+        await ErrorReporter.registerError(
+          errorMessage: 'Error enviando imagen Firma: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
+      }
+      _logger.i(response.reasonPhrase);
+      return (true, 'imagen Firma enviada exitosamente!');
+    } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagen de firma Solicitudes: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+      _logger.e(e);
+      return (false, e.toString());
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
@@ -7,6 +8,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -80,17 +82,24 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                 UploadImageWidget(
                   selectedImage: selectedImage,
                   title: '1- Foto Negocio',
-                  onPressed: () =>
-                      context.pushTransparentRoute(CameraCaptureScreen(
-                    numeroSoicitud: widget.numeroSolicitud,
-                    onImageSelected: (image, path) {
-                      setState(() {
-                        selectedImage = image;
-                        selectedImage1Path = path;
-                      });
-                    },
-                  )),
+                  onPressed: () => context.pushTransparentRoute(
+                    CameraCaptureScreen(
+                      numeroSoicitud: widget.numeroSolicitud,
+                      onImageSelected: (image, path) {
+                        setState(() {
+                          selectedImage = image;
+                          selectedImage1Path = path;
+                        });
+                      },
+                    ),
+                  ),
                 ),
+                //   showModalBottomSheet(
+                //   isScrollControlled: true,
+                //   context: context,
+                //   builder: (ctx) => const _SelectTypePhotoDestination(),
+
+                // )),
                 const Gap(20),
                 UploadImageWidget(
                   selectedImage: selectedImage2,
@@ -180,6 +189,75 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SelectTypePhotoDestination extends StatelessWidget {
+  const _SelectTypePhotoDestination();
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.5,
+      minChildSize: 0.3,
+      maxChildSize: 0.5,
+      expand: false,
+      builder: (_, controller) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: const Color(0xfff9fafb),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(28),
+            ),
+            boxShadow: [
+              BoxShadow(
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.12),
+                blurRadius: 25,
+                offset: const Offset(0, -3),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 42,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const Gap(18),
+              Expanded(
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    SelectableCardItem(
+                      userHaveDataAlready: false,
+                      icon: Icons.camera_alt_outlined,
+                      color: const Color(0xff1554F6),
+                      title: 'Camara',
+                      subtitle: 'Agregar foto desde camara',
+                      onTap: () {},
+                    ),
+                    SelectableCardItem(
+                      userHaveDataAlready: false,
+                      icon: Icons.add_photo_alternate,
+                      color: const Color(0xff1554F6),
+                      title: 'Galeria',
+                      subtitle: 'Agregar foto desde galeria',
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ).fadeIn();
+      },
     );
   }
 }

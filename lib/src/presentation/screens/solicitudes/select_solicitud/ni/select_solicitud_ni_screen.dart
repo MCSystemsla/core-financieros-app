@@ -152,6 +152,8 @@ class _SelectSolicitud extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actions = LocalStorage().currentActions;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -181,7 +183,8 @@ class _SelectSolicitud extends StatelessWidget {
             const _SolicitudesCardsRow2(),
             const Gap(20),
             const _MySolicitudesAsignmentsCard(),
-            if (actions.contains(TypeAction.asignacion.codigo)) ...[
+            if (actions.contains(TypeAction.asignacion.codigo) &&
+                isConnected == ConnectionStatus.connected) ...[
               const Gap(20),
               const _SolicitudesCardsRow3(),
             ],

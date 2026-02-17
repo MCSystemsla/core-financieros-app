@@ -36,7 +36,10 @@ class AuthRepositoryImpl extends AuthRepository {
       dbName: dbName,
     );
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
       return resp;
     } catch (e) {
       throw AppException.toAppException(e.toString());
@@ -47,7 +50,10 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<BranchTeamResponse> getBranchTeam() async {
     try {
       final endpoint = BranchTeamEndpoint();
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
       if (resp['statusCode'] != 200) {
         _logger.i(endpoint.body);
         final (errorMsg, errorCode) = getErrorMessage(resp);
@@ -65,7 +71,10 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<ActionsResponse> getActions({required String database}) async {
     final endpoint = ActionsEndpoint(database: database);
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
       await resp['data'] as List<dynamic>;
       final actions = ActionsResponse.fromJson(resp);
       return actions;
@@ -79,7 +88,8 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<String> getLogo() async {
     final endpoint = LogoImageEndpoint();
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp =
+          await _api.request(endpoint: endpoint, needToValidateToken: false);
       final logoUrl = resp['Valor'] as String;
       return logoUrl;
     } catch (e) {
@@ -92,7 +102,8 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<TutorialResponse> getTutorials() async {
     final endpoint = TutorailEndpoint();
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp =
+          await _api.request(endpoint: endpoint, needToValidateToken: false);
       final tutorialResponse = TutorialResponse.fromJson(resp);
       return tutorialResponse;
     } catch (e) {

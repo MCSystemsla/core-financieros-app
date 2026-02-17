@@ -6,10 +6,12 @@ import 'dart:io';
 
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logger/logger.dart';
 
 import '../../global_locator.dart';
@@ -20,7 +22,10 @@ import 'endpoint.dart';
 enum Protocol { http, https }
 
 abstract class APIRepository {
-  Future<Map<String, dynamic>> request({required Endpoint endpoint});
+  Future<Map<String, dynamic>> request({
+    required Endpoint endpoint,
+    bool needToValidateToken = true,
+  });
 }
 
 class DefaultAPIRepository implements APIRepository {
@@ -30,6 +35,7 @@ class DefaultAPIRepository implements APIRepository {
   @override
   Future<Map<String, dynamic>> request({
     required Endpoint endpoint,
+    bool needToValidateToken = true,
   }) async {
     _logger.d('Request endpoint: ${endpoint.body}');
     final apiUrl = endpoint.setApiUrl ?? const String.fromEnvironment('apiUrl');
@@ -53,6 +59,10 @@ class DefaultAPIRepository implements APIRepository {
         'method': endpoint.method.name.toUpperCase(),
         'body': endpoint.body,
       };
+      if (needToValidateToken && !await _isTokenValid()) {
+        _logger.e('APIRepository - Token no valido');
+        router.go('/loading');
+      }
       BitacoraService.registerBitacora(payload: body.toString());
     } catch (e) {
       _logger.e('APIRepository - Error parse uri$e ');
@@ -282,4 +292,14 @@ class AddFileModel {
         'key': key,
         'path': path,
       };
+}
+
+Future<bool> _isTokenValid() async {
+  final token = LocalStorage().jwt;
+
+  if (token == null || token.isEmpty) {
+    return false;
+  }
+
+  return !JwtDecoder.isExpired(token);
 }

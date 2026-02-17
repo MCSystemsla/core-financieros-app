@@ -125,10 +125,10 @@ class _EstadoResultadoForm extends StatelessWidget {
         final saldoDisponibleUnidadFamiliarCalc = margenBrutoNegocioCalc +
             state.otrosIngresos -
             state.gastosUnidadFamiliar;
-
+        final relacionMinRazonCuotaPercent =
+            (int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) / 100;
         final relacionMinRazonCuotaCalc =
-            ((int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) *
-                saldoDisponibleUnidadFamiliarCalc);
+            (relacionMinRazonCuotaPercent * saldoDisponibleUnidadFamiliarCalc);
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -290,7 +290,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                 hintText: saldoDisponibleUnidadFamiliarCalc.toCurrencyString(),
                 textAlign: TextAlign.end,
                 readOnly: true,
-                title: 'Disponibilidad U.F Familiar',
+                title: 'Disponibilidad U. Familiar',
                 icon: const Icon(Icons.wallet),
                 textInputType: TextInputType.number,
                 onChange: (value) {
@@ -305,10 +305,10 @@ class _EstadoResultadoForm extends StatelessWidget {
               const Gap(10),
               OutlineTextfieldWidget(
                 textAlign: TextAlign.end,
-                title: 'D.P.P (${relacionMinRazonCuota?.valor}%)',
+                title: 'D.P.P (${relacionMinRazonCuotaPercent * 100}%)',
                 icon: const Icon(Icons.wallet),
                 readOnly: true,
-                hintText: relacionMinRazonCuotaCalc.toCurrencyString(),
+                hintText: relacionMinRazonCuotaCalc.toSafeString(2),
                 textInputType: TextInputType.number,
                 onChange: (value) {
                   final newValue = toNumericString(value, allowPeriod: true);

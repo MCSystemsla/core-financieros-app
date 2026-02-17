@@ -142,7 +142,7 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                         enabled: state.data.isNotEmpty,
                         items: state.data
                             .map((e) => Item(
-                                  name: e.numeroCuenta,
+                                  name: 'N. Cuenta: ${e.numeroCuenta}',
                                   value: e.dpfId,
                                 ))
                             .toList(),

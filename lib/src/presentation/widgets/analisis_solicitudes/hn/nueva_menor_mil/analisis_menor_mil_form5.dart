@@ -708,7 +708,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5> {
                             ),
                           );
                         },
-                        text: 'Siguiente',
+                        text: 'Enviar',
                         color: Colors.green,
                       ),
                       const Gap(10),
