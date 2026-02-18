@@ -219,7 +219,7 @@ class AnalisisGarantiaDetalle {
       'Inscrito': inscrito,
       'Medidas': medidas,
       'NumAsiento': numAsiento,
-      'CodValuadorCNBS': codValuadorCnbs,
+      'objValuadorID': int.tryParse(codValuadorCnbs ?? '0'),
       'objAnalisisGarantiaID': objAnalisisGarantiaID,
       'objCuentaDPFID': objCuentaDPFID,
       'DepartamentoCodigo': departamentoCodigo,
