@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/error_reporter/error_repo
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_checks_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_grupal_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
@@ -37,6 +38,10 @@ abstract class AnalisisRepositoryHn {
   Future<void> createAnalisisReprestamo({
     required AnalisisReprestamoHn analisisSolicitudReprestamo,
   });
+  Future<void> createAnalisisGrupal({
+    required AnalisisGrupal analisisSolicitudGrupal,
+  });
+
   Future<void> createAnalisisPlanInversion({
     required AnalisisPlanDeInversion analisisPlanDeInversion,
   });
@@ -643,6 +648,26 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       );
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<void> createAnalisisGrupal({
+    required AnalisisGrupal analisisSolicitudGrupal,
+  }) async {
+    final endpoint = CreateAnalisisGrupalEndpoint(
+      data: analisisSolicitudGrupal,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

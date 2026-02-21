@@ -20,6 +20,7 @@ class AnalisisListDataHn {
   DateTime? fechaSolicitud;
   String? cedulaCliente;
   String? tipoPersonaCodigo;
+  bool esSolicitudGrupal = false;
 
   AnalisisListDataHn({
     this.idAnalisis,
@@ -37,5 +38,6 @@ class AnalisisListDataHn {
     this.fechaSolicitud,
     this.cedulaCliente,
     this.tipoPersonaCodigo,
+    this.esSolicitudGrupal = false,
   });
 }

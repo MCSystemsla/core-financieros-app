@@ -220,7 +220,7 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
               child: CustomElevatedButton(
-                text: 'Siguiente',
+                text: 'Enviar Solicitud',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;

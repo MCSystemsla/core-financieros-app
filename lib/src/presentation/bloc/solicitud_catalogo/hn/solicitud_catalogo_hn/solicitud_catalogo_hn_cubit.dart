@@ -570,6 +570,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       cedulaCliente: e.cedulaCliente,
       tipoPersonaCodigo: e.tipoPersonaCodigo,
       idAnalisis: e.id,
+      esSolicitudGrupal: e.esSolicitudGrupal,
     );
   }
 }

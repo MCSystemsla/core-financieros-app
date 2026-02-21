@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecu
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
@@ -26,10 +25,11 @@ import 'package:core_financiero_app/src/utils/extensions/double/double_extension
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
 
 class AsalariadoHnForm9 extends StatefulWidget {
   final bool isUserSelectUpdateImage;
@@ -89,11 +89,11 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
@@ -134,11 +134,11 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
@@ -173,7 +173,8 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
-    final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    // final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    final calcularCuotaProvider = context.read<CalculoCuotaHnCubit>();
     final internetConnectionCubit =
         context.read<InternetConnectionCubit>().state.connectionStatus;
 
@@ -415,7 +416,7 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
               child: CustomElevatedButton(
-                text: 'Siguiente',
+                text: 'Enviar Solicitud',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
@@ -462,30 +463,32 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     return;
                   }
 
-                  calcularCuotaProvider.calcularCantidadCuotas(
+                  calcularCuotaProvider.calcularMontoCuota(
                     fechaDesembolso: fechaDesembolso,
-                    fechaPrimeraCuota: fechaPrimerPago!,
-                    plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                    frecuenciaPago: frecuenciaDePago?.meses ?? '0',
+                    fechaPrimerPago: fechaPrimerPago!,
+                    plazoSolicitud: double.parse(plazoSolicitud ?? '0'),
+                    formaPagoValor:
+                        double.parse(frecuenciaDePago?.meses ?? '0'),
                     saldoPrincipal: double.parse(monto ?? '0'),
-                    tasaInteresMensual: tasaInteres ?? 0,
+                    tasaInteres: tasaInteres ?? 0,
                   );
                   CuotaDataDialog(
                     context: context,
                     title:
-                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString()} L.',
+                        'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrincipalPrimerCuota.toCurrencyString()} L.',
                     onDone: () {
                       context.pop();
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          cuota: calcularCuotaProvider.state.montoPrimeraCuota
+                          cuota: calcularCuotaProvider
+                              .state.montoPrincipalPrimerCuota
                               .toInt(),
+                          cuotaWithDecimal: calcularCuotaProvider
+                              .state.montoPrincipalPrimerCuota,
                           isDone: true,
                         ),
                       );
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(),
-                      );
+
                       if (internetConnectionCubit ==
                           ConnectionStatus.disconnected) {
                         cubit.onFieldChanged(

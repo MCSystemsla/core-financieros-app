@@ -9,6 +9,7 @@ enum AnalisisSolicitudesInterceptorType {
   represtamo,
   represtamoMayorAMil,
   asalariado,
+  grupal
 }
 
 class AnalisisSolicitudesInterceptor extends StatelessWidget {
@@ -52,6 +53,7 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
       AnalisisSolicitudesInterceptorType.represtamo => const Text('represtamo'),
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
         const Text('represtamoMayor a mil'),
+      _ => const Text('grupal'),
     };
   }
 }

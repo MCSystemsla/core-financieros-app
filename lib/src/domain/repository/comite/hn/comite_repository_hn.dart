@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/endpoint/comite_endpoint_hn.dart';
 import 'package:logger/logger.dart';
@@ -31,6 +32,7 @@ abstract class ComiteRepositoryHN {
   Future<void> crearAprobacion({
     required ComiteAprobacion data,
   });
+  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite();
 }
 
 class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
@@ -125,6 +127,24 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite() async {
+    final endpoint = GetSolicitudesOnComiteEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = SolicitudesOnComiteResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

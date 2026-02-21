@@ -293,7 +293,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
-                      enabled: true,
+                      enabled: false,
                       flavor: global<FlavorCubit>().state.flavor,
                       codigo: 'TIPOSPERSONACREDITO',
                       hintText: 'Ingresa Tipo Persona',
@@ -311,6 +311,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     const Gap(30),
                     OutlineTextfieldWidget(
                       isRequired: true,
+                      readOnly: true,
                       initialValue: state.nombre1,
                       hintText: 'Ingresa Nombre 1',
                       icon: Icon(Icons.person,
@@ -334,6 +335,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      readOnly: true,
                       initialValue: state.nombre2,
                       hintText: 'Ingresa Nombre 2',
                       // validator: (value) => ClassValidator.validateRequired(value),
@@ -356,6 +358,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      readOnly: true,
                       initialValue: state.nombre3,
                       hintText: 'Ingresa Nombre 3',
                       icon: Icon(Icons.person,
@@ -378,6 +381,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      readOnly: true,
                       initialValue: state.apellido1,
                       isRequired: true,
                       hintText: 'Ingresa Apellido 1',
@@ -402,6 +406,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      readOnly: true,
                       initialValue: state.apellido2,
                       hintText: 'Ingresa Apellido 2',
                       icon: Icon(Icons.person,
@@ -423,6 +428,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      readOnly: true,
                       initialValue: state.apellido3,
                       hintText: 'Ingresa Apellido 3',
                       icon: Icon(Icons.person,
@@ -469,6 +475,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      enabled: false,
                       isRequired: true,
                       selectedItem: Item(
                         name: state.tipoDocumentoNombre,
@@ -492,6 +499,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      enabled: false,
                       isRequired: true,
                       selectedItem: Item(
                         name: state.tipoPersonaCNBSNombre,

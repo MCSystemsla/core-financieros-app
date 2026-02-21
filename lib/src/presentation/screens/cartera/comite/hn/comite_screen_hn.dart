@@ -1,12 +1,10 @@
-import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
+import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitudes/comite_solicitudes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +21,9 @@ class ComiteScreenHn extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => SolicitudesByEstadoHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
-          )..getSolicitudesByEstado(
-              isAsignadaToAsesorCredito: true,
-              estadoCredito: EstadoCredito.enComite,
-            ),
+          create: (ctx) => ComiteSolicitudesCubit(
+            ComiteRepositoryHNImpl(),
+          )..getComiteSolicitudes(),
         ),
       ],
       child: PopScope(
@@ -46,11 +41,10 @@ class ComiteScreenHn extends StatelessWidget {
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
               ),
-              const AnalisisFilterContentWidget(
-                estadoCredito: EstadoCredito.enComite,
-              ),
-              BlocBuilder<SolicitudesByEstadoHnCubit,
-                  SolicitudesByEstadoHnState>(
+              // const AnalisisFilterContentWidget(
+              //   estadoCredito: EstadoCredito.enComite,
+              // ),
+              BlocBuilder<ComiteSolicitudesCubit, ComiteSolicitudesState>(
                 builder: (context, state) {
                   return switch (state.status) {
                     Status.inProgress => const Expanded(child: LoadingWidget()),
@@ -58,17 +52,13 @@ class ComiteScreenHn extends StatelessWidget {
                         errorMsg: state.errorMsg,
                         onPressed: () {
                           context
-                              .read<SolicitudesByEstadoHnCubit>()
-                              .getSolicitudesByEstado(
-                                isAsignadaToAsesorCredito: true,
-                                estadoCredito: EstadoCredito.enComite,
-                              );
+                              .read<ComiteSolicitudesCubit>()
+                              .getComiteSolicitudes();
                         },
                       ),
                     Status.done => _ListDataWidget(
-                        data: state.solicitudes,
-                        isAsignadaToAsesorCredito:
-                            state.isAsignadaToAsesorCredito,
+                        data: state.data,
+                        nombrePromotor: state.nombrePromotor,
                       ),
                     _ => const SizedBox(),
                   };
@@ -84,11 +74,11 @@ class ComiteScreenHn extends StatelessWidget {
 }
 
 class _ListDataWidget extends StatelessWidget {
-  final List<SolicitudEstado> data;
-  final bool isAsignadaToAsesorCredito;
+  final List<ComiteOnSolicitudData> data;
+  final String nombrePromotor;
   const _ListDataWidget({
     required this.data,
-    required this.isAsignadaToAsesorCredito,
+    required this.nombrePromotor,
   });
   @override
   Widget build(BuildContext context) {
@@ -116,18 +106,18 @@ class _ListDataWidget extends StatelessWidget {
                 ),
               );
             },
-            isAsesorAsignado: isAsignadaToAsesorCredito,
+            isAsesorAsignado: true,
             tipoSolicitud: data[index].tipoSolicitud,
-            solicitudId: data[index].id,
+            solicitudId: data[index].id.toString(),
             title: 'Numero Solicitud: ${data[index].numero}',
             fecha: data[index].fechaSolicitud,
-            monto: data[index].monto!.toCurrencyString(
+            monto: data[index].monto.toCurrencyString(
                   mantissaLength: 0,
                 ),
             estadoCodigo: data[index].estado,
-            sucursal: data[index].sucursal ?? 'N/A',
-            nombreCliente: data[index].nombreCompleto,
-            nombrePromotor: data[index].nombrePromotor,
+            sucursal: 'N/A',
+            nombreCliente: data[index].nombre,
+            nombrePromotor: nombrePromotor,
           );
         },
       ),

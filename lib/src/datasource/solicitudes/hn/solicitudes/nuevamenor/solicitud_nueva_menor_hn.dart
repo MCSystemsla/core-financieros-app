@@ -31,7 +31,7 @@ class SolicitudNuevaMenorHn {
   final String monedaCodigo;
   final String propositoCodigo;
   final String frecuenciaCodigo;
-  final int cuota;
+  final double cuota;
   final String sectorCodigo;
   final String nombreNegocio;
   final String tiempoFuncionamientoNegocio;
@@ -380,7 +380,7 @@ class SolicitudNuevaMenorHn {
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
       'GrupoCodigo': grupoCodigo,
       'CargoGrupoCodigo': cargoGrupoCodigo,
-      'objCicloGrupoID': grupoCicloID,
+      'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

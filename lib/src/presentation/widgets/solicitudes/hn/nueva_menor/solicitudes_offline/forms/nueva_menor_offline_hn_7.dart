@@ -10,7 +10,7 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
@@ -78,9 +78,6 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
   final List<DateTime> holidays = [
     DateTime(DateTime.now().year, 1, 1), // Año Nuevo
     DateTime(DateTime.now().year, 4, 14), // Día de las Américas
-    DateTime(DateTime.now().year, 4, 17), // Jueves Santo
-    DateTime(DateTime.now().year, 4, 18), // Viernes Santo
-    DateTime(DateTime.now().year, 4, 19), // Sábado Santo
     DateTime(DateTime.now().year, 5, 1), // Día del Trabajo
     DateTime(DateTime.now().year, 9, 15), // Día de la Independencia
     DateTime(DateTime.now().year, 12, 25), // Navidad
@@ -98,11 +95,11 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
@@ -143,11 +140,11 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;
@@ -182,7 +179,8 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    // final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
+    final calcularCuotaProvider = context.read<CalculoCuotaHnCubit>();
     return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -482,24 +480,26 @@ class _NuevaMenorOfflineHn7State extends State<NuevaMenorOfflineHn7>
                         return;
                       }
 
-                      calcularCuotaProvider.calcularCantidadCuotas(
+                      calcularCuotaProvider.calcularMontoCuota(
                         fechaDesembolso: fechaDesembolso,
-                        fechaPrimeraCuota: fechaPrimerPago!,
-                        plazoSolicitud: int.parse(plazoSolicitud ?? '0'),
-                        frecuenciaPago: frecuenciaDePago?.meses ?? '0',
+                        fechaPrimerPago: fechaPrimerPago!,
+                        plazoSolicitud: double.parse(plazoSolicitud ?? '0'),
+                        formaPagoValor:
+                            double.parse(frecuenciaDePago?.meses ?? '0'),
                         saldoPrincipal: double.parse(monto ?? '0'),
-                        tasaInteresMensual: state.tasaInteres,
+                        tasaInteres: state.tasaInteres,
                       );
                       CuotaDataDialog(
                         context: context,
                         title:
-                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrimeraCuota.toCurrencyString()} L.',
+                            'Estimación de la cuota según los datos ingresados\n${calcularCuotaProvider.state.montoPrincipalPrimerCuota.toCurrencyString()} L.',
                         onDone: () {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               cuota: calcularCuotaProvider
-                                  .state.montoPrimeraCuota
-                                  .toInt(),
+                                  .state.montoPrincipalPrimerCuota,
+                              cuotaWithDecimal: calcularCuotaProvider
+                                  .state.montoPrincipalPrimerCuota,
                             ),
                           );
                           widget.controller.nextPage(

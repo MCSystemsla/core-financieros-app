@@ -42,6 +42,7 @@ class SolicitudNuevaMenorHnLocalDb {
   String? frecuenciaCodigo;
   String? frecuenciaCodigoNombre;
   int? cuota;
+  double? cuotaWithDecimal;
   String? sectorCodigo;
   String? sectorCodigoNombre;
   String? nombreNegocio;
@@ -341,5 +342,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.hasVerified = false,
     this.apellidosConyugue,
     this.tipoDocumentoConyugeCodigo,
+    this.cuotaWithDecimal,
   });
 }

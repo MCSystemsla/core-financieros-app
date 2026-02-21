@@ -152,6 +152,7 @@ abstract class SolicitudesCreditoHnRepository {
     required String tipoSolicitud,
     required String firmaCliente,
   });
+  Future<int?> getRolId();
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -538,6 +539,7 @@ class SolicitudesCreditoHnRepositoryImpl
     required int pagina,
     required int? codigoGrupo,
   }) async {
+    final rolId = await getRolId();
     final endpoint = GetSolicitudesByEstadoEndpoint(
       estadoCredito: estadoCredito,
       isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
@@ -545,6 +547,7 @@ class SolicitudesCreditoHnRepositoryImpl
       cedulaCliente: cedulaCliente,
       pagina: pagina,
       codigoGrupo: codigoGrupo,
+      usuarioId: rolId,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -983,6 +986,7 @@ class SolicitudesCreditoHnRepositoryImpl
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {
         _logger.e(resp);
+        _logger.e(endpoint.body);
         final (errorMsg, _) = getErrorMessage(
           resp,
           errorMsg:
@@ -1106,6 +1110,28 @@ class SolicitudesCreditoHnRepositoryImpl
       );
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<int?> getRolId() async {
+    final endpoint = GetUsuarioIdSolicitudesByEstadoEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = resp['data'] as int?;
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

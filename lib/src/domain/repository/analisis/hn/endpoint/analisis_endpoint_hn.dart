@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalariado_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_grupal_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
@@ -460,4 +461,22 @@ class GetPlanInversionAnalisisHNEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'NumeroSolicitud': numeroSolicitud.toString(),
       };
+}
+
+class CreateAnalisisGrupalEndpoint extends Endpoint {
+  final AnalisisGrupal data;
+  CreateAnalisisGrupalEndpoint({
+    required this.data,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-grupales/crear-analisis-rapido';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => data.toJson();
 }

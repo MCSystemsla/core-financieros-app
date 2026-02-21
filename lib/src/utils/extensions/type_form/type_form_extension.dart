@@ -31,6 +31,7 @@ extension TypeFormInterceptorParser on AnalisisSolicitudesInterceptorType {
       AnalisisSolicitudesInterceptorType.asalariado => 'ASAL',
       AnalisisSolicitudesInterceptorType.represtamo => 'REPRESTAMO',
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil => 'REPRESTAMO',
+      AnalisisSolicitudesInterceptorType.grupal => 'GRUPAL',
     };
   }
 }

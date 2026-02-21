@@ -109,3 +109,19 @@ class ComiteCrearAprobacionEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => data.toJson();
 }
+
+class GetSolicitudesOnComiteEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/actas-comite-usuario';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

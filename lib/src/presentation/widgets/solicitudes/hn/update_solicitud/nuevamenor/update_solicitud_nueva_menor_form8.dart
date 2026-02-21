@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
@@ -231,23 +230,23 @@ class _UpdateSolicitudNuevaMenorForm8State
               ],
             ),
             const Gap(30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                // ignore: deprecated_member_use
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
+            // Container(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   width: double.infinity,
+            //   child: CustomElevatedButton(
+            //     text: 'Siguiente',
+            //     // ignore: deprecated_member_use
+            //     color: AppColors.greenLatern.withOpacity(0.4),
+            //     onPressed: () {
+            //       if (!formKey.currentState!.validate()) return;
 
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-            ),
+            //       widget.controller.nextPage(
+            //         duration: const Duration(milliseconds: 300),
+            //         curve: Curves.easeIn,
+            //       );
+            //     },
+            //   ),
+            // ),
             const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),

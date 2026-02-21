@@ -83,7 +83,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String monedaCodigo;
   final String propositoCodigo;
   final String frecuenciaCodigo;
-  final int cuota;
+  final double cuota;
   final String sectorCodigo;
   final String nombreNegocio;
   final String tiempoFuncionamientoNegocio;
@@ -175,8 +175,10 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final bool isDone;
   final String apellidosConyugue;
   final String tipoDocumentoConyugue;
+  final double cuotaWithDecimal;
 
   const SolicitudNuevaMenorHnState({
+    this.cuotaWithDecimal = 0,
     this.idSolicitud = '',
     this.grupoCodigoNombre = '',
     this.cargoGrupoNombre = '',
@@ -354,6 +356,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        cuotaWithDecimal,
         idSolicitud,
         grupoCodigoNombre,
         cargoGrupoNombre,
@@ -610,7 +613,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     String? monedaCodigo,
     String? propositoCodigo,
     String? frecuenciaCodigo,
-    int? cuota,
+    double? cuota,
     String? sectorCodigo,
     String? nombreNegocio,
     String? tiempoFuncionamientoNegocio,
@@ -702,6 +705,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     bool? isDone,
     String? apellidosConyugue,
     String? tipoDocumentoConyugue,
+    double? cuotaWithDecimal,
   }) {
     return SolicitudNuevaMenorHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -933,6 +937,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
       apellidosConyugue: apellidosConyugue ?? this.apellidosConyugue,
       tipoDocumentoConyugue:
           tipoDocumentoConyugue ?? this.tipoDocumentoConyugue,
+      cuotaWithDecimal: cuotaWithDecimal ?? this.cuotaWithDecimal,
     );
   }
 }

@@ -571,7 +571,7 @@ class AnalisisMayorAMilEstadoResultadoHN extends StatelessWidget {
                               ),
                             );
                           },
-                          text: 'Siguiente',
+                          text: 'Enviar Analisis',
                           color: Colors.green,
                         ),
                         const Gap(10),

@@ -34,7 +34,7 @@ class SolicitudAsalariadoHn {
   final String monedaCodigo;
   final String propositoCodigo;
   final String frecuenciaCodigo;
-  final int cuota;
+  final double cuota;
   final String sectorCodigo;
   final int personasACargo;
   final String estadoCivilCodigo;

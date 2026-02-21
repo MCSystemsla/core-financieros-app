@@ -59,7 +59,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
           monedaCodigo: state.monedaCodigo,
           propositoCodigo: state.propositoCodigo,
           frecuenciaCodigo: state.frecuenciaCodigo,
-          cuota: state.cuota,
+          cuota: state.cuotaWithDecimal,
           sectorCodigo: state.sectorCodigo,
           personasACargo: state.personasACargo,
           estadoCivilCodigo: state.estadoCivilCodigo,
@@ -428,6 +428,9 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       email: _prefer(state.email, prev?.email),
       monto: state.monto == 0 ? (prev?.monto ?? 0) : state.monto,
       cuota: state.cuota == 0 ? prev?.cuota : state.cuota,
+      cuotaWithDecimal: state.cuotaWithDecimal == 0
+          ? prev?.cuotaWithDecimal ?? 0
+          : state.cuotaWithDecimal,
       sectorCodigo: _prefer(state.sectorCodigo, prev?.sectorCodigo),
       personasACargo: state.personasACargo == 0
           ? (prev?.personasACargo ?? 0)
@@ -472,6 +475,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   loadFromLocalDb(SolicitudAsalariadoHnDbLocal solicitud) {
     onFieldChanged(
       () => state.copyWith(
+        cuotaWithDecimal: solicitud.cuotaWithDecimal,
         fechaVencimientoCedula:
             solicitud.fechaVencimientoCedula?.toUtc().toIso8601String(),
         fechaEmisionCedula:

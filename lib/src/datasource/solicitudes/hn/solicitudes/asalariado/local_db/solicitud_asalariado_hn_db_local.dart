@@ -129,6 +129,7 @@ class SolicitudAsalariadoHnDbLocal {
   bool hasVerified = false;
   String? cedulaConyuge;
   String? tipoDocumentoConyugeCodigo;
+  double? cuotaWithDecimal;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -254,5 +255,6 @@ class SolicitudAsalariadoHnDbLocal {
     this.hasVerified = false,
     this.cedulaConyuge,
     this.tipoDocumentoConyugeCodigo,
+    this.cuotaWithDecimal,
   });
 }

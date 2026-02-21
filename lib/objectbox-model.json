@@ -2308,7 +2308,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "143:7305229113475547040",
+      "lastPropertyId": "144:1151993333819019313",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2936,13 +2936,18 @@
           "id": "143:7305229113475547040",
           "name": "tipoDocumentoConyugeCodigo",
           "type": 9
+        },
+        {
+          "id": "144:1151993333819019313",
+          "name": "cuotaWithDecimal",
+          "type": 8
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "170:2262986745082270488",
+      "lastPropertyId": "171:6937685208957188625",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3785,6 +3790,11 @@
           "id": "168:4360154849385421371",
           "name": "grupoCodigoNombre",
           "type": 9
+        },
+        {
+          "id": "171:6937685208957188625",
+          "name": "cuotaWithDecimal",
+          "type": 8
         }
       ],
       "relations": []
@@ -6858,7 +6868,7 @@
     },
     {
       "id": "44:134851175495867505",
-      "lastPropertyId": "16:3264443481684242195",
+      "lastPropertyId": "17:6687357913436313967",
       "name": "AnalisisListDataHn",
       "properties": [
         {
@@ -6941,6 +6951,11 @@
           "id": "16:3264443481684242195",
           "name": "tipoPersonaCodigo",
           "type": 9
+        },
+        {
+          "id": "17:6687357913436313967",
+          "name": "esSolicitudGrupal",
+          "type": 1
         }
       ],
       "relations": []

@@ -206,8 +206,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5> {
                       OutlineTextfieldWidget(
                         initialValue: state.cedulaReferencia1,
                         title: 'Número de cédula',
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
+                        // validator: (value) =>
+                        // ClassValidator.validateRequired(value),
                         icon: const Icon(Icons.person),
                         textInputType: TextInputType.number,
                         inputFormatters: [
@@ -392,8 +392,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5> {
                       const Gap(20),
                       OutlineTextfieldWidget(
                         initialValue: state.cedulaReferencia2,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
+                        // validator: (value) =>
+                        //     ClassValidator.validateRequired(value),
                         title: 'Número de cédula:',
                         textInputType: TextInputType.number,
                         icon: const Icon(Icons.person),
@@ -595,8 +595,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5> {
                           initialValue: state.cedulaReferencia3,
                           title: 'Número de cédula:',
                           textInputType: TextInputType.number,
-                          validator: (value) =>
-                              ClassValidator.validateRequired(value),
+                          // validator: (value) =>
+                          // ClassValidator.validateRequired(value),
                           icon: const Icon(Icons.person),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
@@ -708,7 +708,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5> {
                             ),
                           );
                         },
-                        text: 'Enviar',
+                        text: 'Enviar Analisis',
                         color: Colors.green,
                       ),
                       const Gap(10),

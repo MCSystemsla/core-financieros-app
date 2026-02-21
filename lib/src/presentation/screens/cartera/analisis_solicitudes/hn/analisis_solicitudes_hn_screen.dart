@@ -95,11 +95,15 @@ class AnalisisSolicitudesHnScreen extends StatelessWidget {
 AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String tipoSolicitud,
   required String monto,
+  required bool esGrupal,
 }) {
   final montoInt = double.tryParse(monto) ?? 0;
   final nuevaMenorMil =
       global<SolicitudesHnBoxService>().getParametroByName(nombre: 'MENORMIL');
   final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;
+  if (esGrupal) {
+    return AnalisisSolicitudesInterceptorType.grupal;
+  }
 
   switch (tipoSolicitud) {
     case 'NUEVAMENOR':
@@ -221,6 +225,7 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
             tipoSolicitud: getTipoSolicitud(
               tipoSolicitud: widget.data[index].tipoSolicitud,
               monto: widget.data[index].monto!,
+              esGrupal: widget.data[index].esSolicitudGrupal,
             ),
             index: index,
             title:

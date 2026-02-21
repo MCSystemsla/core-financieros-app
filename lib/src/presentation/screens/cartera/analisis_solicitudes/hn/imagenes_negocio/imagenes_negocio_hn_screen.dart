@@ -180,7 +180,7 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                         }
                       },
                       previousTitle: 'button.exit'.tr(),
-                      nextTitle: 'button.next'.tr(),
+                      nextTitle: 'Enviar imagenes'.tr(),
                     );
                   },
                 ),

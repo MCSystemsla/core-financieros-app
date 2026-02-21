@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -244,6 +245,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final String? cedulaCliente;
   final int? pagina;
   final int? codigoGrupo;
+  final int? usuarioId;
   GetSolicitudesByEstadoEndpoint({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
@@ -251,6 +253,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
     this.cedulaCliente,
     this.pagina,
     this.codigoGrupo,
+    this.usuarioId,
   });
   @override
   Method get method => Method.get;
@@ -273,6 +276,23 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
           'Cedula': cedulaCliente,
         if (pagina != null) 'Pagina': pagina.toString(),
         if (codigoGrupo != null) 'GrupoCodigo': codigoGrupo.toString(),
+        if (usuarioId != null) 'OficialCreditoCodigo': usuarioId.toString(),
+      };
+}
+
+class GetUsuarioIdSolicitudesByEstadoEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/asesor-by-user-id';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
       };
 }
 

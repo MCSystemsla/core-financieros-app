@@ -131,7 +131,9 @@ class SolicitudAslariadoHnState extends Equatable {
   final List<HistorialCredito> historialCredito;
   final String cedulaConyuge;
   final String tipoDocumentoConyugeCodigo;
+  final double cuotaWithDecimal;
   const SolicitudAslariadoHnState({
+    this.cuotaWithDecimal = 0,
     this.idSolicitud = '',
     this.frecuenciaMeses = '',
     this.tasaInteres = 0,
@@ -265,6 +267,7 @@ class SolicitudAslariadoHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        cuotaWithDecimal,
         idSolicitud,
         historialCredito,
         frecuenciaMeses,
@@ -523,6 +526,7 @@ class SolicitudAslariadoHnState extends Equatable {
     List<HistorialCredito>? historialCredito,
     String? cedulaConyuge,
     String? tipoDocumentoConyugeCodigo,
+    double? cuotaWithDecimal,
   }) {
     return SolicitudAslariadoHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -681,6 +685,7 @@ class SolicitudAslariadoHnState extends Equatable {
       cedulaConyuge: cedulaConyuge ?? this.cedulaConyuge,
       tipoDocumentoConyugeCodigo:
           tipoDocumentoConyugeCodigo ?? this.tipoDocumentoConyugeCodigo,
+      cuotaWithDecimal: cuotaWithDecimal ?? this.cuotaWithDecimal,
     );
   }
 }

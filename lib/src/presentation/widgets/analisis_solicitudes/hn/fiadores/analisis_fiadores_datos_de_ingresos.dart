@@ -423,7 +423,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                         ),
                       );
                     },
-                    text: 'Siguiente',
+                    text: 'Enviar',
                     color: Colors.green,
                   ),
                 ),
