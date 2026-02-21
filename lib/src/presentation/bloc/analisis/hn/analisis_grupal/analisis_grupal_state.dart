@@ -2,6 +2,8 @@
 part of 'analisis_grupal_cubit.dart';
 
 class AnalisisGrupalState extends Equatable {
+  final int? idLocalResponse;
+  final String? uuid;
   final String errorMsg;
   final Status status;
   final String database;
@@ -25,6 +27,8 @@ class AnalisisGrupalState extends Equatable {
   final bool recapitalizacion;
   final bool creditoParalelo;
   const AnalisisGrupalState({
+    this.idLocalResponse,
+    this.uuid,
     this.errorMsg = '',
     this.status = Status.notStarted,
     this.database = '',
@@ -76,6 +80,8 @@ class AnalisisGrupalState extends Equatable {
       ];
 
   AnalisisGrupalState copyWith({
+    int? idLocalResponse,
+    String? uuid,
     String? errorMsg,
     Status? status,
     String? database,
@@ -100,6 +106,8 @@ class AnalisisGrupalState extends Equatable {
     bool? creditoParalelo,
   }) {
     return AnalisisGrupalState(
+      idLocalResponse: idLocalResponse ?? this.idLocalResponse,
+      uuid: uuid ?? this.uuid,
       errorMsg: errorMsg ?? this.errorMsg,
       status: status ?? this.status,
       database: database ?? this.database,

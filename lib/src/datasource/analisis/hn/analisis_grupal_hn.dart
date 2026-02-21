@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
-
 AnalisisGrupal analisisGrupalFromJson(String str) =>
     AnalisisGrupal.fromJson(json.decode(str));
 
@@ -80,17 +78,20 @@ class AnalisisGrupal {
       'database': database,
       'TipoSolicitud': tipoSolicitud,
       'NumeroSolicitud': numeroSolicitud,
-      'IngresosNegociosSalarios': ingresosNegociosSalarios.toSafeString(2),
-      'IngresosRemesas': ingresosRemesas.toSafeString(2),
-      'IngresosOtraActividad': ingresosOtraActividad.toSafeString(2),
-      'IngresosConyuge': ingresosConyuge.toSafeString(2),
-      'TotalIngresos': totalIngresos.toSafeString(2),
-      'Compras': compras.toSafeString(2),
-      'PagoCuotasOtrasInst': pagoCuotasOtrasInst.toSafeString(2),
-      'GastosFamiliares': gastosFamiliares.toSafeString(2),
-      'OtrosGastos': otrosGastos.toSafeString(2),
-      'TotalGastos': totalGastos.toSafeString(2),
-      'FlujoNeto': flujoNeto.toSafeString(2),
+      'IngresosNegociosSalarios':
+          double.tryParse(ingresosNegociosSalarios.toStringAsFixed(2)),
+      'IngresosRemesas': double.tryParse(ingresosRemesas.toStringAsFixed(2)),
+      'IngresosOtraActividad':
+          double.tryParse(ingresosOtraActividad.toStringAsFixed(2)),
+      'IngresosConyuge': double.tryParse(ingresosConyuge.toStringAsFixed(2)),
+      'TotalIngresos': double.tryParse(totalIngresos.toStringAsFixed(2)),
+      'Compras': double.tryParse(compras.toStringAsFixed(2)),
+      'PagoCuotasOtrasInst':
+          double.tryParse(pagoCuotasOtrasInst.toStringAsFixed(2)),
+      'GastosFamiliares': double.tryParse(gastosFamiliares.toStringAsFixed(2)),
+      'OtrosGastos': double.tryParse(otrosGastos.toStringAsFixed(2)),
+      'TotalGastos': double.tryParse(totalGastos.toStringAsFixed(2)),
+      'FlujoNeto': double.tryParse(flujoNeto.toStringAsFixed(2)),
       'Comentarios': comentarios,
       'CreditoNormal': creditoNormal,
       'CreditoRefinanciado': creditoRefinanciado,

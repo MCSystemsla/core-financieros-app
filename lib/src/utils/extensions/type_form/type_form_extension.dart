@@ -24,14 +24,16 @@ extension TypeFormIdParser on int {
 }
 
 extension TypeFormInterceptorParser on AnalisisSolicitudesInterceptorType {
-  String toTypeForInterceptorString() {
+  String toTypeForInterceptorString({String? tipoGrupal}) {
     return switch (this) {
-      AnalisisSolicitudesInterceptorType.nueva => 'NUEVAMENOR',
-      AnalisisSolicitudesInterceptorType.nuevaMayorAMil => 'NUEVAMENOR',
+      AnalisisSolicitudesInterceptorType.nueva ||
+      AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
+        'NUEVAMENOR',
       AnalisisSolicitudesInterceptorType.asalariado => 'ASAL',
-      AnalisisSolicitudesInterceptorType.represtamo => 'REPRESTAMO',
-      AnalisisSolicitudesInterceptorType.represtamoMayorAMil => 'REPRESTAMO',
-      AnalisisSolicitudesInterceptorType.grupal => 'GRUPAL',
+      AnalisisSolicitudesInterceptorType.represtamo ||
+      AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
+        'REPRESTAMO',
+      AnalisisSolicitudesInterceptorType.grupal => tipoGrupal ?? '',
     };
   }
 }

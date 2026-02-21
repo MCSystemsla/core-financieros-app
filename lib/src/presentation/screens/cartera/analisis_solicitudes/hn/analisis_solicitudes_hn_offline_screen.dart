@@ -154,6 +154,7 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
               monto: widget.data[index].monto!,
               esGrupal: widget.data[index].esSolicitudGrupal,
             ),
+            tipoSolicitudString: widget.data[index].tipoSolicitud ?? '',
             index: index,
             title:
                 'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}',
@@ -178,6 +179,7 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
   final String cedulaCliente;
   final String tipoPersonaCodigo;
   final String monto;
+  final String tipoSolicitudString;
   const AnalisisCreditoOfflineCard({
     super.key,
     required this.index,
@@ -191,6 +193,7 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
     this.cedulaCliente = '',
     this.tipoPersonaCodigo = '',
     this.monto = '0',
+    this.tipoSolicitudString = '',
   });
 
   @override
@@ -219,6 +222,7 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
                             subtitle: subtitle,
                             description: description,
                             numeroSolicitud: numeroSolicitud,
+                            tipoSolicitudString: tipoSolicitudString,
                           ),
                         ),
                       ),

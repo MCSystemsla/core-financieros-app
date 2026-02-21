@@ -36,6 +36,8 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   final String cedulaCliente;
   final String tipoPersonaCodigo;
   final String monto;
+  final String tipoSolicitudString;
+
   const SelectTypeAnalisisModalSheetWidget({
     super.key,
     required this.index,
@@ -49,6 +51,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     required this.cedulaCliente,
     required this.tipoPersonaCodigo,
     required this.monto,
+    required this.tipoSolicitudString,
   });
 
   @override
@@ -63,7 +66,10 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
             ..checkAnalisis(
               cedulaCliente: cedulaCliente,
               numeroSolicitud: int.parse(numeroSolicitud),
-              tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString() ?? '',
+              tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString(
+                    tipoGrupal: tipoSolicitudString,
+                  ) ??
+                  '',
             ),
         ),
       ],
@@ -145,6 +151,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                     subtitle: subtitle,
                                     description: description,
                                     numeroSolicitud: numeroSolicitud,
+                                    tipoSolicitudString: tipoSolicitudString,
                                   ),
                                 ),
                               );

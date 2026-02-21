@@ -6988,9 +6988,128 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "46:9020518801958912717",
+      "lastPropertyId": "22:2935266871729996783",
+      "name": "AnalisisGrupalHnLocalDb",
+      "properties": [
+        {
+          "id": "1:2995606582988420681",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:5789032058345160467",
+          "name": "uuid",
+          "type": 9
+        },
+        {
+          "id": "3:1137394671500576832",
+          "name": "database",
+          "type": 9
+        },
+        {
+          "id": "4:9104803455115215454",
+          "name": "tipoSolicitud",
+          "type": 9
+        },
+        {
+          "id": "5:75987053138571764",
+          "name": "numeroSolicitud",
+          "type": 6
+        },
+        {
+          "id": "6:6923500717117524397",
+          "name": "ingresosNegociosSalarios",
+          "type": 8
+        },
+        {
+          "id": "7:5805400480462233949",
+          "name": "ingresosRemesas",
+          "type": 8
+        },
+        {
+          "id": "8:8953351808912977744",
+          "name": "ingresosOtraActividad",
+          "type": 8
+        },
+        {
+          "id": "9:5777842421411292003",
+          "name": "ingresosConyuge",
+          "type": 8
+        },
+        {
+          "id": "10:576087484450738929",
+          "name": "totalIngresos",
+          "type": 8
+        },
+        {
+          "id": "11:2468332880277008511",
+          "name": "compras",
+          "type": 8
+        },
+        {
+          "id": "12:7929839881918872868",
+          "name": "pagoCuotasOtrasInst",
+          "type": 8
+        },
+        {
+          "id": "13:8882051796345821636",
+          "name": "gastosFamiliares",
+          "type": 8
+        },
+        {
+          "id": "14:5355647751478979605",
+          "name": "otrosGastos",
+          "type": 8
+        },
+        {
+          "id": "15:5849080611588281324",
+          "name": "totalGastos",
+          "type": 8
+        },
+        {
+          "id": "16:6519847090208380676",
+          "name": "flujoNeto",
+          "type": 8
+        },
+        {
+          "id": "17:4888702905809271013",
+          "name": "comentarios",
+          "type": 9
+        },
+        {
+          "id": "18:2697370524056729445",
+          "name": "creditoNormal",
+          "type": 1
+        },
+        {
+          "id": "19:8778964158717010210",
+          "name": "creditoRefinanciado",
+          "type": 1
+        },
+        {
+          "id": "20:7184831211192166385",
+          "name": "creditoReadecuado",
+          "type": 1
+        },
+        {
+          "id": "21:1038836543092459430",
+          "name": "recapitalizacion",
+          "type": 1
+        },
+        {
+          "id": "22:2935266871729996783",
+          "name": "creditoParalelo",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "45:1530853323078253511",
+  "lastEntityId": "46:9020518801958912717",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

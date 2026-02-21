@@ -48,143 +48,148 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Imagenes Negocio'),
+          title: const Text('Imagenes del Negocio'),
         ),
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MiCreditoProgress(
-                  steps: 4,
-                  currentStep: 1,
-                ),
-                const Gap(20),
-                Text(
-                  'Numero Solicitud: ${widget.numeroSolicitud}',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MiCreditoProgress(
+                    steps: 4,
+                    currentStep: 1,
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Numero Solicitud: ${widget.numeroSolicitud}',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const Gap(20),
+                  Text(
+                    'Las imágenes se utilizarán para evaluar el estado del negocio del cliente y como referencia en futuras solicitudes.',
+                    textAlign: TextAlign.justify,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const Gap(25),
+                  UploadImageWidget(
+                    selectedImage: selectedImage,
+                    title: '1- Foto Negocio',
+                    onPressed: () => context.pushTransparentRoute(
+                      CameraCaptureScreen(
+                        numeroSoicitud: widget.numeroSolicitud,
+                        onImageSelected: (image, path) {
+                          setState(() {
+                            selectedImage = image;
+                            selectedImage1Path = path;
+                          });
+                        },
                       ),
-                ),
-                const Gap(20),
-                Text(
-                  'Las imágenes se utilizarán para evaluar el estado del negocio del cliente y como referencia en futuras solicitudes.',
-                  textAlign: TextAlign.justify,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const Gap(25),
-                UploadImageWidget(
-                  selectedImage: selectedImage,
-                  title: '1- Foto Negocio',
-                  onPressed: () => context.pushTransparentRoute(
-                    CameraCaptureScreen(
-                      numeroSoicitud: widget.numeroSolicitud,
-                      onImageSelected: (image, path) {
-                        setState(() {
-                          selectedImage = image;
-                          selectedImage1Path = path;
-                        });
-                      },
                     ),
                   ),
-                ),
-                //   showModalBottomSheet(
-                //   isScrollControlled: true,
-                //   context: context,
-                //   builder: (ctx) => const _SelectTypePhotoDestination(),
+                  //   showModalBottomSheet(
+                  //   isScrollControlled: true,
+                  //   context: context,
+                  //   builder: (ctx) => const _SelectTypePhotoDestination(),
 
-                // )),
-                const Gap(20),
-                UploadImageWidget(
-                  selectedImage: selectedImage2,
-                  title: '2-  Foto Negocio',
-                  onPressed: () =>
-                      context.pushTransparentRoute(CameraCaptureScreen(
-                    numeroSoicitud: widget.numeroSolicitud,
-                    onImageSelected: (image, path) {
-                      setState(() {
-                        selectedImage2 = image;
-                        selectedImage2Path = path;
-                      });
-                    },
-                  )),
-                ),
-                const Gap(15),
-                UploadImageWidget(
-                  selectedImage: selectedImage3,
-                  title: '3- Foto Negocio',
-                  onPressed: () => context.pushTransparentRoute(
-                    CameraCaptureScreen(
+                  // )),
+                  const Gap(20),
+                  UploadImageWidget(
+                    selectedImage: selectedImage2,
+                    title: '2-  Foto Negocio',
+                    onPressed: () =>
+                        context.pushTransparentRoute(CameraCaptureScreen(
                       numeroSoicitud: widget.numeroSolicitud,
                       onImageSelected: (image, path) {
                         setState(() {
-                          selectedImage3 = image;
-                          selectedImage3Path = path;
+                          selectedImage2 = image;
+                          selectedImage2Path = path;
                         });
                       },
+                    )),
+                  ),
+                  const Gap(15),
+                  UploadImageWidget(
+                    selectedImage: selectedImage3,
+                    title: '3- Foto Negocio',
+                    onPressed: () => context.pushTransparentRoute(
+                      CameraCaptureScreen(
+                        numeroSoicitud: widget.numeroSolicitud,
+                        onImageSelected: (image, path) {
+                          setState(() {
+                            selectedImage3 = image;
+                            selectedImage3Path = path;
+                          });
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const Gap(20),
-                BlocConsumer<AnalisisImagenesNegocioCubit,
-                    AnalisisImagenesNegocioState>(
-                  buildWhen: (previous, current) =>
-                      previous.status != current.status,
-                  listener: (context, state) {
-                    if (state.status == Status.done) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Imagenes del negocio enviadas exitosamente',
-                        onDone: () => context.push('/cartera'),
-                      ).showDialog(context, dialogType: DialogType.success);
-                    }
-                    if (state.status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context, dialogType: DialogType.error);
-                    }
-                  },
-                  builder: (context, state) {
-                    return ButtonActionsWidget(
-                      onPreviousPressed: () => context.pop(),
-                      disabled: state.status == Status.inProgress,
-                      onNextPressed: () {
-                        if (selectedImage == null ||
-                            selectedImage2 == null ||
-                            selectedImage3 == null) {
-                          ImagesRequiredPopupDialog(
-                            context: context,
-                            onDone: () => context.pop(),
-                          ).showDialog(context);
-                          return;
-                        }
-                        if (context.mounted) {
-                          context
-                              .read<AnalisisImagenesNegocioCubit>()
-                              .createAnalisisFotoNegocio(
-                                numeroSolicitud:
-                                    int.tryParse(widget.numeroSolicitud) ?? 0,
-                                cedulaCliente: widget.cedulaCliente,
-                                imagenNegocio: selectedImage1Path ?? 'NO PATH',
-                                imagenNegocio2: selectedImage2Path ?? 'NO PATH',
-                                imagenNegocio3: selectedImage3Path ?? 'NO PATH',
-                              );
-                        }
-                      },
-                      previousTitle: 'button.exit'.tr(),
-                      nextTitle: 'Enviar imagenes'.tr(),
-                    );
-                  },
-                ),
-              ],
+                  const Gap(20),
+                  BlocConsumer<AnalisisImagenesNegocioCubit,
+                      AnalisisImagenesNegocioState>(
+                    buildWhen: (previous, current) =>
+                        previous.status != current.status,
+                    listener: (context, state) {
+                      if (state.status == Status.done) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: 'Imagenes del negocio enviadas exitosamente',
+                          onDone: () => context.push('/cartera'),
+                        ).showDialog(context, dialogType: DialogType.success);
+                      }
+                      if (state.status == Status.error) {
+                        CustomAlertDialog(
+                          context: context,
+                          title: state.errorMsg,
+                          onDone: () => context.pop(),
+                        ).showDialog(context, dialogType: DialogType.error);
+                      }
+                    },
+                    builder: (context, state) {
+                      return ButtonActionsWidget(
+                        onPreviousPressed: () => context.pop(),
+                        disabled: state.status == Status.inProgress,
+                        onNextPressed: () {
+                          if (selectedImage == null ||
+                              selectedImage2 == null ||
+                              selectedImage3 == null) {
+                            ImagesRequiredPopupDialog(
+                              context: context,
+                              onDone: () => context.pop(),
+                            ).showDialog(context);
+                            return;
+                          }
+                          if (context.mounted) {
+                            context
+                                .read<AnalisisImagenesNegocioCubit>()
+                                .createAnalisisFotoNegocio(
+                                  numeroSolicitud:
+                                      int.tryParse(widget.numeroSolicitud) ?? 0,
+                                  cedulaCliente: widget.cedulaCliente,
+                                  imagenNegocio:
+                                      selectedImage1Path ?? 'NO PATH',
+                                  imagenNegocio2:
+                                      selectedImage2Path ?? 'NO PATH',
+                                  imagenNegocio3:
+                                      selectedImage3Path ?? 'NO PATH',
+                                );
+                          }
+                        },
+                        previousTitle: 'button.exit'.tr(),
+                        nextTitle: 'Enviar imagenes'.tr(),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

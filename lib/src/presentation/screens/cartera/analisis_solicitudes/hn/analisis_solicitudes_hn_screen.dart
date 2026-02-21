@@ -227,6 +227,7 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
               monto: widget.data[index].monto!,
               esGrupal: widget.data[index].esSolicitudGrupal,
             ),
+            tipoSolicitudString: widget.data[index].tipoSolicitud,
             index: index,
             title:
                 'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}',

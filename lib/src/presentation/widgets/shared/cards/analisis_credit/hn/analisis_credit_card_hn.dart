@@ -20,6 +20,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
   final String cedulaCliente;
   final String tipoPersonaCodigo;
   final String monto;
+  final String tipoSolicitudString;
   const AnalisisCreditCardHn({
     super.key,
     required this.index,
@@ -33,6 +34,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
     this.cedulaCliente = '',
     this.tipoPersonaCodigo = '',
     this.monto = '0',
+    this.tipoSolicitudString = '',
   });
 
   @override
@@ -68,6 +70,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
                             cedulaCliente: cedulaCliente,
                             tipoPersonaCodigo: tipoPersonaCodigo,
                             monto: monto,
+                            tipoSolicitudString: tipoSolicitudString,
                           ),
                         ),
                       ),

@@ -478,5 +478,5 @@ class CreateAnalisisGrupalEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get queryParameters => data.toJson();
+  Map<String, dynamic> get body => data.toJson();
 }
