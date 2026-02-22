@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -61,7 +62,12 @@ class DefaultAPIRepository implements APIRepository {
       };
       if (needToValidateToken && !await _isTokenValid()) {
         _logger.e('APIRepository - Token no valido');
-        router.go('/loading');
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (router.canPop() || router.configuration != null) {
+            router.go('/loading');
+          }
+        });
+        throw Exception('Unauthorized: Redirecting to login...');
       }
       BitacoraService.registerBitacora(payload: body.toString());
     } catch (e) {

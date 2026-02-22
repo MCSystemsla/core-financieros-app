@@ -188,6 +188,7 @@ class _UpdateSolicitudAsalariadoForm1State
             Column(
               children: [
                 SearchDropdownWidget(
+                  enabled: false,
                   selectedItem: Item(
                     name: cubit.state.tipoPersonaCNBSNombre,
                     value: cubit.state.tipoPersonaCNBSCodigo,
@@ -208,6 +209,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: cubit.state.nombre1,
                   hintText: 'Primer Nombre',
@@ -229,6 +231,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   initialValue: cubit.state.nombre2,
                   hintText: 'Segundo Nombre',
                   icon: Icon(Icons.person_outline,
@@ -250,6 +253,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: cubit.state.apellido1,
                   hintText: 'Primer Apellido',
@@ -271,6 +275,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  readOnly: true,
                   initialValue: cubit.state.apellido2,
                   hintText: 'Segundo Apellido',
                   icon: Icon(Icons.badge_outlined,
@@ -358,6 +363,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  enabled: false,
                   selectedItem: Item(
                     name: cubit.state.tipoDocumentoNombre,
                     value: cubit.state.tipoDocumentoCodigo,
@@ -377,6 +383,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 SearchDropdownWidget(
+                  enabled: false,
                   selectedItem: Item(
                     value: cubit.state.tipoPersonaCodigo,
                     name: cubit.state.tipoPersonaNombre,
@@ -479,6 +486,7 @@ class _UpdateSolicitudAsalariadoForm1State
                 ),
                 const Gap(30),
                 CatalogoValorNacionalidad(
+                  enabled: false,
                   selectedItem: ItemNacionalidad(
                     id: 0,
                     valor: cubit.state.paisEmisorCedulaCodigo,
