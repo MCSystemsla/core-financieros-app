@@ -168,7 +168,7 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm>
                     ),
                   );
                 },
-                text: 'Siguiente',
+                text: 'Aprobar Comité',
               ),
             ),
             const Gap(20),

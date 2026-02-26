@@ -125,13 +125,13 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                     );
                   },
                 ),
-                const Gap(12),
-                CustomSwitch(
-                  title: 'Financiar comision y seguros',
-                  subtitle: 'Financiara la comision y seguros?',
-                  value: false,
-                  onChanged: (v) {},
-                ),
+                // const Gap(12),
+                // CustomSwitch(
+                //   title: 'Financiar comision y seguros',
+                //   subtitle: 'Financiara la comision y seguros?',
+                //   value: false,
+                //   onChanged: (v) {},
+                // ),
                 const Gap(12),
               ],
             ),

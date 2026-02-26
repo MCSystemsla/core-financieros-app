@@ -280,7 +280,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               OutlineTextfieldWidget(
                 initialValue: observaciones,
                 title: 'Observaciones',
-                // validator: (value) => ClassValidator.validateRequired(value),
+                validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
