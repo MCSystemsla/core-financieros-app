@@ -14,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
+import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+
 class ComiteDatosDelCreditoForm extends StatefulWidget {
   final ComiteSolicitudData data;
 
@@ -27,7 +29,8 @@ class ComiteDatosDelCreditoForm extends StatefulWidget {
       _ComiteDatosDelCreditoFormState();
 }
 
-class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm> {
+class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
+    with AutomaticKeepAliveClientMixin {
   DateTime? fechaVencimiento;
   DateTime? fechaPrimerPago;
   @override
@@ -35,15 +38,24 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm> {
     super.initState();
     fechaPrimerPago = widget.data.fechaPrimerPagoAprobacion;
     final cubit = context.read<ComiteAprobacionCubit>();
+    final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaAprobacion: fechaPrimerPago?.toUtc().toIso8601String(),
+      ),
+    );
+    cubitCalculos.onFieldChanged(
+      () => cubitCalculos.state.copyWith(
+        fechaPrimerPago: fechaPrimerPago?.toUtc().toIso8601String(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final calculosCubit = context.read<ComiteCalculoDatosCubit>();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -57,139 +69,175 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm> {
           )
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16, top: 20),
-            child: Text(
-              'Datos del credito',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-          const Gap(12),
-          SearchDropdownWidget(
-            selectedItem: Item(
-              name: widget.data.nombreProducto ?? '',
-              value: widget.data.nombreProducto,
-            ),
-            codigo: 'PRODUCTO',
-            onChanged: (item) {},
-            title: 'Producto',
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            initialValue: widget.data.tasaInteresCorriente
-                .toString()
-                .toNullIfEmptyOrZero(),
-            title: 'Interés Corriente %',
-            icon: Icon(
-              Icons.percent_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
+      child: BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+        builder: (context, state) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20),
+                child: Text(
+                  'Datos del credito',
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              const Gap(12),
+              SearchDropdownWidget(
+                selectedItem: Item(
+                  name: widget.data.nombreProducto ?? '',
+                  value: widget.data.nombreProducto,
+                ),
+                codigo: 'PRODUCTO',
+                onChanged: (item) {
+                  if (item == null) return;
+                  calculosCubit.onFieldChanged(
+                    () => calculosCubit.state.copyWith(
+                      productoCodigo: item.value,
+                    ),
+                  );
+                },
+                title: 'Producto',
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                readOnly: true,
+                hintText: state.data?.data.interes.tasaInteresCorriente
+                    .toCurrencyString(),
+                title: 'Interés Corriente %',
+                icon: Icon(
+                  Icons.percent_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {},
+              ),
+              // const Gap(20),
+              // CustomSwitch(
+              //   title: 'Mantener Tasa interés de crédito anterior',
+              //   subtitle: '',
+              //   value: false,
+              //   onChanged: (v) {
+              //     calculosCubit.onFieldChanged(
+              //       () => calculosCubit.state.copyWith(
+              //         esMantieneTasa: v,
+              //       ),
+              //     );
+              //   },
+              // ),
+              const Divider(),
+              OutlineTextfieldWidget(
+                initialValue:
+                    widget.data.plazoSolicitud.toString().toNullIfEmptyOrZero(),
+                title: 'Plazo en meses',
+                icon: Icon(
+                  Icons.schedule_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  final newValue = value.replaceAll(',', '');
+                  calculosCubit.onFieldChanged(
+                    () => calculosCubit.state.copyWith(
+                      plazoMeses: int.tryParse(newValue) ?? 0,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: widget.data.montoSinComision?.toCurrencyString(),
+                title: 'Monto de aprobación',
+                icon: Icon(
+                  Icons.payments_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {
+                  final newValue = value.replaceAll(',', '');
+                  calculosCubit.onFieldChanged(
+                    () => calculosCubit.state.copyWith(
+                      monto: double.tryParse(newValue) ?? 0,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                readOnly: true,
+                initialValue: DateTime.now().toLocal().selectorFormat(),
+                title: 'Fecha de desembolso',
+                icon: Icon(
+                  Icons.event_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {},
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                hintText: fechaPrimerPago?.selectorFormat(),
+                title: 'Fecha de primer pago',
+                onTap: () async {
+                  final date = await pickDate(context);
+                  if (date == null) return;
+                  calculosCubit.onFieldChanged(
+                    () => calculosCubit.state.copyWith(
+                      fechaPrimerPago: date.toUtc().toIso8601String(),
+                    ),
+                  );
+                  setState(() {
+                    fechaPrimerPago = date;
+                  });
+                },
+                readOnly: true,
+                icon: Icon(
+                  Icons.calendar_today_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {},
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                readOnly: true,
+                hintText: fechaVencimiento?.selectorFormat(),
+                onTap: () async {
+                  final date = await pickDate(context);
+                  if (date == null) return;
+                  setState(() {
+                    fechaVencimiento = date;
+                  });
+                },
+                title: 'Fecha de vencimiento',
+                icon: Icon(
+                  Icons.event_busy_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  UpperCaseTextFormatter(),
+                ],
+                onChange: (value) {},
+              ),
+              const Gap(20),
             ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          CustomSwitch(
-            title: 'Mantener Tasa interés de crédito anterior',
-            subtitle: '',
-            value: false,
-            onChanged: (v) {},
-          ),
-          const Divider(),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            initialValue:
-                widget.data.plazoSolicitud.toString().toNullIfEmptyOrZero(),
-            title: 'Plazo en meses',
-            icon: Icon(
-              Icons.schedule_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            initialValue: widget.data.montoSinComision?.toCurrencyString(),
-            title: 'Monto de aprobación',
-            icon: Icon(
-              Icons.payments_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            initialValue: DateTime.now().toLocal().selectorFormat(),
-            title: 'Fecha de desembolso',
-            icon: Icon(
-              Icons.event_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            hintText: fechaPrimerPago?.selectorFormat(),
-            title: 'Fecha de primer pago',
-            onTap: () async {
-              final date = await pickDate(context);
-              if (date == null) return;
-              setState(() {
-                fechaPrimerPago = date;
-              });
-            },
-            readOnly: true,
-            icon: Icon(
-              Icons.calendar_today_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-          OutlineTextfieldWidget(
-            readOnly: true,
-            hintText: fechaVencimiento?.selectorFormat(),
-            onTap: () async {
-              final date = await pickDate(context);
-              if (date == null) return;
-              setState(() {
-                fechaVencimiento = date;
-              });
-            },
-            title: 'Fecha de vencimiento',
-            icon: Icon(
-              Icons.event_busy_outlined,
-              color: AppColors.getPrimaryColor(),
-            ),
-            inputFormatters: [
-              UpperCaseTextFormatter(),
-            ],
-            onChange: (value) {},
-          ),
-          const Gap(20),
-        ],
+          );
+        },
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

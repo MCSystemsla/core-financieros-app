@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_calculo_datos_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
@@ -33,6 +34,22 @@ abstract class ComiteRepositoryHN {
     required ComiteAprobacion data,
   });
   Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite();
+  Future<ComiteCalculoDatosResponse> obtenerCalculoDatos({
+    required int actaID,
+    required String productoCodigo,
+    required num monto,
+    required int plazoMeses,
+    required String monedaCodigo,
+    required DateTime fechaPrimerPago,
+    required bool esRestructuracion,
+    required bool esMantieneTasa,
+    required String creditoCancelacion,
+    required String creditoCancelacion2,
+    required String formaPagoCodigo,
+    required double comisionSegurosFinanciado,
+    required String tipoCobroSaldoDeudorCodigo,
+    required String paisCodigo,
+  });
 }
 
 class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
@@ -144,6 +161,57 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         throw AppException(optionalMsg: errorMsg.toString());
       }
       final data = SolicitudesOnComiteResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ComiteCalculoDatosResponse> obtenerCalculoDatos({
+    required int actaID,
+    required String productoCodigo,
+    required num monto,
+    required int plazoMeses,
+    required String monedaCodigo,
+    required DateTime fechaPrimerPago,
+    required bool esRestructuracion,
+    required bool esMantieneTasa,
+    required String creditoCancelacion,
+    required String creditoCancelacion2,
+    required String formaPagoCodigo,
+    required double comisionSegurosFinanciado,
+    required String tipoCobroSaldoDeudorCodigo,
+    required String paisCodigo,
+  }) async {
+    final endpoint = GetCalculosDatosEndpoint(
+      actaID: actaID,
+      productoCodigo: productoCodigo,
+      monto: monto,
+      plazoMeses: plazoMeses,
+      monedaCodigo: monedaCodigo,
+      fechaPrimerPago: fechaPrimerPago,
+      esRestructuracion: esRestructuracion,
+      esMantieneTasa: esMantieneTasa,
+      creditoCancelacion: creditoCancelacion,
+      creditoCancelacion2: creditoCancelacion2,
+      formaPagoCodigo: formaPagoCodigo,
+      comisionSegurosFinanciado: comisionSegurosFinanciado,
+      tipoCobroSaldoDeudorCodigo: tipoCobroSaldoDeudorCodigo,
+      paisCodigo: paisCodigo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        _logger.i(endpoint.queryParameters);
+
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      _logger.i(resp);
+      final data = ComiteCalculoDatosResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

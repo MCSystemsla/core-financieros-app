@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
@@ -37,6 +38,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   final String tipoPersonaCodigo;
   final String monto;
   final String tipoSolicitudString;
+  final bool esGrupal;
 
   const SelectTypeAnalisisModalSheetWidget({
     super.key,
@@ -52,6 +54,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     required this.tipoPersonaCodigo,
     required this.monto,
     required this.tipoSolicitudString,
+    required this.esGrupal,
   });
 
   @override
@@ -64,6 +67,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
         BlocProvider(
           create: (ctx) => AnalisisChecksCubit(repository)
             ..checkAnalisis(
+              esGrupal: esGrupal,
               cedulaCliente: cedulaCliente,
               numeroSolicitud: int.parse(numeroSolicitud),
               tipoSolicitud: tipoSolicitud?.toTypeForInterceptorString(
@@ -207,52 +211,55 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               );
                             },
                           ),
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneFiadores,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.swap_horiz_rounded,
-                            color: const Color(0xff0D9488),
-                            title: 'Registrar Fiadores',
-                            subtitle: 'Crear Terceros',
-                            onTap: () => {
-                              context.pop(),
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => FiadoresHnScreen(
-                                    numeroSolicitud:
-                                        int.tryParse(numeroSolicitud) ?? 0,
-                                    tipoSolicitud: tipoSolicitud!
-                                        .toTypeForInterceptorString(),
+                          if (!esGrupal) ...[
+                            SelectableCardItem(
+                              userHaveDataAlready: state.tieneFiadores,
+                              isLoading: state.status == Status.inProgress,
+                              icon: Icons.swap_horiz_rounded,
+                              color: const Color(0xff0D9488),
+                              title: 'Registrar Fiadores',
+                              subtitle: 'Crear Terceros',
+                              onTap: () => {
+                                context.pop(),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) => FiadoresHnScreen(
+                                      numeroSolicitud:
+                                          int.tryParse(numeroSolicitud) ?? 0,
+                                      tipoSolicitud: tipoSolicitud!
+                                          .toTypeForInterceptorString(),
+                                    ),
                                   ),
-                                ),
-                              )
-                            },
-                          ),
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneGarantia,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.pie_chart_rounded,
-                            color: const Color(0xff6D28D9),
-                            title: 'Registrar Garantías',
-                            subtitle: 'Crear Garantías',
-                            onTap: () => {
-                              context.pop(),
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => GarantiaHNScreen(
-                                    numeroSolicitud: int.parse(numeroSolicitud),
-                                    solicitudCodigo: tipoSolicitud
-                                            ?.toTypeForInterceptorString() ??
-                                        '',
-                                    cedulaCliente: cedulaCliente,
-                                    tipoPersonaCodigo: tipoPersonaCodigo,
+                                )
+                              },
+                            ),
+                            SelectableCardItem(
+                              userHaveDataAlready: state.tieneGarantia,
+                              isLoading: state.status == Status.inProgress,
+                              icon: Icons.pie_chart_rounded,
+                              color: const Color(0xff6D28D9),
+                              title: 'Registrar Garantías',
+                              subtitle: 'Crear Garantías',
+                              onTap: () => {
+                                context.pop(),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (ctx) => GarantiaHNScreen(
+                                      numeroSolicitud:
+                                          int.parse(numeroSolicitud),
+                                      solicitudCodigo: tipoSolicitud
+                                              ?.toTypeForInterceptorString() ??
+                                          '',
+                                      cedulaCliente: cedulaCliente,
+                                      tipoPersonaCodigo: tipoPersonaCodigo,
+                                    ),
                                   ),
-                                ),
-                              )
-                            },
-                          ),
+                                )
+                              },
+                            ),
+                          ],
                           SelectableCardItem(
                             userHaveDataAlready: state.tieneUbicacion,
                             isLoading: state.status == Status.inProgress,
@@ -273,6 +280,33 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            },
+                          ),
+                          SelectableCardItem(
+                            userHaveDataAlready: state.tieneSupervision,
+                            isLoading: state.status == Status.inProgress,
+                            icon: Icons.verified_user_sharp,
+                            color: Colors.deepPurple,
+                            title: 'Tiene Supervision',
+                            subtitle:
+                                'El analisis tiene supervision realizada?',
+                            onTap: () {
+                              if (state.tieneSupervision) {
+                                CustomAlertDialog(
+                                  context: context,
+                                  title: 'El analisis ya tiene supervision',
+                                  onDone: () => context.pop(),
+                                ).showDialog(context,
+                                    dialogType: DialogType.infoReverse);
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const SelectTipoSupervisionHnScreen(),
+                                ),
+                              );
                             },
                           ),
                           if (actions.contains(TypeAction.cerrar.codigo))
@@ -319,8 +353,10 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                             .closeAnalisis(
                                               numeroSolicitud:
                                                   int.parse(numeroSolicitud),
-                                              tipoSolicitud: tipoSolicitud!
-                                                  .toTypeForInterceptorString(),
+                                              tipoSolicitud: esGrupal
+                                                  ? tipoSolicitudString
+                                                  : tipoSolicitud!
+                                                      .toTypeForInterceptorString(),
                                             );
                                       },
                                     ).showDialog(

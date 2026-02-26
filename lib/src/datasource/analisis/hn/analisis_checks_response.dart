@@ -23,6 +23,7 @@ class AnalisisCheckData {
   final bool tieneAnalisis;
   final bool tieneUbicacion;
   final bool tieneFotoNegocio;
+  final bool tieneSupervision;
 
   AnalisisCheckData({
     required this.tienePlanInversion,
@@ -31,6 +32,7 @@ class AnalisisCheckData {
     required this.tieneAnalisis,
     required this.tieneUbicacion,
     required this.tieneFotoNegocio,
+    required this.tieneSupervision,
   });
 
   factory AnalisisCheckData.fromJson(Map<String, dynamic> json) =>
@@ -41,5 +43,6 @@ class AnalisisCheckData {
         tieneAnalisis: json['TieneAnalisis'],
         tieneUbicacion: json['TieneUbicacion'],
         tieneFotoNegocio: json['TieneFotoNegocio'],
+        tieneSupervision: json['TieneSupervision'],
       );
 }

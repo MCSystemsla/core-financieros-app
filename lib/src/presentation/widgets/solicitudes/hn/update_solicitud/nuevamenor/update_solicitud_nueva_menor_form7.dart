@@ -83,11 +83,11 @@ class _UpdateSolicitudNuevaMenorForm7State
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaPrimerPago) {
       if (!context.mounted) return;
@@ -128,11 +128,11 @@ class _UpdateSolicitudNuevaMenorForm7State
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-      selectableDayPredicate: (day) {
-        if (day.weekday == DateTime.sunday) return false;
-        if (_isHoliday(day)) return false;
-        return true;
-      },
+      // selectableDayPredicate: (day) {
+      //   if (day.weekday == DateTime.sunday) return false;
+      //   if (_isHoliday(day)) return false;
+      //   return true;
+      // },
     );
     if (picked != null && picked != fechaDesembolso) {
       if (!context.mounted) return;

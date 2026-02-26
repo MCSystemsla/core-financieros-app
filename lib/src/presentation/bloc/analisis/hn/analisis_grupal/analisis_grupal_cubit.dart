@@ -50,11 +50,6 @@ class AnalisisGrupalCubit extends Cubit<AnalisisGrupalState> {
           totalGastos: totalGastos,
           flujoNeto: flujoNeto,
           comentarios: state.comentarios,
-          creditoNormal: state.creditoNormal,
-          creditoRefinanciado: state.creditoRefinanciado,
-          creditoReadecuado: state.creditoReadecuado,
-          recapitalizacion: state.recapitalizacion,
-          creditoParalelo: state.creditoParalelo,
         ),
       );
       emit(state.copyWith(status: Status.done));
@@ -145,15 +140,6 @@ class AnalisisGrupalCubit extends Cubit<AnalisisGrupalState> {
           ? (prev?.totalIngresos ?? 0)
           : state.totalIngresos,
       comentarios: _prefer(state.comentarios, prev?.comentarios),
-      creditoNormal: _preferBool(state.creditoNormal, prev?.creditoNormal),
-      creditoRefinanciado:
-          _preferBool(state.creditoRefinanciado, prev?.creditoRefinanciado),
-      creditoReadecuado:
-          _preferBool(state.creditoReadecuado, prev?.creditoReadecuado),
-      recapitalizacion:
-          _preferBool(state.recapitalizacion, prev?.recapitalizacion),
-      creditoParalelo:
-          _preferBool(state.creditoParalelo, prev?.creditoParalelo),
     );
   }
 
@@ -172,11 +158,6 @@ class AnalisisGrupalCubit extends Cubit<AnalisisGrupalState> {
         ingresosNegociosSalarios: solicitud?.ingresosNegociosSalarios,
         totalIngresos: solicitud?.totalIngresos,
         comentarios: solicitud?.comentarios,
-        creditoNormal: solicitud?.creditoNormal,
-        creditoRefinanciado: solicitud?.creditoRefinanciado,
-        creditoReadecuado: solicitud?.creditoReadecuado,
-        recapitalizacion: solicitud?.recapitalizacion,
-        creditoParalelo: solicitud?.creditoParalelo,
         numeroSolicitud: solicitud?.numeroSolicitud,
         tipoSolicitud: solicitud?.tipoSolicitud,
         uuid: solicitud?.uuid,
@@ -187,7 +168,4 @@ class AnalisisGrupalCubit extends Cubit<AnalisisGrupalState> {
 
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
-
-  bool _preferBool(bool? current, bool? previous) =>
-      current ?? previous ?? false;
 }

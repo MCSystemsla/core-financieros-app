@@ -308,11 +308,13 @@ class GetAnalsisChecksEndpointHN extends Endpoint {
   final int numeroSolicitud;
   final String tipoSolicitud;
   final String cedulaCliente;
+  final bool esGrupal;
 
   GetAnalsisChecksEndpointHN({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
     required this.cedulaCliente,
+    required this.esGrupal,
   });
 
   @override
@@ -330,6 +332,7 @@ class GetAnalsisChecksEndpointHN extends Endpoint {
         'database': LocalStorage().database,
         'TipoSolicitud': tipoSolicitud,
         'DocumentoCliente': cedulaCliente,
+        'EsGrupal': esGrupal.toString(),
       };
 }
 

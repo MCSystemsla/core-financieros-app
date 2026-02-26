@@ -30,6 +30,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
 import '../../../../../bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 
 class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
@@ -54,6 +55,9 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => CalculoCuotaCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => CalculoCuotaHnCubit(),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

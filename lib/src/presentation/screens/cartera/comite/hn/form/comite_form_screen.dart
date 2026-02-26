@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_da
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_seguros_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_sending_aprobacion_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/skeleton_card/skeleton_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -17,13 +19,18 @@ import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_pa
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
 
 class ComiteFormScreen extends StatelessWidget {
   final int numeroSolicitud;
   final String tipoSolicitud;
+  final int actaId;
   const ComiteFormScreen({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
+    required this.actaId,
     super.key,
   });
 
@@ -47,6 +54,11 @@ class ComiteFormScreen extends StatelessWidget {
               numeroSolicitud: numeroSolicitud,
               tipoSolicitud: tipoSolicitud,
             ),
+        ),
+        BlocProvider(
+          create: (ctx) => ComiteCalculoDatosCubit(
+            ComiteRepositoryHNImpl(),
+          ),
         ),
       ],
       child: Scaffold(
@@ -72,6 +84,7 @@ class ComiteFormScreen extends StatelessWidget {
                     _ComiteGeneralForm(
                       pageController: pageController,
                       data: state.data.data,
+                      actaId: actaId,
                     ),
                     _ComiteOtrosForm(
                       data: state.data.data,
@@ -95,11 +108,13 @@ class _ComiteOtrosForm extends StatefulWidget {
   State<_ComiteOtrosForm> createState() => _ComiteOtrosFormState();
 }
 
-class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
+class _ComiteOtrosFormState extends State<_ComiteOtrosForm>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
       key: formKey,
       child: SingleChildScrollView(
@@ -128,7 +143,7 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
                 AnalisisCardItem(
                   icon: Icons.production_quantity_limits,
                   label: 'Total bienes adjudicados',
-                  value: 2.toString(),
+                  value: 0.toString(),
                   color: Colors.purple,
                 ),
               ],
@@ -162,25 +177,32 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _ComiteGeneralForm extends StatefulWidget {
   final PageController pageController;
   final ComiteSolicitudData data;
-
+  final int actaId;
   const _ComiteGeneralForm({
     required this.pageController,
     required this.data,
+    required this.actaId,
   });
   @override
   State<_ComiteGeneralForm> createState() => _ComiteGeneralFormState();
 }
 
-class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
+class _ComiteGeneralFormState extends State<_ComiteGeneralForm>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
+  bool isCalcularDatosClicked = false;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Form(
       key: formKey,
       child: SingleChildScrollView(
@@ -223,11 +245,61 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
                 AnalisisCardItem(
                   icon: Icons.credit_card,
                   label: 'Total créditos a cancelar',
-                  value: 2.toString(),
+                  value: 0.toString(),
                   color: Colors.green,
                 ),
               ],
             ),
+            BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
+              listenWhen: (previous, current) =>
+                  previous.status != current.status,
+              listener: (context, state) {
+                if (state.status == Status.done) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Datos calculados exitosamente',
+                    onDone: () {
+                      context.pop();
+                    },
+                  ).showDialog(context, dialogType: DialogType.success);
+                }
+                if (state.status == Status.error) {
+                  CustomAlertDialog(
+                    context: context,
+                    title: state.errorMsg,
+                    onDone: () {
+                      context.pop();
+                    },
+                  ).showDialog(context, dialogType: DialogType.error);
+                }
+              },
+              builder: (context, state) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    enabled: state.status != Status.inProgress,
+                    text: state.status == Status.inProgress
+                        ? 'Creando...'
+                        : 'Calcular Datos',
+                    // ignore: deprecated_member_use
+                    color: Colors.indigo,
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+                      setState(() {
+                        isCalcularDatosClicked = true;
+                      });
+                      context.read<ComiteCalculoDatosCubit>().calcularDatos(
+                            actaID: widget.actaId,
+                          );
+                    },
+                  ),
+                );
+              },
+            ),
+            const Gap(20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
@@ -240,6 +312,14 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
                   if (!formKey.currentState!.validate()) return;
+                  if (!isCalcularDatosClicked) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: 'Debes primero calcular los datos para continuar',
+                      onDone: () => context.pop(),
+                    ).showDialog(context, dialogType: DialogType.warning);
+                    return;
+                  }
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn,
@@ -254,4 +334,7 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

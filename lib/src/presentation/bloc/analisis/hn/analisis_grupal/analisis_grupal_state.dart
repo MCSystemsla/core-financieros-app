@@ -21,11 +21,7 @@ class AnalisisGrupalState extends Equatable {
   final double totalGastos;
   final double flujoNeto;
   final String comentarios;
-  final bool creditoNormal;
-  final bool creditoRefinanciado;
-  final bool creditoReadecuado;
-  final bool recapitalizacion;
-  final bool creditoParalelo;
+
   const AnalisisGrupalState({
     this.idLocalResponse,
     this.uuid,
@@ -46,11 +42,6 @@ class AnalisisGrupalState extends Equatable {
     this.totalGastos = 0,
     this.flujoNeto = 0,
     this.comentarios = '',
-    this.creditoNormal = false,
-    this.creditoRefinanciado = false,
-    this.creditoReadecuado = false,
-    this.recapitalizacion = false,
-    this.creditoParalelo = false,
   });
 
   @override
@@ -72,11 +63,6 @@ class AnalisisGrupalState extends Equatable {
         totalGastos,
         flujoNeto,
         comentarios,
-        creditoNormal,
-        creditoRefinanciado,
-        creditoReadecuado,
-        recapitalizacion,
-        creditoParalelo,
       ];
 
   AnalisisGrupalState copyWith({
@@ -99,11 +85,6 @@ class AnalisisGrupalState extends Equatable {
     double? totalGastos,
     double? flujoNeto,
     String? comentarios,
-    bool? creditoNormal,
-    bool? creditoRefinanciado,
-    bool? creditoReadecuado,
-    bool? recapitalizacion,
-    bool? creditoParalelo,
   }) {
     return AnalisisGrupalState(
       idLocalResponse: idLocalResponse ?? this.idLocalResponse,
@@ -127,11 +108,6 @@ class AnalisisGrupalState extends Equatable {
       totalGastos: totalGastos ?? this.totalGastos,
       flujoNeto: flujoNeto ?? this.flujoNeto,
       comentarios: comentarios ?? this.comentarios,
-      creditoNormal: creditoNormal ?? this.creditoNormal,
-      creditoRefinanciado: creditoRefinanciado ?? this.creditoRefinanciado,
-      creditoReadecuado: creditoReadecuado ?? this.creditoReadecuado,
-      recapitalizacion: recapitalizacion ?? this.recapitalizacion,
-      creditoParalelo: creditoParalelo ?? this.creditoParalelo,
     );
   }
 }

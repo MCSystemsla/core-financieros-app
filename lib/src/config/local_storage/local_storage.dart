@@ -19,6 +19,10 @@ class LocalStorage {
     return prefs.getString('jwt') ?? '';
   }
 
+  String get refreshToken {
+    return prefs.getString('refreshToken') ?? '';
+  }
+
   String get database {
     return prefs.getString('database') ?? '';
   }
@@ -85,5 +89,9 @@ class LocalStorage {
 
   Future<void> setLastActiveTime(int lastActiveTime) async {
     await prefs.setInt('lastActiveTime', lastActiveTime);
+  }
+
+  Future<void> setRefreshToken(String expirationToken) async {
+    await prefs.setString('refreshToken', expirationToken);
   }
 }

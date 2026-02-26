@@ -21,11 +21,6 @@ class AnalisisGrupal {
   final double totalGastos;
   final double flujoNeto;
   final String comentarios;
-  final bool creditoNormal;
-  final bool creditoRefinanciado;
-  final bool creditoReadecuado;
-  final bool recapitalizacion;
-  final bool creditoParalelo;
 
   AnalisisGrupal({
     required this.database,
@@ -43,11 +38,6 @@ class AnalisisGrupal {
     required this.totalGastos,
     required this.flujoNeto,
     required this.comentarios,
-    required this.creditoNormal,
-    required this.creditoRefinanciado,
-    required this.creditoReadecuado,
-    required this.recapitalizacion,
-    required this.creditoParalelo,
   });
 
   factory AnalisisGrupal.fromJson(Map<String, dynamic> json) => AnalisisGrupal(
@@ -66,11 +56,6 @@ class AnalisisGrupal {
         totalGastos: json['TotalGastos']?.toDouble(),
         flujoNeto: json['FlujoNeto']?.toDouble(),
         comentarios: json['Comentarios'],
-        creditoNormal: json['CreditoNormal'],
-        creditoRefinanciado: json['CreditoRefinanciado'],
-        creditoReadecuado: json['CreditoReadecuado'],
-        recapitalizacion: json['Recapitalizacion'],
-        creditoParalelo: json['CreditoParalelo'],
       );
 
   Map<String, dynamic> toJson() {
@@ -93,11 +78,6 @@ class AnalisisGrupal {
       'TotalGastos': double.tryParse(totalGastos.toStringAsFixed(2)),
       'FlujoNeto': double.tryParse(flujoNeto.toStringAsFixed(2)),
       'Comentarios': comentarios,
-      'CreditoNormal': creditoNormal,
-      'CreditoRefinanciado': creditoRefinanciado,
-      'CreditoReadecuado': creditoReadecuado,
-      'Recapitalizacion': recapitalizacion,
-      'CreditoParalelo': creditoParalelo,
     };
     data.removeWhere((key, value) => value == '');
     return data;

@@ -125,3 +125,63 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
         'database': LocalStorage().database,
       };
 }
+
+class GetCalculosDatosEndpoint extends Endpoint {
+  final int actaID;
+  final String productoCodigo;
+  final num monto;
+  final int plazoMeses;
+  final String monedaCodigo;
+  final DateTime fechaPrimerPago;
+  final bool esRestructuracion;
+  final bool esMantieneTasa;
+  final String creditoCancelacion;
+  final String creditoCancelacion2;
+  final String formaPagoCodigo;
+  final double comisionSegurosFinanciado;
+  final String tipoCobroSaldoDeudorCodigo;
+  final String paisCodigo;
+
+  GetCalculosDatosEndpoint({
+    required this.actaID,
+    required this.productoCodigo,
+    required this.monto,
+    required this.plazoMeses,
+    required this.monedaCodigo,
+    required this.fechaPrimerPago,
+    required this.esRestructuracion,
+    required this.esMantieneTasa,
+    required this.creditoCancelacion,
+    required this.creditoCancelacion2,
+    required this.formaPagoCodigo,
+    required this.comisionSegurosFinanciado,
+    required this.tipoCobroSaldoDeudorCodigo,
+    required this.paisCodigo,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/obtener-calculo-datos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'ActaID': actaID.toString(),
+        'ProductoCodigo': productoCodigo,
+        'Monto': monto.toString(),
+        'Plazo': plazoMeses.toString(),
+        'MonedaCodigo': monedaCodigo,
+        'FechaPrimerPago': fechaPrimerPago.toUtc().toIso8601String(),
+        'EsReestructurado': esRestructuracion.toString(),
+        'EsMantieneTasa': esMantieneTasa.toString(),
+        'CreditoCancelacion1': creditoCancelacion.toString(),
+        'CreditoCancelacion2': creditoCancelacion2.toString(),
+        'FormaPagoCodigo': formaPagoCodigo,
+        'ComisionSegurosFinanciado': comisionSegurosFinanciado.toString(),
+        'TipoCobroSaldoDeudorCodigo': tipoCobroSaldoDeudorCodigo.toString(),
+      };
+}

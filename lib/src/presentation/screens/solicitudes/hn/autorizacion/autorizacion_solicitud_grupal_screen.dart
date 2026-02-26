@@ -53,7 +53,7 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Autorizacion de solicitud grupal'),
         ),
-        bottomNavigationBar: _FabButton(grupo: grupoActivoData),
+        bottomNavigationBar: const _FabButton(),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -178,11 +178,7 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
 }
 
 class _FabButton extends StatelessWidget {
-  final GrupoActivoData grupo;
-
-  const _FabButton({
-    required this.grupo,
-  });
+  const _FabButton();
 
   @override
   Widget build(BuildContext context) {

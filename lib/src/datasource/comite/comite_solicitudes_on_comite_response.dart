@@ -24,7 +24,7 @@ class ComiteOnSolicitudData {
   final int id;
   final String nombre;
   final DateTime fechaSolicitud;
-  final int monto;
+  final num monto;
   final String estado;
   final String numero;
   final String moneda;
@@ -52,7 +52,7 @@ class ComiteOnSolicitudData {
         id: json['ID'],
         nombre: json['Nombre'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
-        monto: json['Monto'],
+        monto: json['Monto'] ?? 0,
         estado: json['Estado'],
         numero: json['Numero'],
         moneda: json['Moneda'],

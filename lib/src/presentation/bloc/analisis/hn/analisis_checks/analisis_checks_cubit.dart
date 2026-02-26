@@ -14,6 +14,7 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
     required int numeroSolicitud,
     required String tipoSolicitud,
     required String cedulaCliente,
+    required bool esGrupal,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -21,6 +22,7 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
         cedulaCliente: cedulaCliente,
         numeroSolicitud: numeroSolicitud,
         tipoSolicitud: tipoSolicitud,
+        esGrupal: esGrupal,
       );
       emit(state.copyWith(
         status: Status.done,
@@ -30,6 +32,7 @@ class AnalisisChecksCubit extends Cubit<AnalisisChecksState> {
         tieneAnalisis: data.data.tieneAnalisis,
         tieneUbicacion: data.data.tieneUbicacion,
         tieneFotoNegocio: data.data.tieneFotoNegocio,
+        tieneSupervision: data.data.tieneSupervision,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

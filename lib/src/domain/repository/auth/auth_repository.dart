@@ -1,11 +1,13 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
@@ -18,6 +20,7 @@ abstract class AuthRepository {
   Future<ActionsResponse> getActions({required String database});
   Future<String> getLogo();
   Future<TutorialResponse> getTutorials();
+  Future<(String, String)> refreshToken();
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -106,6 +109,31 @@ class AuthRepositoryImpl extends AuthRepository {
           await _api.request(endpoint: endpoint, needToValidateToken: false);
       final tutorialResponse = TutorialResponse.fromJson(resp);
       return tutorialResponse;
+    } catch (e) {
+      _logger.e(e);
+      throw AppException(optionalMsg: e.toString());
+    }
+  }
+
+  @override
+  Future<(String, String)> refreshToken() async {
+    final endpoint = RefreshTokenEndpoint();
+    try {
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
+      if (resp['statusCode'] != 201) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (router.canPop()) {
+            router.go('/loading');
+          }
+        });
+        throw AppException(
+            optionalMsg:
+                'Una sesión ha expirado, por favor inicia sesión de nuevo.');
+      }
+      return (resp['accessToken'] as String, resp['refreshToken'] as String);
     } catch (e) {
       _logger.e(e);
       throw AppException(optionalMsg: e.toString());

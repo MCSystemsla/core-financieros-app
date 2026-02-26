@@ -27,6 +27,8 @@ import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
+
 class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
   final SolicitudAsalariadoHnDbLocal solicitudAsalariadoHnDbLocal;
   const CrearSolicitudAsalariadoOfflineScreen({
@@ -46,6 +48,9 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (ctx) => CalculoCuotaCubit(),
+        ),
+        BlocProvider(
+          create: (ctx) => CalculoCuotaHnCubit(),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

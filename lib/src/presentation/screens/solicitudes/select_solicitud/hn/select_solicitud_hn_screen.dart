@@ -70,8 +70,11 @@ class _SelectSolicitud extends StatelessWidget {
             if (actions.contains(TypeAction.autorizacion.codigo)) ...[
               const _SolicitudesCardsRow4(),
             ],
-            const Gap(20),
-            const _SolicitudesCardsRow5(),
+            if (actions
+                .contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
+              const Gap(20),
+              const _SolicitudesCardsRow5(),
+            ],
             const Gap(20),
           ],
         ),

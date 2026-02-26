@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_asalariado_hn_form.dart';
@@ -524,65 +523,6 @@ class AnalisisGrupalForm1 extends StatelessWidget {
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             comentarios: value,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    CustomSwitch(
-                      value: state.creditoNormal,
-                      subtitle: 'El credito es normal?',
-                      title: 'Credito Normal:',
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            creditoNormal: value,
-                          ),
-                        );
-                      },
-                    ),
-                    CustomSwitch(
-                      value: state.creditoRefinanciado,
-                      subtitle: 'El credito es refinanciado?',
-                      title: 'Credito Refinanciado:',
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            creditoRefinanciado: value,
-                          ),
-                        );
-                      },
-                    ),
-                    CustomSwitch(
-                      value: state.creditoReadecuado,
-                      subtitle: 'El credito es readecuado?',
-                      title: 'Credito Readecuado:',
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            creditoReadecuado: value,
-                          ),
-                        );
-                      },
-                    ),
-                    CustomSwitch(
-                      value: state.recapitalizacion,
-                      subtitle: 'El credito es recapitalizado?',
-                      title: 'Recapitalizacion:',
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(recapitalizacion: value),
-                        );
-                      },
-                    ),
-                    CustomSwitch(
-                      value: state.creditoParalelo,
-                      subtitle: 'El credito es paralelo?',
-                      title: 'Credito paralelo:',
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            creditoParalelo: value,
                           ),
                         );
                       },

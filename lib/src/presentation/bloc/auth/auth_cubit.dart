@@ -38,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
       }
       await saveCredentialsOnLocalStorage(
         accessToken: resp['accessToken'],
+        refreshToken: resp['refreshToken'] ?? '',
         dbName: dbName,
         userId: resp['usuarioId'],
         username: resp['username'],
@@ -59,12 +60,14 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> saveCredentialsOnLocalStorage({
     required String accessToken,
+    required String refreshToken,
     required String dbName,
     required String userId,
     required String username,
   }) async {
     await Future.wait([
       LocalStorage().setJWT(accessToken),
+      LocalStorage().setRefreshToken(refreshToken),
       LocalStorage().setDatabase(dbName),
       LocalStorage().setUserId(userId),
       LocalStorage().setCurrentUsername(username),

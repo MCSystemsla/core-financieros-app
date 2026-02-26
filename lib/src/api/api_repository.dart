@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -62,12 +61,10 @@ class DefaultAPIRepository implements APIRepository {
       };
       if (needToValidateToken && !await _isTokenValid()) {
         _logger.e('APIRepository - Token no valido');
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (router.canPop() || router.configuration != null) {
-            router.go('/loading');
-          }
-        });
-        throw Exception('Unauthorized: Redirecting to login...');
+
+        router.go('/login');
+
+        return {'statusCode': 401};
       }
       BitacoraService.registerBitacora(payload: body.toString());
     } catch (e) {
@@ -89,7 +86,7 @@ class DefaultAPIRepository implements APIRepository {
         return _formData(endpoint: endpoint, headers: headers);
       } else {
         final result = await requestDistributor(endpoint, url, headers);
-        return _handleResponse(result);
+        return _handleResponse(result, needToValidateToken);
       }
     } catch (e) {
       return _handlerError(e);
@@ -159,7 +156,8 @@ class DefaultAPIRepository implements APIRepository {
         .timeout(kHttpTimeout);
   }
 
-  Future<Map<String, dynamic>> _handleResponse(Response response) async {
+  Future<Map<String, dynamic>> _handleResponse(
+      Response response, bool needToValidateToken) async {
     _logger.d('Response - statusCode: ${response.statusCode}');
     final decodedBody = json.decode(response.body);
     // if (response.headers.containsKey('authorization')) {
@@ -168,8 +166,26 @@ class DefaultAPIRepository implements APIRepository {
     // } else if (decodedBody.containsKey('token')) {
     //   // LocalStorage(). = decodedBody['token'] ?? '';
     // }
+    // if (needToValidateToken && response.statusCode == 401) {
+    //   final (accessToken, refreshToken) =
+    //       await AuthRepositoryImpl().refreshToken();
+
+    //   await Future.wait([
+    //     LocalStorage().setJWT(accessToken),
+    //     LocalStorage().setRefreshToken(refreshToken),
+    //   ]);
+    // }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
+      // if (needToValidateToken) {
+      //   final (accessToken, refreshToken) =
+      //       await AuthRepositoryImpl().refreshToken();
+
+      //   await Future.wait([
+      //     LocalStorage().setJWT(accessToken),
+      //     LocalStorage().setRefreshToken(refreshToken),
+      //   ]);
+      // }
       Map<String, dynamic>? map = cast<Map<String, dynamic>>(decodedBody);
       if (map != null) {
         map.addAll({'statusCode': response.statusCode});

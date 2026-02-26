@@ -10,6 +10,7 @@ class AnalisisChecksState extends Equatable {
   final bool tieneAnalisis;
   final bool tieneUbicacion;
   final bool tieneFotoNegocio;
+  final bool tieneSupervision;
   const AnalisisChecksState({
     this.errorMsg = '',
     this.status = Status.notStarted,
@@ -19,6 +20,7 @@ class AnalisisChecksState extends Equatable {
     this.tieneAnalisis = false,
     this.tieneUbicacion = false,
     this.tieneFotoNegocio = false,
+    this.tieneSupervision = false,
   });
 
   @override
@@ -31,6 +33,7 @@ class AnalisisChecksState extends Equatable {
         tieneUbicacion,
         errorMsg,
         tieneFotoNegocio,
+        tieneSupervision,
       ];
 
   AnalisisChecksState copyWith({
@@ -42,6 +45,7 @@ class AnalisisChecksState extends Equatable {
     bool? tieneAnalisis,
     bool? tieneUbicacion,
     bool? tieneFotoNegocio,
+    bool? tieneSupervision,
   }) {
     return AnalisisChecksState(
       errorMsg: errorMsg ?? this.errorMsg,
@@ -52,6 +56,7 @@ class AnalisisChecksState extends Equatable {
       tieneAnalisis: tieneAnalisis ?? this.tieneAnalisis,
       tieneUbicacion: tieneUbicacion ?? this.tieneUbicacion,
       tieneFotoNegocio: tieneFotoNegocio ?? this.tieneFotoNegocio,
+      tieneSupervision: tieneSupervision ?? this.tieneSupervision,
     );
   }
 }

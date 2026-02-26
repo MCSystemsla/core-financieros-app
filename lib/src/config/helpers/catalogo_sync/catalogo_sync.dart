@@ -7,8 +7,8 @@ class CatalogoSync {
     final lastSyncDate = DateTime.fromMillisecondsSinceEpoch(lastSyncMillis);
     final now = DateTime.now();
     final difference = now.difference(lastSyncDate);
-    // Se debe sincronizar cada hora
-    return difference.inHours >= 1;
+    // Se debe sincronizar cada 5 horas
+    return difference.inHours >= 5;
   }
 
   static bool needToSync() {

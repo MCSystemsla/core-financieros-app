@@ -80,6 +80,7 @@ abstract class AnalisisRepositoryHn {
     required int numeroSolicitud,
     required String tipoSolicitud,
     required String cedulaCliente,
+    required bool esGrupal,
   });
   Future<FiadoresCheckResponse> fiadoresChecks({
     required int numeroSolicitud,
@@ -402,11 +403,13 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
     required int numeroSolicitud,
     required String tipoSolicitud,
     required String cedulaCliente,
+    required bool esGrupal,
   }) async {
     final endpoint = GetAnalsisChecksEndpointHN(
       numeroSolicitud: numeroSolicitud,
       tipoSolicitud: tipoSolicitud,
       cedulaCliente: cedulaCliente,
+      esGrupal: esGrupal,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

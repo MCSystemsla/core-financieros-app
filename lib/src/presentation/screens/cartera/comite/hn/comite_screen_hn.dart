@@ -3,7 +3,7 @@ import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repos
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitudes/comite_solicitudes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/comite/comite_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
@@ -50,11 +50,7 @@ class ComiteScreenHn extends StatelessWidget {
                     Status.inProgress => const Expanded(child: LoadingWidget()),
                     Status.error => OnErrorWidget(
                         errorMsg: state.errorMsg,
-                        onPressed: () {
-                          context
-                              .read<ComiteSolicitudesCubit>()
-                              .getComiteSolicitudes();
-                        },
+                        onPressed: () {},
                       ),
                     Status.done => _ListDataWidget(
                         data: state.data,
@@ -94,7 +90,16 @@ class _ListDataWidget extends StatelessWidget {
         itemCount: data.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          return CreditProductItemHN(
+          return ComiteCard(
+            title: 'ACTA: ${data[index].acta}',
+            fecha: data[index].fechaSolicitud,
+            estadoCodigo: data[index].estado,
+            monto: data[index].monto.toCurrencyString(),
+            nombreCliente: data[index].nombre,
+            nombrePromotor: nombrePromotor,
+            solicitudId: data[index].id.toString(),
+            sucursal: '',
+            tipoSolicitud: data[index].tipoSolicitud,
             onTap: () {
               Navigator.push(
                 context,
@@ -102,22 +107,11 @@ class _ListDataWidget extends StatelessWidget {
                   builder: (ctx) => ComiteFormScreen(
                     numeroSolicitud: int.parse(data[index].numero),
                     tipoSolicitud: data[index].tipoSolicitud,
+                    actaId: data[index].id,
                   ),
                 ),
               );
             },
-            isAsesorAsignado: true,
-            tipoSolicitud: data[index].tipoSolicitud,
-            solicitudId: data[index].id.toString(),
-            title: 'Numero Solicitud: ${data[index].numero}',
-            fecha: data[index].fechaSolicitud,
-            monto: data[index].monto.toCurrencyString(
-                  mantissaLength: 0,
-                ),
-            estadoCodigo: data[index].estado,
-            sucursal: 'N/A',
-            nombreCliente: data[index].nombre,
-            nombrePromotor: nombrePromotor,
           );
         },
       ),

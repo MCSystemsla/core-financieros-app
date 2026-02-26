@@ -79,3 +79,18 @@ class TutorailEndpoint extends Endpoint {
   @override
   String get path => '/tutorial/movil';
 }
+
+class RefreshTokenEndpoint extends Endpoint {
+  RefreshTokenEndpoint();
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/auth/refresh';
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().refreshToken}',
+      };
+}

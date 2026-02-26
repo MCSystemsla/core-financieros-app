@@ -8,6 +8,11 @@ int? parseInt(dynamic value) {
   if (value is int) return value;
   return int.tryParse(value.toString());
 }
+double? parseDouble(dynamic value) {
+  if (value == null) return null;
+  if (value is double) return value;
+  return double.tryParse(value.toString());
+}
 
 bool? parseBool(dynamic value) {
   if (value == null) return null;

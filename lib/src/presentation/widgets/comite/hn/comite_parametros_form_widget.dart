@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
+import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+
 class ComiteParametrosForm extends StatefulWidget {
   final ComiteSolicitudData data;
   const ComiteParametrosForm({
@@ -34,6 +36,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ComiteAprobacionCubit>();
+    final calculosCubit = context.read<ComiteCalculoDatosCubit>();
     return BlocBuilder<ComiteAprobacionCubit, ComiteAprobacionState>(
       builder: (context, state) {
         return FadeIn(
@@ -63,11 +66,21 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                   ),
                 ),
                 const Gap(12),
-                CustomSwitch(
-                  title: 'Es Reestructuración',
-                  subtitle: 'Comité reestructurado?',
-                  value: false,
-                  onChanged: (v) {},
+                BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                  builder: (context, state) {
+                    return CustomSwitch(
+                      value: state.esRestructuracion,
+                      title: 'Es Reestructuración',
+                      subtitle: 'Comité reestructurado?',
+                      onChanged: (v) {
+                        calculosCubit.onFieldChanged(
+                          () => state.copyWith(
+                            esRestructuracion: v,
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
                 const Divider(),
                 const Gap(12),
@@ -81,6 +94,9 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                         alVencimiento: v,
                       ),
                     );
+                    setState(() {
+                      alVencimiento = v;
+                    });
                   },
                 ),
                 const Divider(),
@@ -93,11 +109,21 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                 ),
                 const Divider(),
                 const Gap(12),
-                CustomSwitch(
-                  title: 'Mantener tasa interés de crédito anterior',
-                  subtitle: 'Mantendrá tasa interés de crédito anterior?',
-                  value: false,
-                  onChanged: (v) {},
+                BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                  builder: (context, state) {
+                    return CustomSwitch(
+                      title: 'Mantener tasa interés de crédito anterior',
+                      subtitle: 'Mantendrá tasa interés de crédito anterior?',
+                      value: state.esMantieneTasa,
+                      onChanged: (v) {
+                        calculosCubit.onFieldChanged(
+                          () => state.copyWith(
+                            esMantieneTasa: v,
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
                 const Gap(12),
                 CustomSwitch(
