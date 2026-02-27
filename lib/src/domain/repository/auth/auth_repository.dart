@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.da
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
-import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
@@ -119,24 +118,27 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<(String, String)> refreshToken() async {
     final endpoint = RefreshTokenEndpoint();
     try {
-      final resp = await _api.request(
-        endpoint: endpoint,
-        needToValidateToken: false,
-      );
-      if (resp['statusCode'] != 201) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (router.canPop()) {
-            router.go('/loading');
-          }
-        });
+      final resp = await _api.request(endpoint: endpoint);
+      final statusCode = resp['statusCode'];
+
+      if (statusCode != 201) {
+        _logger.e('APIRepository - Token no valido');
+        Future.microtask(() => router.go('/login'));
+
         throw AppException(
-            optionalMsg:
-                'Una sesión ha expirado, por favor inicia sesión de nuevo.');
+          optionalMsg:
+              'Una sesión ha expirado, por favor inicia sesión de nuevo.',
+        );
       }
-      return (resp['accessToken'] as String, resp['refreshToken'] as String);
-    } catch (e) {
-      _logger.e(e);
-      throw AppException(optionalMsg: e.toString());
+      return (
+        resp['accessToken'] as String,
+        resp['refreshToken'] as String,
+      );
+    } catch (e, s) {
+      _logger.e('Error en refreshToken', error: e, stackTrace: s);
+      Future.microtask(() => router.go('/login'));
+
+      rethrow;
     }
   }
 }

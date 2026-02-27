@@ -4,7 +4,6 @@ import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_respo
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_servicios_acta_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
-import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

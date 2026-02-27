@@ -6,12 +6,12 @@ import 'dart:io';
 
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:logger/logger.dart';
 
 import '../../global_locator.dart';
@@ -59,13 +59,6 @@ class DefaultAPIRepository implements APIRepository {
         'method': endpoint.method.name.toUpperCase(),
         'body': endpoint.body,
       };
-      if (needToValidateToken && !await _isTokenValid()) {
-        _logger.e('APIRepository - Token no valido');
-
-        router.go('/login');
-
-        return {'statusCode': 401};
-      }
       BitacoraService.registerBitacora(payload: body.toString());
     } catch (e) {
       _logger.e('APIRepository - Error parse uri$e ');
@@ -85,8 +78,28 @@ class DefaultAPIRepository implements APIRepository {
       if (endpoint.typeBody == TypeBody.formData) {
         return _formData(endpoint: endpoint, headers: headers);
       } else {
-        final result = await requestDistributor(endpoint, url, headers);
-        return _handleResponse(result, needToValidateToken);
+        Response response = await requestDistributor(endpoint, url, headers);
+
+// 🔥 Si es 401 y no es el refresh
+        if (response.statusCode == 401 &&
+            needToValidateToken &&
+            endpoint is! RefreshTokenEndpoint) {
+          try {
+            // 1️⃣ Refresh
+            final (accessToken, refreshToken) =
+                await AuthRepositoryImpl().refreshToken();
+
+            await LocalStorage().setJWT(accessToken);
+            await LocalStorage().setRefreshToken(refreshToken);
+
+            headers['Authorization'] = 'Bearer ${LocalStorage().jwt}';
+            response = await requestDistributor(endpoint, url, headers);
+          } catch (e) {
+            return {'statusCode': 401, 'message': 'Unauthorized'};
+          }
+        }
+
+        return _handleResponse(response, needToValidateToken);
       }
     } catch (e) {
       return _handlerError(e);
@@ -314,14 +327,4 @@ class AddFileModel {
         'key': key,
         'path': path,
       };
-}
-
-Future<bool> _isTokenValid() async {
-  final token = LocalStorage().jwt;
-
-  if (token == null || token.isEmpty) {
-    return false;
-  }
-
-  return !JwtDecoder.isExpired(token);
 }

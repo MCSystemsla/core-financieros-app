@@ -26,8 +26,7 @@ class _GrupalSendingAnalisisHnState extends State<GrupalSendingAnalisisHn> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisGrupalCubit, AnalisisGrupalState>(
-      listener: (context, state) {},
+    return BlocBuilder<AnalisisGrupalCubit, AnalisisGrupalState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
