@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/reportes/hn/reportes_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -200,14 +201,13 @@ class _CarteraContentWidget extends StatelessWidget {
               ModuleCard(
                 visible: (flavor == Flavor.honduras &&
                     state.connectionStatus == ConnectionStatus.connected),
-                // visible: (!isProdMode),
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (_) => const ComiteScreenHn(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ReportesScreenHn(),
+                    ),
+                  );
                 },
                 title: 'Reporteria',
                 subtitle: 'Módulo de Reporteria',
