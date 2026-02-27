@@ -1,7 +1,6 @@
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/risk_control/risk_control_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form3.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form4.dart';
@@ -58,16 +57,16 @@ class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
                         );
                   },
                 ),
-                RiskControlScreen(
-                  nombre1: userByDocumentProvider.primerNombre,
-                  nombre2: userByDocumentProvider.segundoNombre,
-                  apellido1: userByDocumentProvider.primerApellido,
-                  apellido2: userByDocumentProvider.segundoApellido,
-                  tipoIdentificacion: userByDocumentProvider.tipoDocumento,
-                  identificacion: userByDocumentProvider.cedula,
-                  tipoOrganizacion: 'PERSONANATURAL',
-                  pageController: pageController,
-                ),
+                // RiskControlScreen(
+                //   nombre1: userByDocumentProvider.primerNombre,
+                //   nombre2: userByDocumentProvider.segundoNombre,
+                //   apellido1: userByDocumentProvider.primerApellido,
+                //   apellido2: userByDocumentProvider.segundoApellido,
+                //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
+                //   identificacion: userByDocumentProvider.cedula,
+                //   tipoOrganizacion: 'PERSONANATURAL',
+                //   pageController: pageController,
+                // ),
                 NuevaMenorForm1(
                   controller: pageController,
                   userByDocumentHn: UserDocumentDataHN(

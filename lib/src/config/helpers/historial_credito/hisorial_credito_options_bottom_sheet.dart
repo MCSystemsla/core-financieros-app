@@ -14,53 +14,55 @@ void showHistorialCreditoOptionsBottomSheet({
     backgroundColor: Colors.transparent,
     isScrollControlled: false,
     builder: (_) {
-      return Container(
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 15,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(20),
+      return SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(8),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 15,
+                offset: const Offset(0, -5),
               ),
-            ),
-            const Gap(10),
-            _OptionTile(
-              icon: Icons.edit_outlined,
-              text: 'Editar',
-              iconColor: AppColors.getPrimaryColor(),
-              onTap: () {
-                Navigator.pop(context);
-                onEdit();
-              },
-            ),
-            const Divider(height: 0),
-            _OptionTile(
-              icon: Icons.delete_outline,
-              text: 'Eliminar',
-              iconColor: Colors.redAccent,
-              onTap: () {
-                Navigator.pop(context);
-                onDelete();
-              },
-            ),
-            const SizedBox(height: 5),
-          ],
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade400,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              const Gap(10),
+              _OptionTile(
+                icon: Icons.edit_outlined,
+                text: 'Editar',
+                iconColor: AppColors.getPrimaryColor(),
+                onTap: () {
+                  Navigator.pop(context);
+                  onEdit();
+                },
+              ),
+              const Divider(height: 0),
+              _OptionTile(
+                icon: Icons.delete_outline,
+                text: 'Eliminar',
+                iconColor: Colors.redAccent,
+                onTap: () {
+                  Navigator.pop(context);
+                  onDelete();
+                },
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
         ),
       );
     },

@@ -230,7 +230,7 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
             tipoSolicitudString: widget.data[index].tipoSolicitud,
             index: index,
             title:
-                'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}',
+                'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}\n${widget.data[index].nombreGrupo ?? ''}',
             subtitle: widget.data[index].nombreCompleto ?? 'N/A',
             description: widget.data[index].monto?.toCurrencyString() ?? 'N/A',
             esGrupal: widget.data[index].esSolicitudGrupal,

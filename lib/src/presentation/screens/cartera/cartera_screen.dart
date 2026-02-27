@@ -197,6 +197,28 @@ class _CarteraContentWidget extends StatelessWidget {
                   size: 35,
                 ),
               ),
+              ModuleCard(
+                visible: (flavor == Flavor.honduras &&
+                    state.connectionStatus == ConnectionStatus.connected),
+                // visible: (!isProdMode),
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (_) => const ComiteScreenHn(),
+                  //   ),
+                  // );
+                },
+                title: 'Reporteria',
+                subtitle: 'Módulo de Reporteria',
+                firstColor: const Color(0xFF2C003E),
+                secondColor: const Color(0xFF512DA8),
+                icon: const Icon(
+                  Icons.edit_document,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
             ],
           ),
         );

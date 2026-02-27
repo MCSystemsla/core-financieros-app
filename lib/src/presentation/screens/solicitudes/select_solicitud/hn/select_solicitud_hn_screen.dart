@@ -114,7 +114,7 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
           Expanded(
             child: SolicitudCard(
               svgPath: ImageAsset.nuevaMenorBg6,
-              title: 'Solicitudes Grupales',
+              title: 'Grupales',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -143,7 +143,7 @@ class _SolicitudesCardsRow5 extends StatelessWidget {
         Expanded(
           child: SolicitudCard(
             svgPath: ImageAsset.nuevaMenorBg5,
-            title: 'Actualizacion de solicitudes crédito',
+            title: 'Modificacion de solicitudes crédito',
             onPressed: () {
               Navigator.push(
                 context,

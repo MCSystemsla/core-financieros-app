@@ -91,11 +91,17 @@ class AnalisisCreditCardHn extends StatelessWidget {
                       color: Colors.indigo.withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.account_balance_outlined,
-                      size: 24,
-                      color: Colors.indigo,
-                    ),
+                    child: esGrupal
+                        ? const Icon(
+                            Icons.group_sharp,
+                            size: 24,
+                            color: Colors.indigo,
+                          )
+                        : const Icon(
+                            Icons.account_balance_outlined,
+                            size: 24,
+                            color: Colors.indigo,
+                          ),
                   ),
                   const Gap(16),
                   Expanded(

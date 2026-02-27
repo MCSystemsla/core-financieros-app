@@ -9,7 +9,6 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/signa
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_asalariado/user_by_document_asalariado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/risk_control/risk_control_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -100,16 +99,16 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
                           );
                     },
                   ),
-                RiskControlScreen(
-                  nombre1: userByDocumentProvider.primerNombre,
-                  nombre2: userByDocumentProvider.segundoNombre,
-                  apellido1: userByDocumentProvider.primerApellido,
-                  apellido2: userByDocumentProvider.segundoApellido,
-                  tipoIdentificacion: userByDocumentProvider.tipoDocumento,
-                  identificacion: userByDocumentProvider.cedula,
-                  tipoOrganizacion: 'PERSONANATURAL',
-                  pageController: pageController,
-                ),
+                // RiskControlScreen(
+                //   nombre1: userByDocumentProvider.primerNombre,
+                //   nombre2: userByDocumentProvider.segundoNombre,
+                //   apellido1: userByDocumentProvider.primerApellido,
+                //   apellido2: userByDocumentProvider.segundoApellido,
+                //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
+                //   identificacion: userByDocumentProvider.cedula,
+                //   tipoOrganizacion: 'PERSONANATURAL',
+                //   pageController: pageController,
+                // ),
                 AsalariadoHnForm1(
                   controller: pageController,
                   userByDocumentHnData: UserDocumentDataHN(

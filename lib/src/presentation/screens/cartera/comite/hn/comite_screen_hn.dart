@@ -50,7 +50,11 @@ class ComiteScreenHn extends StatelessWidget {
                     Status.inProgress => const Expanded(child: LoadingWidget()),
                     Status.error => OnErrorWidget(
                         errorMsg: state.errorMsg,
-                        onPressed: () {},
+                        onPressed: () {
+                          context
+                              .read<ComiteSolicitudesCubit>()
+                              .getComiteSolicitudes();
+                        },
                       ),
                     Status.done => _ListDataWidget(
                         data: state.data,
