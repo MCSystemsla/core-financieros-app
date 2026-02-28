@@ -33,7 +33,7 @@ class ComiteDatosDelCreditoForm extends StatefulWidget {
 
 class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
     with AutomaticKeepAliveClientMixin {
-  DateTime? fechaVencimiento;
+  DateTime fechaVencimiento = DateTime.now();
   DateTime? fechaPrimerPago;
   String? productoCodigo;
   @override
@@ -220,7 +220,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               const Gap(20),
               OutlineTextfieldWidget(
                 readOnly: true,
-                hintText: fechaVencimiento?.selectorFormat(),
+                hintText: fechaVencimiento.selectorFormat(),
                 onTap: () async {
                   final date = await pickDate(context);
                   if (date == null) return;

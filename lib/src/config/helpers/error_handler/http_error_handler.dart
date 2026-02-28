@@ -47,7 +47,7 @@ enum ErrorNetworkCode {
   }
   if (msg.contains('unauthorized')) {
     return (
-      'Acceso Denegado: ${resp['message']}',
+      '${resp['message']}, Favor cerrar sesión y volver a iniciar sesión',
       ErrorNetworkCode.unauthorized
     );
   }

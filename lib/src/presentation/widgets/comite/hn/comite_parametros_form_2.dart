@@ -236,8 +236,9 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               const Gap(12),
               OutlineTextfieldWidget(
                 readOnly: true,
-                initialValue:
-                    widget.data.periodoGracia.toString().toNullIfEmptyOrZero(),
+                initialValue: widget.data.periodoGracia
+                    ?.toCurrencyString()
+                    .toNullIfEmptyOrZero(),
                 title: 'Periodo de gracia',
                 icon: Icon(
                   Icons.inventory_2_outlined,

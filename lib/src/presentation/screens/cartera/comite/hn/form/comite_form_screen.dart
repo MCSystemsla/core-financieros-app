@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_da
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_seguros_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_sending_aprobacion_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_user_info.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_card_list_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/skeleton_card/skeleton_card.dart';
@@ -220,6 +221,9 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm>
                       fontWeight: FontWeight.bold,
                     ),
               ),
+            ),
+            ComiteUserInfoWidget(
+              data: widget.data,
             ),
             ComiteParametrosForm(
               data: widget.data,
