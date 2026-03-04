@@ -444,8 +444,10 @@ class _AnalisisFiadoresDatosGeneralesState
                   title: 'RTN:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
+                  validator: (value) => ClassValidator.validateRTN(value),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(14),
                   ],
                   onChange: (value) {
                     cubit.onFieldChanged(

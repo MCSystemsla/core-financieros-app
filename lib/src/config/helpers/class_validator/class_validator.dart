@@ -175,4 +175,44 @@ class ClassValidator {
 
     return null;
   }
+
+  static String? validateRTN(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+
+    final rtn = value.trim();
+
+    if (!RegExp(r'^[0-9]+$').hasMatch(rtn)) {
+      return 'El RTN solo debe contener números';
+    }
+
+    if (rtn.length != 14) {
+      return 'El RTN debe tener 14 dígitos';
+    }
+
+    // No todos los dígitos iguales
+    if (RegExp(r'^(\d)\1+$').hasMatch(rtn)) {
+      return 'RTN inválido';
+    }
+
+    final departamento = int.parse(rtn.substring(0, 2));
+    final year = int.parse(rtn.substring(4, 8));
+    final correlativo = rtn.substring(8, 14);
+
+    if (departamento < 1 || departamento > 18) {
+      return 'Código de departamento inválido';
+    }
+
+    final currentYear = DateTime.now().year;
+    if (year < 1900 || year > currentYear) {
+      return 'Año inválido en el RTN';
+    }
+
+    if (correlativo == '000000') {
+      return 'Correlativo inválido';
+    }
+
+    return null;
+  }
 }

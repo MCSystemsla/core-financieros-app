@@ -556,9 +556,10 @@ class _UpdateSolicitudNuevaMenorForm1State
                       ),
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.characters,
+                      validator: (value) => ClassValidator.validateRTN(value),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
+                        LengthLimitingTextInputFormatter(14),
                       ],
                       title: 'Registro Tributario Nacional (RTN)',
                       onChange: (value) {

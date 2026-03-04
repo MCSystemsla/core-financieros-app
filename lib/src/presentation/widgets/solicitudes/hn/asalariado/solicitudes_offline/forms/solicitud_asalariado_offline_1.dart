@@ -443,9 +443,10 @@ class _SolicitudAsalariadoOffline1State
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.characters,
                       title: 'Rtn',
+                      validator: (value) => ClassValidator.validateRTN(value),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
+                        LengthLimitingTextInputFormatter(14),
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(

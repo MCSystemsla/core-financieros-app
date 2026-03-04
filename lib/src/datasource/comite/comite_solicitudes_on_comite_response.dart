@@ -1,17 +1,22 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+
 SolicitudesOnComiteResponse comiteSolicitudesResponseFromJson(String str) =>
     SolicitudesOnComiteResponse.fromJson(json.decode(str));
 
 class SolicitudesOnComiteResponse {
+  MetaDataPagination metaDataPagination;
   final List<ComiteOnSolicitudData> data;
 
   SolicitudesOnComiteResponse({
     required this.data,
+    required this.metaDataPagination,
   });
 
   factory SolicitudesOnComiteResponse.fromJson(Map<String, dynamic> json) =>
       SolicitudesOnComiteResponse(
+        metaDataPagination: MetaDataPagination.fromJson(json['metaData']),
         data: List<ComiteOnSolicitudData>.from(
             json['data'].map((x) => ComiteOnSolicitudData.fromJson(x))),
       );

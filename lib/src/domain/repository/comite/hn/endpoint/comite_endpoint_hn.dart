@@ -123,6 +123,8 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+        'Page': 1.toString(),
+        // 'NumeroSolicitud': 477.toString(),
       };
 }
 
