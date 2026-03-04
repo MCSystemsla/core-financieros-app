@@ -28,6 +28,7 @@ class ComiteSolicitudData {
   final int? actaNumero;
   final String? numeroSolicitud;
   final String? nombreProducto;
+  final String? codigoProducto;
   final String? nombreCompletoCliente;
   final bool? esReestructuracion;
   final bool? cuotaNivelada;
@@ -65,6 +66,7 @@ class ComiteSolicitudData {
   final String? observacion;
   final double? tasaSaldoDeudor;
   final num? montoSeguroVida;
+  final int? oficialCreditoID;
 
   const ComiteSolicitudData({
     this.id,
@@ -108,6 +110,8 @@ class ComiteSolicitudData {
     this.observacion,
     this.tasaSaldoDeudor,
     this.montoSeguroVida,
+    this.oficialCreditoID,
+    this.codigoProducto,
   });
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -155,6 +159,8 @@ class ComiteSolicitudData {
         observacion: json['Observacion'],
         tasaSaldoDeudor: json['TasaSaldoDeudor']?.toDouble(),
         montoSeguroVida: json['MontoSeguroVida'],
+        oficialCreditoID: json['OficialCreditoID'],
+        codigoProducto: json['ProductoCodigo'],
       );
 
   Map<String, dynamic> toJson() => {

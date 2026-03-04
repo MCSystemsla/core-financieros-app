@@ -13,7 +13,18 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
   final ComiteRepositoryHN _repository;
   ComiteAprobacionCubit(this._repository) : super(ComiteAprobacionInitial());
 
-  Future<void> comiteAprobacion({required String monto}) async {
+  Future<void> comiteAprobacion({
+    required String monto,
+    required double porcentajeComision,
+    required double montoSeguro,
+    required double tasaInteresCorriente,
+    required double tasaInteresMoratorio,
+    required double montoSinComision,
+    required double seguoMemorialMensual,
+    required double porcentajeSaldoDeudorAprobado,
+    required double montoTelemedicinaAprobada,
+    required double seguroMapfre,
+  }) async {
     emit(state.copyWith(status: Status.inProgress));
     final montoInt = double.tryParse(monto) ?? 0;
     final nuevaMenorMil = global<SolicitudesHnBoxService>()
@@ -21,23 +32,53 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
     final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;
     final isMenorMil = montoInt <= nuevaMenorMilMonto;
     try {
-      await _repository.crearAprobacion(
-        data: ComiteAprobacion(
-          isMenorMil: isMenorMil,
-          esRecalculado: state.esRecalculado,
-          alVencimiento: state.alVencimiento,
-          aprobacionDigital: state.aprobacionDigital,
-          numeroSolicitud: state.numeroSolicitud,
-          tipoSolicitudCodigo: state.tipoSolicitudCodigo,
+      final msg = await _repository.crearAprobacion(
+          data: ComiteAprobacion(
+        numeroSolicitud: state.numeroSolicitud,
+        observacion: state.observacion,
+        formaPagoCodigo: state.fromaPagoCodigo,
+        tipoSolicitudCodigo: state.tipoSolicitudCodigo,
+        productoCodigo: state.productoCodigo,
+        isMenorMil: isMenorMil,
+        modificaActa: ModificaActa(
+          monto: state.monto,
+          montoSeguro: montoSeguro,
+          porcentajeComision: porcentajeComision,
+          plazo: state.plazo,
+          sectorCodigo: state.sectorCodigo,
+          actividadCodigo: state.actividadCodigo,
+          fuenteFinanciamientoCodigo: state.fuenteFinanciamientoCodigo,
+          tasaInteresCorriente: tasaInteresCorriente,
+          tasaInteresMoratorio: tasaInteresMoratorio,
+          monedaDesembolsoCodigo: state.monedaDesembolsoCodigo,
+          tipoDesembolsoCodigo: state.tipoDesembolsoCodigo,
+          promotorId: state.promotorId,
+          esReestructurado: state.esReestructurado,
+          comisionFinanciada: state.comisionFinanciada,
+          cuotaNivelada: state.cuotaNivelada,
+          montoSinComision: montoSinComision,
+          periodoGracia: state.periodoGracia,
+          esRetencion: state.esRetencion,
+          seguroMemorialMensual: seguoMemorialMensual,
+          porcentajeSaldoDeudorAprobado: porcentajeSaldoDeudorAprobado,
+          montoTelemedicinaAprobada: montoTelemedicinaAprobada,
+          porcentajeAgricolaAprobado: state.porcentajeAgricolaAprobado,
+          tasaMillarSeguroMapfre: seguroMapfre,
+          numeroBienAdj: state.numeroBienAdj,
+          tipoCreditoNombre: state.tipoCreditoNombre,
+          tipoProgramaCodigo: state.tipoProgramaCodigo,
+        ),
+        insertaAprobacion: InsertaAprobacion(
           estadoSolicitudCodigo: state.estadoSolicitudCodigo,
-          fromaPagoCodigo: state.fromaPagoCodigo,
           periodicidadPrinicipalCodigo: state.periodicidadPrinicipalCodigo,
           periodicidadInteresCodigo: state.periodicidadInteresCodigo,
-          fechaAprobacion: DateTime.tryParse(state.fechaAprobacion),
-          observacion: state.observacion,
+          alVencimiento: state.alVencimiento,
+          tipoComiteAprobacionCodigo: state.tipoComiteAprobacionCodigo,
+          aprobacionDigital: state.aprobacionDigital,
+          esRecalculado: state.esRecalculado,
         ),
-      );
-      emit(state.copyWith(status: Status.done));
+      ));
+      emit(state.copyWith(status: Status.done, respMsg: msg));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,

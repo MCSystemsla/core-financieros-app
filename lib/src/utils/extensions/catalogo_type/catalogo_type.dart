@@ -27,7 +27,9 @@ enum CatalogoType {
   empleados('EMPLEADOS'),
   producto('PRODUCTO'),
   cargosDisponibles('CARGOSDISPONIBLES'),
-  gruposActivos('GRUPOSACTIVOS');
+  gruposActivos('GRUPOSACTIVOS'),
+  programa('PROGRAMA'),
+  tipoDesembolsos('TIPOSDESEMBOLSOS');
 
   final String codigo;
 

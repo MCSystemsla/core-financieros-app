@@ -132,6 +132,7 @@ class SolicitudAslariadoHnState extends Equatable {
   final String cedulaConyuge;
   final String tipoDocumentoConyugeCodigo;
   final double cuotaWithDecimal;
+  final ClientSignatureStatus clientSignatureStatus;
   const SolicitudAslariadoHnState({
     this.cuotaWithDecimal = 0,
     this.idSolicitud = '',
@@ -263,6 +264,7 @@ class SolicitudAslariadoHnState extends Equatable {
     this.historialCredito = const [],
     this.cedulaConyuge = '',
     this.tipoDocumentoConyugeCodigo = '',
+    this.clientSignatureStatus = ClientSignatureStatus.unknown,
   });
 
   @override
@@ -394,6 +396,7 @@ class SolicitudAslariadoHnState extends Equatable {
         aldeaCodigo,
         cedulaConyuge,
         tipoDocumentoConyugeCodigo,
+        clientSignatureStatus,
       ];
 
   SolicitudAslariadoHnState copyWith({
@@ -527,6 +530,7 @@ class SolicitudAslariadoHnState extends Equatable {
     String? cedulaConyuge,
     String? tipoDocumentoConyugeCodigo,
     double? cuotaWithDecimal,
+    ClientSignatureStatus? clientSignatureStatus,
   }) {
     return SolicitudAslariadoHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -686,6 +690,8 @@ class SolicitudAslariadoHnState extends Equatable {
       tipoDocumentoConyugeCodigo:
           tipoDocumentoConyugeCodigo ?? this.tipoDocumentoConyugeCodigo,
       cuotaWithDecimal: cuotaWithDecimal ?? this.cuotaWithDecimal,
+      clientSignatureStatus:
+          clientSignatureStatus ?? this.clientSignatureStatus,
     );
   }
 }

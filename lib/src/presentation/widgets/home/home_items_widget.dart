@@ -31,7 +31,7 @@ class HomeItemsWidget extends StatelessWidget {
 
     List<HomeItemCard> homeItemData = [
       HomeItemCard(
-        visible: actions.contains(TypeAction.menuCartera.codigo),
+        // visible: actions.contains(TypeAction.menuCartera.codigo),
         title: 'home.item5'.tr(),
         subtitle: 'Descripcion',
         icon: const Icon(

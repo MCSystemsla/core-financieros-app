@@ -4,9 +4,11 @@ import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_calculo_datos_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_fuentes_financiamiento_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_tipos_credito_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/endpoint/comite_endpoint_hn.dart';
 import 'package:logger/logger.dart';
@@ -30,10 +32,12 @@ abstract class ComiteRepositoryHN {
   Future<void> crearServicios({
     required ComiteCreateServiceSchema data,
   });
-  Future<void> crearAprobacion({
+  Future<String> crearAprobacion({
     required ComiteAprobacion data,
   });
   Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite();
+  Future<ComiteTiposCreditoResponse> obtenerTiposCredito();
+  Future<ComiteFuentesFinanciamientoResponse> obtenerFuentesFinanciamientos();
   Future<ComiteCalculoDatosResponse> obtenerCalculoDatos({
     required int actaID,
     required String productoCodigo,
@@ -135,7 +139,7 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
   }
 
   @override
-  Future<void> crearAprobacion({required ComiteAprobacion data}) async {
+  Future<String> crearAprobacion({required ComiteAprobacion data}) async {
     final endpoint = ComiteCrearAprobacionEndpoint(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -144,6 +148,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+      final message = resp['message']?.toString();
+      return message ?? 'Acta de Comite aprobada exitosamente';
     } catch (e) {
       _logger.e(e);
       rethrow;
@@ -212,6 +218,43 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
       }
       _logger.i(resp);
       final data = ComiteCalculoDatosResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ComiteTiposCreditoResponse> obtenerTiposCredito() async {
+    final endpoint = ObtenerTiposCreditosHNEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = ComiteTiposCreditoResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ComiteFuentesFinanciamientoResponse>
+      obtenerFuentesFinanciamientos() async {
+    final endpoint = ObtenerFuentesFinanciamientosHNEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = ComiteFuentesFinanciamientoResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

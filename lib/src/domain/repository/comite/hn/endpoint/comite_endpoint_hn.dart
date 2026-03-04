@@ -185,3 +185,35 @@ class GetCalculosDatosEndpoint extends Endpoint {
         'TipoCobroSaldoDeudorCodigo': tipoCobroSaldoDeudorCodigo.toString(),
       };
 }
+
+class ObtenerFuentesFinanciamientosHNEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/obtener-fuentes-financiamiento';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
+
+class ObtenerTiposCreditosHNEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/obtener-tipos-credito';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

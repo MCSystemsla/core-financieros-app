@@ -69,6 +69,11 @@ class VerifyClientSignatureSheet extends StatelessWidget {
               const Gap(18),
               ClientSignatureListData(
                 onClientNoPossibleSignatureTap: () {
+                  context
+                      .read<SolicitudNuevaMenorHnCubit>()
+                      .setClientSignatureStatus(
+                        status: ClientSignatureStatus.noPossible,
+                      );
                   context.pop();
                   context.pushTransparentRoute(BlocProvider.value(
                     value: context.read<SolicitudNuevaMenorHnCubit>(),
@@ -80,6 +85,11 @@ class VerifyClientSignatureSheet extends StatelessWidget {
                   ));
                 },
                 onClientPossibleSignatureTap: () {
+                  context
+                      .read<SolicitudNuevaMenorHnCubit>()
+                      .setClientSignatureStatus(
+                        status: ClientSignatureStatus.yes,
+                      );
                   context.pop();
                   context.pushTransparentRoute(
                     BlocProvider.value(

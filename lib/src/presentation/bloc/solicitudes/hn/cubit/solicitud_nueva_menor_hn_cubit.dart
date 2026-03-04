@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nu
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
@@ -177,6 +178,14 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     }
   }
 
+  setClientSignatureStatus({required ClientSignatureStatus status}) {
+    emit(
+      state.copyWith(
+        clientSignatureStatus: status,
+      ),
+    );
+  }
+
   sendCedulaImages({
     required String numeroSolicitud,
     required String cedulaCliente,
@@ -194,15 +203,19 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
   }
 
   Future<void> sendClientSignatureWhenSolicitudCreditoCreated({
-    required int idSolicitud,
+    required String numeroSolicitud,
     required String tipoSolicitud,
     required String firmaCliente,
+    required String documentoCliente,
+    required ClientSignatureStatus clientSignatureStatus,
   }) async {
     try {
       await _repository.sendClientSignatureWhenSolicitudCreditoCreated(
-        idSolicitud: idSolicitud,
+        numeroSolicitud: numeroSolicitud,
         tipoSolicitud: tipoSolicitud,
         firmaCliente: firmaCliente,
+        documentoCliente: documentoCliente,
+        clientSignatureStatus: clientSignatureStatus,
       );
     } catch (_) {}
   }

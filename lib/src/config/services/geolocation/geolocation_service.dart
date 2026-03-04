@@ -20,7 +20,7 @@ class GeolocationService {
 
       return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(seconds: 30),
+        timeLimit: const Duration(seconds: 60),
       );
     } catch (e) {
       await ErrorReporter.registerError(

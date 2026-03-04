@@ -28,6 +28,7 @@ import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/analisis_endpoint_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/endpoint/solicitudes_credito_hn_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -148,9 +149,11 @@ abstract class SolicitudesCreditoHnRepository {
   });
 
   Future<(bool, String)> sendClientSignatureWhenSolicitudCreditoCreated({
-    required int idSolicitud,
+    required String numeroSolicitud,
     required String tipoSolicitud,
     required String firmaCliente,
+    required String documentoCliente,
+    required ClientSignatureStatus clientSignatureStatus,
   });
   Future<int?> getRolId();
 }
@@ -1053,20 +1056,25 @@ class SolicitudesCreditoHnRepositoryImpl
 
   @override
   Future<(bool, String)> sendClientSignatureWhenSolicitudCreditoCreated({
-    required int idSolicitud,
+    required String numeroSolicitud,
     required String tipoSolicitud,
     required String firmaCliente,
+    required String documentoCliente,
+    required ClientSignatureStatus clientSignatureStatus,
   }) async {
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
     const url =
         '$protocol://$apiUrl/cartera/solicitudes/general/subir-firma-digital';
+    final puedeFirmar = clientSignatureStatus == ClientSignatureStatus.yes;
 
     try {
       var request = http.MultipartRequest('PATCH', Uri.parse(url));
       request.fields['TipoSolicitud'] = tipoSolicitud;
-      request.fields['IdSolicitud'] = idSolicitud.toString();
+      request.fields['NumeroSolicitud'] = numeroSolicitud;
       request.fields['database'] = LocalStorage().database;
+      request.fields['DocumentoCliente'] = documentoCliente;
+      request.fields['PuedeFirmar'] = puedeFirmar.toString();
       request.files.add(await http.MultipartFile.fromPath(
         'FirmaPreImpresa',
         firmaCliente,

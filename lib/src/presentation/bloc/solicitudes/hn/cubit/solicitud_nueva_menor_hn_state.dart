@@ -176,6 +176,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final String apellidosConyugue;
   final String tipoDocumentoConyugue;
   final double cuotaWithDecimal;
+  final ClientSignatureStatus clientSignatureStatus;
 
   const SolicitudNuevaMenorHnState({
     this.cuotaWithDecimal = 0,
@@ -352,6 +353,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     this.fechaDesembolso = '',
     this.apellidosConyugue = '',
     this.tipoDocumentoConyugue = '',
+    this.clientSignatureStatus = ClientSignatureStatus.unknown,
   });
 
   @override
@@ -529,6 +531,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
         descripcionDestino,
         ingresosNetos,
         tipoDocumentoConyugue,
+        clientSignatureStatus,
       ];
 
   SolicitudNuevaMenorHnState copyWith({
@@ -706,6 +709,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     String? apellidosConyugue,
     String? tipoDocumentoConyugue,
     double? cuotaWithDecimal,
+    ClientSignatureStatus? clientSignatureStatus,
   }) {
     return SolicitudNuevaMenorHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -938,6 +942,8 @@ class SolicitudNuevaMenorHnState extends Equatable {
       tipoDocumentoConyugue:
           tipoDocumentoConyugue ?? this.tipoDocumentoConyugue,
       cuotaWithDecimal: cuotaWithDecimal ?? this.cuotaWithDecimal,
+      clientSignatureStatus:
+          clientSignatureStatus ?? this.clientSignatureStatus,
     );
   }
 }

@@ -11,7 +11,28 @@ import 'package:go_router/go_router.dart';
 
 class ComiteSendingAprobacionWidget extends StatefulWidget {
   final String monto;
-  const ComiteSendingAprobacionWidget({super.key, required this.monto});
+  final double porcentajeComision;
+  final double montoSeguro;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
+  final double montoSinComision;
+  final double seguoMemorialMensual;
+  final double porcentajeSaldoDeudorAprobado;
+  final double montoTelemedicinaAprobada;
+  final double seguroMapfre;
+  const ComiteSendingAprobacionWidget({
+    super.key,
+    required this.monto,
+    required this.porcentajeComision,
+    required this.montoSeguro,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
+    required this.montoSinComision,
+    required this.seguoMemorialMensual,
+    required this.porcentajeSaldoDeudorAprobado,
+    required this.montoTelemedicinaAprobada,
+    required this.seguroMapfre,
+  });
 
   @override
   State<ComiteSendingAprobacionWidget> createState() =>
@@ -25,6 +46,15 @@ class _ComiteSendingAprobacionWidgetState
     super.initState();
     context.read<ComiteAprobacionCubit>().comiteAprobacion(
           monto: widget.monto,
+          montoSeguro: widget.montoSeguro,
+          porcentajeComision: widget.porcentajeComision,
+          porcentajeSaldoDeudorAprobado: widget.porcentajeSaldoDeudorAprobado,
+          montoSinComision: widget.montoSinComision,
+          seguoMemorialMensual: widget.seguoMemorialMensual,
+          seguroMapfre: widget.seguroMapfre,
+          tasaInteresCorriente: widget.tasaInteresCorriente,
+          tasaInteresMoratorio: widget.tasaInteresMoratorio,
+          montoTelemedicinaAprobada: widget.montoTelemedicinaAprobada,
         );
   }
 
@@ -59,7 +89,7 @@ class _ComiteSendingAprobacionWidgetState
                 child: DownloadCatalogoLoading(
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: 'Acta de comite aprobada exitosamente!!\n\n',
+                  text: state.respMsg,
                   repeat: false,
                   isUploadingForms: true,
                   onDownloadComplete: () => Navigator.pushReplacement(
@@ -76,6 +106,17 @@ class _ComiteSendingAprobacionWidgetState
                 onPressed: () {
                   context.read<ComiteAprobacionCubit>().comiteAprobacion(
                         monto: widget.monto,
+                        montoSeguro: widget.montoSeguro,
+                        porcentajeComision: widget.porcentajeComision,
+                        porcentajeSaldoDeudorAprobado:
+                            widget.porcentajeSaldoDeudorAprobado,
+                        montoSinComision: widget.montoSinComision,
+                        seguoMemorialMensual: widget.seguoMemorialMensual,
+                        seguroMapfre: widget.seguroMapfre,
+                        tasaInteresCorriente: widget.tasaInteresCorriente,
+                        tasaInteresMoratorio: widget.tasaInteresMoratorio,
+                        montoTelemedicinaAprobada:
+                            widget.montoTelemedicinaAprobada,
                       );
                 },
               ),

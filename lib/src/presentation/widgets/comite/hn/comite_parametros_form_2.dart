@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -6,10 +8,15 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecu
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/fuentes_financiamientos_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/tipos_credito_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
@@ -30,19 +37,27 @@ class ComiteParametrosForm2 extends StatefulWidget {
 
 class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
   String? formadePago;
+  String? formadePagoNombre;
   String? estado;
   String? monedaDesembolso;
   String? periodicidadPrincipalCodigo;
+  String? periodicidadPrincipalNombre;
   String? observaciones;
+  String? fuenteFinanciamientoNombre;
+  String? fuenteFinanciamientoCodigo;
 
   @override
   void initState() {
     super.initState();
-    formadePago = widget.data.formaDePagoCodigo;
+    formadePago = widget.data.formaDePagoCodigo ?? 'MEN';
+    formadePagoNombre = widget.data.formaDePagoNombre;
     estado = widget.data.estadoComiteCodigo;
     monedaDesembolso = widget.data.monedaNombre;
-    periodicidadPrincipalCodigo = widget.data.periodicidadCodigo;
+    periodicidadPrincipalCodigo = widget.data.periodicidadCodigo ?? 'MEN';
+    periodicidadPrincipalNombre = widget.data.periodicidadNombre;
     observaciones = widget.data.observacion;
+    fuenteFinanciamientoCodigo = widget.data.fuenteFinanciamientoCodigo;
+    fuenteFinanciamientoNombre = widget.data.fuenteFinanciamientoNombre;
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
@@ -51,6 +66,14 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
         estadoSolicitudCodigo: estado,
         periodicidadPrinicipalCodigo: periodicidadPrincipalCodigo,
         observacion: observaciones,
+        monedaDesembolsoCodigo: widget.data.monedaCodigo,
+        tipoDesembolsoCodigo: widget.data.tipoDesembolsoCodigo,
+        tipoCreditoNombre: widget.data.tipoCreditoNombre,
+        tipoProgramaCodigo: widget.data.tipoProgramaCodigo,
+        actividadCodigo: widget.data.actividadCodigo,
+        sectorCodigo: widget.data.sectorCodigo,
+        periodoGracia: widget.data.periodoGracia,
+        fuenteFinanciamientoCodigo: fuenteFinanciamientoCodigo,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -89,7 +112,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 padding: const EdgeInsets.only(left: 16, top: 20),
                 child: Text(
                   'Parametros',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -103,6 +126,8 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 codigo: 'MONEDA',
                 enabled: true,
                 title: 'Moneda de desembolso',
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 onChanged: (item) {
                   if (item == null) return;
                   calculosCubit.onFieldChanged(
@@ -110,14 +135,36 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                       monedaCodigo: item.value,
                     ),
                   );
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      monedaDesembolsoCodigo: item.value,
+                    ),
+                  );
+                },
+              ),
+              const Gap(12),
+              SearchDropdownWidget(
+                codigo: CatalogoType.tipoDesembolsos.codigo,
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                enabled: true,
+                title: 'Tipo Desembolso',
+                onChanged: (item) {
+                  if (item == null) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tipoDesembolsoCodigo: item.value,
+                    ),
+                  );
                 },
               ),
               const Gap(12),
               OutlineTextfieldWidget(
+                readOnly: true,
                 initialValue: estado,
                 title: 'Estado',
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.star_outline_sharp,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
@@ -128,8 +175,8 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
                 selectedItem: CatalogoFrecuenciaItem(
-                  valor: formadePago ?? '',
-                  nombre: formadePago ?? '',
+                  valor: formadePago ?? 'MEN',
+                  nombre: formadePagoNombre ?? 'MENSUAL',
                   meses: '',
                 ),
                 title: 'Forma de pago',
@@ -137,6 +184,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                     ClassValidator.validateRequired(value?.valor),
                 onChanged: (value) {
                   if (value == null) return;
+                  log('Forma de pago: ${value.valor}');
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
                       fromaPagoCodigo: value.valor,
@@ -151,6 +199,11 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
+                selectedItem: CatalogoFrecuenciaItem(
+                  valor: periodicidadPrincipalCodigo ?? 'MEN',
+                  nombre: periodicidadPrincipalNombre ?? 'MENSUAL',
+                  meses: '',
+                ),
                 title: 'Periodicidad principal',
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.valor),
@@ -178,32 +231,63 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                     ClassValidator.validateRequired(value?.valor),
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                initialValue: widget.data.sectorNombre,
-                readOnly: true,
+              SearchDropdownWidget(
                 title: 'Sector',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
+                codigo: CatalogoType.sectorEconomico.codigo,
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
+                selectedItem: Item(
+                  name: widget.data.sectorNombre ?? '',
+                  value: widget.data.sectorCodigo,
                 ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
+                onChanged: (item) {
+                  if (item == null) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      sectorCodigo: item.value,
+                    ),
+                  );
+                },
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                initialValue: widget.data.actividadNombre,
-                title: 'Actividad',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
+              // SearchDropdownWidget(
+              //   title: 'Actividad',
+              //   codigo: CatalogoType.actividadEconomica.codigo,
+              //   validator: (value) =>
+              //       ClassValidator.validateRequired(value?.value),
+              //   selectedItem: Item(
+              //     name: widget.data.actividadNombre ?? '',
+              //     value: widget.data.actividadCodigo,
+              //   ),
+              //   onChanged: (item) {
+              //     if (item == null) return;
+              //     cubit.onFieldChanged(
+              //       () => cubit.state.copyWith(
+              //         actividadCodigo: item.value,
+              //       ),
+              //     );
+              //   },
+              // ),
+              CatalogoActividadesCNBSDropdown(
+                selectedItem: ActiivdadCNBS(
+                  esAPNFD: false,
+                  valor: widget.data.actividadCodigo ?? '',
+                  nombre: widget.data.actividadNombre ?? '',
                 ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
+                isRequired: true,
+                enabled: true,
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.valor),
+                hintText: 'selecciona actividad económica',
+                onChanged: (item) {
+                  if (item == null || !mounted) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      actividadCodigo: item.valor,
+                    ),
+                  );
+                },
+                title: 'Actividad',
               ),
               const Gap(12),
               OutlineTextfieldWidget(
@@ -211,7 +295,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 initialValue: widget.data.nombreOficialCredito,
                 title: 'Promotor',
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.person,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
@@ -220,62 +304,71 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 onChange: (value) {},
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                initialValue: widget.data.fuenteFinanciamientoNombre,
-                title: 'Fuente de financiamiento',
-                readOnly: true,
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
+              FuentesFinanciamientosDropdown(
+                selectedItem: Item(
+                  name: fuenteFinanciamientoNombre ?? '',
+                  value: fuenteFinanciamientoCodigo,
                 ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
+                onChanged: (item) {
+                  if (item == null) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      fuenteFinanciamientoCodigo: item.value,
+                    ),
+                  );
+                },
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
               ),
               const Gap(12),
               OutlineTextfieldWidget(
-                readOnly: true,
                 initialValue: widget.data.periodoGracia
                     ?.toCurrencyString()
                     .toNullIfEmptyOrZero(),
                 title: 'Periodo de gracia',
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.timer,
                   color: AppColors.getPrimaryColor(),
                 ),
+                textInputType: TextInputType.number,
                 inputFormatters: [
-                  UpperCaseTextFormatter(),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
-                onChange: (value) {},
+                onChange: (value) {
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      periodoGracia: int.tryParse(value) ?? 0,
+                    ),
+                  );
+                },
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                initialValue: widget.data.tipoCreditoNombre,
-                title: 'Tipo de crédito',
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
+              TiposCreditoDropdown(
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value.toString()),
+                onChanged: (item) {
+                  if (item == null) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tipoCreditoNombre: item.name,
+                    ),
+                  );
+                },
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                initialValue: widget.data.tipoProgramaNombre,
+              SearchDropdownWidget(
+                codigo: CatalogoType.programa.codigo,
+                validator: (value) =>
+                    ClassValidator.validateRequired(value?.value),
                 title: 'Programa',
-                readOnly: true,
-                icon: Icon(
-                  Icons.inventory_2_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
+                onChanged: (item) {
+                  if (item == null) return;
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tipoProgramaCodigo: item.value,
+                    ),
+                  );
+                },
               ),
               const Gap(12),
               OutlineTextfieldWidget(
@@ -283,7 +376,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 title: 'Observaciones',
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.comment,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
@@ -303,7 +396,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 hintText: state.data?.data.montoSolicitado.toCurrencyString(),
                 title: 'Monto Solicitado',
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.monitor_heart_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
@@ -317,7 +410,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 hintText: state.data?.data.montoTotal.toCurrencyString(),
                 title: 'Monto Total',
                 icon: Icon(
-                  Icons.inventory_2_outlined,
+                  Icons.monitor_heart_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [

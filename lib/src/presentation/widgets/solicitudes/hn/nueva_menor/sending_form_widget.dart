@@ -31,6 +31,7 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
   Widget build(BuildContext context) {
     final dbProvider = global<SolicitudesHnBoxService>();
     final cedula = context.read<SolicitudNuevaMenorHnCubit>().state.cedula;
+
     final signatureFile = dbProvider.getSignatureByCedula(
       cedula,
       TypeForm.nueva,
@@ -52,8 +53,10 @@ class _SendingFormWidgetHNState extends State<SendingFormWidgetHN> {
               .read<SolicitudNuevaMenorHnCubit>()
               .sendClientSignatureWhenSolicitudCreditoCreated(
                 firmaCliente: signatureFile?.imageSignature ?? 'NO PATH',
-                idSolicitud: int.tryParse(state.idSolicitud) ?? 0,
+                numeroSolicitud: state.numeroSolicitud,
                 tipoSolicitud: 'NUEVAMENOR',
+                documentoCliente: cedula,
+                clientSignatureStatus: state.clientSignatureStatus,
               );
 
           // context

@@ -5,18 +5,15 @@ SolicitudesOnComiteResponse comiteSolicitudesResponseFromJson(String str) =>
 
 class SolicitudesOnComiteResponse {
   final List<ComiteOnSolicitudData> data;
-  final String nombrePromotor;
 
   SolicitudesOnComiteResponse({
     required this.data,
-    required this.nombrePromotor,
   });
 
   factory SolicitudesOnComiteResponse.fromJson(Map<String, dynamic> json) =>
       SolicitudesOnComiteResponse(
         data: List<ComiteOnSolicitudData>.from(
             json['data'].map((x) => ComiteOnSolicitudData.fromJson(x))),
-        nombrePromotor: json['NombrePromotor'],
       );
 }
 
@@ -32,6 +29,8 @@ class ComiteOnSolicitudData {
   final String acta;
   final String solicitud;
   final String tipoSolicitud;
+  final String nombrePromotor;
+  final int promotorID;
 
   ComiteOnSolicitudData({
     required this.id,
@@ -45,6 +44,8 @@ class ComiteOnSolicitudData {
     required this.acta,
     required this.solicitud,
     required this.tipoSolicitud,
+    required this.nombrePromotor,
+    required this.promotorID,
   });
 
   factory ComiteOnSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -60,5 +61,7 @@ class ComiteOnSolicitudData {
         acta: json['Acta'],
         solicitud: json['Solicitud'],
         tipoSolicitud: json['TipoSolicitud'],
+        nombrePromotor: json['NombrePromotor'],
+        promotorID: json['PromotorID'],
       );
 }

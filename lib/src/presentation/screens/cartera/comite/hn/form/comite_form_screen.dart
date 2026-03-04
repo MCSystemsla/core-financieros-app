@@ -23,6 +23,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+import '../../../../../bloc/comite/fuentes_financiamientos/fuentes_financiamientos_cubit.dart';
+import '../../../../../bloc/comite/tipos_credito/tipos_credito_cubit.dart';
 
 class ComiteFormScreen extends StatelessWidget {
   final int numeroSolicitud;
@@ -37,12 +39,13 @@ class ComiteFormScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = ComiteRepositoryHNImpl();
     final pageController = PageController();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (ctx) => ComiteSolicitudCubit(
-            ComiteRepositoryHNImpl(),
+            repository,
           )..getComiteSolicitud(
               numeroSolicitud: numeroSolicitud,
               tipoSolicitud: tipoSolicitud,
@@ -50,7 +53,7 @@ class ComiteFormScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => ComiteAprobacionCubit(
-            ComiteRepositoryHNImpl(),
+            repository,
           )..setNumeroSolicitudAndTipoSolicitud(
               numeroSolicitud: numeroSolicitud,
               tipoSolicitud: tipoSolicitud,
@@ -58,8 +61,18 @@ class ComiteFormScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => ComiteCalculoDatosCubit(
-            ComiteRepositoryHNImpl(),
+            repository,
           ),
+        ),
+        BlocProvider(
+          create: (ctx) => FuentesFinanciamientosCubit(
+            repository,
+          )..getFuentesFinanciamientos(),
+        ),
+        BlocProvider(
+          create: (ctx) => TiposCreditoCubit(
+            repository,
+          )..getTiposCredito(),
         ),
       ],
       child: Scaffold(
@@ -81,6 +94,7 @@ class ComiteFormScreen extends StatelessWidget {
                 ),
               Status.done => PageView(
                   controller: pageController,
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     _ComiteGeneralForm(
                       pageController: pageController,
@@ -116,64 +130,91 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Form(
-      key: formKey,
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Gap(20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 20),
-              child: Text(
-                'Otros',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-            ComiteSegurosDesembolsoForm(
-              data: widget.data,
-            ),
-            AnalisisCardListHn(
-              title: 'Bienes Adjudicados',
-              onTap: () {},
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.production_quantity_limits,
-                  label: 'Total bienes adjudicados',
-                  value: 0.toString(),
-                  color: Colors.purple,
-                ),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                // ignore: deprecated_member_use
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<ComiteAprobacionCubit>(),
-                        child: ComiteSendingAprobacionWidget(
-                          monto: widget.data.monto.toString(),
-                        ),
+    return SafeArea(
+      child: Form(
+        key: formKey,
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Gap(20),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20),
+                child: Text(
+                  'Otros',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
+                ),
+              ),
+              ComiteSegurosDesembolsoForm(
+                data: widget.data,
+              ),
+              AnalisisCardListHn(
+                title: 'Bienes Adjudicados',
+                onTap: () {},
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.production_quantity_limits,
+                    label: 'Total bienes adjudicados',
+                    value: 0.toString(),
+                    color: Colors.purple,
+                  ),
+                ],
+              ),
+              BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                builder: (context, state) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    child: CustomElevatedButton(
+                      // ignore: deprecated_member_use
+                      color: AppColors.greenLatern.withOpacity(0.4),
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<ComiteAprobacionCubit>(),
+                              child: ComiteSendingAprobacionWidget(
+                                monto: widget.data.monto.toString(),
+                                montoSinComision:
+                                    state.data?.data.montoSolicitado ?? 0,
+                                montoTelemedicinaAprobada:
+                                    state.data?.data.seguros.telemedicina ?? 0,
+                                seguroMapfre:
+                                    state.data?.data.seguros.mapfre ?? 0,
+                                tasaInteresCorriente: state.data?.data.interes
+                                        .tasaInteresCorriente ??
+                                    0,
+                                tasaInteresMoratorio: state.data?.data.interes
+                                        .tasaInteresMoratorio ??
+                                    0,
+                                montoSeguro: state
+                                        .data?.data.seguros.montoTotalSeguros ??
+                                    0,
+                                porcentajeComision:
+                                    state.data?.data.comision.tasa ?? 0,
+                                porcentajeSaldoDeudorAprobado:
+                                    state.data?.data.comision.monto ?? 0,
+                                seguoMemorialMensual:
+                                    state.data?.data.seguros.vida ?? 0,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      text: 'Aprobar Comité',
                     ),
                   );
                 },
-                text: 'Aprobar Comité',
               ),
-            ),
-            const Gap(20),
-          ],
+              const Gap(20),
+            ],
+          ),
         ),
       ),
     );
@@ -204,136 +245,140 @@ class _ComiteGeneralFormState extends State<_ComiteGeneralForm>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Form(
-      key: formKey,
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Gap(20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 20),
-              child: Text(
-                'General',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-            ComiteUserInfoWidget(
-              data: widget.data,
-            ),
-            ComiteParametrosForm(
-              data: widget.data,
-            ),
-            const Gap(12),
-            ComiteDatosDelCreditoForm(
-              data: widget.data,
-            ),
-            const Gap(12),
-            ComiteComisionEnDesembolsoForm(
-              data: widget.data,
-              numeroSolicitud: int.tryParse(widget.data.numeroSolicitud!) ?? 0,
-            ),
-            const Gap(12),
-            ComiteParametrosForm2(
-              data: widget.data,
-            ),
-            const Gap(12),
-            AnalisisCardListHn(
-              title: 'Créditos a cancelar',
-              onTap: () {},
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.credit_card,
-                  label: 'Total créditos a cancelar',
-                  value: 0.toString(),
-                  color: Colors.green,
+    return SafeArea(
+      child: Form(
+        key: formKey,
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Gap(20),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 20),
+                child: Text(
+                  'General',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-              ],
-            ),
-            BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
-              buildWhen: (previous, current) =>
-                  previous.status != current.status,
-              listenWhen: (previous, current) =>
-                  previous.status != current.status,
-              listener: (context, state) {
-                if (state.status == Status.done) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Datos calculados exitosamente',
-                    onDone: () {
-                      context.pop();
-                    },
-                  ).showDialog(context, dialogType: DialogType.success);
-                }
-                if (state.status == Status.error) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: state.errorMsg,
-                    onDone: () {
-                      context.pop();
-                    },
-                  ).showDialog(context, dialogType: DialogType.error);
-                }
-              },
-              builder: (context, state) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    enabled: state.status != Status.inProgress,
-                    text: state.status == Status.inProgress
-                        ? 'Creando...'
-                        : 'Calcular Datos',
-                    // ignore: deprecated_member_use
-                    color: Colors.indigo,
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      setState(() {
-                        isCalcularDatosClicked = true;
-                      });
-                      context.read<ComiteCalculoDatosCubit>().calcularDatos(
-                            actaID: widget.actaId,
-                          );
-                    },
+              ),
+              ComiteUserInfoWidget(
+                data: widget.data,
+              ),
+              ComiteParametrosForm(
+                data: widget.data,
+              ),
+              const Gap(12),
+              ComiteDatosDelCreditoForm(
+                data: widget.data,
+              ),
+              const Gap(12),
+              ComiteComisionEnDesembolsoForm(
+                data: widget.data,
+                numeroSolicitud:
+                    int.tryParse(widget.data.numeroSolicitud!) ?? 0,
+              ),
+              const Gap(12),
+              ComiteParametrosForm2(
+                data: widget.data,
+              ),
+              const Gap(12),
+              AnalisisCardListHn(
+                title: 'Créditos a cancelar',
+                onTap: () {},
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.credit_card,
+                    label: 'Total créditos a cancelar',
+                    value: 0.toString(),
+                    color: Colors.green,
                   ),
-                );
-              },
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                // enabled: state.status != Status.inProgress,
-                // text: state.status == Status.inProgress
-                //     ? 'Creando...'
-                //     : 'Crear',
-                // ignore: deprecated_member_use
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  if (!isCalcularDatosClicked) {
+                ],
+              ),
+              BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                buildWhen: (previous, current) =>
+                    previous.status != current.status,
+                listenWhen: (previous, current) =>
+                    previous.status != current.status,
+                listener: (context, state) {
+                  if (state.status == Status.done) {
                     CustomAlertDialog(
                       context: context,
-                      title: 'Debes primero calcular los datos para continuar',
-                      onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.warning);
-                    return;
+                      title: 'Datos calculados exitosamente',
+                      onDone: () {
+                        context.pop();
+                      },
+                    ).showDialog(context, dialogType: DialogType.success);
                   }
-                  widget.pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
+                  if (state.status == Status.error) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: state.errorMsg,
+                      onDone: () {
+                        context.pop();
+                      },
+                    ).showDialog(context, dialogType: DialogType.error);
+                  }
+                },
+                builder: (context, state) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    width: double.infinity,
+                    child: CustomElevatedButton(
+                      enabled: state.status != Status.inProgress,
+                      text: state.status == Status.inProgress
+                          ? 'Calculando...'
+                          : 'Calcular Datos',
+                      // ignore: deprecated_member_use
+                      color: Colors.indigo,
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) return;
+                        setState(() {
+                          isCalcularDatosClicked = true;
+                        });
+                        context.read<ComiteCalculoDatosCubit>().calcularDatos(
+                              actaID: widget.actaId,
+                            );
+                      },
+                    ),
                   );
                 },
-                text: 'Siguiente',
               ),
-            ),
-            const Gap(20),
-          ],
+              const Gap(20),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  // enabled: state.status != Status.inProgress,
+                  // text: state.status == Status.inProgress
+                  //     ? 'Creando...'
+                  //     : 'Crear',
+                  // ignore: deprecated_member_use
+                  color: AppColors.greenLatern.withOpacity(0.4),
+                  onPressed: () {
+                    if (!formKey.currentState!.validate()) return;
+                    if (!isCalcularDatosClicked) {
+                      CustomAlertDialog(
+                        context: context,
+                        title:
+                            'Debes primero calcular los datos para continuar',
+                        onDone: () => context.pop(),
+                      ).showDialog(context, dialogType: DialogType.warning);
+                      return;
+                    }
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  text: 'Siguiente',
+                ),
+              ),
+              const Gap(20),
+            ],
+          ),
         ),
       ),
     );

@@ -294,7 +294,13 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
               const Gap(18),
               ClientSignatureListData(
                 onClientNoPossibleSignatureTap: () {
+                  context
+                      .read<SolicitudAslariadoHnCubit>()
+                      .setClientSignatureStatus(
+                        status: ClientSignatureStatus.noPossible,
+                      );
                   context.pop();
+
                   context.pushTransparentRoute(BlocProvider.value(
                     value: context.read<SolicitudAslariadoHnCubit>(),
                     child: VerifyClientIfNotPossibleToSignWidget(
@@ -305,6 +311,11 @@ class VerifyClientSignatureSheetAsalariado extends StatelessWidget {
                   ));
                 },
                 onClientPossibleSignatureTap: () {
+                  context
+                      .read<SolicitudAslariadoHnCubit>()
+                      .setClientSignatureStatus(
+                        status: ClientSignatureStatus.yes,
+                      );
                   context.pop();
                   context.pushTransparentRoute(
                     BlocProvider.value(

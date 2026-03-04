@@ -58,7 +58,6 @@ class ComiteScreenHn extends StatelessWidget {
                       ),
                     Status.done => _ListDataWidget(
                         data: state.data,
-                        nombrePromotor: state.nombrePromotor,
                       ),
                     _ => const SizedBox(),
                   };
@@ -75,10 +74,8 @@ class ComiteScreenHn extends StatelessWidget {
 
 class _ListDataWidget extends StatelessWidget {
   final List<ComiteOnSolicitudData> data;
-  final String nombrePromotor;
   const _ListDataWidget({
     required this.data,
-    required this.nombrePromotor,
   });
   @override
   Widget build(BuildContext context) {
@@ -100,7 +97,7 @@ class _ListDataWidget extends StatelessWidget {
             estadoCodigo: data[index].estado,
             monto: data[index].monto.toCurrencyString(),
             nombreCliente: data[index].nombre,
-            nombrePromotor: nombrePromotor,
+            nombrePromotor: data[index].nombrePromotor,
             solicitudId: data[index].id.toString(),
             sucursal: '',
             tipoSolicitud: data[index].tipoSolicitud,

@@ -36,16 +36,20 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
   DateTime fechaVencimiento = DateTime.now();
   DateTime? fechaPrimerPago;
   String? productoCodigo;
+  String? productoNombre;
   @override
   void initState() {
     super.initState();
     fechaPrimerPago = widget.data.fechaPrimerPagoAprobacion;
-    productoCodigo = widget.data.nombreProducto;
+    productoCodigo = widget.data.codigoProducto;
+    productoNombre = widget.data.nombreProducto;
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaAprobacion: fechaPrimerPago?.toUtc().toIso8601String(),
+        productoCodigo: productoCodigo,
+        plazo: widget.data.plazoSolicitud,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -60,6 +64,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
   Widget build(BuildContext context) {
     super.build(context);
     final calculosCubit = context.read<ComiteCalculoDatosCubit>();
+    final cubit = context.read<ComiteAprobacionCubit>();
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -91,7 +96,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               const Gap(12),
               SearchDropdownWidget(
                 selectedItem: Item(
-                  name: productoCodigo ?? '',
+                  name: productoNombre ?? '',
                   value: productoCodigo,
                 ),
                 codigo: 'PRODUCTO',
@@ -100,6 +105,11 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                   productoCodigo = item.value;
                   calculosCubit.onFieldChanged(
                     () => calculosCubit.state.copyWith(
+                      productoCodigo: item.value,
+                    ),
+                  );
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
                       productoCodigo: item.value,
                     ),
                   );
@@ -121,19 +131,6 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                 ],
                 onChange: (value) {},
               ),
-              // const Gap(20),
-              // CustomSwitch(
-              //   title: 'Mantener Tasa interés de crédito anterior',
-              //   subtitle: '',
-              //   value: false,
-              //   onChanged: (v) {
-              //     calculosCubit.onFieldChanged(
-              //       () => calculosCubit.state.copyWith(
-              //         esMantieneTasa: v,
-              //       ),
-              //     );
-              //   },
-              // ),
               const Divider(),
               OutlineTextfieldWidget(
                 initialValue:
@@ -153,6 +150,11 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                       plazoMeses: int.tryParse(newValue) ?? 0,
                     ),
                   );
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      plazo: int.tryParse(newValue) ?? 0,
+                    ),
+                  );
                 },
               ),
               const Gap(20),
@@ -170,6 +172,11 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                   final newValue = toNumericString(value, allowPeriod: true);
                   calculosCubit.onFieldChanged(
                     () => calculosCubit.state.copyWith(
+                      monto: double.tryParse(newValue) ?? 0,
+                    ),
+                  );
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
                       monto: double.tryParse(newValue) ?? 0,
                     ),
                   );
@@ -203,6 +210,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                       fechaPrimerPago: date.toUtc().toIso8601String(),
                     ),
                   );
+
                   setState(() {
                     fechaPrimerPago = date;
                   });

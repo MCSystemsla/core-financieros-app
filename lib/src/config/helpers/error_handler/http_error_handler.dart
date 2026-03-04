@@ -47,7 +47,7 @@ enum ErrorNetworkCode {
   }
   if (msg.contains('unauthorized')) {
     return (
-      '${resp['message']}, Favor cerrar sesión y volver a iniciar sesión',
+      'Su sesión ha expirado. Por favor, vuelva a iniciar sesión, ${resp['message']}',
       ErrorNetworkCode.unauthorized
     );
   }

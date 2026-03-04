@@ -53,8 +53,10 @@ class _AsalariadoSendingFormWidgetState
               .read<SolicitudAslariadoHnCubit>()
               .sendClientSignatureWhenSolicitudCreditoCreated(
                 firmaCliente: signatureFile?.imageSignature ?? 'NO PATH',
-                idSolicitud: int.tryParse(state.idSolicitud) ?? 0,
+                numeroSolicitud: state.numeroSolicitud,
                 tipoSolicitud: 'ASALARIADO',
+                documentoCliente: cedula,
+                clientSignatureStatus: state.clientSignatureStatus,
               );
         }
       },

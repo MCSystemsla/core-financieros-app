@@ -26,9 +26,18 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
     super.initState();
     alVencimiento = (widget.data.alVencimiento ?? false);
     final cubit = context.read<ComiteAprobacionCubit>();
+    final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         alVencimiento: alVencimiento,
+        esReestructurado: widget.data.esReestructuracion ?? false,
+        cuotaNivelada: widget.data.cuotaNivelada ?? false,
+        promotorId: widget.data.oficialCreditoID ?? 0,
+      ),
+    );
+    cubitCalculos.onFieldChanged(
+      () => cubitCalculos.state.copyWith(
+        esRestructuracion: widget.data.esReestructuracion ?? false,
       ),
     );
   }
@@ -94,6 +103,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                         alVencimiento: v,
                       ),
                     );
+
                     setState(() {
                       alVencimiento = v;
                     });
@@ -104,8 +114,14 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                 CustomSwitch(
                   title: 'Cuota Nivelada',
                   subtitle: 'La cuota esta nivelada?',
-                  value: false,
-                  onChanged: (v) {},
+                  value: state.cuotaNivelada,
+                  onChanged: (v) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(
+                        cuotaNivelada: v,
+                      ),
+                    );
+                  },
                 ),
                 const Divider(),
                 const Gap(12),

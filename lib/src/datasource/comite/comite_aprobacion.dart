@@ -6,47 +6,165 @@ String comiteAprobacionToJson(ComiteAprobacion data) =>
     json.encode(data.toJson());
 
 class ComiteAprobacion {
-  final bool isMenorMil;
-  final String estadoSolicitudCodigo;
   final int numeroSolicitud;
-  final bool alVencimiento;
-  final String fromaPagoCodigo;
-  final String periodicidadPrinicipalCodigo;
-  final String periodicidadInteresCodigo;
-  final String tipoSolicitudCodigo;
-  final DateTime? fechaAprobacion;
   final String observacion;
-  final bool aprobacionDigital;
-  final bool esRecalculado;
+  final String formaPagoCodigo;
+  final String tipoSolicitudCodigo;
+  final String productoCodigo;
+  final bool isMenorMil;
+  final ModificaActa modificaActa;
+  final InsertaAprobacion insertaAprobacion;
 
   ComiteAprobacion({
-    required this.isMenorMil,
-    required this.estadoSolicitudCodigo,
     required this.numeroSolicitud,
-    required this.alVencimiento,
-    required this.fromaPagoCodigo,
-    required this.periodicidadPrinicipalCodigo,
-    required this.periodicidadInteresCodigo,
-    required this.tipoSolicitudCodigo,
-    this.fechaAprobacion,
     required this.observacion,
-    required this.aprobacionDigital,
-    required this.esRecalculado,
+    required this.formaPagoCodigo,
+    required this.tipoSolicitudCodigo,
+    required this.productoCodigo,
+    required this.isMenorMil,
+    required this.modificaActa,
+    required this.insertaAprobacion,
   });
 
   Map<String, dynamic> toJson() => {
         'database': LocalStorage().database,
-        'IsMenorMil': isMenorMil,
-        'EstadoSolicitudCodigo': 'CERRADO',
         'NumeroSolicitud': numeroSolicitud,
-        'AlVencimiento': alVencimiento,
-        'FormaPagoCodigo': fromaPagoCodigo,
-        'PeriodicidadPrinicipalCodigo': periodicidadPrinicipalCodigo,
-        'PeriodicidadInteresCodigo': periodicidadInteresCodigo,
-        'TipoSolicitudCodigo': tipoSolicitudCodigo,
-        'FechaAprobacion': DateTime.now().toUtc().toIso8601String(),
         'Observacion': observacion,
-        'AprobacionDigital': aprobacionDigital,
-        'EsRecalculado': esRecalculado,
+        'FormaPagoCodigo': formaPagoCodigo,
+        'TipoSolicitudCodigo': tipoSolicitudCodigo,
+        'ProductoCodigo': productoCodigo,
+        'IsMenorMil': isMenorMil,
+        'modificaActa': modificaActa.toJson(),
+        'insertaAprobacion': insertaAprobacion.toJson(),
       };
+}
+
+class InsertaAprobacion {
+  final String estadoSolicitudCodigo;
+  final String periodicidadPrinicipalCodigo;
+  final String periodicidadInteresCodigo;
+  final bool alVencimiento;
+  final String tipoComiteAprobacionCodigo;
+  final bool aprobacionDigital;
+  final bool esRecalculado;
+
+  InsertaAprobacion({
+    required this.estadoSolicitudCodigo,
+    required this.periodicidadPrinicipalCodigo,
+    required this.periodicidadInteresCodigo,
+    required this.alVencimiento,
+    required this.tipoComiteAprobacionCodigo,
+    required this.aprobacionDigital,
+    required this.esRecalculado,
+  });
+
+  Map<String, dynamic> toJson() {
+    final data = {
+      'EstadoSolicitudCodigo': 'APROBADO',
+      'PeriodicidadPrinicipalCodigo': periodicidadPrinicipalCodigo,
+      'PeriodicidadInteresCodigo': periodicidadInteresCodigo,
+      'AlVencimiento': alVencimiento,
+      'TipoComiteAprobacionCodigo': tipoComiteAprobacionCodigo,
+      'FechaAprobacion': DateTime.now().toUtc().toIso8601String(),
+      'AprobacionDigital': aprobacionDigital,
+      'EsRecalculado': esRecalculado,
+    };
+    data.removeWhere(
+      (key, value) => value == '',
+    );
+    return data;
+  }
+}
+
+class ModificaActa {
+  final double monto;
+  final double montoSeguro;
+  final double porcentajeComision;
+  final int plazo;
+  final String sectorCodigo;
+  final String actividadCodigo;
+  final String fuenteFinanciamientoCodigo;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
+  final String monedaDesembolsoCodigo;
+  final String tipoDesembolsoCodigo;
+  final int promotorId;
+  final bool esReestructurado;
+  final bool comisionFinanciada;
+  final bool cuotaNivelada;
+  final double montoSinComision;
+  final int periodoGracia;
+  final bool esRetencion;
+  final double seguroMemorialMensual;
+  final double porcentajeSaldoDeudorAprobado;
+  final double montoTelemedicinaAprobada;
+  final double porcentajeAgricolaAprobado;
+  final double tasaMillarSeguroMapfre;
+  final String numeroBienAdj;
+  final String tipoCreditoNombre;
+  final String tipoProgramaCodigo;
+
+  ModificaActa({
+    required this.monto,
+    required this.montoSeguro,
+    required this.porcentajeComision,
+    required this.plazo,
+    required this.sectorCodigo,
+    required this.actividadCodigo,
+    required this.fuenteFinanciamientoCodigo,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
+    required this.monedaDesembolsoCodigo,
+    required this.tipoDesembolsoCodigo,
+    required this.promotorId,
+    required this.esReestructurado,
+    required this.comisionFinanciada,
+    required this.cuotaNivelada,
+    required this.montoSinComision,
+    required this.periodoGracia,
+    required this.esRetencion,
+    required this.seguroMemorialMensual,
+    required this.porcentajeSaldoDeudorAprobado,
+    required this.montoTelemedicinaAprobada,
+    required this.porcentajeAgricolaAprobado,
+    required this.tasaMillarSeguroMapfre,
+    required this.numeroBienAdj,
+    required this.tipoCreditoNombre,
+    required this.tipoProgramaCodigo,
+  });
+
+  Map<String, dynamic> toJson() {
+    final data = {
+      'Monto': monto,
+      'MontoSeguro': montoSeguro,
+      'PorcentajeComision': porcentajeComision,
+      'Plazo': plazo,
+      'SectorCodigo': sectorCodigo,
+      'ActividadCodigo': actividadCodigo,
+      'FuenteFinanciamientoCodigo': fuenteFinanciamientoCodigo,
+      'TasaInteresCorriente': tasaInteresCorriente,
+      'TasaInteresMoratorio': tasaInteresMoratorio,
+      'MonedaDesembolsoCodigo': monedaDesembolsoCodigo,
+      'TipoDesembolsoCodigo': tipoDesembolsoCodigo,
+      'PromotorId': promotorId,
+      'EsReestructurado': esReestructurado,
+      'ComisionFinanciada': comisionFinanciada,
+      'CuotaNivelada': cuotaNivelada,
+      'MontoSinComision': montoSinComision,
+      'PeriodoGracia': periodoGracia,
+      'EsRetencion': esRetencion,
+      'SeguroMemorialMensual': seguroMemorialMensual,
+      'PorcentajeSaldoDeudorAprobado': porcentajeSaldoDeudorAprobado,
+      'MontoTelemedicinaAprobada': montoTelemedicinaAprobada,
+      'PorcentajeAgricolaAprobado': porcentajeAgricolaAprobado,
+      'TasaMillarSeguroMapfre': tasaMillarSeguroMapfre,
+      'NumeroBienAdj': numeroBienAdj,
+      'TipoCreditoNombre': tipoCreditoNombre,
+      'TipoProgramaCodigo': tipoProgramaCodigo,
+    };
+    data.removeWhere(
+      (key, value) => value == '',
+    );
+    return data;
+  }
 }
