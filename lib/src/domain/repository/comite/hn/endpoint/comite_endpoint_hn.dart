@@ -111,6 +111,17 @@ class ComiteCrearAprobacionEndpoint extends Endpoint {
 }
 
 class GetSolicitudesOnComiteEndpoint extends Endpoint {
+  final int? numeroSolicitud;
+  final String? documentoCliente;
+  final String? nombrePromotor;
+  final int? numeroActa;
+
+  GetSolicitudesOnComiteEndpoint({
+    this.numeroSolicitud,
+    this.documentoCliente,
+    this.nombrePromotor,
+    this.numeroActa,
+  });
   @override
   Method get method => Method.get;
 
@@ -124,7 +135,14 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
         'Page': 1.toString(),
-        // 'NumeroSolicitud': 477.toString(),
+        if (numeroSolicitud != null && numeroSolicitud != 0)
+          'NumeroSolicitud': numeroSolicitud.toString(),
+        if (documentoCliente != null && documentoCliente!.isNotEmpty)
+          'DocumentoCliente': documentoCliente,
+        if (nombrePromotor != null && nombrePromotor!.isNotEmpty)
+          'NombrePromotor': nombrePromotor,
+        if (numeroActa != null && numeroActa != 0)
+          'NumeroActa': numeroActa.toString(),
       };
 }
 

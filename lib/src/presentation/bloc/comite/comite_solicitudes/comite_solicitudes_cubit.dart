@@ -14,7 +14,12 @@ class ComiteSolicitudesCubit extends Cubit<ComiteSolicitudesState> {
   Future<void> getComiteSolicitudes() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final data = await _repository.obtenerSolicitudesEnComite();
+      final data = await _repository.obtenerSolicitudesEnComite(
+        documentoCliente: state.cedulaClienteFilter,
+        numeroSolicitud: state.numeroSolicitudFilter,
+        nombrePromotor: state.nombrePromotorFilter,
+        numeroActa: state.numeroActaFilter,
+      );
       emit(state.copyWith(
         status: Status.done,
         data: data.data,
@@ -30,5 +35,24 @@ class ComiteSolicitudesCubit extends Cubit<ComiteSolicitudesState> {
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  void onFieldChanged(ComiteSolicitudesState Function() copyWithFn) {
+    emit(copyWithFn());
+  }
+
+  void cleanState() {
+    emit(
+      state.copyWith(
+        isNumeroSolicitudFilter: false,
+        isCedulaSolicitudFilter: false,
+        numeroSolicitudFilter: 0,
+        cedulaClienteFilter: '',
+        numeroActaFilter: 0,
+        isNumeroActaFilter: false,
+        isNombrePromotorFilter: false,
+        nombrePromotorFilter: '',
+      ),
+    );
   }
 }

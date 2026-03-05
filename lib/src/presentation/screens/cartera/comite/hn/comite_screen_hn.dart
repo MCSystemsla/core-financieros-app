@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitu
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/comite/comite_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_comite_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -41,9 +42,7 @@ class ComiteScreenHn extends StatelessWidget {
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
               ),
-              // const AnalisisFilterContentWidget(
-              //   estadoCredito: EstadoCredito.enComite,
-              // ),
+              const FiltersComiteWidget(),
               BlocBuilder<ComiteSolicitudesCubit, ComiteSolicitudesState>(
                 builder: (context, state) {
                   return switch (state.status) {

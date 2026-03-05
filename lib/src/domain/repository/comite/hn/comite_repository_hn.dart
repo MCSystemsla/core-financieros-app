@@ -35,7 +35,12 @@ abstract class ComiteRepositoryHN {
   Future<String> crearAprobacion({
     required ComiteAprobacion data,
   });
-  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite();
+  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite({
+    int? numeroSolicitud,
+    String? documentoCliente,
+    String? nombrePromotor,
+    int? numeroActa,
+  });
   Future<ComiteTiposCreditoResponse> obtenerTiposCredito();
   Future<ComiteFuentesFinanciamientoResponse> obtenerFuentesFinanciamientos();
   Future<ComiteCalculoDatosResponse> obtenerCalculoDatos({
@@ -157,8 +162,18 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
   }
 
   @override
-  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite() async {
-    final endpoint = GetSolicitudesOnComiteEndpoint();
+  Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite({
+    int? numeroSolicitud,
+    String? documentoCliente,
+    String? nombrePromotor,
+    int? numeroActa,
+  }) async {
+    final endpoint = GetSolicitudesOnComiteEndpoint(
+      documentoCliente: documentoCliente,
+      numeroSolicitud: numeroSolicitud,
+      nombrePromotor: nombrePromotor,
+      numeroActa: numeroActa,
+    );
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

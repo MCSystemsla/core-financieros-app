@@ -5,12 +5,27 @@ class ComiteSolicitudesState extends Equatable {
   final Status status;
   final List<ComiteOnSolicitudData> data;
   final String errorMsg;
-  final String nombrePromotor;
+  final String nombrePromotorFilter;
+  final String cedulaClienteFilter;
+  final int numeroSolicitudFilter;
+  final int numeroActaFilter;
+  final bool isNumeroSolicitudFilter;
+  final bool isCedulaSolicitudFilter;
+  final bool isNumeroActaFilter;
+  final bool isNombrePromotorFilter;
+
   const ComiteSolicitudesState({
     this.status = Status.inProgress,
     this.data = const [],
     this.errorMsg = '',
-    this.nombrePromotor = '',
+    this.nombrePromotorFilter = '',
+    this.numeroSolicitudFilter = 0,
+    this.cedulaClienteFilter = '',
+    this.numeroActaFilter = 0,
+    this.isNumeroSolicitudFilter = false,
+    this.isCedulaSolicitudFilter = false,
+    this.isNumeroActaFilter = false,
+    this.isNombrePromotorFilter = false,
   });
 
   @override
@@ -18,20 +33,45 @@ class ComiteSolicitudesState extends Equatable {
         status,
         data,
         errorMsg,
-        nombrePromotor,
+        nombrePromotorFilter,
+        numeroSolicitudFilter,
+        cedulaClienteFilter,
+        numeroActaFilter,
+        isNumeroSolicitudFilter,
+        isCedulaSolicitudFilter,
+        isNumeroActaFilter,
+        isNombrePromotorFilter,
       ];
 
   ComiteSolicitudesState copyWith({
     Status? status,
     List<ComiteOnSolicitudData>? data,
     String? errorMsg,
-    String? nombrePromotor,
+    String? nombrePromotorFilter,
+    String? cedulaClienteFilter,
+    int? numeroSolicitudFilter,
+    int? numeroActaFilter,
+    bool? isNumeroSolicitudFilter,
+    bool? isCedulaSolicitudFilter,
+    bool? isNumeroActaFilter,
+    bool? isNombrePromotorFilter,
   }) {
     return ComiteSolicitudesState(
       status: status ?? this.status,
       data: data ?? this.data,
       errorMsg: errorMsg ?? this.errorMsg,
-      nombrePromotor: nombrePromotor ?? this.nombrePromotor,
+      nombrePromotorFilter: nombrePromotorFilter ?? this.nombrePromotorFilter,
+      cedulaClienteFilter: cedulaClienteFilter ?? this.cedulaClienteFilter,
+      numeroSolicitudFilter:
+          numeroSolicitudFilter ?? this.numeroSolicitudFilter,
+      numeroActaFilter: numeroActaFilter ?? this.numeroActaFilter,
+      isNumeroSolicitudFilter:
+          isNumeroSolicitudFilter ?? this.isNumeroSolicitudFilter,
+      isCedulaSolicitudFilter:
+          isCedulaSolicitudFilter ?? this.isCedulaSolicitudFilter,
+      isNumeroActaFilter: isNumeroActaFilter ?? this.isNumeroActaFilter,
+      isNombrePromotorFilter:
+          isNombrePromotorFilter ?? this.isNombrePromotorFilter,
     );
   }
 }
