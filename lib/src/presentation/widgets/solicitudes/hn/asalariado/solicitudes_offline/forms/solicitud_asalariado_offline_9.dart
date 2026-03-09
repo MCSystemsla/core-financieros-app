@@ -86,10 +86,10 @@ class _SolicitudAsalariadoOffline9State
     DateTime(DateTime.now().year, 12, 25), // Navidad
   ];
 
-  bool _isHoliday(DateTime date) {
-    return holidays.any((h) =>
-        h.year == date.year && h.month == date.month && h.day == date.day);
-  }
+  // bool _isHoliday(DateTime date) {
+  //   return holidays.any((h) =>
+  //       h.year == date.year && h.month == date.month && h.day == date.day);
+  // }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
