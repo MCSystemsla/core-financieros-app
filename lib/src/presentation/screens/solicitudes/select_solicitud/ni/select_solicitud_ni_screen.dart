@@ -322,8 +322,8 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
             onPressed: () {
               context.push('/solicitudes/solicitudes-pendientes');
             },
-            svgPath: ImageAsset.nuevaMenorBg4,
-            title: 'Solicitudes Pendientes',
+            svgPath: ImageAsset.cedulaPhoto,
+            title: 'Solicitudes en proceso offline',
           ),
         ),
         const Gap(10),

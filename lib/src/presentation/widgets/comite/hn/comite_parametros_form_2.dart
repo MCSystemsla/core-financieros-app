@@ -159,20 +159,6 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 },
               ),
               const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                initialValue: estado,
-                title: 'Estado',
-                icon: Icon(
-                  Icons.star_outline_sharp,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
-              ),
-              const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
                 selectedItem: CatalogoFrecuenciaItem(
                   valor: formadePago ?? 'MEN',
@@ -250,24 +236,6 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 },
               ),
               const Gap(12),
-              // SearchDropdownWidget(
-              //   title: 'Actividad',
-              //   codigo: CatalogoType.actividadEconomica.codigo,
-              //   validator: (value) =>
-              //       ClassValidator.validateRequired(value?.value),
-              //   selectedItem: Item(
-              //     name: widget.data.actividadNombre ?? '',
-              //     value: widget.data.actividadCodigo,
-              //   ),
-              //   onChanged: (item) {
-              //     if (item == null) return;
-              //     cubit.onFieldChanged(
-              //       () => cubit.state.copyWith(
-              //         actividadCodigo: item.value,
-              //       ),
-              //     );
-              //   },
-              // ),
               CatalogoActividadesCNBSDropdown(
                 selectedItem: ActiivdadCNBS(
                   esAPNFD: false,
@@ -288,20 +256,6 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                   );
                 },
                 title: 'Actividad',
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                initialValue: widget.data.nombreOficialCredito,
-                title: 'Promotor',
-                icon: Icon(
-                  Icons.person,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
               ),
               const Gap(12),
               FuentesFinanciamientosDropdown(

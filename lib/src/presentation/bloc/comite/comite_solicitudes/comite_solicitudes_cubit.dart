@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/order_type/order_type.dart';
 import 'package:equatable/equatable.dart';
 
 part 'comite_solicitudes_state.dart';
@@ -19,6 +20,7 @@ class ComiteSolicitudesCubit extends Cubit<ComiteSolicitudesState> {
         numeroSolicitud: state.numeroSolicitudFilter,
         nombrePromotor: state.nombrePromotorFilter,
         numeroActa: state.numeroActaFilter,
+        orderType: state.ordenType,
       );
       emit(state.copyWith(
         status: Status.done,

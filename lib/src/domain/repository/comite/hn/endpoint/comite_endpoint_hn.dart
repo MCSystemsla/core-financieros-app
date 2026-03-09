@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
+import 'package:core_financiero_app/src/utils/extensions/order_type/order_type.dart';
 
 class ComiteObtenerDataSolicitudEndpointHN extends Endpoint {
   final int numeroSolicitud;
@@ -115,12 +116,14 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
   final String? documentoCliente;
   final String? nombrePromotor;
   final int? numeroActa;
+  final OrderType orderType;
 
   GetSolicitudesOnComiteEndpoint({
     this.numeroSolicitud,
     this.documentoCliente,
     this.nombrePromotor,
     this.numeroActa,
+    required this.orderType,
   });
   @override
   Method get method => Method.get;
@@ -143,6 +146,7 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
           'NombrePromotor': nombrePromotor,
         if (numeroActa != null && numeroActa != 0)
           'NumeroActa': numeroActa.toString(),
+        'Order': orderType.value,
       };
 }
 

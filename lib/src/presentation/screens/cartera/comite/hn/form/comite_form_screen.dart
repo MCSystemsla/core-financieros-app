@@ -103,6 +103,7 @@ class ComiteFormScreen extends StatelessWidget {
                     ),
                     _ComiteOtrosForm(
                       data: state.data.data,
+                      pageController: pageController,
                     ),
                   ],
                 ),
@@ -117,8 +118,12 @@ class ComiteFormScreen extends StatelessWidget {
 
 class _ComiteOtrosForm extends StatefulWidget {
   final ComiteSolicitudData data;
+  final PageController pageController;
 
-  const _ComiteOtrosForm({required this.data});
+  const _ComiteOtrosForm({
+    required this.data,
+    required this.pageController,
+  });
   @override
   State<_ComiteOtrosForm> createState() => _ComiteOtrosFormState();
 }
@@ -213,6 +218,20 @@ class _ComiteOtrosFormState extends State<_ComiteOtrosForm>
                 },
               ),
               const Gap(20),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                width: double.infinity,
+                child: CustomElevatedButton(
+                  color: AppColors.red,
+                  onPressed: () {
+                    widget.pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  text: 'Anterior',
+                ),
+              ),
             ],
           ),
         ),

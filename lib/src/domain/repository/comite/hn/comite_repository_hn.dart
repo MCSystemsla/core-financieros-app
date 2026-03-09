@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_
 import 'package:core_financiero_app/src/datasource/comite/comite_tipos_credito_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/endpoint/comite_endpoint_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/order_type/order_type.dart';
 import 'package:logger/logger.dart';
 
 abstract class ComiteRepositoryHN {
@@ -40,6 +41,7 @@ abstract class ComiteRepositoryHN {
     String? documentoCliente,
     String? nombrePromotor,
     int? numeroActa,
+    required OrderType orderType,
   });
   Future<ComiteTiposCreditoResponse> obtenerTiposCredito();
   Future<ComiteFuentesFinanciamientoResponse> obtenerFuentesFinanciamientos();
@@ -167,12 +169,14 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
     String? documentoCliente,
     String? nombrePromotor,
     int? numeroActa,
+    required OrderType orderType,
   }) async {
     final endpoint = GetSolicitudesOnComiteEndpoint(
       documentoCliente: documentoCliente,
       numeroSolicitud: numeroSolicitud,
       nombrePromotor: nombrePromotor,
       numeroActa: numeroActa,
+      orderType: orderType,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

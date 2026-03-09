@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/autupdate/autoupdate_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -13,14 +14,14 @@ class UpdateAppDialog extends OdsDialog {
   final String title;
   final String versionName;
   final String apkUrl;
-  final bool isHondurasApp;
+  final Flavor flavor;
   const UpdateAppDialog({
     super.key,
     required this.context,
     required this.title,
     required this.versionName,
     required this.apkUrl,
-    this.isHondurasApp = false,
+    required this.flavor,
   }) : super(
           title: title,
         );
@@ -34,10 +35,19 @@ class UpdateAppDialog extends OdsDialog {
         text: 'Actualizar'.tr(),
         color: AppColors.getPrimaryColor(),
         onPressed: () async {
-          if (isHondurasApp) {
-            await openGooglePlayUpdate(
-                url:
-                    'https://play.google.com/store/apps/details?id=com.mcsystem.core_financiero_app.hnd');
+          const playStoreUrls = {
+            Flavor.honduras:
+                'https://play.google.com/store/apps/details?id=com.mcsystem.core_financiero_app.hnd',
+            Flavor.nicaragua:
+                'https://play.google.com/store/apps/details?id=com.mcsystem.core_financiero_app.ni',
+            Flavor.costaRica:
+                'https://play.google.com/store/apps/details?id=com.mcsystem.core_financiero_app.cr',
+          };
+
+          final url = playStoreUrls[flavor];
+
+          if (url != null) {
+            await openGooglePlayUpdate(url: url);
             return;
           }
           Navigator.pushReplacement(

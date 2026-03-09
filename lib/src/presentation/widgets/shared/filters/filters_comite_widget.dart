@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/show_filter_types_modal_sheet.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +42,10 @@ class FiltersComiteWidget extends StatelessWidget {
                   const Gap(10),
                   Expanded(
                     child: FilterView(
-                      onTap: () {},
+                      onTap: () => showFilterTypeModalSheet(
+                        context,
+                        context.read<ComiteSolicitudesCubit>(),
+                      ),
                     ),
                   ),
                 ],

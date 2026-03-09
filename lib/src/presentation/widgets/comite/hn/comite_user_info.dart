@@ -1,8 +1,8 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
 class ComiteUserInfoWidget extends StatelessWidget {
@@ -16,20 +16,13 @@ class ComiteUserInfoWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 2),
-            )
-          ],
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, top: 20),
+              padding: const EdgeInsets.all(16),
               child: Text(
                 'Datos del solicitante',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -37,39 +30,83 @@ class ComiteUserInfoWidget extends StatelessWidget {
                     ),
               ),
             ),
-            const Gap(12),
-            OutlineTextfieldWidget(
-              initialValue: data.actaNumero.toString(),
-              readOnly: true,
+            const Divider(height: 1),
+            _InfoRow(
+              icon: Icons.document_scanner,
               title: 'Acta',
-              icon: Icon(
-                Icons.document_scanner,
-                color: AppColors.getPrimaryColor(),
-              ),
+              value: data.actaNumero.toString(),
             ),
-            const Gap(12),
-            OutlineTextfieldWidget(
-              initialValue: data.numeroSolicitud,
-              readOnly: true,
-              title: 'Solicitud',
-              icon: Icon(
-                Icons.edit_document,
-                color: AppColors.getPrimaryColor(),
-              ),
+            _InfoRow(
+              icon: Icons.description,
+              title: 'Numero de solicitud',
+              value: data.numeroSolicitud ?? '',
             ),
-            const Gap(12),
-            OutlineTextfieldWidget(
-              initialValue: data.nombreCompletoCliente,
-              readOnly: true,
-              title: 'Nombre del solicitante',
-              icon: Icon(
-                Icons.person,
-                color: AppColors.getPrimaryColor(),
-              ),
+            _InfoRow(
+              icon: Icons.person,
+              title: 'Solicitante',
+              value: data.nombreCompletoCliente ?? '',
             ),
-            const Gap(12),
+            _InfoRow(
+              icon: Icons.person_3,
+              title: 'Nombre oficial de credito',
+              value: data.nombreOficialCredito ?? '',
+            ),
+            _InfoRow(
+              icon: Icons.star,
+              title: 'Estado de la solicitud',
+              value: data.estadoComiteCodigo ?? '',
+            ),
+            _InfoRow(
+              icon: Icons.money,
+              title: 'Monto solicitado',
+              value: data.monto?.toCurrencyString() ?? '',
+            ),
+            const Gap(10),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+
+  const _InfoRow({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.getPrimaryColor()),
+          const Gap(12),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

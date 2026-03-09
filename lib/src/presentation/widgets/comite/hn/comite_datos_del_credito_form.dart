@@ -161,6 +161,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               OutlineTextfieldWidget(
                 title: 'Monto de aprobación',
                 validator: (value) => ClassValidator.validateRequired(value),
+                textInputType: TextInputType.number,
                 icon: Icon(
                   Icons.payments_outlined,
                   color: AppColors.getPrimaryColor(),
@@ -229,6 +230,8 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               OutlineTextfieldWidget(
                 readOnly: true,
                 hintText: fechaVencimiento.selectorFormat(),
+                validator: (value) => ClassValidator.validateRequired(
+                    fechaVencimiento.selectorFormat()),
                 onTap: () async {
                   final date = await pickDate(context);
                   if (date == null) return;

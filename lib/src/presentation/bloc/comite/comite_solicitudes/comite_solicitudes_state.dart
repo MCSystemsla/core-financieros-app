@@ -13,9 +13,10 @@ class ComiteSolicitudesState extends Equatable {
   final bool isCedulaSolicitudFilter;
   final bool isNumeroActaFilter;
   final bool isNombrePromotorFilter;
+  final OrderType ordenType;
 
   const ComiteSolicitudesState({
-    this.status = Status.inProgress,
+    this.status = Status.notStarted,
     this.data = const [],
     this.errorMsg = '',
     this.nombrePromotorFilter = '',
@@ -26,6 +27,7 @@ class ComiteSolicitudesState extends Equatable {
     this.isCedulaSolicitudFilter = false,
     this.isNumeroActaFilter = false,
     this.isNombrePromotorFilter = false,
+    this.ordenType = OrderType.ascending,
   });
 
   @override
@@ -41,6 +43,7 @@ class ComiteSolicitudesState extends Equatable {
         isCedulaSolicitudFilter,
         isNumeroActaFilter,
         isNombrePromotorFilter,
+        ordenType,
       ];
 
   ComiteSolicitudesState copyWith({
@@ -55,6 +58,7 @@ class ComiteSolicitudesState extends Equatable {
     bool? isCedulaSolicitudFilter,
     bool? isNumeroActaFilter,
     bool? isNombrePromotorFilter,
+    OrderType? ordenType,
   }) {
     return ComiteSolicitudesState(
       status: status ?? this.status,
@@ -72,6 +76,7 @@ class ComiteSolicitudesState extends Equatable {
       isNumeroActaFilter: isNumeroActaFilter ?? this.isNumeroActaFilter,
       isNombrePromotorFilter:
           isNombrePromotorFilter ?? this.isNombrePromotorFilter,
+      ordenType: ordenType ?? this.ordenType,
     );
   }
 }
