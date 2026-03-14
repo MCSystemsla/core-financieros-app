@@ -76,6 +76,7 @@ abstract class SolicitudesCreditoHnRepository {
     required String? cedulaCliente,
     required int pagina,
     required int? codigoGrupo,
+    required bool isCustomEstadoCredito,
   });
   Future<(bool, String)> asignSolicitudToAsesor({
     required int idSolicitud,
@@ -541,6 +542,7 @@ class SolicitudesCreditoHnRepositoryImpl
     required String? cedulaCliente,
     required int pagina,
     required int? codigoGrupo,
+    required bool isCustomEstadoCredito,
   }) async {
     final rolId = await getRolId();
     final endpoint = GetSolicitudesByEstadoEndpoint(
@@ -551,6 +553,7 @@ class SolicitudesCreditoHnRepositoryImpl
       pagina: pagina,
       codigoGrupo: codigoGrupo,
       usuarioId: rolId,
+      isCustomEstadoCredito: isCustomEstadoCredito,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

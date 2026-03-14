@@ -1,22 +1,31 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_create_servicios/comite_create_servicios_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_servicios/comite_servicios_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_sending_aprobacion_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
+import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
+import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
 
 class ComiteServiciosActaWidget extends StatelessWidget {
   final int comiteId;
@@ -25,10 +34,17 @@ class ComiteServiciosActaWidget extends StatelessWidget {
   final double montoCredito;
   final double capitalAdeudado;
   final int primaSegurosDanios;
-  final bool esGrupal;
-  final bool esMayorA60;
-  final bool esDPF;
-  final bool esCreditoHipotecario;
+  final String tipoSolicitud;
+  final double porcentajeComision;
+  final double montoSeguro;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
+  final double montoSinComision;
+  final double seguoMemorialMensual;
+  final double porcentajeSaldoDeudorAprobado;
+  final double montoTelemedicinaAprobada;
+  final double seguroMapfre;
+  final DateTime fechaPrimerPago;
 
   const ComiteServiciosActaWidget({
     super.key,
@@ -38,10 +54,17 @@ class ComiteServiciosActaWidget extends StatelessWidget {
     required this.montoCredito,
     required this.capitalAdeudado,
     required this.primaSegurosDanios,
-    this.esGrupal = false,
-    this.esMayorA60 = false,
-    this.esDPF = false,
-    this.esCreditoHipotecario = false,
+    required this.tipoSolicitud,
+    required this.porcentajeComision,
+    required this.montoSeguro,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
+    required this.montoSinComision,
+    required this.seguoMemorialMensual,
+    required this.porcentajeSaldoDeudorAprobado,
+    required this.montoTelemedicinaAprobada,
+    required this.seguroMapfre,
+    required this.fechaPrimerPago,
   });
 
   @override
@@ -58,11 +81,8 @@ class ComiteServiciosActaWidget extends StatelessWidget {
               montoCredito: montoCredito,
               capitalAdeudado: capitalAdeudado,
               primaSegurosDanios: primaSegurosDanios,
-              esGrupal: esGrupal,
-              esMayorA60: esMayorA60,
-              esDPF: esDPF,
-              esCreditoHipotecario: esCreditoHipotecario,
               comiteId: comiteId,
+              tipoSolicitud: tipoSolicitud,
             ),
         ),
         BlocProvider(
@@ -77,6 +97,18 @@ class ComiteServiciosActaWidget extends StatelessWidget {
         ),
         bottomNavigationBar: _BottomButton(
           comiteId: comiteId,
+          monto: montoCredito.toString(),
+          porcentajeComision: porcentajeComision,
+          montoSeguro: montoSeguro,
+          tasaInteresCorriente: tasaInteresCorriente,
+          tasaInteresMoratorio: tasaInteresMoratorio,
+          montoSinComision: montoSinComision,
+          seguoMemorialMensual: seguoMemorialMensual,
+          porcentajeSaldoDeudorAprobado: porcentajeSaldoDeudorAprobado,
+          montoTelemedicinaAprobada: montoTelemedicinaAprobada,
+          seguroMapfre: seguroMapfre,
+          plazoCredito: plazoCredito,
+          fechaPrimerPago: fechaPrimerPago,
         ),
         body: BlocBuilder<ComiteServiciosCubit, ComiteServiciosState>(
           builder: (context, state) {
@@ -95,10 +127,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
                           montoCredito: montoCredito,
                           capitalAdeudado: capitalAdeudado,
                           primaSegurosDanios: primaSegurosDanios,
-                          esGrupal: esGrupal,
-                          esMayorA60: esMayorA60,
-                          esDPF: esDPF,
-                          esCreditoHipotecario: esCreditoHipotecario,
+                          tipoSolicitud: tipoSolicitud,
                         );
                   },
                 ),
@@ -111,15 +140,37 @@ class ComiteServiciosActaWidget extends StatelessWidget {
   }
 }
 
-class _ListItems extends StatelessWidget {
+class _ListItems extends StatefulWidget {
   final List<ComiteServicesData> data;
   const _ListItems({
     required this.data,
   });
 
   @override
+  State<_ListItems> createState() => _ListItemsState();
+}
+
+class _ListItemsState extends State<_ListItems> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<ComiteCreateServiciosCubit>();
+    final serviciosSeleccionados = widget.data.where((e) => e.isSelected);
+    if (serviciosSeleccionados.isEmpty) return;
+    cubit.saveAllServicios(
+        servicios: serviciosSeleccionados
+            .map((e) => ServicioData(
+                  servicioId: e.id,
+                  montoServicio: e.monto.toDouble(),
+                  tipoCalculo: e.tipoCalculo,
+                  nombreServicio: e.nombre,
+                ))
+            .toList());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
+    if (widget.data.isEmpty) {
       return const Expanded(
         child: EmptyListWidget(
           message: 'No hay servicios para mostrar',
@@ -131,13 +182,13 @@ class _ListItems extends StatelessWidget {
         children: [
           const Gap(20),
           ListView.builder(
-            itemCount: data.length,
+            itemCount: widget.data.length,
             addAutomaticKeepAlives: true,
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return _Item(
-                data: data[index],
+                data: widget.data[index],
               );
             },
           ).fadeIn(),
@@ -185,16 +236,40 @@ class _ItemState extends State<_Item> {
         title: widget.data.nombre,
         subtitle: 'Monto: ${widget.data.monto.toCurrencyString()}',
         value: isSelected,
-        onChanged: (v) {
+        onChanged: (v) async {
           final servicio = ServicioData(
             servicioId: widget.data.id,
-            montoServicio: widget.data.monto.toInt(),
+            montoServicio: widget.data.monto.toDouble(),
+            tipoCalculo: widget.data.tipoCalculo,
+            nombreServicio: widget.data.nombre,
           );
+
           setState(() => isSelected = v);
+
           if (!v) {
             context.read<ComiteCreateServiciosCubit>().deleteServicios(
                   servicio: servicio,
                 );
+            return;
+          }
+          if (widget.data.tipoCalculo == 'MANUAL') {
+            final monto = await _openMontoManualSheet(context);
+
+            if (monto == null) {
+              setState(() => isSelected = false);
+              return;
+            }
+            if (!context.mounted) return;
+
+            context.read<ComiteCreateServiciosCubit>().saveServicios(
+                  servicio: ServicioData(
+                    servicioId: widget.data.id,
+                    montoServicio: monto,
+                    tipoCalculo: widget.data.tipoCalculo,
+                    nombreServicio: widget.data.nombre,
+                  ),
+                );
+
             return;
           }
 
@@ -209,7 +284,33 @@ class _ItemState extends State<_Item> {
 
 class _BottomButton extends StatelessWidget {
   final int comiteId;
-  const _BottomButton({required this.comiteId});
+  final String monto;
+  final double porcentajeComision;
+  final double montoSeguro;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
+  final double montoSinComision;
+  final double seguoMemorialMensual;
+  final double porcentajeSaldoDeudorAprobado;
+  final double montoTelemedicinaAprobada;
+  final double seguroMapfre;
+  final int plazoCredito;
+  final DateTime fechaPrimerPago;
+  const _BottomButton({
+    required this.comiteId,
+    required this.monto,
+    required this.porcentajeComision,
+    required this.montoSeguro,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
+    required this.montoSinComision,
+    required this.seguoMemorialMensual,
+    required this.porcentajeSaldoDeudorAprobado,
+    required this.montoTelemedicinaAprobada,
+    required this.seguroMapfre,
+    required this.plazoCredito,
+    required this.fechaPrimerPago,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +323,40 @@ class _BottomButton extends StatelessWidget {
             title: 'Servicios creados exitosamente',
             onDone: () => {
               context.pop(),
+              context.pushTransparentRoute(
+                MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: context.read<ComiteAprobacionCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: context.read<ComiteCalculoDatosCubit>(),
+                    ),
+                  ],
+                  child: ComiteResumeReceiptAprobacionWidget(
+                    totalServicios: state.servicios.fold(
+                        0.0, (sum, element) => sum + element.montoServicio),
+                    plazoCredito: plazoCredito,
+                    fechaPrimerPago: fechaPrimerPago,
+                    monto: monto,
+                    montoSinComision: montoSinComision,
+                    montoTelemedicinaAprobada: montoTelemedicinaAprobada,
+                    seguroMapfre: seguroMapfre,
+                    tasaInteresCorriente: tasaInteresCorriente,
+                    tasaInteresMoratorio: tasaInteresMoratorio,
+                    montoSeguro: montoSeguro,
+                    porcentajeComision: porcentajeComision,
+                    porcentajeSaldoDeudorAprobado:
+                        porcentajeSaldoDeudorAprobado,
+                    seguoMemorialMensual: seguoMemorialMensual,
+                    servicios: state.servicios
+                        .map((e) =>
+                            '${e.servicioId}-${e.nombreServicio} Monto del servicio: ${e.montoServicio.toCurrencyString()}')
+                        .toList(),
+                  ),
+                ),
+                backgroundColor: const Color(0xffF1F1F1),
+              ),
             },
           ).showDialog(
             context,
@@ -240,31 +375,161 @@ class _BottomButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(15),
-          child: CustomElevatedButton(
-            color: Colors.green,
-            enabled:
-                state.status != Status.inProgress && state.servicios.isNotEmpty,
-            icon: state.status == Status.inProgress
-                ? Container(
-                    width: 15,
-                    height: 15,
-                    margin: const EdgeInsets.all(5),
-                    child: const CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.add, color: Colors.white),
-            text: state.status == Status.inProgress
-                ? 'Creando...'
-                : 'Crear Servicios',
-            onPressed: () => context
-                .read<ComiteCreateServiciosCubit>()
-                .crearServicios(comiteId: comiteId),
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: CustomElevatedButton(
+              color: Colors.green,
+              enabled: state.status != Status.inProgress &&
+                  state.servicios.isNotEmpty,
+              icon: state.status == Status.inProgress
+                  ? Container(
+                      width: 15,
+                      height: 15,
+                      margin: const EdgeInsets.all(5),
+                      child: const CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.add, color: Colors.white),
+              text: state.status == Status.inProgress
+                  ? 'Creando...'
+                  : 'Crear Servicios',
+              onPressed: () =>
+                  context.read<ComiteCreateServiciosCubit>().crearServicios(
+                        comiteId: comiteId,
+                        montoCredito: double.parse(monto),
+                        plazoCredito: plazoCredito,
+                      ),
+            ),
           ),
         );
       },
     );
   }
+}
+
+Future<double?> _openMontoManualSheet(BuildContext context) {
+  final controller = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  return showModalBottomSheet<double>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) {
+      return SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+            ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
+                  const Gap(20),
+
+                  const CircleAvatar(
+                    radius: 26,
+                    backgroundColor: Color(0xFFE8F0FE),
+                    child: Icon(
+                      Icons.attach_money_rounded,
+                      size: 28,
+                      color: Colors.blue,
+                    ),
+                  ),
+
+                  const Gap(16),
+
+                  const Text(
+                    'Monto del servicio',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const Gap(6),
+
+                  const Text(
+                    'Ingrese el monto que desea aplicar',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const Gap(24),
+
+                  /// Campo monto
+                  OutlineTextfieldWidget(
+                    padding: EdgeInsets.zero,
+                    textEditingController: controller,
+                    title: 'Monto del servicio',
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    icon: Icon(
+                      Icons.attach_money_rounded,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    textInputType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+
+                  const Gap(24),
+
+                  /// Botón guardar
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.check_circle_outline),
+                      label: const Text(
+                        'Guardar servicio',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (!formKey.currentState!.validate()) return;
+                        final value = double.tryParse(controller.text);
+
+                        if (value != null) {
+                          Navigator.pop(context, value);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

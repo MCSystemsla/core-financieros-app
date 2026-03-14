@@ -37,25 +37,32 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
   DateTime? fechaPrimerPago;
   String? productoCodigo;
   String? productoNombre;
+  double? tasaInteresCorriente;
+
   @override
   void initState() {
     super.initState();
-    fechaPrimerPago = widget.data.fechaPrimerPagoAprobacion;
+    fechaPrimerPago =
+        widget.data.fechaPrimerPagoAprobacion ?? widget.data.fechaPrimerPago;
     productoCodigo = widget.data.codigoProducto;
     productoNombre = widget.data.nombreProducto;
+    tasaInteresCorriente = widget.data.tasaInteresCorriente?.toDouble();
+
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
-        fechaAprobacion: fechaPrimerPago?.toUtc().toIso8601String(),
         productoCodigo: productoCodigo,
         plazo: widget.data.plazoSolicitud,
+        monto: widget.data.monto?.toDouble(),
+        tasaInteresCorriente: tasaInteresCorriente,
       ),
     );
     cubitCalculos.onFieldChanged(
       () => cubitCalculos.state.copyWith(
         fechaPrimerPago: fechaPrimerPago?.toUtc().toIso8601String(),
         productoCodigo: productoCodigo,
+        monto: widget.data.monto?.toDouble(),
       ),
     );
   }
@@ -119,8 +126,9 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               const Gap(20),
               OutlineTextfieldWidget(
                 readOnly: true,
-                hintText: state.data?.data.interes.tasaInteresCorriente
-                    .toCurrencyString(),
+                hintText: state.data?.data.interes.tasaInteresCorriente == 0.00
+                    ? tasaInteresCorriente.toString()
+                    : state.data?.data.interes.tasaInteresCorriente.toString(),
                 title: 'Interés Corriente %',
                 icon: Icon(
                   Icons.percent_outlined,
@@ -159,6 +167,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
+                initialValue: cubit.state.monto.toString().toCurrencyString(),
                 title: 'Monto de aprobación',
                 validator: (value) => ClassValidator.validateRequired(value),
                 textInputType: TextInputType.number,
@@ -185,20 +194,6 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                readOnly: true,
-                initialValue: DateTime.now().toLocal().selectorFormat(),
-                title: 'Fecha de desembolso',
-                icon: Icon(
-                  Icons.event_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
                 hintText: fechaPrimerPago?.selectorFormat(),
                 title: 'Fecha de primer pago',
                 validator: (value) => ClassValidator.validateRequired(
@@ -219,29 +214,6 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
                 readOnly: true,
                 icon: Icon(
                   Icons.calendar_today_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
-              ),
-              const Gap(20),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                hintText: fechaVencimiento.selectorFormat(),
-                validator: (value) => ClassValidator.validateRequired(
-                    fechaVencimiento.selectorFormat()),
-                onTap: () async {
-                  final date = await pickDate(context);
-                  if (date == null) return;
-                  setState(() {
-                    fechaVencimiento = date;
-                  });
-                },
-                title: 'Fecha de vencimiento',
-                icon: Icon(
-                  Icons.event_busy_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [

@@ -45,6 +45,9 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
   String? observaciones;
   String? fuenteFinanciamientoNombre;
   String? fuenteFinanciamientoCodigo;
+  Item? tipoDesembolso;
+  Item? tipoCredito;
+  Item? programa;
 
   @override
   void initState() {
@@ -58,6 +61,21 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
     observaciones = widget.data.observacion;
     fuenteFinanciamientoCodigo = widget.data.fuenteFinanciamientoCodigo;
     fuenteFinanciamientoNombre = widget.data.fuenteFinanciamientoNombre;
+    tipoDesembolso = Item(
+      name: widget.data.tipoDesembolsoNombre ??
+          'TRANSFERENCIA BANCARIA A MICREDITO',
+      value: widget.data.tipoDesembolsoCodigo ?? 'TRANSFERENCIAMICREDITO',
+    );
+    tipoCredito = Item(
+      name: widget.data.tipoCreditoNombre ?? '',
+      // TODO: FALTA TIPO CREDITO CODIGO
+      value: widget.data.tipoCreditoNombre ?? '',
+    );
+    programa = Item(
+      name: widget.data.tipoProgramaNombre ?? '',
+      value: widget.data.tipoProgramaCodigo ?? '',
+    );
+
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
@@ -67,13 +85,13 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
         periodicidadPrinicipalCodigo: periodicidadPrincipalCodigo,
         observacion: observaciones,
         monedaDesembolsoCodigo: widget.data.monedaCodigo,
-        tipoDesembolsoCodigo: widget.data.tipoDesembolsoCodigo,
-        tipoCreditoNombre: widget.data.tipoCreditoNombre,
-        tipoProgramaCodigo: widget.data.tipoProgramaCodigo,
+        tipoCreditoNombre: tipoCredito?.name,
+        tipoProgramaCodigo: programa?.value,
         actividadCodigo: widget.data.actividadCodigo,
         sectorCodigo: widget.data.sectorCodigo,
         periodoGracia: widget.data.periodoGracia,
         fuenteFinanciamientoCodigo: fuenteFinanciamientoCodigo,
+        tipoDesembolsoCodigo: tipoDesembolso?.value,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -120,7 +138,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               const Gap(12),
               SearchDropdownWidget(
                 selectedItem: Item(
-                  name: monedaDesembolso!,
+                  name: monedaDesembolso ?? '',
                   value: monedaDesembolso,
                 ),
                 codigo: 'MONEDA',
@@ -144,6 +162,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                selectedItem: tipoDesembolso,
                 codigo: CatalogoType.tipoDesembolsos.codigo,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
@@ -156,6 +175,8 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                       tipoDesembolsoCodigo: item.value,
                     ),
                   );
+                  tipoDesembolso = item;
+                  log(item.value);
                 },
               ),
               const Gap(12),
@@ -311,6 +332,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                selectedItem: programa,
                 codigo: CatalogoType.programa.codigo,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),

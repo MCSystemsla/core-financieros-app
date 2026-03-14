@@ -31,15 +31,13 @@ class ComiteObtenerDataSolicitudEndpointHN extends Endpoint {
 }
 
 class ComiteServiciosHNEndpoint extends Endpoint {
+  final int numeroSolicitud;
   final int comiteID;
   final int plazoCredito;
   final double montoCredito;
   final double capitalAdeudado;
   final int primaSegurosDanios;
-  final bool esGrupal;
-  final bool esMayorA60;
-  final bool esDPF;
-  final bool esCreditoHipotecario;
+  final String tipoSolicitud;
 
   ComiteServiciosHNEndpoint({
     required this.comiteID,
@@ -47,10 +45,8 @@ class ComiteServiciosHNEndpoint extends Endpoint {
     required this.montoCredito,
     required this.capitalAdeudado,
     required this.primaSegurosDanios,
-    this.esGrupal = false,
-    this.esMayorA60 = false,
-    this.esDPF = false,
-    this.esCreditoHipotecario = false,
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
   });
 
   @override
@@ -69,11 +65,9 @@ class ComiteServiciosHNEndpoint extends Endpoint {
         'PlazoCredito': plazoCredito.toString(),
         'MontoCredito': montoCredito.toString(),
         'CapitalAdeudado': capitalAdeudado.toString(),
-        'EsGrupal': esGrupal.toString(),
-        'EsMayorA60': esMayorA60.toString(),
-        'EsDPF': esDPF.toString(),
-        'EsCreditoHipotecario': esCreditoHipotecario.toString(),
         'PrimaSegurosDanios': primaSegurosDanios.toString(),
+        'NumeroSolicitud': numeroSolicitud.toString(),
+        'TipoSolicitud': tipoSolicitud,
       };
 }
 

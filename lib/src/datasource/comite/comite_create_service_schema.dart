@@ -7,36 +7,49 @@ String comiteCreateServiceSchemaToJson(ComiteCreateServiceSchema data) =>
 
 class ComiteCreateServiceSchema {
   final int comiteId;
+  final int plazoCredito;
+  final double montoCredito;
   final List<ServicioData> servicios;
 
   ComiteCreateServiceSchema({
     required this.comiteId,
     required this.servicios,
+    required this.montoCredito,
+    required this.plazoCredito,
   });
 
   Map<String, dynamic> toJson() => {
         'database': LocalStorage().database,
         'ComiteID': comiteId,
+        'PlazoCredito': plazoCredito,
+        'MontoCredito': montoCredito,
         'Servicios': List<dynamic>.from(servicios.map((x) => x.toJson())),
       };
 }
 
 class ServicioData {
   final int servicioId;
-  final int montoServicio;
+  final double montoServicio;
+  final String tipoCalculo;
+  final String nombreServicio;
 
   ServicioData({
     required this.servicioId,
     required this.montoServicio,
+    required this.tipoCalculo,
+    required this.nombreServicio,
   });
 
   factory ServicioData.fromJson(Map<String, dynamic> json) => ServicioData(
         servicioId: json['ServicioID'],
         montoServicio: json['MontoServicio'],
+        tipoCalculo: json['TipoCalculo'],
+        nombreServicio: json['NombreServicio'],
       );
 
   Map<String, dynamic> toJson() => {
         'ServicioID': servicioId,
         'MontoServicio': montoServicio,
+        'TipoCalculo': tipoCalculo,
       };
 }

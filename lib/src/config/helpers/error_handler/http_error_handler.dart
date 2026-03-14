@@ -51,6 +51,12 @@ enum ErrorNetworkCode {
       ErrorNetworkCode.unauthorized
     );
   }
+  if (msg.contains('<!DOCTYPE html>')) {
+    return (
+      'El servidor se encuentra fuera de servicio, por favor intente nuevamente. ${resp['message']}',
+      ErrorNetworkCode.serverError,
+    );
+  }
   if (msg.contains('handshakeexception') || msg.contains('handshake')) {
     return (
       'La red actual ha bloqueado la conexión, Cambia a una conexión más estable para continuar',

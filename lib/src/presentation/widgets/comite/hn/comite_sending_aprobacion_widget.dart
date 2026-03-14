@@ -3,11 +3,158 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/receipt_card/receipt_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+
+class ComiteResumeReceiptAprobacionWidget extends StatelessWidget {
+  final List<String> servicios;
+  final String monto;
+  final double porcentajeComision;
+  final double montoSeguro;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
+  final double montoSinComision;
+  final double seguoMemorialMensual;
+  final double porcentajeSaldoDeudorAprobado;
+  final double montoTelemedicinaAprobada;
+  final double seguroMapfre;
+  final DateTime fechaPrimerPago;
+  final int plazoCredito;
+  final double totalServicios;
+
+  const ComiteResumeReceiptAprobacionWidget({
+    super.key,
+    required this.servicios,
+    required this.monto,
+    required this.porcentajeComision,
+    required this.montoSeguro,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
+    required this.montoSinComision,
+    required this.seguoMemorialMensual,
+    required this.porcentajeSaldoDeudorAprobado,
+    required this.montoTelemedicinaAprobada,
+    required this.seguroMapfre,
+    required this.fechaPrimerPago,
+    required this.plazoCredito,
+    required this.totalServicios,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final aprobacion = context.read<ComiteAprobacionCubit>().state;
+    final calculo = context.read<ComiteCalculoDatosCubit>().state;
+
+    return PopScope(
+      canPop: false,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(25),
+              _buildTransactionCard(aprobacion),
+              const Gap(20),
+              _buildApproveButton(context, calculo, aprobacion),
+              const Gap(20),
+              _buildCancelButton(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionCard(ComiteAprobacionState aprobacion) {
+    return TransactionReviewCard(
+      servicios: servicios,
+      producto: aprobacion.productoCodigo,
+      monto: aprobacion.monto,
+      plazo: aprobacion.plazo,
+      primerPago: fechaPrimerPago,
+      montoConServicios: aprobacion.monto - totalServicios,
+      observaciones: aprobacion.observacion,
+      tipoCredito: aprobacion.tipoCreditoNombre,
+    );
+  }
+
+  Widget _buildApproveButton(
+    BuildContext context,
+    ComiteCalculoDatosState stateCalculo,
+    ComiteAprobacionState stateAprobacion,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SizedBox(
+        width: double.infinity,
+        child: CustomElevatedButton(
+          text: 'Aprobar Acta',
+          color: Colors.indigo,
+          onPressed: () => _navigateToSending(
+            context,
+            stateCalculo,
+            stateAprobacion,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCancelButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SizedBox(
+        width: double.infinity,
+        child: CustomElevatedButton(
+          text: 'Cancelar',
+          color: Colors.red,
+          onPressed: () {
+            context.pop();
+            context.pop();
+          },
+        ),
+      ),
+    );
+  }
+
+  void _navigateToSending(
+    BuildContext context,
+    ComiteCalculoDatosState stateCalculo,
+    ComiteAprobacionState stateAprobacion,
+  ) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: context.read<ComiteAprobacionCubit>(),
+          child: ComiteSendingAprobacionWidget(
+            monto: stateAprobacion.monto.toString(),
+            montoSinComision: stateAprobacion.montoSinComision,
+            montoTelemedicinaAprobada:
+                stateAprobacion.montoTelemedicinaAprobada.toDouble(),
+            seguroMapfre: stateCalculo.data?.data.seguros.mapfre ?? 0,
+            tasaInteresCorriente:
+                stateCalculo.data?.data.interes.tasaInteresCorriente ?? 0,
+            tasaInteresMoratorio:
+                stateCalculo.data?.data.interes.tasaInteresMoratorio ?? 0,
+            montoSeguro: montoSeguro,
+            porcentajeComision: porcentajeComision,
+            porcentajeSaldoDeudorAprobado: porcentajeSaldoDeudorAprobado,
+            seguoMemorialMensual: seguoMemorialMensual,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class ComiteSendingAprobacionWidget extends StatefulWidget {
   final String monto;

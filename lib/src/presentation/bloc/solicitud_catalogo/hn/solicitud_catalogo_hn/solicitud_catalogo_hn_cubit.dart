@@ -544,6 +544,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
       pagina: 1,
       numeroSolicitud: '',
       codigoGrupo: null,
+      isCustomEstadoCredito: true,
     );
 
     final analisisLocalDbProvider = global<AnalisisBoxServiceHn>();

@@ -246,6 +246,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final int? pagina;
   final int? codigoGrupo;
   final int? usuarioId;
+  final bool isCustomEstadoCredito;
   GetSolicitudesByEstadoEndpoint({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
@@ -254,6 +255,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
     this.pagina,
     this.codigoGrupo,
     this.usuarioId,
+    this.isCustomEstadoCredito = false,
   });
   @override
   Method get method => Method.get;
@@ -268,7 +270,8 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
-        'EstadoSolicitudCodigo': estadoCredito.codigo,
+        'EstadoSolicitudCodigo':
+            isCustomEstadoCredito ? 'REG,AUT' : estadoCredito.codigo,
         'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
         if (numeroSolicitud != null && numeroSolicitud!.isNotEmpty)
           'Numero': numeroSolicitud,

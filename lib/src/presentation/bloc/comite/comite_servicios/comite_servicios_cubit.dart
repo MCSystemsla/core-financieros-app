@@ -18,10 +18,7 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
     required double montoCredito,
     required double capitalAdeudado,
     required int primaSegurosDanios,
-    bool esGrupal = false,
-    bool esMayorA60 = false,
-    bool esDPF = false,
-    bool esCreditoHipotecario = false,
+    required String tipoSolicitud,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -31,10 +28,8 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
         montoCredito: montoCredito,
         capitalAdeudado: capitalAdeudado,
         primaSegurosDanios: primaSegurosDanios,
-        esGrupal: esGrupal,
-        esMayorA60: esMayorA60,
-        esDPF: esDPF,
-        esCreditoHipotecario: esCreditoHipotecario,
+        numeroSolicitud: numeroSolicitud,
+        tipoSolicitud: tipoSolicitud,
       );
       emit(state.copyWith(
         status: Status.done,

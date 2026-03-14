@@ -111,9 +111,9 @@ android {
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.ni"
             signingConfig signingConfigs.release
-            versionName "1.3.3"
+            versionName "1.4.4"
             versionCode flutterVersionCode.toInteger() + 1
-            // versionCode 1
+            // versionCode 4
         }
         micreditoHonduras {
             dimension "country"
@@ -122,8 +122,8 @@ android {
             // applicationId "com.mcsystem.core_financiero_app.hn"
             applicationId "com.mcsystem.core_financiero_app.hnd"
             signingConfig signingConfigs.debug
-            versionName "1.4.15"
-            versionCode 20
+            versionName "1.4.16"
+            versionCode 21
             // versionCode flutterVersionCode.toInteger() + 1
         }
         micreditoCostaRica {

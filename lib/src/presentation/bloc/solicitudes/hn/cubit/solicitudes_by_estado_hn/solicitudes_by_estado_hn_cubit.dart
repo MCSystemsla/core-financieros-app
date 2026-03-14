@@ -17,6 +17,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
     bool isAsignadaToAsesorCredito = false,
     EstadoCredito estadoCredito = EstadoCredito.registrada,
     int? codigoGrupo,
+    bool isCustomEstadoCredito = false,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
 
@@ -28,6 +29,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         cedulaCliente: state.cedulaCliente,
         pagina: state.pagina,
         codigoGrupo: codigoGrupo,
+        isCustomEstadoCredito: isCustomEstadoCredito,
       );
       final hasUserAppliedFilter =
           state.isNumeroSolicitudFilter || state.isCedulaSolicitudFilter;

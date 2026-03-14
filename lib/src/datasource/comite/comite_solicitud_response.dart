@@ -67,6 +67,7 @@ class ComiteSolicitudData {
   final double? tasaSaldoDeudor;
   final num? montoSeguroVida;
   final int? oficialCreditoID;
+  final DateTime? fechaPrimerPago;
 
   const ComiteSolicitudData({
     this.id,
@@ -112,6 +113,7 @@ class ComiteSolicitudData {
     this.montoSeguroVida,
     this.oficialCreditoID,
     this.codigoProducto,
+    this.fechaPrimerPago,
   });
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -161,6 +163,9 @@ class ComiteSolicitudData {
         montoSeguroVida: json['MontoSeguroVida'],
         oficialCreditoID: json['OficialCreditoID'],
         codigoProducto: json['ProductoCodigo'],
+        fechaPrimerPago: json['FechaPrimerPagoSolicitud'] == null
+            ? null
+            : DateTime.parse(json['FechaPrimerPagoSolicitud']),
       );
 
   Map<String, dynamic> toJson() => {

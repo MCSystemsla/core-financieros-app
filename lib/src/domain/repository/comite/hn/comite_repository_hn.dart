@@ -25,10 +25,8 @@ abstract class ComiteRepositoryHN {
     required double montoCredito,
     required double capitalAdeudado,
     required int primaSegurosDanios,
-    bool esGrupal = false,
-    bool esMayorA60 = false,
-    bool esDPF = false,
-    bool esCreditoHipotecario = false,
+    required int numeroSolicitud,
+    required String tipoSolicitud,
   });
   Future<void> crearServicios({
     required ComiteCreateServiceSchema data,
@@ -98,10 +96,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
     required double montoCredito,
     required double capitalAdeudado,
     required int primaSegurosDanios,
-    bool esGrupal = false,
-    bool esMayorA60 = false,
-    bool esDPF = false,
-    bool esCreditoHipotecario = false,
+    required int numeroSolicitud,
+    required String tipoSolicitud,
   }) async {
     final endpoint = ComiteServiciosHNEndpoint(
       comiteID: comiteID,
@@ -109,10 +105,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
       montoCredito: montoCredito,
       capitalAdeudado: capitalAdeudado,
       primaSegurosDanios: primaSegurosDanios,
-      esGrupal: esGrupal,
-      esMayorA60: esMayorA60,
-      esDPF: esDPF,
-      esCreditoHipotecario: esCreditoHipotecario,
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

@@ -14,11 +14,15 @@ class ComiteCreateServiciosCubit extends Cubit<ComiteCreateServiciosState> {
 
   Future<void> crearServicios({
     required int comiteId,
+    required double montoCredito,
+    required int plazoCredito,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
       await _repository.crearServicios(
         data: ComiteCreateServiceSchema(
+          montoCredito: montoCredito,
+          plazoCredito: plazoCredito,
           comiteId: comiteId,
           servicios: state.servicios,
         ),
@@ -35,6 +39,14 @@ class ComiteCreateServiciosCubit extends Cubit<ComiteCreateServiciosState> {
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  void saveAllServicios({required List<ServicioData> servicios}) {
+    emit(
+      state.copyWith(
+        servicios: servicios,
+      ),
+    );
   }
 
   void saveServicios({required ServicioData servicio}) {

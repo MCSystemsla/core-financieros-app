@@ -27,6 +27,7 @@ class ActualizacionSolicitudHn extends StatelessWidget {
           )..getSolicitudesByEstado(
               isAsignadaToAsesorCredito: true,
               estadoCredito: EstadoCredito.registrada,
+              isCustomEstadoCredito: true,
             ),
         ),
       ],

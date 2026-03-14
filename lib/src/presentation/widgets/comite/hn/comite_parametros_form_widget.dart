@@ -25,6 +25,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
   initState() {
     super.initState();
     alVencimiento = (widget.data.alVencimiento ?? false);
+
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
     cubit.onFieldChanged(
