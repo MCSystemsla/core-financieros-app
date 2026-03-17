@@ -91,7 +91,8 @@ class _ListDataWidget extends StatelessWidget {
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
           return ComiteCard(
-            title: 'Numero Solicitud: ${data[index].numero}',
+            title:
+                'Numero Solicitud: ${data[index].numero}\nActa: ${data[index].acta}',
             fecha: data[index].fechaSolicitud,
             estadoCodigo: data[index].estado,
             monto: data[index].monto.toCurrencyString(),

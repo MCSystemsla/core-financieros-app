@@ -27,6 +27,7 @@ class FuentesFinanciamientosDropdown extends StatelessWidget {
           Status.inProgress => const LoadingWidget(),
           Status.error => Text(state.errorMsg),
           Status.done => SheetSearchDropdown(
+              selectedItem: selectedItem,
               title: 'Fuentes de Financiamiento',
               isRequired: true,
               onChanged: onChanged,

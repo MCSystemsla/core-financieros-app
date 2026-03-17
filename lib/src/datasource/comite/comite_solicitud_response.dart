@@ -50,8 +50,10 @@ class ComiteSolicitudData {
   final String? estadoComiteNombre;
   final String? formaDePagoCodigo;
   final String? formaDePagoNombre;
-  final String? periodicidadCodigo;
-  final String? periodicidadNombre;
+  final String? periodicidadInteresCodigo;
+  final String? periodicidadInteresNombre;
+  final String? periodicidadPrincipalCodigo;
+  final String? periodicidadPrincipalNombre;
   final String? sectorCodigo;
   final String? sectorNombre;
   final String? actividadCodigo;
@@ -95,8 +97,8 @@ class ComiteSolicitudData {
     this.estadoComiteNombre,
     this.formaDePagoCodigo,
     this.formaDePagoNombre,
-    this.periodicidadCodigo,
-    this.periodicidadNombre,
+    this.periodicidadInteresCodigo,
+    this.periodicidadInteresNombre,
     this.sectorCodigo,
     this.sectorNombre,
     this.actividadCodigo,
@@ -114,6 +116,8 @@ class ComiteSolicitudData {
     this.oficialCreditoID,
     this.codigoProducto,
     this.fechaPrimerPago,
+    this.periodicidadPrincipalCodigo,
+    this.periodicidadPrincipalNombre,
   });
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -145,8 +149,8 @@ class ComiteSolicitudData {
         estadoComiteNombre: json['EstadoComiteNombre'],
         formaDePagoCodigo: json['FormaDePagoCodigo'],
         formaDePagoNombre: json['FormaDePagoNombre'],
-        periodicidadCodigo: json['PeriodicidadCodigo'],
-        periodicidadNombre: json['PeriodicidadNombre'],
+        periodicidadInteresCodigo: json['PeriodicidadInteresCodigo'],
+        periodicidadInteresNombre: json['PeriodicidadInteresNombre'],
         sectorCodigo: json['SectorCodigo'],
         sectorNombre: json['SectorNombre'],
         actividadCodigo: json['ActividadCodigo'],
@@ -166,6 +170,8 @@ class ComiteSolicitudData {
         fechaPrimerPago: json['FechaPrimerPagoSolicitud'] == null
             ? null
             : DateTime.parse(json['FechaPrimerPagoSolicitud']),
+        periodicidadPrincipalCodigo: json['PeriodicidadPrincipalCodigo'],
+        periodicidadPrincipalNombre: json['PeriodicidadPrincipalNombre'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -194,8 +200,8 @@ class ComiteSolicitudData {
         'EstadoComiteNombre': estadoComiteNombre,
         'FormaDePagoCodigo': formaDePagoCodigo,
         'FormaDePagoNombre': formaDePagoNombre,
-        'PeriodicidadCodigo': periodicidadCodigo,
-        'PeriodicidadNombre': periodicidadNombre,
+        'PeriodicidadInteresCodigo': periodicidadInteresCodigo,
+        'PeriodicidadInteresNombre': periodicidadInteresNombre,
         'SectorCodigo': sectorCodigo,
         'SectorNombre': sectorNombre,
         'ActividadCodigo': actividadCodigo,
@@ -211,5 +217,7 @@ class ComiteSolicitudData {
         'TasaSaldoDeudor': tasaSaldoDeudor,
         'MontoSeguroVida': montoSeguroVida,
         'ID': id,
+        'PeriodicidadPrincipalCodigo': periodicidadPrincipalCodigo,
+        'PeriodicidadPrincipalNombre': periodicidadPrincipalNombre,
       };
 }

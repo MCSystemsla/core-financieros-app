@@ -26,7 +26,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
     required double seguroMapfre,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
-    final montoInt = double.tryParse(monto) ?? 0;
+    final montoInt = state.monto;
     final nuevaMenorMil = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'MENORMIL');
     final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;

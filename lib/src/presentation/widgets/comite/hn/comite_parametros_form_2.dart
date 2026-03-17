@@ -40,14 +40,14 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
   String? formadePagoNombre;
   String? estado;
   String? monedaDesembolso;
-  String? periodicidadPrincipalCodigo;
-  String? periodicidadPrincipalNombre;
+
   String? observaciones;
-  String? fuenteFinanciamientoNombre;
-  String? fuenteFinanciamientoCodigo;
+  Item? fuenteFinanciamiento;
   Item? tipoDesembolso;
   Item? tipoCredito;
   Item? programa;
+  Item? periodicidadPrincipal;
+  Item? periodicidadInteres;
 
   @override
   void initState() {
@@ -56,11 +56,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
     formadePagoNombre = widget.data.formaDePagoNombre;
     estado = widget.data.estadoComiteCodigo;
     monedaDesembolso = widget.data.monedaNombre;
-    periodicidadPrincipalCodigo = widget.data.periodicidadCodigo ?? 'MEN';
-    periodicidadPrincipalNombre = widget.data.periodicidadNombre;
     observaciones = widget.data.observacion;
-    fuenteFinanciamientoCodigo = widget.data.fuenteFinanciamientoCodigo;
-    fuenteFinanciamientoNombre = widget.data.fuenteFinanciamientoNombre;
     tipoDesembolso = Item(
       name: widget.data.tipoDesembolsoNombre ??
           'TRANSFERENCIA BANCARIA A MICREDITO',
@@ -68,12 +64,23 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
     );
     tipoCredito = Item(
       name: widget.data.tipoCreditoNombre ?? '',
-      // TODO: FALTA TIPO CREDITO CODIGO
       value: widget.data.tipoCreditoNombre ?? '',
     );
     programa = Item(
       name: widget.data.tipoProgramaNombre ?? '',
       value: widget.data.tipoProgramaCodigo ?? '',
+    );
+    fuenteFinanciamiento = Item(
+      name: widget.data.fuenteFinanciamientoNombre ?? '',
+      value: widget.data.fuenteFinanciamientoCodigo ?? '',
+    );
+    periodicidadPrincipal = Item(
+      name: widget.data.periodicidadPrincipalNombre ?? '',
+      value: widget.data.periodicidadPrincipalCodigo ?? '',
+    );
+    periodicidadInteres = Item(
+      name: widget.data.periodicidadInteresNombre ?? '',
+      value: widget.data.periodicidadInteresCodigo ?? '',
     );
 
     final cubit = context.read<ComiteAprobacionCubit>();
@@ -82,7 +89,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
       () => cubit.state.copyWith(
         fromaPagoCodigo: formadePago,
         estadoSolicitudCodigo: estado,
-        periodicidadPrinicipalCodigo: periodicidadPrincipalCodigo,
+        periodicidadPrinicipalCodigo: periodicidadPrincipal?.value,
         observacion: observaciones,
         monedaDesembolsoCodigo: widget.data.monedaCodigo,
         tipoCreditoNombre: tipoCredito?.name,
@@ -90,8 +97,9 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
         actividadCodigo: widget.data.actividadCodigo,
         sectorCodigo: widget.data.sectorCodigo,
         periodoGracia: widget.data.periodoGracia,
-        fuenteFinanciamientoCodigo: fuenteFinanciamientoCodigo,
+        fuenteFinanciamientoCodigo: fuenteFinanciamiento?.value,
         tipoDesembolsoCodigo: tipoDesembolso?.value,
+        periodicidadInteresCodigo: periodicidadInteres?.value,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -207,8 +215,8 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
                 selectedItem: CatalogoFrecuenciaItem(
-                  valor: periodicidadPrincipalCodigo ?? 'MEN',
-                  nombre: periodicidadPrincipalNombre ?? 'MENSUAL',
+                  valor: periodicidadPrincipal?.value ?? '',
+                  nombre: periodicidadPrincipal?.name ?? '',
                   meses: '',
                 ),
                 title: 'Periodicidad principal',
@@ -225,6 +233,11 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
+                selectedItem: CatalogoFrecuenciaItem(
+                  valor: periodicidadInteres?.value ?? '',
+                  nombre: periodicidadInteres?.name ?? '',
+                  meses: '',
+                ),
                 onChanged: (item) {
                   if (item == null) return;
                   cubit.onFieldChanged(
@@ -280,10 +293,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               FuentesFinanciamientosDropdown(
-                selectedItem: Item(
-                  name: fuenteFinanciamientoNombre ?? '',
-                  value: fuenteFinanciamientoCodigo,
-                ),
+                selectedItem: fuenteFinanciamiento,
                 onChanged: (item) {
                   if (item == null) return;
                   cubit.onFieldChanged(
@@ -319,6 +329,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               TiposCreditoDropdown(
+                selectedItem: tipoCredito,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value.toString()),
                 onChanged: (item) {

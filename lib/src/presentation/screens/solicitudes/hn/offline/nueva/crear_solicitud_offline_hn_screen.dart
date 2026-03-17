@@ -70,6 +70,10 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
             global<SolicitudesHnBoxService>(),
           )
             ..initAutoSave(uuid: solicitudNuevaMenorHnLocalDb.uuid)
+            ..saveCedula(
+              cedulaBackPath: imagesCedula?.imageBackCedula,
+              cedulaFrontPath: imagesCedula?.imageFrontCedula,
+            )
             ..loadFromLocalDb(solicitudNuevaMenorHnLocalDb),
         ),
       ],

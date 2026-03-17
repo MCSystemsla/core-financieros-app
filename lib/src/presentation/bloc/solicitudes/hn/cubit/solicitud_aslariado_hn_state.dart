@@ -144,7 +144,7 @@ class SolicitudAslariadoHnState extends Equatable {
     this.imagenFrontal = '',
     this.imagenTrasera = '',
     this.numeroSolicitud = '',
-    this.uuid = '',
+    this.uuid,
     this.idLocalResponse = 0,
     this.errorMsg = '',
     this.status = Status.notStarted,

@@ -184,6 +184,11 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         clientSignatureStatus: status,
       ),
     );
+    onFieldChanged(
+      () => state.copyWith(
+        clientSignatureStatus: status,
+      ),
+    );
   }
 
   sendCedulaImages({
@@ -246,6 +251,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     return SolicitudNuevaMenorHnLocalDb(
         id: prev?.id ?? 0,
         uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+        clientSignatureStatus: _prefer(
+            state.clientSignatureStatus.name, prev?.clientSignatureStatus),
         esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
         cargoGrupoCodigo:
             _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
@@ -376,11 +383,9 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         trabajoConyugue: _prefer(state.trabajoConyugue, prev?.trabajoConyugue),
         direccionTrabajoConyugue: _prefer(
             state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
-        telefonoTrabajoConyugue: _prefer(
-            state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
-        cantidadHijos: state.cantidadHijos == 0
-            ? (prev?.cantidadHijos ?? 0)
-            : state.cantidadHijos,
+        telefonoTrabajoConyugue:
+            _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
+        cantidadHijos: state.cantidadHijos == 0 ? (prev?.cantidadHijos ?? 0) : state.cantidadHijos,
         nombrePublico: _prefer(state.nombrePublico, prev?.nombrePublico),
         sexoCodigo: _prefer(state.sexoCodigo, prev?.sexoCodigo),
         paisNacimientoCodigo: _prefer(state.paisNacimientoCodigo, prev?.paisNacimientoCodigo),
@@ -619,6 +624,10 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
   void loadFromLocalDb(SolicitudNuevaMenorHnLocalDb solicitud) {
     onFieldChanged(
       () => state.copyWith(
+        clientSignatureStatus:
+            solicitud.clientSignatureStatus == ClientSignatureStatus.yes.name
+                ? ClientSignatureStatus.yes
+                : ClientSignatureStatus.noPossible,
         cuotaWithDecimal: solicitud.cuotaWithDecimal,
         isDone: solicitud.isDone,
         tipoPersonaCodigo: solicitud.tipoPersonaCodigo,

@@ -10,10 +10,12 @@ import '../../../bloc/comite/tipos_credito/tipos_credito_cubit.dart';
 class TiposCreditoDropdown extends StatelessWidget {
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
+  final Item? selectedItem;
   const TiposCreditoDropdown({
     super.key,
     required this.onChanged,
     this.validator,
+    this.selectedItem,
   });
 
   @override
@@ -28,6 +30,7 @@ class TiposCreditoDropdown extends StatelessWidget {
               isRequired: true,
               onChanged: onChanged,
               validator: validator,
+              selectedItem: selectedItem,
               hintText: 'Selecciona un tipo de crédito',
               enabled: true,
               items: state.data

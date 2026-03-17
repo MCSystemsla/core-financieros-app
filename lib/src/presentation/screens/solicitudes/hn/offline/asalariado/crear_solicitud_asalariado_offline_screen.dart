@@ -62,6 +62,10 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
             SolicitudesCreditoHnRepositoryImpl(),
             global<SolicitudesHnBoxService>(),
           )
+            ..saveCedula(
+              imagenTrasera: imagesCedula?.imageBackCedula,
+              imagenFrontal: imagesCedula?.imageFrontCedula,
+            )
             ..initAutoSave(uuid: solicitudAsalariadoHnDbLocal.uuid)
             ..loadFromLocalDb(solicitudAsalariadoHnDbLocal),
         ),

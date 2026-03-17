@@ -55,13 +55,13 @@ class FiadoresHistorialCredito extends StatelessWidget {
         backgroundColor: Colors.black,
       ),
       appBar: AppBar(
-        title: const Text('Inventario'),
+        title: const Text('Historial crediticio'),
       ),
       body: BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
         builder: (context, state) {
           if (state.historialCredito.isEmpty) {
             return const EmptyListWidget(
-                message: 'No hay inventario para mostrar');
+                message: 'No hay Historial de credito para mostrar');
           }
           return SingleChildScrollView(
             child: Column(

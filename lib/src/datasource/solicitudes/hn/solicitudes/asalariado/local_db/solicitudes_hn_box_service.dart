@@ -328,6 +328,7 @@ class SolicitudesHnBoxService {
 
   List<SolicitudAsalariadoHnDbLocal> getSolicitudesAsalariado() {
     final resp = solicitudesAsalariadoBox.getAll();
+    log('Asalariado solicitudes: ${resp.reversed.toList().length}');
     return resp.reversed.toList();
   }
 

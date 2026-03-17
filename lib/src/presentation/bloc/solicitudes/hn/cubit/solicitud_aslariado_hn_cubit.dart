@@ -194,6 +194,11 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         clientSignatureStatus: status,
       ),
     );
+    onFieldChanged(
+      () => state.copyWith(
+        clientSignatureStatus: status,
+      ),
+    );
   }
 
   Future<void> sendClientSignatureWhenSolicitudCreditoCreated({
@@ -247,6 +252,8 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
     return SolicitudAsalariadoHnDbLocal(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      clientSignatureStatus: _prefer(
+          state.clientSignatureStatus.name, prev?.clientSignatureStatus),
       database: _prefer(state.database, prev?.database),
       isOffline: prev?.isOffline ?? false,
       origenSolicitudCodigo:
@@ -488,6 +495,10 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   loadFromLocalDb(SolicitudAsalariadoHnDbLocal solicitud) {
     onFieldChanged(
       () => state.copyWith(
+        clientSignatureStatus:
+            solicitud.clientSignatureStatus == ClientSignatureStatus.yes.name
+                ? ClientSignatureStatus.yes
+                : ClientSignatureStatus.noPossible,
         cuotaWithDecimal: solicitud.cuotaWithDecimal,
         fechaVencimientoCedula:
             solicitud.fechaVencimientoCedula?.toUtc().toIso8601String(),

@@ -29,24 +29,25 @@ class CrearSolicitudHnScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
+    final repository = SolicitudesCreditoHnRepositoryImpl();
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (ctx) => SolicitudAslariadoHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
             localDbProvider,
           )..initAutoSave(),
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
             localDbProvider,
           )..initAutoSave(),
         ),
         BlocProvider(
           create: (ctx) => SolicitudReprestamoHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
             localDbProvider,
           )..initAutoSave(),
         ),
@@ -60,12 +61,12 @@ class CrearSolicitudHnScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => GruposActivosCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
           )..getGruposActivos(),
         ),
         BlocProvider(
           create: (ctx) => UserHaveCedulaCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
           ),
         ),
         BlocProvider(

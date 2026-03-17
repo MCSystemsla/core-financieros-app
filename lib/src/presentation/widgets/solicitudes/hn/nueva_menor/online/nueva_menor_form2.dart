@@ -218,6 +218,7 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
                   isRequired: true,
                   inputFormatters: [
                     UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(50),
                   ],
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Barrio Casa',

@@ -2308,7 +2308,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "144:1151993333819019313",
+      "lastPropertyId": "146:4466291109480044403",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2941,13 +2941,18 @@
           "id": "144:1151993333819019313",
           "name": "cuotaWithDecimal",
           "type": 8
+        },
+        {
+          "id": "146:4466291109480044403",
+          "name": "clientSignatureStatus",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "171:6937685208957188625",
+      "lastPropertyId": "172:2351698145311061031",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3795,6 +3800,11 @@
           "id": "171:6937685208957188625",
           "name": "cuotaWithDecimal",
           "type": 8
+        },
+        {
+          "id": "172:2351698145311061031",
+          "name": "clientSignatureStatus",
+          "type": 9
         }
       ],
       "relations": []
@@ -7182,7 +7192,8 @@
     9133716231844339991,
     1464668389370668239,
     4271183860103661965,
-    2262986745082270488
+    2262986745082270488,
+    7665266233456517062
   ],
   "retiredRelationUids": [],
   "version": 1
