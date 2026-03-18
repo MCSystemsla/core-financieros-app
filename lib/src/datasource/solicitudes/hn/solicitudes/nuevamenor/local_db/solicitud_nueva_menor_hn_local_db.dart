@@ -175,6 +175,8 @@ class SolicitudNuevaMenorHnLocalDb {
   String? cargoGrupoNombre;
   String? grupoCodigoNombre;
   String? clientSignatureStatus;
+  double? ingresoMensualConyuge;
+  int? aniosLugarTrabajoConyuge;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.esGrupal,
@@ -345,5 +347,7 @@ class SolicitudNuevaMenorHnLocalDb {
     this.tipoDocumentoConyugeCodigo,
     this.cuotaWithDecimal,
     this.clientSignatureStatus,
+    this.ingresoMensualConyuge,
+    this.aniosLugarTrabajoConyuge,
   });
 }

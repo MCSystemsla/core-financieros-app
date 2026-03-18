@@ -11,11 +11,13 @@ class TiposCreditoDropdown extends StatelessWidget {
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
   final Item? selectedItem;
+  final bool isRequired;
   const TiposCreditoDropdown({
     super.key,
     required this.onChanged,
     this.validator,
     this.selectedItem,
+    this.isRequired = false,
   });
 
   @override
@@ -26,7 +28,7 @@ class TiposCreditoDropdown extends StatelessWidget {
           Status.inProgress => const LoadingWidget(),
           Status.error => Text(state.errorMsg),
           Status.done => SheetSearchDropdown(
-              title: 'Tipo de crédito',
+              title: 'Tipo de crédito ${isRequired ? '*' : ''}',
               isRequired: true,
               onChanged: onChanged,
               validator: validator,

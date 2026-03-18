@@ -82,7 +82,7 @@ class _CatalogoFrecuenciaPagoDropdownState
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: OutlineTextfieldWidget(
         readOnly: true,
-        title: widget.title,
+        title: '${widget.title} ${widget.isRequired ? '*' : ''}',
         suffixIcon: const Icon(
           Icons.keyboard_arrow_down,
           size: 30,

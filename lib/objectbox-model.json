@@ -2952,7 +2952,7 @@
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "172:2351698145311061031",
+      "lastPropertyId": "174:1318918895326023986",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3805,6 +3805,16 @@
           "id": "172:2351698145311061031",
           "name": "clientSignatureStatus",
           "type": 9
+        },
+        {
+          "id": "173:1457056047349870425",
+          "name": "ingresoMensualConyuge",
+          "type": 8
+        },
+        {
+          "id": "174:1318918895326023986",
+          "name": "aniosLugarTrabajoConyuge",
+          "type": 6
         }
       ],
       "relations": []

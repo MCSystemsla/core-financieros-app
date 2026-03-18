@@ -32,7 +32,8 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
       () => cubit.state.copyWith(
         alVencimiento: alVencimiento,
         esReestructurado: widget.data.esReestructuracion ?? false,
-        cuotaNivelada: widget.data.cuotaNivelada ?? true,
+        // cuotaNivelada: widget.data.cuotaNivelada ?? true,
+        cuotaNivelada: true,
         promotorId: widget.data.oficialCreditoID ?? 0,
       ),
     );

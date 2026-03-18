@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_calculo_datos_r
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_fuentes_financiamiento_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response_data.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_tipos_credito_response.dart';
@@ -28,7 +29,7 @@ abstract class ComiteRepositoryHN {
     required int numeroSolicitud,
     required String tipoSolicitud,
   });
-  Future<void> crearServicios({
+  Future<ComiteServiciosResponse> crearServicios({
     required ComiteCreateServiceSchema data,
   });
   Future<String> crearAprobacion({
@@ -124,7 +125,9 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
   }
 
   @override
-  Future<void> crearServicios({required ComiteCreateServiceSchema data}) async {
+  Future<ComiteServiciosResponse> crearServicios({
+    required ComiteCreateServiceSchema data,
+  }) async {
     final endpoint = ComiteCrearServiciosHNEndpoint(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -133,6 +136,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+      final data = ComiteServiciosResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

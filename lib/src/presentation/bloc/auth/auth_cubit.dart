@@ -52,7 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
       await LocalStorage().setActions(actions.data);
       emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }

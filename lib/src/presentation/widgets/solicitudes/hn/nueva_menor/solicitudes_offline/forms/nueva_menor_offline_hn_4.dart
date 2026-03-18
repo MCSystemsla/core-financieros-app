@@ -299,6 +299,59 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                             );
                           },
                         ),
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          initialValue:
+                              cubit.state.aniosLugarTrabajoConyuge.toString(),
+                          isRequired: true,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(2),
+                          ],
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Años del Lugar de Trabajo del Cónyuge',
+                          icon: Icon(Icons.location_on,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.number,
+                          title: 'Años del Lugar de Trabajo del Cónyuge',
+                          onChange: (value) {
+                            final newValue = int.tryParse(value);
+                            cubit.onFieldChanged(
+                              () => state.copyWith(
+                                aniosLugarTrabajoConyuge: newValue,
+                              ),
+                            );
+                          },
+                        ),
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          initialValue: cubit.state.ingresoMensualConyuge
+                              .toCurrencyString(
+                            mantissaLength: 0,
+                          ),
+                          isRequired: true,
+                          inputFormatters: [
+                            CurrencyInputFormatter(),
+                          ],
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Ingresos Mensuales del Cónyuge',
+                          icon: Icon(Icons.wallet,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.number,
+                          title: 'Ingresos Mensuales del Cónyuge',
+                          onChange: (value) {
+                            final newValue =
+                                toNumericString(value, allowPeriod: true);
+                            cubit.onFieldChanged(
+                              () => state.copyWith(
+                                ingresoMensualConyuge:
+                                    double.tryParse(newValue),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                       const Gap(30),
                       SearchDropdownWidget(

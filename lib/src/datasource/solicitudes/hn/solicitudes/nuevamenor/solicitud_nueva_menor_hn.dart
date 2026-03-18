@@ -129,6 +129,8 @@ class SolicitudNuevaMenorHn {
   final String grupoCodigo;
   final String cargoGrupoCodigo;
   final int? grupoCicloID;
+  final double ingresoMensualConyuge;
+  final int aniosLugarTrabajoConyuge;
   SolicitudNuevaMenorHn({
     required this.actividadEconomicaCnbs3Codigo,
     required this.database,
@@ -252,6 +254,8 @@ class SolicitudNuevaMenorHn {
     required this.grupoCodigo,
     required this.cargoGrupoCodigo,
     this.grupoCicloID,
+    required this.ingresoMensualConyuge,
+    required this.aniosLugarTrabajoConyuge,
   });
 
   Map<String, dynamic> toJson() {
@@ -381,6 +385,8 @@ class SolicitudNuevaMenorHn {
       'GrupoCodigo': grupoCodigo,
       'CargoGrupoCodigo': cargoGrupoCodigo,
       'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
+      'IngresoMensualConyuge': ingresoMensualConyuge,
+      'AniosLugarTrabajoConyuge': aniosLugarTrabajoConyuge,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

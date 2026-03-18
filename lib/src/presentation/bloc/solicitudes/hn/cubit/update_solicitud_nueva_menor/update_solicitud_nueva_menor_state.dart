@@ -184,6 +184,8 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
   final String direccionFamiliarCercano;
   final String telefonoFamiliarCercano;
   final List<HistorialCredito> historialCredito;
+  final double ingresoMensualConyuge;
+  final int aniosLugarTrabajoConyuge;
   const UpdateSolicitudNuevaMenorState({
     this.status = Status.notStarted,
     this.updateStatus = Status.notStarted,
@@ -367,6 +369,8 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
     this.nombreFamiliarCercano = '',
     this.direccionFamiliarCercano = '',
     this.telefonoFamiliarCercano = '',
+    this.ingresoMensualConyuge = 0,
+    this.aniosLugarTrabajoConyuge = 0,
   });
 
   @override
@@ -552,6 +556,8 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
         cargoGrupoCodigo,
         cargoGrupoNombre,
         otrosIngresosConyugue,
+        ingresoMensualConyuge,
+        aniosLugarTrabajoConyuge,
       ];
 
   UpdateSolicitudNuevaMenorState copyWith({
@@ -737,6 +743,8 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
     String? direccionFamiliarCercano,
     String? telefonoFamiliarCercano,
     List<HistorialCredito>? historialCredito,
+    double? ingresoMensualConyuge,
+    int? aniosLugarTrabajoConyuge,
   }) {
     return UpdateSolicitudNuevaMenorState(
       status: status ?? this.status,
@@ -966,6 +974,10 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
       telefonoFamiliarCercano:
           telefonoFamiliarCercano ?? this.telefonoFamiliarCercano,
       historialCredito: historialCredito ?? this.historialCredito,
+      ingresoMensualConyuge:
+          ingresoMensualConyuge ?? this.ingresoMensualConyuge,
+      aniosLugarTrabajoConyuge:
+          aniosLugarTrabajoConyuge ?? this.aniosLugarTrabajoConyuge,
     );
   }
 }

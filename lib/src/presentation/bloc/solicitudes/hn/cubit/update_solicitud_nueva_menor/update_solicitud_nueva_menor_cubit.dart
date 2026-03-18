@@ -403,6 +403,8 @@ class UpdateSolicitudNuevaMenorCubit
       await _repository.updateSolicitudNuevaMenor(
         idSolicitud: idSolicitud,
         solicitudNuevaMenor: SolicitudNuevaMenorHn(
+          aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
+          ingresoMensualConyuge: state.ingresoMensualConyuge,
           actividadDescripcionConyugue: state.actividadDescripcionConyuge,
           documentoConyuge: state.documentoConyuge,
           actividadEconomicaCnbs3Codigo: state.actividadEconomicaCiuu3Codigo,

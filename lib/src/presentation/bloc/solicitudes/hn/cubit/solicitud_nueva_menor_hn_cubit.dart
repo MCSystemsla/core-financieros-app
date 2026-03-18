@@ -28,6 +28,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
+          aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
+          ingresoMensualConyuge: state.ingresoMensualConyuge,
           cargoGrupoCodigo: state.cargoGrupoCodigo,
           grupoCodigo: state.grupoCodigo,
           historialCredito: state.historialCredito,
@@ -251,6 +253,12 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     return SolicitudNuevaMenorHnLocalDb(
         id: prev?.id ?? 0,
         uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+        aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge == 0
+            ? (prev?.aniosLugarTrabajoConyuge ?? 0)
+            : state.aniosLugarTrabajoConyuge,
+        ingresoMensualConyuge: state.ingresoMensualConyuge == 0
+            ? (prev?.ingresoMensualConyuge ?? 0)
+            : state.ingresoMensualConyuge,
         clientSignatureStatus: _prefer(
             state.clientSignatureStatus.name, prev?.clientSignatureStatus),
         esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
@@ -373,18 +381,13 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
             _prefer(state.condicionNegocioCodigo, prev?.condicionNegocioCodigo),
         horarioTrabajo: _prefer(state.horarioTrabajo, prev?.horarioTrabajo),
         horarioVisita: _prefer(state.horarioVisita, prev?.horarioVisita),
-        personasACargo: state.personasACargo == 0
-            ? (prev?.personasACargo ?? 0)
-            : state.personasACargo,
-        estadoCivilCodigo:
-            _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo),
+        personasACargo: state.personasACargo == 0 ? (prev?.personasACargo ?? 0) : state.personasACargo,
+        estadoCivilCodigo: _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo),
         nombreConyugue: _prefer(state.nombreConyugue, prev?.nombreConyugue),
         trabajaConyugue: _prefer(state.trabajaConyugue, prev?.trabajaConyugue),
         trabajoConyugue: _prefer(state.trabajoConyugue, prev?.trabajoConyugue),
-        direccionTrabajoConyugue: _prefer(
-            state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
-        telefonoTrabajoConyugue:
-            _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
+        direccionTrabajoConyugue: _prefer(state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
+        telefonoTrabajoConyugue: _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
         cantidadHijos: state.cantidadHijos == 0 ? (prev?.cantidadHijos ?? 0) : state.cantidadHijos,
         nombrePublico: _prefer(state.nombrePublico, prev?.nombrePublico),
         sexoCodigo: _prefer(state.sexoCodigo, prev?.sexoCodigo),
@@ -628,6 +631,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
             solicitud.clientSignatureStatus == ClientSignatureStatus.yes.name
                 ? ClientSignatureStatus.yes
                 : ClientSignatureStatus.noPossible,
+        aniosLugarTrabajoConyuge: solicitud.aniosLugarTrabajoConyuge,
+        ingresoMensualConyuge: solicitud.ingresoMensualConyuge,
         cuotaWithDecimal: solicitud.cuotaWithDecimal,
         isDone: solicitud.isDone,
         tipoPersonaCodigo: solicitud.tipoPersonaCodigo,

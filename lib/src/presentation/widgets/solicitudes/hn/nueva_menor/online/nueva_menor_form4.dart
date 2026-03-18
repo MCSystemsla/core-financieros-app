@@ -19,7 +19,7 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
 class NuevaMenorForm4 extends StatefulWidget {
@@ -272,6 +272,52 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             telefonoTrabajoConyugue: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      isRequired: true,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Años del Lugar de Trabajo del Cónyuge',
+                      icon: Icon(Icons.location_on,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      title: 'Años del Lugar de Trabajo del Cónyuge',
+                      onChange: (value) {
+                        final newValue = int.tryParse(value);
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            aniosLugarTrabajoConyuge: newValue,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      isRequired: true,
+                      inputFormatters: [
+                        CurrencyInputFormatter(),
+                      ],
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Ingresos Mensuales del Cónyuge',
+                      icon: Icon(Icons.wallet,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      title: 'Ingresos Mensuales del Cónyuge',
+                      onChange: (value) {
+                        final newValue =
+                            toNumericString(value, allowPeriod: true);
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            ingresoMensualConyuge: double.tryParse(newValue),
                           ),
                         );
                       },

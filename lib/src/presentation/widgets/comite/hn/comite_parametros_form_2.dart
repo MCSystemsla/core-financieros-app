@@ -145,6 +145,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                isRequired: true,
                 selectedItem: Item(
                   name: monedaDesembolso ?? '',
                   value: monedaDesembolso,
@@ -170,6 +171,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                isRequired: true,
                 selectedItem: tipoDesembolso,
                 codigo: CatalogoType.tipoDesembolsos.codigo,
                 validator: (value) =>
@@ -189,6 +191,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
+                isRequired: true,
                 selectedItem: CatalogoFrecuenciaItem(
                   valor: formadePago ?? 'MEN',
                   nombre: formadePagoNombre ?? 'MENSUAL',
@@ -214,6 +217,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
+                isRequired: true,
                 selectedItem: CatalogoFrecuenciaItem(
                   valor: periodicidadPrincipal?.value ?? '',
                   nombre: periodicidadPrincipal?.name ?? '',
@@ -233,6 +237,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               CatalogoFrecuenciaPagoDropdown(
+                isRequired: true,
                 selectedItem: CatalogoFrecuenciaItem(
                   valor: periodicidadInteres?.value ?? '',
                   nombre: periodicidadInteres?.name ?? '',
@@ -252,6 +257,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                isRequired: true,
                 title: 'Sector',
                 codigo: CatalogoType.sectorEconomico.codigo,
                 validator: (value) =>
@@ -293,6 +299,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               FuentesFinanciamientosDropdown(
+                isRequired: true,
                 selectedItem: fuenteFinanciamiento,
                 onChanged: (item) {
                   if (item == null) return;
@@ -330,6 +337,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               const Gap(12),
               TiposCreditoDropdown(
                 selectedItem: tipoCredito,
+                isRequired: true,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value.toString()),
                 onChanged: (item) {
@@ -343,6 +351,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               SearchDropdownWidget(
+                isRequired: true,
                 selectedItem: programa,
                 codigo: CatalogoType.programa.codigo,
                 validator: (value) =>
@@ -359,6 +368,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
               ),
               const Gap(12),
               OutlineTextfieldWidget(
+                isRequired: true,
                 initialValue: observaciones,
                 title: 'Observaciones',
                 validator: (value) => ClassValidator.validateRequired(value),
@@ -377,34 +387,34 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                   );
                 },
               ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                hintText: state.data?.data.montoSolicitado.toCurrencyString(),
-                title: 'Monto Solicitado',
-                icon: Icon(
-                  Icons.monitor_heart_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
-              ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                readOnly: true,
-                hintText: state.data?.data.montoTotal.toCurrencyString(),
-                title: 'Monto Total',
-                icon: Icon(
-                  Icons.monitor_heart_outlined,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                onChange: (value) {},
-              ),
+              // const Gap(12),
+              // OutlineTextfieldWidget(
+              //   readOnly: true,
+              //   hintText: state.data?.data.montoSolicitado.toCurrencyString(),
+              //   title: 'Monto Solicitado',
+              //   icon: Icon(
+              //     Icons.monitor_heart_outlined,
+              //     color: AppColors.getPrimaryColor(),
+              //   ),
+              //   inputFormatters: [
+              //     UpperCaseTextFormatter(),
+              //   ],
+              //   onChange: (value) {},
+              // ),
+              // const Gap(12),
+              // OutlineTextfieldWidget(
+              //   readOnly: true,
+              //   hintText: state.data?.data.montoTotal.toCurrencyString(),
+              //   title: 'Monto Total',
+              //   icon: Icon(
+              //     Icons.monitor_heart_outlined,
+              //     color: AppColors.getPrimaryColor(),
+              //   ),
+              //   inputFormatters: [
+              //     UpperCaseTextFormatter(),
+              //   ],
+              //   onChange: (value) {},
+              // ),
               const Gap(20),
             ],
           );

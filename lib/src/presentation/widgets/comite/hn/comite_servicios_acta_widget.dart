@@ -349,9 +349,9 @@ class _BottomButton extends StatelessWidget {
                     porcentajeSaldoDeudorAprobado:
                         porcentajeSaldoDeudorAprobado,
                     seguoMemorialMensual: seguoMemorialMensual,
-                    servicios: state.servicios
+                    servicios: state.data
                         .map((e) =>
-                            '${e.servicioId}-${e.nombreServicio} Monto del servicio: ${e.montoServicio.toCurrencyString()}')
+                            '${e.codigo}-${e.nombre} Monto del servicio: ${e.montoServicio.toCurrencyString()}')
                         .toList(),
                   ),
                 ),

@@ -11,11 +11,13 @@ class FuentesFinanciamientosDropdown extends StatelessWidget {
   final Item? selectedItem;
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
+  final bool isRequired;
   const FuentesFinanciamientosDropdown({
     super.key,
     required this.onChanged,
     this.validator,
     this.selectedItem,
+    this.isRequired = false,
   });
 
   @override
@@ -28,7 +30,7 @@ class FuentesFinanciamientosDropdown extends StatelessWidget {
           Status.error => Text(state.errorMsg),
           Status.done => SheetSearchDropdown(
               selectedItem: selectedItem,
-              title: 'Fuentes de Financiamiento',
+              title: 'Fuentes de Financiamiento ${isRequired ? '*' : ''}',
               isRequired: true,
               onChanged: onChanged,
               validator: validator,
