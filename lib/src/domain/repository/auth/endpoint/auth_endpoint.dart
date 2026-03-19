@@ -94,3 +94,23 @@ class RefreshTokenEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().refreshToken}',
       };
 }
+
+class OTPEndpoint extends Endpoint {
+  OTPEndpoint();
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/auth/otp/generar';
+
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}

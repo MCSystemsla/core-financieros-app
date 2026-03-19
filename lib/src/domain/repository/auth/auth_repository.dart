@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
+import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -20,6 +21,7 @@ abstract class AuthRepository {
   Future<String> getLogo();
   Future<TutorialResponse> getTutorials();
   Future<(String, String)> refreshToken();
+  Future<OtpGenerateResponse> generateOTP();
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -138,6 +140,24 @@ class AuthRepositoryImpl extends AuthRepository {
       _logger.e('Error en refreshToken', error: e, stackTrace: s);
       Future.microtask(() => router.go('/login'));
 
+      rethrow;
+    }
+  }
+
+  @override
+  Future<OtpGenerateResponse> generateOTP() async {
+    final endpoint = OTPEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = OtpGenerateResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e('Error en generateOTP', error: e);
       rethrow;
     }
   }

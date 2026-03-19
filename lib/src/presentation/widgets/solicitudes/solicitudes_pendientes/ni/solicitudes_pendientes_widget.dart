@@ -938,7 +938,12 @@ class AdvanceCardState extends StatelessWidget {
 
 class Char extends StatelessWidget {
   final double percent;
-  const Char({required this.percent, super.key});
+  final Color? color;
+  const Char({
+    required this.percent,
+    this.color,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -952,7 +957,8 @@ class Char extends StatelessWidget {
             duration: const Duration(milliseconds: 1200),
             builder: (context, value, _) => CircularProgressIndicator(
               value: (value / 100),
-              backgroundColor: AppColors.getPrimaryColor().withOpacity(.3),
+              backgroundColor:
+                  color ?? AppColors.getPrimaryColor().withOpacity(.3),
               color: AppColors.getSecondaryColor(),
               strokeWidth: 9,
             ),

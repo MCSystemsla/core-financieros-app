@@ -102,8 +102,8 @@ android {
             resValue "string", "app_name", "MiCrédito QA"
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.qa"
-            versionName "1.0.4"
-            versionCode 5
+            versionName "1.0.5"
+            versionCode 6
         }
         micreditoNicaragua {
             dimension "country"

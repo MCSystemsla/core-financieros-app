@@ -33,3 +33,11 @@ extension EmptyOrZeroStringToNull on String? {
     return this;
   }
 }
+
+extension TokenFormatter on String {
+  /// Divide un token de 6 dígitos en dos grupos de 3 (ej: 123 456)
+  String get toOtpFormat {
+    if (length != 6) return this;
+    return '${substring(0, 3)} ${substring(3, 6)}';
+  }
+}

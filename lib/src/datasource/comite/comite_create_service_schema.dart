@@ -29,7 +29,7 @@ class ComiteCreateServiceSchema {
 
 class ServicioData {
   final int servicioId;
-  final double montoServicio;
+  final num montoServicio;
   final String tipoCalculo;
   final String nombreServicio;
 
@@ -49,7 +49,7 @@ class ServicioData {
 
   Map<String, dynamic> toJson() => {
         'ServicioID': servicioId,
-        'MontoServicio': montoServicio,
+        'MontoServicio': montoServicio.toDouble(),
         'TipoCalculo': tipoCalculo,
       };
 }

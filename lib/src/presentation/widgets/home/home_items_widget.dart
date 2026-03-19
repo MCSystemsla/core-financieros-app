@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/otp/otp_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -42,6 +43,19 @@ class HomeItemsWidget extends StatelessWidget {
         onTap: () => context.pushWithSyncCheck(
           connectionStatus: connection.connectionStatus,
           destination: const CarteraScreen(),
+        ),
+      ),
+      HomeItemCard(
+        title: 'OTP',
+        subtitle: 'Descripcion',
+        icon: const Icon(
+          Icons.phone_android,
+          color: AppColors.white,
+        ),
+        color: Colors.deepPurple,
+        onTap: () => context.pushWithSyncCheck(
+          connectionStatus: connection.connectionStatus,
+          destination: const OtpScreen(),
         ),
       ),
       HomeItemCard(
