@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_aproved_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
@@ -32,7 +33,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
     final nuevaMenorMilMonto = int.tryParse(nuevaMenorMil!.valor) ?? 0;
     final isMenorMil = montoInt <= nuevaMenorMilMonto;
     try {
-      final msg = await _repository.crearAprobacion(
+      final resp = await _repository.crearAprobacion(
           data: ComiteAprobacion(
         numeroSolicitud: state.numeroSolicitud,
         observacion: state.observacion,
@@ -78,7 +79,11 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
           esRecalculado: state.esRecalculado,
         ),
       ));
-      emit(state.copyWith(status: Status.done, respMsg: msg));
+      emit(state.copyWith(
+        status: Status.done,
+        respMsg: resp.message,
+        responsables: resp.responsables,
+      ));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,

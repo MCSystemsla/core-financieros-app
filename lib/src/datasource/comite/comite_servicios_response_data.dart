@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 ComiteServiciosResponse comiteServiciosResponseFromJson(String str) =>
     ComiteServiciosResponse.fromJson(json.decode(str));
 
@@ -27,7 +29,7 @@ class ComiteServicioData {
   final int servicioId;
   final String codigo;
   final String nombre;
-  final int montoServicio;
+  final double montoServicio;
 
   ComiteServicioData({
     required this.servicioId,
@@ -41,6 +43,6 @@ class ComiteServicioData {
         servicioId: json['ServicioID'],
         codigo: json['Codigo'],
         nombre: json['Nombre'],
-        montoServicio: json['MontoServicio'],
+        montoServicio: parseDouble(json['MontoServicio']) ?? 0.00,
       );
 }

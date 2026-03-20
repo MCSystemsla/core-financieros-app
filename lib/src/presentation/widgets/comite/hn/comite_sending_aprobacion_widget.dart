@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/comite/comite_approved_success_transaction_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/receipt_card/receipt_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -231,21 +231,10 @@ class _ComiteSendingAprobacionWidgetState
                 lottieAsset: ImageAsset.nuevaMenorUploading,
                 text: 'Enviando aprobación a servidor...',
               ),
-            Status.done => Padding(
-                padding: const EdgeInsets.all(10),
-                child: DownloadCatalogoLoading(
-                  isSucess: true,
-                  lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text: state.respMsg,
-                  repeat: false,
-                  isUploadingForms: true,
-                  onDownloadComplete: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => const ComiteScreenHn(),
-                    ),
-                  ),
-                ),
+            Status.done => ComiteApprovedSuccessTransactionCard(
+                monto: state.monto,
+                mensajeExito: state.respMsg,
+                responsables: state.responsables,
               ),
             Status.error => OnErrorWidget(
                 needToGoBack: true,

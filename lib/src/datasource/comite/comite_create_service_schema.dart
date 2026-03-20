@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 
 String comiteCreateServiceSchemaToJson(ComiteCreateServiceSchema data) =>
@@ -29,7 +30,7 @@ class ComiteCreateServiceSchema {
 
 class ServicioData {
   final int servicioId;
-  final num montoServicio;
+  final double montoServicio;
   final String tipoCalculo;
   final String nombreServicio;
 
@@ -42,7 +43,7 @@ class ServicioData {
 
   factory ServicioData.fromJson(Map<String, dynamic> json) => ServicioData(
         servicioId: json['ServicioID'],
-        montoServicio: json['MontoServicio'],
+        montoServicio: parseDouble(json['MontoServicio']) ?? 0.00,
         tipoCalculo: json['TipoCalculo'],
         nombreServicio: json['NombreServicio'],
       );

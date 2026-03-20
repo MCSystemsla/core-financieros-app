@@ -388,33 +388,7 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 },
               ),
               // const Gap(12),
-              // OutlineTextfieldWidget(
-              //   readOnly: true,
-              //   hintText: state.data?.data.montoSolicitado.toCurrencyString(),
-              //   title: 'Monto Solicitado',
-              //   icon: Icon(
-              //     Icons.monitor_heart_outlined,
-              //     color: AppColors.getPrimaryColor(),
-              //   ),
-              //   inputFormatters: [
-              //     UpperCaseTextFormatter(),
-              //   ],
-              //   onChange: (value) {},
-              // ),
-              // const Gap(12),
-              // OutlineTextfieldWidget(
-              //   readOnly: true,
-              //   hintText: state.data?.data.montoTotal.toCurrencyString(),
-              //   title: 'Monto Total',
-              //   icon: Icon(
-              //     Icons.monitor_heart_outlined,
-              //     color: AppColors.getPrimaryColor(),
-              //   ),
-              //   inputFormatters: [
-              //     UpperCaseTextFormatter(),
-              //   ],
-              //   onChange: (value) {},
-              // ),
+
               const Gap(20),
             ],
           );

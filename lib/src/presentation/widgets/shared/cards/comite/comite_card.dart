@@ -16,6 +16,7 @@ class ComiteCard extends StatelessWidget {
   final String? tipoSolicitud;
   final bool isAsesorAsignado;
   final VoidCallback? onTap;
+  final int nivelComite;
 
   const ComiteCard({
     super.key,
@@ -25,6 +26,7 @@ class ComiteCard extends StatelessWidget {
     required this.estadoCodigo,
     required this.sucursal,
     required this.solicitudId,
+    required this.nivelComite,
     this.nombreCliente,
     this.nombrePromotor,
     this.tipoSolicitud,
@@ -67,6 +69,14 @@ class ComiteCard extends StatelessWidget {
                   const Spacer(),
                   const Icon(Icons.chevron_right),
                 ],
+              ),
+              Chip(
+                avatar: const Icon(Icons.checklist_rounded, size: 21),
+                label: Text('Nivel de Comite: $nivelComite'),
+                backgroundColor: _getNivelColor(nivelComite),
+                side: BorderSide.none,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
               const SizedBox(height: 12),
               Row(
@@ -193,4 +203,15 @@ class _InfoTag extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _getNivelColor(int nivel) {
+  return switch (nivel) {
+    1 => Colors.indigo.withOpacity(0.1),
+    2 => Colors.deepPurple.withOpacity(0.1),
+    3 => Colors.blue.withOpacity(0.1),
+    4 => Colors.green.withOpacity(0.1),
+    5 => Colors.orange.withOpacity(0.1),
+    _ => Colors.brown,
+  };
 }

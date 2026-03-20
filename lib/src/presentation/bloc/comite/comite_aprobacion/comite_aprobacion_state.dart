@@ -45,8 +45,10 @@ class ComiteAprobacionState extends Equatable {
   final String tipoCreditoNombre;
   final String tipoProgramaCodigo;
   final String tipoComiteAprobacionCodigo;
+  final List<ComiteAprovedResponsable> responsables;
 
   const ComiteAprobacionState({
+    this.responsables = const [],
     this.respMsg = '',
     this.isMenorMil = false,
     this.esRecalculado = false,
@@ -94,6 +96,7 @@ class ComiteAprobacionState extends Equatable {
 
   @override
   List<Object> get props => [
+        responsables,
         respMsg,
         errorMsg,
         isMenorMil,
@@ -183,6 +186,7 @@ class ComiteAprobacionState extends Equatable {
     String? tipoCreditoNombre,
     String? tipoProgramaCodigo,
     String? tipoComiteAprobacionCodigo,
+    List<ComiteAprovedResponsable>? responsables,
   }) {
     return ComiteAprobacionState(
       respMsg: respMsg ?? this.respMsg,
@@ -239,6 +243,7 @@ class ComiteAprobacionState extends Equatable {
       tipoProgramaCodigo: tipoProgramaCodigo ?? this.tipoProgramaCodigo,
       tipoComiteAprobacionCodigo:
           tipoComiteAprobacionCodigo ?? this.tipoComiteAprobacionCodigo,
+      responsables: responsables ?? this.responsables,
     );
   }
 }

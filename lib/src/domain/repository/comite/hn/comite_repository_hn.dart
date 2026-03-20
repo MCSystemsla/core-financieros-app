@@ -2,6 +2,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_aproved_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_calculo_datos_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_fuentes_financiamiento_response.dart';
@@ -32,7 +33,7 @@ abstract class ComiteRepositoryHN {
   Future<ComiteServiciosResponse> crearServicios({
     required ComiteCreateServiceSchema data,
   });
-  Future<String> crearAprobacion({
+  Future<ComiteApprovedResponse> crearAprobacion({
     required ComiteAprobacion data,
   });
   Future<SolicitudesOnComiteResponse> obtenerSolicitudesEnComite({
@@ -145,7 +146,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
   }
 
   @override
-  Future<String> crearAprobacion({required ComiteAprobacion data}) async {
+  Future<ComiteApprovedResponse> crearAprobacion(
+      {required ComiteAprobacion data}) async {
     final endpoint = ComiteCrearAprobacionEndpoint(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -154,8 +156,8 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
-      final message = resp['message']?.toString();
-      return message ?? 'Acta de Comite aprobada exitosamente';
+      final data = ComiteApprovedResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

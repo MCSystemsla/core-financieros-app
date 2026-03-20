@@ -36,6 +36,7 @@ class ComiteOnSolicitudData {
   final String tipoSolicitud;
   final String nombrePromotor;
   final int promotorID;
+  final int nivelComite;
 
   ComiteOnSolicitudData({
     required this.id,
@@ -51,6 +52,7 @@ class ComiteOnSolicitudData {
     required this.tipoSolicitud,
     required this.nombrePromotor,
     required this.promotorID,
+    required this.nivelComite,
   });
 
   factory ComiteOnSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -68,5 +70,6 @@ class ComiteOnSolicitudData {
         tipoSolicitud: json['TipoSolicitud'],
         nombrePromotor: json['NombrePromotor'],
         promotorID: json['PromotorID'],
+        nivelComite: json['NivelComite'],
       );
 }
