@@ -385,8 +385,10 @@ class SolicitudNuevaMenorHn {
       'GrupoCodigo': grupoCodigo,
       'CargoGrupoCodigo': cargoGrupoCodigo,
       'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
-      'IngresoMensualConyuge': ingresoMensualConyuge,
-      'AniosLugarTrabajoConyuge': aniosLugarTrabajoConyuge,
+      'IngresoMensualConyuge':
+          ingresoMensualConyuge == 0 ? null : ingresoMensualConyuge,
+      'AniosLugarTrabajoConyuge':
+          aniosLugarTrabajoConyuge == 0 ? null : aniosLugarTrabajoConyuge,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',
