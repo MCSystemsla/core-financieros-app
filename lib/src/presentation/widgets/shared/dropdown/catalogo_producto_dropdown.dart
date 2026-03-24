@@ -2,6 +2,7 @@
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:drop_down_list/drop_down_list.dart';
@@ -12,13 +13,12 @@ import 'package:uuid/uuid.dart';
 class CatalogoProductoDropdown extends StatefulWidget {
   final String title;
   final bool isRequired;
-  final bool isRecurrente;
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
   final String hintText;
   final bool enabled;
   final Item? selectedItem;
-  final bool isAsalariado;
+  final TypeForm typeForm;
 
   const CatalogoProductoDropdown({
     super.key,
@@ -28,9 +28,8 @@ class CatalogoProductoDropdown extends StatefulWidget {
     this.validator,
     this.hintText = 'Selecciona una opción',
     this.enabled = true,
-    this.isRecurrente = false,
     this.selectedItem,
-    this.isAsalariado = false,
+    required this.typeForm,
   });
 
   @override
@@ -51,12 +50,8 @@ class _CatalogoProductoDropdownState extends State<CatalogoProductoDropdown> {
     final uuid = const Uuid().v4();
 
     final localDbProvider = global<ObjectBoxService>();
-    final items = localDbProvider
-        .getCatalogoProductos(
-      isRecurrente: widget.isRecurrente,
-      isAsalariado: widget.isAsalariado,
-    )
-        .map((e) {
+    final items =
+        localDbProvider.getCatalogoProductos(tipo: widget.typeForm).map((e) {
       return Item(
         id: uuid,
         value: e.valor,

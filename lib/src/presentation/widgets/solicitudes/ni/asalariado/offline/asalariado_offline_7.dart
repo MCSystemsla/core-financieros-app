@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_asalariado/solicitud_asalariado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -305,7 +306,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                 ),
                 const Gap(20),
                 CatalogoProductoDropdown(
-                  isAsalariado: true,
+                  typeForm: TypeForm.asalariado,
                   selectedItem: Item(
                     name: producto?.name ?? '',
                     value: producto?.value,

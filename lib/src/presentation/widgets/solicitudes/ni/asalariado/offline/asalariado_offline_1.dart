@@ -605,6 +605,8 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: telefono,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       isRequired: false,
                       onChange: (value) {
                         telefono = value;
@@ -614,7 +616,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                           ),
                         );
                       },
-                      textInputType: TextInputType.number,
+                      textInputType: TextInputType.phone,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(9),

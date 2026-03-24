@@ -69,6 +69,7 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
       children: [
         const Navbar(
           title: 'Crear nueva Solicitud Asalariado',
+          imageUrl: ImageAsset.represtamoBg,
         ),
         Expanded(
           child: SafeArea(

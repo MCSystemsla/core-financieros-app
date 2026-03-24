@@ -18,6 +18,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/respo
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
@@ -190,33 +191,33 @@ class ObjectBoxService {
   }
 
   List<CatalogoLocalDb> getCatalogoProductos({
-    bool isRecurrente = false,
-    bool isAsalariado = false,
+    required TypeForm tipo,
   }) {
-    if (!isAsalariado) {
-      final query = catalogoBox
-          .query(
-            CatalogoLocalDb_.type.equals('PRODUCTO').and(
-                  CatalogoLocalDb_.isRecurrente.equals(isRecurrente),
-                ),
-          )
-          .build();
+    late Condition<CatalogoLocalDb> condition;
 
-      final results = query.find();
-      query.close();
+    switch (tipo) {
+      case TypeForm.nueva:
+        condition = CatalogoLocalDb_.type.equals('PRODUCTO') &
+            CatalogoLocalDb_.esNuevo.equals(true) &
+            CatalogoLocalDb_.isRecurrente.equals(false);
+        break;
 
-      return results;
+      case TypeForm.asalariado:
+        condition = CatalogoLocalDb_.type.equals('PRODUCTO');
+        break;
+
+      case TypeForm.represtamo:
+        condition = CatalogoLocalDb_.type.equals('PRODUCTO') &
+            CatalogoLocalDb_.esNuevo.equals(false) &
+            CatalogoLocalDb_.isRecurrente.equals(true);
+        break;
     }
-    final query = catalogoBox
-        .query(
-          CatalogoLocalDb_.type.equals('PRODUCTO'),
-        )
-        .build();
 
-    final results = query.find();
+    final query = catalogoBox.query(condition).build();
+    final result = query.find();
     query.close();
 
-    return results;
+    return result;
   }
 
   List<CatalogoFrecuenciaPagoDb> getCatalogoFrecuenciaPago() {

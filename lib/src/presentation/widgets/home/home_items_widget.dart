@@ -46,6 +46,8 @@ class HomeItemsWidget extends StatelessWidget {
         ),
       ),
       HomeItemCard(
+        visible: (connection.connectionStatus == ConnectionStatus.connected &&
+            flavor == Flavor.honduras),
         title: 'OTP',
         subtitle: 'Descripcion',
         icon: const Icon(
@@ -78,8 +80,9 @@ class HomeItemsWidget extends StatelessWidget {
         },
       ),
     ];
+    final visibleItems = homeItemData.where((e) => e.visible).toList();
 
-    if (homeItemData.where((e) => e.visible).isEmpty) {
+    if (visibleItems.isEmpty) {
       return const EmptyListWidget(
         message:
             'No tienes ningun permiso para acceder a los servicios de la aplicación.',
@@ -100,9 +103,9 @@ class HomeItemsWidget extends StatelessWidget {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
-              itemCount: homeItemData.where((e) => e.visible).length,
+              itemCount: visibleItems.length,
               itemBuilder: (BuildContext context, int index) => _ItemWidget(
-                homeItemCard: homeItemData[index],
+                homeItemCard: visibleItems[index],
               ),
             ),
           ),

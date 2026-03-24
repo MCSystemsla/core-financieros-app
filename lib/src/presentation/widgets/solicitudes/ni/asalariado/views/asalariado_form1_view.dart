@@ -531,6 +531,7 @@ class __FormContentState extends State<_FormContent> {
                 const Gap(30),
                 CountryInput(
                   isRequired: false,
+                  validator: (value) => ClassValidator.validateRequired(value),
                   onCountryCodeChange: (value) {
                     telefonoDatoPersonal = value?.dialCode ?? '';
                   },

@@ -94,7 +94,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 20),
                 child: Text(
-                  'Datos del credito',
+                  'Datos del crédito',
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),

@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solic
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -242,7 +243,7 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
             ),
             const Gap(20),
             CatalogoProductoDropdown(
-              isRecurrente: true,
+              typeForm: TypeForm.represtamo,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               title: 'Producto',

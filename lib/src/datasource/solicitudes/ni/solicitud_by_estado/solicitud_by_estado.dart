@@ -81,7 +81,7 @@ class SolicitudEstado {
         cedulaCliente: (json['CedulaCliente'] ?? '') as String,
         tipoPersonaCodigo: (json['TipoPersonaCodigo'] ?? '') as String,
         cicloGrupoID: json['CicloGrupoID'],
-        esSolicitudGrupal: json['EsSolicitudGrupal'],
+        esSolicitudGrupal: json['EsSolicitudGrupal'] ?? false,
         grupoCodigo: json['GrupoCodigo'],
         nombreGrupo: json['NombreGrupo'],
       );

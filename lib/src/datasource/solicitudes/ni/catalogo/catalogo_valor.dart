@@ -29,6 +29,7 @@ class Catalogo {
   final double? montoMinimo;
   final double? montoMaximo;
   final bool isRecurrente;
+  final bool esNuevo;
   final bool esAPNFD;
 
   Catalogo({
@@ -38,6 +39,7 @@ class Catalogo {
     this.montoMaximo,
     this.montoMinimo,
     this.isRecurrente = false,
+    this.esNuevo = false,
     this.esAPNFD = false,
   });
 
@@ -56,6 +58,8 @@ class Catalogo {
         isRecurrente: json.containsKey('EsRecurrente')
             ? (json['EsRecurrente'] as bool)
             : false,
+        esNuevo:
+            json.containsKey('EsNuevo') ? (json['EsNuevo'] as bool) : false,
         esAPNFD:
             json.containsKey('esAPNFD') ? (json['esAPNFD'] as bool) : false,
       );
@@ -67,6 +71,7 @@ class Catalogo {
         if (montoMinimo != null) 'montoMinimo': montoMinimo,
         if (montoMaximo != null) 'montoMaximo': montoMaximo,
         'EsRecurrente': isRecurrente,
+        'EsNuevo': esNuevo,
         'esAPNFD': esAPNFD,
       };
 }

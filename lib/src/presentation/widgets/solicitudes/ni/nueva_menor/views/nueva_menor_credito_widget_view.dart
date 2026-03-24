@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solic
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/cuota_data_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -257,6 +258,7 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 const Gap(20),
                 CatalogoProductoDropdown(
+                  typeForm: TypeForm.nueva,
                   validator: (value) =>
                       ClassValidator.validateRequired(producto?.value),
                   title: 'Producto',

@@ -615,6 +615,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
               title: 'Teléfono',
               hintText: 'Ingresa Teléfono',
               textInputType: TextInputType.phone,
+              validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               isRequired: false,
               onChange: (value) {

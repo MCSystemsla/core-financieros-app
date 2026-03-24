@@ -60,7 +60,7 @@ class TransactionReviewCard extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            _row(Icons.account_balance_wallet_outlined, 'Producto del credito',
+            _row(Icons.account_balance_wallet_outlined, 'Producto del crédito',
                 producto),
             _row(Icons.schedule_outlined, 'Plazo', '$plazo meses'),
             _row(Icons.calendar_today_outlined, 'Fecha de Primer pago',

@@ -48,7 +48,7 @@ class ComiteUserInfoWidget extends StatelessWidget {
             ),
             _InfoRow(
               icon: Icons.person_3,
-              title: 'Nombre oficial de credito',
+              title: 'Nombre oficial de crédito',
               value: data.nombreOficialCredito ?? '',
             ),
             _InfoRow(

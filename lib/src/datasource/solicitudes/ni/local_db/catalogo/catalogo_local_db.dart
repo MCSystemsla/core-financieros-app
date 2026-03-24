@@ -12,6 +12,7 @@ class CatalogoLocalDb {
   int? montoMinimo;
   double? montoMaximo;
   bool isRecurrente = false;
+  bool esNuevo = false;
   bool isAPNFD = false;
 
   CatalogoLocalDb({
@@ -23,5 +24,6 @@ class CatalogoLocalDb {
     this.montoMaximo,
     this.isRecurrente = false,
     this.isAPNFD = false,
+    this.esNuevo = false,
   });
 }

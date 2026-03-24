@@ -69,6 +69,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
         montoMaximo: item.montoMaximo,
         montoMinimo: item.montoMinimo?.toInt(),
         isRecurrente: item.isRecurrente,
+        esNuevo: item.esNuevo,
       ));
     }
     for (var item in kivaConfiguracionData.data) {

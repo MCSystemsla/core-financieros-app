@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/catalogo_frecuencia_pago/catalogo_frecuencia_pago.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_represtamo/solicitud_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
@@ -286,6 +287,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             ),
             const Gap(20),
             CatalogoProductoDropdown(
+              typeForm: TypeForm.represtamo,
               selectedItem: Item(
                 name: producto?.name ?? '',
                 value: producto?.value,
@@ -293,7 +295,6 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
                 montoMaximo: producto?.montoMaximo,
                 montoMinimo: producto?.montoMinimo,
               ),
-              isRecurrente: true,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
               hintText: 'input.select_option'.tr(),

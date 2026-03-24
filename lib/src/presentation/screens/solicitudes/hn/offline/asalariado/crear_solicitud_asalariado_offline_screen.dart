@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
@@ -86,6 +87,7 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
               children: [
                 const Navbar(
                   title: 'Crear nueva Solicitud Asalariado',
+                  imageUrl: ImageAsset.represtamoBg,
                 ),
                 Expanded(
                   child: SafeArea(

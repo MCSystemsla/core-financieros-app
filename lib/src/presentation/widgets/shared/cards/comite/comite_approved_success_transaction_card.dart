@@ -84,7 +84,7 @@ class ComiteApprovedSuccessTransactionCard extends StatelessWidget {
             if (responsables.isNotEmpty) ...[
               const Gap(24),
               Text(
-                '${responsables.length > 1 ? 'Responsables' : 'Responsable'} de siguiente nivel de aprobacion:',
+                '${responsables.length > 1 ? 'Responsables' : 'Responsable'} de siguiente nivel de aprobación:',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
