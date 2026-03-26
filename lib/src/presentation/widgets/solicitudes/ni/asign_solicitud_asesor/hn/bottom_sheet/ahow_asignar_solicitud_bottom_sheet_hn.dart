@@ -163,6 +163,7 @@ void showAsignarSolicitudBottomSheetHN(
                               onDone: () {
                                 cubit.getSolicitudesByEstado();
                                 Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                             ).showDialog(
                               context,

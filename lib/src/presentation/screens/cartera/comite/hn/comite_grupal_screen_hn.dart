@@ -1,32 +1,35 @@
-import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_grupales_on_comite_response.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comite/comite_solicitudes/comite_solicitudes_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/form/comite_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/comite/comite_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_comite_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class ComiteScreenHn extends StatelessWidget {
-  const ComiteScreenHn({super.key});
+import '../../../../bloc/comite/comite_solicitudes_grupales/comite_solicitudes_grupales_cubit.dart';
+
+class ComiteGrupalScreenHn extends StatelessWidget {
+  final GrupoActivoData grupoActivoData;
+  const ComiteGrupalScreenHn({
+    super.key,
+    required this.grupoActivoData,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (ctx) => ComiteSolicitudesCubit(
-            ComiteRepositoryHNImpl(),
-          )..getComiteSolicitudes(),
+    return BlocProvider(
+      create: (ctx) => ComiteSolicitudesGrupalesCubit(
+        ComiteRepositoryHNImpl(),
+      )..getSolicitudesGrupalesOnComite(
+          grupoId: grupoActivoData.id,
         ),
-      ],
       child: PopScope(
         onPopInvokedWithResult: (pop, result) {
           context.push('/');
@@ -42,8 +45,9 @@ class ComiteScreenHn extends StatelessWidget {
               const Expanded(
                 child: _AnalisisSolicitudesTitle(),
               ),
-              const FiltersComiteWidget(),
-              BlocBuilder<ComiteSolicitudesCubit, ComiteSolicitudesState>(
+              // const FiltersComiteWidget(),
+              BlocBuilder<ComiteSolicitudesGrupalesCubit,
+                  ComiteSolicitudesGrupalesState>(
                 builder: (context, state) {
                   return switch (state.status) {
                     Status.inProgress => const Expanded(child: LoadingWidget()),
@@ -51,14 +55,17 @@ class ComiteScreenHn extends StatelessWidget {
                         errorMsg: state.errorMsg,
                         onPressed: () {
                           context
-                              .read<ComiteSolicitudesCubit>()
-                              .getComiteSolicitudes();
+                              .read<ComiteSolicitudesGrupalesCubit>()
+                              .getSolicitudesGrupalesOnComite(
+                                grupoId: grupoActivoData.id,
+                              );
                         },
                       ),
                     Status.done => _ListDataWidget(
                         data: state.data,
+                        grupoID: grupoActivoData.id,
                       ),
-                    _ => const SizedBox(),
+                    _ => const SizedBox.shrink(),
                   };
                 },
               ),
@@ -72,9 +79,11 @@ class ComiteScreenHn extends StatelessWidget {
 }
 
 class _ListDataWidget extends StatelessWidget {
-  final List<ComiteOnSolicitudData> data;
+  final List<ComiteGrupalResponseItem> data;
+  final int grupoID;
   const _ListDataWidget({
     required this.data,
+    required this.grupoID,
   });
   @override
   Widget build(BuildContext context) {
@@ -90,6 +99,7 @@ class _ListDataWidget extends StatelessWidget {
         itemCount: data.length,
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
+          final bool esElUltimoRecord = data.length == 1;
           return ComiteCard(
             nivelComite: data[index].nivelComite,
             title:
@@ -110,7 +120,8 @@ class _ListDataWidget extends StatelessWidget {
                     numeroSolicitud: int.parse(data[index].numero),
                     tipoSolicitud: data[index].tipoSolicitud,
                     actaId: data[index].id,
-                    esUltimoRegistro: false,
+                    grupoID: grupoID,
+                    esUltimoRegistro: esElUltimoRecord,
                   ),
                 ),
               );
@@ -133,7 +144,7 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Comité de Crédito',
+            'Comité de Crédito grupal',
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium

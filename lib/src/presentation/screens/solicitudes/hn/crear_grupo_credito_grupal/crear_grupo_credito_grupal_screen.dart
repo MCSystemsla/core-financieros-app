@@ -4,11 +4,13 @@ import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_grupal_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_solicitud_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_grupal_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -18,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/select
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -259,10 +262,11 @@ class _ModalSheetGrupales extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
     return DraggableScrollableSheet(
-      initialChildSize: 0.41,
+      initialChildSize: 0.55,
       minChildSize: 0.2,
-      maxChildSize: 0.5,
+      maxChildSize: 0.7,
       expand: false,
       builder: (_, controller) {
         return Container(
@@ -296,32 +300,54 @@ class _ModalSheetGrupales extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 controller: controller,
                 children: [
-                  SelectableCardItem(
-                    icon: Icons.group_add_rounded,
-                    color: const Color(0xFF2E7D32),
-                    title: 'Asignacion de Solicitud Grupal',
-                    subtitle: 'Asignar solicitud a grupo',
-                    onTap: () => {
-                      context.pushTransparentRoute(
-                        AsignacionSolicitudGrupalHnScreen(
-                          grupoActivoData: grupoActivoData,
+                  if (actions.contains(
+                      TypeAction.asignacionSolicitudGrupal.codigo)) ...[
+                    SelectableCardItem(
+                      icon: Icons.group_add_rounded,
+                      color: const Color(0xFF2E7D32),
+                      title: 'Asignacion de Solicitud Grupal',
+                      subtitle: 'Asignar solicitud a grupo',
+                      onTap: () => {
+                        context.pushTransparentRoute(
+                          AsignacionSolicitudGrupalHnScreen(
+                            grupoActivoData: grupoActivoData,
+                          ),
                         ),
-                      ),
-                    },
-                  ),
-                  SelectableCardItem(
-                    icon: Icons.verified_user,
-                    color: Colors.indigo,
-                    title: 'Autorizar Solicitud Grupal',
-                    subtitle: 'Autorizar solicitud grupal',
-                    onTap: () => {
-                      context.pushTransparentRoute(
-                        AutorizacionSolicitudGrupalScreen(
-                          grupoActivoData: grupoActivoData,
+                      },
+                    ),
+                  ],
+                  if (actions.contains(
+                      TypeAction.autorizacionSolicitudGrupal.codigo)) ...[
+                    SelectableCardItem(
+                      icon: Icons.verified_user,
+                      color: Colors.indigo,
+                      title: 'Autorizar Solicitud Grupal',
+                      subtitle: 'Autorizar solicitud grupal',
+                      onTap: () => {
+                        context.pushTransparentRoute(
+                          AutorizacionSolicitudGrupalScreen(
+                            grupoActivoData: grupoActivoData,
+                          ),
                         ),
-                      ),
-                    },
-                  ),
+                      },
+                    ),
+                  ],
+                  if (actions
+                      .contains(TypeAction.aprobarComiteGrupal.codigo)) ...[
+                    SelectableCardItem(
+                      icon: Icons.checklist_rounded,
+                      color: Colors.deepPurple,
+                      title: 'Comité Grupal',
+                      subtitle: 'Aprobar comité grupal',
+                      onTap: () => {
+                        context.pushTransparentRoute(
+                          ComiteGrupalScreenHn(
+                            grupoActivoData: grupoActivoData,
+                          ),
+                        ),
+                      },
+                    ),
+                  ],
                 ],
               ),
             ],

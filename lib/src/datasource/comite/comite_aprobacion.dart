@@ -12,6 +12,8 @@ class ComiteAprobacion {
   final String tipoSolicitudCodigo;
   final String productoCodigo;
   final bool isMenorMil;
+  final int? grupoID;
+  final bool esUltimoRegistro;
   final ModificaActa modificaActa;
   final InsertaAprobacion insertaAprobacion;
 
@@ -24,19 +26,29 @@ class ComiteAprobacion {
     required this.isMenorMil,
     required this.modificaActa,
     required this.insertaAprobacion,
+    required this.esUltimoRegistro,
+    this.grupoID,
   });
 
-  Map<String, dynamic> toJson() => {
-        'database': LocalStorage().database,
-        'NumeroSolicitud': numeroSolicitud,
-        'Observacion': observacion,
-        'FormaPagoCodigo': formaPagoCodigo,
-        'TipoSolicitudCodigo': tipoSolicitudCodigo,
-        'ProductoCodigo': productoCodigo,
-        'IsMenorMil': isMenorMil,
-        'modificaActa': modificaActa.toJson(),
-        'insertaAprobacion': insertaAprobacion.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    final data = {
+      'database': LocalStorage().database,
+      'NumeroSolicitud': numeroSolicitud,
+      'Observacion': observacion,
+      'FormaPagoCodigo': formaPagoCodigo,
+      'TipoSolicitudCodigo': tipoSolicitudCodigo,
+      'ProductoCodigo': productoCodigo,
+      'IsMenorMil': isMenorMil,
+      'modificaActa': modificaActa.toJson(),
+      'insertaAprobacion': insertaAprobacion.toJson(),
+      'GrupoID': grupoID == 0 ? null : grupoID,
+      'EsUltimoRegistro': esUltimoRegistro,
+    };
+    data.removeWhere(
+      (key, value) => value == null,
+    );
+    return data;
+  }
 }
 
 class InsertaAprobacion {

@@ -46,8 +46,11 @@ class ComiteAprobacionState extends Equatable {
   final String tipoProgramaCodigo;
   final String tipoComiteAprobacionCodigo;
   final List<ComiteAprovedResponsable> responsables;
+  final int grupoID;
+  final bool esUltimoRegistro;
 
   const ComiteAprobacionState({
+    this.grupoID = 0,
     this.responsables = const [],
     this.respMsg = '',
     this.isMenorMil = false,
@@ -92,6 +95,7 @@ class ComiteAprobacionState extends Equatable {
     this.tipoCreditoNombre = '',
     this.tipoProgramaCodigo = '',
     this.tipoComiteAprobacionCodigo = '',
+    this.esUltimoRegistro = false,
   });
 
   @override
@@ -140,6 +144,8 @@ class ComiteAprobacionState extends Equatable {
         tipoCreditoNombre,
         tipoProgramaCodigo,
         tipoComiteAprobacionCodigo,
+        grupoID,
+        esUltimoRegistro,
       ];
 
   ComiteAprobacionState copyWith({
@@ -187,6 +193,8 @@ class ComiteAprobacionState extends Equatable {
     String? tipoProgramaCodigo,
     String? tipoComiteAprobacionCodigo,
     List<ComiteAprovedResponsable>? responsables,
+    int? grupoID,
+    bool? esUltimoRegistro,
   }) {
     return ComiteAprobacionState(
       respMsg: respMsg ?? this.respMsg,
@@ -244,6 +252,8 @@ class ComiteAprobacionState extends Equatable {
       tipoComiteAprobacionCodigo:
           tipoComiteAprobacionCodigo ?? this.tipoComiteAprobacionCodigo,
       responsables: responsables ?? this.responsables,
+      grupoID: grupoID ?? this.grupoID,
+      esUltimoRegistro: esUltimoRegistro ?? this.esUltimoRegistro,
     );
   }
 }

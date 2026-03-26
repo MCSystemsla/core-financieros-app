@@ -7,7 +7,10 @@ enum TypeAction {
   llenarKiva('LLENARKIVAMOVIL'),
   crearGrupoCredito('CREARGRUPOCREDITO'),
   solicitudCreditoModificar('SOLICITUDCREDITOMODIFICAR'),
-  comite('ACTASCOMITE');
+  comite('ACTASCOMITE'),
+  aprobarComiteGrupal('APROBARCOMITEGRUPAL'),
+  autorizacionSolicitudGrupal('AUTORIZARSOLICITUDGRUPAL'),
+  asignacionSolicitudGrupal('ASIGNARSOLICITUDGRUPAL');
 
   final String codigo;
 

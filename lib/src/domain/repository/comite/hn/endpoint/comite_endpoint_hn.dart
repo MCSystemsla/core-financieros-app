@@ -144,6 +144,48 @@ class GetSolicitudesOnComiteEndpoint extends Endpoint {
       };
 }
 
+class GetSolicitudesGrupalesOnComiteEndpoint extends Endpoint {
+  final int? numeroSolicitud;
+  final String? documentoCliente;
+  final String? nombrePromotor;
+  final int? numeroActa;
+  final OrderType orderType;
+  final int grupoId;
+
+  GetSolicitudesGrupalesOnComiteEndpoint({
+    this.numeroSolicitud,
+    this.documentoCliente,
+    this.nombrePromotor,
+    this.numeroActa,
+    required this.grupoId,
+    required this.orderType,
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/actas-comite-grupal';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'Page': 1.toString(),
+        if (numeroSolicitud != null && numeroSolicitud != 0)
+          'NumeroSolicitud': numeroSolicitud.toString(),
+        if (documentoCliente != null && documentoCliente!.isNotEmpty)
+          'DocumentoCliente': documentoCliente,
+        if (nombrePromotor != null && nombrePromotor!.isNotEmpty)
+          'NombrePromotor': nombrePromotor,
+        if (numeroActa != null && numeroActa != 0)
+          'NumeroActa': numeroActa.toString(),
+        'Order': orderType.value,
+        'GrupoID': grupoId.toString(),
+      };
+}
+
 class GetCalculosDatosEndpoint extends Endpoint {
   final int actaID;
   final String productoCodigo;

@@ -11,15 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 
 class AnalisisFilterContentWidget extends StatefulWidget {
   final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+
   const AnalisisFilterContentWidget({
     super.key,
     required this.estadoCredito,
+    this.isAsignadaToAsesorCredito = true,
   });
 
   @override
@@ -46,7 +48,9 @@ class _AnalisisFilterContentWidgetState
                       onTap: () => showFilterGetByCedualAndNumeroSolicitud(
                         context,
                         context.read<SolicitudesByEstadoHnCubit>(),
-                        widget.estadoCredito,
+                        estadoCredito: widget.estadoCredito,
+                        isAsignadaToAsesorCredito:
+                            widget.isAsignadaToAsesorCredito,
                       ),
                     ),
                   ),
@@ -68,12 +72,10 @@ class _AnalisisFilterContentWidgetState
 
 void showFilterGetByCedualAndNumeroSolicitud(
   BuildContext context,
-  SolicitudesByEstadoHnCubit cubit,
-  EstadoCredito estadoCredito,
-) {
-  final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-  final formKey = GlobalKey<FormState>();
-
+  SolicitudesByEstadoHnCubit cubit, {
+  required EstadoCredito estadoCredito,
+  required bool isAsignadaToAsesorCredito,
+}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -81,214 +83,202 @@ void showFilterGetByCedualAndNumeroSolicitud(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (context) {
-      return BlocProvider.value(
-        value: cubit,
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: bottomInset,
-              top: 24,
-              left: 20,
-              right: 20,
-            ),
-            child: StatefulBuilder(
-              builder: (context, setState) {
-                return BlocBuilder<SolicitudesByEstadoHnCubit,
-                    SolicitudesByEstadoHnState>(
-                  builder: (context, state) {
-                    return SingleChildScrollView(
-                      child: Form(
-                        key: formKey,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.filter_alt_rounded,
-                                  size: 24,
-                                  color: Colors.indigo,
-                                ),
-                                const Gap(15),
-                                Text(
-                                  'Filtrar por tipo de solicitud',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                            const Gap(10),
-                            Text(
-                              'Filtra las solicitudes por Cedula Cliente y Numero Solciitud',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: Colors.grey[600]),
-                            ),
-                            const Gap(20),
-                            SwitchListTile(
-                              value: state.isNumeroSolicitudFilter,
-                              onChanged: (value) {
-                                cubit.onFieldChanged(
-                                  () => state.copyWith(
-                                    isNumeroSolicitudFilter: value,
-                                  ),
-                                );
-                              },
-                              title: const Text('Numero Solicitud'),
-                              subtitle: const Text(
-                                'Filtra las solicitudes por numero de solicitud',
-                              ),
-                            ),
-                            if (state.isNumeroSolicitudFilter)
-                              FadeIn(
-                                child: OutlineTextfieldWidget(
-                                  initialValue: state.numeroSolicitud,
-                                  onChange: (value) {
-                                    cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        numeroSolicitud: value,
-                                      ),
-                                    );
-                                  },
-                                  validator: (value) =>
-                                      ClassValidator.validateRequired(value),
-                                  title: 'Ingresa el numero de solicitud',
-                                  hintText: 'Ej: 2321',
-                                  icon: const Icon(Icons.request_page),
-                                  textInputType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                ),
-                              ),
-                            const Gap(20),
-                            SwitchListTile(
-                              value: state.isCedulaSolicitudFilter,
-                              onChanged: (value) {
-                                cubit.onFieldChanged(
-                                  () => state.copyWith(
-                                    isCedulaSolicitudFilter: value,
-                                  ),
-                                );
-                              },
-                              title: const Text('Cedula del Cliente'),
-                              subtitle: const Text(
-                                'Filtra las solicitudes por cedula del cliente',
-                              ),
-                            ),
-                            if (state.isCedulaSolicitudFilter)
-                              FadeIn(
-                                child: OutlineTextfieldWidget(
-                                  initialValue: state.cedulaCliente,
-                                  validator: (value) =>
-                                      ClassValidator.validateRequired(value),
-                                  title: 'Ingresa cedula del Cliente',
-                                  hintText: 'Ej: 0809199901218T',
-                                  icon: const Icon(Icons.person),
-                                  onChange: (value) {
-                                    cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        cedulaCliente: value,
-                                      ),
-                                    );
-                                  },
-                                  inputFormatters: [
-                                    UpperCaseTextFormatter(),
-                                  ],
-                                ),
-                              ),
-                            const Gap(20),
-                            SwitchListTile(
-                              value: false,
-                              onChanged: (value) {},
-                              title: const Text('Nombre de cliente'),
-                              subtitle: const Text(
-                                'Filtrar por nombre de cliente',
-                              ),
-                            ),
-                            // if (state.isNumeroSolicitudFilter)
-                            //   FadeIn(
-                            //     child: OutlineTextfieldWidget(
-                            //       initialValue: state.numeroSolicitud,
-                            //       onChange: (value) {},
-                            //       validator: (value) =>
-                            //           ClassValidator.validateRequired(value),
-                            //       title: 'Ingresa el nombre del cliente',
-                            //       hintText: 'Ej: Dery Galeas',
-                            //       icon: const Icon(Icons.request_page),
-                            //       textInputType: TextInputType.number,
-                            //       inputFormatters: [
-                            //         FilteringTextInputFormatter.digitsOnly,
-                            //       ],
-                            //     ),
-                            //   ),
-                            const Gap(20),
-                            CustomElevatedButton(
-                              onPressed: () {
-                                cubit.cleanState();
-                                cubit.getSolicitudesByEstado(
-                                  estadoCredito: estadoCredito,
-                                  isAsignadaToAsesorCredito: true,
-                                );
-                                context.pop();
-                              },
-                              text: 'Limpiar Filtros',
-                              color: AppColors.red,
-                              icon: const Icon(
-                                Icons.filter_alt_off_rounded,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Gap(20),
-                            CustomElevatedButton(
-                              enabled: state.isNumeroSolicitudFilter ||
-                                  state.isCedulaSolicitudFilter,
-                              onPressed: () {
-                                if (!formKey.currentState!.validate()) return;
-                                if (!state.isNumeroSolicitudFilter) {
-                                  cubit.onFieldChanged(
-                                    () => state.copyWith(
-                                      numeroSolicitud: null,
-                                    ),
-                                  );
-                                }
-                                if (!state.isCedulaSolicitudFilter) {
-                                  cubit.onFieldChanged(
-                                    () => state.copyWith(
-                                      cedulaCliente: null,
-                                    ),
-                                  );
-                                }
-                                cubit.getSolicitudesByEstado(
-                                  estadoCredito: estadoCredito,
-                                  isAsignadaToAsesorCredito: true,
-                                );
-                                context.pop();
-                              },
-                              text: 'Guardar Cambios',
-                              color: AppColors.getSecondaryColor(),
-                              icon: const Icon(
-                                Icons.save,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Gap(20),
-                          ],
-                        ),
+    builder: (context) => _FilterModal(
+      cubit: cubit,
+      estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+    ),
+  );
+}
+
+class _FilterModal extends StatefulWidget {
+  final SolicitudesByEstadoHnCubit cubit;
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+
+  const _FilterModal({
+    required this.cubit,
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+  });
+
+  @override
+  State<_FilterModal> createState() => _FilterModalState();
+}
+
+class _FilterModalState extends State<_FilterModal> {
+  final formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+    return BlocProvider.value(
+      value: widget.cubit,
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: bottomInset,
+            top: 24,
+            left: 20,
+            right: 20,
+          ),
+          child: BlocBuilder<SolicitudesByEstadoHnCubit,
+              SolicitudesByEstadoHnState>(
+            builder: (context, state) {
+              return SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header
+                      Row(
+                        children: [
+                          const Icon(Icons.filter_alt_rounded,
+                              color: Colors.indigo),
+                          const Gap(15),
+                          Text(
+                            'Filtrar por tipo de solicitud',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                );
-              },
-            ),
+                      const Gap(10),
+                      Text(
+                        'Filtra las solicitudes por Cédula Cliente y Número Solicitud',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.grey[600]),
+                      ),
+                      const Gap(20),
+
+                      // Filtro Número Solicitud
+                      SwitchListTile(
+                        value: state.isNumeroSolicitudFilter,
+                        title: const Text('Número Solicitud'),
+                        subtitle: const Text('Filtra por número de solicitud'),
+                        onChanged: (val) => widget.cubit.onFieldChanged(
+                            () => state.copyWith(isNumeroSolicitudFilter: val)),
+                      ),
+                      if (state.isNumeroSolicitudFilter)
+                        FadeIn(
+                          child: OutlineTextfieldWidget(
+                            initialValue: state.numeroSolicitud,
+                            title: 'Ingresa el número de solicitud',
+                            hintText: 'Ej: 2321',
+                            icon: const Icon(Icons.request_page),
+                            textInputType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChange: (val) => widget.cubit.onFieldChanged(
+                                () => state.copyWith(numeroSolicitud: val)),
+                            validator: (value) =>
+                                ClassValidator.validateRequired(value),
+                          ),
+                        ),
+                      const Gap(20),
+
+                      // Filtro Cédula
+                      SwitchListTile(
+                        value: state.isCedulaSolicitudFilter,
+                        title: const Text('Cédula del Cliente'),
+                        subtitle: const Text('Filtra por cédula del cliente'),
+                        onChanged: (val) => widget.cubit.onFieldChanged(
+                            () => state.copyWith(isCedulaSolicitudFilter: val)),
+                      ),
+                      if (state.isCedulaSolicitudFilter)
+                        FadeIn(
+                          child: OutlineTextfieldWidget(
+                            initialValue: state.cedulaCliente,
+                            title: 'Ingresa cédula del Cliente',
+                            hintText: 'Ej: 0809199901218T',
+                            icon: const Icon(Icons.person),
+                            inputFormatters: [UpperCaseTextFormatter()],
+                            onChange: (val) => widget.cubit.onFieldChanged(
+                                () => state.copyWith(cedulaCliente: val)),
+                            validator: (value) =>
+                                ClassValidator.validateRequired(value),
+                          ),
+                        ),
+                      const Gap(30),
+                      // if (state.isNumeroSolicitudFilter)
+                      // FadeIn(
+                      //   child: OutlineTextfieldWidget(
+                      //     initialValue: state.numeroSolicitud,
+                      //     onChange: (value) {},
+                      //     validator: (value) =>
+                      //         ClassValidator.validateRequired(value),
+                      //     title: 'Ingresa el nombre del cliente',
+                      //     hintText: 'Ej: Dery Galeas',
+                      //     icon: const Icon(Icons.request_page),
+                      //     textInputType: TextInputType.number,
+                      //     inputFormatters: [
+                      //       FilteringTextInputFormatter.digitsOnly,
+                      //     ],
+                      //   ),
+                      // ),
+                      // const Gap(20),
+
+                      // Botón Limpiar
+                      CustomElevatedButton(
+                        text: 'Limpiar Filtros',
+                        color: AppColors.red,
+                        icon: const Icon(Icons.filter_alt_off_rounded,
+                            color: Colors.white),
+                        onPressed: () {
+                          widget.cubit.cleanState();
+                          widget.cubit.getSolicitudesByEstado(
+                            estadoCredito: widget.estadoCredito,
+                            isAsignadaToAsesorCredito:
+                                widget.isAsignadaToAsesorCredito,
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const Gap(20),
+
+                      // Botón Guardar
+                      CustomElevatedButton(
+                        text: 'Guardar Cambios',
+                        enabled: state.isNumeroSolicitudFilter ||
+                            state.isCedulaSolicitudFilter,
+                        color: AppColors.getSecondaryColor(),
+                        icon: const Icon(Icons.save, color: Colors.white),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+
+                          widget.cubit.onFieldChanged(() => state.copyWith(
+                                numeroSolicitud: state.isNumeroSolicitudFilter
+                                    ? state.numeroSolicitud
+                                    : null,
+                                cedulaCliente: state.isCedulaSolicitudFilter
+                                    ? state.cedulaCliente
+                                    : null,
+                              ));
+
+                          widget.cubit.getSolicitudesByEstado(
+                            estadoCredito: widget.estadoCredito,
+                            isAsignadaToAsesorCredito:
+                                widget.isAsignadaToAsesorCredito,
+                          );
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const Gap(20),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }

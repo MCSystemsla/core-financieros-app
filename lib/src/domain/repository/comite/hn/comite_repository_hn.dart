@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_fuentes_financi
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response_data.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_grupales_on_comite_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitudes_on_comite_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_tipos_credito_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -42,6 +43,15 @@ abstract class ComiteRepositoryHN {
     String? nombrePromotor,
     int? numeroActa,
     required OrderType orderType,
+  });
+  Future<ComiteSolicitudesGrupalesOnComiteResponse>
+      obtenerSolicitudesGrupalesEnComite({
+    int? numeroSolicitud,
+    String? documentoCliente,
+    String? nombrePromotor,
+    int? numeroActa,
+    required OrderType orderType,
+    required int grupoId,
   });
   Future<ComiteTiposCreditoResponse> obtenerTiposCredito();
   Future<ComiteFuentesFinanciamientoResponse> obtenerFuentesFinanciamientos();
@@ -275,6 +285,39 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         throw AppException(optionalMsg: errorMsg.toString());
       }
       final data = ComiteFuentesFinanciamientoResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ComiteSolicitudesGrupalesOnComiteResponse>
+      obtenerSolicitudesGrupalesEnComite({
+    int? numeroSolicitud,
+    String? documentoCliente,
+    String? nombrePromotor,
+    int? numeroActa,
+    required OrderType orderType,
+    required int grupoId,
+  }) async {
+    final endpoint = GetSolicitudesGrupalesOnComiteEndpoint(
+      documentoCliente: documentoCliente,
+      numeroSolicitud: numeroSolicitud,
+      nombrePromotor: nombrePromotor,
+      numeroActa: numeroActa,
+      orderType: orderType,
+      grupoId: grupoId,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = ComiteSolicitudesGrupalesOnComiteResponse.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

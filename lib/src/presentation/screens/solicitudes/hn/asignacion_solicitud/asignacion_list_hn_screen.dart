@@ -1,11 +1,12 @@
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_by_estado_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asign_solicitud_asesor/hn/filter_content_widget_hn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -86,7 +87,10 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
         ),
         const Expanded(
           flex: 1,
-          child: FilterContentWidgetHn(),
+          child: AnalisisFilterContentWidget(
+            estadoCredito: EstadoCredito.registrada,
+            isAsignadaToAsesorCredito: false,
+          ),
         ),
         Expanded(
           flex: 5,
