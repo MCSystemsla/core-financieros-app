@@ -3,6 +3,11 @@ part of 'solicitud_aslariado_hn_cubit.dart';
 
 class SolicitudAslariadoHnState extends Equatable {
   final String idSolicitud;
+  final String esGrupal;
+  final String cargoGrupoCodigo;
+  final String cargoGrupoNombre;
+  final String grupoCodigo;
+  final String grupoCodigoNombre;
   final String frecuenciaMeses;
   final double tasaInteres;
   final String fechaDesembolso;
@@ -134,6 +139,11 @@ class SolicitudAslariadoHnState extends Equatable {
   final double cuotaWithDecimal;
   final ClientSignatureStatus clientSignatureStatus;
   const SolicitudAslariadoHnState({
+    this.esGrupal = '',
+    this.cargoGrupoCodigo = '',
+    this.cargoGrupoNombre = '',
+    this.grupoCodigo = '',
+    this.grupoCodigoNombre = '',
     this.cuotaWithDecimal = 0,
     this.idSolicitud = '',
     this.frecuenciaMeses = '',
@@ -397,10 +407,20 @@ class SolicitudAslariadoHnState extends Equatable {
         cedulaConyuge,
         tipoDocumentoConyugeCodigo,
         clientSignatureStatus,
+        esGrupal,
+        cargoGrupoCodigo,
+        cargoGrupoNombre,
+        grupoCodigo,
+        grupoCodigoNombre
       ];
 
   SolicitudAslariadoHnState copyWith({
     String? idSolicitud,
+    String? esGrupal,
+    String? cargoGrupoCodigo,
+    String? cargoGrupoNombre,
+    String? grupoCodigo,
+    String? grupoCodigoNombre,
     String? frecuenciaMeses,
     double? tasaInteres,
     String? fechaDesembolso,
@@ -534,6 +554,11 @@ class SolicitudAslariadoHnState extends Equatable {
   }) {
     return SolicitudAslariadoHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
+      esGrupal: esGrupal ?? this.esGrupal,
+      cargoGrupoCodigo: cargoGrupoCodigo ?? this.cargoGrupoCodigo,
+      cargoGrupoNombre: cargoGrupoNombre ?? this.cargoGrupoNombre,
+      grupoCodigo: grupoCodigo ?? this.grupoCodigo,
+      grupoCodigoNombre: grupoCodigoNombre ?? this.grupoCodigoNombre,
       frecuenciaMeses: frecuenciaMeses ?? this.frecuenciaMeses,
       tasaInteres: tasaInteres ?? this.tasaInteres,
       fechaDesembolso: fechaDesembolso ?? this.fechaDesembolso,

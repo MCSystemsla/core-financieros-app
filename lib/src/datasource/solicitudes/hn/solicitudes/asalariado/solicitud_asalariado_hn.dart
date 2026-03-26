@@ -123,6 +123,9 @@ class SolicitudAsalariadoHn {
   final String tipoDocumentoConyugeCodigo;
   final String cedulaConyuge;
   final List<HistorialCredito> historialCredito;
+  final String grupoCodigo;
+  final String cargoGrupoCodigo;
+  final int? grupoCicloID;
 
   SolicitudAsalariadoHn({
     required this.database,
@@ -241,6 +244,9 @@ class SolicitudAsalariadoHn {
     required this.tipoDocumentoConyugeCodigo,
     required this.cedulaConyuge,
     required this.historialCredito,
+    required this.grupoCodigo,
+    required this.cargoGrupoCodigo,
+    this.grupoCicloID,
   });
 
   Map<String, dynamic> toJson() {
@@ -365,6 +371,9 @@ class SolicitudAsalariadoHn {
       'TipoDocumentoConyugeCodigo': tipoDocumentoConyugeCodigo,
       'historialCredito':
           List<dynamic>.from(historialCredito.map((x) => x.toJson())),
+      'GrupoCodigo': grupoCodigo,
+      'CargoGrupoCodigo': cargoGrupoCodigo,
+      'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

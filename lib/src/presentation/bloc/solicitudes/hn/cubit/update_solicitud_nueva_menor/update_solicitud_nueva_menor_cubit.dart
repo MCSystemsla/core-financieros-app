@@ -266,6 +266,10 @@ class UpdateSolicitudNuevaMenorCubit
       await _repository.updateSolicitudAsalariado(
         idSolicitud: idSolicitud,
         solicitudAsalariado: SolicitudAsalariadoHn(
+          // TODO: TERMINAR ESTO
+          cargoGrupoCodigo: '',
+          grupoCodigo: '',
+          grupoCicloID: 0,
           database: LocalStorage().database,
           isOffline: false,
           origenSolicitudCodigo: state.origenSolicitudCodigo,

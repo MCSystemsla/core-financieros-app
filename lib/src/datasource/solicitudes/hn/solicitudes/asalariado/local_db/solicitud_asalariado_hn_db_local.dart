@@ -131,6 +131,11 @@ class SolicitudAsalariadoHnDbLocal {
   String? tipoDocumentoConyugeCodigo;
   double? cuotaWithDecimal;
   String? clientSignatureStatus;
+  String? grupoCodigo;
+  String? cargoGrupoCodigo;
+  String? esGrupal;
+  String? cargoGrupoNombre;
+  String? grupoCodigoNombre;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -258,5 +263,10 @@ class SolicitudAsalariadoHnDbLocal {
     this.tipoDocumentoConyugeCodigo,
     this.cuotaWithDecimal,
     this.clientSignatureStatus,
+    this.grupoCodigo,
+    this.cargoGrupoCodigo,
+    this.esGrupal,
+    this.cargoGrupoNombre,
+    this.grupoCodigoNombre,
   });
 }

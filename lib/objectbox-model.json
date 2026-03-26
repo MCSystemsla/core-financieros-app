@@ -2313,7 +2313,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "146:4466291109480044403",
+      "lastPropertyId": "151:1322104153663295487",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2950,6 +2950,31 @@
         {
           "id": "146:4466291109480044403",
           "name": "clientSignatureStatus",
+          "type": 9
+        },
+        {
+          "id": "147:1724172836692059010",
+          "name": "grupoCodigo",
+          "type": 9
+        },
+        {
+          "id": "148:106903493312769087",
+          "name": "cargoGrupoCodigo",
+          "type": 9
+        },
+        {
+          "id": "149:7458821721054184557",
+          "name": "esGrupal",
+          "type": 9
+        },
+        {
+          "id": "150:3420904841293710458",
+          "name": "cargoGrupoNombre",
+          "type": 9
+        },
+        {
+          "id": "151:1322104153663295487",
+          "name": "grupoCodigoNombre",
           "type": 9
         }
       ],

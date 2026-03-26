@@ -29,6 +29,9 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
+          cargoGrupoCodigo: state.cargoGrupoCodigo,
+          grupoCodigo: state.grupoCodigo,
+          // grupoCicloID: state.grupoCicloID,
           cedulaConyuge: state.cedulaConyuge,
           tipoDocumentoConyugeCodigo: state.tipoDocumentoConyugeCodigo,
           historialCredito: state.historialCredito,
@@ -252,6 +255,12 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
     return SolicitudAsalariadoHnDbLocal(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
+      cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
+      grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
+      cargoGrupoNombre: _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
+      grupoCodigoNombre:
+          _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
       clientSignatureStatus: _prefer(
           state.clientSignatureStatus.name, prev?.clientSignatureStatus),
       database: _prefer(state.database, prev?.database),
@@ -619,6 +628,11 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         tipoClienteCodigo: solicitud.tipoClienteCodigo,
         cedulaConyuge: solicitud.cedulaConyuge,
         tipoDocumentoConyugeCodigo: solicitud.tipoDocumentoConyugeCodigo,
+        cargoGrupoCodigo: solicitud.cargoGrupoCodigo,
+        grupoCodigo: solicitud.grupoCodigo,
+        cargoGrupoNombre: solicitud.cargoGrupoNombre,
+        grupoCodigoNombre: solicitud.grupoCodigoNombre,
+        esGrupal: solicitud.esGrupal,
       ),
     );
   }
