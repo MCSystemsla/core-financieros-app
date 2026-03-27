@@ -285,7 +285,6 @@ class UpdateSolicitudNuevaMenorCubit
       await _repository.updateSolicitudAsalariado(
         idSolicitud: idSolicitud,
         solicitudAsalariado: SolicitudAsalariadoHn(
-          // TODO: TERMINAR ESTO
           aldeaTrabajoCodigo: state.aldeaTrabajoCodigo,
           aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
           caserioCasa: state.caserioCasa,
