@@ -153,6 +153,19 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
           barrioDestino: state.barrioDestino,
           caseriCasa: state.caseriCasa,
           aldeaCodigo: state.aldeaCodigo,
+          otrosIngresos: state.otrosIngresos,
+          telefonoConyuge: state.telefonoConyuge,
+          salarioNetoMensualConyuge: state.salarioNetoMensualConyuge,
+          aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
+          tipoViviendaCodigo: state.tipoViviendaCodigo,
+          ubicacionCodigo: state.ubicacionCodigo,
+          salarioNetoMensual: state.salarioNetoMensual,
+          paisTrabajoCodigo: state.paisTrabajoCodigo,
+          departamentoTrabajoCodigo: state.departamentoTrabajoCodigo,
+          municipioTrabajoCodigo: state.municipioTrabajoCodigo,
+          aldeaTrabajoCodigo: state.aldeaTrabajoCodigo,
+          caserioTrabajo: state.caserioTrabajo,
+          caserioCasa: state.caserioCasa,
         ),
       );
       if (!isOk) {
@@ -490,6 +503,32 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         state.tipoDocumentoConyugeCodigo,
         prev?.tipoDocumentoConyugeCodigo,
       ),
+      aldeaTrabajoCodigo:
+          _prefer(state.aldeaTrabajoCodigo, prev?.aldeaTrabajoCodigo),
+      caserioTrabajo: _prefer(state.caserioTrabajo, prev?.caserioTrabajo),
+      caserioCasa: _prefer(state.caserioCasa, prev?.caserioCasa),
+      telefonoConyuge: _prefer(state.telefonoConyuge, prev?.telefonoConyuge),
+      tipoViviendaCodigo:
+          _prefer(state.tipoViviendaCodigo, prev?.tipoViviendaCodigo),
+      ubicacionCodigo: _prefer(state.ubicacionCodigo, prev?.ubicacionCodigo),
+      salarioNetoMensual: state.salarioNetoMensual == 0
+          ? (prev?.salarioNetoMensual ?? 0)
+          : state.salarioNetoMensual,
+      aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge == 0
+          ? (prev?.aniosLugarTrabajoConyuge ?? 0)
+          : state.aniosLugarTrabajoConyuge,
+      salarioNetoMensualConyuge: state.salarioNetoMensualConyuge == 0
+          ? (prev?.salarioNetoMensualConyuge ?? 0)
+          : state.salarioNetoMensualConyuge,
+      departamentoTrabajoCodigo: _prefer(
+          state.departamentoTrabajoCodigo, prev?.departamentoTrabajoCodigo),
+      municipioTrabajoCodigo:
+          _prefer(state.municipioTrabajoCodigo, prev?.municipioTrabajoCodigo),
+      paisTrabajoCodigo:
+          _prefer(state.paisTrabajoCodigo, prev?.paisTrabajoCodigo),
+      otrosIngresos: state.otrosIngresos == 0
+          ? (prev?.otrosIngresos ?? 0)
+          : state.otrosIngresos,
     );
   }
 
@@ -633,6 +672,19 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         cargoGrupoNombre: solicitud.cargoGrupoNombre,
         grupoCodigoNombre: solicitud.grupoCodigoNombre,
         esGrupal: solicitud.esGrupal,
+        aldeaTrabajoCodigo: solicitud.aldeaTrabajoCodigo,
+        caserioTrabajo: solicitud.caserioTrabajo,
+        caserioCasa: solicitud.caserioCasa,
+        telefonoConyuge: solicitud.telefonoConyuge,
+        tipoViviendaCodigo: solicitud.tipoViviendaCodigo,
+        ubicacionCodigo: solicitud.ubicacionCodigo,
+        salarioNetoMensual: solicitud.salarioNetoMensual,
+        aniosLugarTrabajoConyuge: solicitud.aniosLugarTrabajoConyuge,
+        salarioNetoMensualConyuge: solicitud.salarioNetoMensualConyuge,
+        departamentoTrabajoCodigo: solicitud.departamentoTrabajoCodigo,
+        municipioTrabajoCodigo: solicitud.municipioTrabajoCodigo,
+        paisTrabajoCodigo: solicitud.paisTrabajoCodigo,
+        otrosIngresos: solicitud.otrosIngresos,
       ),
     );
   }

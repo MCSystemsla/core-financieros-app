@@ -177,6 +177,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         caseriCasa: value,
+                        caserioCasa: value,
                       ),
                     );
                   },
@@ -231,6 +232,7 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         condicionCasaCodigo: value?.value,
+                        // tipoViviendaCodigo: value?.value,
                       ),
                     );
                   },

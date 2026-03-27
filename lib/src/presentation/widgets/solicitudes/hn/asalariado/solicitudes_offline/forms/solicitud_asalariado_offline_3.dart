@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
@@ -69,7 +70,7 @@ class _SolicitudAsalariadoOffline3State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             profesionCodigo: item.value,
                           ),
                         );
@@ -90,7 +91,7 @@ class _SolicitudAsalariadoOffline3State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             ocupacionCodigo: item.value,
                           ),
                         );
@@ -110,7 +111,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             cargo: value,
                           ),
                         );
@@ -133,8 +134,123 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nombreTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      selectedItem: ItemNacionalidad(
+                        id: 0,
+                        valor: state.paisTrabajoCodigo,
+                        nombre: state.paisTrabajoCodigo,
+                        relacion: '',
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Pais del Trabajo',
+                      title: 'Pais del Trabajo',
+                      codigo: 'PAIS',
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            paisTrabajoCodigo: item.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      selectedItem: ItemNacionalidad(
+                        id: 0,
+                        valor: state.departamentoTrabajoCodigo,
+                        nombre: state.departamentoTrabajoCodigo,
+                        relacion: '',
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Departamento del trabajo',
+                      title: 'Departamento del trabajo',
+                      codigo: 'DEP',
+                      where: state.paisTrabajoCodigo,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            departamentoTrabajoCodigo: item.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      selectedItem: ItemNacionalidad(
+                        id: 0,
+                        valor: state.municipioTrabajoCodigo,
+                        nombre: state.municipioTrabajoCodigo,
+                        relacion: '',
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      codigo: 'MUN',
+                      hintText: 'Municipio del trabajo',
+                      title: 'Municipio del trabajo',
+                      where: state.departamentoTrabajoCodigo,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            municipioTrabajoCodigo: value.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      selectedItem: ItemNacionalidad(
+                        id: 0,
+                        valor: state.aldeaTrabajoCodigo,
+                        nombre: state.aldeaTrabajoCodigo,
+                        relacion: '',
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Aldea del trabajo',
+                      title: 'Aldea del trabajo',
+                      codigo: 'ALD',
+                      where: state.municipioTrabajoCodigo,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            aldeaTrabajoCodigo: value.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      initialValue: state.caserioTrabajo,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Caserio del Trabajo',
+                      icon: Icon(Icons.location_on,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      title: 'Caserio del Trabajo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            caserioTrabajo: value,
                           ),
                         );
                       },
@@ -155,7 +271,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             direccionTrabajo: value,
                           ),
                         );
@@ -178,7 +294,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             barrioTrabajo: value,
                           ),
                         );
@@ -201,7 +317,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             telefonoTrabajo: value,
                           ),
                         );
@@ -222,7 +338,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             tiempoLaborar: value,
                           ),
                         );
@@ -243,7 +359,7 @@ class _SolicitudAsalariadoOffline3State
                       ],
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             lugarTrabajoAnterior: value,
                           ),
                         );
@@ -267,10 +383,13 @@ class _SolicitudAsalariadoOffline3State
                         final newValue =
                             value.replaceAll(RegExp(r'[^0-9]'), '');
                         final salarioNeto = int.tryParse(newValue) ?? 0;
+                        final total = state.salarioNetoCordoba + salarioNeto;
 
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             salarioNetoCordoba: salarioNeto,
+                            totalIngresoMes: total,
+                            salarioNetoMensual: salarioNeto.toDouble(),
                           ),
                         );
                       },
@@ -295,6 +414,9 @@ class _SolicitudAsalariadoOffline3State
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             otrosIngresosCordoba: otrosIngresos,
+                            totalIngresoMes: state.totalIngresoMes +
+                                (int.tryParse(newValue) ?? 0),
+                            otrosIngresos: otrosIngresos.toDouble(),
                           ),
                         );
                       },

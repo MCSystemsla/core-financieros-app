@@ -814,6 +814,7 @@ class _SolicitudAsalariadoOffline1State
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             ubicacion: value.value,
+                            ubicacionCodigo: value.value,
                           ),
                         );
                       },

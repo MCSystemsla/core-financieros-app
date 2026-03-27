@@ -136,6 +136,19 @@ class SolicitudAsalariadoHnDbLocal {
   String? esGrupal;
   String? cargoGrupoNombre;
   String? grupoCodigoNombre;
+  double? otrosIngresos;
+  String? telefonoConyuge;
+  double? salarioNetoMensualConyuge;
+  int? aniosLugarTrabajoConyuge;
+  String? tipoViviendaCodigo;
+  String? ubicacionCodigo;
+  double? salarioNetoMensual;
+  String? paisTrabajoCodigo;
+  String? departamentoTrabajoCodigo;
+  String? municipioTrabajoCodigo;
+  String? aldeaTrabajoCodigo;
+  String? caserioTrabajo;
+  String? caserioCasa;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -268,5 +281,18 @@ class SolicitudAsalariadoHnDbLocal {
     this.esGrupal,
     this.cargoGrupoNombre,
     this.grupoCodigoNombre,
+    this.otrosIngresos,
+    this.telefonoConyuge,
+    this.salarioNetoMensualConyuge,
+    this.aniosLugarTrabajoConyuge,
+    this.tipoViviendaCodigo,
+    this.ubicacionCodigo,
+    this.salarioNetoMensual,
+    this.paisTrabajoCodigo,
+    this.departamentoTrabajoCodigo,
+    this.municipioTrabajoCodigo,
+    this.aldeaTrabajoCodigo,
+    this.caserioTrabajo,
+    this.caserioCasa,
   });
 }

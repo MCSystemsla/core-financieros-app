@@ -138,6 +138,19 @@ class SolicitudAslariadoHnState extends Equatable {
   final String tipoDocumentoConyugeCodigo;
   final double cuotaWithDecimal;
   final ClientSignatureStatus clientSignatureStatus;
+  final double otrosIngresos;
+  final String telefonoConyuge;
+  final double salarioNetoMensualConyuge;
+  final int aniosLugarTrabajoConyuge;
+  final String tipoViviendaCodigo;
+  final String ubicacionCodigo;
+  final double salarioNetoMensual;
+  final String paisTrabajoCodigo;
+  final String departamentoTrabajoCodigo;
+  final String municipioTrabajoCodigo;
+  final String aldeaTrabajoCodigo;
+  final String caserioTrabajo;
+  final String caserioCasa;
   const SolicitudAslariadoHnState({
     this.esGrupal = '',
     this.cargoGrupoCodigo = '',
@@ -275,6 +288,19 @@ class SolicitudAslariadoHnState extends Equatable {
     this.cedulaConyuge = '',
     this.tipoDocumentoConyugeCodigo = '',
     this.clientSignatureStatus = ClientSignatureStatus.unknown,
+    this.otrosIngresos = 0,
+    this.telefonoConyuge = '',
+    this.salarioNetoMensualConyuge = 0,
+    this.aniosLugarTrabajoConyuge = 0,
+    this.tipoViviendaCodigo = '',
+    this.ubicacionCodigo = '',
+    this.salarioNetoMensual = 0,
+    this.paisTrabajoCodigo = '',
+    this.departamentoTrabajoCodigo = '',
+    this.municipioTrabajoCodigo = '',
+    this.aldeaTrabajoCodigo = '',
+    this.caserioTrabajo = '',
+    this.caserioCasa = '',
   });
 
   @override
@@ -411,7 +437,20 @@ class SolicitudAslariadoHnState extends Equatable {
         cargoGrupoCodigo,
         cargoGrupoNombre,
         grupoCodigo,
-        grupoCodigoNombre
+        grupoCodigoNombre,
+        otrosIngresos,
+        telefonoConyuge,
+        salarioNetoMensualConyuge,
+        aniosLugarTrabajoConyuge,
+        tipoViviendaCodigo,
+        ubicacionCodigo,
+        salarioNetoMensual,
+        paisTrabajoCodigo,
+        departamentoTrabajoCodigo,
+        municipioTrabajoCodigo,
+        aldeaTrabajoCodigo,
+        caserioTrabajo,
+        caserioCasa
       ];
 
   SolicitudAslariadoHnState copyWith({
@@ -551,6 +590,19 @@ class SolicitudAslariadoHnState extends Equatable {
     String? tipoDocumentoConyugeCodigo,
     double? cuotaWithDecimal,
     ClientSignatureStatus? clientSignatureStatus,
+    double? otrosIngresos,
+    String? telefonoConyuge,
+    double? salarioNetoMensualConyuge,
+    int? aniosLugarTrabajoConyuge,
+    String? tipoViviendaCodigo,
+    String? ubicacionCodigo,
+    double? salarioNetoMensual,
+    String? paisTrabajoCodigo,
+    String? departamentoTrabajoCodigo,
+    String? municipioTrabajoCodigo,
+    String? aldeaTrabajoCodigo,
+    String? caserioTrabajo,
+    String? caserioCasa,
   }) {
     return SolicitudAslariadoHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -717,6 +769,23 @@ class SolicitudAslariadoHnState extends Equatable {
       cuotaWithDecimal: cuotaWithDecimal ?? this.cuotaWithDecimal,
       clientSignatureStatus:
           clientSignatureStatus ?? this.clientSignatureStatus,
+      otrosIngresos: otrosIngresos ?? this.otrosIngresos,
+      telefonoConyuge: telefonoConyuge ?? this.telefonoConyuge,
+      salarioNetoMensualConyuge:
+          salarioNetoMensualConyuge ?? this.salarioNetoMensualConyuge,
+      aniosLugarTrabajoConyuge:
+          aniosLugarTrabajoConyuge ?? this.aniosLugarTrabajoConyuge,
+      tipoViviendaCodigo: tipoViviendaCodigo ?? this.tipoViviendaCodigo,
+      ubicacionCodigo: ubicacionCodigo ?? this.ubicacionCodigo,
+      salarioNetoMensual: salarioNetoMensual ?? this.salarioNetoMensual,
+      paisTrabajoCodigo: paisTrabajoCodigo ?? this.paisTrabajoCodigo,
+      departamentoTrabajoCodigo:
+          departamentoTrabajoCodigo ?? this.departamentoTrabajoCodigo,
+      municipioTrabajoCodigo:
+          municipioTrabajoCodigo ?? this.municipioTrabajoCodigo,
+      aldeaTrabajoCodigo: aldeaTrabajoCodigo ?? this.aldeaTrabajoCodigo,
+      caserioTrabajo: caserioTrabajo ?? this.caserioTrabajo,
+      caserioCasa: caserioCasa ?? this.caserioCasa,
     );
   }
 }

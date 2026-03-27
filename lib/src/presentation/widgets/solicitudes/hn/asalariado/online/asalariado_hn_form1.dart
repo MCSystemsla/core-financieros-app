@@ -806,6 +806,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         ubicacion: value.value,
+                        ubicacionCodigo: value.value,
                       ),
                     );
                   },

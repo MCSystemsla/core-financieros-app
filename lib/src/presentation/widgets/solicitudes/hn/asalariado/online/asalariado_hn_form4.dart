@@ -141,7 +141,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
-                    textInputType: TextInputType.name,
+                    textInputType: TextInputType.text,
                     textCapitalization: TextCapitalization.words,
                     title: 'Documento Cónyuge',
                     inputFormatters: [
@@ -266,6 +266,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             tiempoLaborarConyugue: value,
+                            aniosLugarTrabajoConyuge: int.tryParse(value) ?? 0,
                           ),
                         );
                       },
@@ -292,6 +293,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             sueldoMesConyugue: sueldoMensual,
+                            salarioNetoMensualConyuge: sueldoMensual.toDouble(),
                           ),
                         );
                       },
@@ -356,6 +358,29 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
                           nacionalidadConyugue: item.valor,
+                        ),
+                      );
+                    },
+                  ),
+                  const Gap(30),
+                  CountryInput(
+                    isRequired: true,
+                    maxLength: 15,
+                    countryCodeInput: CountryCodeInput.hn,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    hintText: 'Numero de telefono del Cónyuge',
+                    icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
+                    textInputType: TextInputType.phone,
+                    textCapitalization: TextCapitalization.none,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    title: 'Numero de telefono del Cónyuge',
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          telefonoConyuge: value,
                         ),
                       );
                     },

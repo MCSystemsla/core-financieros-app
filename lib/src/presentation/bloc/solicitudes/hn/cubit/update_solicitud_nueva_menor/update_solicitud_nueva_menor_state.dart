@@ -186,6 +186,23 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
   final List<HistorialCredito> historialCredito;
   final double ingresoMensualConyuge;
   final int aniosLugarTrabajoConyuge;
+  final String medidasConocimientoCodigo;
+  final String medidasConocimientoNombre;
+  final String paisTrabajoCodigo;
+  final String paisTrabajoNombre;
+  final String departamentoTrabajoCodigo;
+  final String departamentoTrabajoNombre;
+  final String municipioTrabajoCodigo;
+  final String municipioTrabajoNombre;
+  final String aldeaTrabajoCodigo;
+  final String aldeaTrabajoNombre;
+  final String caserioTrabajo;
+  final double otrosIngresos;
+  final double salarioNetoMensual;
+  final double salarioNetoMensualConyuge;
+  final String telefonoConyuge;
+  final String cedulaConyuge;
+
   const UpdateSolicitudNuevaMenorState({
     this.status = Status.notStarted,
     this.updateStatus = Status.notStarted,
@@ -371,6 +388,22 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
     this.telefonoFamiliarCercano = '',
     this.ingresoMensualConyuge = 0,
     this.aniosLugarTrabajoConyuge = 0,
+    this.medidasConocimientoCodigo = '',
+    this.medidasConocimientoNombre = '',
+    this.paisTrabajoCodigo = '',
+    this.paisTrabajoNombre = '',
+    this.departamentoTrabajoCodigo = '',
+    this.departamentoTrabajoNombre = '',
+    this.municipioTrabajoCodigo = '',
+    this.municipioTrabajoNombre = '',
+    this.aldeaTrabajoCodigo = '',
+    this.aldeaTrabajoNombre = '',
+    this.caserioTrabajo = '',
+    this.otrosIngresos = 0,
+    this.salarioNetoMensual = 0,
+    this.salarioNetoMensualConyuge = 0,
+    this.telefonoConyuge = '',
+    this.cedulaConyuge = '',
   });
 
   @override
@@ -558,6 +591,22 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
         otrosIngresosConyugue,
         ingresoMensualConyuge,
         aniosLugarTrabajoConyuge,
+        medidasConocimientoCodigo,
+        medidasConocimientoNombre,
+        paisTrabajoCodigo,
+        paisTrabajoNombre,
+        departamentoTrabajoCodigo,
+        departamentoTrabajoNombre,
+        municipioTrabajoCodigo,
+        municipioTrabajoNombre,
+        aldeaTrabajoCodigo,
+        aldeaTrabajoNombre,
+        caserioTrabajo,
+        otrosIngresos,
+        salarioNetoMensual,
+        salarioNetoMensualConyuge,
+        telefonoConyuge,
+        cedulaConyuge,
       ];
 
   UpdateSolicitudNuevaMenorState copyWith({
@@ -745,6 +794,22 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
     List<HistorialCredito>? historialCredito,
     double? ingresoMensualConyuge,
     int? aniosLugarTrabajoConyuge,
+    String? medidasConocimientoCodigo,
+    String? medidasConocimientoNombre,
+    String? paisTrabajoCodigo,
+    String? paisTrabajoNombre,
+    String? departamentoTrabajoCodigo,
+    String? departamentoTrabajoNombre,
+    String? municipioTrabajoCodigo,
+    String? municipioTrabajoNombre,
+    String? aldeaTrabajoCodigo,
+    String? aldeaTrabajoNombre,
+    String? caserioTrabajo,
+    double? otrosIngresos,
+    double? salarioNetoMensual,
+    double? salarioNetoMensualConyuge,
+    String? telefonoConyuge,
+    String? cedulaConyuge,
   }) {
     return UpdateSolicitudNuevaMenorState(
       status: status ?? this.status,
@@ -978,6 +1043,29 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
           ingresoMensualConyuge ?? this.ingresoMensualConyuge,
       aniosLugarTrabajoConyuge:
           aniosLugarTrabajoConyuge ?? this.aniosLugarTrabajoConyuge,
+      medidasConocimientoCodigo:
+          medidasConocimientoCodigo ?? this.medidasConocimientoCodigo,
+      medidasConocimientoNombre:
+          medidasConocimientoNombre ?? this.medidasConocimientoNombre,
+      paisTrabajoCodigo: paisTrabajoCodigo ?? this.paisTrabajoCodigo,
+      paisTrabajoNombre: paisTrabajoNombre ?? this.paisTrabajoNombre,
+      departamentoTrabajoCodigo:
+          departamentoTrabajoCodigo ?? this.departamentoTrabajoCodigo,
+      departamentoTrabajoNombre:
+          departamentoTrabajoNombre ?? this.departamentoTrabajoNombre,
+      municipioTrabajoCodigo:
+          municipioTrabajoCodigo ?? this.municipioTrabajoCodigo,
+      municipioTrabajoNombre:
+          municipioTrabajoNombre ?? this.municipioTrabajoNombre,
+      aldeaTrabajoCodigo: aldeaTrabajoCodigo ?? this.aldeaTrabajoCodigo,
+      aldeaTrabajoNombre: aldeaTrabajoNombre ?? this.aldeaTrabajoNombre,
+      caserioTrabajo: caserioTrabajo ?? this.caserioTrabajo,
+      otrosIngresos: otrosIngresos ?? this.otrosIngresos,
+      salarioNetoMensual: salarioNetoMensual ?? this.salarioNetoMensual,
+      salarioNetoMensualConyuge:
+          salarioNetoMensualConyuge ?? this.salarioNetoMensualConyuge,
+      telefonoConyuge: telefonoConyuge ?? this.telefonoConyuge,
+      cedulaConyuge: cedulaConyuge ?? this.cedulaConyuge,
     );
   }
 }

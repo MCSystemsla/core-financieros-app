@@ -197,6 +197,23 @@ class UpdateSolicitudNuevaData {
   final String? nombreFamiliarCercano;
   final String? direccionFamiliarCercano;
   final String? telefonoFamiliarCercano;
+  final String? medidasConocimientoCodigo;
+  final String? medidasConocimientoNombre;
+  final String? paisTrabajoCodigo;
+  final String? paisTrabajoNombre;
+  final String? departamentoTrabajoCodigo;
+  final String? departamentoTrabajoNombre;
+  final String? municipioTrabajoCodigo;
+  final String? municipioTrabajoNombre;
+  final String? aldeaTrabajoCodigo;
+  final String? aldeaTrabajoNombre;
+  final String? caserioTrabajo;
+  final double? otrosIngresos;
+  final double? salarioNetoMensual;
+  final double? salarioNetoMensualConyuge;
+  final int? aniosLugarTrabajoConyuge;
+  final String? cedulaConyuge;
+
   UpdateSolicitudNuevaData({
     this.id,
     this.origenSolicitudCodigo,
@@ -376,6 +393,22 @@ class UpdateSolicitudNuevaData {
     this.nombreFamiliarCercano,
     this.direccionFamiliarCercano,
     this.telefonoFamiliarCercano,
+    this.medidasConocimientoCodigo,
+    this.medidasConocimientoNombre,
+    this.paisTrabajoCodigo,
+    this.paisTrabajoNombre,
+    this.departamentoTrabajoCodigo,
+    this.departamentoTrabajoNombre,
+    this.municipioTrabajoCodigo,
+    this.municipioTrabajoNombre,
+    this.aldeaTrabajoCodigo,
+    this.aldeaTrabajoNombre,
+    this.caserioTrabajo,
+    this.otrosIngresos,
+    this.salarioNetoMensual,
+    this.salarioNetoMensualConyuge,
+    this.aniosLugarTrabajoConyuge,
+    this.cedulaConyuge,
   });
 
   factory UpdateSolicitudNuevaData.fromJson(Map<String, dynamic> json) =>
@@ -431,7 +464,7 @@ class UpdateSolicitudNuevaData {
         trabajaConyugue: parseBool(json['TrabajaConyugue']),
         trabajoConyugue: json['TrabajoConyugue'],
         direccionTrabajoConyugue: json['DireccionTrabajoConyugue'],
-        telefonoTrabajoConyugue: json['TelefonoTrabajoConyugue'],
+        telefonoTrabajoConyugue: json['TelefonoConyuge'],
         productoCodigo: json['ProductoCodigo'],
         productoNombre: json['ProductoNombre'],
         observacion: json['Observacion'],
@@ -558,5 +591,22 @@ class UpdateSolicitudNuevaData {
         nombreFamiliarCercano: json['NombreFamiliarCercano'],
         direccionFamiliarCercano: json['DireccionFamiliarCercano'],
         telefonoFamiliarCercano: json['TelefonoFamiliarCercano'],
+        medidasConocimientoCodigo: json['MedidasConocimientoCodigo'],
+        medidasConocimientoNombre: json['MedidasConocimientoNombre'],
+        paisTrabajoCodigo: json['PaisTrabajoCodigo'],
+        paisTrabajoNombre: json['PaisTrabajoNombre'],
+        departamentoTrabajoCodigo: json['DepartamentoTrabajoCodigo'],
+        departamentoTrabajoNombre: json['DepartamentoTrabajoNombre'],
+        municipioTrabajoCodigo: json['MunicipioTrabajoCodigo'],
+        municipioTrabajoNombre: json['MunicipioTrabajoNombre'],
+        aldeaTrabajoCodigo: json['AldeaTrabajoCodigo'],
+        aldeaTrabajoNombre: json['AldeaTrabajoNombre'],
+        caserioTrabajo: json['CaserioTrabajo'],
+        otrosIngresos: parseDouble(json['OtrosIngresos']),
+        salarioNetoMensual: parseDouble(json['SalarioNetoMensual']),
+        salarioNetoMensualConyuge:
+            parseDouble(json['SalarioNetoMensualConyuge']),
+        aniosLugarTrabajoConyuge: parseInt(json['AniosLugarTrabajoConyuge']),
+        cedulaConyuge: json['CedulaConyuge'],
       );
 }

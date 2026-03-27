@@ -2313,7 +2313,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "151:1322104153663295487",
+      "lastPropertyId": "164:8080817985793085361",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -2975,6 +2975,71 @@
         {
           "id": "151:1322104153663295487",
           "name": "grupoCodigoNombre",
+          "type": 9
+        },
+        {
+          "id": "152:5909001231064476994",
+          "name": "otrosIngresos",
+          "type": 8
+        },
+        {
+          "id": "153:6505305802822957545",
+          "name": "telefonoConyuge",
+          "type": 9
+        },
+        {
+          "id": "154:7088858987026820100",
+          "name": "salarioNetoMensualConyuge",
+          "type": 8
+        },
+        {
+          "id": "155:7479302768723868103",
+          "name": "aniosLugarTrabajoConyuge",
+          "type": 6
+        },
+        {
+          "id": "156:4741456223090900223",
+          "name": "tipoViviendaCodigo",
+          "type": 9
+        },
+        {
+          "id": "157:6852695543769254129",
+          "name": "ubicacionCodigo",
+          "type": 9
+        },
+        {
+          "id": "158:3789277183481958347",
+          "name": "salarioNetoMensual",
+          "type": 8
+        },
+        {
+          "id": "159:7915911736271204913",
+          "name": "paisTrabajoCodigo",
+          "type": 9
+        },
+        {
+          "id": "160:6749782610288618143",
+          "name": "departamentoTrabajoCodigo",
+          "type": 9
+        },
+        {
+          "id": "161:7603264620472387831",
+          "name": "municipioTrabajoCodigo",
+          "type": 9
+        },
+        {
+          "id": "162:8068505831176000006",
+          "name": "aldeaTrabajoCodigo",
+          "type": 9
+        },
+        {
+          "id": "163:3106125696438427627",
+          "name": "caserioTrabajo",
+          "type": 9
+        },
+        {
+          "id": "164:8080817985793085361",
+          "name": "caserioCasa",
           "type": 9
         }
       ],

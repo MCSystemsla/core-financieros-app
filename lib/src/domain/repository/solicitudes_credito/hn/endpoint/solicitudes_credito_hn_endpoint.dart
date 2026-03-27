@@ -19,7 +19,9 @@ class CrearSolciitudAsalariadoHNEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/cartera/solicitud-asalariado/crear';
+  // * Version 1.0
+  // String get path => '/cartera/solicitud-asalariado/crear';
+  String get path => '/cartera/solicitud-asalariado/crear/v2';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -574,7 +576,8 @@ class UpdateSolicitudAsalariadoEndpoint extends Endpoint {
   Method get method => Method.patch;
 
   @override
-  String get path => '/cartera/solicitud-asalariado/actualizar';
+  // String get path => '/cartera/solicitud-asalariado/actualizar';
+  String get path => '/cartera/solicitud-asalariado/actualizar/V2';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

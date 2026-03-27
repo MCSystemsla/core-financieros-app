@@ -126,7 +126,19 @@ class SolicitudAsalariadoHn {
   final String grupoCodigo;
   final String cargoGrupoCodigo;
   final int? grupoCicloID;
-
+  final double otrosIngresos;
+  final String telefonoConyuge;
+  final double salarioNetoMensualConyuge;
+  final int aniosLugarTrabajoConyuge;
+  final String tipoViviendaCodigo;
+  final String ubicacionCodigo;
+  final double salarioNetoMensual;
+  final String paisTrabajoCodigo;
+  final String departamentoTrabajoCodigo;
+  final String municipioTrabajoCodigo;
+  final String aldeaTrabajoCodigo;
+  final String caserioTrabajo;
+  final String caserioCasa;
   SolicitudAsalariadoHn({
     required this.database,
     required this.isOffline,
@@ -247,6 +259,19 @@ class SolicitudAsalariadoHn {
     required this.grupoCodigo,
     required this.cargoGrupoCodigo,
     this.grupoCicloID,
+    required this.otrosIngresos,
+    required this.telefonoConyuge,
+    required this.salarioNetoMensualConyuge,
+    required this.aniosLugarTrabajoConyuge,
+    required this.tipoViviendaCodigo,
+    required this.ubicacionCodigo,
+    required this.salarioNetoMensual,
+    required this.paisTrabajoCodigo,
+    required this.departamentoTrabajoCodigo,
+    required this.municipioTrabajoCodigo,
+    required this.aldeaTrabajoCodigo,
+    required this.caserioTrabajo,
+    required this.caserioCasa,
   });
 
   Map<String, dynamic> toJson() {
@@ -374,6 +399,19 @@ class SolicitudAsalariadoHn {
       'GrupoCodigo': grupoCodigo,
       'CargoGrupoCodigo': cargoGrupoCodigo,
       'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
+      'OtrosIngresos': otrosIngresos,
+      'TelefonoConyuge': telefonoConyuge,
+      'SalarioNetoMensualConyuge': salarioNetoMensualConyuge,
+      'AniosLugarTrabajoConyuge': aniosLugarTrabajoConyuge,
+      'TipoViviendaCodigo': tipoViviendaCodigo,
+      'UbicacionCodigo': ubicacionCodigo,
+      'SalarioNetoMensual': salarioNetoMensual,
+      'PaisTrabajoCodigo': paisTrabajoCodigo,
+      'DepartamentoTrabajoCodigo': departamentoTrabajoCodigo,
+      'MunicipioTrabajoCodigo': municipioTrabajoCodigo,
+      'AldeaTrabajoCodigo': aldeaTrabajoCodigo,
+      'CaserioTrabajo': caserioTrabajo,
+      'CaserioCasa': caserioCasa,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

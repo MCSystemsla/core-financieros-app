@@ -174,6 +174,7 @@ class _SolicitudAsalariadoOffline2State
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             caseriCasa: value,
+                            caserioCasa: value,
                           ),
                         );
                       },
@@ -237,6 +238,7 @@ class _SolicitudAsalariadoOffline2State
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             condicionCasaCodigo: value?.value,
+                            // tipoViviendaCodigo: value?.value,
                           ),
                         );
                       },
