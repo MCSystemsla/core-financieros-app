@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 UserByDocumentHn userByDocumentHnFromJson(String str) =>
     UserByDocumentHn.fromJson(json.decode(str));
 
@@ -56,16 +58,14 @@ class UserDocumentDataHN {
         segundoNombre: json['SegundoNombre'],
         primerApellido: json['PrimerApellido'],
         segundoApellido: json['SegundoApellido'],
-        fechaNacimiento: DateTime.parse(json['FechaNacimiento']),
+        fechaNacimiento: parseDate(json['FechaNacimiento']),
         sexo: json['Sexo'],
         pais: json['Pais'],
         departamento: json['Departamento'],
         municipio: json['Municipio'],
         direccion: json['Direccion'],
-        fechaEmision: (json['FechaEmision'] != null)
-            ? DateTime.parse(json['FechaEmision'])
-            : null,
-        fechaExpira: DateTime.parse(json['FechaExpira']),
+        fechaEmision: parseDate(json['FechaEmision']),
+        fechaExpira: parseDate(json['FechaExpira']),
         tipoDocumento: json['TipoDocumento'],
       );
 }

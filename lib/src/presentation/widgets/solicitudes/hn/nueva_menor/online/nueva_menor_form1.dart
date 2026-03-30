@@ -651,7 +651,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   isRequired: true,
-                  initialValue: fechaNacimiento?.selectorFormat(),
+                  // initialValue: fechaNacimiento?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),
                   readOnly: true,
