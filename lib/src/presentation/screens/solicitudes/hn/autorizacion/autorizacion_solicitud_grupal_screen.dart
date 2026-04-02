@@ -217,7 +217,16 @@ class _FabButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: CustomElevatedButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: state.status == Status.inProgress
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 5,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.add, color: Colors.white),
               color: AppColors.greenLatern,
               enabled: state.status != Status.inProgress,
               text: state.status == Status.inProgress

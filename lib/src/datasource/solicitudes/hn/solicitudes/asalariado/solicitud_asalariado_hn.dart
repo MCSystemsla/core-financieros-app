@@ -139,6 +139,7 @@ class SolicitudAsalariadoHn {
   final String aldeaTrabajoCodigo;
   final String caserioTrabajo;
   final String caserioCasa;
+  final bool esRecurrente;
   SolicitudAsalariadoHn({
     required this.database,
     required this.isOffline,
@@ -272,6 +273,7 @@ class SolicitudAsalariadoHn {
     required this.aldeaTrabajoCodigo,
     required this.caserioTrabajo,
     required this.caserioCasa,
+    required this.esRecurrente,
   });
 
   Map<String, dynamic> toJson() {
@@ -355,17 +357,19 @@ class SolicitudAsalariadoHn {
       'LugarTrabajoAnterior': lugarTrabajoAnterior,
       'NombreFamiliarCercano': nombreFamiliarCercano,
       'ParentescoFamiliarCercanoCodigo': parentescoFamiliarCercanoCodigo,
-      'OtrosIngresosConyugue': otrosIngresosConyugue,
+      'OtrosIngresosConyugue':
+          otrosIngresosConyugue == 0 ? null : otrosIngresosConyugue,
       'OtrosIngresosCordoba': otrosIngresosCordoba,
       'ProfesionConyugue': profesionConyugue,
       'SalarioNetoCordoba': salarioNetoCordoba,
-      'SueldoMesConyugue': sueldoMesConyugue,
+      'SueldoMesConyugue': sueldoMesConyugue == 0 ? null : sueldoMesConyugue,
       'TelefonoFamiliarCercano': telefonoFamiliarCercano,
       'TelefonoTrabajo': telefonoTrabajo,
       'TiempoLaborar': tiempoLaborar,
       'TiempoLaborarConyugue': tiempoLaborarConyugue,
       'TotalIngresoMes': totalIngresoMes,
-      'TotalIngresoMesConyugue': totalIngresoMesConyugue,
+      'TotalIngresoMesConyugue':
+          totalIngresoMesConyugue == 0 ? null : totalIngresoMesConyugue,
       'RTN': rtn,
       'CodigoUSA': codigoUsa,
       'TipoPersonaCNBSIDCodigo': tipoPersonaCnbsidCodigo,
@@ -401,8 +405,10 @@ class SolicitudAsalariadoHn {
       'objCicloGrupoID': grupoCicloID == 0 ? null : grupoCicloID,
       'OtrosIngresos': otrosIngresos,
       'TelefonoConyuge': telefonoConyuge,
-      'SalarioNetoMensualConyuge': salarioNetoMensualConyuge,
-      'AniosLugarTrabajoConyuge': aniosLugarTrabajoConyuge,
+      'SalarioNetoMensualConyuge':
+          salarioNetoMensualConyuge == 0 ? null : salarioNetoMensualConyuge,
+      'AniosLugarTrabajoConyuge':
+          aniosLugarTrabajoConyuge == 0 ? null : aniosLugarTrabajoConyuge,
       'TipoViviendaCodigo': tipoViviendaCodigo,
       'UbicacionCodigo': ubicacionCodigo,
       'SalarioNetoMensual': salarioNetoMensual,
@@ -412,6 +418,7 @@ class SolicitudAsalariadoHn {
       'AldeaTrabajoCodigo': aldeaTrabajoCodigo,
       'CaserioTrabajo': caserioTrabajo,
       'CaserioCasa': caserioCasa,
+      'EsRecurrente': esRecurrente,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

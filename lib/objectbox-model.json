@@ -2313,7 +2313,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "164:8080817985793085361",
+      "lastPropertyId": "165:238939257928424754",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -3041,13 +3041,18 @@
           "id": "164:8080817985793085361",
           "name": "caserioCasa",
           "type": 9
+        },
+        {
+          "id": "165:238939257928424754",
+          "name": "esRecurrente",
+          "type": 1
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "174:1318918895326023986",
+      "lastPropertyId": "175:2255315914120479271",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3910,6 +3915,11 @@
           "id": "174:1318918895326023986",
           "name": "aniosLugarTrabajoConyuge",
           "type": 6
+        },
+        {
+          "id": "175:2255315914120479271",
+          "name": "esRecurrente",
+          "type": 1
         }
       ],
       "relations": []

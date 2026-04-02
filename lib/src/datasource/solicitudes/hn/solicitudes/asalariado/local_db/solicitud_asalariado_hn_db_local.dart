@@ -149,6 +149,7 @@ class SolicitudAsalariadoHnDbLocal {
   String? aldeaTrabajoCodigo;
   String? caserioTrabajo;
   String? caserioCasa;
+  bool esRecurrente = false;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -294,5 +295,6 @@ class SolicitudAsalariadoHnDbLocal {
     this.aldeaTrabajoCodigo,
     this.caserioTrabajo,
     this.caserioCasa,
+    this.esRecurrente = false,
   });
 }

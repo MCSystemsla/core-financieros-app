@@ -100,6 +100,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
         tipoPersonaCnbsCodigoNombre: 'PERSONA NATURAL',
         paisEmisorCedulaCodigoNombre: 'Honduras',
         nacinalidadCodigoNombre: 'HN',
+        esRecurrente: widget.userByDocumentHn?.esRecurrente,
       ),
     );
     localDpProvider.saveCedulaClient(
@@ -618,7 +619,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                   const Gap(30),
                   OutlineTextfieldWidget(
                     isRequired: true,
-                    initialValue: fechaEmisionCedula?.selectorFormat(),
+                    // initialValue: fechaEmisionCedula?.selectorFormat(),
                     validator: (value) => ClassValidator.validateRequired(
                         fechaEmisionCedula?.selectorFormat()),
                     onTap: () => selectEmisionFecha(context),
@@ -635,7 +636,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   isRequired: true,
-                  initialValue: _selectedDate?.selectorFormat(),
+                  // initialValue: _selectedDate?.selectorFormat(),
                   validator: (value) => ClassValidator.validateRequired(
                       _selectedDate?.selectorFormat()),
                   readOnly: true,

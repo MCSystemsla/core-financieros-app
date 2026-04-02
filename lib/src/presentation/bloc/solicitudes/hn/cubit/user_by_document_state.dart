@@ -20,6 +20,7 @@ class UserByDocumentState extends Equatable {
   final String fechaEmision;
   final String fechaExpira;
   final String tipoDocumento;
+  final bool esRecurrente;
   const UserByDocumentState({
     this.errorMsg = '',
     this.status = UserByDocumentStatus.notStarted,
@@ -37,6 +38,7 @@ class UserByDocumentState extends Equatable {
     this.fechaEmision = '',
     this.fechaExpira = '',
     this.tipoDocumento = '',
+    this.esRecurrente = false,
   });
 
   @override
@@ -57,6 +59,7 @@ class UserByDocumentState extends Equatable {
         fechaEmision,
         fechaExpira,
         tipoDocumento,
+        esRecurrente,
       ];
 
   UserByDocumentState copyWith({
@@ -76,6 +79,7 @@ class UserByDocumentState extends Equatable {
     String? fechaEmision,
     String? fechaExpira,
     String? tipoDocumento,
+    bool? esRecurrente,
   }) {
     return UserByDocumentState(
       status: status ?? this.status,
@@ -94,6 +98,7 @@ class UserByDocumentState extends Equatable {
       fechaEmision: fechaEmision ?? this.fechaEmision,
       fechaExpira: fechaExpira ?? this.fechaExpira,
       tipoDocumento: tipoDocumento ?? this.tipoDocumento,
+      esRecurrente: esRecurrente ?? this.esRecurrente,
     );
   }
 }

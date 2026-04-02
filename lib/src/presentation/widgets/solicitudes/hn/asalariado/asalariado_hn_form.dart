@@ -127,6 +127,7 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
                     fechaExpira:
                         DateTime.tryParse(userByDocumentProvider.fechaExpira),
                     tipoDocumento: userByDocumentProvider.tipoDocumento,
+                    esRecurrente: userByDocumentProvider.esRecurrente,
                   ),
                 ),
                 AsalariadoHnForm2(
@@ -146,6 +147,7 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
                     fechaExpira:
                         DateTime.tryParse(userByDocumentProvider.fechaExpira),
                     tipoDocumento: userByDocumentProvider.tipoDocumento,
+                    esRecurrente: userByDocumentProvider.esRecurrente,
                   ),
                 ),
                 AsalariadoHnForm3(

@@ -151,6 +151,7 @@ class SolicitudAslariadoHnState extends Equatable {
   final String aldeaTrabajoCodigo;
   final String caserioTrabajo;
   final String caserioCasa;
+  final bool esRecurrente;
   const SolicitudAslariadoHnState({
     this.esGrupal = '',
     this.cargoGrupoCodigo = '',
@@ -301,10 +302,12 @@ class SolicitudAslariadoHnState extends Equatable {
     this.aldeaTrabajoCodigo = '',
     this.caserioTrabajo = '',
     this.caserioCasa = '',
+    this.esRecurrente = false,
   });
 
   @override
   List<Object> get props => [
+        esRecurrente,
         cuotaWithDecimal,
         idSolicitud,
         historialCredito,
@@ -603,6 +606,7 @@ class SolicitudAslariadoHnState extends Equatable {
     String? aldeaTrabajoCodigo,
     String? caserioTrabajo,
     String? caserioCasa,
+    bool? esRecurrente,
   }) {
     return SolicitudAslariadoHnState(
       idSolicitud: idSolicitud ?? this.idSolicitud,
@@ -786,6 +790,7 @@ class SolicitudAslariadoHnState extends Equatable {
       aldeaTrabajoCodigo: aldeaTrabajoCodigo ?? this.aldeaTrabajoCodigo,
       caserioTrabajo: caserioTrabajo ?? this.caserioTrabajo,
       caserioCasa: caserioCasa ?? this.caserioCasa,
+      esRecurrente: esRecurrente ?? this.esRecurrente,
     );
   }
 }

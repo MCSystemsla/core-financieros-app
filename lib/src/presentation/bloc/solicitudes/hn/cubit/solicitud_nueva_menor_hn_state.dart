@@ -2,6 +2,7 @@
 part of 'solicitud_nueva_menor_hn_cubit.dart';
 
 class SolicitudNuevaMenorHnState extends Equatable {
+  final bool esRecurrente;
   final String idSolicitud;
   final String esGrupal;
   final String cargoGrupoCodigo;
@@ -181,6 +182,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
   final int aniosLugarTrabajoConyuge;
 
   const SolicitudNuevaMenorHnState({
+    this.esRecurrente = false,
     this.cuotaWithDecimal = 0,
     this.idSolicitud = '',
     this.grupoCodigoNombre = '',
@@ -362,6 +364,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
 
   @override
   List<Object> get props => [
+        esRecurrente,
         ingresoMensualConyuge,
         aniosLugarTrabajoConyuge,
         cuotaWithDecimal,
@@ -541,6 +544,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
       ];
 
   SolicitudNuevaMenorHnState copyWith({
+    bool? esRecurrente,
     String? idSolicitud,
     String? esGrupal,
     String? cargoGrupoCodigo,
@@ -720,6 +724,7 @@ class SolicitudNuevaMenorHnState extends Equatable {
     int? aniosLugarTrabajoConyuge,
   }) {
     return SolicitudNuevaMenorHnState(
+      esRecurrente: esRecurrente ?? this.esRecurrente,
       idSolicitud: idSolicitud ?? this.idSolicitud,
       esGrupal: esGrupal ?? this.esGrupal,
       cargoGrupoCodigo: cargoGrupoCodigo ?? this.cargoGrupoCodigo,

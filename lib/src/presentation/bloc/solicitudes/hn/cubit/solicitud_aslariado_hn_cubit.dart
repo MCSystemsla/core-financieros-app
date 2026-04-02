@@ -29,6 +29,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
+          esRecurrente: state.esRecurrente,
           cargoGrupoCodigo: state.cargoGrupoCodigo,
           grupoCodigo: state.grupoCodigo,
           // grupoCicloID: state.grupoCicloID,
@@ -268,6 +269,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
     return SolicitudAsalariadoHnDbLocal(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      esRecurrente: state.esRecurrente,
       esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
       cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
       grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
@@ -543,6 +545,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   loadFromLocalDb(SolicitudAsalariadoHnDbLocal solicitud) {
     onFieldChanged(
       () => state.copyWith(
+        esRecurrente: solicitud.esRecurrente,
         clientSignatureStatus:
             solicitud.clientSignatureStatus == ClientSignatureStatus.yes.name
                 ? ClientSignatureStatus.yes

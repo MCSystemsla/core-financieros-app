@@ -50,7 +50,10 @@ class AsalariadoOfflineView extends StatelessWidget {
           create: (ctx) => SolicitudAsalariadoCubit(
             SolicitudCreditoRepositoryImpl(),
             localDbProvider,
-          ),
+          )..saveCedula(
+              cedulaFrontPath: imagesCedula?.imageFrontCedula,
+              cedulaBackPath: imagesCedula?.imageBackCedula,
+            ),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

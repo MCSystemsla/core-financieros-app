@@ -84,6 +84,7 @@ class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
                     fechaExpira:
                         DateTime.tryParse(userByDocumentProvider.fechaExpira),
                     tipoDocumento: userByDocumentProvider.tipoDocumento,
+                    esRecurrente: userByDocumentProvider.esRecurrente,
                   ),
                 ),
                 NuevaMenorForm2(
@@ -103,6 +104,7 @@ class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
                     fechaExpira:
                         DateTime.tryParse(userByDocumentProvider.fechaExpira),
                     tipoDocumento: userByDocumentProvider.tipoDocumento,
+                    esRecurrente: userByDocumentProvider.esRecurrente,
                   ),
                 ),
                 NuevaMenorForm3(

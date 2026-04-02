@@ -47,7 +47,8 @@ class HomeItemsWidget extends StatelessWidget {
       ),
       HomeItemCard(
         visible: (connection.connectionStatus == ConnectionStatus.connected &&
-            flavor == Flavor.honduras),
+            flavor == Flavor.honduras &&
+            actions.contains(TypeAction.moduloOtp.codigo)),
         title: 'OTP',
         subtitle: 'Descripcion',
         icon: const Icon(

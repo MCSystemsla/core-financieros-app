@@ -18,6 +18,7 @@ class UserByDocumentAsalariadoState extends Equatable {
   final String fechaEmision;
   final String fechaExpira;
   final String tipoDocumento;
+  final bool esRecurrente;
   const UserByDocumentAsalariadoState({
     this.errorMsg = '',
     this.status = UserByDocumentStatus.notStarted,
@@ -35,10 +36,12 @@ class UserByDocumentAsalariadoState extends Equatable {
     this.fechaEmision = '',
     this.fechaExpira = '',
     this.tipoDocumento = '',
+    this.esRecurrente = false,
   });
 
   @override
   List<Object> get props => [
+        esRecurrente,
         errorMsg,
         status,
         cedula,
@@ -74,6 +77,7 @@ class UserByDocumentAsalariadoState extends Equatable {
     String? fechaEmision,
     String? fechaExpira,
     String? tipoDocumento,
+    bool? esRecurrente,
   }) {
     return UserByDocumentAsalariadoState(
       errorMsg: errorMsg ?? this.errorMsg,
@@ -92,6 +96,7 @@ class UserByDocumentAsalariadoState extends Equatable {
       fechaEmision: fechaEmision ?? this.fechaEmision,
       fechaExpira: fechaExpira ?? this.fechaExpira,
       tipoDocumento: tipoDocumento ?? this.tipoDocumento,
+      esRecurrente: esRecurrente ?? this.esRecurrente,
     );
   }
 }

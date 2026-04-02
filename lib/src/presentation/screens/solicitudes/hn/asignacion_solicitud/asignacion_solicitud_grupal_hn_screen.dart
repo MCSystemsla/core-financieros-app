@@ -228,52 +228,62 @@ class _ListDataState extends State<_ListData> {
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(15),
       itemCount: widget.solicitudes.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 14),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: CustomSwitch(
-            title: widget.solicitudes[index].nombreCompleto ?? 'N/A',
-            subtitle:
-                'Identificacion: ${widget.solicitudes[index].cedulaCliente}',
-            value: isSelected,
-            onChanged: (v) {
-              setState(() => isSelected = v);
-              if (!isSelected) {
-                context
-                    .read<SolicitudGrupalAsignarPromotoCubit>()
-                    .deleteSolicitudesData(
-                      int.tryParse(widget.solicitudes[index].id) ?? 0,
-                    );
-                return;
-              }
-
-              context
-                  .read<SolicitudGrupalAsignarPromotoCubit>()
-                  .saveSolicitudesData(
-                    SolicitudAsignadaData(
-                      idSolicitud:
-                          int.tryParse(widget.solicitudes[index].id) ?? 0,
-                      tipoSolicitud: widget.solicitudes[index].tipoSolicitud,
-                    ),
-                  );
-            },
-          ),
+      itemBuilder: (context, index) {
+        return SolicitudItemTile(
+          solicitud: widget.solicitudes[index],
         );
       },
     ).fadeIn();
   }
 }
 
+class SolicitudItemTile extends StatefulWidget {
+  final SolicitudEstado solicitud;
 
-// SelectableCardItem(
-//           color: const Color(0xFF1565C0),
-//           icon: Icons.group,
-//           title: solicitudes[index].nombreCompleto ?? 'N/A',
-//           subtitle: 'Identificacion: ${solicitudes[index].cedulaCliente}',
-//           onTap: () {},
-//         ),
+  const SolicitudItemTile({
+    super.key,
+    required this.solicitud,
+  });
+
+  @override
+  State<SolicitudItemTile> createState() => _SolicitudItemTileState();
+}
+
+class _SolicitudItemTileState extends State<SolicitudItemTile> {
+  bool isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final int id = int.tryParse(widget.solicitud.id) ?? 0;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: CustomSwitch(
+        title: widget.solicitud.nombreCompleto ?? 'N/A',
+        subtitle: 'Identificación: ${widget.solicitud.cedulaCliente}',
+        value: isSelected,
+        onChanged: (newValue) {
+          setState(() => isSelected = newValue);
+
+          _handleCubitAction(context, newValue, id);
+        },
+      ),
+    );
+  }
+
+  void _handleCubitAction(BuildContext context, bool value, int id) {
+    final cubit = context.read<SolicitudGrupalAsignarPromotoCubit>();
+
+    value
+        ? cubit.saveSolicitudesData(SolicitudAsignadaData(
+            idSolicitud: id,
+            tipoSolicitud: widget.solicitud.tipoSolicitud,
+          ))
+        : cubit.deleteSolicitudesData(id);
+  }
+}

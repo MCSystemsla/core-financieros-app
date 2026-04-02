@@ -177,6 +177,7 @@ class SolicitudNuevaMenorHnLocalDb {
   String? clientSignatureStatus;
   double? ingresoMensualConyuge;
   int? aniosLugarTrabajoConyuge;
+  bool esRecurrente = false;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.esGrupal,
@@ -349,5 +350,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.clientSignatureStatus,
     this.ingresoMensualConyuge,
     this.aniosLugarTrabajoConyuge,
+    this.esRecurrente = false,
   });
 }

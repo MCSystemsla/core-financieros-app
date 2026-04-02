@@ -131,6 +131,7 @@ class SolicitudNuevaMenorHn {
   final int? grupoCicloID;
   final double ingresoMensualConyuge;
   final int aniosLugarTrabajoConyuge;
+  final bool esRecurrente;
   SolicitudNuevaMenorHn({
     required this.actividadEconomicaCnbs3Codigo,
     required this.database,
@@ -256,6 +257,7 @@ class SolicitudNuevaMenorHn {
     this.grupoCicloID,
     required this.ingresoMensualConyuge,
     required this.aniosLugarTrabajoConyuge,
+    required this.esRecurrente,
   });
 
   Map<String, dynamic> toJson() {
@@ -389,6 +391,7 @@ class SolicitudNuevaMenorHn {
           ingresoMensualConyuge == 0 ? null : ingresoMensualConyuge,
       'AniosLugarTrabajoConyuge':
           aniosLugarTrabajoConyuge == 0 ? null : aniosLugarTrabajoConyuge,
+      'EsRecurrente': esRecurrente,
     };
     data.removeWhere(
       (key, value) => value == null || value == '',

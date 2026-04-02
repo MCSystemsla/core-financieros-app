@@ -10,7 +10,8 @@ enum TypeAction {
   comite('ACTASCOMITE'),
   aprobarComiteGrupal('APROBARCOMITEGRUPAL'),
   autorizacionSolicitudGrupal('AUTORIZARSOLICITUDGRUPAL'),
-  asignacionSolicitudGrupal('ASIGNARSOLICITUDGRUPAL');
+  asignacionSolicitudGrupal('ASIGNARSOLICITUDGRUPAL'),
+  moduloOtp('MODULOOTP');
 
   final String codigo;
 

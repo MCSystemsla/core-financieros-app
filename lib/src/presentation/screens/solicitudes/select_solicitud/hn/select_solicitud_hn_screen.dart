@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/actualizacion_solicitud/actualizacion_solicitud_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_represtamo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_grupo_credito_grupal/crear_grupo_credito_grupal_screen.dart';
@@ -70,11 +69,11 @@ class _SelectSolicitud extends StatelessWidget {
             if (actions.contains(TypeAction.autorizacion.codigo)) ...[
               const _SolicitudesCardsRow4(),
             ],
-            if (actions
-                .contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
-              const Gap(20),
-              const _SolicitudesCardsRow5(),
-            ],
+            // if (actions
+            //     .contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
+            //   const Gap(20),
+            //   const _SolicitudesCardsRow5(),
+            // ],
             const Gap(20),
           ],
         ),
@@ -132,62 +131,6 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
   }
 }
 
-class _SolicitudesCardsRow5 extends StatelessWidget {
-  const _SolicitudesCardsRow5();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg5,
-            title: 'Modificacion de solicitudes crédito',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const ActualizacionSolicitudHn()),
-                ),
-              );
-            },
-          ),
-        ),
-        const Gap(10),
-      ],
-    );
-  }
-}
-
-// class _MySolicitudesAsignmentsCard extends StatelessWidget {
-//   const _MySolicitudesAsignmentsCard();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             svgPath: ImageAsset.mySolicitudesAssignments,
-//             title: 'Mi Solicitudes Asignadas',
-//             onPressed: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: ((_) => const SolicitudesAsesorScreen()),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//         const Gap(10),
-//       ],
-//     );
-//   }
-// }
-
 class _SolicitudesCardsRow4 extends StatelessWidget {
   const _SolicitudesCardsRow4();
 
@@ -221,26 +164,44 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+
     return Row(
       children: [
         const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg3,
-            title: 'Represtamo',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AddUserCedulaReprestamoHnScreen(
-                        typeForm: TypeForm.represtamo,
-                      )),
-                ),
-              );
-              return;
-            },
+        // Expanded(
+        //   child: SolicitudCard(
+        //     svgPath: ImageAsset.nuevaMenorBg3,
+        //     title: 'Represtamo',
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: ((_) => const AddUserCedulaReprestamoHnScreen(
+        //                 typeForm: TypeForm.represtamo,
+        //               )),
+        //         ),
+        //       );
+        //       return;
+        //     },
+        //   ),
+        // ),
+        if (actions.contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
+          Expanded(
+            child: SolicitudCard(
+              svgPath: ImageAsset.nuevaMenorBg5,
+              title: 'Modificacion de solicitudes crédito',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const ActualizacionSolicitudHn()),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
+        ],
         const Gap(10),
         Expanded(
           child: SolicitudCard(

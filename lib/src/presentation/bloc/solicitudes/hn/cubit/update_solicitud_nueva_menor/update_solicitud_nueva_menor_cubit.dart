@@ -285,6 +285,7 @@ class UpdateSolicitudNuevaMenorCubit
       await _repository.updateSolicitudAsalariado(
         idSolicitud: idSolicitud,
         solicitudAsalariado: SolicitudAsalariadoHn(
+          esRecurrente: false,
           aldeaTrabajoCodigo: state.aldeaTrabajoCodigo,
           aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
           caserioCasa: state.caserioCasa,
@@ -298,9 +299,9 @@ class UpdateSolicitudNuevaMenorCubit
           telefonoConyuge: state.telefonoConyuge,
           tipoViviendaCodigo: state.condicionCasaCodigo,
           ubicacionCodigo: state.ubicacion,
-          cargoGrupoCodigo: '',
-          grupoCodigo: '',
-          grupoCicloID: 0,
+          cargoGrupoCodigo: state.cargoGrupoCodigo,
+          grupoCodigo: state.grupoCodigo,
+          grupoCicloID: state.grupoCicloId,
           database: LocalStorage().database,
           isOffline: false,
           origenSolicitudCodigo: state.origenSolicitudCodigo,
@@ -438,6 +439,7 @@ class UpdateSolicitudNuevaMenorCubit
       await _repository.updateSolicitudNuevaMenor(
         idSolicitud: idSolicitud,
         solicitudNuevaMenor: SolicitudNuevaMenorHn(
+          esRecurrente: false,
           aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
           ingresoMensualConyuge: state.ingresoMensualConyuge,
           actividadDescripcionConyugue: state.actividadDescripcionConyuge,

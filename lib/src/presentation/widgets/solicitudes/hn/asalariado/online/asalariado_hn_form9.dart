@@ -264,30 +264,29 @@ class _AsalariadoHnForm9State extends State<AsalariadoHnForm9>
                     );
                   },
                 ),
-                if (cubit.state.propositoCodigo.isNotEmpty) ...[
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    key: const ValueKey('DestinoDescripcion'),
-                    isRequired: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'ingresa descripcion del Destino',
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                      LengthLimitingTextInputFormatter(200),
-                    ],
-                    icon: Icon(Icons.description_outlined,
-                        color: AppColors.getPrimaryColor()),
-                    title: 'Descripcion del Destino',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          descripcionDestino: value,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                // if (cubit.state.propositoCodigo.isNotEmpty) ...[
+                const Gap(30),
+                OutlineTextfieldWidget(
+                  key: const ValueKey('DestinoDescripcion'),
+                  isRequired: true,
+                  validator: (value) => ClassValidator.validateRequired(value),
+                  hintText: 'ingresa descripcion del Destino',
+                  inputFormatters: [
+                    UpperCaseTextFormatter(),
+                    LengthLimitingTextInputFormatter(200),
+                  ],
+                  icon: Icon(Icons.description_outlined,
+                      color: AppColors.getPrimaryColor()),
+                  title: 'Descripcion del Destino',
+                  onChange: (value) {
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        descripcionDestino: value,
+                      ),
+                    );
+                  },
+                ),
+                // ],
                 const Gap(30),
                 OutlineTextfieldWidget(
                   key: const ValueKey('Monto'),

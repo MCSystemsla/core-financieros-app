@@ -42,8 +42,8 @@ class UserByDocumentCubit extends Cubit<UserByDocumentState> {
         primerNombre: resp?.data.primerNombre ?? primerNombre,
         segundoNombre: resp?.data.segundoNombre ?? segundoNombre,
         fechaNacimiento: resp?.data.fechaNacimiento?.toUtc().toIso8601String(),
-        tipoDocumento: resp?.data.tipoDocumento,
-        cedula: resp?.data.cedula,
+        tipoDocumento: resp?.data.tipoDocumento ?? tipoDocumentoCodigo,
+        cedula: resp?.data.cedula ?? cedula,
         fechaExpira: resp?.data.fechaExpira?.toUtc().toIso8601String(),
         departamento: resp?.data.departamento,
         direccion: resp?.data.direccion,
@@ -53,6 +53,7 @@ class UserByDocumentCubit extends Cubit<UserByDocumentState> {
         primerApellido: resp?.data.primerApellido ?? primerApellido,
         segundoApellido: resp?.data.segundoApellido ?? segundoApellido,
         sexo: resp?.data.sexo,
+        esRecurrente: resp?.data.esRecurrente,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

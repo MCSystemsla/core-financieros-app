@@ -97,6 +97,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
         paisNacimientoCodigo: 'HN',
         tipoPersonaCodigo: 'PERSONANATURAL',
         paisEmisorCedulaCodigo: 'HN',
+        esRecurrente: widget.userByDocumentHnData?.esRecurrente,
       ),
     );
     localDpProvider.saveCedulaClient(

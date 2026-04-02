@@ -44,7 +44,12 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorCubit(
-              SolicitudCreditoRepositoryImpl(), global<ObjectBoxService>()),
+            SolicitudCreditoRepositoryImpl(),
+            global<ObjectBoxService>(),
+          )..saveCedula(
+              cedulaFrontPath: imagesCedula?.imageFrontCedula,
+              cedulaBackPath: imagesCedula?.imageBackCedula,
+            ),
         ),
         BlocProvider(
           create: (ctx) => GeolocationCubit(

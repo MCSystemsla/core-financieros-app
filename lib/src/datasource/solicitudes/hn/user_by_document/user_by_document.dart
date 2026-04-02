@@ -33,6 +33,7 @@ class UserDocumentDataHN {
   final DateTime? fechaEmision;
   final DateTime? fechaExpira;
   final String? tipoDocumento;
+  final bool? esRecurrente;
 
   UserDocumentDataHN({
     this.cedula,
@@ -49,6 +50,7 @@ class UserDocumentDataHN {
     this.fechaEmision,
     this.fechaExpira,
     this.tipoDocumento,
+    this.esRecurrente,
   });
 
   factory UserDocumentDataHN.fromJson(Map<String, dynamic> json) =>
@@ -67,5 +69,6 @@ class UserDocumentDataHN {
         fechaEmision: parseDate(json['FechaEmision']),
         fechaExpira: parseDate(json['FechaExpira']),
         tipoDocumento: json['TipoDocumento'],
+        esRecurrente: parseBool(json['EsRecurrente']),
       );
 }
