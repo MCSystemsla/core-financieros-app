@@ -275,7 +275,9 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                     documentoCliente: cedulaCliente,
                                     numeroSolicitud: int.parse(numeroSolicitud),
                                     tipoSolicitud: tipoSolicitud
-                                            ?.toTypeForInterceptorString() ??
+                                            ?.toTypeForInterceptorString(
+                                          tipoGrupal: tipoSolicitudString,
+                                        ) ??
                                         '',
                                   ),
                                 ),

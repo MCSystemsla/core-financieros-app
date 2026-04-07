@@ -69,11 +69,6 @@ class _SelectSolicitud extends StatelessWidget {
             if (actions.contains(TypeAction.autorizacion.codigo)) ...[
               const _SolicitudesCardsRow4(),
             ],
-            // if (actions
-            //     .contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
-            //   const Gap(20),
-            //   const _SolicitudesCardsRow5(),
-            // ],
             const Gap(20),
           ],
         ),
@@ -153,6 +148,21 @@ class _SolicitudesCardsRow4 extends StatelessWidget {
             },
           ),
         ),
+        // const Gap(10),
+        // Expanded(
+        //   child: SolicitudCard(
+        //     svgPath: ImageAsset.nuevaMenorBg6,
+        //     title: 'Modificacion de Analisis de Credito',
+        //     onPressed: () {
+        //       // Navigator.push(
+        //       //   context,
+        //       //   MaterialPageRoute(
+        //       //     builder: ((_) => const AutorizacionSolicitudHnScreen()),
+        //       //   ),
+        //       // );
+        //     },
+        //   ),
+        // ),
         const Gap(10),
       ],
     );
@@ -244,7 +254,7 @@ class _SolicitudCardsRow1 extends StatelessWidget {
               );
             },
             svgPath: ImageAsset.nuevaMenorBg,
-            title: 'Nueva',
+            title: 'Comercial',
           ),
         ),
         const Gap(10),

@@ -407,7 +407,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                     curve: Curves.easeIn,
                   );
                 },
-                text: 'Cancelar',
+                text: 'Anterior',
                 textColor: AppColors.red,
                 color: AppColors.red,
               ),

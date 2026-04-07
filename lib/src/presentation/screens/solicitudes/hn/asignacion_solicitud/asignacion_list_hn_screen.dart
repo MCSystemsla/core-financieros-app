@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -20,7 +21,9 @@ class AsignacionListHnScreen extends StatelessWidget {
     return BlocProvider(
       create: (ctx) => SolicitudesByEstadoHnCubit(
         SolicitudesCreditoHnRepositoryImpl(),
-      )..getSolicitudesByEstado(),
+      )..getSolicitudesByEstado(
+          filterEstadosCredito: FilterEstadosCredito.individual,
+        ),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Asignar Credito a Asesor'),
@@ -69,6 +72,7 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
 
       context.read<SolicitudesByEstadoHnCubit>().getSolicitudesByEstado(
             isAsignadaToAsesorCredito: cubit.state.isAsignadaToAsesorCredito,
+            filterEstadosCredito: FilterEstadosCredito.individual,
           );
       if (!mounted) return;
 
@@ -90,6 +94,7 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
           child: AnalisisFilterContentWidget(
             estadoCredito: EstadoCredito.registrada,
             isAsignadaToAsesorCredito: false,
+            filterEstadosCredito: FilterEstadosCredito.individual,
           ),
         ),
         Expanded(
@@ -104,7 +109,10 @@ class _AsignacionNuevaListViewState extends State<_AsignacionNuevaListView> {
                     onPressed: () {
                       context
                           .read<SolicitudesByEstadoHnCubit>()
-                          .getSolicitudesByEstado();
+                          .getSolicitudesByEstado(
+                            filterEstadosCredito:
+                                FilterEstadosCredito.individual,
+                          );
                     },
                   ),
                 Status.done => state.solicitudes.isEmpty

@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,11 +18,13 @@ import '../../../bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/solicitudes_
 class AnalisisFilterContentWidget extends StatefulWidget {
   final EstadoCredito estadoCredito;
   final bool isAsignadaToAsesorCredito;
+  final FilterEstadosCredito filterEstadosCredito;
 
   const AnalisisFilterContentWidget({
     super.key,
     required this.estadoCredito,
     this.isAsignadaToAsesorCredito = true,
+    this.filterEstadosCredito = FilterEstadosCredito.all,
   });
 
   @override
@@ -51,6 +54,7 @@ class _AnalisisFilterContentWidgetState
                         estadoCredito: widget.estadoCredito,
                         isAsignadaToAsesorCredito:
                             widget.isAsignadaToAsesorCredito,
+                        filterEstadosCredito: widget.filterEstadosCredito,
                       ),
                     ),
                   ),
@@ -75,6 +79,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
   SolicitudesByEstadoHnCubit cubit, {
   required EstadoCredito estadoCredito,
   required bool isAsignadaToAsesorCredito,
+  required FilterEstadosCredito filterEstadosCredito,
 }) {
   showModalBottomSheet(
     context: context,
@@ -87,6 +92,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
       cubit: cubit,
       estadoCredito: estadoCredito,
       isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      filterEstadosCredito: filterEstadosCredito,
     ),
   );
 }
@@ -95,11 +101,13 @@ class _FilterModal extends StatefulWidget {
   final SolicitudesByEstadoHnCubit cubit;
   final EstadoCredito estadoCredito;
   final bool isAsignadaToAsesorCredito;
+  final FilterEstadosCredito filterEstadosCredito;
 
   const _FilterModal({
     required this.cubit,
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
+    required this.filterEstadosCredito,
   });
 
   @override
@@ -237,6 +245,7 @@ class _FilterModalState extends State<_FilterModal> {
                             estadoCredito: widget.estadoCredito,
                             isAsignadaToAsesorCredito:
                                 widget.isAsignadaToAsesorCredito,
+                            filterEstadosCredito: widget.filterEstadosCredito,
                           );
                           Navigator.pop(context);
                         },
@@ -266,6 +275,7 @@ class _FilterModalState extends State<_FilterModal> {
                             estadoCredito: widget.estadoCredito,
                             isAsignadaToAsesorCredito:
                                 widget.isAsignadaToAsesorCredito,
+                            filterEstadosCredito: widget.filterEstadosCredito,
                           );
                           Navigator.pop(context);
                         },

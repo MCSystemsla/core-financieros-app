@@ -64,7 +64,7 @@ enum ErrorNetworkCode {
     );
   }
   return (
-    resp['message']?.toString() ?? resp.toString(),
+    '${resp['message'] ?? resp.toString()}',
     ErrorNetworkCode.unknownError
   );
 }

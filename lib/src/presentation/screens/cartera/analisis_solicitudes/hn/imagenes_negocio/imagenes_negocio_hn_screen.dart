@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
@@ -142,7 +143,13 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                         CustomAlertDialog(
                           context: context,
                           title: 'Imagenes del negocio enviadas exitosamente',
-                          onDone: () => context.push('/cartera'),
+                          onDone: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const AnalisisInterceptorByFlavor(),
+                            ),
+                          ),
                         ).showDialog(context, dialogType: DialogType.success);
                       }
                       if (state.status == Status.error) {

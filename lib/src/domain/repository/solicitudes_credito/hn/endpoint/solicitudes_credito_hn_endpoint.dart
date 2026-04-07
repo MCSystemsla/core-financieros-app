@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/gr
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 
 class CrearSolciitudAsalariadoHNEndpoint extends Endpoint {
   final SolicitudAsalariadoHn solicitud;
@@ -249,6 +250,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final int? codigoGrupo;
   final int? usuarioId;
   final bool isCustomEstadoCredito;
+  final FilterEstadosCredito filterEstadosCredito;
   GetSolicitudesByEstadoEndpoint({
     required this.estadoCredito,
     required this.isAsignadaToAsesorCredito,
@@ -258,6 +260,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
     this.codigoGrupo,
     this.usuarioId,
     this.isCustomEstadoCredito = false,
+    this.filterEstadosCredito = FilterEstadosCredito.all,
   });
   @override
   Method get method => Method.get;
@@ -282,6 +285,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
         if (pagina != null) 'Pagina': pagina.toString(),
         if (codigoGrupo != null) 'GrupoCodigo': codigoGrupo.toString(),
         if (usuarioId != null) 'OficialCreditoCodigo': usuarioId.toString(),
+        'TipoSolicitudFiltro': filterEstadosCredito.codigo,
       };
 }
 
@@ -466,6 +470,9 @@ class SolicitudesGrupalCreateGrupoCreditoEndpoint extends Endpoint {
 }
 
 class SolicitudesGrupalesGetCargosDisponiblesEndpoint extends Endpoint {
+  final int? grupoCodigo;
+
+  SolicitudesGrupalesGetCargosDisponiblesEndpoint({this.grupoCodigo});
   @override
   Method get method => Method.get;
 
@@ -478,6 +485,8 @@ class SolicitudesGrupalesGetCargosDisponiblesEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+        if (grupoCodigo != null && grupoCodigo != 0)
+          'grupoCodigo': grupoCodigo.toString(),
       };
 }
 

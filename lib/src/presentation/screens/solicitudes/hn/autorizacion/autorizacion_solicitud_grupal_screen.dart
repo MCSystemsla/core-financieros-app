@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/gr
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
@@ -63,19 +64,7 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
               BlocConsumer<SolicitudesByEstadoHnCubit,
                   SolicitudesByEstadoHnState>(
                 listener: (context, state) {
-                  if (state.status == Status.done) {
-                    context
-                        .read<AutorizarSolicitudGrupalCubit>()
-                        .saveSolicitudesData(
-                          state.solicitudes
-                              .map((e) => SolicitudeAutorizarData(
-                                    numeroSolicitud:
-                                        int.tryParse(e.numero) ?? 0,
-                                    tipoSolicitud: e.tipoSolicitud,
-                                  ))
-                              .toList(),
-                        );
-                  }
+                  if (state.status == Status.done) {}
                 },
                 builder: (context, state) {
                   return switch (state.status) {
@@ -110,6 +99,7 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
 class _ListData extends StatefulWidget {
   final List<SolicitudEstado> solicitudes;
   final GrupoActivoData grupo;
+
   const _ListData({
     required this.solicitudes,
     required this.grupo,
@@ -139,7 +129,24 @@ class _ListDataState extends State<_ListData> {
           title: widget.solicitudes[index].nombreCompleto ?? 'N/A',
           subtitle:
               'Identificacion: ${widget.solicitudes[index].cedulaCliente}',
-          onTap: () {},
+          onTap: () => CloseAnalisisDialog(
+            context: context,
+            title:
+                'Estas seguro que desea autorizar la solicitud ${widget.solicitudes[index].nombreCompleto}?',
+            onYes: () {
+              context.pop();
+              context.read<AutorizarSolicitudGrupalCubit>().saveSolicitud(
+                    SolicitudeAutorizarData(
+                      numeroSolicitud:
+                          int.parse(widget.solicitudes[index].numero),
+                      tipoSolicitud: widget.solicitudes[index].tipoSolicitud,
+                    ),
+                  );
+              context
+                  .read<AutorizarSolicitudGrupalCubit>()
+                  .autorizarSolicitudGrupal();
+            },
+          ).showDialog(context),
         );
       },
     ).fadeIn();
@@ -231,8 +238,21 @@ class _FabButton extends StatelessWidget {
               enabled: state.status != Status.inProgress,
               text: state.status == Status.inProgress
                   ? 'Autorizando...'
-                  : 'Autorizar Solicitudes',
+                  : 'Autorizar todas las solicitudes',
               onPressed: () {
+                context
+                    .read<AutorizarSolicitudGrupalCubit>()
+                    .saveSolicitudesData(
+                      context
+                          .read<SolicitudesByEstadoHnCubit>()
+                          .state
+                          .solicitudes
+                          .map((e) => SolicitudeAutorizarData(
+                                numeroSolicitud: int.tryParse(e.numero) ?? 0,
+                                tipoSolicitud: e.tipoSolicitud,
+                              ))
+                          .toList(),
+                    );
                 context
                     .read<AutorizarSolicitudGrupalCubit>()
                     .autorizarSolicitudGrupal();

@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_user_location/analisis_user_location_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -134,7 +135,12 @@ class _UserLocationContentState extends State<UserLocationContent> {
           CustomAlertDialog(
             context: context,
             title: 'La ubicación del cliente fue registrada exitosamente',
-            onDone: () => context.pop(),
+            onDone: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const AnalisisInterceptorByFlavor(),
+              ),
+            ),
           ).showDialog(
             context,
             dialogType: DialogType.success,

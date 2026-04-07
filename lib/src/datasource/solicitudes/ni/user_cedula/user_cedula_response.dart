@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 UserCedulaData userCedulaResponseFromJson(String str) =>
     UserCedulaData.fromJson(json.decode(str));
 
@@ -55,20 +57,14 @@ class UserCedulaResponse {
         segundoNombre: json['SegundoNombre'] ?? '',
         primerApellido: json['PrimerApellido'] ?? '',
         segundoApellido: json['SegundoApellido'] ?? '',
-        fechaNacimiento: json['FechaNacimiento'] != null
-            ? DateTime.tryParse(json['FechaNacimiento'].toString())
-            : null,
+        fechaNacimiento: parseDate(json['FechaNacimiento']),
         sexo: json['Sexo'] ?? '',
-        pais: json['Pais'] ?? '',
-        departamento: json['Departamento'] ?? '',
-        municipio: json['Municipio'] ?? '',
-        direccion: json['Direccion'] ?? '',
-        fechaEmision: json['FechaEmision'] != null
-            ? DateTime.tryParse(json['FechaEmision'].toString())
-            : null,
-        fechaExpira: json['FechaExpira'] != null
-            ? DateTime.tryParse(json['FechaExpira'].toString())
-            : null,
-        tipoDocumento: json['TipoDocumento'] ?? '',
+        pais: json['Pais'],
+        departamento: json['Departamento'],
+        municipio: json['Municipio'],
+        direccion: json['Direccion'],
+        fechaEmision: parseDate(json['FechaEmision']),
+        fechaExpira: parseDate(json['FechaExpira']),
+        tipoDocumento: json['TipoDocumento'],
       );
 }

@@ -29,6 +29,7 @@ import 'package:core_financiero_app/src/domain/repository/analisis/hn/endpoint/a
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/endpoint/solicitudes_credito_hn_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/signature/nueva/solicitud_nueva_signature_hn.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -77,6 +78,7 @@ abstract class SolicitudesCreditoHnRepository {
     required int pagina,
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
   });
   Future<(bool, String)> asignSolicitudToAsesor({
     required int idSolicitud,
@@ -109,7 +111,9 @@ abstract class SolicitudesCreditoHnRepository {
   Future<void> crearGrupoCredito({
     required String nombre,
   });
-  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles();
+  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles({
+    int? grupoCodigo,
+  });
 
   Future<void> solicitudesGrupalesAsignarPromotor({
     required SolicitudGrupalesAsignarSolicitudToPromotor data,
@@ -543,6 +547,7 @@ class SolicitudesCreditoHnRepositoryImpl
     required int pagina,
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
   }) async {
     final rolId = await getRolId();
     final endpoint = GetSolicitudesByEstadoEndpoint(
@@ -554,6 +559,7 @@ class SolicitudesCreditoHnRepositoryImpl
       codigoGrupo: codigoGrupo,
       usuarioId: rolId,
       isCustomEstadoCredito: isCustomEstadoCredito,
+      filterEstadosCredito: filterEstadosCredito,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
@@ -808,8 +814,12 @@ class SolicitudesCreditoHnRepositoryImpl
   }
 
   @override
-  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles() async {
-    final endpoint = SolicitudesGrupalesGetCargosDisponiblesEndpoint();
+  Future<GrupalesCargosDisponiblesResponse> getCargosDisponibles({
+    int? grupoCodigo,
+  }) async {
+    final endpoint = SolicitudesGrupalesGetCargosDisponiblesEndpoint(
+      grupoCodigo: grupoCodigo,
+    );
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

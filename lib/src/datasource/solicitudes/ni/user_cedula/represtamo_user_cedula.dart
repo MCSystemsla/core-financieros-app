@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 ReprestamoUserCedula represtamoUserCedulaFromJson(String str) =>
     ReprestamoUserCedula.fromJson(json.decode(str));
 
@@ -32,11 +34,7 @@ class ReprestamoUserCedula {
         tipoDocumento: json['TipoDocumento'] ?? '',
         tipoPersona: json['TipoPersona'] ?? '',
         paisEmisorDocumento: json['PaisEmisorCedula'] ?? '',
-        fechaVencimientoDocumento: json['FechaVencimientoCedula'] != null
-            ? DateTime.tryParse(json['FechaVencimientoCedula'].toString())
-            : null,
-        fechaEmisionDocumento: json['FechaEmisionCedula'] != null
-            ? DateTime.tryParse(json['FechaEmisionCedula'].toString())
-            : null,
+        fechaVencimientoDocumento: parseDate(json['FechaVencimientoCedula']),
+        fechaEmisionDocumento: parseDate(json['FechaEmisionCedula']),
       );
 }

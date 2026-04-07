@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_err
 import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filters_by_estado_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -36,6 +37,7 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
           )..getSolicitudesByEstado(
               isAsignadaToAsesorCredito: true,
               estadoCredito: EstadoCredito.registrada,
+              filterEstadosCredito: FilterEstadosCredito.individual,
             ),
         ),
         BlocProvider(
@@ -47,7 +49,7 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
       child: PopScope(
         onPopInvoked: (didPop) {
           if (didPop) {
-            context.push('/cartera');
+            context.push('/solicitudes');
           }
         },
         child: Scaffold(
@@ -63,6 +65,7 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
               ),
               const AnalisisFilterContentWidget(
                 estadoCredito: EstadoCredito.registrada,
+                filterEstadosCredito: FilterEstadosCredito.individual,
               ),
               BlocBuilder<SolicitudesByEstadoHnCubit,
                   SolicitudesByEstadoHnState>(
@@ -77,6 +80,8 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
                               .getSolicitudesByEstado(
                                 isAsignadaToAsesorCredito: true,
                                 estadoCredito: EstadoCredito.registrada,
+                                filterEstadosCredito:
+                                    FilterEstadosCredito.individual,
                               );
                         },
                       ),

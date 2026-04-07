@@ -37,6 +37,10 @@ class AutorizarSolicitudGrupalCubit
     }
   }
 
+  void saveSolicitud(SolicitudeAutorizarData data) {
+    emit(state.copyWith(solicitudes: [...state.solicitudes, data]));
+  }
+
   void saveSolicitudesData(List<SolicitudeAutorizarData> data) {
     emit(state.copyWith(solicitudes: data));
   }

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_e
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:equatable/equatable.dart';
 
 part 'solicitudes_by_estado_hn_state.dart';
@@ -18,6 +19,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
     EstadoCredito estadoCredito = EstadoCredito.registrada,
     int? codigoGrupo,
     bool isCustomEstadoCredito = false,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
 
@@ -30,6 +32,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         pagina: state.pagina,
         codigoGrupo: codigoGrupo,
         isCustomEstadoCredito: isCustomEstadoCredito,
+        filterEstadosCredito: filterEstadosCredito,
       );
       final hasUserAppliedFilter =
           state.isNumeroSolicitudFilter || state.isCedulaSolicitudFilter;

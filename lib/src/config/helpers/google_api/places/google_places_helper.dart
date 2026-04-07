@@ -130,7 +130,7 @@ class GooglePlacesHelperImpl implements GooglePlacesHelperRepository {
         _logger.e(request.fields);
         throw AppException(
           optionalMsg:
-              jsonBody['message'] ?? 'Error enviando imagen Ubicacion Cliente',
+              'Error enviando imagen Ubicacion Cliente: ${jsonBody.toString()}',
         );
       }
       _logger.i('Imagen: ${response.reasonPhrase}');
