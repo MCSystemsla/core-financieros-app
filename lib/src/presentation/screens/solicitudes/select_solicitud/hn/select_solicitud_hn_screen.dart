@@ -36,7 +36,6 @@ class _SelectSolicitud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final actions = LocalStorage().currentActions;
     return Padding(
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
@@ -66,9 +65,7 @@ class _SelectSolicitud extends StatelessWidget {
             const Gap(20),
             const _SolicitudesCardsRow3(),
             const Gap(20),
-            if (actions.contains(TypeAction.autorizacion.codigo)) ...[
-              const _SolicitudesCardsRow4(),
-            ],
+            const _SolicitudesCardsRow4(),
             const Gap(20),
           ],
         ),
@@ -131,35 +128,38 @@ class _SolicitudesCardsRow4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
     return Row(
       children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg6,
-            title: 'Autorizacion de Solicitudes Crédito',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AutorizacionSolicitudHnScreen()),
-                ),
-              );
-            },
+        if (actions.contains(TypeAction.autorizacion.codigo)) ...[
+          const Gap(10),
+          Expanded(
+            child: SolicitudCard(
+              svgPath: ImageAsset.nuevaMenorBg6,
+              title: 'Autorizacion de Solicitudes Crédito',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const AutorizacionSolicitudHnScreen()),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
+        ],
         // const Gap(10),
         // Expanded(
         //   child: SolicitudCard(
         //     svgPath: ImageAsset.nuevaMenorBg6,
         //     title: 'Modificacion de Analisis de Credito',
         //     onPressed: () {
-        //       // Navigator.push(
-        //       //   context,
-        //       //   MaterialPageRoute(
-        //       //     builder: ((_) => const AutorizacionSolicitudHnScreen()),
-        //       //   ),
-        //       // );
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: ((_) => const ModificarAnalisisScreenHn()),
+        //         ),
+        //       );
         //     },
         //   ),
         // ),

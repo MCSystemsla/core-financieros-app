@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
@@ -27,6 +29,7 @@ class UpdateSolicitudNuevaMenorCubit
         tipoSolicitud: tipoSolicitud,
         idSolicitud: idSolicitud,
       );
+      log('Resp: ${resp.data.cuota}');
       emit(
         state.copyWith(
           status: Status.done,

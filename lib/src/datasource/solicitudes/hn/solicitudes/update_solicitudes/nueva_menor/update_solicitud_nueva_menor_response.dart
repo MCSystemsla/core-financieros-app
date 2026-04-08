@@ -60,7 +60,7 @@ class UpdateSolicitudNuevaData {
   final String? descripcionDestino;
   final String? frecuenciaCodigo;
   final String? frecuenciaNombre;
-  final int? cuota;
+  final double? cuota;
   final String? sectorCodigo;
   final String? sectorNombre;
   final int? personasACargo;
@@ -454,7 +454,7 @@ class UpdateSolicitudNuevaData {
         descripcionDestino: json['DescripcionDestino'],
         frecuenciaCodigo: json['FrecuenciaCodigo'],
         frecuenciaNombre: json['FrecuenciaNombre'],
-        cuota: parseInt(json['Cuota']),
+        cuota: parseDouble(json['Cuota']),
         sectorCodigo: json['SectorCodigo'],
         sectorNombre: json['SectorNombre'],
         personasACargo: parseInt(json['PersonasACargo']),

@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_grupal.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/plan_inversion_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -111,6 +112,13 @@ abstract class AnalisisRepositoryHn {
     required String imagenNegocio,
     required String imagenNegocio2,
     required String imagenNegocio3,
+  });
+  Future<void> updateAnalisisGrupal({
+    required AnalisisGrupal analisisSolicitudGrupal,
+  });
+  Future<GetDataAnalisisGrupalResponse> getAnalisisData({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
   });
 }
 
@@ -668,6 +676,50 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateAnalisisGrupal({
+    required AnalisisGrupal analisisSolicitudGrupal,
+  }) async {
+    final endpoint = UpdateAnalisisGrupalEndpoint(
+      data: analisisSolicitudGrupal,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GetDataAnalisisGrupalResponse> getAnalisisData({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = GetAnalisisDataEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = GetDataAnalisisGrupalResponse.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

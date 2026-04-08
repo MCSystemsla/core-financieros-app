@@ -186,7 +186,7 @@ class _UpdateSolicitudNuevaMenorForm1State
     final actions = LocalStorage().currentActions;
     final formKey = GlobalKey<FormState>();
     final gruposActivos =
-        context.read<GruposActivosCubit>().state.gruposActivos;
+        context.watch<GruposActivosCubit>().state.gruposActivos;
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -224,6 +224,17 @@ class _UpdateSolicitudNuevaMenorForm1State
                           setState(() {
                             isSolicitudGrupal = item.value == 'input.yes'.tr();
                           });
+                          if (!isSolicitudGrupal) {
+                            cubit.onFieldChanged(
+                              () => state.copyWith(
+                                grupoCicloId: 0,
+                                grupoNombre: '',
+                                grupoCodigo: '',
+                                cargoGrupoCodigo: '',
+                                cargoGrupoNombre: '',
+                              ),
+                            );
+                          }
                           // cubit.onFieldChanged(
                           //   () => cubit.state.copyWith(
                           //     esGrupal: item.value,
@@ -243,8 +254,11 @@ class _UpdateSolicitudNuevaMenorForm1State
                             value: cubit.state.grupoCodigo,
                           ),
                           items: gruposActivos
-                              .map((e) =>
-                                  Item(name: e.nombreCompleto, value: e.codigo))
+                              .map((e) => Item(
+                                    name: e.nombreCompleto,
+                                    value: e.codigo,
+                                    anotherValue: e.id,
+                                  ))
                               .toList(),
                           onChanged: (item) {
                             if (item == null || !mounted) return;

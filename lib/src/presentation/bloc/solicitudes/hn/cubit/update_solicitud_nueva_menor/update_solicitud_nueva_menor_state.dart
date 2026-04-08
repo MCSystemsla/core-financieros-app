@@ -46,7 +46,7 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
   final String descripcionDestino;
   final String frecuenciaCodigo;
   final String frecuenciaNombre;
-  final int cuota;
+  final double cuota;
   final String sectorCodigo;
   final String sectorNombre;
   final int personasACargo;
@@ -654,7 +654,7 @@ class UpdateSolicitudNuevaMenorState extends Equatable {
     String? descripcionDestino,
     String? frecuenciaCodigo,
     String? frecuenciaNombre,
-    int? cuota,
+    double? cuota,
     String? sectorCodigo,
     String? sectorNombre,
     int? personasACargo,

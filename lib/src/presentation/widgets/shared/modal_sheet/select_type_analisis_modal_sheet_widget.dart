@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_r
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_checks/analisis_checks_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/actualizar_analisis/actualizar_analisis_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
@@ -161,6 +162,31 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               );
                             },
                           ),
+                          if (state.tieneAnalisis && esGrupal)
+                            SelectableCardItem(
+                              userHaveDataAlready: false,
+                              isLoading: state.status == Status.inProgress,
+                              icon: Icons.edit,
+                              color: const Color(0xff1554F6),
+                              title: 'Modificar Analisis',
+                              subtitle: 'Modificar analisis de crédito',
+                              onTap: () {
+                                context.pop();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ActualizarAnalisisHnScreen(
+                                      numeroSolicitud: numeroSolicitud,
+                                      tipoSolicitud: tipoSolicitudString,
+                                      title: title,
+                                      subtitle: subtitle,
+                                      description: description,
+                                      index: index,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           SelectableCardItem(
                             userHaveDataAlready: state.tienePlanInversion,
                             isLoading: state.status == Status.inProgress,
