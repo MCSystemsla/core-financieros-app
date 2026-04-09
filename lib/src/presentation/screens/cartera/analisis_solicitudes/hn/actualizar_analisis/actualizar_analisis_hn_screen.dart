@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,15 @@ class ActualizarAnalisisHnScreen extends StatelessWidget {
           builder: (context, state) {
             return switch (state.status) {
               Status.inProgress => const LoadingWidget(),
-              Status.error => Text(state.errorMessage),
+              Status.error => OnErrorWidget(
+                  errorMsg: state.errorMessage,
+                  onPressed: () {
+                    context.read<GetAnalisisDataCubit>().getAnalisisData(
+                          numeroSolicitud: numeroSolicitud,
+                          tipoSolicitud: tipoSolicitud,
+                        );
+                  },
+                ),
               Status.done => UpdateAnalisisGrupalForm(
                   index: index,
                   title: title,
