@@ -73,7 +73,7 @@ class TransactionReviewCard extends StatelessWidget {
             if (servicios.isNotEmpty) ...[
               const SizedBox(height: 20),
               const Text(
-                'Servicios incluidos',
+                'Servicios incluidos (montos de servicio se recalculan en formalizacion)',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,

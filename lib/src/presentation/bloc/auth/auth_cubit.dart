@@ -42,6 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
         dbName: dbName,
         userId: resp['usuarioId'],
         username: resp['username'],
+        rolUser: resp['rol'],
       );
       final haveToSync = CatalogoSync.needToSync();
       if (!haveToSync) {
@@ -64,6 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String dbName,
     required String userId,
     required String username,
+    required String rolUser,
   }) async {
     await Future.wait([
       LocalStorage().setJWT(accessToken),
@@ -71,6 +73,7 @@ class AuthCubit extends Cubit<AuthState> {
       LocalStorage().setDatabase(dbName),
       LocalStorage().setUserId(userId),
       LocalStorage().setCurrentUsername(username),
+      LocalStorage().setRolUser(rolUser),
     ]);
   }
 

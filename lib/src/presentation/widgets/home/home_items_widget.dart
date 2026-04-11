@@ -123,6 +123,7 @@ class _GreetingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final (greeting, icon) = getGreetings();
     final currentUserName = LocalStorage().currentUserName;
+    final currentRoUser = LocalStorage().rolUser;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -163,6 +164,14 @@ class _GreetingsWidget extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: AppColors.getPrimaryColor(),
+                ),
+              ),
+              const Gap(2),
+              Text(
+                currentRoUser,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],

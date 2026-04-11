@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_grupal.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/plan_inversion_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -117,6 +118,10 @@ abstract class AnalisisRepositoryHn {
     required AnalisisGrupal analisisSolicitudGrupal,
   });
   Future<GetDataAnalisisGrupalResponse> getAnalisisData({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  });
+  Future<GetDataAnalisisNuevaMenorMil> getAnalisisDataNuevaMenorMil({
     required String numeroSolicitud,
     required String tipoSolicitud,
   });
@@ -610,14 +615,14 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       ));
       request.files.add(await http.MultipartFile.fromPath(
         'fotoNegocio2',
-        imagenNegocio,
-        filename: imagenNegocio,
+        imagenNegocio2,
+        filename: imagenNegocio2,
         contentType: MediaType('image', 'jpg'),
       ));
       request.files.add(await http.MultipartFile.fromPath(
         'fotoNegocio3',
-        imagenNegocio,
-        filename: imagenNegocio,
+        imagenNegocio3,
+        filename: imagenNegocio3,
         contentType: MediaType('image', 'jpg'),
       ));
 
@@ -719,6 +724,31 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         throw AppException(optionalMsg: errorMsg.toString());
       }
       final data = GetDataAnalisisGrupalResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GetDataAnalisisNuevaMenorMil> getAnalisisDataNuevaMenorMil({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = GetAnalisisDataEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final Map<String, dynamic> respBody = resp['data'];
+      final data = GetDataAnalisisNuevaMenorMil.fromJson(respBody);
       return data;
     } catch (e) {
       _logger.e(e);

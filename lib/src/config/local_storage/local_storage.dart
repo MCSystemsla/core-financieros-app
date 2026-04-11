@@ -51,6 +51,10 @@ class LocalStorage {
     return prefs.getString('currentUserName') ?? '';
   }
 
+  String get rolUser {
+    return prefs.getString('rolUser') ?? '';
+  }
+
   Future<void> setLanguage(String value) async {
     await prefs.setString('lang', value);
   }
@@ -93,5 +97,9 @@ class LocalStorage {
 
   Future<void> setRefreshToken(String expirationToken) async {
     await prefs.setString('refreshToken', expirationToken);
+  }
+
+  Future<void> setRolUser(String rolUser) async {
+    await prefs.setString('rolUser', rolUser);
   }
 }

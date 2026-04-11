@@ -162,7 +162,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               );
                             },
                           ),
-                          if (state.tieneAnalisis && esGrupal)
+                          if (state.tieneAnalisis)
                             SelectableCardItem(
                               userHaveDataAlready: false,
                               isLoading: state.status == Status.inProgress,
@@ -175,9 +175,11 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => ActualizarAnalisisHnScreen(
+                                    builder: (_) =>
+                                        ActualizarAnalisisHnInterceptor(
+                                      type: tipoSolicitud!,
                                       numeroSolicitud: numeroSolicitud,
-                                      tipoSolicitud: tipoSolicitudString,
+                                      tipoSolicitudString: tipoSolicitudString,
                                       title: title,
                                       subtitle: subtitle,
                                       description: description,
