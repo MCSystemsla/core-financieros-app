@@ -60,6 +60,7 @@ class _LoginScreenViewState extends State<LoginScreenView>
   @override
   Widget build(BuildContext context) {
     final flavor = global<FlavorCubit>().state.flavor;
+    const isProdMode = bool.fromEnvironment('isProdMode');
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -73,14 +74,14 @@ class _LoginScreenViewState extends State<LoginScreenView>
       ],
       child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
-          if (state is AutoupdateSuccess) {
+          if (state is AutoupdateSuccess && isProdMode) {
             UpdateAppDialog(
               flavor: flavor,
               apkUrl: state.apkVersion,
               context: context,
               title: 'Para continuar, es necesario actualizar la aplicación.',
               versionName: state.apkVersionName,
-            ).showDialog(context);
+            ).showDialog(context, dismissOnBackKeyPress: false);
           }
         },
         builder: (context, state) {

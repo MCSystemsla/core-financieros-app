@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
@@ -603,67 +605,92 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         '$protocol://$apiUrl/cartera/solicitudes/general/analisis/fotos-negocio';
 
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
-      request.fields['NumeroSolicitud'] = numeroSolicitud.toString();
-      request.fields['Cedula'] = cedulaCliente;
-      request.fields['database'] = LocalStorage().database;
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoNegocio',
-        imagenNegocio,
-        filename: imagenNegocio,
-        contentType: MediaType('image', 'jpg'),
-      ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoNegocio2',
-        imagenNegocio2,
-        filename: imagenNegocio2,
-        contentType: MediaType('image', 'jpg'),
-      ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'fotoNegocio3',
-        imagenNegocio3,
-        filename: imagenNegocio3,
-        contentType: MediaType('image', 'jpg'),
-      ));
+      final request = http.MultipartRequest('POST', Uri.parse(url));
 
+      // 1. Campos de texto
+      request.fields.addAll({
+        'NumeroSolicitud': numeroSolicitud.toString(),
+        'Cedula': cedulaCliente,
+        'database': LocalStorage().database,
+      });
+
+      // 2. Procesamiento de archivos (DRY - Don't Repeat Yourself)
+      final imagenes = {
+        'fotoNegocio': imagenNegocio,
+        'fotoNegocio2': imagenNegocio2,
+        'fotoNegocio3': imagenNegocio3,
+      };
+
+      for (var entry in imagenes.entries) {
+        if (entry.value.isNotEmpty) {
+          request.files.add(await http.MultipartFile.fromPath(
+            entry.key,
+            entry.value,
+            // Opcional: Detectar el tipo de contenido dinámicamente
+            contentType: MediaType('image', entry.value.split('.').last),
+          ));
+        }
+      }
+
+      // 3. Headers
       request.headers.addAll({
         'Accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ${LocalStorage().jwt}',
         'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
         'CF-Access-Client-Secret':
             const String.fromEnvironment('CFAccessClientSecret'),
       });
-      var response = await request.send();
-      var responseBody = await http.Response.fromStream(response);
-      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('Imagenes enviadas exitosamente: ${responseBody.body}');
-      } else {
-        await ErrorReporter.registerError(
-          errorMessage:
-              'Error enviando imagenes Solicitudes: ${jsonBody['message']}',
-          statusCode: response.statusCode.toString(),
-          username: LocalStorage().currentUserName,
-        );
-        _logger.e(
-            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
-        return (
-          false,
-          jsonBody['message'] as String,
-        );
-      }
-      _logger.i(response.reasonPhrase);
-      return (true, 'Imagenes Enviadas exitosamente!');
+      // 4. Envío con Timeout
+      final streamedResponse =
+          await request.send().timeout(const Duration(seconds: 30));
+      final response = await http.Response.fromStream(streamedResponse);
+
+      // 5. Manejo de respuesta
+      return _procesarRespuestaServidor(response);
+    } on SocketException {
+      return (false, 'No hay conexión a internet. Verifica tu red.');
+    } on TimeoutException {
+      return (false, 'La conexión ha expirado. Intenta de nuevo.');
     } catch (e) {
       await ErrorReporter.registerError(
-        errorMessage: 'Error enviando imagenes Solicitudes: $e',
-        statusCode: '400',
+        errorMessage: 'Error Enviando Imagenes del negocio: $e',
+        statusCode: '500',
         username: LocalStorage().currentUserName,
       );
-      _logger.e(e);
-      return (false, e.toString());
+      return (
+        false,
+        'Ocurrió un error inesperado al enviar las fotos: ${e.toString()}'
+      );
+    }
+  }
+
+  /// Helper para procesar la respuesta y evitar duplicar lógica
+  Future<(bool, String)> _procesarRespuestaServidor(
+      http.Response response) async {
+    Map<String, dynamic> jsonBody;
+
+    try {
+      jsonBody = json.decode(response.body);
+    } catch (_) {
+      jsonBody = {'message': 'Error desconocido en el servidor'};
+    }
+
+    final message =
+        jsonBody['message'] ?? 'Error al enviar imagenes del negocio';
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      _logger.i('Éxito: $message');
+      return (true, '¡Imágenes enviadas exitosamente!');
+    } else {
+      await ErrorReporter.registerError(
+        errorMessage:
+            'Error Enviando imagenes del negocio: ${response.statusCode}: $message',
+        statusCode: response.statusCode.toString(),
+        username: LocalStorage().currentUserName,
+      );
+      _logger.e('Servidor Error: ${response.statusCode} - ${response.body}');
+      return (false, message.toString());
     }
   }
 

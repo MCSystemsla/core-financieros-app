@@ -80,7 +80,7 @@ class ComiteResumeReceiptAprobacionWidget extends StatelessWidget {
       monto: aprobacion.monto,
       plazo: aprobacion.plazo,
       primerPago: fechaPrimerPago,
-      montoConServicios: aprobacion.monto - totalServicios,
+      montoConServicios: aprobacion.monto + totalServicios,
       observaciones: aprobacion.observacion,
       tipoCredito: aprobacion.tipoCreditoNombre,
     );

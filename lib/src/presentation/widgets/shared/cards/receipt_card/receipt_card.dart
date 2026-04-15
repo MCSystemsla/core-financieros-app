@@ -65,8 +65,8 @@ class TransactionReviewCard extends StatelessWidget {
             _row(Icons.schedule_outlined, 'Plazo', '$plazo meses'),
             _row(Icons.calendar_today_outlined, 'Fecha de Primer pago',
                 primerPago.selectorFormat()),
-            _row(Icons.wallet, 'Monto total con servicios',
-                montoConServicios.toCurrencyString()),
+            // _row(Icons.wallet, 'Monto total con servicios',
+            // montoConServicios.toCurrencyString()),
             _row(Icons.credit_card, 'Tipo Credito', tipoCredito),
             _row(Icons.remove_red_eye, 'Observaciones', observaciones),
 

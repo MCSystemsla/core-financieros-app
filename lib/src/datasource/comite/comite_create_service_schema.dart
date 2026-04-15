@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 
 String comiteCreateServiceSchemaToJson(ComiteCreateServiceSchema data) =>
     json.encode(data.toJson());
@@ -23,7 +24,7 @@ class ComiteCreateServiceSchema {
         'database': LocalStorage().database,
         'ComiteID': comiteId,
         'PlazoCredito': plazoCredito,
-        'MontoCredito': montoCredito,
+        'MontoCredito': double.tryParse(montoCredito.toSafeString(2)),
         'Servicios': List<dynamic>.from(servicios.map((x) => x.toJson())),
       };
 }

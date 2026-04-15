@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 
 ComiteSolicitudesGrupalesOnComiteResponse
@@ -8,17 +9,20 @@ ComiteSolicitudesGrupalesOnComiteResponse
 
 class ComiteSolicitudesGrupalesOnComiteResponse {
   final MetaDataPagination metaData;
+  final num montoTotalGrupo;
   final List<ComiteGrupalResponseItem> data;
 
   ComiteSolicitudesGrupalesOnComiteResponse({
     required this.metaData,
     required this.data,
+    required this.montoTotalGrupo,
   });
 
   factory ComiteSolicitudesGrupalesOnComiteResponse.fromJson(
           Map<String, dynamic> json) =>
       ComiteSolicitudesGrupalesOnComiteResponse(
         metaData: MetaDataPagination.fromJson(json['metaData']),
+        montoTotalGrupo: parseNum(json['MontoTotalGrupo']) ?? 0,
         data: List<ComiteGrupalResponseItem>.from(
             json['data'].map((x) => ComiteGrupalResponseItem.fromJson(x))),
       );
@@ -29,7 +33,7 @@ class ComiteGrupalResponseItem {
   final int nivelComite;
   final String nombre;
   final DateTime fechaSolicitud;
-  final int monto;
+  final num monto;
   final String estado;
   final String numero;
   final String moneda;
@@ -67,7 +71,7 @@ class ComiteGrupalResponseItem {
         nivelComite: json['NivelComite'],
         nombre: json['Nombre'],
         fechaSolicitud: DateTime.parse(json['FechaSolicitud']),
-        monto: json['Monto'],
+        monto: parseNum(json['Monto']) ?? 0,
         estado: json['Estado'],
         numero: json['Numero'],
         moneda: json['Moneda'],

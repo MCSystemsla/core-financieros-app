@@ -18,9 +18,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empt
 import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -417,7 +416,7 @@ Future<double?> _openMontoManualSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (ctx) {
       return SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -429,102 +428,104 @@ Future<double?> _openMontoManualSheet(BuildContext context) {
               left: 20,
               right: 20,
               top: 16,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
             ),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-
-                  const Gap(20),
-
-                  const CircleAvatar(
-                    radius: 26,
-                    backgroundColor: Color(0xFFE8F0FE),
-                    child: Icon(
-                      Icons.attach_money_rounded,
-                      size: 28,
-                      color: Colors.blue,
-                    ),
-                  ),
-
-                  const Gap(16),
-
-                  const Text(
-                    'Monto del servicio',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const Gap(6),
-
-                  const Text(
-                    'Ingrese el monto que desea aplicar',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-
-                  const Gap(24),
-
-                  /// Campo monto
-                  OutlineTextfieldWidget(
-                    padding: EdgeInsets.zero,
-                    textEditingController: controller,
-                    title: 'Monto del servicio',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    icon: Icon(
-                      Icons.attach_money_rounded,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    textInputType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                  ),
-
-                  const Gap(24),
-
-                  /// Botón guardar
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.check_circle_outline),
-                      label: const Text(
-                        'Guardar servicio',
-                        style: TextStyle(fontSize: 16),
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                    ),
+
+                    const Gap(20),
+
+                    const CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Color(0xFFE8F0FE),
+                      child: Icon(
+                        Icons.attach_money_rounded,
+                        size: 28,
+                        color: Colors.blue,
+                      ),
+                    ),
+
+                    const Gap(16),
+
+                    const Text(
+                      'Monto del servicio',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
+                    const Gap(6),
+
+                    const Text(
+                      'Ingrese el monto que desea aplicar',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    const Gap(24),
+
+                    /// Campo monto
+                    OutlineTextfieldWidget(
+                      padding: EdgeInsets.zero,
+                      textEditingController: controller,
+                      title: 'Monto del servicio',
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      icon: Icon(
+                        Icons.attach_money_rounded,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      textInputType: TextInputType.number,
+                      inputFormatters: [
+                        CurrencyInputFormatter(),
+                      ],
+                    ),
+
+                    const Gap(24),
+
+                    /// Botón guardar
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.check_circle_outline),
+                        label: const Text(
+                          'Guardar servicio',
+                          style: TextStyle(fontSize: 16),
                         ),
-                      ),
-                      onPressed: () {
-                        if (!formKey.currentState!.validate()) return;
-                        final value = double.tryParse(controller.text);
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          final value = toNumericString(controller.text,
+                              allowPeriod: true);
 
-                        if (value != null) {
-                          Navigator.pop(context, value);
-                        }
-                      },
+                          Navigator.pop(context, double.tryParse(value));
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -36,8 +36,9 @@ class ComiteGrupalScreenHn extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Comité de Crédito'),
+            title: const Text('Comité de Crédito Grupal'),
           ),
+          floatingActionButton: const TotalGroupBanner(),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -160,6 +161,53 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TotalGroupBanner extends StatelessWidget {
+  const TotalGroupBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ComiteSolicitudesGrupalesCubit,
+        ComiteSolicitudesGrupalesState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          Status.done => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                // ignore: deprecated_member_use
+                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Monto total del grupo:',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Gap(12),
+                  Text(
+                    'L. ${state.montoTotalGrupo.toCurrencyString()}',
+                    style: const TextStyle(
+                      color: Color(0xFF1A3D7C),
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          _ => const SizedBox.shrink(),
+        };
+      },
     );
   }
 }

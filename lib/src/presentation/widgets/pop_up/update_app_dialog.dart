@@ -70,11 +70,13 @@ class UpdateAppDialog extends OdsDialog {
     AnimType animType = AnimType.scale,
     DialogType dialogType = DialogType.infoReverse,
     Widget? customHeader,
+    bool dismissOnBackKeyPress = true,
   }) {
     return super.showDialog(
       context,
       animType: animType,
       dialogType: dialogType,
+      dismissOnBackKeyPress: dismissOnBackKeyPress,
     );
   }
 }

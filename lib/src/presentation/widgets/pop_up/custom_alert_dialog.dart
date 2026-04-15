@@ -43,6 +43,7 @@ class CustomAlertDialog extends OdsDialog {
     AnimType animType = AnimType.scale,
     DialogType dialogType = DialogType.warning,
     Widget? customHeader,
+    bool dismissOnBackKeyPress = true,
   }) {
     return super.showDialog(
       context,

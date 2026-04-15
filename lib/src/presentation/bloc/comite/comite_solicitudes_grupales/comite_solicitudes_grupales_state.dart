@@ -10,6 +10,7 @@ class ComiteSolicitudesGrupalesState extends Equatable {
   final int numeroActa;
   final OrderType orderType;
   final List<ComiteGrupalResponseItem> data;
+  final num montoTotalGrupo;
   const ComiteSolicitudesGrupalesState({
     this.status = Status.notStarted,
     this.errorMsg = '',
@@ -19,6 +20,7 @@ class ComiteSolicitudesGrupalesState extends Equatable {
     this.numeroActa = 0,
     this.orderType = OrderType.descending,
     this.data = const [],
+    this.montoTotalGrupo = 0,
   });
 
   @override
@@ -31,6 +33,7 @@ class ComiteSolicitudesGrupalesState extends Equatable {
         numeroActa,
         orderType,
         data,
+        montoTotalGrupo,
       ];
 
   ComiteSolicitudesGrupalesState copyWith({
@@ -42,6 +45,7 @@ class ComiteSolicitudesGrupalesState extends Equatable {
     int? numeroActa,
     OrderType? orderType,
     List<ComiteGrupalResponseItem>? data,
+    num? montoTotalGrupo,
   }) {
     return ComiteSolicitudesGrupalesState(
       status: status ?? this.status,
@@ -52,6 +56,7 @@ class ComiteSolicitudesGrupalesState extends Equatable {
       numeroActa: numeroActa ?? this.numeroActa,
       orderType: orderType ?? this.orderType,
       data: data ?? this.data,
+      montoTotalGrupo: montoTotalGrupo ?? this.montoTotalGrupo,
     );
   }
 }

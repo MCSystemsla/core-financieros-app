@@ -19,8 +19,9 @@ class GeolocationService {
       }
 
       return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
+        desiredAccuracy: LocationAccuracy.best,
         timeLimit: const Duration(seconds: 60),
+        forceAndroidLocationManager: true,
       );
     } catch (e) {
       await ErrorReporter.registerError(

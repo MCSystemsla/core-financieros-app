@@ -27,7 +27,11 @@ class ComiteSolicitudesGrupalesCubit
         orderType: state.orderType,
         grupoId: grupoId,
       );
-      emit(state.copyWith(status: Status.done, data: resp.data));
+      emit(state.copyWith(
+        status: Status.done,
+        data: resp.data,
+        montoTotalGrupo: resp.montoTotalGrupo,
+      ));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
     } catch (e) {
