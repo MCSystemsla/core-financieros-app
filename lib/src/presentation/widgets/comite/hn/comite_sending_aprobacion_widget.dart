@@ -190,7 +190,7 @@ class _ComiteResumeReceiptAprobacionWidgetState
                 stateCalculo.data?.data.interes.tasaInteresCorriente ?? 0,
             tasaInteresMoratorio:
                 stateCalculo.data?.data.interes.tasaInteresMoratorio ?? 0,
-            montoSeguro: widget.montoSeguro,
+            montoSeguro: stateCalculo.data?.data.seguros.montoTotalSeguros ?? 0,
             porcentajeComision: widget.porcentajeComision,
             porcentajeSaldoDeudorAprobado: widget.porcentajeSaldoDeudorAprobado,
             seguoMemorialMensual: widget.seguoMemorialMensual,

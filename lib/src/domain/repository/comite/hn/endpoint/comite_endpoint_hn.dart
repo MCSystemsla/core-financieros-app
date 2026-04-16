@@ -238,8 +238,10 @@ class GetCalculosDatosEndpoint extends Endpoint {
         'FechaPrimerPago': fechaPrimerPago.toUtc().toIso8601String(),
         'EsReestructurado': esRestructuracion.toString(),
         'EsMantieneTasa': esMantieneTasa.toString(),
-        'CreditoCancelacion1': creditoCancelacion.toString(),
-        'CreditoCancelacion2': creditoCancelacion2.toString(),
+        if (creditoCancelacion.isNotEmpty)
+          'CreditoCancelacion1': creditoCancelacion.toString(),
+        if (creditoCancelacion2.isNotEmpty)
+          'CreditoCancelacion2': creditoCancelacion2.toString(),
         'FormaPagoCodigo': formaPagoCodigo,
         'ComisionSegurosFinanciado': comisionSegurosFinanciado.toString(),
         'TipoCobroSaldoDeudorCodigo': tipoCobroSaldoDeudorCodigo.toString(),
