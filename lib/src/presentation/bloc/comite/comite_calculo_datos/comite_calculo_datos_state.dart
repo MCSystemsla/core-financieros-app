@@ -12,6 +12,7 @@ class ComiteCalculoDatosState extends Equatable {
   final String fechaPrimerPago;
   final bool esRestructuracion;
   final bool esMantieneTasa;
+  final bool finaciaComisionYSeguros;
   final String creditoCancelacion;
   final String creditoCancelacion2;
   final String formaPagoCodigo;
@@ -28,6 +29,7 @@ class ComiteCalculoDatosState extends Equatable {
     this.fechaPrimerPago = '',
     this.esRestructuracion = false,
     this.esMantieneTasa = false,
+    this.finaciaComisionYSeguros = false,
     this.creditoCancelacion = '',
     this.creditoCancelacion2 = '',
     this.formaPagoCodigo = '',
@@ -76,6 +78,7 @@ class ComiteCalculoDatosState extends Equatable {
         comisionSegurosFinanciado,
         tipoCobroSaldoDeudorCodigo,
         paisCodigo,
+        finaciaComisionYSeguros,
       ];
 
   ComiteCalculoDatosState copyWith({
@@ -95,6 +98,7 @@ class ComiteCalculoDatosState extends Equatable {
     double? comisionSegurosFinanciado,
     String? tipoCobroSaldoDeudorCodigo,
     String? paisCodigo,
+    bool? finaciaComisionYSeguros,
   }) {
     return ComiteCalculoDatosState(
       status: status ?? this.status,
@@ -115,6 +119,8 @@ class ComiteCalculoDatosState extends Equatable {
       tipoCobroSaldoDeudorCodigo:
           tipoCobroSaldoDeudorCodigo ?? this.tipoCobroSaldoDeudorCodigo,
       paisCodigo: paisCodigo ?? this.paisCodigo,
+      finaciaComisionYSeguros:
+          finaciaComisionYSeguros ?? this.finaciaComisionYSeguros,
     );
   }
 }

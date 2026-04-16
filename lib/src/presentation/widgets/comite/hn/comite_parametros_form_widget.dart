@@ -144,11 +144,21 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                   },
                 ),
                 const Gap(12),
-                CustomSwitch(
-                  title: 'Financiar comision y seguros',
-                  subtitle: 'Financiara la comision y seguros?',
-                  value: false,
-                  onChanged: (v) {},
+                BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                  builder: (context, state) {
+                    return CustomSwitch(
+                      title: 'Financiar comision y seguros',
+                      subtitle: 'Financiara la comision y seguros?',
+                      value: state.finaciaComisionYSeguros,
+                      onChanged: (v) {
+                        calculosCubit.onFieldChanged(
+                          () => state.copyWith(
+                            finaciaComisionYSeguros: v,
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
                 const Gap(12),
               ],

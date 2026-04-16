@@ -14,8 +14,10 @@ class ComiteCalculoDatosCubit extends Cubit<ComiteCalculoDatosState> {
 
   Future<void> calcularDatos({
     required int actaID,
+    required num comisionSegurosFinanciado,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
+    await Future.delayed(const Duration(seconds: 2));
     try {
       final resp = await _repository.obtenerCalculoDatos(
         actaID: actaID,
@@ -29,9 +31,12 @@ class ComiteCalculoDatosCubit extends Cubit<ComiteCalculoDatosState> {
         creditoCancelacion: state.creditoCancelacion,
         creditoCancelacion2: state.creditoCancelacion2,
         formaPagoCodigo: state.formaPagoCodigo,
-        comisionSegurosFinanciado: state.comisionSegurosFinanciado,
+        comisionSegurosFinanciado: state.finaciaComisionYSeguros
+            ? comisionSegurosFinanciado.toDouble()
+            : 0,
         tipoCobroSaldoDeudorCodigo: state.tipoCobroSaldoDeudorCodigo,
         paisCodigo: state.paisCodigo,
+        
       );
       emit(state.copyWith(status: Status.done, data: resp));
     } on AppException catch (e) {

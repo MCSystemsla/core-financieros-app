@@ -63,6 +63,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
         fechaPrimerPago: fechaPrimerPago?.toUtc().toIso8601String(),
         productoCodigo: productoCodigo,
         monto: widget.data.monto?.toDouble(),
+        tipoCobroSaldoDeudorCodigo: widget.data.formaCobroSaldoDeudorCodigo,
       ),
     );
   }

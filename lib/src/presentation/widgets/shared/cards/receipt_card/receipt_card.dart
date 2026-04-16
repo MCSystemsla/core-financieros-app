@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
@@ -7,10 +8,14 @@ class TransactionReviewCard extends StatelessWidget {
   final String producto;
   final int plazo;
   final DateTime primerPago;
-  final List<String> servicios;
+  final List<Item> servicios;
   final double montoConServicios;
   final String tipoCredito;
   final String observaciones;
+  final double montoSinComision;
+  final bool mostrarMontoSinComision;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
 
   const TransactionReviewCard({
     super.key,
@@ -22,6 +27,10 @@ class TransactionReviewCard extends StatelessWidget {
     required this.montoConServicios,
     required this.tipoCredito,
     required this.observaciones,
+    required this.montoSinComision,
+    this.mostrarMontoSinComision = false,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
   });
 
   @override
@@ -47,26 +56,55 @@ class TransactionReviewCard extends StatelessWidget {
                     style: TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    'L ${monto.toCurrencyString()}',
-                    style: const TextStyle(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.0, end: monto),
+                    duration: const Duration(seconds: 2),
+                    curve: Curves.easeOutExpo,
+                    builder: (context, value, child) {
+                      return Text(
+                        'L. ${value.toCurrencyString()}',
+                        style: const TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
+            if (mostrarMontoSinComision) ...[
+              _row(
+                Icons.wallet,
+                'Monto total sin comision y seguros',
+                montoSinComision.toCurrencyString(),
+              ),
+            ],
 
-            _row(Icons.account_balance_wallet_outlined, 'Producto del crédito',
-                producto),
+            _row(
+              Icons.account_balance_wallet_outlined,
+              'Producto del crédito',
+              producto,
+            ),
+            _row(
+              Icons.percent,
+              'Interes corriente',
+              tasaInteresCorriente.toString(),
+            ),
+            _row(
+              Icons.percent,
+              'Interes moratorio',
+              tasaInteresMoratorio.toString(),
+            ),
             _row(Icons.schedule_outlined, 'Plazo', '$plazo meses'),
-            _row(Icons.calendar_today_outlined, 'Fecha de Primer pago',
-                primerPago.selectorFormat()),
-            // _row(Icons.wallet, 'Monto total con servicios',
-            // montoConServicios.toCurrencyString()),
+            _row(
+              Icons.calendar_today_outlined,
+              'Fecha de Primer pago',
+              primerPago.selectorFormat(),
+            ),
+
             _row(Icons.credit_card, 'Tipo Credito', tipoCredito),
             _row(Icons.remove_red_eye, 'Observaciones', observaciones),
 
@@ -91,7 +129,7 @@ class TransactionReviewCard extends StatelessWidget {
                         color: Colors.green,
                       ),
                       const SizedBox(width: 8),
-                      Expanded(child: Text(s)),
+                      Expanded(child: Text(s.name)),
                     ],
                   ),
                 ),

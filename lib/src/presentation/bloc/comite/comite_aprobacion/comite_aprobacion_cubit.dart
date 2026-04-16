@@ -44,7 +44,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
         productoCodigo: state.productoCodigo,
         isMenorMil: isMenorMil,
         modificaActa: ModificaActa(
-          monto: state.monto,
+          monto: double.tryParse(monto) ?? 0,
           montoSeguro: montoSeguro,
           porcentajeComision: porcentajeComision,
           plazo: state.plazo,

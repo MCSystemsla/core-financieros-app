@@ -1,8 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
-import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_comision_en_desembolso_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_datos_del_credito_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_widget.dart';
@@ -77,13 +75,13 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
           ComiteParametrosForm(data: widget.data),
           const Gap(12),
           ComiteDatosDelCreditoForm(data: widget.data),
-          const Gap(12),
-          ComiteComisionEnDesembolsoForm(
-            data: widget.data,
-            numeroSolicitud:
-                int.tryParse(widget.data.numeroSolicitud ?? '') ?? 0,
-            tipoSolicitud: widget.tipoSolicitud,
-          ),
+          // const Gap(12),
+          // ComiteComisionEnDesembolsoForm(
+          //   data: widget.data,
+          //   numeroSolicitud:
+          //       int.tryParse(widget.data.numeroSolicitud ?? '') ?? 0,
+          //   tipoSolicitud: widget.tipoSolicitud,
+          // ),
           const Gap(12),
           ComiteParametrosForm2(data: widget.data),
         ],
@@ -96,7 +94,7 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          _buildCalcularButton(),
+          // _buildCalcularButton(),
           const Gap(20),
           _buildAgregarServiciosButton(),
         ],
@@ -104,61 +102,61 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
     );
   }
 
-  Widget _buildCalcularButton() {
-    return BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
-      buildWhen: (p, c) => p.status != c.status,
-      listenWhen: (p, c) => p.status != c.status,
-      listener: (context, state) {
-        if (state.status == Status.done) {
-          CustomAlertDialog(
-            context: context,
-            title: 'Datos calculados exitosamente',
-            onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.success);
-        }
+  // Widget _buildCalcularButton() {
+  //   return BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+  //     buildWhen: (p, c) => p.status != c.status,
+  //     listenWhen: (p, c) => p.status != c.status,
+  //     listener: (context, state) {
+  //       if (state.status == Status.done) {
+  //         CustomAlertDialog(
+  //           context: context,
+  //           title: 'Datos calculados exitosamente',
+  //           onDone: () => context.pop(),
+  //         ).showDialog(context, dialogType: DialogType.success);
+  //       }
 
-        if (state.status == Status.error) {
-          CustomAlertDialog(
-            context: context,
-            title: state.errorMsg,
-            onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
-        }
-      },
-      builder: (context, state) {
-        return SizedBox(
-          width: double.infinity,
-          child: CustomElevatedButton(
-            color: Colors.indigo,
-            enabled: state.status != Status.inProgress,
-            text: state.status == Status.inProgress
-                ? 'Calculando...'
-                : 'Calcular Datos',
-            onPressed: _onCalcularPressed,
-          ),
-        );
-      },
-    );
-  }
+  //       if (state.status == Status.error) {
+  //         CustomAlertDialog(
+  //           context: context,
+  //           title: state.errorMsg,
+  //           onDone: () => context.pop(),
+  //         ).showDialog(context, dialogType: DialogType.error);
+  //       }
+  //     },
+  //     builder: (context, state) {
+  //       return SizedBox(
+  //         width: double.infinity,
+  //         child: CustomElevatedButton(
+  //           color: Colors.indigo,
+  //           enabled: state.status != Status.inProgress,
+  //           text: state.status == Status.inProgress
+  //               ? 'Calculando...'
+  //               : 'Calcular Datos',
+  //           onPressed: _onCalcularPressed,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  void _onCalcularPressed() {
-    if (!formKey.currentState!.validate()) {
-      CustomAlertDialog(
-        context: context,
-        title: 'Debes completar los campos requeridos para continuar.',
-        onDone: () => context.pop(),
-      ).showDialog(context, dialogType: DialogType.warning);
-      return;
-    }
+  // void _onCalcularPressed() {
+  //   if (!formKey.currentState!.validate()) {
+  //     CustomAlertDialog(
+  //       context: context,
+  //       title: 'Debes completar los campos requeridos para continuar.',
+  //       onDone: () => context.pop(),
+  //     ).showDialog(context, dialogType: DialogType.warning);
+  //     return;
+  //   }
 
-    setState(() {
-      isCalcularDatosClicked = true;
-    });
+  //   setState(() {
+  //     isCalcularDatosClicked = true;
+  //   });
 
-    context.read<ComiteCalculoDatosCubit>().calcularDatos(
-          actaID: widget.actaId,
-        );
-  }
+  //   // context.read<ComiteCalculoDatosCubit>().calcularDatos(
+  //   //       actaID: widget.actaId,
+  //   // );
+  // }
 
   Widget _buildAgregarServiciosButton() {
     return BlocBuilder<ComiteAprobacionCubit, ComiteAprobacionState>(
@@ -186,14 +184,14 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
       return;
     }
 
-    if (!isCalcularDatosClicked) {
-      CustomAlertDialog(
-        context: context,
-        title: 'Debes primero calcular los datos para continuar',
-        onDone: () => context.pop(),
-      ).showDialog(context, dialogType: DialogType.warning);
-      return;
-    }
+    // if (!isCalcularDatosClicked) {
+    //   CustomAlertDialog(
+    //     context: context,
+    //     title: 'Debes primero calcular los datos para continuar',
+    //     onDone: () => context.pop(),
+    //   ).showDialog(context, dialogType: DialogType.warning);
+    //   return;
+    // }
 
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
 
@@ -207,6 +205,7 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
         ),
       ],
       child: ComiteServiciosActaWidget(
+        actaId: widget.actaId,
         fechaPrimerPago: DateTime.parse(cubitCalculos.state.fechaPrimerPago),
         comiteId: widget.data.id ?? 0,
         numeroSolicitud: state.numeroSolicitud,

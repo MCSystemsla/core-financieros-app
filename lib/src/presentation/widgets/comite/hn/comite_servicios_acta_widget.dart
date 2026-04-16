@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_se
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
@@ -44,6 +45,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
   final double montoTelemedicinaAprobada;
   final double seguroMapfre;
   final DateTime fechaPrimerPago;
+  final int actaId;
 
   const ComiteServiciosActaWidget({
     super.key,
@@ -64,6 +66,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
     required this.montoTelemedicinaAprobada,
     required this.seguroMapfre,
     required this.fechaPrimerPago,
+    required this.actaId,
   });
 
   @override
@@ -95,6 +98,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
           title: const Text('Servicios Acta'),
         ),
         bottomNavigationBar: _BottomButton(
+          actaId: actaId,
           comiteId: comiteId,
           monto: montoCredito.toString(),
           porcentajeComision: porcentajeComision,
@@ -295,6 +299,7 @@ class _BottomButton extends StatelessWidget {
   final double seguroMapfre;
   final int plazoCredito;
   final DateTime fechaPrimerPago;
+  final int actaId;
   const _BottomButton({
     required this.comiteId,
     required this.monto,
@@ -309,6 +314,7 @@ class _BottomButton extends StatelessWidget {
     required this.seguroMapfre,
     required this.plazoCredito,
     required this.fechaPrimerPago,
+    required this.actaId,
   });
 
   @override
@@ -333,6 +339,7 @@ class _BottomButton extends StatelessWidget {
                     ),
                   ],
                   child: ComiteResumeReceiptAprobacionWidget(
+                    actaId: actaId,
                     totalServicios: state.servicios.fold(
                         0.0, (sum, element) => sum + element.montoServicio),
                     plazoCredito: plazoCredito,
@@ -349,8 +356,11 @@ class _BottomButton extends StatelessWidget {
                         porcentajeSaldoDeudorAprobado,
                     seguoMemorialMensual: seguoMemorialMensual,
                     servicios: state.data
-                        .map((e) =>
-                            '${e.codigo}-${e.nombre} Monto del servicio: ${e.montoServicio.toCurrencyString()}')
+                        .map((e) => Item(
+                              name:
+                                  '${e.codigo}-${e.nombre} Monto del servicio: ${e.montoServicio.toCurrencyString()}',
+                              value: (e.montoServicio),
+                            ))
                         .toList(),
                   ),
                 ),

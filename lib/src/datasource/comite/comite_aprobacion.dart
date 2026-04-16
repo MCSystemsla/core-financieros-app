@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 
 String comiteAprobacionToJson(ComiteAprobacion data) =>
     json.encode(data.toJson());
@@ -34,7 +35,7 @@ class ComiteAprobacion {
     final data = {
       'database': LocalStorage().database,
       'NumeroSolicitud': numeroSolicitud,
-      'Observacion': observacion,
+      'Observacion': observacion.isEmpty ? null : observacion,
       'FormaPagoCodigo': formaPagoCodigo,
       'TipoSolicitudCodigo': tipoSolicitudCodigo,
       'ProductoCodigo': productoCodigo,
@@ -147,7 +148,7 @@ class ModificaActa {
 
   Map<String, dynamic> toJson() {
     final data = {
-      'Monto': monto,
+      'Monto': double.tryParse(monto.toSafeString(2)),
       'MontoSeguro': montoSeguro,
       'PorcentajeComision': porcentajeComision,
       'Plazo': plazo,
