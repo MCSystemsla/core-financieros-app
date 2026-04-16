@@ -197,11 +197,9 @@ class ObjectBoxService {
 
     switch (tipo) {
       case TypeForm.nueva:
-        condition = CatalogoLocalDb_.type.equals('PRODUCTO');
-        // TODO: Descomentar cuando se tenga todo en orden en SCRProducto
-        // &
-        //     CatalogoLocalDb_.esNuevo.equals(true) &
-        //     CatalogoLocalDb_.isRecurrente.equals(false);
+        condition = CatalogoLocalDb_.type.equals('PRODUCTO') &
+            CatalogoLocalDb_.esNuevo.equals(true) &
+            CatalogoLocalDb_.isRecurrente.equals(false);
         break;
 
       case TypeForm.asalariado:
@@ -209,10 +207,9 @@ class ObjectBoxService {
         break;
 
       case TypeForm.represtamo:
-        condition = CatalogoLocalDb_.type.equals('PRODUCTO');
-        // &
-        //     CatalogoLocalDb_.esNuevo.equals(false) &
-        //     CatalogoLocalDb_.isRecurrente.equals(true);
+        condition = CatalogoLocalDb_.type.equals('PRODUCTO') &
+            CatalogoLocalDb_.esNuevo.equals(false) &
+            CatalogoLocalDb_.isRecurrente.equals(true);
         break;
     }
 
