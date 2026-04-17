@@ -37,6 +37,32 @@ class AutorizarSolicitudGrupalCubit
     }
   }
 
+  Future<void> autorizarSolicitudGrupalIndividual({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    emit(state.copyWith(status: Status.inProgress));
+    try {
+      await _repository.autorizarSolicitudCredito(
+        numeroSolicitud: numeroSolicitud,
+        tipoSolicitud: tipoSolicitud,
+      );
+      emit(state.copyWith(
+        status: Status.done,
+      ));
+    } on AppException catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        errorMsg: e.optionalMsg,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        errorMsg: e.toString(),
+      ));
+    }
+  }
+
   void saveSolicitud(SolicitudeAutorizarData data) {
     emit(state.copyWith(solicitudes: [...state.solicitudes, data]));
   }

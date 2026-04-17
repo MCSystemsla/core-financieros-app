@@ -135,16 +135,14 @@ class _ListDataState extends State<_ListData> {
                 'Estas seguro que desea autorizar la solicitud ${widget.solicitudes[index].nombreCompleto}?',
             onYes: () {
               context.pop();
-              context.read<AutorizarSolicitudGrupalCubit>().saveSolicitud(
-                    SolicitudeAutorizarData(
-                      numeroSolicitud:
-                          int.parse(widget.solicitudes[index].numero),
-                      tipoSolicitud: widget.solicitudes[index].tipoSolicitud,
-                    ),
-                  );
+
               context
                   .read<AutorizarSolicitudGrupalCubit>()
-                  .autorizarSolicitudGrupal();
+                  .autorizarSolicitudGrupalIndividual(
+                    numeroSolicitud:
+                        int.parse(widget.solicitudes[index].numero),
+                    tipoSolicitud: widget.solicitudes[index].tipoSolicitud,
+                  );
             },
           ).showDialog(context),
         );

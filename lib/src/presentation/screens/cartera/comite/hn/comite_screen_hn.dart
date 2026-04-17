@@ -111,6 +111,8 @@ class _ListDataWidget extends StatelessWidget {
                     tipoSolicitud: data[index].tipoSolicitud,
                     actaId: data[index].id,
                     esUltimoRegistro: false,
+                    esAprobacionMasiva: false,
+                    grupoID: data[index].grupoID ?? 0,
                   ),
                 ),
               );

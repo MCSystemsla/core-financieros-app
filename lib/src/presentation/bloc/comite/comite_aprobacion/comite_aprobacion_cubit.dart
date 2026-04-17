@@ -35,6 +35,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
     try {
       final resp = await _repository.crearAprobacion(
           data: ComiteAprobacion(
+        esAprobacionMasiva: state.esAprobacionMasiva,
         esUltimoRegistro: state.esUltimoRegistro,
         grupoID: state.grupoID,
         numeroSolicitud: state.numeroSolicitud,
@@ -104,6 +105,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
     required int numeroSolicitud,
     required String tipoSolicitud,
     required bool esUltimoRegistro,
+    required bool esAprobacionMasiva,
     int? grupoID,
   }) {
     emit(
@@ -112,6 +114,7 @@ class ComiteAprobacionCubit extends Cubit<ComiteAprobacionState> {
         tipoSolicitudCodigo: tipoSolicitud,
         grupoID: grupoID,
         esUltimoRegistro: esUltimoRegistro,
+        esAprobacionMasiva: esAprobacionMasiva,
       ),
     );
   }

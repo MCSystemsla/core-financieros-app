@@ -123,6 +123,7 @@ class _ListDataWidget extends StatelessWidget {
                     actaId: data[index].id,
                     grupoID: grupoID,
                     esUltimoRegistro: esElUltimoRecord,
+                    esAprobacionMasiva: true,
                   ),
                 ),
               );

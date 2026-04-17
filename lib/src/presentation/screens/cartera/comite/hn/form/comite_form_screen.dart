@@ -18,12 +18,14 @@ class ComiteFormScreen extends StatelessWidget {
   final int actaId;
   final int grupoID;
   final bool esUltimoRegistro;
+  final bool esAprobacionMasiva;
   const ComiteFormScreen({
     required this.numeroSolicitud,
     required this.tipoSolicitud,
     required this.actaId,
     this.grupoID = 0,
     this.esUltimoRegistro = false,
+    required this.esAprobacionMasiva,
     super.key,
   });
 
@@ -49,6 +51,7 @@ class ComiteFormScreen extends StatelessWidget {
               tipoSolicitud: tipoSolicitud,
               grupoID: grupoID,
               esUltimoRegistro: esUltimoRegistro,
+              esAprobacionMasiva: esAprobacionMasiva,
             ),
         ),
         BlocProvider(

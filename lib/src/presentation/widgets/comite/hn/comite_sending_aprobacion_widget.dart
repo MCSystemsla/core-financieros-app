@@ -277,7 +277,7 @@ class _ComiteSendingAprobacionWidgetState
                 text: 'Enviando aprobación a servidor...',
               ),
             Status.done => ComiteApprovedSuccessTransactionCard(
-                monto: state.monto,
+                monto: double.tryParse(widget.monto) ?? 0,
                 mensajeExito: state.respMsg,
                 responsables: state.responsables,
               ),

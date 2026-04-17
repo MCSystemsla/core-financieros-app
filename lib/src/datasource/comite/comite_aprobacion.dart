@@ -15,6 +15,7 @@ class ComiteAprobacion {
   final bool isMenorMil;
   final int? grupoID;
   final bool esUltimoRegistro;
+  final bool esAprobacionMasiva;
   final ModificaActa modificaActa;
   final InsertaAprobacion insertaAprobacion;
 
@@ -28,6 +29,7 @@ class ComiteAprobacion {
     required this.modificaActa,
     required this.insertaAprobacion,
     required this.esUltimoRegistro,
+    required this.esAprobacionMasiva,
     this.grupoID,
   });
 
@@ -44,6 +46,7 @@ class ComiteAprobacion {
       'insertaAprobacion': insertaAprobacion.toJson(),
       'GrupoID': grupoID == 0 ? null : grupoID,
       'EsUltimoRegistro': grupoID == 0 ? null : esUltimoRegistro,
+      'EsAprobacionMasiva': esAprobacionMasiva,
     };
     data.removeWhere(
       (key, value) => value == null,

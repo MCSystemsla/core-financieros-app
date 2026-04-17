@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 
 SolicitudesOnComiteResponse comiteSolicitudesResponseFromJson(String str) =>
@@ -37,6 +38,7 @@ class ComiteOnSolicitudData {
   final String nombrePromotor;
   final int promotorID;
   final int nivelComite;
+  final int? grupoID;
 
   ComiteOnSolicitudData({
     required this.id,
@@ -53,6 +55,7 @@ class ComiteOnSolicitudData {
     required this.nombrePromotor,
     required this.promotorID,
     required this.nivelComite,
+    this.grupoID,
   });
 
   factory ComiteOnSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -71,5 +74,6 @@ class ComiteOnSolicitudData {
         nombrePromotor: json['NombrePromotor'],
         promotorID: json['PromotorID'],
         nivelComite: json['NivelComite'],
+        grupoID: parseInt(json['GrupoID']),
       );
 }
