@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_grupal_screen_hn.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/v2_comite_grupal_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_solicitud_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_grupal_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -341,7 +342,10 @@ class _ModalSheetGrupales extends StatelessWidget {
                       subtitle: 'Aprobar comité grupal',
                       onTap: () => {
                         context.pushTransparentRoute(
-                          ComiteGrupalScreenHn(
+                          // ComiteGrupalScreenHn(
+                          //   grupoActivoData: grupoActivoData,
+                          // ),
+                          V2ComiteGrupalScreenHn(
                             grupoActivoData: grupoActivoData,
                           ),
                         ),
