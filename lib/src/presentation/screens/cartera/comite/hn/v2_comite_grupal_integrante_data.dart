@@ -1,6 +1,5 @@
 import 'package:core_financiero_app/src/domain/repository/comite/hn/comite_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/comite/v2_comite_configuration_grupal/v2_comite_configuration_grupal_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_grupal_integrante_data_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/status_item_card/status_item_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
