@@ -1,12 +1,19 @@
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 
 class CustomExpandable extends StatefulWidget {
   final String title;
+  final DateTime? fechaPrimerPago;
+  final String plazo;
+  final String tipoCredito;
   final Widget child;
   const CustomExpandable({
     super.key,
     required this.title,
     required this.child,
+    this.fechaPrimerPago,
+    required this.plazo,
+    required this.tipoCredito,
   });
 
   @override
@@ -91,9 +98,12 @@ class _CustomExpandableState extends State<CustomExpandable>
                   const SizedBox(height: 8),
                   const Divider(height: 1),
                   const SizedBox(height: 10),
-                  _buildRow('Interes:', '3.0%'),
-                  _buildRow('Plazo:', '12 months'),
-                  _buildRow('Moneda:', 'Lempira'),
+                  _buildRow('Fecha de primer pago:',
+                      widget.fechaPrimerPago?.selectorFormat() ?? 'N/A'),
+                  _buildRow('Plazo:',
+                      widget.plazo.isEmpty ? 'N/A' : widget.plazo.toString()),
+                  _buildRow('Tipo de crédito:',
+                      widget.tipoCredito.isEmpty ? 'N/A' : widget.tipoCredito),
                 ],
               ),
             ),

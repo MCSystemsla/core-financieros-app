@@ -37,30 +37,51 @@ class _WidgetLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = AppColors.getPrimaryColor();
+
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Image(
-                image: AssetImage(ImageAsset.icon),
-                height: 80,
-              ),
-              const Gap(25),
-              SizedBox(
-                width: 110,
-                child: LinearProgressIndicator(
-                  color: AppColors.getPrimaryColor(),
-                  minHeight: 6,
-                  backgroundColor:
-                      AppColors.getPrimaryColor().withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            colors: [
+              Colors.white,
+              Color(0xFFF0F0F0),
             ],
+            radius: 1.0,
           ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Spacer(flex: 3),
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryColor.withOpacity(0.1),
+                    blurRadius: 40,
+                    spreadRadius: 10,
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                ImageAsset.icon,
+                height: 100,
+              ),
+            ),
+            const Spacer(flex: 2),
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 3.0,
+                valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+              ),
+            ),
+            const Gap(40),
+          ],
         ),
       ),
     );

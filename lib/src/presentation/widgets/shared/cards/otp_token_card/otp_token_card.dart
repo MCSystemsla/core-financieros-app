@@ -187,14 +187,10 @@ class _CopyButton extends StatelessWidget {
       onPressed: () async {
         await Clipboard.setData(ClipboardData(text: token));
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnackbar(
-              title: 'Codigo de seguridad copiado',
-              icon: const Icon(
-                Icons.copy,
-                color: Colors.white,
-              ),
-            ),
+          showV2CustomSnackbar(
+            context,
+            title: 'Codigo de seguridad copiado.',
+            type: SnackbarType.success,
           );
           HapticFeedback.lightImpact();
         }

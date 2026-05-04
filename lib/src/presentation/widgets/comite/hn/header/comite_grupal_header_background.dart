@@ -100,11 +100,18 @@ class _AnimatedCard extends StatelessWidget {
                       value: state.data.length.toString(),
                       isCollapsed: isCollapsed,
                     ),
-                    _InfoItem(
-                      label: 'Total:',
-                      value: 'L. ${state.montoTotalGrupo.toCurrencyString()}',
-                      isCollapsed: isCollapsed,
-                      align: CrossAxisAlignment.end,
+                    TweenAnimationBuilder<num>(
+                      tween: Tween<num>(begin: 0.0, end: state.montoTotalGrupo),
+                      curve: Curves.easeOutExpo,
+                      duration: const Duration(seconds: 2),
+                      builder:
+                          (BuildContext context, num value, Widget? child) =>
+                              _InfoItem(
+                        label: 'Total:',
+                        value: 'L. ${value.toCurrencyString()}',
+                        isCollapsed: isCollapsed,
+                        align: CrossAxisAlignment.end,
+                      ),
                     ),
                   ],
                 ),

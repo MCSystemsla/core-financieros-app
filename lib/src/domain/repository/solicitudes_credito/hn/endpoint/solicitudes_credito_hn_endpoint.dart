@@ -275,8 +275,9 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
-        'EstadoSolicitudCodigo':
-            isCustomEstadoCredito ? 'REG,AUT' : estadoCredito.codigo,
+        'EstadoSolicitudCodigo': isCustomEstadoCredito
+            ? '${EstadoCredito.registrada.codigo},${EstadoCredito.asignada.codigo},${EstadoCredito.enRevision.codigo},${EstadoCredito.enComite.codigo}'
+            : estadoCredito.codigo,
         'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
         if (numeroSolicitud != null && numeroSolicitud!.isNotEmpty)
           'Numero': numeroSolicitud,

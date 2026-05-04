@@ -254,16 +254,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
               const VersionControlWidget(),
-              const Gap(10),
-              CloudflareTurnstile(
-                options: options,
-                siteKey: const String.fromEnvironment('CFAccessSiteKey'),
-                baseUrl: 'http://localhost/',
-                onTokenReceived: (token) {
-                  turnstileToken = token;
-                  setState(() {});
-                },
-              ),
+              // const Gap(10),
+              // CloudflareTurnstile(
+              //   options: options,
+              //   siteKey: const String.fromEnvironment('CFAccessSiteKey'),
+              //   baseUrl: 'http://localhost/',
+              //   onTokenReceived: (token) {
+              //     turnstileToken = token;
+              //     setState(() {});
+              //   },
+              // ),
               if (localStorage.currentUserName.isNotEmpty &&
                   localStorage.jwt.isNotEmpty)
                 SwitchListTile(
@@ -281,14 +281,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                           .makeToOfflineMode();
                       global<BiometricCubit>().deactivateBiometricAuth();
                       context.pushReplacement('/');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        customSnackbar(
-                          title: 'Modo offline Activado',
-                          icon: const Icon(
-                            Icons.offline_bolt,
-                            color: Colors.white,
-                          ),
-                        ),
+                      showV2CustomSnackbar(
+                        context,
+                        title: 'Modo offline Activado',
+                        type: SnackbarType.success,
+                        message:
+                            'Has entrado al modo offline, puedes gestionar tus datos sin conexión a internet.',
                       );
                     }
                   },
@@ -298,12 +296,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 listener: (context, state) async {
                   final status = state.status;
                   if (status == Status.error) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        showCloseIcon: true,
-                        content: Text(state.errorMsg),
-                      ),
+                    showV2CustomSnackbar(
+                      context,
+                      title: state.errorMsg,
+                      type: SnackbarType.warning,
                     );
                   }
                   if (state.status == Status.done) {
@@ -312,12 +308,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                       global<BiometricCubit>().deactivateBiometricAuth();
                     }
                     context.pushReplacement('/');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        showCloseIcon: true,
-                        content: Text('auth.logged'.tr()),
-                      ),
+                    showV2CustomSnackbar(
+                      context,
+                      title: 'auth.logged'.tr(),
+                      type: SnackbarType.success,
                     );
                   }
                 },
@@ -326,17 +320,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                     enabled: state.status != Status.inProgress,
                     text: 'button.login'.tr(),
                     color: Colors.black,
-                    onPressed: () async {
+                    onPressed: () {
                       FocusScope.of(context).unfocus();
 
-                      // if (turnstileToken == null) {
-                      //   CustomAlertDialog(
-                      //     context: context,
-                      //     title: 'Por favor verifica que eres un humano',
-                      //     onDone: () => context.pop(),
-                      //   ).showDialog(context);
-                      //   return;
-                      // }
                       if (_formKey.currentState?.validate() ?? false) {
                         context.read<AuthCubit>().login(
                               userName: username!.trim(),

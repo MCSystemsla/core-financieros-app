@@ -51,8 +51,12 @@ class AnalisisMenorMilCubit extends Cubit<AnalisisMenorMilState> {
 
     final ingresoAnualVenta = totalIngresosCalc * 12;
 
-    final costoPorcentajeVenta = state.inventarioHn
-            .fold(0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
+    final costoPorcentajeVenta = state.inventarioHn.fold(
+            0.0,
+            (sum, element) =>
+                sum +
+                (num.tryParse(element.costoVentaPorcentaje.toSafeString(2)) ??
+                    0)) /
         (state.inventarioHn.length);
 
     final relacionMaxRazonCuotaParam = switch (tipoSolicitud) {

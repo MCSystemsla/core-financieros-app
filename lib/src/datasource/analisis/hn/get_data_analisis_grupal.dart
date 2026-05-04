@@ -36,7 +36,7 @@ class AnalisisGrupalData {
   final double otrosGastos;
   final double totalGastos;
   final double flujoNeto;
-  final String comentarios;
+  final String? comentarios;
 
   AnalisisGrupalData({
     required this.numeroSolicitud,
@@ -51,7 +51,7 @@ class AnalisisGrupalData {
     required this.otrosGastos,
     required this.totalGastos,
     required this.flujoNeto,
-    required this.comentarios,
+    this.comentarios,
   });
 
   factory AnalisisGrupalData.fromJson(Map<String, dynamic> json) =>

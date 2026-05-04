@@ -1,6 +1,8 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite__approved_grupal_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_create_configuration_grupal.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/utils/extensions/order_type/order_type.dart';
 
@@ -278,4 +280,58 @@ class ObtenerTiposCreditosHNEndpoint extends Endpoint {
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
       };
+}
+
+class CreateConfigurationGrupalHNEndpoint extends Endpoint {
+  final ComiteCreateConfigurationGrupal data;
+
+  CreateConfigurationGrupalHNEndpoint({required this.data});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/comite/acta-grupal/configuracion/guardar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class GetConfigurationGrupalHNEndpoint extends Endpoint {
+  final int cicloGrupoId;
+
+  GetConfigurationGrupalHNEndpoint({required this.cicloGrupoId});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/comite/acta-grupal/configuracion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'CicloGrupoID': cicloGrupoId.toString(),
+      };
+}
+
+class ApproveActasComiteGrupaHnEndpoint extends Endpoint {
+  final ComiteApprovedGrupalSchema data;
+
+  ApproveActasComiteGrupaHnEndpoint({required this.data});
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/comite/aprobar/v2';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
 }

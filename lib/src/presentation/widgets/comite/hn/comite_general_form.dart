@@ -102,62 +102,6 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
     );
   }
 
-  // Widget _buildCalcularButton() {
-  //   return BlocConsumer<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
-  //     buildWhen: (p, c) => p.status != c.status,
-  //     listenWhen: (p, c) => p.status != c.status,
-  //     listener: (context, state) {
-  //       if (state.status == Status.done) {
-  //         CustomAlertDialog(
-  //           context: context,
-  //           title: 'Datos calculados exitosamente',
-  //           onDone: () => context.pop(),
-  //         ).showDialog(context, dialogType: DialogType.success);
-  //       }
-
-  //       if (state.status == Status.error) {
-  //         CustomAlertDialog(
-  //           context: context,
-  //           title: state.errorMsg,
-  //           onDone: () => context.pop(),
-  //         ).showDialog(context, dialogType: DialogType.error);
-  //       }
-  //     },
-  //     builder: (context, state) {
-  //       return SizedBox(
-  //         width: double.infinity,
-  //         child: CustomElevatedButton(
-  //           color: Colors.indigo,
-  //           enabled: state.status != Status.inProgress,
-  //           text: state.status == Status.inProgress
-  //               ? 'Calculando...'
-  //               : 'Calcular Datos',
-  //           onPressed: _onCalcularPressed,
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // void _onCalcularPressed() {
-  //   if (!formKey.currentState!.validate()) {
-  //     CustomAlertDialog(
-  //       context: context,
-  //       title: 'Debes completar los campos requeridos para continuar.',
-  //       onDone: () => context.pop(),
-  //     ).showDialog(context, dialogType: DialogType.warning);
-  //     return;
-  //   }
-
-  //   setState(() {
-  //     isCalcularDatosClicked = true;
-  //   });
-
-  //   // context.read<ComiteCalculoDatosCubit>().calcularDatos(
-  //   //       actaID: widget.actaId,
-  //   // );
-  // }
-
   Widget _buildAgregarServiciosButton() {
     return BlocBuilder<ComiteAprobacionCubit, ComiteAprobacionState>(
       builder: (context, state) {

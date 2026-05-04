@@ -18,7 +18,7 @@ class ComiteGrupalUserCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         padding: const EdgeInsets.all(16),
@@ -52,15 +52,22 @@ class ComiteGrupalUserCardWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 100),
-                  child: Text(
-                    'L. ${amount.toCurrencyString()}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
+                TweenAnimationBuilder<double>(
+                  tween: Tween<double>(begin: 0.0, end: amount),
+                  curve: Curves.easeOutExpo,
+                  duration: const Duration(seconds: 2),
+                  builder: (BuildContext context, double value, Widget? child) {
+                    return ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 100),
+                      child: Text(
+                        'L. ${value.toCurrencyString()}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

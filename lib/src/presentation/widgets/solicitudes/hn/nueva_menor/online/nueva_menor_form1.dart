@@ -1025,6 +1025,8 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
             ),
           ConnectionStatus.connected => SheetSearchDropdown(
               selectedItem: widget.selectedItem,
+              validator: (value) =>
+                  ClassValidator.validateRequired(value?.value),
               title: 'Tipo de Grupo',
               isRequired: true,
               onChanged: widget.onChanged,
