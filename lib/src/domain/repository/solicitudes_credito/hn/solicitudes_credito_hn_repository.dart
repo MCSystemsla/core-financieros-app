@@ -79,6 +79,12 @@ abstract class SolicitudesCreditoHnRepository {
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
   });
   Future<(bool, String)> asignSolicitudToAsesor({
     required int idSolicitud,
@@ -548,6 +554,12 @@ class SolicitudesCreditoHnRepositoryImpl
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
   }) async {
     final rolId = await getRolId();
     final endpoint = GetSolicitudesByEstadoEndpoint(
@@ -560,6 +572,7 @@ class SolicitudesCreditoHnRepositoryImpl
       usuarioId: rolId,
       isCustomEstadoCredito: isCustomEstadoCredito,
       filterEstadosCredito: filterEstadosCredito,
+      estadosCredito: estadosCredito,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

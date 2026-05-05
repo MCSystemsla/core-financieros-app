@@ -36,8 +36,12 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
             SolicitudesCreditoHnRepositoryImpl(),
           )..getSolicitudesByEstado(
               isAsignadaToAsesorCredito: true,
-              estadoCredito: EstadoCredito.registrada,
               filterEstadosCredito: FilterEstadosCredito.individual,
+              isCustomEstadoCredito: true,
+              estadosCredito: [
+                EstadoCredito.registrada,
+                EstadoCredito.enRevision
+              ],
             ),
         ),
         BlocProvider(
@@ -78,11 +82,15 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
                           context
                               .read<SolicitudesByEstadoHnCubit>()
                               .getSolicitudesByEstado(
-                                isAsignadaToAsesorCredito: true,
-                                estadoCredito: EstadoCredito.registrada,
-                                filterEstadosCredito:
-                                    FilterEstadosCredito.individual,
-                              );
+                            isAsignadaToAsesorCredito: true,
+                            filterEstadosCredito:
+                                FilterEstadosCredito.individual,
+                            isCustomEstadoCredito: true,
+                            estadosCredito: [
+                              EstadoCredito.registrada,
+                              EstadoCredito.enRevision
+                            ],
+                          );
                         },
                       ),
                     Status.done => _ListDataWidget(

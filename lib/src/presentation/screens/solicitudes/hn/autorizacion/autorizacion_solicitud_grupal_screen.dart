@@ -41,7 +41,11 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
           )..getSolicitudesByEstado(
               codigoGrupo: int.tryParse(grupoActivoData.codigo) ?? 0,
               isAsignadaToAsesorCredito: true,
-              estadoCredito: EstadoCredito.registrada,
+              isCustomEstadoCredito: true,
+              estadosCredito: [
+                EstadoCredito.registrada,
+                EstadoCredito.enRevision
+              ],
             ),
         ),
         BlocProvider(
@@ -74,11 +78,15 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
                         onPressed: () => context
                             .read<SolicitudesByEstadoHnCubit>()
                             .getSolicitudesByEstado(
-                              codigoGrupo:
-                                  int.tryParse(grupoActivoData.codigo) ?? 0,
-                              isAsignadaToAsesorCredito: true,
-                              estadoCredito: EstadoCredito.registrada,
-                            ),
+                          codigoGrupo:
+                              int.tryParse(grupoActivoData.codigo) ?? 0,
+                          isAsignadaToAsesorCredito: true,
+                          isCustomEstadoCredito: true,
+                          estadosCredito: [
+                            EstadoCredito.registrada,
+                            EstadoCredito.enRevision
+                          ],
+                        ),
                       ),
                     Status.done => _ListData(
                         solicitudes: state.solicitudes,

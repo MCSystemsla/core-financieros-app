@@ -20,6 +20,12 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
     int? codigoGrupo,
     bool isCustomEstadoCredito = false,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
   }) async {
     emit(state.copyWith(status: Status.inProgress));
 
@@ -33,6 +39,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         codigoGrupo: codigoGrupo,
         isCustomEstadoCredito: isCustomEstadoCredito,
         filterEstadosCredito: filterEstadosCredito,
+        estadosCredito: estadosCredito,
       );
       final hasUserAppliedFilter =
           state.isNumeroSolicitudFilter || state.isCedulaSolicitudFilter;

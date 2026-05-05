@@ -36,15 +36,20 @@ class ComiteGroupMember {
     required this.insertaAprobacion,
   });
 
-  Map<String, dynamic> toJson() => {
-        'NumeroSolicitud': numeroSolicitud,
-        'Observacion': observacion,
-        'FormaPagoCodigo': formaPagoCodigo,
-        'TipoSolicitudCodigo': tipoSolicitudCodigo,
-        'ProductoCodigo': productoCodigo,
-        'modificaActa': modificaActa.toJson(),
-        'insertaAprobacion': insertaAprobacion.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {
+      'NumeroSolicitud': numeroSolicitud,
+      'Observacion': observacion,
+      'FormaPagoCodigo': formaPagoCodigo,
+      'TipoSolicitudCodigo': tipoSolicitudCodigo,
+      'ProductoCodigo': productoCodigo,
+      'modificaActa': modificaActa.toJson(),
+      'insertaAprobacion': insertaAprobacion.toJson(),
+    };
+    data.removeWhere(
+        (key, value) => value == '' || value == null || value == 0);
+    return data;
+  }
 }
 
 class GrupalInsertaAprobacion {
@@ -123,28 +128,33 @@ class GrupalModificaActa {
     required this.tipoProgramaCodigo,
   });
 
-  Map<String, dynamic> toJson() => {
-        'Monto': monto,
-        'MontoSeguro': montoSeguro,
-        'PorcentajeComision': porcentajeComision,
-        'Plazo': plazo,
-        'SectorCodigo': sectorCodigo,
-        'ActividadCodigo': actividadCodigo,
-        'FuenteFinanciamientoCodigo': fuenteFinanciamientoCodigo,
-        'TasaInteresCorriente': tasaInteresCorriente,
-        'TasaInteresMoratorio': tasaInteresMoratorio,
-        'MonedaDesembolsoCodigo': monedaDesembolsoCodigo,
-        'TipoDesembolsoCodigo': tipoDesembolsoCodigo,
-        'PromotorId': promotorId,
-        'EsReestructurado': esReestructurado,
-        'ComisionFinanciada': comisionFinanciada,
-        'CuotaNivelada': cuotaNivelada,
-        'MontoSinComision': montoSinComision,
-        'PeriodoGracia': periodoGracia,
-        'EsRetencion': esRetencion,
-        'SeguroMemorialMensual': seguroMemorialMensual,
-        'UsaConfiguracionCompartida': usaConfiguracionCompartida,
-        'TipoCreditoNombre': tipoCreditoNombre,
-        'TipoProgramaCodigo': tipoProgramaCodigo,
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {
+      'Monto': monto,
+      'MontoSeguro': montoSeguro,
+      'PorcentajeComision': porcentajeComision,
+      'Plazo': plazo,
+      'SectorCodigo': sectorCodigo,
+      'ActividadCodigo': actividadCodigo,
+      'FuenteFinanciamientoCodigo': fuenteFinanciamientoCodigo,
+      'TasaInteresCorriente': tasaInteresCorriente,
+      'TasaInteresMoratorio': tasaInteresMoratorio,
+      'MonedaDesembolsoCodigo': monedaDesembolsoCodigo,
+      'TipoDesembolsoCodigo': tipoDesembolsoCodigo,
+      'PromotorId': promotorId,
+      'EsReestructurado': esReestructurado,
+      'ComisionFinanciada': comisionFinanciada,
+      'CuotaNivelada': cuotaNivelada,
+      'MontoSinComision': montoSinComision,
+      'PeriodoGracia': periodoGracia,
+      'EsRetencion': esRetencion,
+      'SeguroMemorialMensual': seguroMemorialMensual,
+      'UsaConfiguracionCompartida': usaConfiguracionCompartida,
+      'TipoCreditoNombre': tipoCreditoNombre,
+      'TipoProgramaCodigo': tipoProgramaCodigo,
+    };
+    data.removeWhere(
+        (key, value) => value == '' || value == null || value == 0);
+    return data;
+  }
 }

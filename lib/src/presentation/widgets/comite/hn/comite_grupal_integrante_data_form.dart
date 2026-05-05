@@ -174,24 +174,34 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           key: formKey,
           child: Column(
             children: [
+              const Gap(20),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: CustomSwitch(
+                  value: usaConfiguracionCompartida,
+                  onChanged: (value) {
+                    setState(() => usaConfiguracionCompartida = value);
+                  },
+                  title: 'El cliente usa la configuración compartida?',
+                  subtitle:
+                      'La configuración compartida es la configuración que se aplica a todos los integrantes del grupo',
+                ),
+              ),
+              const Gap(20),
               _FormCard(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: CustomSwitch(
-                        value: usaConfiguracionCompartida,
-                        onChanged: (value) {
-                          setState(() => usaConfiguracionCompartida = value);
-                        },
-                        title: 'El cliente usa la configuración compartida?',
-                        subtitle:
-                            'La configuración compartida es la configuración que se aplica a todos los integrantes del grupo',
-                      ),
-                    ),
                     if (!usaConfiguracionCompartida) ...[
                       _buildInputsSharedIndividuals(context, widget.data),
+                      const Gap(25),
                     ],
+                  ],
+                ),
+              ),
+              const Gap(25),
+              _FormCard(
+                child: Column(
+                  children: [
                     _buildMainInputs(context, calculoCubit),
                     const Gap(12),
                     _buildParametersSection(context, state, calculoCubit),
