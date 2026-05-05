@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/comite
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,7 +133,12 @@ class _ApprovedActasGrupal extends StatelessWidget {
         V2ComiteSolicitudesGrupalesState>(
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
+        if (state.status == Status.inProgress) {
+          context.showLoading(message: 'Aprobando actas...');
+        }
+
         if (state.status == Status.done) {
+          context.hideLoading();
           context.pushTransparentRoute(
             ComiteApprovedSuccessTransactionCard(
               monto: state.groupMembers.fold(
@@ -146,6 +152,7 @@ class _ApprovedActasGrupal extends StatelessWidget {
           );
         }
         if (state.status == Status.error) {
+          context.hideLoading();
           CustomAlertDialog(
             context: context,
             title: state.errorMsg,
@@ -164,7 +171,7 @@ class _ApprovedActasGrupal extends StatelessWidget {
             color: Colors.green,
             enabled: state.status != Status.inProgress,
             text: state.status == Status.inProgress
-                ? 'Aprobando...'
+                ? 'Aprobando actas...'
                 : 'Aprobar Actas de grupo',
             onPressed: () {
               context
