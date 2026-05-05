@@ -19,10 +19,8 @@ class V2ComiteCalculoDatosGrupalState extends Equatable {
   final double comisionSegurosFinanciado;
   final String tipoCobroSaldoDeudorCodigo;
   final String paisCodigo;
-  final bool sharedIndividuals;
   const V2ComiteCalculoDatosGrupalState({
     this.status = Status.notStarted,
-    this.sharedIndividuals = false,
     this.errorMsg = '',
     this.productoCodigo = '',
     this.monto = 0,
@@ -64,7 +62,6 @@ class V2ComiteCalculoDatosGrupalState extends Equatable {
 
   @override
   List<Object> get props => [
-        sharedIndividuals,
         status,
         errorMsg,
         productoCodigo,
@@ -103,7 +100,6 @@ class V2ComiteCalculoDatosGrupalState extends Equatable {
     double? comisionSegurosFinanciado,
     String? tipoCobroSaldoDeudorCodigo,
     String? paisCodigo,
-    bool? sharedIndividuals,
   }) {
     return V2ComiteCalculoDatosGrupalState(
       status: status ?? this.status,
@@ -126,7 +122,6 @@ class V2ComiteCalculoDatosGrupalState extends Equatable {
       tipoCobroSaldoDeudorCodigo:
           tipoCobroSaldoDeudorCodigo ?? this.tipoCobroSaldoDeudorCodigo,
       paisCodigo: paisCodigo ?? this.paisCodigo,
-      sharedIndividuals: sharedIndividuals ?? this.sharedIndividuals,
     );
   }
 }

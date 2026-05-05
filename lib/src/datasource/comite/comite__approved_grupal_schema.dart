@@ -94,6 +94,9 @@ class GrupalModificaActa {
   final int periodoGracia;
   final bool esRetencion;
   final int seguroMemorialMensual;
+  final bool usaConfiguracionCompartida;
+  final String tipoCreditoNombre;
+  final String tipoProgramaCodigo;
 
   GrupalModificaActa({
     required this.monto,
@@ -115,6 +118,9 @@ class GrupalModificaActa {
     required this.periodoGracia,
     required this.esRetencion,
     required this.seguroMemorialMensual,
+    required this.usaConfiguracionCompartida,
+    required this.tipoCreditoNombre,
+    required this.tipoProgramaCodigo,
   });
 
   Map<String, dynamic> toJson() => {
@@ -137,5 +143,8 @@ class GrupalModificaActa {
         'PeriodoGracia': periodoGracia,
         'EsRetencion': esRetencion,
         'SeguroMemorialMensual': seguroMemorialMensual,
+        'UsaConfiguracionCompartida': usaConfiguracionCompartida,
+        'TipoCreditoNombre': tipoCreditoNombre,
+        'TipoProgramaCodigo': tipoProgramaCodigo,
       };
 }

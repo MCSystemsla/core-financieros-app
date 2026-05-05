@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_grupal_integrante_data_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/status_item_card/status_item_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -155,27 +154,6 @@ class _V2ComiteGrupalIntegranteDataState
                   ),
                 );
               },
-            ),
-            const Gap(20),
-            BlocBuilder<V2ComiteCalculoDatosGrupalCubit,
-                V2ComiteCalculoDatosGrupalState>(
-              builder: (context, state) => Padding(
-                padding: const EdgeInsets.all(10),
-                child: CustomSwitch(
-                  onChanged: (value) {
-                    context
-                        .read<V2ComiteCalculoDatosGrupalCubit>()
-                        .onFieldChanged(
-                          () => state.copyWith(
-                            sharedIndividuals: value,
-                          ),
-                        );
-                  },
-                  title: 'El integrante tiene campos individuales',
-                  subtitle: 'Si el integrante tiene campos individuales',
-                  value: state.sharedIndividuals,
-                ),
-              ),
             ),
             const Gap(20),
             Expanded(

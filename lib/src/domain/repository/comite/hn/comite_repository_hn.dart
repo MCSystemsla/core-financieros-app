@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
@@ -105,6 +107,7 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+      log('Respuesta: $resp');
       final data = ComiteSolicitudResponse.fromJson(resp);
       return data;
     } catch (e) {

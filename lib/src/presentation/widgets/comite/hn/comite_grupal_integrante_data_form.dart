@@ -19,6 +19,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/tip
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/switch/custom_switch.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,6 +53,7 @@ class IntegranteDataForm extends StatefulWidget {
 }
 
 class _IntegranteDataFormState extends State<IntegranteDataForm> {
+  final formKey = GlobalKey<FormState>();
   num? monto;
   Item? sector;
   ActiivdadCNBS? actividad;
@@ -61,7 +64,18 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
   bool financiaComisionYSeguros = false;
   int plazoMeses = 0;
   Item? producto;
-
+  bool usaConfiguracionCompartida = true;
+  int? periodoGracia;
+  Item? fuenteFinanciamiento;
+  DateTime? fechaPrimerPago;
+  Item? monedaDesembolso;
+  Item? tipoDesembolso;
+  CatalogoFrecuenciaItem? formaPago;
+  CatalogoFrecuenciaItem? periodicidadPrincipal;
+  CatalogoFrecuenciaItem? periodicidadInteres;
+  Item? tipoCredito;
+  Item? tipoPrograma;
+  String? observacion;
   @override
   void initState() {
     super.initState();
@@ -84,6 +98,47 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
       name: widget.data.data.nombreProducto ?? '',
       value: widget.data.data.codigoProducto ?? '',
     );
+    usaConfiguracionCompartida =
+        widget.data.data.usaConfiguracionCompartida ?? true;
+    periodoGracia = widget.data.data.periodoGracia ?? 0;
+    plazoMeses = widget.data.data.plazoSolicitud ?? 0;
+    fuenteFinanciamiento = Item(
+      name: widget.data.data.fuenteFinanciamientoNombre ?? '',
+      value: widget.data.data.fuenteFinanciamientoCodigo ?? '',
+    );
+    fechaPrimerPago = widget.data.data.fechaPrimerPago;
+    monedaDesembolso = Item(
+      name: widget.data.data.monedaNombre ?? '',
+      value: widget.data.data.monedaCodigo ?? '',
+    );
+    tipoDesembolso = Item(
+      name: widget.data.data.tipoDesembolsoNombre ?? '',
+      value: widget.data.data.tipoDesembolsoCodigo ?? '',
+    );
+    formaPago = CatalogoFrecuenciaItem(
+      valor: widget.data.data.formaDePagoCodigo ?? '',
+      nombre: widget.data.data.formaDePagoNombre ?? '',
+      meses: '',
+    );
+    periodicidadPrincipal = CatalogoFrecuenciaItem(
+      valor: widget.data.data.periodicidadPrincipalCodigo ?? '',
+      nombre: widget.data.data.periodicidadPrincipalNombre ?? '',
+      meses: '',
+    );
+    periodicidadInteres = CatalogoFrecuenciaItem(
+      valor: widget.data.data.periodicidadInteresCodigo ?? '',
+      nombre: widget.data.data.periodicidadInteresNombre ?? '',
+      meses: '',
+    );
+    tipoCredito = Item(
+      name: widget.data.data.tipoCreditoNombre ?? '',
+      value: widget.data.data.tipoCreditoNombre ?? '',
+    );
+    tipoPrograma = Item(
+      name: widget.data.data.tipoProgramaNombre ?? '',
+      value: widget.data.data.tipoProgramaCodigo ?? '',
+    );
+    observacion = widget.data.data.observacion;
   }
 
   @override
@@ -116,12 +171,25 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
       },
       builder: (context, state) {
         return Form(
+          key: formKey,
           child: Column(
             children: [
               _FormCard(
                 child: Column(
                   children: [
-                    if (state.sharedIndividuals) ...[
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: CustomSwitch(
+                        value: usaConfiguracionCompartida,
+                        onChanged: (value) {
+                          setState(() => usaConfiguracionCompartida = value);
+                        },
+                        title: 'El cliente usa la configuración compartida?',
+                        subtitle:
+                            'La configuración compartida es la configuración que se aplica a todos los integrantes del grupo',
+                      ),
+                    ),
+                    if (!usaConfiguracionCompartida) ...[
                       _buildInputsSharedIndividuals(context, widget.data),
                     ],
                     _buildMainInputs(context, calculoCubit),
@@ -157,16 +225,14 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
         const Gap(12),
         SearchDropdownWidget(
           key: const Key('productoDropdown'),
-          selectedItem: Item(
-            name: data.data.nombreProducto ?? '',
-            value: data.data.codigoProducto ?? '',
-          ),
+          selectedItem: producto,
           validator: (value) => ClassValidator.validateRequired(
             value?.value.toString(),
           ),
           codigo: 'PRODUCTO',
           onChanged: (item) {
             if (item == null) return;
+            producto = item;
           },
           title: 'Producto',
         ),
@@ -186,12 +252,13 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           ],
           onChange: (value) {
             final newValue = toNumericString(value);
+            plazoMeses = int.tryParse(newValue) ?? 0;
           },
         ),
         const Gap(20),
         OutlineTextfieldWidget(
+          initialValue: periodoGracia?.toString().toNullIfEmptyOrZero(),
           key: const Key('periodoGraciaDropdown'),
-          initialValue: data.data.periodoGracia.toString(),
           title: 'Periodo de gracia',
           textInputType: TextInputType.number,
           icon: Icon(
@@ -203,29 +270,32 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           ],
           onChange: (value) {
             final newValue = toNumericString(value);
+            periodoGracia = int.tryParse(newValue) ?? 0;
           },
         ),
         const Gap(20),
         FuentesFinanciamientosDropdown(
+          selectedItem: fuenteFinanciamiento,
           key: const Key('fuenteFinanciamientoDropdown'),
-          selectedItem: Item(
-            name: data.data.fuenteFinanciamientoNombre ?? '',
-            value: data.data.fuenteFinanciamientoCodigo ?? '',
-          ),
           isRequired: true,
           onChanged: (item) {
             if (item == null) return;
+            fuenteFinanciamiento = item;
           },
           validator: (value) => ClassValidator.validateRequired(value?.value),
         ),
         const Gap(20),
         OutlineTextfieldWidget(
+          hintText: fechaPrimerPago?.selectorFormat(),
           key: const Key('fechaPrimerPagoDropdown'),
           title: 'Fecha de primer pago',
           onTap: () async {
             final date = await pickDate(context);
             if (date == null) return;
+            setState(() => fechaPrimerPago = date);
           },
+          validator: (value) => ClassValidator.validateRequired(
+              fechaPrimerPago?.selectorFormat()),
           readOnly: true,
           icon: Icon(
             Icons.calendar_today_outlined,
@@ -249,10 +319,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
         const Gap(12),
         SearchDropdownWidget(
           key: const Key('monedaDropdown'),
-          selectedItem: Item(
-            name: data.data.monedaNombre ?? '',
-            value: data.data.monedaCodigo ?? '',
-          ),
+          selectedItem: monedaDesembolso,
           isRequired: true,
           codigo: 'MONEDA',
           enabled: true,
@@ -260,15 +327,13 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           validator: (value) => ClassValidator.validateRequired(value?.value),
           onChanged: (item) {
             if (item == null) return;
+            monedaDesembolso = item;
           },
         ),
         const Gap(12),
         SearchDropdownWidget(
           key: const Key('tipoDesembolsoDropdown'),
-          selectedItem: Item(
-            name: data.data.tipoDesembolsoNombre ?? '',
-            value: data.data.tipoDesembolsoCodigo ?? '',
-          ),
+          selectedItem: tipoDesembolso,
           isRequired: true,
           codigo: CatalogoType.tipoDesembolsos.codigo,
           validator: (value) => ClassValidator.validateRequired(value?.value),
@@ -276,49 +341,41 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           title: 'Tipo Desembolso',
           onChanged: (item) {
             if (item == null) return;
+            tipoDesembolso = item;
           },
         ),
         const Gap(12),
         CatalogoFrecuenciaPagoDropdown(
           key: const Key('formaDePagoDropdown'),
-          selectedItem: CatalogoFrecuenciaItem(
-            valor: data.data.formaDePagoCodigo ?? '',
-            nombre: data.data.formaDePagoNombre ?? '',
-            meses: '',
-          ),
+          selectedItem: formaPago,
           isRequired: true,
           title: 'Forma de pago',
           validator: (value) => ClassValidator.validateRequired(value?.valor),
           onChanged: (value) {
             if (value == null) return;
+            formaPago = value;
           },
         ),
         const Gap(12),
         CatalogoFrecuenciaPagoDropdown(
           key: const Key('periodicidadPrincipalDropdown'),
-          selectedItem: CatalogoFrecuenciaItem(
-            valor: data.data.periodicidadPrincipalCodigo ?? '',
-            nombre: data.data.periodicidadPrincipalNombre ?? '',
-            meses: '',
-          ),
+          selectedItem: periodicidadPrincipal,
           isRequired: true,
           title: 'Periodicidad principal',
           validator: (value) => ClassValidator.validateRequired(value?.valor),
           onChanged: (value) {
             if (value == null) return;
+            periodicidadPrincipal = value;
           },
         ),
         const Gap(12),
         CatalogoFrecuenciaPagoDropdown(
           key: const Key('periodicidadInteresDropdown'),
-          selectedItem: CatalogoFrecuenciaItem(
-            valor: data.data.periodicidadInteresCodigo ?? '',
-            nombre: data.data.periodicidadInteresNombre ?? '',
-            meses: '',
-          ),
+          selectedItem: periodicidadInteres,
           isRequired: true,
           onChanged: (item) {
             if (item == null) return;
+            periodicidadInteres = item;
           },
           title: 'Periodicidad interes',
           validator: (value) => ClassValidator.validateRequired(value?.valor),
@@ -326,38 +383,38 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
         const Gap(12),
         TiposCreditoDropdown(
           key: const Key('tipoCreditoDropdown'),
-          selectedItem: Item(
-            name: data.data.tipoCreditoNombre ?? '',
-            value: data.data.tipoCreditoNombre ?? '',
-          ),
+          selectedItem: tipoCredito,
           // selectedItem: tipoCredito,
           isRequired: true,
-          validator: (value) =>
-              ClassValidator.validateRequired(value?.value.toString()),
+          validator: (value) => ClassValidator.validateRequired(value?.name),
           onChanged: (item) {
             if (item == null) return;
+            tipoCredito = Item(
+              name: item.name,
+              value: item.value.toString(),
+            );
           },
         ),
         const Gap(12),
         SearchDropdownWidget(
           key: const Key('tipoProgramaDropdown'),
-          selectedItem: Item(
-            name: data.data.tipoProgramaNombre ?? '',
-            value: data.data.tipoProgramaCodigo ?? '',
-          ),
+          selectedItem: tipoPrograma,
           isRequired: true,
           // selectedItem: programa,
           codigo: CatalogoType.programa.codigo,
-          validator: (value) => ClassValidator.validateRequired(value?.value),
+          validator: (value) => ClassValidator.validateRequired(
+            value?.value.toString(),
+          ),
           title: 'Programa',
           onChanged: (item) {
             if (item == null) return;
+            tipoPrograma = item;
           },
         ),
         const Gap(12),
         OutlineTextfieldWidget(
+          initialValue: observacion,
           key: const Key('observacionesDropdown'),
-          initialValue: data.data.observacion,
           title: 'Observaciones',
           // validator: (value) => ClassValidator.validateRequired(value),
           icon: Icon(
@@ -367,7 +424,9 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           inputFormatters: [
             UpperCaseTextFormatter(),
           ],
-          onChange: (value) {},
+          onChange: (value) {
+            observacion = value;
+          },
         ),
       ],
     );
@@ -524,6 +583,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           color: Colors.green,
           text: isLoading ? 'Verificando...' : 'Verificar integrante',
           onPressed: () {
+            if (!formKey.currentState!.validate()) return;
             if (!configCubit.state.dataAreLoaded) {
               showV2CustomSnackbar(
                 context,
@@ -570,23 +630,43 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
     final member = ComiteGroupMember(
       numeroSolicitud: widget.numeroSolicitud,
       tipoSolicitudCodigo: widget.tipoSolicitud,
-      observacion: state.observacion,
-      formaPagoCodigo: state.formaDePagoCodigo,
-      productoCodigo: state.productoCodigo,
+      observacion:
+          usaConfiguracionCompartida ? state.observacion : (observacion ?? ''),
+      formaPagoCodigo: usaConfiguracionCompartida
+          ? state.formaDePagoCodigo
+          : formaPago!.valor,
+      productoCodigo:
+          usaConfiguracionCompartida ? state.productoCodigo : producto?.value,
       modificaActa: GrupalModificaActa(
+        usaConfiguracionCompartida: usaConfiguracionCompartida,
+        tipoCreditoNombre: usaConfiguracionCompartida
+            ? state.tipoCreditoNombre
+            : (tipoCredito?.name ?? ''),
+        tipoProgramaCodigo: usaConfiguracionCompartida
+            ? state.tipoProgramaCodigo
+            : tipoPrograma?.value ?? '',
         monto: monto ?? 0,
         montoSeguro: data.montoSeguroVida ?? 0,
-        plazo: data.plazoSolicitud ?? 0,
+        plazo:
+            usaConfiguracionCompartida ? data.plazoSolicitud ?? 0 : plazoMeses,
         sectorCodigo: sector?.value ?? '',
         actividadCodigo: actividad?.valor ?? '',
-        fuenteFinanciamientoCodigo: state.fuenteFinanciamientoCodigo,
-        monedaDesembolsoCodigo: state.monedaCodigo,
-        tipoDesembolsoCodigo: state.tipoDesembolsoCodigo,
+        fuenteFinanciamientoCodigo: usaConfiguracionCompartida
+            ? state.fuenteFinanciamientoCodigo
+            : fuenteFinanciamiento!.value,
+        monedaDesembolsoCodigo: usaConfiguracionCompartida
+            ? state.monedaCodigo
+            : monedaDesembolso!.value,
+        tipoDesembolsoCodigo: usaConfiguracionCompartida
+            ? state.tipoDesembolsoCodigo
+            : tipoDesembolso?.value,
         promotorId: data.oficialCreditoID ?? 0,
         esReestructurado: esReestructuracion,
         cuotaNivelada: cuotaNivelada,
         montoSinComision: monto ?? 0,
-        periodoGracia: state.periodoGracia,
+        periodoGracia: usaConfiguracionCompartida
+            ? state.periodoGracia
+            : (periodoGracia ?? 0),
         porcentajeComision: porcentajeComision,
         tasaInteresCorriente: interesCorriente.toInt(),
         tasaInteresMoratorio: interesMoratorio.toInt(),
@@ -595,8 +675,12 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
         seguroMemorialMensual: seguroMemorialMensual.toInt(),
       ),
       insertaAprobacion: GrupalInsertaAprobacion(
-        periodicidadPrinicipalCodigo: state.periodicidadPrincipalCodigo,
-        periodicidadInteresCodigo: state.periodicidadInteresCodigo,
+        periodicidadPrinicipalCodigo: usaConfiguracionCompartida
+            ? state.periodicidadPrincipalCodigo
+            : periodicidadPrincipal!.valor,
+        periodicidadInteresCodigo: usaConfiguracionCompartida
+            ? state.periodicidadInteresCodigo
+            : periodicidadInteres!.valor,
         alVencimiento: data.alVencimiento ?? false,
         fechaAprobacion: DateTime.now(),
         aprobacionDigital: false,

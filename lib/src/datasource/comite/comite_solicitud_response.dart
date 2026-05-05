@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 ComiteSolicitudResponse comiteSolicitudResponseFromJson(String str) =>
     ComiteSolicitudResponse.fromJson(json.decode(str));
 
@@ -71,6 +73,7 @@ class ComiteSolicitudData {
   final int? oficialCreditoID;
   final DateTime? fechaPrimerPago;
   final String? formaCobroSaldoDeudorCodigo;
+  final bool? usaConfiguracionCompartida;
 
   const ComiteSolicitudData({
     this.id,
@@ -120,6 +123,7 @@ class ComiteSolicitudData {
     this.periodicidadPrincipalCodigo,
     this.periodicidadPrincipalNombre,
     this.formaCobroSaldoDeudorCodigo,
+    this.usaConfiguracionCompartida,
   });
 
   factory ComiteSolicitudData.fromJson(Map<String, dynamic> json) =>
@@ -175,6 +179,8 @@ class ComiteSolicitudData {
         periodicidadPrincipalCodigo: json['PeriodicidadPrincipalCodigo'],
         periodicidadPrincipalNombre: json['PeriodicidadPrincipalNombre'],
         formaCobroSaldoDeudorCodigo: json['FormaCobroSaldoDeudorCodigo'],
+        usaConfiguracionCompartida:
+            parseBool(json['UsaConfiguracionCompartida']),
       );
 
   Map<String, dynamic> toJson() => {
