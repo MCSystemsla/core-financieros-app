@@ -112,12 +112,13 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
       value: widget.data.data.monedaCodigo ?? '',
     );
     tipoDesembolso = Item(
-      name: widget.data.data.tipoDesembolsoNombre ?? '',
-      value: widget.data.data.tipoDesembolsoCodigo ?? '',
+      name: widget.data.data.tipoDesembolsoNombre ??
+          'TRANSFERENCIA BANCARIA A MICREDITO',
+      value: widget.data.data.tipoDesembolsoCodigo ?? 'TRANSFERENCIAMICREDITO',
     );
     formaPago = CatalogoFrecuenciaItem(
-      valor: widget.data.data.formaDePagoCodigo ?? '',
-      nombre: widget.data.data.formaDePagoNombre ?? '',
+      valor: widget.data.data.formaDePagoCodigo ?? 'MEN',
+      nombre: widget.data.data.formaDePagoNombre ?? 'MENSUAL',
       meses: '',
     );
     periodicidadPrincipal = CatalogoFrecuenciaItem(
@@ -202,7 +203,11 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
               _FormCard(
                 child: Column(
                   children: [
-                    _buildMainInputs(context, calculoCubit),
+                    _buildMainInputs(
+                      context,
+                      calculoCubit,
+                      calculoCubit.state,
+                    ),
                     const Gap(12),
                     _buildParametersSection(context, state, calculoCubit),
                   ],
@@ -270,6 +275,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           initialValue: periodoGracia?.toString().toNullIfEmptyOrZero(),
           key: const Key('periodoGraciaDropdown'),
           title: 'Periodo de gracia',
+          readOnly: true,
           textInputType: TextInputType.number,
           icon: Icon(
             Icons.schedule_outlined,
@@ -444,7 +450,10 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
 
   // --- Funciones de Construcción de UI ---
   Widget _buildMainInputs(
-      BuildContext context, V2ComiteCalculoDatosGrupalCubit cubit) {
+    BuildContext context,
+    V2ComiteCalculoDatosGrupalCubit cubit,
+    V2ComiteCalculoDatosGrupalState state,
+  ) {
     return Column(
       children: [
         OutlineTextfieldWidget(
@@ -452,15 +461,21 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           initialValue: monto?.toCurrencyString(),
           title: 'Monto solicitado',
           hintText: 'Ingrese el monto solicitado',
-          inputFormatters: [CurrencyInputFormatter()],
+          textInputType: TextInputType.number,
+          inputFormatters: [
+            CurrencyInputFormatter(),
+          ],
           isRequired: true,
           icon: const Icon(Icons.wallet, color: Colors.green),
           onChange: (value) {
-            final newValue = toNumericString(value, allowAllZeroes: true);
-            monto = num.tryParse(newValue);
+            final newValue = toNumericString(value, allowPeriod: true);
+
+            setState(() {
+              monto = num.tryParse(newValue);
+            });
 
             cubit.onFieldChanged(
-              () => cubit.state.copyWith(monto: num.tryParse(newValue)),
+              () => state.copyWith(monto: num.tryParse(newValue)),
             );
           },
         ),
@@ -516,9 +531,9 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           subtitle: 'Si es un acta de reestructuración?',
           title: 'Es Reestructuración',
           onChanged: (v) {
-            setState(() {
-              esReestructuracion = v;
-            });
+            // setState(() {
+            //   esReestructuracion = v;
+            // });
           },
         ),
         const Divider(),
@@ -532,17 +547,17 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
             });
           },
         ),
-        const Divider(),
-        CustomSwitch(
-          title: 'Mantener tasa interés anterior',
-          value: mantienesTasa,
-          onChanged: (v) {
-            setState(() {
-              mantienesTasa = v;
-            });
-          },
-          subtitle: 'Si se mantiene la tasa de interés?',
-        ),
+        // const Divider(),
+        // CustomSwitch(
+        //   title: 'Mantener tasa interés anterior',
+        //   value: mantienesTasa,
+        //   onChanged: (v) {
+        //     setState(() {
+        //       mantienesTasa = v;
+        //     });
+        //   },
+        //   subtitle: 'Si se mantiene la tasa de interés?',
+        // ),
         const Divider(),
         CustomSwitch(
           title: 'Financiar comision y seguros',

@@ -51,8 +51,7 @@ class ComiteCreateConfigurationGrupal {
       'FechaPrimerPago': fechaPrimerPago.toUtc().toIso8601String(),
       'ProductoCodigo': productoCodigo,
     };
-    data.removeWhere(
-        (key, value) => value == '' || value == null || value == 0);
+    data.removeWhere((key, value) => value == '' || value == null);
     return data;
   }
 }

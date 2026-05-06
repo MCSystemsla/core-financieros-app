@@ -154,6 +154,7 @@ class _ComiteGrupalEditSharedDataState extends State<ComiteGrupalEditSharedData>
                         initialValue: state.periodoGracia
                             .toString()
                             .toNullIfEmptyOrZero(),
+                        readOnly: true,
                         title: 'Periodo de gracia',
                         textInputType: TextInputType.number,
                         icon: Icon(

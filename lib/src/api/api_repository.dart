@@ -30,7 +30,7 @@ abstract class APIRepository {
 
 class DefaultAPIRepository implements APIRepository {
   final _logger = global<Logger>();
-  final kHttpTimeout = Duration(seconds: 120);
+  final kHttpTimeout = Duration(seconds: 60);
 
   @override
   Future<Map<String, dynamic>> request({

@@ -1,5 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:cloudflare_turnstile/cloudflare_turnstile.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
@@ -139,14 +138,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final TurnstileOptions options = TurnstileOptions(
-    size: TurnstileSize.flexible,
-    theme: TurnstileTheme.light,
-    borderRadius: BorderRadius.circular(10),
-    language: 'es',
-    retryAutomatically: false,
-    refreshTimeout: TurnstileRefreshTimeout.manual,
-  );
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -254,16 +245,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
               ),
               const VersionControlWidget(),
-              // const Gap(10),
-              // CloudflareTurnstile(
-              //   options: options,
-              //   siteKey: const String.fromEnvironment('CFAccessSiteKey'),
-              //   baseUrl: 'http://localhost/',
-              //   onTokenReceived: (token) {
-              //     turnstileToken = token;
-              //     setState(() {});
-              //   },
-              // ),
               if (localStorage.currentUserName.isNotEmpty &&
                   localStorage.jwt.isNotEmpty)
                 SwitchListTile(

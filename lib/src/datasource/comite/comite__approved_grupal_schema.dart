@@ -153,8 +153,6 @@ class GrupalModificaActa {
       'TipoCreditoNombre': tipoCreditoNombre,
       'TipoProgramaCodigo': tipoProgramaCodigo,
     };
-    data.removeWhere(
-        (key, value) => value == '' || value == null || value == 0);
     return data;
   }
 }
