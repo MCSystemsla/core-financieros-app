@@ -112,7 +112,10 @@ abstract class SolicitudesCreditoHnRepository {
     required int numeroSolicitud,
     required String tipoSolicitud,
   });
-  Future<GruposActivosResponse> getGruposActivos();
+  Future<GruposActivosResponse> getGruposActivos({
+    String? grupoCodigo,
+    String? grupoNombre,
+  });
 
   Future<void> crearGrupoCredito({
     required String nombre,
@@ -784,8 +787,14 @@ class SolicitudesCreditoHnRepositoryImpl
   }
 
   @override
-  Future<GruposActivosResponse> getGruposActivos() async {
-    final endpoint = SolciitudGrupalGruposActivos();
+  Future<GruposActivosResponse> getGruposActivos({
+    String? grupoCodigo,
+    String? grupoNombre,
+  }) async {
+    final endpoint = SolciitudGrupalGruposActivos(
+      grupoCodigo: grupoCodigo,
+      grupoNombre: grupoNombre,
+    );
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

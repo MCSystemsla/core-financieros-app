@@ -3,6 +3,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -18,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filter_grupos_activos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
@@ -54,8 +56,16 @@ class CrearGrupoCreditoGrupalScreen extends StatelessWidget {
                   onPressed: () =>
                       context.read<GruposActivosCubit>().getGruposActivos(),
                 ),
-              Status.done => _ListData(
-                  grupoActivoData: state.gruposActivos,
+              Status.done => SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Gap(20),
+                      const FilterGruposActivosWidget(),
+                      _ListData(
+                        grupoActivoData: state.gruposActivos,
+                      ),
+                    ],
+                  ),
                 ),
               _ => const SizedBox.shrink(),
             };
@@ -79,13 +89,29 @@ class _ListData extends StatelessWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(15),
       itemCount: grupoActivoData.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return SelectableCardItem(
+          leading: Icon(
+            Icons.circle,
+            color:
+                grupoActivoData[index].enProceso ? Colors.green : Colors.orange,
+          ),
           color: const Color(0xFF1565C0),
           icon: Icons.group,
           title: grupoActivoData[index].nombreCompleto,
           subtitle: 'Codigo: ${grupoActivoData[index].codigo}',
           onTap: () {
+            final isEnProceso = grupoActivoData[index].enProceso;
+            if (!isEnProceso) {
+              showV2CustomSnackbar(
+                context,
+                title: 'No hay procesos activos para este grupo.',
+                type: SnackbarType.info,
+              );
+              return;
+            }
             showModalBottomSheet(
               isScrollControlled: true,
               context: context,

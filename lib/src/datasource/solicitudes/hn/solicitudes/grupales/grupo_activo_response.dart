@@ -21,11 +21,13 @@ class GrupoActivoData {
   final int id;
   final String nombreCompleto;
   final String codigo;
+  final bool enProceso;
 
   GrupoActivoData({
     required this.id,
     required this.nombreCompleto,
     required this.codigo,
+    required this.enProceso,
   });
 
   factory GrupoActivoData.fromJson(Map<String, dynamic> json) =>
@@ -33,5 +35,6 @@ class GrupoActivoData {
         id: json['ID'],
         nombreCompleto: json['NombreCompleto'],
         codigo: json['Codigo'],
+        enProceso: json['EnProceso'],
       );
 }

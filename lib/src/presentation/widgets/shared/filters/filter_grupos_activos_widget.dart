@@ -6,22 +6,20 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/show_filter_types_modal_sheet.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../bloc/comite/comite_solicitudes/comite_solicitudes_cubit.dart';
+import '../../../bloc/solicitudes/hn/cubit/grupos_activos/grupos_activos_cubit.dart';
 
-class FiltersComiteWidget extends StatelessWidget {
-  const FiltersComiteWidget({super.key});
+class FilterGruposActivosWidget extends StatelessWidget {
+  const FilterGruposActivosWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ComiteSolicitudesCubit, ComiteSolicitudesState>(
+    return BlocBuilder<GruposActivosCubit, GruposActivosState>(
       builder: (context, state) {
         return switch (state.status) {
           Status.done => Padding(
@@ -35,17 +33,14 @@ class FiltersComiteWidget extends StatelessWidget {
                       onPressed: () {},
                       onTap: () => showFilterGetByCedualAndNumeroSolicitud(
                         context,
-                        context.read<ComiteSolicitudesCubit>(),
+                        context.read<GruposActivosCubit>(),
                       ),
                     ),
                   ),
                   const Gap(10),
                   Expanded(
                     child: FilterView(
-                      onTap: () => showFilterTypeModalSheet(
-                        context,
-                        context.read<ComiteSolicitudesCubit>(),
-                      ),
+                      onTap: () {},
                     ),
                   ),
                 ],
@@ -60,7 +55,7 @@ class FiltersComiteWidget extends StatelessWidget {
 
 void showFilterGetByCedualAndNumeroSolicitud(
   BuildContext context,
-  ComiteSolicitudesCubit cubit,
+  GruposActivosCubit cubit,
 ) {
   final formKey = GlobalKey<FormState>();
 
@@ -74,18 +69,17 @@ void showFilterGetByCedualAndNumeroSolicitud(
     builder: (ctx) {
       return BlocProvider.value(
         value: cubit,
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(ctx).viewInsets.bottom,
-              top: 24,
-              left: 20,
-              right: 20,
-            ),
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+            top: 24,
+            left: 20,
+            right: 20,
+          ),
+          child: SafeArea(
             child: StatefulBuilder(
               builder: (context, setState) {
-                return BlocBuilder<ComiteSolicitudesCubit,
-                    ComiteSolicitudesState>(
+                return BlocBuilder<GruposActivosCubit, GruposActivosState>(
                   builder: (context, state) {
                     return SingleChildScrollView(
                       child: Form(
@@ -103,7 +97,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
                                 ),
                                 const Gap(15),
                                 Text(
-                                  'Filtrar por tipo de solicitud',
+                                  'Filtrar por tipo de grupo',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -113,7 +107,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             ),
                             const Gap(10),
                             Text(
-                              'Filtra las solicitudes por con las siguientes opciones:',
+                              'Filtra los grupos con las siguientes opciones:',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
@@ -121,76 +115,35 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             ),
                             const Gap(20),
                             SwitchListTile(
-                              value: state.isNumeroSolicitudFilter,
+                              value: state.isGrupoNombreFilter,
                               onChanged: (value) {
                                 cubit.onFieldChanged(
                                   () => state.copyWith(
-                                    isNumeroSolicitudFilter: value,
+                                    isGrupoNombreFilter: value,
                                   ),
                                 );
                               },
-                              title: const Text('Numero Solicitud'),
+                              title: const Text('Nombre del Grupo'),
                               subtitle: const Text(
-                                'Filtra las solicitudes por numero de solicitud',
+                                'Filtra los grupos por nombre',
                               ),
                             ),
-                            if (state.isNumeroSolicitudFilter)
+                            if (state.isGrupoNombreFilter)
                               FadeIn(
                                 child: OutlineTextfieldWidget(
-                                  initialValue: state.numeroSolicitudFilter
+                                  initialValue: state.grupoNombre
                                       .toString()
                                       .toNullIfEmptyOrZero(),
                                   onChange: (value) {
                                     cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        numeroSolicitudFilter:
-                                            int.tryParse(value) ?? 0,
-                                      ),
+                                      () => state.copyWith(grupoNombre: value),
                                     );
                                   },
                                   validator: (value) =>
                                       ClassValidator.validateRequired(value),
-                                  title: 'Ingresa el numero de solicitud',
-                                  hintText: 'Ej: 2321',
+                                  title: 'Ingresa el nombre del grupo',
+                                  hintText: 'Ej: Grupo 1',
                                   icon: const Icon(Icons.request_page),
-                                  textInputType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                ),
-                              ),
-                            const Gap(20),
-                            SwitchListTile(
-                              value: state.isCedulaSolicitudFilter,
-                              onChanged: (value) {
-                                cubit.onFieldChanged(
-                                  () => state.copyWith(
-                                    isCedulaSolicitudFilter: value,
-                                  ),
-                                );
-                              },
-                              title: const Text('Cedula del Cliente'),
-                              subtitle: const Text(
-                                'Filtra las solicitudes por cedula del cliente',
-                              ),
-                            ),
-                            if (state.isCedulaSolicitudFilter)
-                              FadeIn(
-                                child: OutlineTextfieldWidget(
-                                  initialValue: state.cedulaClienteFilter
-                                      .toNullIfEmptyOrZero(),
-                                  validator: (value) =>
-                                      ClassValidator.validateRequired(value),
-                                  title: 'Ingresa cedula del Cliente',
-                                  hintText: 'Ej: 0809199901218T',
-                                  icon: const Icon(Icons.person),
-                                  onChange: (value) {
-                                    cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        cedulaClienteFilter: value,
-                                      ),
-                                    );
-                                  },
                                   inputFormatters: [
                                     UpperCaseTextFormatter(),
                                   ],
@@ -198,75 +151,36 @@ void showFilterGetByCedualAndNumeroSolicitud(
                               ),
                             const Gap(20),
                             SwitchListTile(
-                              value: state.isNumeroActaFilter,
+                              value: state.isGrupoCodigoFilter,
                               onChanged: (value) {
                                 cubit.onFieldChanged(
                                   () => state.copyWith(
-                                    isNumeroActaFilter: value,
+                                    isGrupoCodigoFilter: value,
                                   ),
                                 );
                               },
-                              title: const Text('Numero de acta'),
+                              title: const Text('Codigo del Grupo'),
                               subtitle: const Text(
-                                'Filtrar por numero de acta',
+                                'Filtra los grupos por codigo',
                               ),
                             ),
-                            if (state.isNumeroActaFilter)
+                            if (state.isGrupoCodigoFilter)
                               FadeIn(
                                 child: OutlineTextfieldWidget(
-                                  initialValue: state.numeroActaFilter
-                                      .toString()
-                                      .toNullIfEmptyOrZero(),
-                                  onChange: (value) {
-                                    cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        numeroActaFilter:
-                                            int.tryParse(value) ?? 0,
-                                      ),
-                                    );
-                                  },
+                                  initialValue:
+                                      state.grupoCodigo.toNullIfEmptyOrZero(),
                                   validator: (value) =>
                                       ClassValidator.validateRequired(value),
-                                  title: 'Ingresa el numero de acta',
-                                  hintText: 'Ej: 138',
-                                  icon: const Icon(Icons.request_page),
-                                  textInputType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                ),
-                              ),
-                            const Gap(20),
-                            SwitchListTile(
-                              value: state.isNombrePromotorFilter,
-                              onChanged: (value) {
-                                cubit.onFieldChanged(
-                                  () => state.copyWith(
-                                    isNombrePromotorFilter: value,
-                                  ),
-                                );
-                              },
-                              title: const Text('Nombre de promotor'),
-                              subtitle: const Text(
-                                'Filtrar por nombre de promotor',
-                              ),
-                            ),
-                            if (state.isNombrePromotorFilter)
-                              FadeIn(
-                                child: OutlineTextfieldWidget(
-                                  initialValue: state.nombrePromotorFilter,
-                                  onChange: (value) {
-                                    cubit.onFieldChanged(
-                                      () => state.copyWith(
-                                        nombrePromotorFilter: value,
-                                      ),
-                                    );
-                                  },
-                                  validator: (value) =>
-                                      ClassValidator.validateRequired(value),
-                                  title: 'Ingresa el nombre del promotor',
-                                  hintText: 'Ej: Dery Galeas',
+                                  title: 'Ingresa codigo del Grupo',
+                                  hintText: 'Ej: 31',
                                   icon: const Icon(Icons.person),
+                                  onChange: (value) {
+                                    cubit.onFieldChanged(
+                                      () => state.copyWith(
+                                        grupoCodigo: value,
+                                      ),
+                                    );
+                                  },
                                   inputFormatters: [
                                     UpperCaseTextFormatter(),
                                   ],
@@ -276,7 +190,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             CustomElevatedButton(
                               onPressed: () {
                                 cubit.cleanState();
-                                cubit.getComiteSolicitudes();
+                                cubit.getGruposActivos();
                                 context.pop();
                               },
                               text: 'Limpiar Filtros',
@@ -288,41 +202,26 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             ),
                             const Gap(20),
                             CustomElevatedButton(
-                              enabled: state.isNumeroSolicitudFilter ||
-                                  state.isCedulaSolicitudFilter ||
-                                  state.isNumeroActaFilter ||
-                                  state.isNombrePromotorFilter,
+                              enabled: state.isGrupoCodigoFilter ||
+                                  state.isGrupoNombreFilter,
                               onPressed: () {
                                 if (!formKey.currentState!.validate()) return;
-                                if (!state.isNumeroSolicitudFilter) {
+                                if (!state.isGrupoNombreFilter) {
                                   cubit.onFieldChanged(
                                     () => state.copyWith(
-                                      numeroSolicitudFilter: null,
+                                      isGrupoCodigoFilter: null,
                                     ),
                                   );
                                 }
-                                if (!state.isCedulaSolicitudFilter) {
+                                if (!state.isGrupoCodigoFilter) {
                                   cubit.onFieldChanged(
                                     () => state.copyWith(
-                                      cedulaClienteFilter: null,
+                                      isGrupoNombreFilter: null,
                                     ),
                                   );
                                 }
-                                if (!state.isNumeroActaFilter) {
-                                  cubit.onFieldChanged(
-                                    () => state.copyWith(
-                                      numeroActaFilter: null,
-                                    ),
-                                  );
-                                }
-                                if (!state.isNombrePromotorFilter) {
-                                  cubit.onFieldChanged(
-                                    () => state.copyWith(
-                                      nombrePromotorFilter: null,
-                                    ),
-                                  );
-                                }
-                                cubit.getComiteSolicitudes();
+
+                                cubit.getGruposActivos();
                                 context.pop();
                               },
                               text: 'Guardar Cambios',

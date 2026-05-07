@@ -10,6 +10,7 @@ class SelectableCardItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool isLoading;
   final bool userHaveDataAlready;
+  final Icon? leading;
 
   const SelectableCardItem({
     super.key,
@@ -20,6 +21,7 @@ class SelectableCardItem extends StatelessWidget {
     required this.onTap,
     this.isLoading = false,
     this.userHaveDataAlready = false,
+    this.leading,
   });
 
   @override
@@ -62,15 +64,16 @@ class SelectableCardItem extends StatelessWidget {
             color: Color(0xff6B7280),
           ),
         ),
-        trailing: isLoading
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
-              )
-            : IsUserHaveDataAlreadyWidget(
-                userHaveDataAlready: userHaveDataAlready,
-              ),
+        trailing: leading ??
+            (isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(),
+                  )
+                : IsUserHaveDataAlreadyWidget(
+                    userHaveDataAlready: userHaveDataAlready,
+                  )),
         onTap: onTap,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),

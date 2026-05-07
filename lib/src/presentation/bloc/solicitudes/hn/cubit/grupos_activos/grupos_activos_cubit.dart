@@ -14,7 +14,10 @@ class GruposActivosCubit extends Cubit<GruposActivosState> {
   Future<void> getGruposActivos() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final resp = await _repository.getGruposActivos();
+      final resp = await _repository.getGruposActivos(
+        grupoCodigo: state.grupoCodigo,
+        grupoNombre: state.grupoNombre,
+      );
       emit(state.copyWith(status: Status.done, gruposActivos: resp.data));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
@@ -33,5 +36,20 @@ class GruposActivosCubit extends Cubit<GruposActivosState> {
     } catch (e) {
       emit(state.copyWith(createStatus: Status.error, errorMsg: e.toString()));
     }
+  }
+
+  void onFieldChanged(GruposActivosState Function() copyWithFn) {
+    emit(copyWithFn());
+  }
+
+  void cleanState() {
+    emit(
+      state.copyWith(
+        isGrupoCodigoFilter: false,
+        isGrupoNombreFilter: false,
+        grupoCodigo: '',
+        grupoNombre: '',
+      ),
+    );
   }
 }

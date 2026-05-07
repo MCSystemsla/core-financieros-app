@@ -442,6 +442,13 @@ class AutorizarSolicitudCreditoHNEndpoint extends Endpoint {
 }
 
 class SolciitudGrupalGruposActivos extends Endpoint {
+  final String? grupoCodigo;
+  final String? grupoNombre;
+
+  SolciitudGrupalGruposActivos({
+    this.grupoCodigo,
+    this.grupoNombre,
+  });
   @override
   Method get method => Method.get;
 
@@ -454,6 +461,10 @@ class SolciitudGrupalGruposActivos extends Endpoint {
   @override
   Map<String, dynamic> get queryParameters => {
         'database': LocalStorage().database,
+        if (grupoCodigo != null && grupoCodigo!.isNotEmpty)
+          'GrupoCodigo': grupoCodigo,
+        if (grupoNombre != null && grupoNombre!.isNotEmpty)
+          'NombreGrupo': grupoNombre,
       };
 }
 
