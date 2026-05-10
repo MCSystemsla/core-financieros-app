@@ -274,7 +274,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 ),
               const Gap(14),
               BlocConsumer<AuthCubit, AuthState>(
-                listener: (context, state) async {
+                listener: (context, state) {
                   final status = state.status;
                   if (status == Status.error) {
                     showV2CustomSnackbar(

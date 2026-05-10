@@ -1,29 +1,24 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/login/login_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class LoadingScreen extends StatefulWidget {
+class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});
 
-  @override
-  State<LoadingScreen> createState() => _LoadingScreenState();
-}
-
-class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
         return switch (state.connectionStatus) {
           ConnectionStatus.connected => const LoginScreen(),
-          ConnectionStatus.disconnected => const HomeScreen(),
+          // ConnectionStatus.disconnected => const HomeScreen(),
+          ConnectionStatus.disconnected => const LoginScreen(),
           ConnectionStatus.checking => const _WidgetLoading(),
           _ => const _WidgetLoading(),
         };
