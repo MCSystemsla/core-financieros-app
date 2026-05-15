@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/grupal/analisis_grupal_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/imagenes_negocio/imagenes_negocio_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_menor_mil/nueva_menor_mil_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/represtamo/analisis_represtamo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_activo_hn_local_db.dart';
@@ -21,6 +22,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/a
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_mayor_mil/analisis_nueva_mayor_a_mil_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_pasivo_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/ubicacion_cliente/ubicacion_cliente_hn_local_db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -49,6 +51,8 @@ class AnalisisBoxServiceHn {
   late final Box<NuevaMenorMilLocalDb> analisisNuevaMenorMilHnLocalDb;
   late final Box<AnalisisListDataHn> analisisListDataHnBox;
   late final Box<AnalisisGrupalHnLocalDb> analisisGrupalHnLocalDb;
+  late final Box<ImagenesNegocioHnLocalDb> imagenesNegocioHnLocalDb;
+  late final Box<UbicacionClienteHnLocalDb> ubicacionClienteHnLocalDb;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -75,6 +79,8 @@ class AnalisisBoxServiceHn {
     analisisNuevaMenorMilHnLocalDb = _store.box<NuevaMenorMilLocalDb>();
     analisisListDataHnBox = _store.box<AnalisisListDataHn>();
     analisisGrupalHnLocalDb = _store.box<AnalisisGrupalHnLocalDb>();
+    imagenesNegocioHnLocalDb = _store.box<ImagenesNegocioHnLocalDb>();
+    ubicacionClienteHnLocalDb = _store.box<UbicacionClienteHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
@@ -221,5 +227,69 @@ class AnalisisBoxServiceHn {
   }) {
     analisisListDataHnBox.removeAll();
     analisisListDataHnBox.putMany(analisisListDataHn);
+  }
+
+  void saveImagenesNegocioOnLocalDb({
+    required ImagenesNegocioHnLocalDb imagenNegocioSchema,
+  }) {
+    imagenesNegocioHnLocalDb.put(imagenNegocioSchema);
+  }
+
+  ImagenesNegocioHnLocalDb? getImagenesNegocioFromLocalDb({
+    required String numeroSolicitud,
+  }) {
+    try {
+      final query = imagenesNegocioHnLocalDb
+          .query(
+              ImagenesNegocioHnLocalDb_.numeroSolicitud.equals(numeroSolicitud))
+          .build();
+
+      final result = query.findFirst();
+
+      query.close();
+
+      return result;
+    } catch (e) {
+      log('Error al consultar LocalDB: $e');
+      return null;
+    }
+  }
+
+  bool saveUbicacionCliente({
+    required UbicacionClienteHnLocalDb ubicacionCliente,
+  }) {
+    try {
+      ubicacionClienteHnLocalDb.put(ubicacionCliente);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  List<UbicacionClienteHnLocalDb> getAllClientesUbicacionesByNumeroSolicitud(
+    String numeroSolicitud,
+  ) {
+    return ubicacionClienteHnLocalDb
+        .query(
+          UbicacionClienteHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build()
+        .find();
+  }
+
+  void deleteRowByNumeroSolicitud(String numeroSolicitud) {
+    final query = ubicacionClienteHnLocalDb
+        .query(
+          UbicacionClienteHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        )
+        .build();
+
+    final item = query.findFirst();
+
+    if (item != null) {
+      ubicacionClienteHnLocalDb.remove(item.id);
+    }
+
+    query.close();
   }
 }

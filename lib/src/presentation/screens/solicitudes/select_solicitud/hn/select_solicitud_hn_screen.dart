@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/actualizacion_solicitud/actualizacion_solicitud_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_hn_screen.dart';
@@ -11,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crea
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -80,6 +82,8 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actions = LocalStorage().currentActions;
+    final connectionStatus =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     return Row(
       children: [
@@ -101,7 +105,8 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
           ),
           const Gap(10),
         ],
-        if (actions.contains(TypeAction.crearGrupoCredito.codigo)) ...[
+        if (actions.contains(TypeAction.crearGrupoCredito.codigo) &&
+            connectionStatus == ConnectionStatus.connected) ...[
           Expanded(
             child: SolicitudCard(
               svgPath: ImageAsset.nuevaMenorBg6,

@@ -78,7 +78,7 @@ si se quiere generar un archivo `.apk` para compartir o para subir a tiendas com
 CORE FINANCIERO
 
 ```
-flutter build appbundle --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
+flutter build appbundle --flavor micreditoHonduras --dart-define-from-file=api-key-hn-prod.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 si se quiere generar un archivo .aab para subir a la tienda de google
 

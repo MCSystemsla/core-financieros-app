@@ -44,7 +44,7 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
               isCustomEstadoCredito: true,
               estadosCredito: [
                 EstadoCredito.registrada,
-                EstadoCredito.enRevision
+                // EstadoCredito.enRevision
               ],
             ),
         ),
@@ -84,7 +84,7 @@ class AutorizacionSolicitudGrupalScreen extends StatelessWidget {
                           isCustomEstadoCredito: true,
                           estadosCredito: [
                             EstadoCredito.registrada,
-                            EstadoCredito.enRevision
+                            // EstadoCredito.enRevision
                           ],
                         ),
                       ),

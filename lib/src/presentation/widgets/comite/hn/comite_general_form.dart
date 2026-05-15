@@ -1,11 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_datos_del_credito_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_parametros_form_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_servicios_acta_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/comite_user_info.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/modal/open_motivo_rechazo_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -16,6 +18,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+import '../../../bloc/comite/comite_rechazar_acta/comite_rechazar_acta_cubit.dart';
 
 class ComiteGeneralForm extends StatefulWidget {
   final PageController pageController;
@@ -48,7 +51,10 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
         child: Column(
           children: [
             Expanded(child: _buildFormContent()),
-            _buildFooterButtons(),
+            _buildFooterButtons(
+              numeroSolicitud: widget.data.numeroSolicitud ?? '',
+              tipoSolicitud: widget.tipoSolicitud,
+            ),
           ],
         ),
       ),
@@ -89,7 +95,10 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
     );
   }
 
-  Widget _buildFooterButtons() {
+  Widget _buildFooterButtons({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -97,6 +106,11 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
           // _buildCalcularButton(),
           const Gap(20),
           _buildAgregarServiciosButton(),
+          const Gap(20),
+          _buildRechazarActaButton(
+            numeroSolicitud: numeroSolicitud,
+            tipoSolicitud: tipoSolicitud,
+          ),
         ],
       ),
     );
@@ -118,6 +132,63 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
     );
   }
 
+  Widget _buildRechazarActaButton({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  }) {
+    return BlocConsumer<ComiteRechazarActaCubit, ComiteRechazarActaState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == Status.done) {
+          CustomAlertDialog(
+            context: context,
+            title: state.successMessage,
+            onDone: () => context.pop(),
+          ).showDialog(
+            context,
+            dialogType: DialogType.success,
+          );
+        }
+        if (state.status == Status.error) {
+          CustomAlertDialog(
+            context: context,
+            title: state.errorMsg,
+            onDone: () => context.pop(),
+          ).showDialog(
+            context,
+            dialogType: DialogType.error,
+          );
+        }
+      },
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          child: CustomElevatedButton(
+              enabled: state.status != Status.inProgress,
+              icon: const Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              // ignore: deprecated_member_use
+              color: Colors.red,
+              text: state.status == Status.inProgress
+                  ? 'Rechazando...'
+                  : 'Rechazar Acta',
+              onPressed: () async {
+                final motivoRechazo = await openMotivoRechazoSheet(context);
+                if (motivoRechazo == null) return;
+                if (!context.mounted) return;
+                context.read<ComiteRechazarActaCubit>().rechazarActa(
+                      numeroSolicitud: int.parse(numeroSolicitud),
+                      observacion: motivoRechazo,
+                      tipoSolicitud: tipoSolicitud,
+                    );
+              }),
+        );
+      },
+    );
+  }
+
   void _onAgregarServiciosPressed(ComiteAprobacionState state) {
     if (!formKey.currentState!.validate()) {
       CustomAlertDialog(
@@ -127,15 +198,6 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
       ).showDialog(context, dialogType: DialogType.warning);
       return;
     }
-
-    // if (!isCalcularDatosClicked) {
-    //   CustomAlertDialog(
-    //     context: context,
-    //     title: 'Debes primero calcular los datos para continuar',
-    //     onDone: () => context.pop(),
-    //   ).showDialog(context, dialogType: DialogType.warning);
-    //   return;
-    // }
 
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
 

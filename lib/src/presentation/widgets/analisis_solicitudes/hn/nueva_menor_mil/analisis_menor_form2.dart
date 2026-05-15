@@ -113,11 +113,17 @@ class _EstadoResultadoForm extends StatelessWidget {
       builder: (context, state) {
         final totalIngresosCalc = state.ventasContado + state.recuperaciones;
 
-        final costoPorcentajeVenta = state.inventarioHn.fold(
-                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-            (state.inventarioHn.length);
+        final costoPorcentajeVenta = state.inventarioHn.isEmpty
+            ? 0.0.toSafeString(2)
+            : (state.inventarioHn.fold<double>(
+                      0.0,
+                      (sum, e) => sum + e.costoVentaPorcentaje,
+                    ) /
+                    state.inventarioHn.length)
+                .toSafeString(2);
 
-        final costoVentaCalc = totalIngresosCalc * costoPorcentajeVenta;
+        final costoVentaCalc =
+            totalIngresosCalc * double.parse(costoPorcentajeVenta);
 
         final margenBrutoNegocioCalc =
             totalIngresosCalc - costoVentaCalc - state.gastosOperativos;
@@ -201,8 +207,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                 hintText: costoVentaCalc.toCurrencyString(),
                 readOnly: true,
                 textAlign: TextAlign.end,
-                title:
-                    'Costo de Venta (${costoPorcentajeVenta.toSafeString(2)}%)',
+                title: 'Costo de Venta ($costoPorcentajeVenta%)',
                 icon: const Icon(Icons.wallet),
                 textInputType: TextInputType.number,
                 onChange: (value) {

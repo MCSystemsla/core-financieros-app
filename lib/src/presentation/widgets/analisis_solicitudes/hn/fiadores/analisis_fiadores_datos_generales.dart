@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,9 +78,9 @@ class _AnalisisFiadoresDatosGeneralesState
   void initState() {
     super.initState();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
     fechaEmisionCedula = widget.fechaEmision;
     fechaVencimientoCedula = widget.fechaExpira;
     fechaNacimiento = widget.fechaNacimiento;

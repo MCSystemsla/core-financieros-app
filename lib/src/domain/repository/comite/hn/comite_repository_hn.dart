@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite_create_configur
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_fuentes_financiamiento_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_get_configuration_data.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_rechazar_acta.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_servicios_response_data.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_solicitud_response.dart';
@@ -84,6 +85,9 @@ abstract class ComiteRepositoryHN {
   });
   Future<ComiteApprovedResponse> aprobarActasGrupal({
     required ComiteApprovedGrupalSchema data,
+  });
+  Future<String> rechazarActa({
+    required ComiteRechazarActa data,
   });
 }
 
@@ -399,6 +403,25 @@ class ComiteRepositoryHNImpl implements ComiteRepositoryHN {
       }
       _logger.i(endpoint.body);
       return ComiteApprovedResponse.fromJson(resp);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> rechazarActa({
+    required ComiteRechazarActa data,
+  }) async {
+    final endpoint = RechazarActaComiteHnEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message'];
     } catch (e) {
       _logger.e(e);
       rethrow;

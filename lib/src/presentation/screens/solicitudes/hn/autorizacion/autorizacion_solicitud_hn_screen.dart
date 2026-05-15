@@ -40,7 +40,7 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
               isCustomEstadoCredito: true,
               estadosCredito: [
                 EstadoCredito.registrada,
-                EstadoCredito.enRevision
+                // EstadoCredito.enRevision
               ],
             ),
         ),
@@ -88,7 +88,7 @@ class AutorizacionSolicitudHnScreen extends StatelessWidget {
                             isCustomEstadoCredito: true,
                             estadosCredito: [
                               EstadoCredito.registrada,
-                              EstadoCredito.enRevision
+                              // EstadoCredito.enRevision
                             ],
                           );
                         },

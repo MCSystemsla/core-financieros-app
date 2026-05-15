@@ -4,7 +4,10 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubicacion_cliente_offline_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -212,18 +215,20 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
           child: InkWell(
             onTap: enabled
                 ? () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => AnalisisSolicitudesInterceptorHN(
-                            index: index,
-                            type: tipoSolicitud!,
-                            title: title,
-                            subtitle: subtitle,
-                            description: description,
-                            numeroSolicitud: numeroSolicitud,
-                            tipoSolicitudString: tipoSolicitudString,
-                          ),
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (ctx) => _SelectTypeAnalisis(
+                          index: index,
+                          title: title,
+                          subtitle: subtitle,
+                          description: description,
+                          numeroSolicitud: numeroSolicitud,
+                          cedulaCliente: cedulaCliente,
+                          tipoPersonaCodigo: tipoPersonaCodigo,
+                          monto: monto,
+                          tipoSolicitud: tipoSolicitud,
+                          tipoSolicitudString: tipoSolicitudString,
                         ),
                       ),
                     }
@@ -292,6 +297,136 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SelectTypeAnalisis extends StatelessWidget {
+  final int index;
+  final String title;
+  final String subtitle;
+  final String description;
+  final String numeroSolicitud;
+  final AnalisisSolicitudesInterceptorType? tipoSolicitud;
+  final String cedulaCliente;
+  final String tipoPersonaCodigo;
+  final String monto;
+  final String tipoSolicitudString;
+  const _SelectTypeAnalisis({
+    required this.index,
+    required this.title,
+    required this.subtitle,
+    required this.description,
+    required this.numeroSolicitud,
+    this.tipoSolicitud,
+    this.cedulaCliente = '',
+    this.tipoPersonaCodigo = '',
+    this.monto = '0',
+    this.tipoSolicitudString = '',
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      minChildSize: 0.45,
+      maxChildSize: 0.75,
+      expand: false,
+      builder: (_, controller) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: const Color(0xfff9fafb),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(28),
+            ),
+            boxShadow: [
+              BoxShadow(
+                // ignore: deprecated_member_use
+                color: Colors.black.withOpacity(0.12),
+                blurRadius: 25,
+                offset: const Offset(0, -3),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 42,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const Gap(18),
+              Expanded(
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    SelectableCardItem(
+                      icon: Icons.dashboard_customize_rounded,
+                      color: const Color(0xff1554F6),
+                      title: 'Registrar Analisis',
+                      subtitle: 'Crear analisis de crédito',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AnalisisSolicitudesInterceptorHN(
+                              index: index,
+                              type: tipoSolicitud!,
+                              title: title,
+                              subtitle: subtitle,
+                              description: description,
+                              numeroSolicitud: numeroSolicitud,
+                              tipoSolicitudString: tipoSolicitudString,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SelectableCardItem(
+                      icon: Icons.photo_library_outlined,
+                      color: const Color(0xff455A64),
+                      title: 'Registrar Imágenes del negocio',
+                      subtitle: 'Ingresa fotografías del negocio',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => ImagenesNegocioHnScreen(
+                              numeroSolicitud: numeroSolicitud,
+                              cedulaCliente: cedulaCliente,
+                              isOfflineMode: true,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SelectableCardItem(
+                      icon: Icons.location_on_rounded,
+                      color: Colors.pink,
+                      title: 'Registrar Ubicacion',
+                      subtitle: 'Ingresa ubicacion del cliente',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => UbicacionClienteOfflineHnScreen(
+                              numeroSolicitud: numeroSolicitud,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ).fadeIn();
+      },
     );
   }
 }

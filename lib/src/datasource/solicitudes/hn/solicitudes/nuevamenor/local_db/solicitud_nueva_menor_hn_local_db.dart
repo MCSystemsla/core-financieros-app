@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -178,6 +179,7 @@ class SolicitudNuevaMenorHnLocalDb {
   double? ingresoMensualConyuge;
   int? aniosLugarTrabajoConyuge;
   bool esRecurrente = false;
+  String? userId = LocalStorage().userId;
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.esGrupal,

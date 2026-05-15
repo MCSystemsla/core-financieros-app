@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,9 +56,9 @@ class _UpdateSolicitudAsalariadoForm1State
   void initState() {
     super.initState();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
     _selectedDate = DateTime.tryParse(cubit.state.fechaVencimientoCedula);
     fechaEmisionCedula = DateTime.tryParse(cubit.state.fechaEmisionCedula);

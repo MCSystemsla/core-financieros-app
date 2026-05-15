@@ -1,6 +1,10 @@
+import 'dart:developer';
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/imagenes_negocio/imagenes_negocio_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
@@ -19,14 +23,18 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../bloc/analisis/hn/analisis_imagenes_negocio/analisis_imagenes_negocio_cubit.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class ImagenesNegocioHnScreen extends StatefulWidget {
   final String numeroSolicitud;
   final String cedulaCliente;
+  final bool isOfflineMode;
   const ImagenesNegocioHnScreen({
     super.key,
     required this.numeroSolicitud,
     required this.cedulaCliente,
+    this.isOfflineMode = false,
   });
 
   @override
@@ -41,8 +49,28 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
   String? selectedImage2Path;
   XFile? selectedImage3;
   String? selectedImage3Path;
+
+  @override
+  void initState() {
+    super.initState();
+    final localDbProvider = global<AnalisisBoxServiceHn>();
+    final imagenesNegocioHnLocalDb =
+        localDbProvider.getImagenesNegocioFromLocalDb(
+      numeroSolicitud: widget.numeroSolicitud,
+    );
+    if (imagenesNegocioHnLocalDb != null) {
+      selectedImage1Path = imagenesNegocioHnLocalDb.pathFoto1;
+      selectedImage2Path = imagenesNegocioHnLocalDb.pathFoto2;
+      selectedImage3Path = imagenesNegocioHnLocalDb.pathFoto3;
+      selectedImage = XFile(selectedImage1Path!);
+      selectedImage2 = XFile(selectedImage2Path!);
+      selectedImage3 = XFile(selectedImage3Path!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localDbProvider = global<AnalisisBoxServiceHn>();
     return BlocProvider(
       create: (ctx) => AnalisisImagenesNegocioCubit(
         AnalisisRepositoryHNImpl(),
@@ -87,21 +115,18 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                     onPressed: () => context.pushTransparentRoute(
                       CameraCaptureScreen(
                         numeroSoicitud: widget.numeroSolicitud,
-                        onImageSelected: (image, path) {
+                        onImageSelected: (image, path) async {
+                          if (image == null) return;
+                          final savePath = await _savePath(image);
+
                           setState(() {
                             selectedImage = image;
-                            selectedImage1Path = path;
+                            selectedImage1Path = savePath;
                           });
                         },
                       ),
                     ),
                   ),
-                  //   showModalBottomSheet(
-                  //   isScrollControlled: true,
-                  //   context: context,
-                  //   builder: (ctx) => const _SelectTypePhotoDestination(),
-
-                  // )),
                   const Gap(20),
                   UploadImageWidget(
                     selectedImage: selectedImage2,
@@ -109,10 +134,12 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                     onPressed: () =>
                         context.pushTransparentRoute(CameraCaptureScreen(
                       numeroSoicitud: widget.numeroSolicitud,
-                      onImageSelected: (image, path) {
+                      onImageSelected: (image, path) async {
+                        if (image == null) return;
+                        final savePath = await _savePath(image);
                         setState(() {
                           selectedImage2 = image;
-                          selectedImage2Path = path;
+                          selectedImage2Path = savePath;
                         });
                       },
                     )),
@@ -124,10 +151,12 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                     onPressed: () => context.pushTransparentRoute(
                       CameraCaptureScreen(
                         numeroSoicitud: widget.numeroSolicitud,
-                        onImageSelected: (image, path) {
+                        onImageSelected: (image, path) async {
+                          if (image == null) return;
+                          final savePath = await _savePath(image);
                           setState(() {
                             selectedImage3 = image;
-                            selectedImage3Path = path;
+                            selectedImage3Path = savePath;
                           });
                         },
                       ),
@@ -141,16 +170,21 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                     listener: (context, state) {
                       if (state.status == Status.done) {
                         CustomAlertDialog(
-                          context: context,
-                          title: 'Imagenes del negocio enviadas exitosamente',
-                          onDone: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const AnalisisInterceptorByFlavor(),
-                            ),
-                          ),
-                        ).showDialog(context, dialogType: DialogType.success);
+                            context: context,
+                            title: 'Imagenes del negocio enviadas exitosamente',
+                            onDone: () {
+                              if (widget.isOfflineMode) {
+                                context.pop();
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const AnalisisInterceptorByFlavor(),
+                                ),
+                              );
+                            }).showDialog(context, dialogType: DialogType.success);
                       }
                       if (state.status == Status.error) {
                         CustomAlertDialog(
@@ -175,6 +209,16 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                             return;
                           }
                           if (context.mounted) {
+                            final imagenNegocio = ImagenesNegocioHnLocalDb(
+                              numeroSolicitud: widget.numeroSolicitud,
+                              pathFoto1: selectedImage1Path,
+                              pathFoto2: selectedImage2Path,
+                              pathFoto3: selectedImage3Path,
+                            );
+                            localDbProvider.saveImagenesNegocioOnLocalDb(
+                              imagenNegocioSchema: imagenNegocio,
+                            );
+
                             context
                                 .read<AnalisisImagenesNegocioCubit>()
                                 .createAnalisisFotoNegocio(
@@ -202,6 +246,26 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
         ),
       ),
     );
+  }
+
+  Future<String> _savePath(XFile image) async {
+    final appDir = await getApplicationDocumentsDirectory();
+
+    // 1. Definimos la ruta de la carpeta específica
+    final String folderPath = '${appDir.path}/imagenes_negocio';
+
+    // 2. Creamos la carpeta (si ya existe, no hace nada)
+    final Directory businessFolder = Directory(folderPath);
+    await businessFolder.create(recursive: true);
+
+    // 3. Definimos la ruta final del archivo usando el nombre original
+    final String finalPath = '$folderPath/${image.name}';
+    log('📂 Ruta final: $finalPath');
+
+    // 4. Copiamos el archivo y retornamos solo el String de la ruta
+    await File(image.path).copy(finalPath);
+
+    return finalPath;
   }
 }
 

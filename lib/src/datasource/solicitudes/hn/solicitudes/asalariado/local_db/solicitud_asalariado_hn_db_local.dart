@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -150,6 +151,7 @@ class SolicitudAsalariadoHnDbLocal {
   String? caserioTrabajo;
   String? caserioCasa;
   bool esRecurrente = false;
+  String? userId = LocalStorage().userId;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,

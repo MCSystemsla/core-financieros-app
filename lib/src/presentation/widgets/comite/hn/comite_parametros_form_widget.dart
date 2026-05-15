@@ -77,22 +77,22 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                   ),
                 ),
                 const Gap(12),
-                BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
-                  builder: (context, state) {
-                    return CustomSwitch(
-                      value: state.esRestructuracion,
-                      title: 'Es Reestructuración',
-                      subtitle: 'Comité reestructurado?',
-                      onChanged: (v) {
-                        calculosCubit.onFieldChanged(
-                          () => state.copyWith(
-                            esRestructuracion: v,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+                // BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
+                //   builder: (context, state) {
+                //     return CustomSwitch(
+                //       value: state.esRestructuracion,
+                //       title: 'Es Reestructuración',
+                //       subtitle: 'Comité reestructurado?',
+                //       onChanged: (v) {
+                //         calculosCubit.onFieldChanged(
+                //           () => state.copyWith(
+                //             esRestructuracion: v,
+                //           ),
+                //         );
+                //       },
+                //     );
+                //   },
+                // ),
                 const Divider(),
                 const Gap(12),
                 CustomSwitch(

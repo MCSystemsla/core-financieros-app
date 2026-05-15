@@ -8,21 +8,23 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationCardContainer extends StatelessWidget {
-  final Position position;
+  final LatLng position;
   final GoogleMapController controller;
   final String documentoCliente;
   final int numeroSolicitud;
   final String tipoSolicitud;
+  final String? ubicacionGpsCodigo;
+  final String? referenciaAdicional;
   const LocationCardContainer({
     super.key,
     required this.position,
@@ -30,6 +32,8 @@ class LocationCardContainer extends StatelessWidget {
     required this.documentoCliente,
     required this.numeroSolicitud,
     required this.tipoSolicitud,
+    this.ubicacionGpsCodigo,
+    this.referenciaAdicional,
   });
 
   @override
@@ -73,6 +77,8 @@ class LocationCardContainer extends StatelessWidget {
                   documentoCliente: documentoCliente,
                   numeroSolicitud: numeroSolicitud,
                   tipoSolicitud: tipoSolicitud,
+                  referenciaAdicional: referenciaAdicional,
+                  ubicacionGpsCodigo: ubicacionGpsCodigo,
                 ),
               ],
             ),
@@ -84,11 +90,13 @@ class LocationCardContainer extends StatelessWidget {
 }
 
 class UserLocationContent extends StatefulWidget {
-  final Position position;
+  final LatLng position;
   final GoogleMapController controller;
   final String documentoCliente;
   final int numeroSolicitud;
   final String tipoSolicitud;
+  final String? ubicacionGpsCodigo;
+  final String? referenciaAdicional;
   const UserLocationContent({
     super.key,
     required this.position,
@@ -96,6 +104,8 @@ class UserLocationContent extends StatefulWidget {
     required this.documentoCliente,
     required this.numeroSolicitud,
     required this.tipoSolicitud,
+    this.ubicacionGpsCodigo,
+    this.referenciaAdicional,
   });
 
   @override
@@ -113,6 +123,11 @@ class _UserLocationContentState extends State<UserLocationContent> {
           latitude: widget.position.latitude,
           longitude: widget.position.longitude,
         );
+    if (widget.ubicacionGpsCodigo != null ||
+        widget.referenciaAdicional != null) {
+      ubicacionGpsCodigo = widget.ubicacionGpsCodigo;
+      referencia = widget.referenciaAdicional;
+    }
   }
 
   @override
@@ -191,6 +206,10 @@ class _UserLocationContentState extends State<UserLocationContent> {
                   ),
                   const Gap(20),
                   SearchDropdownWidget(
+                    selectedItem: Item(
+                      name: ubicacionGpsCodigo ?? '',
+                      value: ubicacionGpsCodigo ?? '',
+                    ),
                     codigo: 'UBICACIONGPS',
                     title: 'Tipo de ubicación',
                     validator: (value) =>
@@ -202,6 +221,7 @@ class _UserLocationContentState extends State<UserLocationContent> {
                   ),
                   const Gap(16),
                   OutlineTextfieldWidget(
+                    initialValue: referencia,
                     title: 'Referencia adicional',
                     validator: (value) =>
                         ClassValidator.validateRequired(value),

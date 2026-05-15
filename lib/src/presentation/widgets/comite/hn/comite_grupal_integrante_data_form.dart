@@ -526,16 +526,16 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
                 .copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        CustomSwitch(
-          value: esReestructuracion,
-          subtitle: 'Si es un acta de reestructuración?',
-          title: 'Es Reestructuración',
-          onChanged: (v) {
-            // setState(() {
-            //   esReestructuracion = v;
-            // });
-          },
-        ),
+        // CustomSwitch(
+        //   value: esReestructuracion,
+        //   subtitle: 'Si es un acta de reestructuración?',
+        //   title: 'Es Reestructuración',
+        //   onChanged: (v) {
+        //     // setState(() {
+        //     //   esReestructuracion = v;
+        //     // });
+        //   },
+        // ),
         const Divider(),
         CustomSwitch(
           value: alVencimiento,

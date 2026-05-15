@@ -538,13 +538,13 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
 
   Future<void> guardarAnalisisAsignados() async {
     final analisisListData = await _repository.getSolicitudesByEstado(
-      estadoCredito: EstadoCredito.asignada,
       isAsignadaToAsesorCredito: true,
+      estadoCredito: EstadoCredito.asignada,
       cedulaCliente: '',
       pagina: 1,
       numeroSolicitud: '',
       codigoGrupo: null,
-      isCustomEstadoCredito: true,
+      isCustomEstadoCredito: false,
     );
 
     final analisisLocalDbProvider = global<AnalisisBoxServiceHn>();

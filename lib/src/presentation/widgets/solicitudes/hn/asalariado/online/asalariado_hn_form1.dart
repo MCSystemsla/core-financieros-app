@@ -28,6 +28,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form1.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,9 +68,9 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
   void initState() {
     super.initState();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
     _selectedDate = widget.userByDocumentHnData?.fechaExpira;
     fechaEmisionCedula = widget.userByDocumentHnData?.fechaEmision;
     fechaNacimiento = widget.userByDocumentHnData?.fechaNacimiento;

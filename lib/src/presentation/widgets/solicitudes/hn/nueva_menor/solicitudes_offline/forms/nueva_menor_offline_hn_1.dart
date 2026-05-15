@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/progress/mic
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,9 +52,9 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
   void initState() {
     super.initState();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
   }
 
   Future<void> selectDate(BuildContext context) async {

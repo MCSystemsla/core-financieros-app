@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
+import '../../../../../bloc/comite/comite_rechazar_acta/comite_rechazar_acta_cubit.dart';
 import '../../../../../bloc/comite/fuentes_financiamientos/fuentes_financiamientos_cubit.dart';
 import '../../../../../bloc/comite/tipos_credito/tipos_credito_cubit.dart';
 
@@ -68,6 +69,11 @@ class ComiteFormScreen extends StatelessWidget {
           create: (ctx) => TiposCreditoCubit(
             repository,
           )..getTiposCredito(),
+        ),
+        BlocProvider(
+          create: (ctx) => ComiteRechazarActaCubit(
+            repository,
+          ),
         ),
       ],
       child: Scaffold(

@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/cedula/cedula_client_db.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -24,6 +25,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/car
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
@@ -1023,16 +1025,58 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
               title: 'Tipo de Grupo',
               onChanged: widget.onChanged,
             ),
-          ConnectionStatus.connected => SheetSearchDropdown(
-              selectedItem: widget.selectedItem,
+          ConnectionStatus.connected => _GruposActivosDropdownWidget(
+              onChanged: widget.onChanged,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
-              title: 'Tipo de Grupo',
+            ),
+          _ => const SizedBox.shrink(),
+        };
+      },
+    );
+  }
+}
+
+class _GruposActivosDropdownWidget extends StatelessWidget {
+  final ItemCallback<Item> onChanged;
+  final ValidatorCallback<Item> validator;
+
+  const _GruposActivosDropdownWidget({
+    required this.onChanged,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GruposActivosCubit, GruposActivosState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          Status.inProgress => const LoadingWidget(),
+          Status.done => SheetSearchDropdown(
+              items: state.gruposActivos
+                  .map((e) => Item(
+                        value: e.codigo,
+                        name: e.nombreCompleto,
+                      ))
+                  .toList(),
+              key: const Key('tipoGrupoDropdown'),
               isRequired: true,
-              onChanged: widget.onChanged,
-              hintText: 'Ingresa Grupo',
+              validator: validator,
               enabled: true,
-              items: widget.items,
+              hintText: 'Ingresa Tipo de Grupo',
+              title: 'Tipo de Grupo',
+              onChanged: onChanged,
+            ),
+          Status.error => SearchDropdownWidget(
+              key: const Key('tipoGrupoDropdown'),
+              isRequired: true,
+              validator: validator,
+              enabled: true,
+              flavor: global<FlavorCubit>().state.flavor,
+              codigo: CatalogoType.gruposActivos.codigo,
+              hintText: 'Tipo de Grupo',
+              title: 'Tipo de Grupo',
+              onChanged: onChanged,
             ),
           _ => const SizedBox.shrink(),
         };

@@ -1,10 +1,13 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/data/custom_map_style.dart';
 import 'package:core_financiero_app/src/config/helpers/google_api/places/google_places_helper.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_user_location/analisis_user_location_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/location_card_container.dart';
+import 'package:core_financiero_app/src/presentation/widgets/client_location/location_saved_container.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/select_location_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/geolocation_permission/geolocation_permission_widget.dart';
@@ -105,6 +108,9 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
   GoogleMapController? _controller;
 
   bool isUserSelectedLocation = false;
+  LatLng? position;
+  String? ubicacionGpsCodigo;
+  String? referenciaAdicional;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(14.0998805, -87.1888407),
@@ -122,6 +128,11 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final localProvider = global<AnalisisBoxServiceHn>();
+    final ubicacionesGuardadas =
+        localProvider.getAllClientesUbicacionesByNumeroSolicitud(
+      widget.numeroSolicitud.toString(),
+    );
     return Stack(
       children: [
         AbsorbPointer(
@@ -151,13 +162,70 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
         ),
         if (isUserSelectedLocation) ...[
           LocationCardContainer(
-            position: widget.position,
+            position: position ??
+                LatLng(
+                  widget.position.latitude,
+                  widget.position.longitude,
+                ),
             controller: _controller!,
             documentoCliente: widget.documentoCliente,
             numeroSolicitud: widget.numeroSolicitud,
             tipoSolicitud: widget.tipoSolicitud,
+            referenciaAdicional: referenciaAdicional,
+            ubicacionGpsCodigo: ubicacionGpsCodigo,
           ),
         ],
+        if (!isUserSelectedLocation) ...[
+          SelectLocationWidget(
+            onTap: () {
+              setState(() {
+                isUserSelectedLocation = true;
+              });
+            },
+          ),
+        ],
+        SafeArea(
+          child: Container(
+            height: 280,
+            margin: const EdgeInsets.only(left: 10, right: 10, top: 25),
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: ubicacionesGuardadas.length,
+              itemBuilder: (_, index) {
+                final item = ubicacionesGuardadas[index];
+
+                return UbicacionGuardadaCard(
+                  ubicacion: item,
+                  onTap: () {
+                    final latLng = LatLng(
+                      item.latitude ?? 0,
+                      item.longitude ?? 0,
+                    );
+                    setState(() {
+                      position = latLng;
+                      ubicacionGpsCodigo = item.tipoUbicacionCodigo;
+                      referenciaAdicional = item.referenciaAdicional;
+                    });
+
+                    _controller?.animateCamera(
+                      CameraUpdate.newCameraPosition(
+                        getCurrentLocation(latLng: latLng),
+                      ),
+                    );
+                  },
+                  onDelete: () {
+                    setState(() {
+                      localProvider.deleteRowByNumeroSolicitud(
+                        widget.numeroSolicitud.toString(),
+                      );
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ),
         Positioned(
           top: 10,
           left: 10,
@@ -177,15 +245,6 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
             ),
           ),
         ),
-        if (!isUserSelectedLocation) ...[
-          SelectLocationWidget(
-            onTap: () {
-              setState(() {
-                isUserSelectedLocation = true;
-              });
-            },
-          ),
-        ],
         Center(
           child: Icon(
             Icons.location_on_rounded,

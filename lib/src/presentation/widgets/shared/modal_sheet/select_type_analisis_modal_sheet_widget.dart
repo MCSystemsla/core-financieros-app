@@ -2,6 +2,7 @@
 
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_checks/analisis_checks_cubit.dart';
@@ -363,12 +364,12 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                                         : '';
 
                                     if (!state.tieneAnalisis) {
-                                      CustomAlertDialog(
-                                        context: context,
+                                      showV2CustomSnackbar(
+                                        context,
                                         title:
                                             'Para cerrar el analisis es necesario haber realizado el analisis de credito',
-                                        onDone: () => context.pop(),
-                                      ).showDialog(context);
+                                        type: SnackbarType.warning,
+                                      );
                                       return;
                                     }
 

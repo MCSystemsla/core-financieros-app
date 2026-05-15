@@ -33,6 +33,7 @@ class _WidgetLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = AppColors.getPrimaryColor();
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Scaffold(
       body: Container(
@@ -67,9 +68,12 @@ class _WidgetLoading extends StatelessWidget {
               ),
             ),
             const Spacer(flex: 2),
-            SizedBox(
+            Container(
               width: 20,
               height: 20,
+              margin: EdgeInsets.only(
+                bottom: bottomInset,
+              ),
               child: CircularProgressIndicator(
                 strokeWidth: 3.0,
                 valueColor: AlwaysStoppedAnimation<Color>(primaryColor),

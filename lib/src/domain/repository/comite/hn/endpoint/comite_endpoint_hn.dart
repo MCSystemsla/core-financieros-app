@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/comite/comite__approved_grupa
 import 'package:core_financiero_app/src/datasource/comite/comite_aprobacion.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_configuration_grupal.dart';
 import 'package:core_financiero_app/src/datasource/comite/comite_create_service_schema.dart';
+import 'package:core_financiero_app/src/datasource/comite/comite_rechazar_acta.dart';
 import 'package:core_financiero_app/src/utils/extensions/order_type/order_type.dart';
 
 class ComiteObtenerDataSolicitudEndpointHN extends Endpoint {
@@ -98,7 +99,7 @@ class ComiteCrearAprobacionEndpoint extends Endpoint {
   Method get method => Method.patch;
 
   @override
-  String get path => '/cartera/comite/aprobar';
+  String get path => '/cartera/comite/aprobar/v2';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -328,6 +329,24 @@ class ApproveActasComiteGrupaHnEndpoint extends Endpoint {
 
   @override
   String get path => '/cartera/comite/aprobar/v2';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class RechazarActaComiteHnEndpoint extends Endpoint {
+  final ComiteRechazarActa data;
+  RechazarActaComiteHnEndpoint({
+    required this.data,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/rechazar-solicitud';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

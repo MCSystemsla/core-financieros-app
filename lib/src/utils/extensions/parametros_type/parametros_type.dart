@@ -1,5 +1,5 @@
 enum ParametroType {
-  edadMinimaCliente('EDADMINIMACLIENTE'),
+  edadMinimaCliente('EDADMINIMAGUARDASISTEMA'),
   edadMaximaCliente('EDADMAXIMACLIENTE'),
   incobrablesDeCXCobrar('INCOBRABLESDECXCOBRAR'),
   fechaOperacion('FECHAOPERACION'),

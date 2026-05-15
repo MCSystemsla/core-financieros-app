@@ -51,13 +51,14 @@ class AnalisisMenorMilCubit extends Cubit<AnalisisMenorMilState> {
 
     final ingresoAnualVenta = totalIngresosCalc * 12;
 
-    final costoPorcentajeVenta = state.inventarioHn.fold(
-            0.0,
-            (sum, element) =>
-                sum +
-                (num.tryParse(element.costoVentaPorcentaje.toSafeString(2)) ??
-                    0)) /
-        (state.inventarioHn.length);
+    final costoPorcentajeVenta = state.inventarioHn.isEmpty
+        ? 0.0.toSafeString(2)
+        : (state.inventarioHn.fold<double>(
+                  0.0,
+                  (sum, e) => sum + e.costoVentaPorcentaje,
+                ) /
+                state.inventarioHn.length)
+            .toSafeString(2);
 
     final relacionMaxRazonCuotaParam = switch (tipoSolicitud) {
       AnalisisSolicitudesInterceptorType.nueva =>
@@ -72,7 +73,7 @@ class AnalisisMenorMilCubit extends Cubit<AnalisisMenorMilState> {
     emit(state.copyWith(status: Status.inProgress));
 
     final costoVentaCalc =
-        totalIngresosCalc * double.parse(costoPorcentajeVenta.toSafeString(2));
+        totalIngresosCalc * double.parse(costoPorcentajeVenta);
 
     final margenBrutoNegocioCalc =
         totalIngresosCalc - costoVentaCalc - state.gastosOperativos;
@@ -123,7 +124,7 @@ class AnalisisMenorMilCubit extends Cubit<AnalisisMenorMilState> {
           gastosOperativos: state.gastosOperativos,
           gastosUnidadFamiliar: state.gastosUnidadFamiliar,
           otrosIngresos: state.otrosIngresos,
-          costoVentaPorcentaje: costoPorcentajeVenta,
+          costoVentaPorcentaje: double.parse(costoPorcentajeVenta),
           resultadoVerificacion1: state.resultadoVerificacion1,
           resultadoVerificacion2: state.resultadoVerificacion2,
           resultadoVerificacion3: state.resultadoVerificacion3,

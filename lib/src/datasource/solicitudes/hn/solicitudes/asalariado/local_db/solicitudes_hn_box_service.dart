@@ -86,7 +86,7 @@ class SolicitudesHnBoxService {
         log('⚠️ Error de modelo detectado. Borrando base de datos local...');
 
         final dir = await getApplicationDocumentsDirectory();
-        final dbDir = Directory('${dir.path}/database');
+        final dbDir = Directory('${dir.path}/database_hn');
 
         if (await dbDir.exists()) {
           await dbDir.delete(recursive: true);
@@ -322,14 +322,41 @@ class SolicitudesHnBoxService {
   }
 
   List<SolicitudNuevaMenorHnLocalDb> getSolicitudesNueva() {
-    final resp = solicitudesNuevaMenorBox.getAll();
-    return resp.reversed.toList();
+    final currentUserId = LocalStorage().userId;
+
+    final query = solicitudesNuevaMenorBox
+        .query(
+          SolicitudNuevaMenorHnLocalDb_.userId
+              .equals(currentUserId)
+              .or(SolicitudNuevaMenorHnLocalDb_.userId.isNull())
+              .or(SolicitudNuevaMenorHnLocalDb_.userId.equals('')),
+        )
+        .build();
+
+    final results = query.find();
+
+    query.close();
+
+    return results.reversed.toList();
   }
 
   List<SolicitudAsalariadoHnDbLocal> getSolicitudesAsalariado() {
-    final resp = solicitudesAsalariadoBox.getAll();
-    log('Asalariado solicitudes: ${resp.reversed.toList().length}');
-    return resp.reversed.toList();
+    final currentUserId = LocalStorage().userId;
+
+    final query = solicitudesAsalariadoBox
+        .query(
+          SolicitudAsalariadoHnDbLocal_.userId
+              .equals(currentUserId)
+              .or(SolicitudAsalariadoHnDbLocal_.userId.isNull())
+              .or(SolicitudAsalariadoHnDbLocal_.userId.equals('')),
+        )
+        .build();
+
+    final results = query.find();
+
+    query.close();
+
+    return results.reversed.toList();
   }
 
   List<SolicitudReprestamoHnLocalDb> getSolicitudesReprestamo() {

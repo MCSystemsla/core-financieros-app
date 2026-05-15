@@ -122,8 +122,8 @@ android {
             // applicationId "com.mcsystem.core_financiero_app.hn"
             applicationId "com.mcsystem.core_financiero_app.hnd"
             signingConfig signingConfigs.debug
-            versionName "1.7.28"
-            versionCode 33
+            versionName "1.7.33"
+            versionCode 38
             // versionCode flutterVersionCode.toInteger() + 1
         }
         micreditoCostaRica {
