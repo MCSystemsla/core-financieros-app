@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nu
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -46,6 +47,10 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
     final imagesCedula = localDbProvider.getCedula(
       cedula: solicitudNuevaMenorHnLocalDb.cedula!,
       tipoSolicitud: 'NUEVA_MENOR',
+    );
+    final signatureFile = localDbProvider.getSignatureByCedula(
+      solicitudNuevaMenorHnLocalDb.cedula!,
+      TypeForm.nueva,
     );
     // final signatureImage = localDbProvider.getSignatureByCedula(
     //   solicitudNuevaMenorHnLocalDb.cedula ?? '',
@@ -110,6 +115,9 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                                 imagesCedula?.imageFrontCedula ?? 'NO PATH'),
                             fotoCedulaTrasera: XFile(
                                 imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                            fotoFirma: XFile(
+                              signatureFile?.imageSignature ?? 'NO PATH',
+                            ),
                             onCedulaFrontalPressed: () {
                               context.pushTransparentRoute(
                                 PhotoCedulaImagePreview(
@@ -124,6 +132,15 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                                 PhotoCedulaImagePreview(
                                   imagesCedula: File(
                                     imagesCedula?.imageBackCedula ?? '',
+                                  ),
+                                ),
+                              );
+                            },
+                            onFirmaPressed: () {
+                              context.pushTransparentRoute(
+                                PhotoCedulaImagePreview(
+                                  imagesCedula: File(
+                                    signatureFile?.imageSignature ?? '',
                                   ),
                                 ),
                               );

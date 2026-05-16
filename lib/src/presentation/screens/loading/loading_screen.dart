@@ -47,40 +47,68 @@ class _WidgetLoading extends StatelessWidget {
             radius: 1.0,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(flex: 3),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryColor.withOpacity(0.1),
-                    blurRadius: 40,
-                    spreadRadius: 10,
+        child: SafeArea(
+          child: Column(
+            children: [
+              const Spacer(flex: 3),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: primaryColor.withOpacity(0.1),
+                      blurRadius: 40,
+                      spreadRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  ImageAsset.icon,
+                  height: 100,
+                ),
+              ),
+              const Gap(40),
+              Container(
+                width: 22,
+                height: 22,
+                margin: EdgeInsets.only(
+                  bottom: bottomInset,
+                ),
+                child: CircularProgressIndicator(
+                  strokeWidth: 3.0,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    primaryColor,
                   ),
-                ],
+                ),
               ),
-              child: Image.asset(
-                ImageAsset.icon,
-                height: 100,
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  children: [
+                    Text(
+                      'from',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade500,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const Gap(2),
+                    const Text(
+                      'MCSYSTEM',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                        color: Colors.indigo,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Spacer(flex: 2),
-            Container(
-              width: 20,
-              height: 20,
-              margin: EdgeInsets.only(
-                bottom: bottomInset,
-              ),
-              child: CircularProgressIndicator(
-                strokeWidth: 3.0,
-                valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-              ),
-            ),
-            const Gap(40),
-          ],
+            ],
+          ),
         ),
       ),
     );

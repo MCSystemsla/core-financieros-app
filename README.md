@@ -77,8 +77,17 @@ si se quiere generar un archivo `.apk` para compartir o para subir a tiendas com
 
 CORE FINANCIERO
 
+Honduras
 ```
 flutter build appbundle --flavor micreditoHonduras --dart-define-from-file=api-key-hn-prod.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
+```
+Nicaragua
+```
+flutter build appbundle --flavor micreditoNicaragua --dart-define-from-file=api-key-prod.json --target=lib/main.dart --release --obfuscate --split-debug-info=../
+```
+Costa Rica
+```
+flutter build appbundle --flavor micreditoCostaRica --dart-define-from-file=api-key-prod.json --target=lib/main_cr.dart --release --obfuscate --split-debug-info=../
 ```
 si se quiere generar un archivo .aab para subir a la tienda de google
 
