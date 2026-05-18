@@ -5,9 +5,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_checks/analisis_checks_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/actualizar_analisis/actualizar_analisis_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
@@ -17,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/comite/hn/modal/open_motivo_rechazo_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
@@ -26,6 +29,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../bloc/solicitudes/hn/cubit/rechazar_solicitud/rechazar_solicitud_hn_cubit.dart';
 
 class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   final int index;
@@ -77,6 +82,11 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                   ) ??
                   '',
             ),
+        ),
+        BlocProvider(
+          create: (ctx) => RechazarSolicitudHnCubit(
+            SolicitudesCreditoHnRepositoryImpl(),
+          ),
         ),
       ],
       child: DraggableScrollableSheet(
@@ -163,7 +173,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               );
                             },
                           ),
-                          if (state.tieneAnalisis && esGrupal)
+                          if (state.tieneAnalisis)
                             SelectableCardItem(
                               userHaveDataAlready: false,
                               isLoading: state.status == Status.inProgress,
@@ -340,6 +350,79 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                               );
                             },
                           ),
+                          if (actions.contains(
+                              TypeAction.rechazarSolicitud.codigo)) ...[
+                            BlocConsumer<RechazarSolicitudHnCubit,
+                                RechazarSolicitudHnState>(
+                              listener: (context, rechazoState) {
+                                if (rechazoState.status == Status.done) {
+                                  CustomAlertDialog(
+                                      context: context,
+                                      title: rechazoState.successMessage,
+                                      onDone: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const AnalisisInterceptorByFlavor(),
+                                          ),
+                                        );
+                                      }).showDialog(
+                                    context,
+                                    dialogType: DialogType.success,
+                                  );
+                                }
+                                if (rechazoState.status == Status.error) {
+                                  CustomAlertDialog(
+                                    context: context,
+                                    title: rechazoState.errorMsg,
+                                    onDone: () => context.pop(),
+                                  ).showDialog(
+                                    context,
+                                    dialogType: DialogType.error,
+                                  );
+                                }
+                              },
+                              builder: (context, rechazoState) {
+                                return SelectableCardItem(
+                                  userHaveDataAlready: false,
+                                  isLoading:
+                                      rechazoState.status == Status.inProgress,
+                                  icon: Icons.close_rounded,
+                                  color: Colors.red,
+                                  title: 'Rechazar Solicitud',
+                                  subtitle: 'Rechazar la solicitud de crédito',
+                                  onTap: () => CloseAnalisisDialog(
+                                    context: context,
+                                    title:
+                                        '¿Estás seguro de que quieres rechazar la solicitud de crédito?',
+                                    onYes: () async {
+                                      context.pop();
+                                      final motivoRechazo =
+                                          await openMotivoRechazoSheet(
+                                        context,
+                                        buttonText: 'Rechazar Solicitud',
+                                      );
+                                      if (motivoRechazo == null) return;
+                                      if (!context.mounted) return;
+
+                                      context
+                                          .read<RechazarSolicitudHnCubit>()
+                                          .rechazarSolicitud(
+                                            numeroSolicitud:
+                                                int.parse(numeroSolicitud),
+                                            tipoSolicitud: tipoSolicitudString,
+                                            observacion: motivoRechazo,
+                                          );
+                                    },
+                                  ).showDialog(
+                                    context,
+                                    dialogType: DialogType.infoReverse,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                           if (actions.contains(TypeAction.cerrar.codigo))
                             BlocBuilder<CerrarAnalisisCubit,
                                 CerrarAnalisisState>(

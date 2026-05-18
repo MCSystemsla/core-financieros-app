@@ -211,7 +211,7 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.21,
       minChildSize: 0.2,
-      maxChildSize: 0.4,
+      maxChildSize: 0.5,
       expand: false,
       builder: (_, controller) {
         return Container(
@@ -229,88 +229,83 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            children: [
-              Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              const Gap(18),
-              BlocConsumer<AutorizarSolicitudCubit, AutorizarSolicitudState>(
-                listenWhen: (previous, current) =>
-                    previous.status != current.status,
-                listener: (context, state) {
-                  if (state.status == Status.done) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: 'Solicitud autorizada exitosamente.',
-                      onDone: () {
-                        context.pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) =>
-                                const AutorizacionSolicitudHnScreen(),
-                          ),
-                        );
-                      },
-                    ).showDialog(
+          child: BlocConsumer<AutorizarSolicitudCubit, AutorizarSolicitudState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status,
+            listener: (context, state) {
+              if (state.status == Status.done) {
+                CustomAlertDialog(
+                  context: context,
+                  title: 'Solicitud autorizada exitosamente.',
+                  onDone: () {
+                    context.pop();
+                    Navigator.push(
                       context,
-                      dialogType: DialogType.success,
-                    );
-                  }
-                  if (state.status == Status.error) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: state.errorMsg,
-                      onDone: () => context.pop(),
-                    ).showDialog(
-                      context,
-                      dialogType: DialogType.error,
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  return ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: controller,
-                    children: [
-                      SelectableCardItem(
-                        isLoading: state.status == Status.inProgress,
-                        icon: Icons.verified_user,
-                        color: const Color(0xFF2E7D32),
-                        title: 'Autorizar Solicitud',
-                        subtitle: 'Autorizar solicitud de crédito',
-                        onTap: () => {
-                          CloseAnalisisDialog(
-                            context: context,
-                            title:
-                                '¿Estás seguro que desea autorizar la solicitud?',
-                            onYes: () {
-                              context.pop();
-                              context
-                                  .read<AutorizarSolicitudCubit>()
-                                  .autorizarSolicitudCredito(
-                                    numeroSolicitud: numeroSolicitud,
-                                    tipoSolicitud: tipoSolicitud,
-                                  );
-                            },
-                          ).showDialog(
-                            context,
-                            dialogType: DialogType.infoReverse,
-                          )
-                        },
+                      MaterialPageRoute(
+                        builder: (ctx) => const AutorizacionSolicitudHnScreen(),
                       ),
-                    ],
-                  );
-                },
-              ),
-            ],
+                    );
+                  },
+                ).showDialog(
+                  context,
+                  dialogType: DialogType.success,
+                );
+              }
+              if (state.status == Status.error) {
+                CustomAlertDialog(
+                  context: context,
+                  title: state.errorMsg,
+                  onDone: () => context.pop(),
+                ).showDialog(
+                  context,
+                  dialogType: DialogType.error,
+                );
+              }
+            },
+            builder: (context, state) {
+              return ListView(
+                controller: controller,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 42,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  const Gap(18),
+                  SelectableCardItem(
+                    isLoading: state.status == Status.inProgress,
+                    icon: Icons.verified_user,
+                    color: const Color(0xFF2E7D32),
+                    title: 'Autorizar Solicitud',
+                    subtitle: 'Autorizar solicitud de crédito',
+                    onTap: () => {
+                      CloseAnalisisDialog(
+                        context: context,
+                        title:
+                            '¿Estás seguro que desea autorizar la solicitud?',
+                        onYes: () {
+                          context.pop();
+                          context
+                              .read<AutorizarSolicitudCubit>()
+                              .autorizarSolicitudCredito(
+                                numeroSolicitud: numeroSolicitud,
+                                tipoSolicitud: tipoSolicitud,
+                              );
+                        },
+                      ).showDialog(
+                        context,
+                        dialogType: DialogType.infoReverse,
+                      )
+                    },
+                  ),
+                ],
+              );
+            },
           ),
         ).fadeIn();
       },

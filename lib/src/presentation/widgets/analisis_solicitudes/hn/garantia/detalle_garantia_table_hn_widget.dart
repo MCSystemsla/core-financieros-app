@@ -47,7 +47,7 @@ class DetalleGarantiaTableHNWidget extends StatelessWidget {
             AnalisisCardItem(
               icon: Icons.payments_rounded,
               label: 'Total Valor Comercial',
-              value: 111.toString(),
+              value: 'N/A',
               color: Colors.indigo,
             ),
             AnalisisCardItem(

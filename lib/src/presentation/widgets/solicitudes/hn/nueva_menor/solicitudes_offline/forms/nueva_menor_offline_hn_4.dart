@@ -56,9 +56,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                 Column(
                   children: [
                     SearchDropdownWidget(
+                      key: const ValueKey('profesionCodigo'),
                       selectedItem: Item(
-                        name: cubit.state.profesionNombre,
-                        value: cubit.state.profesionCodigo,
+                        name: state.profesionCodigoNombre,
+                        value: state.profesionCodigo,
                       ),
                       isRequired: true,
                       validator: (value) =>
@@ -70,19 +71,21 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             profesionCodigo: item.value,
                             profesion: item.name,
                             profesionNombre: item.name,
+                            profesionCodigoNombre: item.name,
                           ),
                         );
                       },
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('ocupacionCodigo'),
                       selectedItem: Item(
-                        name: cubit.state.ocupacionNombre,
-                        value: cubit.state.ocupacionCodigo,
+                        name: state.ocupacionCodigoNombre,
+                        value: state.ocupacionCodigo,
                       ),
                       isRequired: true,
                       validator: (value) =>
@@ -92,10 +95,11 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             ocupacion: item.name,
                             ocupacionCodigo: item.value,
                             ocupacionNombre: item.name,
+                            ocupacionCodigoNombre: item.name,
                           ),
                         );
                       },
@@ -104,9 +108,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('estadoCivilCodigo'),
                       selectedItem: Item(
-                        name: cubit.state.estadoCivilCodigoNombre,
-                        value: cubit.state.estadoCivilCodigo,
+                        name: state.estadoCivilCodigoNombre,
+                        value: state.estadoCivilCodigo,
                       ),
                       isRequired: true,
                       validator: (value) =>
@@ -118,7 +123,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         if (item == null || !mounted) return;
 
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             estadoCivilCodigo: item.value,
                             estadoCivilCodigoNombre: item.name,
                           ),
@@ -129,7 +134,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         state.estadoCivilCodigo == 'CAS') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.nombreConyugue,
+                        key: const ValueKey('nombreConyugue'),
+                        initialValue: state.nombreConyugue,
                         isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -145,7 +151,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         title: 'Nombres del Cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               nombreConyugue: value,
                             ),
                           );
@@ -153,7 +159,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.apellidosConyugue,
+                        key: const ValueKey('apellidosConyugue'),
+                        initialValue: state.apellidosConyugue,
                         isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -171,7 +178,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         title: 'Apellidos del Cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               apellidosConyugue: value,
                             ),
                           );
@@ -179,10 +186,11 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       CatalogoValorNacionalidad(
+                        key: const ValueKey('nacionalidadConyugue'),
                         selectedItem: ItemNacionalidad(
                           id: 0,
-                          valor: cubit.state.nacionalidadConyugue,
-                          nombre: cubit.state.nacionalidadConyugue,
+                          valor: state.nacionalidadConyugue,
+                          nombre: state.nacionalidadConyugue,
                           relacion: '',
                         ),
                         validator: (value) =>
@@ -193,7 +201,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         onChanged: (item) {
                           if (item == null || !mounted) return;
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               nacionalidadConyugue: item.valor,
                             ),
                           );
@@ -201,9 +209,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       SheetSearchDropdown(
+                        key: const ValueKey('trabajaConyugue'),
                         selectedItem: Item(
-                          name: cubit.state.trabajaConyugue,
-                          value: cubit.state.trabajaConyugue,
+                          name: state.trabajaConyugue,
+                          value: state.trabajaConyugue,
                         ),
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),
@@ -213,7 +222,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           if (item == null || !mounted) return;
 
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               trabajaConyugue: item.value,
                             ),
                           );
@@ -228,7 +237,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       if (state.trabajaConyugue == 'input.yes'.tr()) ...[
                         const Gap(30),
                         OutlineTextfieldWidget(
-                          initialValue: cubit.state.trabajoConyugue,
+                          key: const ValueKey('trabajoConyugue'),
+                          initialValue: state.trabajoConyugue,
                           isRequired: true,
                           inputFormatters: [
                             UpperCaseTextFormatter(),
@@ -244,7 +254,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           title: 'Centro de Trabajo del cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
-                              () => cubit.state.copyWith(
+                              () => state.copyWith(
                                 trabajoConyugue: value,
                               ),
                             );
@@ -252,8 +262,9 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         const Gap(30),
                         OutlineTextfieldWidget(
+                          key: const ValueKey('direccionTrabajoConyugue'),
                           isRequired: true,
-                          initialValue: cubit.state.direccionTrabajoConyugue,
+                          initialValue: state.direccionTrabajoConyugue,
                           inputFormatters: [
                             UpperCaseTextFormatter(),
                             LengthLimitingTextInputFormatter(100),
@@ -268,7 +279,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           title: 'Dirección del Trabajo del Cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
-                              () => cubit.state.copyWith(
+                              () => state.copyWith(
                                 direccionTrabajoConyugue: value,
                               ),
                             );
@@ -276,7 +287,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         const Gap(30),
                         CountryInput(
-                          initialValue: cubit.state.telefonoTrabajoConyugue,
+                          key: const ValueKey('telefonoTrabajoConyugue'),
+                          initialValue: state.telefonoTrabajoConyugue,
                           maxLength: 15,
                           countryCodeInput: CountryCodeInput.hn,
                           isRequired: true,
@@ -293,7 +305,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           title: 'Teléfono del Trabajo del Cónyuge',
                           onChange: (value) {
                             cubit.onFieldChanged(
-                              () => cubit.state.copyWith(
+                              () => state.copyWith(
                                 telefonoTrabajoConyugue: value,
                               ),
                             );
@@ -301,8 +313,9 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         const Gap(30),
                         OutlineTextfieldWidget(
+                          key: const ValueKey('aniosLugarTrabajoConyuge'),
                           initialValue:
-                              cubit.state.aniosLugarTrabajoConyuge.toString(),
+                              state.aniosLugarTrabajoConyuge.toString(),
                           isRequired: true,
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
@@ -326,8 +339,9 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ),
                         const Gap(30),
                         OutlineTextfieldWidget(
-                          initialValue: cubit.state.ingresoMensualConyuge
-                              .toCurrencyString(
+                          key: const ValueKey('ingresoMensualConyuge'),
+                          initialValue:
+                              state.ingresoMensualConyuge.toCurrencyString(
                             mantissaLength: 0,
                           ),
                           isRequired: true,
@@ -355,9 +369,10 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ],
                       const Gap(30),
                       SearchDropdownWidget(
+                        key: const ValueKey('tipoDocumentoConyugue'),
                         selectedItem: Item(
-                          name: cubit.state.tipoDocumentoConyugue,
-                          value: cubit.state.tipoDocumentoConyugue,
+                          name: state.tipoDocumentoConyugue,
+                          value: state.tipoDocumentoConyugue,
                         ),
                         codigo: 'TIPODOCUMENTOPERSONA',
                         isRequired: true,
@@ -375,7 +390,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.documentoConyuge,
+                        key: const ValueKey('documentoConyuge'),
+                        initialValue: state.documentoConyuge,
                         isRequired: true,
                         validator: (value) =>
                             ClassValidator.validateRequired(value),
@@ -391,7 +407,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               documentoConyuge: value,
                             ),
                           );
@@ -399,7 +415,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       ),
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: cubit.state.actividadDescripcionConyugue,
+                        key: const ValueKey('actividadDescripcionConyugue'),
+                        initialValue: state.actividadDescripcionConyugue,
                         isRequired: true,
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -414,7 +431,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         title: 'Descripción de Actividad del Cónyuge',
                         onChange: (value) {
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               actividadDescripcionConyugue: value,
                             ),
                           );
@@ -423,8 +440,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                     ],
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue:
-                          cubit.state.ingresosNetos.toCurrencyString(),
+                      key: const ValueKey('ingresosNetos'),
+                      initialValue: state.ingresosNetos.toCurrencyString(),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateNotZero(value),
@@ -442,7 +459,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                             value.replaceAll(RegExp(r'[^0-9]'), '');
                         final ingresosNetos = int.tryParse(newValue) ?? 0;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             ingresosNetos: ingresosNetos,
                           ),
                         );
@@ -450,7 +467,8 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: cubit.state.exeperiencia.toString(),
+                      key: const ValueKey('exeperiencia'),
+                      initialValue: state.exeperiencia.toString(),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -465,7 +483,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                       onChange: (value) {
                         final newValue = value.replaceAll(',', '');
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             exeperiencia: int.tryParse(newValue) ?? 0,
                           ),
                         );

@@ -5,9 +5,9 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-Future<String?> openMotivoRechazoSheet(
+Future<String?> openCambiarGrupoNombreSheet(
   BuildContext context, {
-  String buttonText = 'Rechazar acta',
+  required String nombre,
 }) {
   final controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -48,20 +48,21 @@ Future<String?> openMotivoRechazoSheet(
 
                     const Gap(20),
 
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 26,
-                      backgroundColor: Color.fromARGB(255, 246, 207, 209),
-                      child: Icon(
-                        Icons.close_sharp,
+                      backgroundColor: Colors.grey.shade300,
+                      child: const Icon(
+                        Icons.edit,
                         size: 28,
-                        color: Colors.red,
+                        color: Colors.blue,
                       ),
                     ),
 
                     const Gap(16),
 
                     const Text(
-                      'Motivo de rechazo',
+                      'Cambiar nombre del grupo:',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -70,8 +71,18 @@ Future<String?> openMotivoRechazoSheet(
 
                     const Gap(6),
 
+                    Text(
+                      nombre,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.grey,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(6),
+
                     const Text(
-                      'Ingrese el el motivo del rechazo',
+                      'Ingrese el nombre del grupo',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey,
@@ -85,7 +96,7 @@ Future<String?> openMotivoRechazoSheet(
                     OutlineTextfieldWidget(
                       padding: EdgeInsets.zero,
                       textEditingController: controller,
-                      title: 'Motivo del rechazo',
+                      title: 'Nombre del Grupo',
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       icon: Icon(
@@ -106,9 +117,9 @@ Future<String?> openMotivoRechazoSheet(
                       height: 50,
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.check_circle_outline),
-                        label: Text(
-                          buttonText,
-                          style: const TextStyle(fontSize: 16),
+                        label: const Text(
+                          'Guardar',
+                          style: TextStyle(fontSize: 16),
                         ),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

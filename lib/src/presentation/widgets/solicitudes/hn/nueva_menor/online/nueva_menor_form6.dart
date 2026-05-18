@@ -34,153 +34,162 @@ class _NuevaMenorForm6State extends State<NuevaMenorForm6>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const MiCreditoProgress(
-              currentStep: 6,
-              steps: 7,
-            ),
-            const Gap(30),
-            Column(
+    return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
               children: [
-                if (cubit.state.paisCasaCodigo == 'HN') ...[
-                  CatalogoValorNacionalidad(
-                    where: cubit.state.paisCasaCodigo,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Departamento de Destino',
-                    codigo: 'DEP',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      setState(() {
-                        depWhereClause = item.valor;
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          departamentoDestinoCodigo: item.valor,
-                          departamentoDestinoCodigoNombre: item.nombre,
+                const MiCreditoProgress(
+                  currentStep: 6,
+                  steps: 7,
+                ),
+                const Gap(30),
+                Column(
+                  children: [
+                    if (state.paisCasaCodigo == 'HN') ...[
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('paisCasaCodigo'),
+                        where: cubit.state.paisCasaCodigo,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Departamento de Destino',
+                        codigo: 'DEP',
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          setState(() {
+                            depWhereClause = item.valor;
+                          });
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              departamentoDestinoCodigo: item.valor,
+                              departamentoDestinoCodigoNombre: item.nombre,
+                            ),
+                          );
+                        },
+                        title: 'Departamento de Destino',
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('depWhereClause'),
+                        where: depWhereClause,
+                        validator: (value) => ClassValidator.validateRequired(
+                          value?.valor,
                         ),
-                      );
-                    },
-                    title: 'Departamento de Destino',
-                  ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    where: depWhereClause,
-                    validator: (value) => ClassValidator.validateRequired(
-                      value?.valor,
-                    ),
-                    hintText: 'Municipio Destino',
-                    title: 'Municipio de Destino',
-                    codigo: 'MUN',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      setState(() {
-                        munWhereClause = item.valor;
-                      });
+                        hintText: 'Municipio Destino',
+                        title: 'Municipio de Destino',
+                        codigo: 'MUN',
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          setState(() {
+                            munWhereClause = item.valor;
+                          });
 
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          municipioDestinoCodigo: item.valor,
-                          municipioDestinoCodigoNombre: item.nombre,
-                        ),
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              municipioDestinoCodigo: item.valor,
+                              municipioDestinoCodigoNombre: item.nombre,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('munWhereClause'),
+                        where: munWhereClause,
+                        codigo: 'ALD',
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Aldea Destino',
+                        title: 'Aldea o Localidad de Destino',
+                        onChanged: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              aldeaDestinoCodigo: value?.valor,
+                              aldeaDestinoCodigoNombre: value?.nombre,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('caserioDestino'),
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      hintText: 'Caserío Destino',
+                      title: 'Caserío de Destino',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            caserioDestino: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('barrioDestino'),
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      hintText: 'Barrio Destino',
+                      title: 'Barrio o Colonia de Destino',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            barrioDestino: value,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const Gap(30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
                       );
                     },
                   ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    where: munWhereClause,
-                    codigo: 'ALD',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Aldea Destino',
-                    title: 'Aldea o Localidad de Destino',
-                    onChanged: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          aldeaDestinoCodigo: value?.valor,
-                          aldeaDestinoCodigoNombre: value?.nombre,
-                        ),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
                       );
                     },
+                    text: 'Anterior',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
                   ),
-                ],
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
-                  ],
-                  hintText: 'Caserío Destino',
-                  title: 'Caserío de Destino',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        caserioDestino: value,
-                      ),
-                    );
-                  },
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
-                  ],
-                  hintText: 'Barrio Destino',
-                  title: 'Barrio o Colonia de Destino',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        barrioDestino: value,
-                      ),
-                    );
-                  },
-                ),
+                const Gap(20),
               ],
             ),
-            const Gap(30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Anterior',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

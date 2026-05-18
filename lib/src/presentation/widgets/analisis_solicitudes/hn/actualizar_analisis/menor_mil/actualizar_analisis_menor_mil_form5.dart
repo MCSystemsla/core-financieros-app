@@ -275,8 +275,8 @@ class _ActualizarAnalisisMenorMilForm5State
                     ),
                     codigo: 'EMPLEADOS',
                     title: 'Empleado que verifica',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
+                    validator: (value) => ClassValidator.validateRequired(
+                        value?.value.toString()),
                     onChanged: (value) {
                       // cubit.onFieldChanged(
                       //   () => cubit.state.copyWith(
@@ -461,8 +461,8 @@ class _ActualizarAnalisisMenorMilForm5State
                     ),
                     codigo: 'EMPLEADOS',
                     title: 'Empleado que verifica 2',
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
+                    validator: (value) => ClassValidator.validateRequired(
+                        value?.value.toString()),
                     onChanged: (value) {
                       // cubit.onFieldChanged(() => state.copyWith(
                       //       objEmpleadoVerificaReferenciaId2: value?.value,

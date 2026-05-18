@@ -643,7 +643,7 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
 
       // 4. Envío con Timeout
       final streamedResponse =
-          await request.send().timeout(const Duration(seconds: 30));
+          await request.send().timeout(const Duration(seconds: 60));
       final response = await http.Response.fromStream(streamedResponse);
 
       // 5. Manejo de respuesta
@@ -667,7 +667,8 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
 
   /// Helper para procesar la respuesta y evitar duplicar lógica
   Future<(bool, String)> _procesarRespuestaServidor(
-      http.Response response) async {
+    http.Response response,
+  ) async {
     Map<String, dynamic> jsonBody;
 
     try {

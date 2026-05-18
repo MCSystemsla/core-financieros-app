@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/rechazar_solicitud/rechazar_solicitud_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 
@@ -666,5 +667,46 @@ class GetSolicitudDataNuevaEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'TipoSolicitud': tipoSolicitud,
         'SolicitudID': idSolicitud.toString(),
+      };
+}
+
+class RechazarSolicitudHnEndpoint extends Endpoint {
+  final RechazarSolicitudHn data;
+  RechazarSolicitudHnEndpoint({required this.data});
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/rechazar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class CambiarGrupoNombreEndpoint extends Endpoint {
+  final String nombreGrupo;
+  final int codigoGrupo;
+  CambiarGrupoNombreEndpoint({
+    required this.nombreGrupo,
+    required this.codigoGrupo,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/grupales/actualizar-grupo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'Nombre': nombreGrupo,
+        'CodigoGrupo': codigoGrupo.toString(),
       };
 }

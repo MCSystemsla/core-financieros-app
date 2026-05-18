@@ -11,7 +11,9 @@ enum TypeAction {
   aprobarComiteGrupal('APROBARCOMITEGRUPAL'),
   autorizacionSolicitudGrupal('AUTORIZARSOLICITUDGRUPAL'),
   asignacionSolicitudGrupal('ASIGNARSOLICITUDGRUPAL'),
-  moduloOtp('MODULOOTP');
+  moduloOtp('MODULOOTP'),
+  rechazarSolicitud('SOLICITUDCREDITORECHAZAR'),
+  supervisionDeCredito('SUPERVISIONCREDITO');
 
   final String codigo;
 

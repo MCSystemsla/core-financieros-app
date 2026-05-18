@@ -638,7 +638,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                         'CEDULAIDENTIDAD') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
-                        initialValue: fechaEmisionCedula?.selectorFormat(),
                         readOnly: true,
                         onTap: () => selectEmisionFecha(context),
                         validator: (value) => ClassValidator.validateRequired(
@@ -654,7 +653,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                     ],
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: _selectedDate?.selectorFormat(),
                       readOnly: true,
                       onTap: () => selectDate(context),
                       validator: (value) => ClassValidator.validateRequired(
@@ -670,7 +668,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: fechaNacimiento?.selectorFormat(),
                       readOnly: true,
                       onTap: () => selectFechaNacimiento(context),
                       validator: (value) => ClassValidator.validateRequired(

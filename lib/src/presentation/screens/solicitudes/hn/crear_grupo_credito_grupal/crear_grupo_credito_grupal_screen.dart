@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/select
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/filters/filter_grupos_activos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/cambiar_grupo_nombre_modal_shee_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -29,17 +30,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../bloc/solicitudes/hn/cubit/cambiar_nombre_grupo/cambiar_nombre_grupo_cubit.dart';
+
 class CrearGrupoCreditoGrupalScreen extends StatelessWidget {
   const CrearGrupoCreditoGrupalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final repository = SolicitudesCreditoHnRepositoryImpl();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (ctx) => GruposActivosCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
           )..getGruposActivos(),
+        ),
+        BlocProvider(
+          create: (ctx) => CambiarNombreGrupoCubit(
+            repository,
+          ),
         ),
       ],
       child: Scaffold(
@@ -115,8 +124,11 @@ class _ListData extends StatelessWidget {
             showModalBottomSheet(
               isScrollControlled: true,
               context: context,
-              builder: (ctx) => _ModalSheetGrupales(
-                grupoActivoData: grupoActivoData[index],
+              builder: (ctx) => BlocProvider.value(
+                value: context.read<CambiarNombreGrupoCubit>(),
+                child: _ModalSheetGrupales(
+                  grupoActivoData: grupoActivoData[index],
+                ),
               ),
             );
           },
@@ -310,75 +322,126 @@ class _ModalSheetGrupales extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
+          child: ListView(
+            controller: controller,
             children: [
-              Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
+              Center(
+                child: Container(
+                  width: 42,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
               const Gap(18),
-              ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                controller: controller,
-                children: [
-                  if (actions.contains(
-                      TypeAction.asignacionSolicitudGrupal.codigo)) ...[
-                    SelectableCardItem(
-                      icon: Icons.group_add_rounded,
-                      color: const Color(0xFF2E7D32),
-                      title: 'Asignacion de Solicitud Grupal',
-                      subtitle: 'Asignar solicitud a grupo',
-                      onTap: () => {
-                        context.pushTransparentRoute(
-                          AsignacionSolicitudGrupalHnScreen(
-                            grupoActivoData: grupoActivoData,
+              BlocConsumer<CambiarNombreGrupoCubit, CambiarNombreGrupoState>(
+                listener: (context, state) {
+                  if (state.status == Status.done) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: state.successMessage,
+                      onDone: () {
+                        context.pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const CrearGrupoCreditoGrupalScreen(),
                           ),
-                        ),
+                        );
                       },
-                    ),
-                  ],
-                  if (actions.contains(
-                      TypeAction.autorizacionSolicitudGrupal.codigo)) ...[
-                    SelectableCardItem(
-                      icon: Icons.verified_user,
-                      color: Colors.indigo,
-                      title: 'Autorizar Solicitud Grupal',
-                      subtitle: 'Autorizar solicitud grupal',
-                      onTap: () => {
-                        context.pushTransparentRoute(
-                          AutorizacionSolicitudGrupalScreen(
-                            grupoActivoData: grupoActivoData,
-                          ),
-                        ),
-                      },
-                    ),
-                  ],
-                  if (actions
-                      .contains(TypeAction.aprobarComiteGrupal.codigo)) ...[
-                    SelectableCardItem(
-                      icon: Icons.checklist_rounded,
-                      color: Colors.deepPurple,
-                      title: 'Comité Grupal',
-                      subtitle: 'Aprobar comité grupal',
-                      onTap: () => {
-                        context.pushTransparentRoute(
-                          // ComiteGrupalScreenHn(
-                          //   grupoActivoData: grupoActivoData,
-                          // ),
-                          V2ComiteGrupalScreenHn(
-                            grupoActivoData: grupoActivoData,
-                          ),
-                        ),
-                      },
-                    ),
-                  ],
-                ],
+                    ).showDialog(
+                      context,
+                      dialogType: DialogType.success,
+                    );
+                  }
+                  if (state.status == Status.error) {
+                    CustomAlertDialog(
+                      context: context,
+                      title: state.errorMsg,
+                      onDone: () => context.pop(),
+                    ).showDialog(
+                      context,
+                      dialogType: DialogType.error,
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return SelectableCardItem(
+                    isLoading: state.status == Status.inProgress,
+                    icon: Icons.edit,
+                    color: Colors.blue,
+                    title: 'Cambiar Nombre del Grupo',
+                    subtitle: 'Editar nombre del grupo',
+                    onTap: () async {
+                      final nombreDelGrupo = await openCambiarGrupoNombreSheet(
+                        context,
+                        nombre: grupoActivoData.nombreCompleto,
+                      );
+                      if (nombreDelGrupo == null) return;
+                      if (!context.mounted) return;
+                      context
+                          .read<CambiarNombreGrupoCubit>()
+                          .cambiarGrupoNombre(
+                            codigoGrupo: int.parse(grupoActivoData.codigo),
+                            nombreGrupo: nombreDelGrupo,
+                          );
+                    },
+                  );
+                },
               ),
+              if (actions
+                  .contains(TypeAction.asignacionSolicitudGrupal.codigo)) ...[
+                SelectableCardItem(
+                  icon: Icons.group_add_rounded,
+                  color: const Color(0xFF2E7D32),
+                  title: 'Asignacion de Solicitud Grupal',
+                  subtitle: 'Asignar solicitud a grupo',
+                  onTap: () => {
+                    context.pushTransparentRoute(
+                      AsignacionSolicitudGrupalHnScreen(
+                        grupoActivoData: grupoActivoData,
+                      ),
+                    ),
+                  },
+                ),
+              ],
+              if (actions
+                  .contains(TypeAction.autorizacionSolicitudGrupal.codigo)) ...[
+                SelectableCardItem(
+                  icon: Icons.verified_user,
+                  color: Colors.indigo,
+                  title: 'Autorizar Solicitud Grupal',
+                  subtitle: 'Autorizar solicitud grupal',
+                  onTap: () => {
+                    context.pushTransparentRoute(
+                      AutorizacionSolicitudGrupalScreen(
+                        grupoActivoData: grupoActivoData,
+                      ),
+                    ),
+                  },
+                ),
+              ],
+              if (actions.contains(TypeAction.aprobarComiteGrupal.codigo)) ...[
+                SelectableCardItem(
+                  icon: Icons.checklist_rounded,
+                  color: Colors.deepPurple,
+                  title: 'Comité Grupal',
+                  subtitle: 'Aprobar comité grupal',
+                  onTap: () => {
+                    context.pushTransparentRoute(
+                      // ComiteGrupalScreenHn(
+                      //   grupoActivoData: grupoActivoData,
+                      // ),
+                      V2ComiteGrupalScreenHn(
+                        grupoActivoData: grupoActivoData,
+                      ),
+                    ),
+                  },
+                ),
+              ],
             ],
           ),
         ).fadeIn();

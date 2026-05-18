@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
@@ -13,7 +12,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -66,6 +64,22 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
       selectedImage2 = XFile(selectedImage2Path!);
       selectedImage3 = XFile(selectedImage3Path!);
     }
+  }
+
+  Future<String> _savePath(XFile image) async {
+    final appDir = await getApplicationDocumentsDirectory();
+
+    final String folderPath = '${appDir.path}/imagenes_negocio';
+
+    final Directory businessFolder = Directory(folderPath);
+    await businessFolder.create(recursive: true);
+
+    final String finalPath = '$folderPath/${image.name}';
+    log('📂 Ruta final: $finalPath');
+
+    await File(image.path).copy(finalPath);
+
+    return finalPath;
   }
 
   @override
@@ -247,93 +261,74 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
       ),
     );
   }
-
-  Future<String> _savePath(XFile image) async {
-    final appDir = await getApplicationDocumentsDirectory();
-
-    // 1. Definimos la ruta de la carpeta específica
-    final String folderPath = '${appDir.path}/imagenes_negocio';
-
-    // 2. Creamos la carpeta (si ya existe, no hace nada)
-    final Directory businessFolder = Directory(folderPath);
-    await businessFolder.create(recursive: true);
-
-    // 3. Definimos la ruta final del archivo usando el nombre original
-    final String finalPath = '$folderPath/${image.name}';
-    log('📂 Ruta final: $finalPath');
-
-    // 4. Copiamos el archivo y retornamos solo el String de la ruta
-    await File(image.path).copy(finalPath);
-
-    return finalPath;
-  }
 }
+// Comentado porque no se usa
 
-class _SelectTypePhotoDestination extends StatelessWidget {
-  const _SelectTypePhotoDestination();
+// class _SelectTypePhotoDestination extends StatelessWidget {
+//   const _SelectTypePhotoDestination();
 
-  @override
-  Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      minChildSize: 0.3,
-      maxChildSize: 0.5,
-      expand: false,
-      builder: (_, controller) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xfff9fafb),
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(28),
-            ),
-            boxShadow: [
-              BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.12),
-                blurRadius: 25,
-                offset: const Offset(0, -3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              const Gap(18),
-              Expanded(
-                child: ListView(
-                  controller: controller,
-                  children: [
-                    SelectableCardItem(
-                      userHaveDataAlready: false,
-                      icon: Icons.camera_alt_outlined,
-                      color: const Color(0xff1554F6),
-                      title: 'Camara',
-                      subtitle: 'Agregar foto desde camara',
-                      onTap: () {},
-                    ),
-                    SelectableCardItem(
-                      userHaveDataAlready: false,
-                      icon: Icons.add_photo_alternate,
-                      color: const Color(0xff1554F6),
-                      title: 'Galeria',
-                      subtitle: 'Agregar foto desde galeria',
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ).fadeIn();
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return DraggableScrollableSheet(
+//       initialChildSize: 0.5,
+//       minChildSize: 0.3,
+//       maxChildSize: 0.5,
+//       expand: false,
+//       builder: (_, controller) {
+//         return Container(
+//           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+//           decoration: BoxDecoration(
+//             color: const Color(0xfff9fafb),
+//             borderRadius: const BorderRadius.vertical(
+//               top: Radius.circular(28),
+//             ),
+//             boxShadow: [
+//               BoxShadow(
+//                 // ignore: deprecated_member_use
+//                 color: Colors.black.withOpacity(0.12),
+//                 blurRadius: 25,
+//                 offset: const Offset(0, -3),
+//               ),
+//             ],
+//           ),
+//           child: Column(
+//             children: [
+//               Container(
+//                 width: 42,
+//                 height: 5,
+//                 decoration: BoxDecoration(
+//                   color: Colors.grey.shade300,
+//                   borderRadius: BorderRadius.circular(12),
+//                 ),
+//               ),
+//               const Gap(18),
+//               Expanded(
+//                 child: ListView(
+//                   controller: controller,
+//                   children: [
+//                     SelectableCardItem(
+//                       userHaveDataAlready: false,
+//                       icon: Icons.camera_alt_outlined,
+//                       color: const Color(0xff1554F6),
+//                       title: 'Camara',
+//                       subtitle: 'Agregar foto desde camara',
+//                       onTap: () {},
+//                     ),
+//                     SelectableCardItem(
+//                       userHaveDataAlready: false,
+//                       icon: Icons.add_photo_alternate,
+//                       color: const Color(0xff1554F6),
+//                       title: 'Galeria',
+//                       subtitle: 'Agregar foto desde galeria',
+//                       onTap: () {},
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ).fadeIn();
+//       },
+//     );
+//   }
+// }

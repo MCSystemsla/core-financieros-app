@@ -63,299 +63,319 @@ class _NuevaMenorForm2State extends State<NuevaMenorForm2>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const MiCreditoProgress(
-              currentStep: 2,
-              steps: 7,
-            ),
-            const Gap(30),
-            Column(
+    return BlocBuilder<SolicitudNuevaMenorHnCubit, SolicitudNuevaMenorHnState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
               children: [
-                CatalogoValorNacionalidad(
-                  selectedItem: ItemNacionalidad(
-                    id: 0,
-                    nombre: widget.userByDocumentHn.pais ?? 'Honduras',
-                    valor: widget.userByDocumentHn.pais ?? 'HN',
-                    relacion: '',
-                  ),
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.valor),
-                  hintText: 'Ingresa País Casa',
-                  title: 'País de domicilio del cliente',
-                  codigo: 'PAIS',
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    setState(() {
-                      depWhereClause = item.valor;
-                    });
-                    if (item.valor != 'HN') {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          departamentoCasaCodigo: item.valor,
-                          municipioCasaCodigo: item.valor,
-                          aldeaCasaCodigo: item.valor,
-                          departamentoNegocioCodigo: item.valor,
-                          municipioNegocioCodigo: item.valor,
-                          aldeaNegocioCodigo: item.valor,
-                          departamentoDestinoCodigo: item.valor,
-                          municipioDestinoCodigo: item.valor,
-                          aldeaDestinoCodigo: item.valor,
-                        ),
-                      );
-                    }
+                const MiCreditoProgress(
+                  currentStep: 2,
+                  steps: 7,
+                ),
+                const Gap(30),
+                Column(
+                  children: [
+                    CatalogoValorNacionalidad(
+                      key: const ValueKey('paisCasaCodigo'),
+                      selectedItem: ItemNacionalidad(
+                        id: 0,
+                        nombre: widget.userByDocumentHn.pais ?? 'Honduras',
+                        valor: widget.userByDocumentHn.pais ?? 'HN',
+                        relacion: '',
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Ingresa País Casa',
+                      title: 'País de domicilio del cliente',
+                      codigo: 'PAIS',
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        setState(() {
+                          depWhereClause = item.valor;
+                        });
+                        if (item.valor != 'HN') {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              departamentoCasaCodigo: item.valor,
+                              municipioCasaCodigo: item.valor,
+                              aldeaCasaCodigo: item.valor,
+                              departamentoNegocioCodigo: item.valor,
+                              municipioNegocioCodigo: item.valor,
+                              aldeaNegocioCodigo: item.valor,
+                              departamentoDestinoCodigo: item.valor,
+                              municipioDestinoCodigo: item.valor,
+                              aldeaDestinoCodigo: item.valor,
+                            ),
+                          );
+                        }
 
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        paisCasaCodigo: item.valor,
-                        paisCasaCodigoNombre: item.nombre,
-                      ),
-                    );
-                  },
-                ),
-                if (cubit.state.paisCasaCodigo == 'HN') ...[
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    selectedItem: ItemNacionalidad(
-                      id: 0,
-                      valor: widget.userByDocumentHn.departamento ?? '',
-                      nombre: widget.userByDocumentHn.departamento ?? '',
-                      relacion: '',
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            paisCasaCodigo: item.valor,
+                            paisCasaCodigoNombre: item.nombre,
+                          ),
+                        );
+                      },
                     ),
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Ingresa Departamento Casa',
-                    title: 'Departamento de domicilio del cliente',
-                    codigo: 'DEP',
-                    where: depWhereClause,
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      setState(() {
-                        munWhereClause = item.valor;
-                      });
+                    if (state.paisCasaCodigo == 'HN') ...[
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('departamentoCasaCodigo'),
+                        selectedItem: ItemNacionalidad(
+                          id: 0,
+                          valor: widget.userByDocumentHn.departamento ?? '',
+                          nombre: widget.userByDocumentHn.departamento ?? '',
+                          relacion: '',
+                        ),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Ingresa Departamento Casa',
+                        title: 'Departamento de domicilio del cliente',
+                        codigo: 'DEP',
+                        where: depWhereClause,
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          setState(() {
+                            munWhereClause = item.valor;
+                          });
 
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          departamentoCasaCodigo: item.valor,
-                          departamentoCasaCodigoNombre: item.nombre,
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              departamentoCasaCodigo: item.valor,
+                              departamentoCasaCodigoNombre: item.nombre,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('municipioCasaCodigo'),
+                        selectedItem: ItemNacionalidad(
+                          id: 0,
+                          valor: widget.userByDocumentHn.municipio ?? '',
+                          nombre: widget.userByDocumentHn.municipio ?? '',
+                          relacion: '',
                         ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    selectedItem: ItemNacionalidad(
-                      id: 0,
-                      valor: widget.userByDocumentHn.municipio ?? '',
-                      nombre: widget.userByDocumentHn.municipio ?? '',
-                      relacion: '',
+                        where: munWhereClause,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Ingresa Municipio Casa',
+                        title: 'Municipio de domicilio del cliente',
+                        codigo: 'MUN',
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          setState(() {
+                            aldeaWhereClause = item.valor;
+                          });
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              municipioCasaCodigo: item.valor,
+                              municipioCasaCodigoNombre: item.nombre,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        key: const ValueKey('aldeaCasaCodigo'),
+                        where: aldeaWhereClause,
+                        enabled: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Ingresa Aldea Casa',
+                        title: 'Aldea de domicilio del cliente',
+                        onChanged: (value) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              aldeaCasaCodigo: value?.valor,
+                              aldeaCasaCodigoNombre: value?.nombre,
+                            ),
+                          );
+                        },
+                        codigo: 'ALD',
+                      ),
+                    ],
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('direccionCasa'),
+                      isRequired: true,
+                      initialValue: widget.userByDocumentHn.direccion,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Ingresa Dirección Casa',
+                      icon:
+                          Icon(Icons.home, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.streetAddress,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Dirección de domicilio del cliente',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            direccionCasa: value,
+                          ),
+                        );
+                      },
                     ),
-                    where: munWhereClause,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Ingresa Municipio Casa',
-                    title: 'Municipio de domicilio del cliente',
-                    codigo: 'MUN',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      setState(() {
-                        aldeaWhereClause = item.valor;
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          municipioCasaCodigo: item.valor,
-                          municipioCasaCodigoNombre: item.nombre,
-                        ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('barrioCasa'),
+                      isRequired: true,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Ingresa Barrio Casa',
+                      title: 'Barrio o colonia de residencia',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            barrioCasa: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      key: const ValueKey('condicionCasaCodigo'),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Ingresa Condición Casa',
+                      title: 'Condición de vivienda',
+                      codigo: 'TIPOVIVIENDA',
+                      flavor: global<FlavorCubit>().state.flavor,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            condicionCasaCodigo: item.value,
+                            condicionCasaCodigoNombre: item.name,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('anosResidirCasa'),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Ingresa Años Residir Casa',
+                      icon: Icon(Icons.calendar_today,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      title: 'Años de residencia en el domicilio actual',
+                      onChange: (value) {
+                        final newValue = value.replaceAll(',', '');
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            anosResidirCasa: int.tryParse(newValue) ?? 0,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      key: const ValueKey('personasACargo'),
+                      isRequired: true,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Ingresa Personas a cargo',
+                      icon:
+                          Icon(Icons.group, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      title: 'Personas a cargo',
+                      onChange: (value) {
+                        final newValue = value.replaceAll(',', '');
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            personasACargo: int.tryParse(newValue) ?? 0,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    SheetSearchDropdown(
+                      key: const ValueKey('ubicacion'),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Ingresa Ubicación',
+                      title: 'Ubicación del domicilio',
+                      enabled: true,
+                      isRequired: true,
+                      items: const [
+                        Item(name: 'Urbano', value: 'URB'),
+                        Item(name: 'Rural', value: 'RUR'),
+                      ],
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            ubicacion: value.value,
+                            ubicacionCodigo: value.value,
+                            ubicacionCodigoNombre: value.name,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const Gap(30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
                       );
                     },
                   ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    where: aldeaWhereClause,
-                    enabled: true,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Ingresa Aldea Casa',
-                    title: 'Aldea de domicilio del cliente',
-                    onChanged: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          aldeaCasaCodigo: value?.valor,
-                          aldeaCasaCodigoNombre: value?.nombre,
-                        ),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
                       );
                     },
-                    codigo: 'ALD',
+                    text: 'Anterior',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
                   ),
-                ],
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  initialValue: widget.userByDocumentHn.direccion,
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Dirección Casa',
-                  icon: Icon(Icons.home, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.streetAddress,
-                  textCapitalization: TextCapitalization.words,
-                  title: 'Dirección de domicilio del cliente',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        direccionCasa: value,
-                      ),
-                    );
-                  },
                 ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                    LengthLimitingTextInputFormatter(50),
-                  ],
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Barrio Casa',
-                  title: 'Barrio o colonia de residencia',
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        barrioCasa: value,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                SearchDropdownWidget(
-                  isRequired: true,
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Ingresa Condición Casa',
-                  title: 'Condición de vivienda',
-                  codigo: 'TIPOVIVIENDA',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        condicionCasaCodigo: item.value,
-                        condicionCasaCodigoNombre: item.name,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Años Residir Casa',
-                  icon: Icon(Icons.calendar_today,
-                      color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  title: 'Años de residencia en el domicilio actual',
-                  onChange: (value) {
-                    final newValue = value.replaceAll(',', '');
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        anosResidirCasa: int.tryParse(newValue) ?? 0,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  isRequired: true,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  hintText: 'Ingresa Personas a cargo',
-                  icon: Icon(Icons.group, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  title: 'Personas a cargo',
-                  onChange: (value) {
-                    final newValue = value.replaceAll(',', '');
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        personasACargo: int.tryParse(newValue) ?? 0,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                SheetSearchDropdown(
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  hintText: 'Ingresa Ubicación',
-                  title: 'Ubicación del domicilio',
-                  enabled: true,
-                  isRequired: true,
-                  items: const [
-                    Item(name: 'Urbano', value: 'URB'),
-                    Item(name: 'Rural', value: 'RUR'),
-                  ],
-                  onChanged: (value) {
-                    if (value == null || !mounted) return;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        ubicacion: value.value,
-                        ubicacionCodigo: value.value,
-                        ubicacionCodigoNombre: value.name,
-                      ),
-                    );
-                  },
-                ),
+                const Gap(20),
               ],
             ),
-            const Gap(30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Anterior',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

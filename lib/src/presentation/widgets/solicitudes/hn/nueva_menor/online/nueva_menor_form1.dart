@@ -356,6 +356,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('primerNombre'),
                       isRequired: true,
                       initialValue: widget.userByDocumentHn?.primerNombre,
                       hintText: 'Ingresa Nombre 1',
@@ -380,6 +381,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('segundoNombre'),
                       initialValue: widget.userByDocumentHn?.segundoNombre,
                       hintText: 'Ingresa Nombre 2',
                       // validator: (value) => ClassValidator.validateRequired(value),
@@ -402,6 +404,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('tercerNombre'),
                       hintText: 'Ingresa Nombre 3',
                       icon: Icon(Icons.person,
                           color: AppColors.getPrimaryColor()),
@@ -423,6 +426,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('primerApellido'),
                       isRequired: true,
                       initialValue: widget.userByDocumentHn?.primerApellido,
                       hintText: 'Ingresa Apellido 1',
@@ -447,6 +451,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('segundoApellido'),
                       initialValue: widget.userByDocumentHn?.segundoApellido,
                       hintText: 'Ingresa Apellido 2',
                       icon: Icon(Icons.person,
@@ -468,6 +473,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('tercerApellido'),
                       hintText: 'Ingresa Apellido 3',
                       icon: Icon(Icons.person,
                           color: AppColors.getPrimaryColor()),
@@ -488,6 +494,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('nombrePublico'),
                       hintText: 'Nombre Publico',
                       icon: Icon(
                         Icons.person,
@@ -512,6 +519,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('tipoDocumento'),
                       isRequired: true,
                       selectedItem: Item(
                         name: widget.userByDocumentHn?.tipoDocumento ?? '',
@@ -536,6 +544,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('tipoPersonaCnbs'),
                       isRequired: true,
                       selectedItem: const Item(
                         name: 'PERSONA NATURAL',
@@ -559,6 +568,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('cedula'),
                       isRequired: true,
                       readOnly: true,
                       initialValue: widget.userByDocumentHn?.cedula,
@@ -584,6 +594,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('rtn'),
                       hintText: 'Ingresa RTN',
                       icon: Icon(
                         Icons.confirmation_number,
@@ -606,6 +617,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                       },
                     ),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('email'),
                       maxLength: 50,
                       validator: (value) => ClassValidator.validateEmail(value),
                       icon: Icon(
@@ -626,6 +638,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      key: const ValueKey('paisEmisorCedulaCodigo'),
                       selectedItem: const ItemNacionalidad(
                         id: 0,
                         valor: 'HN',
@@ -651,6 +664,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                         'CEDULAIDENTIDAD') ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
+                        key: const ValueKey('fechaEmisionCedula'),
                         isRequired: true,
                         // initialValue: fechaEmisionCedula?.selectorFormat(),
                         validator: (value) => ClassValidator.validateRequired(
@@ -668,6 +682,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ],
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('fechaExpira'),
                       isRequired: true,
                       // initialValue: _selectedDate?.selectorFormat(),
                       validator: (value) => ClassValidator.validateRequired(
@@ -684,6 +699,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('fechaNacimiento'),
                       isRequired: true,
                       // initialValue: fechaNacimiento?.selectorFormat(),
                       validator: (value) => ClassValidator.validateRequired(
@@ -700,6 +716,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CountryInput(
+                      key: const ValueKey('celular'),
                       countryCodeInput: CountryCodeInput.hn,
                       maxLength: 50,
                       isRequired: true,
@@ -727,6 +744,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CountryInput(
+                      key: const ValueKey('telefono'),
                       countryCodeInput: CountryCodeInput.hn,
                       maxLength: 50,
                       isRequired: true,
@@ -751,6 +769,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('escolaridadCodigo'),
                       isRequired: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
@@ -770,6 +789,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
+                      key: const ValueKey('cantidadHijos'),
                       hintText: 'Ingresa Cantidad Hijos',
                       // validator: (value) => ClassValidator.validateRequired(value),
                       icon: Icon(Icons.family_restroom,
@@ -793,6 +813,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     SearchDropdownWidget(
+                      key: const ValueKey('sexo'),
                       isRequired: true,
                       selectedItem: Item(
                         name: widget.userByDocumentHn?.sexo ?? '',
@@ -815,6 +836,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      key: const ValueKey('paisNacimientoCodigo'),
                       selectedItem: const ItemNacionalidad(
                         id: 0,
                         valor: 'HN',
@@ -837,6 +859,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     SheetSearchDropdown(
+                      key: const ValueKey('tieneVinculosUsa'),
                       validator: (value) => ClassValidator.validateRequired(
                         value?.value,
                       ),
@@ -863,6 +886,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     if (tieneVinculosUsa) ...[
                       const Gap(30),
                       OutlineTextfieldWidget(
+                        key: const ValueKey('codigoUsa'),
                         validator: (value) => ClassValidator.validateRequired(
                           value,
                         ),
@@ -883,6 +907,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ],
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      key: const ValueKey('nacinalidadCodigo'),
                       selectedItem: const ItemNacionalidad(
                         id: 0,
                         nombre: 'Honduras',
@@ -906,6 +931,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      key: const ValueKey('nacinalidad2Codigo'),
                       hintText: 'Ingresa Nacionalidad 2',
                       title: 'Segunda Nacionalidad',
                       codigo: 'PAIS',
@@ -921,6 +947,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                     ),
                     const Gap(30),
                     CatalogoValorNacionalidad(
+                      key: const ValueKey('nacinalidad3Codigo'),
                       hintText: 'Ingresa Nacionalidad 3',
                       title: 'Tercera Nacionalidad',
                       codigo: 'PAIS',

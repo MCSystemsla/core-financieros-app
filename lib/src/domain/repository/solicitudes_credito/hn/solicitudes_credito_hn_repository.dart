@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/gr
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/solicitud_nueva_menor_hn.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/rechazar_solicitud/rechazar_solicitud_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/solicitud_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/update_solicitudes/nueva_menor/update_solicitud_nueva_menor_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/user_by_document/user_by_document.dart';
@@ -170,6 +171,13 @@ abstract class SolicitudesCreditoHnRepository {
     required ClientSignatureStatus clientSignatureStatus,
   });
   Future<int?> getRolId();
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudHn data,
+  });
+  Future<String> cambiarGrupoNombre({
+    required String nombreGrupo,
+    required int codigoGrupo,
+  });
 }
 
 class SolicitudesCreditoHnRepositoryImpl
@@ -1172,6 +1180,48 @@ class SolicitudesCreditoHnRepositoryImpl
       }
       final data = resp['data'] as int?;
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudHn data,
+  }) async {
+    final endpoint = RechazarSolicitudHnEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message'] as String;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> cambiarGrupoNombre({
+    required String nombreGrupo,
+    required int codigoGrupo,
+  }) async {
+    final endpoint = CambiarGrupoNombreEndpoint(
+      nombreGrupo: nombreGrupo,
+      codigoGrupo: codigoGrupo,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message'] as String;
     } catch (e) {
       _logger.e(e);
       rethrow;

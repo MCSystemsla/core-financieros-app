@@ -119,7 +119,8 @@ class _CarteraContentWidget extends StatelessWidget {
               ),
               ModuleCard(
                 visible: (flavor == Flavor.honduras &&
-                    state.connectionStatus == ConnectionStatus.connected),
+                    state.connectionStatus == ConnectionStatus.connected &&
+                    actions.contains(TypeAction.supervisionDeCredito.codigo)),
                 onTap: () {
                   Navigator.push(
                     context,
