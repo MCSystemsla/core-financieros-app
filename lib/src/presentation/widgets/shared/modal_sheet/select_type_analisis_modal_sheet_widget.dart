@@ -92,7 +92,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
       child: DraggableScrollableSheet(
         initialChildSize: 0.7,
         minChildSize: 0.45,
-        maxChildSize: 0.75,
+        maxChildSize: 0.9,
         expand: false,
         builder: (_, controller) {
           return Container(
@@ -120,370 +120,357 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                   'Ubicacion': state.tieneUbicacion,
                   'Imagenes del negocio': state.tieneFotoNegocio,
                 };
-                return Column(
+                return ListView(
+                  controller: controller,
                   children: [
-                    Container(
-                      width: 42,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(12),
+                    Center(
+                      child: Container(
+                        width: 42,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                     const Gap(18),
-                    Expanded(
-                      child: ListView(
-                        controller: controller,
-                        children: [
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneAnalisis,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.dashboard_customize_rounded,
-                            color: const Color(0xff1554F6),
-                            title: 'Registrar Analisis',
-                            subtitle: 'Crear analisis de crédito',
-                            onTap: () {
-                              if (state.tieneAnalisis) {
-                                CustomAlertDialog(
-                                  context: context,
-                                  title:
-                                      'No es posible continuar: el análisis ya figura como registrado en sistema.',
-                                  onDone: () => context.pop(),
-                                ).showDialog(
-                                  context,
-                                  dialogType: DialogType.infoReverse,
-                                );
-                                return;
-                              }
-                              context.pop();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      AnalisisSolicitudesInterceptorHN(
-                                    index: index,
-                                    type: tipoSolicitud!,
-                                    title: title,
-                                    subtitle: subtitle,
-                                    description: description,
-                                    numeroSolicitud: numeroSolicitud,
-                                    tipoSolicitudString: tipoSolicitudString,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          if (state.tieneAnalisis)
-                            SelectableCardItem(
-                              userHaveDataAlready: false,
-                              isLoading: state.status == Status.inProgress,
-                              icon: Icons.edit,
-                              color: const Color(0xff1554F6),
-                              title: 'Modificar Analisis',
-                              subtitle: 'Modificar analisis de crédito',
-                              onTap: () {
-                                context.pop();
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        ActualizarAnalisisHnInterceptor(
-                                      type: tipoSolicitud!,
-                                      numeroSolicitud: numeroSolicitud,
-                                      tipoSolicitudString: tipoSolicitudString,
-                                      title: title,
-                                      subtitle: subtitle,
-                                      description: description,
-                                      index: index,
-                                    ),
-                                  ),
-                                );
-                              },
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tieneAnalisis,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.dashboard_customize_rounded,
+                      color: const Color(0xff1554F6),
+                      title: 'Registrar Analisis',
+                      subtitle: 'Crear analisis de crédito',
+                      onTap: () {
+                        if (state.tieneAnalisis) {
+                          CustomAlertDialog(
+                            context: context,
+                            title:
+                                'No es posible continuar: el análisis ya figura como registrado en sistema.',
+                            onDone: () => context.pop(),
+                          ).showDialog(
+                            context,
+                            dialogType: DialogType.infoReverse,
+                          );
+                          return;
+                        }
+                        context.pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AnalisisSolicitudesInterceptorHN(
+                              index: index,
+                              type: tipoSolicitud!,
+                              title: title,
+                              subtitle: subtitle,
+                              description: description,
+                              numeroSolicitud: numeroSolicitud,
+                              tipoSolicitudString: tipoSolicitudString,
                             ),
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tienePlanInversion,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.business_center_outlined,
-                            color: const Color(0xffF6153F),
-                            title: 'Registrar Plan de inversion',
-                            subtitle: 'Crear plan de inversion',
-                            onTap: () => {
-                              context.pop(),
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => PlanInversionScreen(
-                                    numeroSolicitud: int.parse(numeroSolicitud),
-                                  ),
-                                ),
+                          ),
+                        );
+                      },
+                    ),
+                    if (state.tieneAnalisis)
+                      SelectableCardItem(
+                        userHaveDataAlready: false,
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.edit,
+                        color: const Color(0xff1554F6),
+                        title: 'Modificar Analisis',
+                        subtitle: 'Modificar analisis de crédito',
+                        onTap: () {
+                          context.pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ActualizarAnalisisHnInterceptor(
+                                type: tipoSolicitud!,
+                                numeroSolicitud: numeroSolicitud,
+                                tipoSolicitudString: tipoSolicitudString,
+                                title: title,
+                                subtitle: subtitle,
+                                description: description,
+                                index: index,
                               ),
-                            },
-                          ),
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneFotoNegocio,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.photo_library_outlined,
-                            color: const Color(0xff455A64),
-                            title: 'Registrar Imágenes del negocio',
-                            subtitle: 'Ingresa fotografías del negocio',
-                            onTap: () {
-                              if (state.tieneFotoNegocio) {
-                                CustomAlertDialog(
-                                  context: context,
-                                  title:
-                                      'No es posible continuar: las imagenes del negocio ya figuran como registrado en sistema.',
-                                  onDone: () => context.pop(),
-                                ).showDialog(
-                                  context,
-                                  dialogType: DialogType.infoReverse,
-                                );
-                                return;
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => ImagenesNegocioHnScreen(
-                                    numeroSolicitud: numeroSolicitud,
-                                    cedulaCliente: cedulaCliente,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          if (!esGrupal) ...[
-                            SelectableCardItem(
-                              userHaveDataAlready: state.tieneFiadores,
-                              isLoading: state.status == Status.inProgress,
-                              icon: Icons.swap_horiz_rounded,
-                              color: const Color(0xff0D9488),
-                              title: 'Registrar Fiadores',
-                              subtitle: 'Crear Terceros',
-                              onTap: () => {
-                                context.pop(),
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => FiadoresHnScreen(
-                                      numeroSolicitud:
-                                          int.tryParse(numeroSolicitud) ?? 0,
-                                      tipoSolicitud: tipoSolicitud!
-                                          .toTypeForInterceptorString(),
-                                    ),
-                                  ),
-                                )
-                              },
                             ),
-                            SelectableCardItem(
-                              userHaveDataAlready: state.tieneGarantia,
-                              isLoading: state.status == Status.inProgress,
-                              icon: Icons.pie_chart_rounded,
-                              color: const Color(0xff6D28D9),
-                              title: 'Registrar Garantías',
-                              subtitle: 'Crear Garantías',
-                              onTap: () => {
-                                context.pop(),
-                                Navigator.push(
+                          );
+                        },
+                      ),
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tienePlanInversion,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.business_center_outlined,
+                      color: const Color(0xffF6153F),
+                      title: 'Registrar Plan de inversion',
+                      subtitle: 'Crear plan de inversion',
+                      onTap: () => {
+                        context.pop(),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => PlanInversionScreen(
+                              numeroSolicitud: int.parse(numeroSolicitud),
+                            ),
+                          ),
+                        ),
+                      },
+                    ),
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tieneFotoNegocio,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.photo_library_outlined,
+                      color: const Color(0xff455A64),
+                      title: 'Registrar Imágenes del negocio',
+                      subtitle: 'Ingresa fotografías del negocio',
+                      onTap: () {
+                        if (state.tieneFotoNegocio) {
+                          CustomAlertDialog(
+                            context: context,
+                            title:
+                                'No es posible continuar: las imagenes del negocio ya figuran como registrado en sistema.',
+                            onDone: () => context.pop(),
+                          ).showDialog(
+                            context,
+                            dialogType: DialogType.infoReverse,
+                          );
+                          return;
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => ImagenesNegocioHnScreen(
+                              numeroSolicitud: numeroSolicitud,
+                              cedulaCliente: cedulaCliente,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    if (!esGrupal) ...[
+                      SelectableCardItem(
+                        userHaveDataAlready: state.tieneFiadores,
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.swap_horiz_rounded,
+                        color: const Color(0xff0D9488),
+                        title: 'Registrar Fiadores',
+                        subtitle: 'Crear Terceros',
+                        onTap: () => {
+                          context.pop(),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => FiadoresHnScreen(
+                                numeroSolicitud:
+                                    int.tryParse(numeroSolicitud) ?? 0,
+                                tipoSolicitud:
+                                    tipoSolicitud!.toTypeForInterceptorString(),
+                              ),
+                            ),
+                          )
+                        },
+                      ),
+                      SelectableCardItem(
+                        userHaveDataAlready: state.tieneGarantia,
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.pie_chart_rounded,
+                        color: const Color(0xff6D28D9),
+                        title: 'Registrar Garantías',
+                        subtitle: 'Crear Garantías',
+                        onTap: () => {
+                          context.pop(),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => GarantiaHNScreen(
+                                numeroSolicitud: int.parse(numeroSolicitud),
+                                solicitudCodigo: tipoSolicitud
+                                        ?.toTypeForInterceptorString() ??
+                                    '',
+                                cedulaCliente: cedulaCliente,
+                                tipoPersonaCodigo: tipoPersonaCodigo,
+                              ),
+                            ),
+                          )
+                        },
+                      ),
+                    ],
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tieneUbicacion,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.place_rounded,
+                      color: const Color(0xFF0EA5E9),
+                      title: 'Registrar Ubicacion',
+                      subtitle: 'Crear ubicacion de cliente',
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => UbiacacionClienteHnScreen(
+                              documentoCliente: cedulaCliente,
+                              numeroSolicitud: int.parse(numeroSolicitud),
+                              tipoSolicitud:
+                                  tipoSolicitud?.toTypeForInterceptorString(
+                                        tipoGrupal: tipoSolicitudString,
+                                      ) ??
+                                      '',
+                            ),
+                          ),
+                        ),
+                      },
+                    ),
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tieneSupervision,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.verified_user_sharp,
+                      color: Colors.deepPurple,
+                      title: 'Tiene Supervision',
+                      subtitle: 'El analisis tiene supervision realizada?',
+                      onTap: () {
+                        if (state.tieneSupervision) {
+                          CustomAlertDialog(
+                            context: context,
+                            title: 'El analisis ya tiene supervision',
+                            onDone: () => context.pop(),
+                          ).showDialog(context,
+                              dialogType: DialogType.infoReverse);
+                          return;
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const SelectTipoSupervisionHnScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    if (actions
+                        .contains(TypeAction.rechazarSolicitud.codigo)) ...[
+                      BlocConsumer<RechazarSolicitudHnCubit,
+                          RechazarSolicitudHnState>(
+                        listener: (context, rechazoState) {
+                          if (rechazoState.status == Status.done) {
+                            CustomAlertDialog(
+                                context: context,
+                                title: rechazoState.successMessage,
+                                onDone: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const AnalisisInterceptorByFlavor(),
+                                    ),
+                                  );
+                                }).showDialog(
+                              context,
+                              dialogType: DialogType.success,
+                            );
+                          }
+                          if (rechazoState.status == Status.error) {
+                            CustomAlertDialog(
+                              context: context,
+                              title: rechazoState.errorMsg,
+                              onDone: () => context.pop(),
+                            ).showDialog(
+                              context,
+                              dialogType: DialogType.error,
+                            );
+                          }
+                        },
+                        builder: (context, rechazoState) {
+                          return SelectableCardItem(
+                            userHaveDataAlready: false,
+                            isLoading: rechazoState.status == Status.inProgress,
+                            icon: Icons.close_rounded,
+                            color: Colors.red,
+                            title: 'Rechazar Solicitud',
+                            subtitle: 'Rechazar la solicitud de crédito',
+                            onTap: () => CloseAnalisisDialog(
+                              context: context,
+                              title:
+                                  '¿Estás seguro de que quieres rechazar la solicitud de crédito?',
+                              onYes: () async {
+                                context.pop();
+                                final motivoRechazo =
+                                    await openMotivoRechazoSheet(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => GarantiaHNScreen(
+                                  buttonText: 'Rechazar Solicitud',
+                                );
+                                if (motivoRechazo == null) return;
+                                if (!context.mounted) return;
+
+                                context
+                                    .read<RechazarSolicitudHnCubit>()
+                                    .rechazarSolicitud(
                                       numeroSolicitud:
                                           int.parse(numeroSolicitud),
-                                      solicitudCodigo: tipoSolicitud
-                                              ?.toTypeForInterceptorString() ??
-                                          '',
-                                      cedulaCliente: cedulaCliente,
-                                      tipoPersonaCodigo: tipoPersonaCodigo,
-                                    ),
-                                  ),
-                                )
+                                      tipoSolicitud: tipoSolicitudString,
+                                      observacion: motivoRechazo,
+                                    );
                               },
+                            ).showDialog(
+                              context,
+                              dialogType: DialogType.infoReverse,
                             ),
-                          ],
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneUbicacion,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.place_rounded,
-                            color: const Color(0xFF0EA5E9),
-                            title: 'Registrar Ubicacion',
-                            subtitle: 'Crear ubicacion de cliente',
-                            onTap: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (ctx) => UbiacacionClienteHnScreen(
-                                    documentoCliente: cedulaCliente,
-                                    numeroSolicitud: int.parse(numeroSolicitud),
-                                    tipoSolicitud: tipoSolicitud
-                                            ?.toTypeForInterceptorString(
-                                          tipoGrupal: tipoSolicitudString,
-                                        ) ??
-                                        '',
-                                  ),
-                                ),
-                              ),
-                            },
-                          ),
-                          SelectableCardItem(
-                            userHaveDataAlready: state.tieneSupervision,
-                            isLoading: state.status == Status.inProgress,
-                            icon: Icons.verified_user_sharp,
-                            color: Colors.deepPurple,
-                            title: 'Tiene Supervision',
-                            subtitle:
-                                'El analisis tiene supervision realizada?',
+                          );
+                        },
+                      ),
+                    ],
+                    if (actions.contains(TypeAction.cerrar.codigo))
+                      BlocBuilder<CerrarAnalisisCubit, CerrarAnalisisState>(
+                        builder: (context, cerrarState) {
+                          return SelectableCardItem(
+                            isLoading: cerrarState.status == Status.inProgress,
+                            icon: Icons.assignment_turned_in,
+                            color: const Color(0xFFB91C1C),
+                            title: 'Cerrar Analisis',
+                            subtitle: 'Cerrar analisis de crédito',
                             onTap: () {
-                              if (state.tieneSupervision) {
-                                CustomAlertDialog(
-                                  context: context,
-                                  title: 'El analisis ya tiene supervision',
-                                  onDone: () => context.pop(),
-                                ).showDialog(context,
-                                    dialogType: DialogType.infoReverse);
+                              List<String> pendientes = analisisItems.entries
+                                  .where((entry) => entry.value == false)
+                                  .map((entry) => entry.key)
+                                  .toList();
+
+                              final havePendientesTitle = pendientes.isNotEmpty
+                                  ? '\nPendientes: ${pendientes.join(', ')}'
+                                  : '';
+
+                              if (!state.tieneAnalisis) {
+                                showV2CustomSnackbar(
+                                  context,
+                                  title:
+                                      'Para cerrar el analisis es necesario haber realizado el analisis de credito',
+                                  type: SnackbarType.warning,
+                                );
                                 return;
                               }
-                              Navigator.push(
+
+                              CloseAnalisisDialog(
+                                context: context,
+                                title:
+                                    '¿Estás seguro de cerrar el analisis?$havePendientesTitle',
+                                onYes: () {
+                                  context.pop();
+                                  context
+                                      .read<CerrarAnalisisCubit>()
+                                      .closeAnalisis(
+                                        numeroSolicitud:
+                                            int.parse(numeroSolicitud),
+                                        tipoSolicitud: esGrupal
+                                            ? tipoSolicitudString
+                                            : tipoSolicitud!
+                                                .toTypeForInterceptorString(),
+                                      );
+                                },
+                              ).showDialog(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      const SelectTipoSupervisionHnScreen(),
-                                ),
+                                dialogType: DialogType.infoReverse,
                               );
                             },
-                          ),
-                          if (actions.contains(
-                              TypeAction.rechazarSolicitud.codigo)) ...[
-                            BlocConsumer<RechazarSolicitudHnCubit,
-                                RechazarSolicitudHnState>(
-                              listener: (context, rechazoState) {
-                                if (rechazoState.status == Status.done) {
-                                  CustomAlertDialog(
-                                      context: context,
-                                      title: rechazoState.successMessage,
-                                      onDone: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                const AnalisisInterceptorByFlavor(),
-                                          ),
-                                        );
-                                      }).showDialog(
-                                    context,
-                                    dialogType: DialogType.success,
-                                  );
-                                }
-                                if (rechazoState.status == Status.error) {
-                                  CustomAlertDialog(
-                                    context: context,
-                                    title: rechazoState.errorMsg,
-                                    onDone: () => context.pop(),
-                                  ).showDialog(
-                                    context,
-                                    dialogType: DialogType.error,
-                                  );
-                                }
-                              },
-                              builder: (context, rechazoState) {
-                                return SelectableCardItem(
-                                  userHaveDataAlready: false,
-                                  isLoading:
-                                      rechazoState.status == Status.inProgress,
-                                  icon: Icons.close_rounded,
-                                  color: Colors.red,
-                                  title: 'Rechazar Solicitud',
-                                  subtitle: 'Rechazar la solicitud de crédito',
-                                  onTap: () => CloseAnalisisDialog(
-                                    context: context,
-                                    title:
-                                        '¿Estás seguro de que quieres rechazar la solicitud de crédito?',
-                                    onYes: () async {
-                                      context.pop();
-                                      final motivoRechazo =
-                                          await openMotivoRechazoSheet(
-                                        context,
-                                        buttonText: 'Rechazar Solicitud',
-                                      );
-                                      if (motivoRechazo == null) return;
-                                      if (!context.mounted) return;
-
-                                      context
-                                          .read<RechazarSolicitudHnCubit>()
-                                          .rechazarSolicitud(
-                                            numeroSolicitud:
-                                                int.parse(numeroSolicitud),
-                                            tipoSolicitud: tipoSolicitudString,
-                                            observacion: motivoRechazo,
-                                          );
-                                    },
-                                  ).showDialog(
-                                    context,
-                                    dialogType: DialogType.infoReverse,
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                          if (actions.contains(TypeAction.cerrar.codigo))
-                            BlocBuilder<CerrarAnalisisCubit,
-                                CerrarAnalisisState>(
-                              builder: (context, cerrarState) {
-                                return SelectableCardItem(
-                                  isLoading:
-                                      cerrarState.status == Status.inProgress,
-                                  icon: Icons.assignment_turned_in,
-                                  color: const Color(0xFFB91C1C),
-                                  title: 'Cerrar Analisis',
-                                  subtitle: 'Cerrar analisis de crédito',
-                                  onTap: () {
-                                    List<String> pendientes = analisisItems
-                                        .entries
-                                        .where((entry) => entry.value == false)
-                                        .map((entry) => entry.key)
-                                        .toList();
-
-                                    final havePendientesTitle = pendientes
-                                            .isNotEmpty
-                                        ? '\nPendientes: ${pendientes.join(', ')}'
-                                        : '';
-
-                                    if (!state.tieneAnalisis) {
-                                      showV2CustomSnackbar(
-                                        context,
-                                        title:
-                                            'Para cerrar el analisis es necesario haber realizado el analisis de credito',
-                                        type: SnackbarType.warning,
-                                      );
-                                      return;
-                                    }
-
-                                    CloseAnalisisDialog(
-                                      context: context,
-                                      title:
-                                          '¿Estás seguro de cerrar el analisis?$havePendientesTitle',
-                                      onYes: () {
-                                        context.pop();
-                                        context
-                                            .read<CerrarAnalisisCubit>()
-                                            .closeAnalisis(
-                                              numeroSolicitud:
-                                                  int.parse(numeroSolicitud),
-                                              tipoSolicitud: esGrupal
-                                                  ? tipoSolicitudString
-                                                  : tipoSolicitud!
-                                                      .toTypeForInterceptorString(),
-                                            );
-                                      },
-                                    ).showDialog(
-                                      context,
-                                      dialogType: DialogType.infoReverse,
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                        ],
+                          );
+                        },
                       ),
-                    ),
                   ],
                 );
               },

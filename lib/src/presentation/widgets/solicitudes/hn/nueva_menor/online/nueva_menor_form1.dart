@@ -31,6 +31,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -69,9 +70,9 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
   void initState() {
     super.initState();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
     fechaEmisionCedula = widget.userByDocumentHn?.fechaEmision;
     _selectedDate = widget.userByDocumentHn?.fechaExpira;
     fechaNacimiento = widget.userByDocumentHn?.fechaNacimiento;
@@ -185,7 +186,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
 
   Future<void> selectFechaNacimiento(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime eighteenYearsAgo = DateTime(
+    final DateTime minAgeClient = DateTime(
       now.year - int.parse(edadMinima?.valor ?? '0'),
       now.month,
       now.day,
@@ -200,7 +201,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
       context: context,
       initialDate: fechaNacimiento,
       firstDate: maxAgeClient,
-      lastDate: eighteenYearsAgo,
+      lastDate: minAgeClient,
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
     if (picked != null) {
