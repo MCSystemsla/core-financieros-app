@@ -533,10 +533,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       otrosIngresos: state.otrosIngresos == 0
           ? (prev?.otrosIngresos ?? 0)
           : state.otrosIngresos,
-      numeroSolicitud: _prefer(
-        state.numeroSolicitud,
-        prev?.numeroSolicitud,
-      ),
+      numeroSolicitud: _prefer(state.numeroSolicitud, prev?.numeroSolicitud),
     );
   }
 
@@ -551,6 +548,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   loadFromLocalDb(SolicitudAsalariadoHnDbLocal solicitud) {
     onFieldChanged(
       () => state.copyWith(
+        isDone: solicitud.isDone,
         esRecurrente: solicitud.esRecurrente,
         clientSignatureStatus:
             solicitud.clientSignatureStatus == ClientSignatureStatus.yes.name
