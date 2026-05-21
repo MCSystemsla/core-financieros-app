@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nuev
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/parametros_type/parametros_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,9 +65,9 @@ class _UpdateSolicitudNuevaMenorForm1State
     super.initState();
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
     edadMinima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMINIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
-        .getParametroByName(nombre: 'EDADMAXIMACLIENTE');
+        .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
     tieneVinculosUsa = cubit.state.codigoUsa.isNotEmpty;
     fechaEmisionCedula = DateTime.tryParse(cubit.state.fechaEmisionCedula);
     fechaNacimiento = DateTime.tryParse(cubit.state.fechaNacimiento);
@@ -263,7 +264,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                           onChanged: (item) {
                             if (item == null || !mounted) return;
                             cubit.onFieldChanged(
-                              () => cubit.state.copyWith(
+                              () => state.copyWith(
                                 grupoCodigo: item.value,
                                 grupoNombre: item.name,
                               ),
@@ -288,7 +289,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                           onChanged: (Item<dynamic>? item) {
                             if (item == null || !mounted) return;
                             cubit.onFieldChanged(
-                              () => cubit.state.copyWith(
+                              () => state.copyWith(
                                 cargoGrupoCodigo: item.value,
                                 cargoGrupoNombre: item.name,
                               ),
@@ -315,7 +316,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (Item<dynamic>? item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             tipoPersonaCodigo: item.value,
                             tipoPersonaNombre: item.name,
                           ),
@@ -341,7 +342,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Primer Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nombre1: value,
                           ),
                         );
@@ -364,7 +365,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Segundo Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nombre2: value,
                           ),
                         );
@@ -387,7 +388,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Tercer Nombre',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nombre3: value,
                           ),
                         );
@@ -412,7 +413,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Primer Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             apellido1: value,
                           ),
                         );
@@ -434,7 +435,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Segundo Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             apellido2: value,
                           ),
                         );
@@ -456,7 +457,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Tercer Apellido',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             apellido3: value,
                           ),
                         );
@@ -481,7 +482,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                           ClassValidator.validateRequired(value),
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nombrePublico: value,
                           ),
                         );
@@ -503,7 +504,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             tipoDocumentoCodigo: item.value,
                             tipoDocumentoNombre: item.name,
                           ),
@@ -524,7 +525,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             tipoPersonaCNBSCodigo: item.value,
                             tipoPersonaCNBSNombre: item.name,
                           ),
@@ -578,7 +579,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       title: 'Registro Tributario Nacional (RTN)',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             rtn: value,
                           ),
                         );
@@ -598,7 +599,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       textCapitalization: TextCapitalization.none,
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             email: value,
                           ),
                         );
@@ -620,7 +621,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             paisEmisorCedulaCodigo: item.valor,
                             paisEmisorCedulaNombre: item.nombre,
                           ),
@@ -697,7 +698,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChange: (value) {
                         final newValue = value.replaceAll('-', '');
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             celular: newValue,
                           ),
                         );
@@ -722,7 +723,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChange: (value) {
                         final newValue = value.replaceAll('-', '');
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             telefono: newValue,
                           ),
                         );
@@ -745,7 +746,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                         if (item == null || !mounted) return;
 
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             escolaridadCodigo: item.value,
                           ),
                         );
@@ -769,7 +770,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                         final newValue = value.replaceAll(',', '');
 
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             cantidadHijos: int.tryParse(newValue) ?? 0,
                           ),
                         );
@@ -791,7 +792,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             sexoCodigo: item.value,
                             sexoNombre: item.name,
                           ),
@@ -814,7 +815,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             paisNacimientoCodigo: item.valor,
                           ),
                         );
@@ -868,7 +869,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                         title: 'Código de Identificación EE.UU.',
                         onChange: (value) {
                           cubit.onFieldChanged(
-                            () => cubit.state.copyWith(
+                            () => state.copyWith(
                               codigoUsa: value,
                             ),
                           );
@@ -891,7 +892,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nacionalidad: item.valor,
                           ),
                         );
@@ -911,7 +912,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nacionalidad2Codigo: item.valor,
                             nacionalidad2Nombre: item.nombre,
                           ),
@@ -932,7 +933,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             nacionalidad3Codigo: item.valor,
                             nacionalidad3Nombre: item.nombre,
                           ),

@@ -178,11 +178,13 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         );
         return;
       }
-      emit(state.copyWith(
-        status: Status.done,
-        numeroSolicitud: numeroSolicitud,
-        idSolicitud: idSolicitud,
-      ));
+      onFieldChanged(
+        () => state.copyWith(
+          status: Status.done,
+          numeroSolicitud: numeroSolicitud,
+          idSolicitud: idSolicitud,
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(
@@ -531,6 +533,10 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
       otrosIngresos: state.otrosIngresos == 0
           ? (prev?.otrosIngresos ?? 0)
           : state.otrosIngresos,
+      numeroSolicitud: _prefer(
+        state.numeroSolicitud,
+        prev?.numeroSolicitud,
+      ),
     );
   }
 
@@ -688,6 +694,7 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
         municipioTrabajoCodigo: solicitud.municipioTrabajoCodigo,
         paisTrabajoCodigo: solicitud.paisTrabajoCodigo,
         otrosIngresos: solicitud.otrosIngresos,
+        numeroSolicitud: solicitud.numeroSolicitud,
       ),
     );
   }

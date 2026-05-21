@@ -166,11 +166,13 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         );
         return;
       }
-      emit(state.copyWith(
-        status: Status.done,
-        numeroSolicitud: numeroSolicitud,
-        idSolicitud: idSolicitud,
-      ));
+      onFieldChanged(
+        () => state.copyWith(
+          status: Status.done,
+          numeroSolicitud: numeroSolicitud,
+          idSolicitud: idSolicitud,
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(
@@ -252,349 +254,375 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     final prev = existing;
 
     return SolicitudNuevaMenorHnLocalDb(
-        id: prev?.id ?? 0,
-        esRecurrente: state.esRecurrente,
-        uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-        aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge == 0
-            ? (prev?.aniosLugarTrabajoConyuge ?? 0)
-            : state.aniosLugarTrabajoConyuge,
-        ingresoMensualConyuge: state.ingresoMensualConyuge == 0
-            ? (prev?.ingresoMensualConyuge ?? 0)
-            : state.ingresoMensualConyuge,
-        clientSignatureStatus: _prefer(
-            state.clientSignatureStatus.name, prev?.clientSignatureStatus),
-        esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
-        cargoGrupoCodigo:
-            _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
-        grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
-        cargoGrupoNombre:
-            _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
-        grupoCodigoNombre:
-            _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
-        database: _prefer(state.database, prev?.database),
-        apellido2: _prefer(state.apellido2, prev?.apellido2),
-        nombre2: _prefer(state.nombre2, prev?.nombre2),
-        origenSolicitudCodigo:
-            _prefer(state.origenSolicitudCodigo, prev?.origenSolicitudCodigo),
-        nombre1: _prefer(state.nombre1, prev?.nombre1),
-        apellido1: _prefer(state.apellido1, prev?.apellido1),
-        cedula: _prefer(state.cedula, prev?.cedula),
-        observacion: _prefer(state.observacion, prev?.observacion),
-        fechaEmisionCedula: _preferDate(
-          (state.fechaEmisionCedula),
-          prev?.fechaEmisionCedula,
-        ),
-        fechaVencimientoCedula: _preferDate(
-          (state.fechaVencimientoCedula),
-          prev?.fechaVencimientoCedula,
-        ),
-        fechaNacimiento: _preferDate(
-          (state.fechaNacimiento),
-          prev?.fechaNacimiento,
-        ),
-        telefono: _prefer(state.telefono, prev?.telefono),
-        celular: _prefer(state.celular, prev?.celular),
-        direccionCasa: _prefer(state.direccionCasa, prev?.direccionCasa),
-        barrioCasa: _prefer(state.barrioCasa, prev?.barrioCasa),
-        municipioCasaCodigo:
-            _prefer(state.municipioCasaCodigo, prev?.municipioCasaCodigo),
-        departamentoCasaCodigo:
-            _prefer(state.departamentoCasaCodigo, prev?.departamentoCasaCodigo),
-        paisCasaCodigo: _prefer(state.paisCasaCodigo, prev?.paisCasaCodigo),
-        profesion: _prefer(state.profesion, prev?.profesion),
-        ocupacion: _prefer(state.ocupacion, prev?.ocupacion),
-        condicionCasaCodigo:
-            _prefer(state.condicionCasaCodigo, prev?.condicionCasaCodigo),
-        anosResidirCasa: state.anosResidirCasa == 0
-            ? (prev?.anosResidirCasa ?? 0)
-            : state.anosResidirCasa,
-        actividaEconomicaDescipcion1: _prefer(
-            state.actividaEconomicaDescipcion1,
-            prev?.actividaEconomicaDescipcion1),
-        actividaEconomicaDescipcion2: _prefer(
-            state.actividaEconomicaDescipcion2,
-            prev?.actividaEconomicaDescipcion2),
-        actividaEconomicaDescipcion3: _prefer(
-            state.actividaEconomicaDescipcion3,
-            prev?.actividaEconomicaDescipcion3),
-        ejerceApnfd: _prefer(state.ejerceApnfd, prev?.ejerceApnfd),
-        esApnfd: _prefer(state.esApnfd, prev?.esApnfd),
-        nacinalidadCodigo:
-            _prefer(state.nacinalidadCodigo, prev?.nacinalidadCodigo),
-        nacinalidad2Codigo:
-            _prefer(state.nacinalidad2Codigo, prev?.nacinalidad2Codigo),
-        nacinalidad3Codigo:
-            _prefer(state.nacinalidad3Codigo, prev?.nacinalidad3Codigo),
-        departamentoDestinoCodigo: _prefer(
-            state.departamentoDestinoCodigo, prev?.departamentoDestinoCodigo),
-        tipoPersonaCodigo:
-            _prefer(state.tipoPersonaCodigo, prev?.tipoPersonaCodigo),
-        tipoClienteCodigo:
-            _prefer(state.tipoClienteCodigo, prev?.tipoClienteCodigo),
-        aldeaDestinoCodigo:
-            _prefer(state.aldeaDestinoCodigo, prev?.aldeaDestinoCodigo),
-        municipioDestinoCodigo:
-            _prefer(state.municipioDestinoCodigo, prev?.municipioDestinoCodigo),
-        aldeaNegocioCodigo:
-            _prefer(state.aldeaNegocioCodigo, prev?.aldeaNegocioCodigo),
-        departamentoNegocioCodigo: _prefer(
-            state.departamentoNegocioCodigo, prev?.departamentoNegocioCodigo),
-        nivelAproximadoIngresosCodigo: _prefer(
-            state.nivelAproximadoIngresosCodigo,
-            prev?.nivelAproximadoIngresosCodigo),
-        documentoConyuge:
-            _prefer(state.documentoConyuge, prev?.documentoConyuge),
-        ocupacionCodigo: _prefer(state.ocupacionCodigo, prev?.ocupacionCodigo),
-        profesionCodigo: _prefer(state.profesionCodigo, prev?.profesionCodigo),
-        aldeaCasaCodigo: _prefer(state.aldeaCasaCodigo, prev?.aldeaCasaCodigo),
-        ubicacionCodigo: _prefer(state.ubicacionCodigo, prev?.ubicacionCodigo),
-        medidasConocimientoCodigo: _prefer(
-            state.medidasConocimientoCodigo, prev?.medidasConocimientoCodigo),
-        caserioCasa: _prefer(state.caserioCasa, prev?.caserioCasa),
-        caserioNegocio: _prefer(state.caserioNegocio, prev?.caserioNegocio),
-        caserioDestino: _prefer(state.caserioDestino, prev?.caserioDestino),
-        barrioDestino: _prefer(state.barrioDestino, prev?.barrioDestino),
-        descripcionDestino:
-            _prefer(state.descripcionDestino, prev?.descripcionDestino),
-        ingresosNetos: state.ingresosNetos == 0
-            ? (prev?.ingresosNetos ?? 0)
-            : state.ingresosNetos,
-        actividadDescripcionConyugue: _prefer(
-            state.actividadDescripcionConyugue,
-            prev?.actividadDescripcionConyugue),
-        exeperiencia: state.exeperiencia == 0
-            ? (prev?.exeperiencia ?? 0)
-            : state.exeperiencia,
-        puestoNegocio: _prefer(state.puestoNegocio, prev?.puestoNegocio),
-        actividadEconomicaCnbs1Codigo: _prefer(
-            state.actividadEconomicaCnbs1Codigo,
-            prev?.actividadEconomicaCnbs1Codigo),
-        actividadEconomicaCnbs2Codigo: _prefer(
-            state.actividadEconomicaCnbs2Codigo,
-            prev?.actividadEconomicaCnbs2Codigo),
-        apellido3: _prefer(state.apellido3, prev?.apellido3),
-        rtn: _prefer(state.rtn, prev?.rtn),
-        telefonoNegocio: _prefer(state.telefonoNegocio, prev?.telefonoNegocio),
-        celularNegocio: _prefer(state.celularNegocio, prev?.celularNegocio),
-        barrioNegocio: _prefer(state.barrioNegocio, prev?.barrioNegocio),
-        municipioNegocioCodigo:
-            _prefer(state.municipioNegocioCodigo, prev?.municipioNegocioCodigo),
-        condicionNegocioCodigo:
-            _prefer(state.condicionNegocioCodigo, prev?.condicionNegocioCodigo),
-        horarioTrabajo: _prefer(state.horarioTrabajo, prev?.horarioTrabajo),
-        horarioVisita: _prefer(state.horarioVisita, prev?.horarioVisita),
-        personasACargo: state.personasACargo == 0 ? (prev?.personasACargo ?? 0) : state.personasACargo,
-        estadoCivilCodigo: _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo),
-        nombreConyugue: _prefer(state.nombreConyugue, prev?.nombreConyugue),
-        trabajaConyugue: _prefer(state.trabajaConyugue, prev?.trabajaConyugue),
-        trabajoConyugue: _prefer(state.trabajoConyugue, prev?.trabajoConyugue),
-        direccionTrabajoConyugue: _prefer(state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
-        telefonoTrabajoConyugue: _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
-        cantidadHijos: state.cantidadHijos == 0 ? (prev?.cantidadHijos ?? 0) : state.cantidadHijos,
-        nombrePublico: _prefer(state.nombrePublico, prev?.nombrePublico),
-        sexoCodigo: _prefer(state.sexoCodigo, prev?.sexoCodigo),
-        paisNacimientoCodigo: _prefer(state.paisNacimientoCodigo, prev?.paisNacimientoCodigo),
-        nacionalidadConyugue: _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugue),
-        ubicacion: _prefer(state.ubicacion, prev?.ubicacion),
-        espeps: _prefer(state.espeps, prev?.espeps),
-        nombreDeEntidadPeps: _prefer(state.nombreDeEntidadPeps, prev?.nombreDeEntidadPeps),
-        paisPeps: _prefer(state.paisPeps, prev?.paisPeps),
-        periodoPeps: _prefer(state.periodoPeps, prev?.periodoPeps),
-        cargoOficialPeps: _prefer(state.cargoOficialPeps, prev?.cargoOficialPeps),
-        tieneFamiliarPeps: _prefer(state.tieneFamiliarPeps, prev?.tieneFamiliarPeps),
-        nombreFamiliarPeps2: _prefer(state.nombreFamiliarPeps2, prev?.nombreFamiliarPeps2),
-        parentescoFamiliarPeps2Codigo: _prefer(state.parentescoFamiliarPeps2Codigo, prev?.parentescoFamiliarPeps2Codigo),
-        cargoFamiliarPeps2: _prefer(state.cargoFamiliarPeps2, prev?.cargoFamiliarPeps2),
-        nombreEntidadPeps2: _prefer(state.nombreEntidadPeps2, prev?.nombreEntidadPeps2),
-        periodoPeps2: _prefer(state.periodoPeps2, prev?.periodoPeps2),
-        paisPeps2: _prefer(state.paisPeps2, prev?.paisPeps2),
-        esFamiliarEmpleado: _prefer(state.esFamiliarEmpleado, prev?.esFamiliarEmpleado),
-        nombreFamiliar: _prefer(state.nombreFamiliar, prev?.nombreFamiliar),
-        cedulaFamiliar: _prefer(state.cedulaFamiliar, prev?.cedulaFamiliar),
-        tipoDocumentoCodigo: _prefer(state.tipoDocumentoCodigo, prev?.tipoDocumentoCodigo),
-        codigoUsa: _prefer(state.codigoUsa, prev?.codigoUsa),
-        nombre3: _prefer(state.nombre3, prev?.nombre3),
-        cuota: state.cuota == 0 ? (prev?.cuota ?? 0) : state.cuota.toInt(),
-        sectorCodigo: _prefer(state.sectorCodigo, prev?.sectorCodigo),
-        direccionNegocio: _prefer(state.direccionNegocio, prev?.direccionNegocio),
-        tipoPersonaCnbsCodigo: _prefer(state.tipoPersonaCnbsCodigo, prev?.tipoPersonaCnbsCodigo),
-        escolaridadCodigo: _prefer(state.escolaridadCodigo, prev?.escolaridadCodigo),
-        ubicacionLongitud: _prefer(state.ubicacionLongitud, prev?.ubicacionLongitud),
-        ubicacionLatitud: _prefer(state.ubicacionLatitud, prev?.ubicacionLatitud),
-        fechaPrimerPagoSolicitud: _preferDate(
-          state.fechaPrimerPagoSolicitud,
-          prev?.fechaPrimerPagoSolicitud,
-        ),
-        frecuenciaCodigo: _prefer(state.frecuenciaCodigo, prev?.frecuenciaCodigo),
-        monedaCodigo: _prefer(state.monedaCodigo, prev?.monedaCodigo),
-        monto: state.monto == 0 ? (prev?.monto ?? 0) : state.monto,
-        nombreNegocio: _prefer(state.nombreNegocio, prev?.nombreNegocio),
-        tiempoFuncionamientoNegocio: _prefer(state.tiempoFuncionamientoNegocio, prev?.tiempoFuncionamientoNegocio),
-        paisEmisorCedulaCodigo: _prefer(state.paisEmisorCedulaCodigo, prev?.paisEmisorCedulaCodigo),
-        plazoSolicitud: state.plazoSolicitud == 0 ? (prev?.plazoSolicitud ?? 0) : state.plazoSolicitud,
-        productoCodigo: _prefer(state.productoCodigo, prev?.productoCodigo),
-        propositoCodigo: _prefer(state.propositoCodigo, prev?.propositoCodigo),
-        isOffline: prev?.isOffline ?? false,
-        email: _prefer(state.email, prev?.email),
-        actividadEconomicaCnbs3Codigo: _prefer(
-          state.actividadEconomicaCnbs3Codigo,
-          prev?.actividadEconomicaCnbs3Codigo,
-        ),
-        fechaDesembolso: _preferDate(
-          (state.fechaDesembolso),
-          prev?.fechaDesembolso,
-        ),
-        frecuenciaMeses: _prefer(state.frecuenciaMeses, prev?.frecuenciaMeses),
-        tasaInteres: state.tasaInteres == 0 ? (prev?.tasaInteres ?? 0) : state.tasaInteres,
-        montoMinimo: _preferNum(state.montoMinimo, prev?.montoMinimo),
-        montoMaximo: _preferNum(state.montoMaximo, prev?.montoMaximo),
-        tieneVinculosUsa: _prefer(state.tieneVinculosUsa, prev?.tieneVinculosUsa),
-        isDone: state.isDone,
-        actividadEconomicaCnbs1CodigoNombre: _prefer(
-          state.actividadEconomicaCnbs1CodigoNombre,
-          prev?.actividadEconomicaCnbs1CodigoNombre,
-        ),
-        actividadEconomicaCnbs2CodigoNombre: _prefer(
-          state.actividadEconomicaCnbs2CodigoNombre,
-          prev?.actividadEconomicaCnbs2CodigoNombre,
-        ),
-        aldeaCasaCodigoNombre: _prefer(
-          state.aldeaCasaCodigoNombre,
-          prev?.aldeaCasaCodigoNombre,
-        ),
-        paisCasaCodigoNombre: _prefer(
-          state.paisCasaCodigoNombre,
-          prev?.paisCasaCodigoNombre,
-        ),
-        paisEmisorCedulaCodigoNombre: _prefer(
-          state.paisEmisorCedulaCodigoNombre,
-          prev?.paisEmisorCedulaCodigoNombre,
-        ),
-        aldeaDestinoCodigoNombre: _prefer(
-          state.aldeaDestinoCodigoNombre,
-          prev?.aldeaDestinoCodigoNombre,
-        ),
-        municipioDestinoCodigoNombre: _prefer(
-          state.municipioDestinoCodigoNombre,
-          prev?.municipioDestinoCodigoNombre,
-        ),
-        aldeaNegocioCodigoNombre: _prefer(
-          state.aldeaNegocioCodigoNombre,
-          prev?.aldeaNegocioCodigoNombre,
-        ),
-        departamentoNegocioCodigoNombre: _prefer(
-          state.departamentoNegocioCodigoNombre,
-          prev?.departamentoNegocioCodigoNombre,
-        ),
-        ocupacionCodigoNombre: _prefer(
-          state.ocupacionCodigoNombre,
-          prev?.ocupacionCodigoNombre,
-        ),
-        profesionCodigoNombre: _prefer(
-          state.profesionCodigoNombre,
-          prev?.profesionCodigoNombre,
-        ),
-        ubicacionCodigoNombre: _prefer(
-          state.ubicacionCodigoNombre,
-          prev?.ubicacionCodigoNombre,
-        ),
-        condicionCasaCodigoNombre: _prefer(
-          state.condicionCasaCodigoNombre,
-          prev?.condicionCasaCodigoNombre,
-        ),
-        condicionNegocioCodigoNombre: _prefer(
-          state.condicionNegocioCodigoNombre,
-          prev?.condicionNegocioCodigoNombre,
-        ),
-        departamentoCasaCodigoNombre: _prefer(
-          state.departamentoCasaCodigoNombre,
-          prev?.departamentoCasaCodigoNombre,
-        ),
-        departamentoDestinoCodigoNombre: _prefer(
-          state.departamentoDestinoCodigoNombre,
-          prev?.departamentoDestinoCodigoNombre,
-        ),
-        estadoCivilCodigoNombre: _prefer(
-          state.estadoCivilCodigoNombre,
-          prev?.estadoCivilCodigoNombre,
-        ),
-        frecuenciaCodigoNombre: _prefer(
-          state.frecuenciaCodigoNombre,
-          prev?.frecuenciaCodigoNombre,
-        ),
-        monedaCodigoNombre: _prefer(
-          state.monedaCodigoNombre,
-          prev?.monedaCodigoNombre,
-        ),
-        municipioCasaCodigoNombre: _prefer(
-          state.municipioCasaCodigoNombre,
-          prev?.municipioCasaCodigoNombre,
-        ),
-        municipioNegocioCodigoNombre: _prefer(
-          state.municipioNegocioCodigoNombre,
-          prev?.municipioNegocioCodigoNombre,
-        ),
-        nacinalidad2CodigoNombre: _prefer(
-          state.nacinalidad2CodigoNombre,
-          prev?.nacinalidad2CodigoNombre,
-        ),
-        nacinalidadCodigoNombre: _prefer(
-          state.nacinalidadCodigoNombre,
-          prev?.nacinalidadCodigoNombre,
-        ),
-        nacinalidad3CodigoNombre: _prefer(
-          state.nacinalidad3CodigoNombre,
-          prev?.nacinalidad3CodigoNombre,
-        ),
-        ocupacionNombre: _prefer(
-          state.ocupacionNombre,
-          prev?.ocupacionNombre,
-        ),
-        parentescoFamiliarPeps2CodigoNombre: _prefer(
-          state.parentescoFamiliarPeps2CodigoNombre,
-          prev?.parentescoFamiliarPeps2CodigoNombre,
-        ),
-        productoCodigoNombre: _prefer(
-          state.productoCodigoNombre,
-          prev?.productoCodigoNombre,
-        ),
-        profesionNombre: _prefer(
-          state.profesionNombre,
-          prev?.profesionNombre,
-        ),
-        propositoCodigoNombre: _prefer(
-          state.propositoCodigoNombre,
-          prev?.propositoCodigoNombre,
-        ),
-        sectorCodigoNombre: _prefer(
-          state.sectorCodigoNombre,
-          prev?.sectorCodigoNombre,
-        ),
-        tipoClienteCodigoNombre: _prefer(
-          state.tipoClienteCodigoNombre,
-          prev?.tipoClienteCodigoNombre,
-        ),
-        tipoDocumentoCodigoNombre: _prefer(
-          state.tipoDocumentoCodigoNombre,
-          prev?.tipoDocumentoCodigoNombre,
-        ),
-        tipoPersonaCodigoNombre: _prefer(
-          state.tipoPersonaCodigoNombre,
-          prev?.tipoPersonaCodigoNombre,
-        ),
-        tipoPersonaCnbsCodigoNombre: _prefer(
-          state.tipoPersonaCnbsCodigoNombre,
-          prev?.tipoPersonaCnbsCodigoNombre,
-        ),
-        apellidosConyugue: _prefer(
-          state.apellidosConyugue,
-          prev?.apellidosConyugue,
-        ),
-        tipoDocumentoConyugeCodigo: _prefer(
-          state.tipoDocumentoConyugue,
-          prev?.tipoDocumentoConyugeCodigo,
-        ),
-        cuotaWithDecimal: state.cuotaWithDecimal == 0 ? (prev?.cuotaWithDecimal ?? 0) : state.cuotaWithDecimal);
+      id: prev?.id ?? 0,
+      esRecurrente: state.esRecurrente,
+      uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
+      aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge == 0
+          ? (prev?.aniosLugarTrabajoConyuge ?? 0)
+          : state.aniosLugarTrabajoConyuge,
+      ingresoMensualConyuge: state.ingresoMensualConyuge == 0
+          ? (prev?.ingresoMensualConyuge ?? 0)
+          : state.ingresoMensualConyuge,
+      clientSignatureStatus: _prefer(
+          state.clientSignatureStatus.name, prev?.clientSignatureStatus),
+      esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
+      cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
+      grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
+      cargoGrupoNombre: _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
+      grupoCodigoNombre:
+          _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
+      database: _prefer(state.database, prev?.database),
+      apellido2: _prefer(state.apellido2, prev?.apellido2),
+      nombre2: _prefer(state.nombre2, prev?.nombre2),
+      origenSolicitudCodigo:
+          _prefer(state.origenSolicitudCodigo, prev?.origenSolicitudCodigo),
+      nombre1: _prefer(state.nombre1, prev?.nombre1),
+      apellido1: _prefer(state.apellido1, prev?.apellido1),
+      cedula: _prefer(state.cedula, prev?.cedula),
+      observacion: _prefer(state.observacion, prev?.observacion),
+      fechaEmisionCedula: _preferDate(
+        (state.fechaEmisionCedula),
+        prev?.fechaEmisionCedula,
+      ),
+      fechaVencimientoCedula: _preferDate(
+        (state.fechaVencimientoCedula),
+        prev?.fechaVencimientoCedula,
+      ),
+      fechaNacimiento: _preferDate(
+        (state.fechaNacimiento),
+        prev?.fechaNacimiento,
+      ),
+      telefono: _prefer(state.telefono, prev?.telefono),
+      celular: _prefer(state.celular, prev?.celular),
+      direccionCasa: _prefer(state.direccionCasa, prev?.direccionCasa),
+      barrioCasa: _prefer(state.barrioCasa, prev?.barrioCasa),
+      municipioCasaCodigo:
+          _prefer(state.municipioCasaCodigo, prev?.municipioCasaCodigo),
+      departamentoCasaCodigo:
+          _prefer(state.departamentoCasaCodigo, prev?.departamentoCasaCodigo),
+      paisCasaCodigo: _prefer(state.paisCasaCodigo, prev?.paisCasaCodigo),
+      profesion: _prefer(state.profesion, prev?.profesion),
+      ocupacion: _prefer(state.ocupacion, prev?.ocupacion),
+      condicionCasaCodigo:
+          _prefer(state.condicionCasaCodigo, prev?.condicionCasaCodigo),
+      anosResidirCasa: state.anosResidirCasa == 0
+          ? (prev?.anosResidirCasa ?? 0)
+          : state.anosResidirCasa,
+      actividaEconomicaDescipcion1: _prefer(state.actividaEconomicaDescipcion1,
+          prev?.actividaEconomicaDescipcion1),
+      actividaEconomicaDescipcion2: _prefer(state.actividaEconomicaDescipcion2,
+          prev?.actividaEconomicaDescipcion2),
+      actividaEconomicaDescipcion3: _prefer(state.actividaEconomicaDescipcion3,
+          prev?.actividaEconomicaDescipcion3),
+      ejerceApnfd: _prefer(state.ejerceApnfd, prev?.ejerceApnfd),
+      esApnfd: _prefer(state.esApnfd, prev?.esApnfd),
+      nacinalidadCodigo:
+          _prefer(state.nacinalidadCodigo, prev?.nacinalidadCodigo),
+      nacinalidad2Codigo:
+          _prefer(state.nacinalidad2Codigo, prev?.nacinalidad2Codigo),
+      nacinalidad3Codigo:
+          _prefer(state.nacinalidad3Codigo, prev?.nacinalidad3Codigo),
+      departamentoDestinoCodigo: _prefer(
+          state.departamentoDestinoCodigo, prev?.departamentoDestinoCodigo),
+      tipoPersonaCodigo:
+          _prefer(state.tipoPersonaCodigo, prev?.tipoPersonaCodigo),
+      tipoClienteCodigo:
+          _prefer(state.tipoClienteCodigo, prev?.tipoClienteCodigo),
+      aldeaDestinoCodigo:
+          _prefer(state.aldeaDestinoCodigo, prev?.aldeaDestinoCodigo),
+      municipioDestinoCodigo:
+          _prefer(state.municipioDestinoCodigo, prev?.municipioDestinoCodigo),
+      aldeaNegocioCodigo:
+          _prefer(state.aldeaNegocioCodigo, prev?.aldeaNegocioCodigo),
+      departamentoNegocioCodigo: _prefer(
+          state.departamentoNegocioCodigo, prev?.departamentoNegocioCodigo),
+      nivelAproximadoIngresosCodigo: _prefer(
+          state.nivelAproximadoIngresosCodigo,
+          prev?.nivelAproximadoIngresosCodigo),
+      documentoConyuge: _prefer(state.documentoConyuge, prev?.documentoConyuge),
+      ocupacionCodigo: _prefer(state.ocupacionCodigo, prev?.ocupacionCodigo),
+      profesionCodigo: _prefer(state.profesionCodigo, prev?.profesionCodigo),
+      aldeaCasaCodigo: _prefer(state.aldeaCasaCodigo, prev?.aldeaCasaCodigo),
+      ubicacionCodigo: _prefer(state.ubicacionCodigo, prev?.ubicacionCodigo),
+      medidasConocimientoCodigo: _prefer(
+          state.medidasConocimientoCodigo, prev?.medidasConocimientoCodigo),
+      caserioCasa: _prefer(state.caserioCasa, prev?.caserioCasa),
+      caserioNegocio: _prefer(state.caserioNegocio, prev?.caserioNegocio),
+      caserioDestino: _prefer(state.caserioDestino, prev?.caserioDestino),
+      barrioDestino: _prefer(state.barrioDestino, prev?.barrioDestino),
+      descripcionDestino:
+          _prefer(state.descripcionDestino, prev?.descripcionDestino),
+      ingresosNetos: state.ingresosNetos == 0
+          ? (prev?.ingresosNetos ?? 0)
+          : state.ingresosNetos,
+      actividadDescripcionConyugue: _prefer(state.actividadDescripcionConyugue,
+          prev?.actividadDescripcionConyugue),
+      exeperiencia: state.exeperiencia == 0
+          ? (prev?.exeperiencia ?? 0)
+          : state.exeperiencia,
+      puestoNegocio: _prefer(state.puestoNegocio, prev?.puestoNegocio),
+      actividadEconomicaCnbs1Codigo: _prefer(
+          state.actividadEconomicaCnbs1Codigo,
+          prev?.actividadEconomicaCnbs1Codigo),
+      actividadEconomicaCnbs2Codigo: _prefer(
+          state.actividadEconomicaCnbs2Codigo,
+          prev?.actividadEconomicaCnbs2Codigo),
+      apellido3: _prefer(state.apellido3, prev?.apellido3),
+      rtn: _prefer(state.rtn, prev?.rtn),
+      telefonoNegocio: _prefer(state.telefonoNegocio, prev?.telefonoNegocio),
+      celularNegocio: _prefer(state.celularNegocio, prev?.celularNegocio),
+      barrioNegocio: _prefer(state.barrioNegocio, prev?.barrioNegocio),
+      municipioNegocioCodigo:
+          _prefer(state.municipioNegocioCodigo, prev?.municipioNegocioCodigo),
+      condicionNegocioCodigo:
+          _prefer(state.condicionNegocioCodigo, prev?.condicionNegocioCodigo),
+      horarioTrabajo: _prefer(state.horarioTrabajo, prev?.horarioTrabajo),
+      horarioVisita: _prefer(state.horarioVisita, prev?.horarioVisita),
+      personasACargo: state.personasACargo == 0
+          ? (prev?.personasACargo ?? 0)
+          : state.personasACargo,
+      estadoCivilCodigo:
+          _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo),
+      nombreConyugue: _prefer(state.nombreConyugue, prev?.nombreConyugue),
+      trabajaConyugue: _prefer(state.trabajaConyugue, prev?.trabajaConyugue),
+      trabajoConyugue: _prefer(state.trabajoConyugue, prev?.trabajoConyugue),
+      direccionTrabajoConyugue: _prefer(
+          state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
+      telefonoTrabajoConyugue:
+          _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
+      cantidadHijos: state.cantidadHijos == 0
+          ? (prev?.cantidadHijos ?? 0)
+          : state.cantidadHijos,
+      nombrePublico: _prefer(state.nombrePublico, prev?.nombrePublico),
+      sexoCodigo: _prefer(state.sexoCodigo, prev?.sexoCodigo),
+      paisNacimientoCodigo:
+          _prefer(state.paisNacimientoCodigo, prev?.paisNacimientoCodigo),
+      nacionalidadConyugue:
+          _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugue),
+      ubicacion: _prefer(state.ubicacion, prev?.ubicacion),
+      espeps: _prefer(state.espeps, prev?.espeps),
+      nombreDeEntidadPeps:
+          _prefer(state.nombreDeEntidadPeps, prev?.nombreDeEntidadPeps),
+      paisPeps: _prefer(state.paisPeps, prev?.paisPeps),
+      periodoPeps: _prefer(state.periodoPeps, prev?.periodoPeps),
+      cargoOficialPeps: _prefer(state.cargoOficialPeps, prev?.cargoOficialPeps),
+      tieneFamiliarPeps:
+          _prefer(state.tieneFamiliarPeps, prev?.tieneFamiliarPeps),
+      nombreFamiliarPeps2:
+          _prefer(state.nombreFamiliarPeps2, prev?.nombreFamiliarPeps2),
+      parentescoFamiliarPeps2Codigo: _prefer(
+          state.parentescoFamiliarPeps2Codigo,
+          prev?.parentescoFamiliarPeps2Codigo),
+      cargoFamiliarPeps2:
+          _prefer(state.cargoFamiliarPeps2, prev?.cargoFamiliarPeps2),
+      nombreEntidadPeps2:
+          _prefer(state.nombreEntidadPeps2, prev?.nombreEntidadPeps2),
+      periodoPeps2: _prefer(state.periodoPeps2, prev?.periodoPeps2),
+      paisPeps2: _prefer(state.paisPeps2, prev?.paisPeps2),
+      esFamiliarEmpleado:
+          _prefer(state.esFamiliarEmpleado, prev?.esFamiliarEmpleado),
+      nombreFamiliar: _prefer(state.nombreFamiliar, prev?.nombreFamiliar),
+      cedulaFamiliar: _prefer(state.cedulaFamiliar, prev?.cedulaFamiliar),
+      tipoDocumentoCodigo:
+          _prefer(state.tipoDocumentoCodigo, prev?.tipoDocumentoCodigo),
+      codigoUsa: _prefer(state.codigoUsa, prev?.codigoUsa),
+      nombre3: _prefer(state.nombre3, prev?.nombre3),
+      cuota: state.cuota == 0 ? (prev?.cuota ?? 0) : state.cuota.toInt(),
+      sectorCodigo: _prefer(state.sectorCodigo, prev?.sectorCodigo),
+      direccionNegocio: _prefer(state.direccionNegocio, prev?.direccionNegocio),
+      tipoPersonaCnbsCodigo:
+          _prefer(state.tipoPersonaCnbsCodigo, prev?.tipoPersonaCnbsCodigo),
+      escolaridadCodigo:
+          _prefer(state.escolaridadCodigo, prev?.escolaridadCodigo),
+      ubicacionLongitud:
+          _prefer(state.ubicacionLongitud, prev?.ubicacionLongitud),
+      ubicacionLatitud: _prefer(state.ubicacionLatitud, prev?.ubicacionLatitud),
+      fechaPrimerPagoSolicitud: _preferDate(
+        state.fechaPrimerPagoSolicitud,
+        prev?.fechaPrimerPagoSolicitud,
+      ),
+      frecuenciaCodigo: _prefer(state.frecuenciaCodigo, prev?.frecuenciaCodigo),
+      monedaCodigo: _prefer(state.monedaCodigo, prev?.monedaCodigo),
+      monto: state.monto == 0 ? (prev?.monto ?? 0) : state.monto,
+      nombreNegocio: _prefer(state.nombreNegocio, prev?.nombreNegocio),
+      tiempoFuncionamientoNegocio: _prefer(
+          state.tiempoFuncionamientoNegocio, prev?.tiempoFuncionamientoNegocio),
+      paisEmisorCedulaCodigo:
+          _prefer(state.paisEmisorCedulaCodigo, prev?.paisEmisorCedulaCodigo),
+      plazoSolicitud: state.plazoSolicitud == 0
+          ? (prev?.plazoSolicitud ?? 0)
+          : state.plazoSolicitud,
+      productoCodigo: _prefer(state.productoCodigo, prev?.productoCodigo),
+      propositoCodigo: _prefer(state.propositoCodigo, prev?.propositoCodigo),
+      isOffline: prev?.isOffline ?? false,
+      email: _prefer(state.email, prev?.email),
+      actividadEconomicaCnbs3Codigo: _prefer(
+        state.actividadEconomicaCnbs3Codigo,
+        prev?.actividadEconomicaCnbs3Codigo,
+      ),
+      fechaDesembolso: _preferDate(
+        (state.fechaDesembolso),
+        prev?.fechaDesembolso,
+      ),
+      frecuenciaMeses: _prefer(state.frecuenciaMeses, prev?.frecuenciaMeses),
+      tasaInteres:
+          state.tasaInteres == 0 ? (prev?.tasaInteres ?? 0) : state.tasaInteres,
+      montoMinimo: _preferNum(state.montoMinimo, prev?.montoMinimo),
+      montoMaximo: _preferNum(state.montoMaximo, prev?.montoMaximo),
+      tieneVinculosUsa: _prefer(state.tieneVinculosUsa, prev?.tieneVinculosUsa),
+      isDone: state.isDone,
+      actividadEconomicaCnbs1CodigoNombre: _prefer(
+        state.actividadEconomicaCnbs1CodigoNombre,
+        prev?.actividadEconomicaCnbs1CodigoNombre,
+      ),
+      actividadEconomicaCnbs2CodigoNombre: _prefer(
+        state.actividadEconomicaCnbs2CodigoNombre,
+        prev?.actividadEconomicaCnbs2CodigoNombre,
+      ),
+      aldeaCasaCodigoNombre: _prefer(
+        state.aldeaCasaCodigoNombre,
+        prev?.aldeaCasaCodigoNombre,
+      ),
+      paisCasaCodigoNombre: _prefer(
+        state.paisCasaCodigoNombre,
+        prev?.paisCasaCodigoNombre,
+      ),
+      paisEmisorCedulaCodigoNombre: _prefer(
+        state.paisEmisorCedulaCodigoNombre,
+        prev?.paisEmisorCedulaCodigoNombre,
+      ),
+      aldeaDestinoCodigoNombre: _prefer(
+        state.aldeaDestinoCodigoNombre,
+        prev?.aldeaDestinoCodigoNombre,
+      ),
+      municipioDestinoCodigoNombre: _prefer(
+        state.municipioDestinoCodigoNombre,
+        prev?.municipioDestinoCodigoNombre,
+      ),
+      aldeaNegocioCodigoNombre: _prefer(
+        state.aldeaNegocioCodigoNombre,
+        prev?.aldeaNegocioCodigoNombre,
+      ),
+      departamentoNegocioCodigoNombre: _prefer(
+        state.departamentoNegocioCodigoNombre,
+        prev?.departamentoNegocioCodigoNombre,
+      ),
+      ocupacionCodigoNombre: _prefer(
+        state.ocupacionCodigoNombre,
+        prev?.ocupacionCodigoNombre,
+      ),
+      profesionCodigoNombre: _prefer(
+        state.profesionCodigoNombre,
+        prev?.profesionCodigoNombre,
+      ),
+      ubicacionCodigoNombre: _prefer(
+        state.ubicacionCodigoNombre,
+        prev?.ubicacionCodigoNombre,
+      ),
+      condicionCasaCodigoNombre: _prefer(
+        state.condicionCasaCodigoNombre,
+        prev?.condicionCasaCodigoNombre,
+      ),
+      condicionNegocioCodigoNombre: _prefer(
+        state.condicionNegocioCodigoNombre,
+        prev?.condicionNegocioCodigoNombre,
+      ),
+      departamentoCasaCodigoNombre: _prefer(
+        state.departamentoCasaCodigoNombre,
+        prev?.departamentoCasaCodigoNombre,
+      ),
+      departamentoDestinoCodigoNombre: _prefer(
+        state.departamentoDestinoCodigoNombre,
+        prev?.departamentoDestinoCodigoNombre,
+      ),
+      estadoCivilCodigoNombre: _prefer(
+        state.estadoCivilCodigoNombre,
+        prev?.estadoCivilCodigoNombre,
+      ),
+      frecuenciaCodigoNombre: _prefer(
+        state.frecuenciaCodigoNombre,
+        prev?.frecuenciaCodigoNombre,
+      ),
+      monedaCodigoNombre: _prefer(
+        state.monedaCodigoNombre,
+        prev?.monedaCodigoNombre,
+      ),
+      municipioCasaCodigoNombre: _prefer(
+        state.municipioCasaCodigoNombre,
+        prev?.municipioCasaCodigoNombre,
+      ),
+      municipioNegocioCodigoNombre: _prefer(
+        state.municipioNegocioCodigoNombre,
+        prev?.municipioNegocioCodigoNombre,
+      ),
+      nacinalidad2CodigoNombre: _prefer(
+        state.nacinalidad2CodigoNombre,
+        prev?.nacinalidad2CodigoNombre,
+      ),
+      nacinalidadCodigoNombre: _prefer(
+        state.nacinalidadCodigoNombre,
+        prev?.nacinalidadCodigoNombre,
+      ),
+      nacinalidad3CodigoNombre: _prefer(
+        state.nacinalidad3CodigoNombre,
+        prev?.nacinalidad3CodigoNombre,
+      ),
+      ocupacionNombre: _prefer(
+        state.ocupacionNombre,
+        prev?.ocupacionNombre,
+      ),
+      parentescoFamiliarPeps2CodigoNombre: _prefer(
+        state.parentescoFamiliarPeps2CodigoNombre,
+        prev?.parentescoFamiliarPeps2CodigoNombre,
+      ),
+      productoCodigoNombre: _prefer(
+        state.productoCodigoNombre,
+        prev?.productoCodigoNombre,
+      ),
+      profesionNombre: _prefer(
+        state.profesionNombre,
+        prev?.profesionNombre,
+      ),
+      propositoCodigoNombre: _prefer(
+        state.propositoCodigoNombre,
+        prev?.propositoCodigoNombre,
+      ),
+      sectorCodigoNombre: _prefer(
+        state.sectorCodigoNombre,
+        prev?.sectorCodigoNombre,
+      ),
+      tipoClienteCodigoNombre: _prefer(
+        state.tipoClienteCodigoNombre,
+        prev?.tipoClienteCodigoNombre,
+      ),
+      tipoDocumentoCodigoNombre: _prefer(
+        state.tipoDocumentoCodigoNombre,
+        prev?.tipoDocumentoCodigoNombre,
+      ),
+      tipoPersonaCodigoNombre: _prefer(
+        state.tipoPersonaCodigoNombre,
+        prev?.tipoPersonaCodigoNombre,
+      ),
+      tipoPersonaCnbsCodigoNombre: _prefer(
+        state.tipoPersonaCnbsCodigoNombre,
+        prev?.tipoPersonaCnbsCodigoNombre,
+      ),
+      apellidosConyugue: _prefer(
+        state.apellidosConyugue,
+        prev?.apellidosConyugue,
+      ),
+      tipoDocumentoConyugeCodigo: _prefer(
+        state.tipoDocumentoConyugue,
+        prev?.tipoDocumentoConyugeCodigo,
+      ),
+      cuotaWithDecimal: state.cuotaWithDecimal == 0
+          ? (prev?.cuotaWithDecimal ?? 0)
+          : state.cuotaWithDecimal,
+      numeroSolicitud: _prefer(
+        state.numeroSolicitud,
+        prev?.numeroSolicitud,
+      ),
+    );
   }
 
   void onFieldChanged(SolicitudNuevaMenorHnState Function() copyWithFn) {
@@ -801,6 +829,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         esGrupal: solicitud.esGrupal,
         cargoGrupoNombre: solicitud.cargoGrupoNombre,
         grupoCodigoNombre: solicitud.grupoCodigoNombre,
+        numeroSolicitud: solicitud.numeroSolicitud,
       ),
     );
   }

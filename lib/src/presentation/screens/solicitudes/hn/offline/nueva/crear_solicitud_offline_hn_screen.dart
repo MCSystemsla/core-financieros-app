@@ -1,19 +1,12 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/services/geolocation/geolocation_service.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/nuevamenor/local_db/solicitud_nueva_menor_hn_local_db.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_historial_crediticio_offline_hn.dart';
@@ -25,13 +18,14 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nuev
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_7.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_8.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/reenviar_archivos_solicitudes/reenviar_archivos_solicitudes.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
+import '../../../../../bloc/solicitudes/hn/cubit/enviar_cedula_solicitud_hn/enviar_cedula_solicitud_hn_cubit.dart';
+import '../../../../../bloc/solicitudes/hn/cubit/enviar_firma_digital_hn/enviar_firma_digital_solicitud_hn_cubit.dart';
 import '../../../../../bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
 
 class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
@@ -43,6 +37,7 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = SolicitudesCreditoHnRepositoryImpl();
     final localDbProvider = global<SolicitudesHnBoxService>();
     final imagesCedula = localDbProvider.getCedula(
       cedula: solicitudNuevaMenorHnLocalDb.cedula!,
@@ -71,7 +66,7 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudNuevaMenorHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
             global<SolicitudesHnBoxService>(),
           )
             ..initAutoSave(uuid: solicitudNuevaMenorHnLocalDb.uuid)
@@ -80,6 +75,16 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
               cedulaFrontPath: imagesCedula?.imageFrontCedula,
             )
             ..loadFromLocalDb(solicitudNuevaMenorHnLocalDb),
+        ),
+        BlocProvider(
+          create: (ctx) => EnviarCedulaSolicitudHnCubit(
+            repository,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => EnviarFirmaDigitalSolicitudHnCubit(
+            repository,
+          ),
         ),
       ],
       child: Scaffold(
@@ -108,45 +113,64 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                         Hero(
                           transitionOnUserGestures: true,
                           tag: 'cedulaFrontal',
-                          child: PhotoCedulaClientWidget(
-                            onNextPressed: () {},
-                            controller: pageController,
-                            fotoCedulaFrontal: XFile(
-                                imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                            fotoCedulaTrasera: XFile(
-                                imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                            fotoFirma: XFile(
-                              signatureFile?.imageSignature ?? 'NO PATH',
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SendFilesSolicitudNuevaContainers(
+                                  imagesCedula: imagesCedula,
+                                  cedulaCliente:
+                                      solicitudNuevaMenorHnLocalDb.cedula ?? '',
+                                  numeroSolicitud: solicitudNuevaMenorHnLocalDb
+                                          .numeroSolicitud ??
+                                      '',
+                                  signatureFile: signatureFile,
+                                  tipoSolicitud: 'NUEVAMENOR',
+                                ),
+                                PhotoCedulaClientWidget(
+                                  onNextPressed: () {},
+                                  controller: pageController,
+                                  fotoCedulaFrontal: XFile(
+                                    imagesCedula?.imageFrontCedula ?? 'NO PATH',
+                                  ),
+                                  fotoCedulaTrasera: XFile(
+                                    imagesCedula?.imageBackCedula ?? 'NO PATH',
+                                  ),
+                                  fotoFirma: XFile(
+                                    signatureFile?.imageSignature ?? 'NO PATH',
+                                  ),
+                                  onCedulaFrontalPressed: () {
+                                    // context.pushTransparentRoute(
+                                    //   PhotoCedulaImagePreview(
+                                    //     imagesCedula: File(
+                                    //       imagesCedula?.imageFrontCedula ?? '',
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                  onCedulaTraseraPressed: () {
+                                    // context.pushTransparentRoute(
+                                    //   PhotoCedulaImagePreview(
+                                    //     imagesCedula: File(
+                                    //       imagesCedula?.imageBackCedula ?? '',
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                  onFirmaPressed: () {
+                                    // context.pushTransparentRoute(
+                                    //   PhotoCedulaImagePreview(
+                                    //     imagesCedula: File(
+                                    //       signatureFile?.imageSignature ?? '',
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                ),
+                              ],
                             ),
-                            onCedulaFrontalPressed: () {
-                              context.pushTransparentRoute(
-                                PhotoCedulaImagePreview(
-                                  imagesCedula: File(
-                                    imagesCedula?.imageFrontCedula ?? '',
-                                  ),
-                                ),
-                              );
-                            },
-                            onCedulaTraseraPressed: () {
-                              context.pushTransparentRoute(
-                                PhotoCedulaImagePreview(
-                                  imagesCedula: File(
-                                    imagesCedula?.imageBackCedula ?? '',
-                                  ),
-                                ),
-                              );
-                            },
-                            onFirmaPressed: () {
-                              context.pushTransparentRoute(
-                                PhotoCedulaImagePreview(
-                                  imagesCedula: File(
-                                    signatureFile?.imageSignature ?? '',
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                         ),
+
                         NuevaMenorOfflineHn1(
                           controller: pageController,
                         ),
@@ -204,65 +228,6 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class PhootoSignatureWidget extends StatelessWidget {
-  final XFile? fotoSignature;
-  final VoidCallback onPhotoSignaturePressed;
-
-  final VoidCallback onNextPressed;
-  const PhootoSignatureWidget({
-    super.key,
-    required this.controller,
-    this.fotoSignature,
-    required this.onPhotoSignaturePressed,
-    required this.onNextPressed,
-  });
-
-  final PageController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Gap(30),
-          UploadImageWidget(
-            selectedImage: fotoSignature,
-            onPressed: onPhotoSignaturePressed,
-            title: 'Foto de firma digital',
-          ),
-          const Gap(30),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: CustomElevatedButton(
-              text: 'Siguiente',
-              // ignore: deprecated_member_use
-              color: AppColors.greenLatern.withOpacity(0.4),
-              onPressed: onNextPressed,
-            ),
-          ),
-          const Gap(20),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomOutLineButton(
-              onPressed: () {
-                controller.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                );
-              },
-              text: 'Cancelar',
-              textColor: AppColors.red,
-              color: AppColors.red,
-            ),
-          ),
-          const Gap(20),
-        ],
       ),
     );
   }

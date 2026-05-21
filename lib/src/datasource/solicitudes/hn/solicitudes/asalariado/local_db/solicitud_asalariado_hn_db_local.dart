@@ -152,6 +152,7 @@ class SolicitudAsalariadoHnDbLocal {
   String? caserioCasa;
   bool esRecurrente = false;
   String? userId = LocalStorage().userId;
+  String? numeroSolicitud;
   SolicitudAsalariadoHnDbLocal({
     this.id = 0,
     this.uuid,
@@ -298,5 +299,6 @@ class SolicitudAsalariadoHnDbLocal {
     this.caserioTrabajo,
     this.caserioCasa,
     this.esRecurrente = false,
+    this.numeroSolicitud,
   });
 }

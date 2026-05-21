@@ -180,6 +180,8 @@ class SolicitudNuevaMenorHnLocalDb {
   int? aniosLugarTrabajoConyuge;
   bool esRecurrente = false;
   String? userId = LocalStorage().userId;
+  String? numeroSolicitud;
+
   SolicitudNuevaMenorHnLocalDb({
     required this.id,
     this.esGrupal,
@@ -353,5 +355,6 @@ class SolicitudNuevaMenorHnLocalDb {
     this.ingresoMensualConyuge,
     this.aniosLugarTrabajoConyuge,
     this.esRecurrente = false,
+    this.numeroSolicitud,
   });
 }

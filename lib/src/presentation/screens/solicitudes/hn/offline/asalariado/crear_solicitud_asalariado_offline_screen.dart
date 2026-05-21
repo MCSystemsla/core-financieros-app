@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
@@ -23,12 +24,15 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_8.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/forms/solicitud_asalariado_offline_9.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/reenviar_archivos_solicitudes/reenviar_archivos_solicitudes.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_hn_cubit.dart';
+import '../../../../../bloc/solicitudes/hn/cubit/enviar_cedula_solicitud_hn/enviar_cedula_solicitud_hn_cubit.dart';
+import '../../../../../bloc/solicitudes/hn/cubit/enviar_firma_digital_hn/enviar_firma_digital_solicitud_hn_cubit.dart';
 
 class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
   final SolicitudAsalariadoHnDbLocal solicitudAsalariadoHnDbLocal;
@@ -40,9 +44,14 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localDbProvider = global<SolicitudesHnBoxService>();
+    final repository = SolicitudesCreditoHnRepositoryImpl();
     final imagesCedula = localDbProvider.getCedula(
       cedula: solicitudAsalariadoHnDbLocal.cedula!,
       tipoSolicitud: 'ASALARIADO',
+    );
+    final signatureFile = localDbProvider.getSignatureByCedula(
+      solicitudAsalariadoHnDbLocal.cedula!,
+      TypeForm.asalariado,
     );
     final pageController = PageController();
     return MultiBlocProvider(
@@ -60,7 +69,7 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => SolicitudAslariadoHnCubit(
-            SolicitudesCreditoHnRepositoryImpl(),
+            repository,
             global<SolicitudesHnBoxService>(),
           )
             ..saveCedula(
@@ -69,6 +78,16 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
             )
             ..initAutoSave(uuid: solicitudAsalariadoHnDbLocal.uuid)
             ..loadFromLocalDb(solicitudAsalariadoHnDbLocal),
+        ),
+        BlocProvider(
+          create: (ctx) => EnviarFirmaDigitalSolicitudHnCubit(
+            repository,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => EnviarCedulaSolicitudHnCubit(
+            repository,
+          ),
         ),
       ],
       child: Scaffold(
@@ -95,34 +114,64 @@ class CrearSolicitudAsalariadoOfflineScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       controller: pageController,
                       children: [
-                        Hero(
-                          transitionOnUserGestures: true,
-                          tag: 'cedulaFrontal',
-                          child: PhotoCedulaClientWidget(
-                            onNextPressed: () {},
-                            controller: pageController,
-                            fotoCedulaFrontal: XFile(
-                                imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                            fotoCedulaTrasera: XFile(
-                                imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                            onCedulaFrontalPressed: () {
-                              context.pushTransparentRoute(
-                                PhotoCedulaImagePreview(
-                                  imagesCedula: File(
-                                    imagesCedula?.imageFrontCedula ?? '',
-                                  ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SendFilesSolicitudAsalariadoContainers(
+                                imagesCedula: imagesCedula,
+                                cedulaCliente:
+                                    solicitudAsalariadoHnDbLocal.cedula ?? '',
+                                numeroSolicitud: solicitudAsalariadoHnDbLocal
+                                        .numeroSolicitud ??
+                                    '',
+                                signatureFile: signatureFile,
+                                tipoSolicitud: 'ASALARIADO',
+                              ),
+                              Hero(
+                                transitionOnUserGestures: true,
+                                tag: 'cedulaFrontal',
+                                child: PhotoCedulaClientWidget(
+                                  onNextPressed: () {},
+                                  controller: pageController,
+                                  fotoCedulaFrontal: XFile(
+                                      imagesCedula?.imageFrontCedula ??
+                                          'NO PATH'),
+                                  fotoCedulaTrasera: XFile(
+                                      imagesCedula?.imageBackCedula ??
+                                          'NO PATH'),
+                                  fotoFirma: XFile(
+                                      signatureFile?.imageSignature ??
+                                          'NO PATH'),
+                                  onFirmaPressed: () {
+                                    context.pushTransparentRoute(
+                                      PhotoCedulaImagePreview(
+                                        imagesCedula: File(
+                                          signatureFile?.imageSignature ?? '',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onCedulaFrontalPressed: () {
+                                    context.pushTransparentRoute(
+                                      PhotoCedulaImagePreview(
+                                        imagesCedula: File(
+                                          imagesCedula?.imageFrontCedula ?? '',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onCedulaTraseraPressed: () {
+                                    context.pushTransparentRoute(
+                                      PhotoCedulaImagePreview(
+                                        imagesCedula: File(
+                                          imagesCedula?.imageBackCedula ?? '',
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                            onCedulaTraseraPressed: () {
-                              context.pushTransparentRoute(
-                                PhotoCedulaImagePreview(
-                                  imagesCedula: File(
-                                    imagesCedula?.imageBackCedula ?? '',
-                                  ),
-                                ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
                         ),
                         SolicitudAsalariadoOffline1(

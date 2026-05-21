@@ -276,7 +276,6 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                       if (isSolicitudGrupal) ...[
                         const Gap(30),
                         GrupoSolicitudDropdown(
-                          key: const Key('grupoDropdown'),
                           items: gruposActivos
                               .map((e) =>
                                   Item(name: e.nombreCompleto, value: e.codigo))
@@ -1054,6 +1053,7 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
               onChanged: widget.onChanged,
             ),
           ConnectionStatus.connected => _GruposActivosDropdownWidget(
+              selectedItem: widget.selectedItem,
               onChanged: widget.onChanged,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.value),
@@ -1068,9 +1068,11 @@ class _GrupoSolicitudDropdownState extends State<GrupoSolicitudDropdown> {
 class _GruposActivosDropdownWidget extends StatelessWidget {
   final ItemCallback<Item> onChanged;
   final ValidatorCallback<Item> validator;
+  final Item? selectedItem;
 
   const _GruposActivosDropdownWidget({
     required this.onChanged,
+    this.selectedItem,
     this.validator,
   });
 
@@ -1081,13 +1083,14 @@ class _GruposActivosDropdownWidget extends StatelessWidget {
         return switch (state.status) {
           Status.inProgress => const LoadingWidget(),
           Status.done => SheetSearchDropdown(
+              selectedItem: selectedItem,
+              key: const Key('grupoDropdown'),
               items: state.gruposActivos
                   .map((e) => Item(
                         value: e.codigo,
                         name: e.nombreCompleto,
                       ))
                   .toList(),
-              key: const Key('tipoGrupoDropdown'),
               isRequired: true,
               validator: validator,
               enabled: true,
@@ -1096,7 +1099,8 @@ class _GruposActivosDropdownWidget extends StatelessWidget {
               onChanged: onChanged,
             ),
           Status.error => SearchDropdownWidget(
-              key: const Key('tipoGrupoDropdown'),
+              selectedItem: selectedItem,
+              key: const Key('grupoDropdown'),
               isRequired: true,
               validator: validator,
               enabled: true,

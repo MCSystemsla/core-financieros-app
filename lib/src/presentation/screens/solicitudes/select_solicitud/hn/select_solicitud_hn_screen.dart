@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_grupo_credito_grupal/crear_grupo_credito_grupal_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/rechazar_solicitud/rechazar_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
@@ -153,21 +154,23 @@ class _SolicitudesCardsRow4 extends StatelessWidget {
             ),
           ),
         ],
-        // const Gap(10),
-        // Expanded(
-        //   child: SolicitudCard(
-        //     svgPath: ImageAsset.nuevaMenorBg6,
-        //     title: 'Modificacion de Analisis de Credito',
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: ((_) => const ModificarAnalisisScreenHn()),
-        //         ),
-        //       );
-        //     },
-        //   ),
-        // ),
+        if (actions.contains(TypeAction.rechazarSolicitud.codigo)) ...[
+          const Gap(10),
+          Expanded(
+            child: SolicitudCard(
+              svgPath: ImageAsset.nuevaAddDni,
+              title: 'Rechazar Solicitud de Credito',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((_) => const RechazarSolicitudHnScreen()),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
         const Gap(10),
       ],
     );

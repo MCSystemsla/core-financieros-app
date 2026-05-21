@@ -2313,7 +2313,7 @@
     },
     {
       "id": "19:3800812227675495763",
-      "lastPropertyId": "166:4083707814335636976",
+      "lastPropertyId": "167:2051279379511489728",
       "name": "SolicitudAsalariadoHnDbLocal",
       "properties": [
         {
@@ -3051,13 +3051,18 @@
           "id": "166:4083707814335636976",
           "name": "userId",
           "type": 9
+        },
+        {
+          "id": "167:2051279379511489728",
+          "name": "numeroSolicitud",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "20:7517400371317957052",
-      "lastPropertyId": "176:5542657634735940913",
+      "lastPropertyId": "177:7980076068164213996",
       "name": "SolicitudNuevaMenorHnLocalDb",
       "properties": [
         {
@@ -3929,6 +3934,11 @@
         {
           "id": "176:5542657634735940913",
           "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "177:7980076068164213996",
+          "name": "numeroSolicitud",
           "type": 9
         }
       ],
