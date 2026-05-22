@@ -277,13 +277,13 @@ class GetDataAnalisisNuevaMenorMil {
 }
 
 class InventarioMenorMilData {
-  final int? id;
+  final String? id;
   final int? cantidad;
-  final int? costoVentaPorcentaje;
+  final num? costoVentaPorcentaje;
   final String? articulo;
   final double? costoCompra;
   final double? precioVenta;
-  final int? total;
+  final double? total;
 
   InventarioMenorMilData({
     this.id,
@@ -298,12 +298,12 @@ class InventarioMenorMilData {
   factory InventarioMenorMilData.fromJson(Map<String, dynamic> json) =>
       InventarioMenorMilData(
         id: json['ID'],
-        cantidad: json['Cantidad'],
-        costoVentaPorcentaje: json['CostoVentaPorcentaje'],
+        cantidad: parseInt(json['Cantidad']),
+        costoVentaPorcentaje: parseNum(json['CostoVentaPorcentaje']),
         articulo: json['Articulo'],
-        costoCompra: json['CostoCompra']?.toDouble(),
-        precioVenta: json['PrecioVenta']?.toDouble(),
-        total: json['Total'],
+        costoCompra: parseDouble(json['CostoCompra']),
+        precioVenta: parseDouble(json['PrecioVenta']),
+        total: parseDouble(json['Total']),
       );
 
   Map<String, dynamic> toJson() => {

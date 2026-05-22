@@ -107,7 +107,7 @@ class _ActivosFormState extends State<_ActivosForm> {
     final analisisDataCubit = context.watch<GetAnalisisMenorMilDataCubit>();
 
     final totalInventarioCalc = analisisDataCubit.state.inventarioTb.fold(
-      0,
+      0.00,
       (sum, element) => sum + (element.total ?? 0),
     );
 
@@ -317,7 +317,7 @@ class _PasivosForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final analisisDataCubit = context.watch<GetAnalisisMenorMilDataCubit>();
     final totalInventarioCalc = analisisDataCubit.state.inventarioTb.fold(
-      0,
+      0.00,
       (sum, element) => sum + (element.total ?? 0),
     );
     final totalActivosCirculantesCalc = analisisDataCubit.state.caja +

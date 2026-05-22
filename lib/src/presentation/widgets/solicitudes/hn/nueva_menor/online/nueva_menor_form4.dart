@@ -38,6 +38,20 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
   final formKey = GlobalKey<FormState>();
   bool trabajaConyuge = false;
   Item? estadoCivil;
+
+  TextInputType determineInputType({
+    String? tipoDocumento,
+  }) {
+    return switch ((tipoDocumento)) {
+      ('CEDULAIDENTIDAD') => TextInputType.number,
+      ('PASAPORTE') => TextInputType.text,
+      ('RTN') => TextInputType.number,
+      ('CARNETRESIDENCIA') => TextInputType.text,
+      ('DNI') => TextInputType.number,
+      _ => TextInputType.text
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -359,12 +373,27 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       OutlineTextfieldWidget(
                         key: const ValueKey('documentoConyuge'),
                         isRequired: true,
-                        validator: (value) =>
-                            ClassValidator.validateRequired(value),
+                        validator: (value) {
+                          final error =
+                              ClassValidator.hondurasDocumentValidator(
+                            value,
+                            state.tipoDocumentoConyugue,
+                          );
+
+                          if (error != null) return error;
+
+                          if (value == state.cedula) {
+                            return 'La cedula del conyugue no puede ser igual a la cedula del solicitante';
+                          }
+
+                          return null;
+                        },
                         hintText: 'Documento Cónyuge',
                         icon: Icon(Icons.credit_card,
                             color: AppColors.getPrimaryColor()),
-                        textInputType: TextInputType.text,
+                        textInputType: determineInputType(
+                          tipoDocumento: state.tipoDocumentoConyugue,
+                        ),
                         textCapitalization: TextCapitalization.characters,
                         title: 'Número de Documento del Cónyuge',
                         inputFormatters: [
