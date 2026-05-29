@@ -143,6 +143,7 @@ class _ListDataWidget extends StatelessWidget {
                   child: AutorizarSolicitudBottomSheet(
                     numeroSolicitud: int.tryParse(data[index].numero) ?? 0,
                     tipoSolicitud: data[index].tipoSolicitud,
+                    esPeps: data[index].esPeps,
                   ),
                 ),
               );
@@ -200,10 +201,12 @@ class _AnalisisSolicitudesTitle extends StatelessWidget {
 class AutorizarSolicitudBottomSheet extends StatelessWidget {
   final int numeroSolicitud;
   final String tipoSolicitud;
+  final bool esPeps;
   const AutorizarSolicitudBottomSheet({
     super.key,
     required this.numeroSolicitud,
     required this.tipoSolicitud,
+    required this.esPeps,
   });
 
   @override
@@ -290,6 +293,17 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                             '¿Estás seguro que desea autorizar la solicitud?',
                         onYes: () {
                           context.pop();
+                          // if (esPeps) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (_) => EspepsAutorizacionFormScreen(
+                          //         numeroSolicitud: numeroSolicitud,
+                          //       ),
+                          //     ),
+                          //   );
+                          //   return;
+                          // }
                           context
                               .read<AutorizarSolicitudCubit>()
                               .autorizarSolicitudCredito(

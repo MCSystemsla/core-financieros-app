@@ -42,407 +42,463 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<SolicitudAslariadoHnCubit>();
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const MiCreditoProgress(
-              currentStep: 4,
-              steps: 7,
-            ),
-            const Gap(30),
-            Column(
+    return BlocBuilder<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
               children: [
-                SearchDropdownWidget(
-                  codigo: 'ESTADOCIVIL',
-                  title: 'Estado Civil',
-                  flavor: global<FlavorCubit>().state.flavor,
-                  isRequired: true,
-                  onChanged: (item) {
-                    if (item == null || !mounted) return;
-                    setState(() {
-                      estadoCivil = item;
-                    });
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        estadoCivilCodigo: item.value,
-                      ),
-                    );
-                  },
-                  hintText: 'input.select_option'.tr(),
-                  enabled: true,
+                const MiCreditoProgress(
+                  currentStep: 4,
+                  steps: 7,
                 ),
-                if (estadoCivil?.value == 'UNI' ||
-                    estadoCivil?.value == 'CAS') ...[
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Nombre del Cónyuge',
-                    icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'Nombre del Cónyuge',
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                      LengthLimitingTextInputFormatter(250),
-                    ],
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          nombreConyugue: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  SearchDropdownWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    codigo: 'PROFESION',
-                    flavor: global<FlavorCubit>().state.flavor,
-                    hintText: 'Profesión del Cónyuge',
-                    title: 'Profesion del Conjugue',
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          profesionConyugue: value.value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  SearchDropdownWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    codigo: 'TIPODOCUMENTOPERSONA',
-                    flavor: global<FlavorCubit>().state.flavor,
-                    hintText: 'Tipo documento conyuge',
-                    title: 'Tipo documento conyuge',
-                    onChanged: (value) {
-                      if (value == null || !mounted) return;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          tipoDocumentoConyugeCodigo: value.value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Documento Cónyuge',
-                    icon: Icon(
-                      Icons.person,
-                      color: AppColors.getPrimaryColor(),
-                    ),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.words,
-                    title: 'Documento Cónyuge',
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                      LengthLimitingTextInputFormatter(250),
-                    ],
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          cedulaConyuge: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  SheetSearchDropdown(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.value),
-                    title: 'Trabaja Cónyuge?',
-                    hintText: 'input.select.option'.tr(),
-                    isRequired: true,
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      setState(() {
-                        trabajaConyuge = item.value == 'input.yes'.tr();
-                      });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          trabajaConyugue: item.value,
-                        ),
-                      );
-                    },
-                    enabled: true,
-                    items: [
-                      Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
-                      Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
-                    ],
-                  ),
-                  if (trabajaConyuge) ...[
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Trabajo del Cónyuge',
-                      icon: Icon(Icons.business,
-                          color: AppColors.getPrimaryColor()),
-                      textInputType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      title: 'Trabajo del Cónyuge',
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                        LengthLimitingTextInputFormatter(100),
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            trabajoConyugue: value,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Dirección del Trabajo del Cónyuge',
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      icon: Icon(Icons.location_on,
-                          color: AppColors.getPrimaryColor()),
-                      textInputType: TextInputType.text,
-                      textCapitalization: TextCapitalization.sentences,
-                      title: 'Direccion del Trabajo del Cónyuge',
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            direccionTrabajoConyugue: value,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(30),
-                    CountryInput(
+                const Gap(30),
+                Column(
+                  children: [
+                    SearchDropdownWidget(
+                      codigo: 'ESTADOCIVIL',
+                      title: 'Estado Civil',
+                      flavor: global<FlavorCubit>().state.flavor,
                       isRequired: true,
-                      maxLength: 15,
-                      countryCodeInput: CountryCodeInput.hn,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Teléfono del Trabajo del Cónyuge',
-                      icon:
-                          Icon(Icons.phone, color: AppColors.getPrimaryColor()),
-                      textInputType: TextInputType.phone,
-                      textCapitalization: TextCapitalization.none,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      title: 'Teléfono del Trabajo del Cónyuge',
-                      onChange: (value) {
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+
+                        final bool esConPareja =
+                            item.value == 'UNI' || item.value == 'CAS';
+
+                        setState(() {
+                          estadoCivil = item;
+                          if (!esConPareja) {
+                            trabajaConyuge = false;
+                          }
+                        });
+
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            telefonoTrabajoConyugue: value,
+                          () => state.copyWith(
+                            estadoCivilCodigo: item.value,
+                            nombreConyugue:
+                                esConPareja ? state.nombreConyugue : '',
+                            cedulaConyuge: esConPareja ? state.cedula : '',
+                            trabajaConyugue:
+                                esConPareja ? state.trabajaConyugue : '',
+                            trabajoConyugue:
+                                esConPareja ? state.trabajoConyugue : '',
+                            direccionTrabajoConyugue: esConPareja
+                                ? state.direccionTrabajoConyugue
+                                : '',
+                            telefonoTrabajoConyugue: esConPareja
+                                ? state.telefonoTrabajoConyugue
+                                : '',
+                            aniosLugarTrabajoConyuge: esConPareja
+                                ? state.aniosLugarTrabajoConyuge
+                                : 0,
+                            telefonoConyuge:
+                                esConPareja ? state.telefonoConyuge : '',
+                            profesionConyugue:
+                                esConPareja ? state.profesionConyugue : '',
+                            sueldoMesConyugue:
+                                esConPareja ? state.sueldoMesConyugue : 0,
+                            otrosIngresosConyugue:
+                                esConPareja ? state.otrosIngresosConyugue : 0,
+                            fuenteOtrosIngresosConyugue: esConPareja
+                                ? state.fuenteOtrosIngresosConyugue
+                                : '',
+                            nacionalidadConyugue:
+                                esConPareja ? state.nacionalidadConyugue : '',
+                            tiempoLaborarConyugue:
+                                esConPareja ? state.tiempoLaborarConyugue : '',
+                            tipoDocumentoConyugeCodigo: esConPareja
+                                ? state.tipoDocumentoConyugeCodigo
+                                : '',
+                            totalIngresoMesConyugue:
+                                esConPareja ? state.totalIngresoMesConyugue : 0,
+                            salarioNetoMensualConyuge: esConPareja
+                                ? state.salarioNetoMensualConyuge
+                                : 0,
                           ),
                         );
                       },
+                      hintText: 'input.select_option'.tr(),
+                      enabled: true,
                     ),
+                    if (estadoCivil?.value == 'UNI' ||
+                        estadoCivil?.value == 'CAS') ...[
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Nombre del Cónyuge',
+                        icon: Icon(Icons.person,
+                            color: AppColors.getPrimaryColor()),
+                        textInputType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
+                        title: 'Nombre del Cónyuge',
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(250),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              nombreConyugue: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      SearchDropdownWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        codigo: 'PROFESION',
+                        flavor: global<FlavorCubit>().state.flavor,
+                        hintText: 'Profesión del Cónyuge',
+                        title: 'Profesion del Conjugue',
+                        onChanged: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              profesionConyugue: value.value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      SearchDropdownWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        codigo: 'TIPODOCUMENTOPERSONA',
+                        flavor: global<FlavorCubit>().state.flavor,
+                        hintText: 'Tipo documento conyuge',
+                        title: 'Tipo documento conyuge',
+                        onChanged: (value) {
+                          if (value == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              tipoDocumentoConyugeCodigo: value.value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Documento Cónyuge',
+                        icon: Icon(
+                          Icons.person,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        textInputType: TextInputType.text,
+                        textCapitalization: TextCapitalization.words,
+                        title: 'Documento Cónyuge',
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(250),
+                        ],
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              cedulaConyuge: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      SheetSearchDropdown(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.value),
+                        title: 'Trabaja Cónyuge?',
+                        hintText: 'input.select.option'.tr(),
+                        isRequired: true,
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          setState(() {
+                            trabajaConyuge = item.value == 'input.yes'.tr();
+                          });
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              trabajaConyugue: item.value,
+                            ),
+                          );
+                        },
+                        enabled: true,
+                        items: [
+                          Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
+                          Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
+                        ],
+                      ),
+                      if (trabajaConyuge) ...[
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Trabajo del Cónyuge',
+                          icon: Icon(Icons.business,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.text,
+                          textCapitalization: TextCapitalization.words,
+                          title: 'Trabajo del Cónyuge',
+                          inputFormatters: [
+                            UpperCaseTextFormatter(),
+                            LengthLimitingTextInputFormatter(100),
+                          ],
+                          onChange: (value) {
+                            cubit.onFieldChanged(
+                              () => cubit.state.copyWith(
+                                trabajoConyugue: value,
+                              ),
+                            );
+                          },
+                        ),
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Dirección del Trabajo del Cónyuge',
+                          inputFormatters: [
+                            UpperCaseTextFormatter(),
+                          ],
+                          icon: Icon(Icons.location_on,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.text,
+                          textCapitalization: TextCapitalization.sentences,
+                          title: 'Direccion del Trabajo del Cónyuge',
+                          onChange: (value) {
+                            cubit.onFieldChanged(
+                              () => cubit.state.copyWith(
+                                direccionTrabajoConyugue: value,
+                              ),
+                            );
+                          },
+                        ),
+                        const Gap(30),
+                        CountryInput(
+                          isRequired: true,
+                          maxLength: 15,
+                          countryCodeInput: CountryCodeInput.hn,
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Teléfono del Trabajo del Cónyuge',
+                          icon: Icon(Icons.phone,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.phone,
+                          textCapitalization: TextCapitalization.none,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          title: 'Teléfono del Trabajo del Cónyuge',
+                          onChange: (value) {
+                            cubit.onFieldChanged(
+                              () => cubit.state.copyWith(
+                                telefonoTrabajoConyugue: value,
+                              ),
+                            );
+                          },
+                        ),
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Tiempo de Laborar del Cónyuge',
+                          icon: Icon(Icons.access_time,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.number,
+                          textCapitalization: TextCapitalization.none,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(2),
+                          ],
+                          title: 'Tiempo de laborar del Cónyuge',
+                          onChange: (value) {
+                            cubit.onFieldChanged(
+                              () => cubit.state.copyWith(
+                                tiempoLaborarConyugue: value,
+                                aniosLugarTrabajoConyuge:
+                                    int.tryParse(value) ?? 0,
+                              ),
+                            );
+                          },
+                        ),
+                        const Gap(30),
+                        OutlineTextfieldWidget(
+                          validator: (value) =>
+                              ClassValidator.validateRequired(value),
+                          hintText: 'Sueldo Mensual del Cónyuge',
+                          icon: Icon(Icons.wallet,
+                              color: AppColors.getPrimaryColor()),
+                          textInputType: TextInputType.number,
+                          textCapitalization: TextCapitalization.none,
+                          title: 'Sueldo Mensual del Cónyuge',
+                          inputFormatters: [
+                            CurrencyInputFormatter(
+                              mantissaLength: 0,
+                            ),
+                          ],
+                          onChange: (value) {
+                            final newValue =
+                                value.replaceAll(RegExp(r'[^0-9]'), '');
+                            final sueldoMensual = int.tryParse(newValue) ?? 0;
+                            cubit.onFieldChanged(
+                              () => cubit.state.copyWith(
+                                sueldoMesConyugue: sueldoMensual,
+                                salarioNetoMensualConyuge:
+                                    sueldoMensual.toDouble(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Otros Ingresos del Cónyuge',
+                        icon: Icon(Icons.payments,
+                            color: AppColors.getPrimaryColor()),
+                        textInputType: TextInputType.number,
+                        textCapitalization: TextCapitalization.none,
+                        title: 'Otros Ingresos del Cónyuge',
+                        inputFormatters: [
+                          CurrencyInputFormatter(
+                            mantissaLength: 0,
+                          ),
+                        ],
+                        onChange: (value) {
+                          final newValue =
+                              value.replaceAll(RegExp(r'[^0-9]'), '');
+                          final otrosIngresos = int.tryParse(newValue) ?? 0;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              otrosIngresosConyugue: otrosIngresos,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      OutlineTextfieldWidget(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Fuente de Otros Ingresos del Cónyuge',
+                        icon: Icon(Icons.source,
+                            color: AppColors.getPrimaryColor()),
+                        textInputType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        inputFormatters: [
+                          UpperCaseTextFormatter(),
+                          LengthLimitingTextInputFormatter(100),
+                        ],
+                        title: 'Fuente de Otros Ingresos del Cónyuge',
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              fuenteOtrosIngresosConyugue: value,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CatalogoValorNacionalidad(
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value?.valor),
+                        hintText: 'Nacionalidad del Cónyuge',
+                        title: 'Nacionalidad del Cónyuge',
+                        codigo: 'PAIS',
+                        onChanged: (item) {
+                          if (item == null || !mounted) return;
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              nacionalidadConyugue: item.valor,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(30),
+                      CountryInput(
+                        isRequired: true,
+                        maxLength: 15,
+                        countryCodeInput: CountryCodeInput.hn,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Numero de telefono del Cónyuge',
+                        icon: Icon(Icons.phone,
+                            color: AppColors.getPrimaryColor()),
+                        textInputType: TextInputType.phone,
+                        textCapitalization: TextCapitalization.none,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        title: 'Numero de telefono del Cónyuge',
+                        onChange: (value) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              telefonoConyuge: value,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Tiempo de Laborar del Cónyuge',
-                      icon: Icon(Icons.access_time,
-                          color: AppColors.getPrimaryColor()),
+                      hintText: 'Personas a Cargo',
+                      icon:
+                          Icon(Icons.group, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
+                      title: 'Personas a Cargo',
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(2),
                       ],
-                      title: 'Tiempo de laborar del Cónyuge',
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            tiempoLaborarConyugue: value,
-                            aniosLugarTrabajoConyuge: int.tryParse(value) ?? 0,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(30),
-                    OutlineTextfieldWidget(
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Sueldo Mensual del Cónyuge',
-                      icon: Icon(Icons.wallet,
-                          color: AppColors.getPrimaryColor()),
-                      textInputType: TextInputType.number,
-                      textCapitalization: TextCapitalization.none,
-                      title: 'Sueldo Mensual del Cónyuge',
-                      inputFormatters: [
-                        CurrencyInputFormatter(
-                          mantissaLength: 0,
-                        ),
-                      ],
-                      onChange: (value) {
-                        final newValue =
-                            value.replaceAll(RegExp(r'[^0-9]'), '');
-                        final sueldoMensual = int.tryParse(newValue) ?? 0;
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
-                            sueldoMesConyugue: sueldoMensual,
-                            salarioNetoMensualConyuge: sueldoMensual.toDouble(),
+                            personasACargo: int.tryParse(value) ?? 0,
                           ),
                         );
                       },
                     ),
                   ],
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Otros Ingresos del Cónyuge',
-                    icon: Icon(Icons.payments,
-                        color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.number,
-                    textCapitalization: TextCapitalization.none,
-                    title: 'Otros Ingresos del Cónyuge',
-                    inputFormatters: [
-                      CurrencyInputFormatter(
-                        mantissaLength: 0,
-                      ),
-                    ],
-                    onChange: (value) {
-                      final newValue = value.replaceAll(RegExp(r'[^0-9]'), '');
-                      final otrosIngresos = int.tryParse(newValue) ?? 0;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          otrosIngresosConyugue: otrosIngresos,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  OutlineTextfieldWidget(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Fuente de Otros Ingresos del Cónyuge',
-                    icon:
-                        Icon(Icons.source, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.text,
-                    textCapitalization: TextCapitalization.sentences,
-                    inputFormatters: [
-                      UpperCaseTextFormatter(),
-                      LengthLimitingTextInputFormatter(100),
-                    ],
-                    title: 'Fuente de Otros Ingresos del Cónyuge',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          fuenteOtrosIngresosConyugue: value,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  CatalogoValorNacionalidad(
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value?.valor),
-                    hintText: 'Nacionalidad del Cónyuge',
-                    title: 'Nacionalidad del Cónyuge',
-                    codigo: 'PAIS',
-                    onChanged: (item) {
-                      if (item == null || !mounted) return;
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          nacionalidadConyugue: item.valor,
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(30),
-                  CountryInput(
-                    isRequired: true,
-                    maxLength: 15,
-                    countryCodeInput: CountryCodeInput.hn,
-                    validator: (value) =>
-                        ClassValidator.validateRequired(value),
-                    hintText: 'Numero de telefono del Cónyuge',
-                    icon: Icon(Icons.phone, color: AppColors.getPrimaryColor()),
-                    textInputType: TextInputType.phone,
-                    textCapitalization: TextCapitalization.none,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    title: 'Numero de telefono del Cónyuge',
-                    onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(
-                          telefonoConyuge: value,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-                const Gap(30),
-                OutlineTextfieldWidget(
-                  hintText: 'Personas a Cargo',
-                  icon: Icon(Icons.group, color: AppColors.getPrimaryColor()),
-                  textInputType: TextInputType.number,
-                  textCapitalization: TextCapitalization.none,
-                  title: 'Personas a Cargo',
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(2),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                        personasACargo: int.tryParse(value) ?? 0,
-                      ),
-                    );
-                  },
                 ),
+                const Gap(30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Cancelar',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
               ],
             ),
-            const Gap(30),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: CustomElevatedButton(
-                text: 'Siguiente',
-                color: AppColors.greenLatern.withOpacity(0.4),
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-
-                  widget.controller.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-              ),
-            ),
-            const Gap(20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomOutLineButton(
-                onPressed: () {
-                  widget.controller.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                },
-                text: 'Cancelar',
-                textColor: AppColors.red,
-                color: AppColors.red,
-              ),
-            ),
-            const Gap(20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

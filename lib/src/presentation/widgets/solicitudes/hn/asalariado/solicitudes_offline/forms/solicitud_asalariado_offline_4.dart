@@ -71,9 +71,51 @@ class _SolicitudAsalariadoOffline4State
                       onChanged: (item) {
                         if (item == null || !mounted) return;
 
+                        final bool esConPareja =
+                            item.value == 'UNI' || item.value == 'CAS';
+
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             estadoCivilCodigo: item.value,
+                            nombreConyugue:
+                                esConPareja ? state.nombreConyugue : '',
+                            cedulaConyuge: esConPareja ? state.cedula : '',
+                            trabajaConyugue:
+                                esConPareja ? state.trabajaConyugue : '',
+                            trabajoConyugue:
+                                esConPareja ? state.trabajoConyugue : '',
+                            direccionTrabajoConyugue: esConPareja
+                                ? state.direccionTrabajoConyugue
+                                : '',
+                            telefonoTrabajoConyugue: esConPareja
+                                ? state.telefonoTrabajoConyugue
+                                : '',
+                            aniosLugarTrabajoConyuge: esConPareja
+                                ? state.aniosLugarTrabajoConyuge
+                                : 0,
+                            telefonoConyuge:
+                                esConPareja ? state.telefonoConyuge : '',
+                            profesionConyugue:
+                                esConPareja ? state.profesionConyugue : '',
+                            sueldoMesConyugue:
+                                esConPareja ? state.sueldoMesConyugue : 0,
+                            otrosIngresosConyugue:
+                                esConPareja ? state.otrosIngresosConyugue : 0,
+                            fuenteOtrosIngresosConyugue: esConPareja
+                                ? state.fuenteOtrosIngresosConyugue
+                                : '',
+                            nacionalidadConyugue:
+                                esConPareja ? state.nacionalidadConyugue : '',
+                            tiempoLaborarConyugue:
+                                esConPareja ? state.tiempoLaborarConyugue : '',
+                            tipoDocumentoConyugeCodigo: esConPareja
+                                ? state.tipoDocumentoConyugeCodigo
+                                : '',
+                            totalIngresoMesConyugue:
+                                esConPareja ? state.totalIngresoMesConyugue : 0,
+                            salarioNetoMensualConyuge: esConPareja
+                                ? state.salarioNetoMensualConyuge
+                                : 0,
                           ),
                         );
                       },

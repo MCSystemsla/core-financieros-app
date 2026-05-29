@@ -40,6 +40,7 @@ class SolicitudEstado {
   final bool esSolicitudGrupal;
   final String? grupoCodigo;
   final String? nombreGrupo;
+  final bool esPeps;
 
   SolicitudEstado({
     required this.id,
@@ -61,6 +62,7 @@ class SolicitudEstado {
     required this.esSolicitudGrupal,
     this.grupoCodigo,
     this.nombreGrupo,
+    required this.esPeps,
   });
 
   factory SolicitudEstado.fromJson(Map<String, dynamic> json) =>
@@ -84,6 +86,7 @@ class SolicitudEstado {
         esSolicitudGrupal: json['EsSolicitudGrupal'] ?? false,
         grupoCodigo: json['GrupoCodigo'],
         nombreGrupo: json['NombreGrupo'],
+        esPeps: json['EsPEPS'] ?? false,
       );
 }
 

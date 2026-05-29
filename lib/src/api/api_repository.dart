@@ -16,7 +16,7 @@ import 'package:logger/logger.dart';
 
 import '../../global_locator.dart';
 // import '../utils/lang/type_safety.dart';
-import 'package:http_parser/http_parser.dart';
+// import 'package:http_parser/http_parser.dart';
 import 'endpoint.dart';
 
 enum Protocol { http, https }

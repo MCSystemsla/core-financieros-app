@@ -3,6 +3,7 @@
 import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/informacion_peps/informacion_peps_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_asignar_promotor_to_solicitud.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/solicitudes_grupales_autorizacion.dart';
@@ -709,4 +710,22 @@ class CambiarGrupoNombreEndpoint extends Endpoint {
         'Nombre': nombreGrupo,
         'CodigoGrupo': codigoGrupo.toString(),
       };
+}
+
+class InformacionPepsEndpointHN extends Endpoint {
+  final PepsInformacionHn pepsInformacionHn;
+  InformacionPepsEndpointHN({
+    required this.pepsInformacionHn,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/peps/informacion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => pepsInformacionHn.toJson();
 }

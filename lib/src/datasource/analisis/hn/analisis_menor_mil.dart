@@ -197,7 +197,7 @@ class AnalisisMenorMilHN {
           double.tryParse(gastosUnidadFamiliar.toSafeString(2)),
       'TotalIngresos': double.tryParse(totalIngresos.toSafeString(2)),
       'CostoVentaPorcentaje':
-          double.tryParse(costoVentaPorcentaje.toSafeString(2)),
+          double.tryParse(costoVentaPorcentaje.toSafeString(2)) ?? 0,
       'CostoVenta': double.tryParse(costoVenta.toSafeString(2)),
       'GastosOperativos': double.tryParse(gastosOperativos.toSafeString(2)),
       'MargenBrutoNegocio': double.tryParse(margenBrutoNegocio.toSafeString(2)),

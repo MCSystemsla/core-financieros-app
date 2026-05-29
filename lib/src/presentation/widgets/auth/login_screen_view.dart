@@ -276,14 +276,21 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               BlocConsumer<AuthCubit, AuthState>(
                 listener: (context, state) {
                   final status = state.status;
-                  if (status == Status.error) {
+                  if (status == AuthStatus.unauthenticated) {
                     showV2CustomSnackbar(
                       context,
                       title: state.errorMsg,
                       type: SnackbarType.warning,
                     );
                   }
-                  if (state.status == Status.done) {
+                  if (status == AuthStatus.error) {
+                    showV2CustomSnackbar(
+                      context,
+                      title: state.errorMsg,
+                      type: SnackbarType.error,
+                    );
+                  }
+                  if (state.status == AuthStatus.authenticated) {
                     if (!context.mounted) return;
                     if (global<BiometricCubit>().state.isAuthenticated) {
                       global<BiometricCubit>().deactivateBiometricAuth();
@@ -298,7 +305,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 },
                 builder: (context, state) {
                   return CustomElevatedButton(
-                    enabled: state.status != Status.inProgress,
+                    enabled: state.status != AuthStatus.authenticating,
                     text: 'button.login'.tr(),
                     color: Colors.black,
                     onPressed: () {

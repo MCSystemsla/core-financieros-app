@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
+import 'package:core_financiero_app/src/datasource/auth/auth_response.dart';
 import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
@@ -11,7 +12,7 @@ import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_end
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
-  Future<Map<String, dynamic>> login({
+  Future<AuthResponse> login({
     required String userName,
     required String password,
     required String dbName,
@@ -29,7 +30,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   final _logger = Logger();
   @override
-  Future<Map<String, dynamic>> login({
+  Future<AuthResponse> login({
     required String userName,
     required String password,
     required String dbName,
@@ -44,9 +45,15 @@ class AuthRepositoryImpl extends AuthRepository {
         endpoint: endpoint,
         needToValidateToken: false,
       );
-      return resp;
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = AuthResponse.fromJson(resp);
+      return data;
     } catch (e) {
-      throw AppException.toAppException(e.toString());
+      rethrow;
     }
   }
 

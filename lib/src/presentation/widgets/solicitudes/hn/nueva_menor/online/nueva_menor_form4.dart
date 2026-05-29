@@ -123,13 +123,49 @@ class _NuevaMenorForm4State extends State<NuevaMenorForm4>
                       title: 'Estado Civil',
                       onChanged: (item) {
                         if (item == null || !mounted) return;
+
+                        final bool esConPareja =
+                            item.value == 'UNI' || item.value == 'CAS';
+
                         setState(() {
                           estadoCivil = item;
+                          if (!esConPareja) {
+                            trabajaConyuge = false;
+                          }
                         });
+
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             estadoCivilCodigo: item.value,
                             estadoCivilCodigoNombre: item.name,
+                            nombreConyugue:
+                                esConPareja ? state.nombreConyugue : '',
+                            apellidosConyugue:
+                                esConPareja ? state.apellidosConyugue : '',
+                            nacionalidadConyugue:
+                                esConPareja ? state.nacionalidadConyugue : '',
+                            trabajaConyugue:
+                                esConPareja ? state.trabajaConyugue : '',
+                            trabajoConyugue:
+                                esConPareja ? state.trabajoConyugue : '',
+                            direccionTrabajoConyugue: esConPareja
+                                ? state.direccionTrabajoConyugue
+                                : '',
+                            telefonoTrabajoConyugue: esConPareja
+                                ? state.telefonoTrabajoConyugue
+                                : '',
+                            aniosLugarTrabajoConyuge: esConPareja
+                                ? state.aniosLugarTrabajoConyuge
+                                : 0,
+                            ingresoMensualConyuge:
+                                esConPareja ? state.ingresoMensualConyuge : 0,
+                            tipoDocumentoConyugue:
+                                esConPareja ? state.tipoDocumentoConyugue : '',
+                            documentoConyuge:
+                                esConPareja ? state.documentoConyuge : '',
+                            actividadDescripcionConyugue: esConPareja
+                                ? state.actividadDescripcionConyugue
+                                : '',
                           ),
                         );
                       },

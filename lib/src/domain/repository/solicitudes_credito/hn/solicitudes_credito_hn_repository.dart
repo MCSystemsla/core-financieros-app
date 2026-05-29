@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/error_reporter/error_repo
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/catalogos/actividades_economicas_alias_filtered.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/informacion_peps/informacion_peps_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/cargos_disponible_response.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/grupales/grupo_activo_response.dart';
@@ -177,6 +178,9 @@ abstract class SolicitudesCreditoHnRepository {
   Future<String> cambiarGrupoNombre({
     required String nombreGrupo,
     required int codigoGrupo,
+  });
+  Future<void> enviarInformacionPeps({
+    required PepsInformacionHn informacionPeps,
   });
 }
 
@@ -1222,6 +1226,26 @@ class SolicitudesCreditoHnRepositoryImpl
         throw AppException(optionalMsg: errorMsg.toString());
       }
       return resp['message'] as String;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> enviarInformacionPeps({
+    required PepsInformacionHn informacionPeps,
+  }) async {
+    final endpoint = InformacionPepsEndpointHN(
+      pepsInformacionHn: informacionPeps,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;

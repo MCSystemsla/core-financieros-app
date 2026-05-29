@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/get_supervisiones/get_supervisiones_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_credito_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_regional_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/form/supervisiones_form_riesgo_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_dynamic_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -223,7 +224,10 @@ class SupervisionsHnIncerptorHn extends StatelessWidget {
           razonEndeudamiento: razonEndeudamiento,
           tipoSolicitud: tipoSolicitud,
         ),
-      _ => const SizedBox.shrink(),
+      TipoSupervisorEnum.regional => SupervisionesFormRegionalHnScreen(
+          data: data,
+          tipoSolicitud: tipoSolicitud,
+        ),
     };
   }
 }

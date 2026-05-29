@@ -300,7 +300,7 @@ class SolicitudNuevaMenorHn {
       'HorarioVisita': horarioVisita,
       'PersonasACargo': personasACargo,
       'EstadoCivilCodigo': estadoCivilCodigo,
-      'NombreConyugue': nombreCompletoConyugue,
+      'NombreConyugue': nombreCompletoConyugue.trim(),
       'TrabajaConyugue': trabajaConyugue,
       'TrabajoConyugue': trabajoConyugue,
       'DireccionTrabajoConyugue': direccionTrabajoConyugue,

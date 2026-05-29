@@ -420,6 +420,7 @@ class SolicitudAsalariadoHn {
       'CaserioCasa': caserioCasa,
       'EsRecurrente': esRecurrente,
     };
+
     data.removeWhere(
       (key, value) => value == null || value == '',
     );
