@@ -318,8 +318,8 @@ class _UpdateSolicitudNuevaMenorForm4State
                     onChanged: (value) {
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          tipoDocumentoCodigo: value?.value,
-                          tipoDocumentoNombre: value?.name,
+                          tipoDocumentoConyugeCodigo: value?.value,
+                          tipoDocumentoConyugeNombre: value?.name,
                         ),
                       );
                     },

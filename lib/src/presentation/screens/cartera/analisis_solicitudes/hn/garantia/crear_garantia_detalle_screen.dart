@@ -121,7 +121,8 @@ class _ArticuloFormState extends State<_ArticuloForm> {
                       ))
                   .toList(),
             ),
-            if (tipoGarantiaName == TipoGarantiaEnum.liquida.codigo) ...[
+            if (tipoGarantiaName?.toUpperCase() ==
+                TipoGarantiaEnum.liquida.codigo) ...[
               const Gap(20),
               BlocBuilder<AnalisisDpfsCubit, AnalisisDpfsState>(
                 builder: (context, state) {

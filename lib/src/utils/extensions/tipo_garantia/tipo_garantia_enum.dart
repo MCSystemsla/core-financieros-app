@@ -1,10 +1,10 @@
 enum TipoGarantiaEnum {
-  liquida('Garantía Liquida'),
+  liquida('GARANTIA LIQUIDA'),
   fiadorPrendario('Fiador Prendario'),
   fiadorSolidario('Fiador Solidario'),
   prendaAgraria('Prenda Agraria'),
   fiduciario('Fiduciaria'),
-  hipotecario('Hipotecaria'),
+  hipotecario('GARANTIA HIPOTECARIA'),
   fiadorHipotecario('Fiador Hipotecario');
 
   final String codigo;
@@ -14,7 +14,7 @@ enum TipoGarantiaEnum {
 
 extension TipoGarantiaParser on String {
   TipoGarantiaEnum toTipoGarantiaEnum() => switch (this) {
-        'Garantía Liquida' => TipoGarantiaEnum.liquida,
+        'GARANTIA LIQUIDA' => TipoGarantiaEnum.liquida,
         'Garantia Liquida' => TipoGarantiaEnum.liquida,
         'Fiador Prendario' => TipoGarantiaEnum.fiadorPrendario,
         'Fiador Solidario' => TipoGarantiaEnum.fiadorSolidario,

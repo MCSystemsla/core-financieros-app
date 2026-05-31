@@ -121,12 +121,11 @@ android {
             // applicationId "com.mcsystem.core_financiero_app.hn"
             applicationId "com.mcsystem.core_financiero_app.hnd"
             signingConfig signingConfigs.debug
-            versionName "1.10.36"
-            versionCode 45
+            versionName "1.10.38"
+            versionCode 47
             // versionCode flutterVersionCode.toInteger() + 1
         }
-        micreditoCostaRica {
-            dimension "country"
+        micreditoCostaRica { 
             resValue "string", "app_name", "MiCrédito Costa Rica"
             // versionNameSuffix ".cr"
             applicationId "com.mcsystem.core_financiero_app.cr"

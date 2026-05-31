@@ -179,6 +179,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: CustomSwitch(
+                  enabled: false,
                   value: usaConfiguracionCompartida,
                   onChanged: (value) {
                     setState(() => usaConfiguracionCompartida = value);
@@ -558,17 +559,17 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
         //   },
         //   subtitle: 'Si se mantiene la tasa de interés?',
         // ),
-        const Divider(),
-        CustomSwitch(
-          title: 'Financiar comision y seguros',
-          subtitle: 'Si se financia la comisión y los seguros?',
-          value: financiaComisionYSeguros,
-          onChanged: (v) {
-            setState(() {
-              financiaComisionYSeguros = v;
-            });
-          },
-        ),
+        // const Divider(),
+        // CustomSwitch(
+        //   title: 'Financiar comision y seguros',
+        //   subtitle: 'Si se financia la comisión y los seguros?',
+        //   value: financiaComisionYSeguros,
+        //   onChanged: (v) {
+        //     setState(() {
+        //       financiaComisionYSeguros = v;
+        //     });
+        //   },
+        // ),
         const Divider(),
         CustomSwitch(
           title: 'Cuota nivelada',
@@ -672,8 +673,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
             : tipoPrograma?.value ?? '',
         monto: monto ?? 0,
         montoSeguro: data.montoSeguroVida ?? 0,
-        plazo:
-            usaConfiguracionCompartida ? data.plazoSolicitud ?? 0 : plazoMeses,
+        plazo: usaConfiguracionCompartida ? state.plazo : plazoMeses,
         sectorCodigo: sector?.value ?? '',
         actividadCodigo: actividad?.valor ?? '',
         fuenteFinanciamientoCodigo: usaConfiguracionCompartida
@@ -722,7 +722,7 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
                 )..getComiteServicios(
                     comiteId: data.id ?? 0,
                     numeroSolicitud: widget.numeroSolicitud,
-                    plazoCredito: data.plazoSolicitud ?? 0,
+                    plazoCredito: state.plazo,
                     montoCredito: monto?.toDouble() ?? 0,
                     capitalAdeudado: 0,
                     primaSegurosDanios: 0,
