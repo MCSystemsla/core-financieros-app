@@ -201,6 +201,9 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
 
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
 
+    double tasaInteresCorriente = state.tasaInteresCorriente;
+    double tasaInteresMoratorio = state.tasaInteresMoratorio;
+
     context.pushTransparentRoute(MultiBlocProvider(
       providers: [
         BlocProvider.value(
@@ -229,10 +232,8 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
         seguroMapfre: cubitCalculos.state.data?.data.seguros.mapfre ?? 0,
         porcentajeSaldoDeudorAprobado:
             cubitCalculos.state.data?.data.comision.tasa ?? 0,
-        tasaInteresCorriente:
-            cubitCalculos.state.data?.data.interes.tasaInteresCorriente ?? 0,
-        tasaInteresMoratorio:
-            cubitCalculos.state.data?.data.interes.tasaInteresMoratorio ?? 0,
+        tasaInteresCorriente: tasaInteresCorriente,
+        tasaInteresMoratorio: tasaInteresMoratorio,
         seguoMemorialMensual: cubitCalculos.state.data?.data.seguros.vida ?? 0,
       ),
     ));

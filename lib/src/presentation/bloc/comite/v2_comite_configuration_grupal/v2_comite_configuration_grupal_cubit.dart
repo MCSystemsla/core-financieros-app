@@ -32,6 +32,8 @@ class V2ComiteConfigurationGrupalCubit
           plazo: state.plazo,
           observacion: state.observacion,
           fechaPrimerPago: DateTime.parse(state.fechaPrimerPago),
+          tasaInteresCorriente: state.tasaInteresCorriente,
+          tasaInteresMoratorio: state.tasaInteresMoratorio,
         ),
       );
       emit(state.copyWith(status: Status.done, dataAreLoaded: true));
@@ -72,6 +74,8 @@ class V2ComiteConfigurationGrupalCubit
           periodicidadInteresNombre: data.data.periodicidadInteresNombre,
           tipoProgramaNombre: data.data.tipoProgramaNombre,
           fuenteFinanciamientoNombre: data.data.fuenteFinanciamientoNombre,
+          tasaInteresCorriente: data.data.tasaInteresCorriente,
+          tasaInteresMoratorio: data.data.tasaInteresMoratorio,
           dataAreLoaded: data.data.dataAreLoaded,
         ),
       );

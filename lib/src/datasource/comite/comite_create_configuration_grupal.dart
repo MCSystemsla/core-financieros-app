@@ -15,6 +15,8 @@ class ComiteCreateConfigurationGrupal {
   final String observacion;
   final DateTime fechaPrimerPago;
   final String productoCodigo;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
 
   ComiteCreateConfigurationGrupal({
     required this.cicloGrupoId,
@@ -31,6 +33,8 @@ class ComiteCreateConfigurationGrupal {
     required this.observacion,
     required this.fechaPrimerPago,
     required this.productoCodigo,
+    required this.tasaInteresCorriente,
+    required this.tasaInteresMoratorio,
   });
 
   Map<String, dynamic> toJson() {
@@ -50,6 +54,8 @@ class ComiteCreateConfigurationGrupal {
       'Observacion': observacion,
       'FechaPrimerPago': fechaPrimerPago.toUtc().toIso8601String(),
       'ProductoCodigo': productoCodigo,
+      'TasaInteresCorriente': tasaInteresCorriente,
+      'TasaInteresMoratorio': tasaInteresMoratorio,
     };
     data.removeWhere((key, value) => value == '' || value == null);
     return data;

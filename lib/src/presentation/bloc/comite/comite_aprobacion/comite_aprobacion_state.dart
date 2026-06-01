@@ -26,7 +26,7 @@ class ComiteAprobacionState extends Equatable {
   final String actividadCodigo;
   final String fuenteFinanciamientoCodigo;
   final double tasaInteresCorriente;
-  final int tasaInteresMoratorio;
+  final double tasaInteresMoratorio;
   final String monedaDesembolsoCodigo;
   final String tipoDesembolsoCodigo;
   final int promotorId;
@@ -176,7 +176,7 @@ class ComiteAprobacionState extends Equatable {
     String? actividadCodigo,
     String? fuenteFinanciamientoCodigo,
     double? tasaInteresCorriente,
-    int? tasaInteresMoratorio,
+    double? tasaInteresMoratorio,
     String? monedaDesembolsoCodigo,
     String? tipoDesembolsoCodigo,
     int? promotorId,

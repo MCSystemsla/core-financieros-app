@@ -35,6 +35,8 @@ class SharedConfigurationGrupalData {
   final String? fuenteFinanciamientoCodigo;
   final String? fuenteFinanciamientoNombre;
   final String? tipoCreditoNombre;
+  final double? tasaInteresCorriente;
+  final double? tasaInteresMoratorio;
   final bool dataAreLoaded;
 
   SharedConfigurationGrupalData({
@@ -59,6 +61,8 @@ class SharedConfigurationGrupalData {
     this.fuenteFinanciamientoCodigo,
     this.fuenteFinanciamientoNombre,
     this.tipoCreditoNombre,
+    this.tasaInteresCorriente,
+    this.tasaInteresMoratorio,
     this.dataAreLoaded = true,
   });
 
@@ -85,5 +89,7 @@ class SharedConfigurationGrupalData {
         fuenteFinanciamientoCodigo: json['FuenteFinanciamientoCodigo'],
         fuenteFinanciamientoNombre: json['FuenteFinanciamientoNombre'],
         tipoCreditoNombre: json['TipoCreditoNombre'],
+        tasaInteresCorriente: parseDouble(json['TasaInteresCorriente']),
+        tasaInteresMoratorio: parseDouble(json['TasaInteresMoratorio']),
       );
 }

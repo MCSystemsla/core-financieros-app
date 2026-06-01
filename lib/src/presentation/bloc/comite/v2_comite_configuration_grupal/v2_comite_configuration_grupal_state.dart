@@ -28,6 +28,8 @@ class V2ComiteConfigurationGrupalState extends Equatable {
   final String productoCodigo;
   final String productoNombre;
   final bool dataAreLoaded;
+  final double tasaInteresCorriente;
+  final double tasaInteresMoratorio;
   const V2ComiteConfigurationGrupalState({
     this.errorMsg = '',
     this.status = Status.notStarted,
@@ -55,6 +57,8 @@ class V2ComiteConfigurationGrupalState extends Equatable {
     this.tipoProgramaNombre = '',
     this.fuenteFinanciamientoNombre = '',
     this.dataAreLoaded = false,
+    this.tasaInteresCorriente = 0,
+    this.tasaInteresMoratorio = 0,
   });
 
   @override
@@ -85,6 +89,8 @@ class V2ComiteConfigurationGrupalState extends Equatable {
         periodicidadInteresNombre,
         tipoProgramaNombre,
         fuenteFinanciamientoNombre,
+        tasaInteresCorriente,
+        tasaInteresMoratorio,
       ];
 
   V2ComiteConfigurationGrupalState copyWith({
@@ -114,6 +120,8 @@ class V2ComiteConfigurationGrupalState extends Equatable {
     String? productoCodigo,
     String? productoNombre,
     bool? dataAreLoaded,
+    double? tasaInteresCorriente,
+    double? tasaInteresMoratorio,
   }) {
     return V2ComiteConfigurationGrupalState(
       errorMsg: errorMsg ?? this.errorMsg,
@@ -149,6 +157,8 @@ class V2ComiteConfigurationGrupalState extends Equatable {
       productoCodigo: productoCodigo ?? this.productoCodigo,
       productoNombre: productoNombre ?? this.productoNombre,
       dataAreLoaded: dataAreLoaded ?? this.dataAreLoaded,
+      tasaInteresCorriente: tasaInteresCorriente ?? this.tasaInteresCorriente,
+      tasaInteresMoratorio: tasaInteresMoratorio ?? this.tasaInteresMoratorio,
     );
   }
 }

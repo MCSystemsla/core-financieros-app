@@ -175,6 +175,62 @@ class _ComiteGrupalEditSharedDataState extends State<ComiteGrupalEditSharedData>
                         },
                       ),
                       const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.tasaInteresCorriente
+                            .toString()
+                            .toNullIfEmptyOrZero(),
+                        title: 'Tasa de interés corriente',
+                        textInputType: TextInputType.number,
+                        icon: Icon(
+                          Icons.schedule_outlined,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        inputFormatters: [
+                          CurrencyInputFormatter(),
+                        ],
+                        onChange: (value) {
+                          final newValue =
+                              toNumericString(value, allowPeriod: true);
+
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              tasaInteresCorriente:
+                                  double.tryParse(newValue) ?? 0,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(20),
+                      OutlineTextfieldWidget(
+                        initialValue: state.tasaInteresCorriente
+                            .toString()
+                            .toNullIfEmptyOrZero(),
+                        title: 'Tasa de interés moratorio',
+                        textInputType: TextInputType.number,
+                        icon: Icon(
+                          Icons.schedule_outlined,
+                          color: AppColors.getPrimaryColor(),
+                        ),
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        inputFormatters: [
+                          CurrencyInputFormatter(),
+                        ],
+                        onChange: (value) {
+                          final newValue =
+                              toNumericString(value, allowPeriod: true);
+
+                          cubit.onFieldChanged(
+                            () => state.copyWith(
+                              tasaInteresMoratorio:
+                                  double.tryParse(newValue) ?? 0,
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(20),
                       FuentesFinanciamientosDropdown(
                         isRequired: true,
                         selectedItem: Item(

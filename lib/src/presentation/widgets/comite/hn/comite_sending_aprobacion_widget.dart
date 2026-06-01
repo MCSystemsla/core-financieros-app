@@ -125,8 +125,8 @@ class _ComiteResumeReceiptAprobacionWidgetState
       tipoCredito: aprobacion.tipoCreditoNombre,
       montoSinComision: calculo.data!.data.montoSolicitado,
       mostrarMontoSinComision: calculo.finaciaComisionYSeguros,
-      tasaInteresCorriente: calculo.data!.data.interes.tasaInteresCorriente,
-      tasaInteresMoratorio: calculo.data!.data.interes.tasaInteresMoratorio,
+      tasaInteresCorriente: aprobacion.tasaInteresCorriente,
+      tasaInteresMoratorio: aprobacion.tasaInteresMoratorio,
     );
   }
 
@@ -186,10 +186,8 @@ class _ComiteResumeReceiptAprobacionWidgetState
             montoTelemedicinaAprobada:
                 stateAprobacion.montoTelemedicinaAprobada.toDouble(),
             seguroMapfre: stateCalculo.data?.data.seguros.mapfre ?? 0,
-            tasaInteresCorriente:
-                stateCalculo.data?.data.interes.tasaInteresCorriente ?? 0,
-            tasaInteresMoratorio:
-                stateCalculo.data?.data.interes.tasaInteresMoratorio ?? 0,
+            tasaInteresCorriente: stateAprobacion.tasaInteresCorriente,
+            tasaInteresMoratorio: stateAprobacion.tasaInteresMoratorio,
             montoSeguro: stateCalculo.data?.data.seguros.montoTotalSeguros ?? 0,
             porcentajeComision: widget.porcentajeComision,
             porcentajeSaldoDeudorAprobado: widget.porcentajeSaldoDeudorAprobado,

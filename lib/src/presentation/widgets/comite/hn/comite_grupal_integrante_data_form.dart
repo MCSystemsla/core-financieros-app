@@ -155,8 +155,8 @@ class _IntegranteDataFormState extends State<IntegranteDataForm> {
           _handleSubmission(
             context,
             configCubit,
-            state.data?.data.interes.tasaInteresCorriente.toDouble() ?? 0,
-            state.data?.data.interes.tasaInteresMoratorio.toDouble() ?? 0,
+            configCubit.state.tasaInteresCorriente,
+            configCubit.state.tasaInteresMoratorio,
             state.data?.data.comision.tasa ?? 0,
             state.data?.data.comision.monto ?? 0,
             state.data?.data.seguros.vida ?? 0,

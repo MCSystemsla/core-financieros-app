@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
@@ -38,6 +39,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
   String? productoCodigo;
   String? productoNombre;
   double? tasaInteresCorriente;
+  double? tasaInteresMoratorio;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
     productoCodigo = widget.data.codigoProducto;
     productoNombre = widget.data.nombreProducto;
     tasaInteresCorriente = widget.data.tasaInteresCorriente?.toDouble();
+    tasaInteresMoratorio = widget.data.tasaInteresMoratorio?.toDouble();
 
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
@@ -56,6 +59,7 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
         plazo: widget.data.plazoSolicitud,
         monto: widget.data.monto?.toDouble(),
         tasaInteresCorriente: tasaInteresCorriente,
+        tasaInteresMoratorio: tasaInteresMoratorio,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -126,19 +130,49 @@ class _ComiteDatosDelCreditoFormState extends State<ComiteDatosDelCreditoForm>
               ),
               const Gap(20),
               OutlineTextfieldWidget(
-                readOnly: true,
-                hintText: state.data?.data.interes.tasaInteresCorriente == 0.00
-                    ? tasaInteresCorriente.toString()
-                    : state.data?.data.interes.tasaInteresCorriente.toString(),
+                initialValue: tasaInteresCorriente.toString(),
                 title: 'Interés Corriente %',
+                textInputType: TextInputType.number,
                 icon: Icon(
                   Icons.percent_outlined,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
-                  UpperCaseTextFormatter(),
+                  CurrencyInputFormatter(),
                 ],
-                onChange: (value) {},
+                onChange: (value) {
+                  final newValue = toNumericString(value, allowPeriod: true);
+                  tasaInteresCorriente = double.tryParse(newValue) ?? 0;
+
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tasaInteresCorriente: tasaInteresCorriente,
+                    ),
+                  );
+                },
+              ),
+              const Gap(20),
+              OutlineTextfieldWidget(
+                initialValue: tasaInteresMoratorio.toString(),
+                title: 'Interés Moratorio %',
+                textInputType: TextInputType.number,
+                icon: Icon(
+                  Icons.percent_outlined,
+                  color: AppColors.getPrimaryColor(),
+                ),
+                inputFormatters: [
+                  CurrencyInputFormatter(),
+                ],
+                onChange: (value) {
+                  final newValue = toNumericString(value, allowPeriod: true);
+                  tasaInteresMoratorio = double.tryParse(newValue) ?? 0;
+
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(
+                      tasaInteresMoratorio: tasaInteresMoratorio,
+                    ),
+                  );
+                },
               ),
               const Divider(),
               OutlineTextfieldWidget(
