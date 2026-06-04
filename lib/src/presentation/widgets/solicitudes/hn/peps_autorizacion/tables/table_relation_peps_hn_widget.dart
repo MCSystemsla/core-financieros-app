@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../bloc/solicitudes/hn/cubit/informacion_peps_hn/informacion_peps_hn_cubit.dart';
 
@@ -53,7 +54,7 @@ class TableRelationPepsHnWidget extends StatelessWidget {
       ),
       body: BlocBuilder<InformacionPepsHnCubit, InformacionPepsHnState>(
         builder: (context, state) {
-          if (state.detallePeps.isEmpty) {
+          if (state.relacionPeps.isEmpty) {
             return const EmptyListWidget(
                 message: 'No hay tipos de relación para mostrar');
           }
@@ -69,8 +70,8 @@ class TableRelationPepsHnWidget extends StatelessWidget {
                     final e = state.relacionPeps[index];
                     return AnalisisCardVentasDay(
                       subtitle: e.nombre,
-                      title: e.tipoRelacionCodigo,
-                      description: '',
+                      title: '',
+                      description: e.tipoRelacionCodigo,
                       onTap: () {
                         showHistorialCreditoOptionsBottomSheet(
                           context: context,
@@ -86,11 +87,9 @@ class TableRelationPepsHnWidget extends StatelessWidget {
                             ),
                           },
                           onDelete: () {
-                            // context
-                            //     .read<InformacionPepsHnCubit>()
-                            //     .deleteDetallePep(
-                            //       e.familiarReferencia ?? '',
-                            //     );
+                            context
+                                .read<InformacionPepsHnCubit>()
+                                .deleteRelacionPep(e.uuid);
                           },
                         );
                       },
@@ -125,14 +124,14 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
   final formKey = GlobalKey<FormState>();
   String? nombre;
   String? tipoRelacionCodigo;
+  String? uuid;
   @override
   void initState() {
     super.initState();
     if (widget.isUpdate) {
-      // cargo = widget.detallePep?.cargo;
-      // periodo = widget.detallePep?.periodo;
-      // nombreInstitucion = widget.detallePep?.nombreInstitucion;
-      // referencia = widget.detallePep?.familiarReferencia;
+      nombre = widget.relacionPep?.nombre;
+      tipoRelacionCodigo = widget.relacionPep?.tipoRelacionCodigo;
+      uuid = widget.relacionPep?.uuid;
     }
   }
 
@@ -189,6 +188,10 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(10),
                     SheetSearchDropdown(
+                      selectedItem: Item(
+                        name: tipoRelacionCodigo ?? '',
+                        value: tipoRelacionCodigo ?? '',
+                      ),
                       title: 'Tipo de Relación',
                       isRequired: true,
                       onChanged: (v) {
@@ -223,26 +226,20 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          // if (widget.isUpdate) {
-                          //   widget.cubit.updateInventario(
-                          //     numeroSolicitud: widget.numeroSolicitud,
-                          //     inventario: AnalisisInventarioHnLocalDb(
-                          //       uuid: widget.inventorio!.uuid,
-                          //       cantidad: cantidad!,
-                          //       articulo: articulo!,
-                          //       costoCompra: costoCompra!,
-                          //       precioVenta: precioVenta!.toInt(),
-                          //       costoVentaPorcentaje:
-                          //           (costoCompra ?? 0) / (precioVenta ?? 0),
-                          //       total: ((costoCompra ?? 0) * (cantidad ?? 0))
-                          //           .toInt(),
-                          //     ),
-                          //   );
-                          //   context.pop();
-                          //   return;
-                          // }
+                          if (widget.isUpdate) {
+                            widget.cubit.updateRelacionPep(
+                              RelacionPep(
+                                uuid: uuid!,
+                                nombre: nombre!,
+                                tipoRelacionCodigo: tipoRelacionCodigo!,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.addRelacionPep(
                             RelacionPep(
+                              uuid: const Uuid().v4(),
                               nombre: nombre!,
                               tipoRelacionCodigo: tipoRelacionCodigo!,
                             ),

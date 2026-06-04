@@ -29,7 +29,8 @@ enum CatalogoType {
   cargosDisponibles('CARGOSDISPONIBLES'),
   gruposActivos('GRUPOSACTIVOS'),
   programa('PROGRAMA'),
-  tipoDesembolsos('TIPOSDESEMBOLSOS');
+  tipoDesembolsos('TIPOSDESEMBOLSOS'),
+  parentescoPeps('PARENTESCOPEPS');
 
   final String codigo;
 

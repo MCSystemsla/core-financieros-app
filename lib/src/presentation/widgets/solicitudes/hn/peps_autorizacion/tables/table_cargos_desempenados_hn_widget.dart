@@ -127,6 +127,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
   int? periodo;
   String? nombreInstitucion;
   String? referencia;
+  String? referenciaNombre;
   @override
   void initState() {
     super.initState();
@@ -135,6 +136,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
       periodo = widget.detallePep?.periodo;
       nombreInstitucion = widget.detallePep?.nombreInstitucion;
       referencia = widget.detallePep?.familiarReferencia;
+      referenciaNombre = widget.detallePep?.nombreFamiliarReferencia;
     }
   }
 
@@ -220,11 +222,16 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     ),
                     const Gap(10),
                     SheetSearchDropdown(
+                      selectedItem: Item(
+                        name: referenciaNombre ?? '',
+                        value: referencia ?? '',
+                      ),
                       title: 'Referencia',
                       isRequired: true,
                       onChanged: (v) {
                         if (v == null) return;
                         referencia = v.value;
+                        referenciaNombre = v.name;
                       },
                       hintText: 'Ingresa una referencia',
                       enabled: true,
@@ -252,24 +259,25 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          // if (widget.isUpdate) {
-                          //   widget.cubit.updateInventario(
-                          //     numeroSolicitud: widget.numeroSolicitud,
-                          //     inventario: AnalisisInventarioHnLocalDb(
-                          //       uuid: widget.inventorio!.uuid,
-                          //       cantidad: cantidad!,
-                          //       articulo: articulo!,
-                          //       costoCompra: costoCompra!,
-                          //       precioVenta: precioVenta!.toInt(),
-                          //       costoVentaPorcentaje:
-                          //           (costoCompra ?? 0) / (precioVenta ?? 0),
-                          //       total: ((costoCompra ?? 0) * (cantidad ?? 0))
-                          //           .toInt(),
-                          //     ),
-                          //   );
-                          //   context.pop();
-                          //   return;
-                          // }
+                          if (widget.isUpdate) {
+                            widget.cubit.updateDetallePep(
+                              DetallePep(
+                                cargo: cargo!,
+                                nombreInstitucion: nombreInstitucion!,
+                                periodo: periodo!,
+                                familiarReferencia:
+                                    (referencia?.isEmpty ?? true)
+                                        ? null
+                                        : referencia,
+                                nombreFamiliarReferencia:
+                                    referenciaNombre!.isEmpty
+                                        ? null
+                                        : referenciaNombre,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.addDetallePep(
                             DetallePep(
                               cargo: cargo!,
@@ -277,6 +285,10 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                               periodo: periodo!,
                               familiarReferencia:
                                   referencia!.isEmpty ? null : referencia,
+                              nombreFamiliarReferencia:
+                                  referenciaNombre!.isEmpty
+                                      ? null
+                                      : referenciaNombre,
                             ),
                           );
                           context.pop();

@@ -70,6 +70,19 @@ class InformacionPepsHnCubit extends Cubit<InformacionPepsHnState> {
     ));
   }
 
+  void updateDetallePep(DetallePep detallePep) {
+    emit(state.copyWith(
+      detallePeps: state.detallePeps
+          .map(
+            (detalle) =>
+                detalle.familiarReferencia == detallePep.familiarReferencia
+                    ? detallePep
+                    : detalle,
+          )
+          .toList(),
+    ));
+  }
+
   void addFamiliarPep(FamiliaresPep familiarPep) {
     emit(
         state.copyWith(familiaresPeps: [...state.familiaresPeps, familiarPep]));
@@ -84,7 +97,34 @@ class InformacionPepsHnCubit extends Cubit<InformacionPepsHnState> {
     ));
   }
 
+  void updateFamiliarPep(
+      String referenciaTemporal, FamiliaresPep updatedFamiliar) {
+    emit(state.copyWith(
+      familiaresPeps: state.familiaresPeps
+          .map((familiar) => familiar.referenciaTemporal == referenciaTemporal
+              ? updatedFamiliar
+              : familiar)
+          .toList(),
+    ));
+  }
+
   void addRelacionPep(RelacionPep relacionPep) {
     emit(state.copyWith(relacionPeps: [...state.relacionPeps, relacionPep]));
+  }
+
+  void deleteRelacionPep(String uuid) {
+    emit(state.copyWith(
+      relacionPeps: state.relacionPeps
+          .where((relacion) => relacion.uuid != uuid)
+          .toList(),
+    ));
+  }
+
+  void updateRelacionPep(RelacionPep relacionPep) {
+    emit(state.copyWith(
+      relacionPeps: state.relacionPeps
+          .map((e) => e.uuid == relacionPep.uuid ? relacionPep : e)
+          .toList(),
+    ));
   }
 }

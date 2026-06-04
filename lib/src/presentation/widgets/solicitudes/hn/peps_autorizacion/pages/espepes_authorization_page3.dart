@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../bloc/solicitudes/hn/cubit/informacion_peps_hn/informacion_peps_hn_cubit.dart';
 
-class EsPepsAuthorizationPage3 extends StatelessWidget {
+class EsPepsAuthorizationPage3 extends StatefulWidget {
   final PageController pageController;
   const EsPepsAuthorizationPage3({
     super.key,
@@ -15,10 +15,19 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
   });
 
   @override
+  State<EsPepsAuthorizationPage3> createState() =>
+      _EsPepsAuthorizationPage3State();
+}
+
+class _EsPepsAuthorizationPage3State extends State<EsPepsAuthorizationPage3>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,7 +49,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'ABU',
+                        parentescoCodigo: 'ABUELOSPEPS',
                       ),
                     ),
                   ),
@@ -65,7 +74,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HER',
+                        parentescoCodigo: 'HERMANOSPEPS',
                       ),
                     ),
                   ),
@@ -90,7 +99,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HER',
+                        parentescoCodigo: 'ESPOSOSHERMANOSPEPS',
                       ),
                     ),
                   ),
@@ -115,7 +124,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HIJ',
+                        parentescoCodigo: 'HIJOSPEPS',
                       ),
                     ),
                   ),
@@ -132,7 +141,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
             ),
             const Gap(10),
             AnalisisCardListHn(
-              title: 'Detalle de Yernos o Nueras (as):',
+              title: 'Detalle de Nueras (as):',
               onTap: () {
                 Navigator.push(
                   context,
@@ -140,7 +149,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'NUE',
+                        parentescoCodigo: 'NUERASPEPS',
                       ),
                     ),
                   ),
@@ -149,14 +158,38 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
               items: [
                 AnalisisCardItem(
                   icon: Icons.person,
-                  label: 'Nombre completo de Yerno(s) o Nuera (s)',
+                  label: 'Nombre completo de Nuera (s)',
                   value: '',
                   color: Colors.blueGrey,
                 ),
               ],
             ),
             const Gap(10),
-            // TODO: FALTA CATALOGO PARA SUEGROS
+            AnalisisCardListHn(
+              title: 'Detalle de Yerno (os):',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<InformacionPepsHnCubit>(),
+                      child: const TableDetalleFamiliarPeps(
+                        parentescoCodigo: 'YERNOSPEPS',
+                      ),
+                    ),
+                  ),
+                );
+              },
+              items: [
+                AnalisisCardItem(
+                  icon: Icons.person,
+                  label: 'Nombre completo de Yerno (s)',
+                  value: '',
+                  color: Colors.blueGrey,
+                ),
+              ],
+            ),
+            const Gap(10),
             AnalisisCardListHn(
               title: 'Nombres de los Suegros',
               onTap: () {
@@ -166,7 +199,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'NUE',
+                        parentescoCodigo: 'SUEGROPEPS',
                       ),
                     ),
                   ),
@@ -188,7 +221,6 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
               ],
             ),
             const Gap(10),
-            // TODO: FALTA CATALOGO PARA NIETOS
             AnalisisCardListHn(
               title: 'Detalle de Nieto (as)',
               onTap: () {
@@ -198,7 +230,7 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
                     builder: (_) => BlocProvider.value(
                       value: context.read<InformacionPepsHnCubit>(),
                       child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'NUE',
+                        parentescoCodigo: 'NIETOSPEPS',
                       ),
                     ),
                   ),
@@ -216,7 +248,19 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
             const Gap(10),
             AnalisisCardListHn(
               title: 'Detalle de Abuelos (as) Cónyuge:',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<InformacionPepsHnCubit>(),
+                      child: const TableDetalleFamiliarPeps(
+                        parentescoCodigo: 'ABUELOSCONYUGEPEPS',
+                      ),
+                    ),
+                  ),
+                );
+              },
               items: [
                 AnalisisCardItem(
                   icon: Icons.person,
@@ -229,7 +273,19 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
             const Gap(10),
             AnalisisCardListHn(
               title: 'Detalle de Hermanos (as) del cónyuge',
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<InformacionPepsHnCubit>(),
+                      child: const TableDetalleFamiliarPeps(
+                        parentescoCodigo: 'HERMANOSCONYUGEPEPS',
+                      ),
+                    ),
+                  ),
+                );
+              },
               items: [
                 AnalisisCardItem(
                   icon: Icons.person,
@@ -240,12 +296,15 @@ class EsPepsAuthorizationPage3 extends StatelessWidget {
               ],
             ),
             const Gap(20),
-            esPepsSiguienteButton(context, pageController),
-            esPepsAtrasButton(context, pageController),
+            esPepsSiguienteButton(context, widget.pageController),
+            esPepsAtrasButton(context, widget.pageController),
             const Gap(10),
           ],
         ),
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

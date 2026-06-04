@@ -265,6 +265,13 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               esGrupal: item.value,
+                              grupoCodigo: isSolicitudGrupal ? item.value : '',
+                              grupoCodigoNombre:
+                                  isSolicitudGrupal ? item.name : '',
+                              cargoGrupoCodigo:
+                                  isSolicitudGrupal ? item.value : '',
+                              cargoGrupoNombre:
+                                  isSolicitudGrupal ? item.name : '',
                             ),
                           );
                         },

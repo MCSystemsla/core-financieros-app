@@ -100,6 +100,8 @@ Widget esPepsEnviarButton(
   PageController pageController,
 ) {
   return BlocConsumer<InformacionPepsHnCubit, InformacionPepsHnState>(
+    listenWhen: (previous, current) => previous.status != current.status,
+    buildWhen: (previous, current) => previous.status != current.status,
     listener: (context, state) {
       if (state.status == Status.inProgress) {
         context.showLoading(message: 'Enviando información...');

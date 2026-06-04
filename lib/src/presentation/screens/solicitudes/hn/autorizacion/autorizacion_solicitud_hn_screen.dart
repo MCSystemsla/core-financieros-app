@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_cre
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/espeps_autorizacion_form/espeps_autorizacion_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/credit_producto/credit_product_item_hn.dart';
@@ -293,17 +294,17 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                             '¿Estás seguro que desea autorizar la solicitud?',
                         onYes: () {
                           context.pop();
-                          // if (esPeps) {
-                          //   Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //       builder: (_) => EspepsAutorizacionFormScreen(
-                          //         numeroSolicitud: numeroSolicitud,
-                          //       ),
-                          //     ),
-                          //   );
-                          //   return;
-                          // }
+                          if (esPeps) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => EspepsAutorizacionFormScreen(
+                                  numeroSolicitud: numeroSolicitud,
+                                ),
+                              ),
+                            );
+                            return;
+                          }
                           context
                               .read<AutorizarSolicitudCubit>()
                               .autorizarSolicitudCredito(

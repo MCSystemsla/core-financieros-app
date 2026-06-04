@@ -53,6 +53,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
                 textCapitalization: TextCapitalization.none,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
@@ -72,6 +73,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
                 textCapitalization: TextCapitalization.none,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(3),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
@@ -109,12 +111,11 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 onChange: (value) {
-                  // TODO: FALTA Proveedores
-                  // cubit.onFieldChanged(
-                  //   () => state.copyWith(
-                  //     : value,
-                  //   ),
-                  // );
+                  cubit.onFieldChanged(
+                    () => state.copyWith(
+                      negocioProveedores: value,
+                    ),
+                  );
                 },
               ),
               const Gap(10),

@@ -135,6 +135,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
   String? nombre2;
   String? apellido1;
   String? apellido2;
+  String? referenciaTemporal;
   @override
   void initState() {
     super.initState();
@@ -143,6 +144,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
       nombre2 = widget.familiarPep?.nombre2;
       apellido1 = widget.familiarPep?.apellido1;
       apellido2 = widget.familiarPep?.apellido2;
+      referenciaTemporal = widget.familiarPep?.referenciaTemporal;
     }
   }
 
@@ -246,24 +248,21 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                         color: AppColors.greenLatern.withOpacity(0.4),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          // if (widget.isUpdate) {
-                          //   widget.cubit.updateInventario(
-                          //     numeroSolicitud: widget.numeroSolicitud,
-                          //     inventario: AnalisisInventarioHnLocalDb(
-                          //       uuid: widget.inventorio!.uuid,
-                          //       cantidad: cantidad!,
-                          //       articulo: articulo!,
-                          //       costoCompra: costoCompra!,
-                          //       precioVenta: precioVenta!.toInt(),
-                          //       costoVentaPorcentaje:
-                          //           (costoCompra ?? 0) / (precioVenta ?? 0),
-                          //       total: ((costoCompra ?? 0) * (cantidad ?? 0))
-                          //           .toInt(),
-                          //     ),
-                          //   );
-                          //   context.pop();
-                          //   return;
-                          // }
+                          if (widget.isUpdate) {
+                            widget.cubit.updateFamiliarPep(
+                              referenciaTemporal!,
+                              FamiliaresPep(
+                                referenciaTemporal: referenciaTemporal!,
+                                parentescoCodigo: widget.parentescoCodigo,
+                                nombre1: nombre1!,
+                                nombre2: nombre2,
+                                apellido1: apellido1!,
+                                apellido2: apellido2,
+                              ),
+                            );
+                            context.pop();
+                            return;
+                          }
                           widget.cubit.addFamiliarPep(FamiliaresPep(
                             referenciaTemporal: const Uuid().v4(),
                             parentescoCodigo: widget.parentescoCodigo,

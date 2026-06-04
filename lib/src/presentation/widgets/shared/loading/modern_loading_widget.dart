@@ -15,6 +15,7 @@ class ModernLoadingWidget extends StatelessWidget {
 
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(

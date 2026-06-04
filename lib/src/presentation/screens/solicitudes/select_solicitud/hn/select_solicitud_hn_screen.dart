@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/asignacion_solicitud/asignacion_list_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/autorizacion/autorizacion_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/crear_grupo_credito_grupal/crear_grupo_credito_grupal_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/mis_solicitudes_asignadas/mis_solicitudes_asignadas_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/rechazar_solicitud/rechazar_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
@@ -69,6 +70,8 @@ class _SelectSolicitud extends StatelessWidget {
             const _SolicitudesCardsRow3(),
             const Gap(20),
             const _SolicitudesCardsRow4(),
+            const Gap(20),
+            const _SolicitudCardsRow5(),
             const Gap(20),
           ],
         ),
@@ -187,23 +190,6 @@ class _SolicitudesCardsRow2 extends StatelessWidget {
     return Row(
       children: [
         const Gap(10),
-        // Expanded(
-        //   child: SolicitudCard(
-        //     svgPath: ImageAsset.nuevaMenorBg3,
-        //     title: 'Represtamo',
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //           builder: ((_) => const AddUserCedulaReprestamoHnScreen(
-        //                 typeForm: TypeForm.represtamo,
-        //               )),
-        //         ),
-        //       );
-        //       return;
-        //     },
-        //   ),
-        // ),
         if (actions.contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
           Expanded(
             child: SolicitudCard(
@@ -280,6 +266,34 @@ class _SolicitudCardsRow1 extends StatelessWidget {
             },
             svgPath: ImageAsset.nuevaMenorBg2,
             title: 'Asalariado',
+          ),
+        ),
+        const Gap(10),
+      ],
+    );
+  }
+}
+
+class _SolicitudCardsRow5 extends StatelessWidget {
+  const _SolicitudCardsRow5();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Gap(10),
+        Expanded(
+          child: SolicitudCard(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const MisSolicitudesAsignadasHnScreen()),
+                ),
+              );
+            },
+            svgPath: ImageAsset.nuevaMenorBg3,
+            title: 'Mis Solicitudes Asignadas',
           ),
         ),
         const Gap(10),

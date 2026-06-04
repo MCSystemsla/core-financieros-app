@@ -28,20 +28,15 @@ class DetallePep {
   final String nombreInstitucion;
   final int periodo;
   final String? familiarReferencia;
+  final String? nombreFamiliarReferencia;
 
   DetallePep({
     required this.cargo,
     required this.nombreInstitucion,
     required this.periodo,
     required this.familiarReferencia,
+    required this.nombreFamiliarReferencia,
   });
-
-  factory DetallePep.fromJson(Map<String, dynamic> json) => DetallePep(
-        cargo: json['Cargo'],
-        nombreInstitucion: json['NombreInstitucion'],
-        periodo: json['Periodo'],
-        familiarReferencia: json['FamiliarReferencia'],
-      );
 
   Map<String, dynamic> toJson() => {
         'Cargo': cargo,
@@ -123,37 +118,43 @@ class InformacionPeps {
     required this.negocioProveedores,
   });
 
-  Map<String, dynamic> toJson() => {
-        'NumeroSolicitud': numeroSolicitud,
-        'ServicioCredito': servicioCredito,
-        'ServicioCuentaAhorro': servicioCuentaAhorro,
-        'ServicioDpf': servicioDpf,
-        'ServicioRemesa': servicioRemesa,
-        'ServicioOtros': servicioOtros,
-        'NegocioPorcentajeAccion': negocioPorcentajeAccion,
-        'NegocioCantidadSucursal': negocioCantidadSucursal,
-        'NegocioCiudadSucursales': negocioCiudadSucursales,
-        'NegocioEsProveedorEstado': negocioEsProveedorEstado,
-        'NegocioAdquirienteInstitucion': negocioAdquirienteInstitucion,
-        'PagoEfectivoDolar': pagoEfectivoDolar,
-        'PagoEfectivoLempira': pagoEfectivoLempira,
-        'PagoCheque': pagoCheque,
-        'PagoTCTD': pagoTctd,
-        'PagoDepositoCuenta': pagoDepositoCuenta,
-        'PagoOtrosBancos': pagoOtrosBancos,
-        'ManejaBienesPublicos': manejaBienesPublicos,
-        'DescripcionBienesPublicos': descripcionBienesPublicos,
-        'NegocioProveedores': negocioProveedores,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'NumeroSolicitud': numeroSolicitud,
+      'ServicioCredito': servicioCredito,
+      'ServicioCuentaAhorro': servicioCuentaAhorro,
+      'ServicioDpf': servicioDpf,
+      'ServicioRemesa': servicioRemesa,
+      'ServicioOtros': servicioOtros,
+      'NegocioPorcentajeAccion': negocioPorcentajeAccion,
+      'NegocioCantidadSucursal': negocioCantidadSucursal,
+      'NegocioCiudadSucursales': negocioCiudadSucursales,
+      'NegocioEsProveedorEstado': negocioEsProveedorEstado,
+      'NegocioAdquirienteInstitucion': negocioAdquirienteInstitucion,
+      'PagoEfectivoDolar': pagoEfectivoDolar,
+      'PagoEfectivoLempira': pagoEfectivoLempira,
+      'PagoCheque': pagoCheque,
+      'PagoTCTD': pagoTctd,
+      'PagoDepositoCuenta': pagoDepositoCuenta,
+      'PagoOtrosBancos': pagoOtrosBancos,
+      'ManejaBienesPublicos': manejaBienesPublicos,
+      'DescripcionBienesPublicos': descripcionBienesPublicos,
+      'NegocioProveedores': negocioProveedores,
+    };
+    data.removeWhere((key, value) => value == null || value == '');
+    return data;
+  }
 }
 
 class RelacionPep {
   final String tipoRelacionCodigo;
   final String nombre;
+  final String uuid;
 
   RelacionPep({
     required this.tipoRelacionCodigo,
     required this.nombre,
+    required this.uuid,
   });
 
   Map<String, dynamic> toJson() => {

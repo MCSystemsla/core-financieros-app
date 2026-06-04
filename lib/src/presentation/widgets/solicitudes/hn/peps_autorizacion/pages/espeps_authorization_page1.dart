@@ -5,7 +5,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/peps
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-class EspepsAuthorizationPage1 extends StatelessWidget {
+class EspepsAuthorizationPage1 extends StatefulWidget {
   final PageController pageController;
 
   const EspepsAuthorizationPage1({
@@ -14,8 +14,17 @@ class EspepsAuthorizationPage1 extends StatelessWidget {
   });
 
   @override
+  State<EspepsAuthorizationPage1> createState() =>
+      _EspepsAuthorizationPage1State();
+}
+
+class _EspepsAuthorizationPage1State extends State<EspepsAuthorizationPage1>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Column(
         children: [
           const _AnalisisSolicitudesTitle(),
@@ -29,12 +38,15 @@ class EspepsAuthorizationPage1 extends StatelessWidget {
           const PepsFormaDePagoNegocioWidget(),
           const Divider(),
           const Gap(20),
-          esPepsSiguienteButton(context, pageController),
-          esPepsAtrasButton(context, pageController),
+          esPepsSiguienteButton(context, widget.pageController),
+          esPepsAtrasButton(context, widget.pageController),
         ],
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _AnalisisSolicitudesTitle extends StatelessWidget {

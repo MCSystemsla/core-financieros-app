@@ -101,8 +101,8 @@ android {
             resValue "string", "app_name", "MiCrédito QA"
             // versionNameSuffix ".ni"
             applicationId "com.mcsystem.core_financiero_app.qa"
-            versionName "1.5.19"
-            versionCode 24
+            versionName "1.6.19"
+            versionCode 25
         }
         micreditoNicaragua {
             dimension "country"
@@ -121,8 +121,8 @@ android {
             // applicationId "com.mcsystem.core_financiero_app.hn"
             applicationId "com.mcsystem.core_financiero_app.hnd"
             signingConfig signingConfigs.debug
-            versionName "1.10.38"
-            versionCode 47
+            versionName "1.11.39"
+            versionCode 49
             // versionCode flutterVersionCode.toInteger() + 1
         }
         micreditoCostaRica { 

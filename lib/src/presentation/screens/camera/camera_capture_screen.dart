@@ -158,7 +158,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar: AppBar(
-        title: const Text('Tomar foto Kiva'),
+        title: const Text('Tomar Foto'),
         centerTitle: true,
       ),
       body: Column(

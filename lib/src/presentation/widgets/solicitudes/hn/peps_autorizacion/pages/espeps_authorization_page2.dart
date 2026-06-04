@@ -12,7 +12,7 @@ import 'package:gap/gap.dart';
 
 import '../../../../../bloc/solicitudes/hn/cubit/informacion_peps_hn/informacion_peps_hn_cubit.dart';
 
-class EsPepsAuthorizationPage2 extends StatelessWidget {
+class EsPepsAuthorizationPage2 extends StatefulWidget {
   final PageController pageController;
   const EsPepsAuthorizationPage2({
     super.key,
@@ -20,13 +20,22 @@ class EsPepsAuthorizationPage2 extends StatelessWidget {
   });
 
   @override
+  State<EsPepsAuthorizationPage2> createState() =>
+      _EsPepsAuthorizationPage2State();
+}
+
+class _EsPepsAuthorizationPage2State extends State<EsPepsAuthorizationPage2>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<InformacionPepsHnCubit>();
     return BlocBuilder<InformacionPepsHnCubit, InformacionPepsHnState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -118,8 +127,8 @@ class EsPepsAuthorizationPage2 extends StatelessWidget {
                   ],
                 ),
                 const Gap(20),
-                esPepsEnviarButton(context, pageController),
-                esPepsAtrasButton(context, pageController),
+                esPepsEnviarButton(context, widget.pageController),
+                esPepsAtrasButton(context, widget.pageController),
                 const Gap(10),
               ],
             ),
@@ -128,4 +137,7 @@ class EsPepsAuthorizationPage2 extends StatelessWidget {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
