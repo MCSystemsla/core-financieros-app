@@ -2,6 +2,7 @@
 part of 'solicitud_asalariado_cubit.dart';
 
 class SolicitudAsalariadoState extends Equatable {
+  final List<HistorialCredito> historialCredito;
   final String numeroSolicitud;
   final String? uuid;
   final bool hasVerified;
@@ -67,12 +68,12 @@ class SolicitudAsalariadoState extends Equatable {
   final String objPaisNacimientoId;
   final String nacionalidadConyugue;
   final String ubicacion;
-  final bool espeps;
+  final String espeps;
   final String nombreDeEntidadPeps;
   final String paisPeps;
   final String periodoPeps;
   final String cargoOficialPeps;
-  final bool tieneFamiliarPeps;
+  final String tieneFamiliarPeps;
   final String nombreFamiliarPeps2;
   final String parentescoFamiliarPeps2;
   final String cargoFamiliarPeps2;
@@ -81,7 +82,7 @@ class SolicitudAsalariadoState extends Equatable {
   final String paisPeps2;
   final String objRubroActividad;
   final String objActividadPredominante;
-  final bool esFamiliarEmpleado;
+  final String esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
   final String objTipoDocumentoId;
@@ -158,7 +159,11 @@ class SolicitudAsalariadoState extends Equatable {
   final String cedulaBackPath;
   final String frecuenciaPagoMeses;
   final String createdAt;
+  final String nombreFormularioKiva;
+  final String nacionalidadConyugueVer;
   const SolicitudAsalariadoState({
+    this.historialCredito = const [],
+    this.nombreFormularioKiva = '',
     this.uuid,
     this.frecuenciaPagoMeses = '',
     this.numeroSolicitud = '',
@@ -250,8 +255,8 @@ class SolicitudAsalariadoState extends Equatable {
     this.objProductoId = '',
     this.observacion = '',
     this.sucursal = '',
-    this.ubicacionLongitud = '',
-    this.ubicacionLatitud = '',
+    this.ubicacionLongitud = '0',
+    this.ubicacionLatitud = '0',
     this.ubicacionGradosLongitud = '',
     this.ubicacionGradosLatitud = '',
     this.objEscolaridadId = '',
@@ -261,12 +266,12 @@ class SolicitudAsalariadoState extends Equatable {
     this.objPaisNacimientoId = '',
     this.nacionalidadConyugue = '',
     this.ubicacion = '',
-    this.espeps = false,
+    this.espeps = '',
     this.nombreDeEntidadPeps = '',
     this.paisPeps = '',
     this.periodoPeps = '',
     this.cargoOficialPeps = '',
-    this.tieneFamiliarPeps = false,
+    this.tieneFamiliarPeps = '',
     this.nombreFamiliarPeps2 = '',
     this.parentescoFamiliarPeps2 = '',
     this.cargoFamiliarPeps2 = '',
@@ -275,7 +280,7 @@ class SolicitudAsalariadoState extends Equatable {
     this.paisPeps2 = '',
     this.objRubroActividad = '',
     this.objActividadPredominante = '',
-    this.esFamiliarEmpleado = false,
+    this.esFamiliarEmpleado = '',
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
     this.objTipoDocumentoId = '',
@@ -315,14 +320,52 @@ class SolicitudAsalariadoState extends Equatable {
     this.tiempoLaborarConyugue = '',
     this.totalIngresoMes = 0.0,
     this.totalIngresoMesConyugue = 0.0,
+    this.nacionalidadConyugueVer = '',
   });
 
   @override
   List<Object> get props => [
-        createdAt,
+        historialCredito,
+        nacionalidadConyugueVer,
+        nombreFormularioKiva,
         frecuenciaPagoMeses,
+        numeroSolicitud,
+        createdAt,
+        nombreFormularioKiva,
+        frecuenciaPagoMeses,
+        numeroSolicitud,
+        createdAt,
         cedulaFrontPath,
         cedulaBackPath,
+        objOrigenSolicitudIdVer,
+        objPaisEmisorCedulaVer,
+        objMunicipioCasaIdVer,
+        objDepartamentoCasaIdVer,
+        objPaisCasaIdVer,
+        objCondicionCasaIdVer,
+        objMonedaIdVer,
+        objPropositoIdVer,
+        objFrecuenciaIdVer,
+        objSectorIdVer,
+        objEstadoCivilIdVer,
+        objParentescoBeneficiarioSeguroIdVer,
+        objEstadoSolicitudIdVer,
+        objOficialCreditoIdVer,
+        objProductoIdVer,
+        objEscolaridadIdVer,
+        objSexoIdVer,
+        objPaisNacimientoIdVer,
+        objRubroActividadVer,
+        objActividadPredominanteVer,
+        objTipoDocumentoIdVer,
+        objRubroActividad2Ver,
+        objRubroActividad3Ver,
+        objRubroActividadPredominanteVer,
+        objTipoPersonaIdVer,
+        objActividadEconomicaIdVer,
+        objActividadEconomicaId1Ver,
+        objActividadEconomicaId2Ver,
+        objParentescoFamiliarCercanoIdVer,
         fechaDesembolso,
         tasaInteres,
         montoMinimo,
@@ -331,9 +374,9 @@ class SolicitudAsalariadoState extends Equatable {
         isOffline,
         isDone,
         idLocalResponse,
-        successMsg,
-        errorMsg,
         status,
+        errorMsg,
+        successMsg,
         objOrigenSolicitudId,
         database,
         nombre1,
@@ -447,6 +490,7 @@ class SolicitudAsalariadoState extends Equatable {
       ];
 
   SolicitudAsalariadoState copyWith({
+    List<HistorialCredito>? historialCredito,
     String? numeroSolicitud,
     String? uuid,
     bool? hasVerified,
@@ -512,12 +556,12 @@ class SolicitudAsalariadoState extends Equatable {
     String? objPaisNacimientoId,
     String? nacionalidadConyugue,
     String? ubicacion,
-    bool? espeps,
+    String? espeps,
     String? nombreDeEntidadPeps,
     String? paisPeps,
     String? periodoPeps,
     String? cargoOficialPeps,
-    bool? tieneFamiliarPeps,
+    String? tieneFamiliarPeps,
     String? nombreFamiliarPeps2,
     String? parentescoFamiliarPeps2,
     String? cargoFamiliarPeps2,
@@ -526,7 +570,7 @@ class SolicitudAsalariadoState extends Equatable {
     String? paisPeps2,
     String? objRubroActividad,
     String? objActividadPredominante,
-    bool? esFamiliarEmpleado,
+    String? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
     String? objTipoDocumentoId,
@@ -603,8 +647,11 @@ class SolicitudAsalariadoState extends Equatable {
     String? cedulaBackPath,
     String? frecuenciaPagoMeses,
     String? createdAt,
+    String? nombreFormularioKiva,
+    String? nacionalidadConyugueVer,
   }) {
     return SolicitudAsalariadoState(
+      historialCredito: historialCredito ?? this.historialCredito,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       uuid: uuid ?? this.uuid,
       hasVerified: hasVerified ?? this.hasVerified,
@@ -804,6 +851,9 @@ class SolicitudAsalariadoState extends Equatable {
       cedulaBackPath: cedulaBackPath ?? this.cedulaBackPath,
       frecuenciaPagoMeses: frecuenciaPagoMeses ?? this.frecuenciaPagoMeses,
       createdAt: createdAt ?? this.createdAt,
+      nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
+      nacionalidadConyugueVer:
+          nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
     );
   }
 }

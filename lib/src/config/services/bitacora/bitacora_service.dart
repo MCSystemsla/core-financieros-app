@@ -2,28 +2,34 @@ import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 class BitacoraService {
+  static final _logger = Logger();
+  static const bool _isProdMode = bool.fromEnvironment('isProdMode');
+  static const String _bitacoraUrl =
+      String.fromEnvironment('GOOGLE_SHEET_BITACORA_LOG_URL');
   static Future<void> registerBitacora({
     required String payload,
   }) async {
-    const bool isProdMode = bool.fromEnvironment('isProdMode');
-    const String versionJsonUrl =
-        'https://script.google.com/macros/s/AKfycbxABbtiNUKkXPi62G78YYn5B7syqeMMyb2zMsQ8NIpqmReGp1tJmFhPiXQvLB6-Jtn1/exec';
-    await http.post(
-      Uri.parse(versionJsonUrl),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(
-        {
-          'payload': payload,
-          'username': LocalStorage().currentUserName,
-          'environment': isProdMode ? 'PROD' : 'DEV',
-          'statusCode': '200',
-          'database': LocalStorage().database
+    try {
+      await http.post(
+        Uri.parse(_bitacoraUrl),
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ),
-    );
+        body: jsonEncode(
+          {
+            'payload': payload,
+            'username': LocalStorage().currentUserName,
+            'environment': _isProdMode ? 'PROD' : 'DEV',
+            'statusCode': '200',
+            'database': LocalStorage().database
+          },
+        ),
+      );
+    } catch (e) {
+      _logger.e(e);
+    }
   }
 }

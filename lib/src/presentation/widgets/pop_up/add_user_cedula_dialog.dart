@@ -1,6 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/ods_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -36,7 +36,7 @@ class AddUserCedulaDialog extends OdsDialog {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: ((_) => CrearSolicitudScreen(
+                builder: ((_) => CrearSolicitudScreenNi(
                       typeForm: typeForm,
                     )),
               ),
@@ -57,6 +57,7 @@ class AddUserCedulaDialog extends OdsDialog {
     AnimType animType = AnimType.scale,
     DialogType dialogType = DialogType.warning,
     Widget? customHeader,
+    bool dismissOnBackKeyPress = true,
   }) {
     return super.showDialog(
       context,

@@ -77,7 +77,7 @@ class PhotosCedulaScreen extends StatelessWidget {
             child: CustomElevatedButton(
               onPressed: () {
                 if (photoCedulaProvider.cedulaBackPath.isEmpty ||
-                    photoCedulaProvider.cedulaBackPath.isEmpty) {
+                    photoCedulaProvider.cedulaFrontPath.isEmpty) {
                   CustomAlertDialog(
                     context: context,
                     title:

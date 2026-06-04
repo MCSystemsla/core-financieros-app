@@ -11,6 +11,7 @@ class KivaRouteState extends Equatable {
   final int cantidadHijos;
   final String cedula;
   final String nombreFormularioKiva;
+  final String solicitudCreditoId;
   const KivaRouteState({
     this.currentRoute = '',
     this.solicitudId = '',
@@ -21,6 +22,7 @@ class KivaRouteState extends Equatable {
     this.cantidadHijos = 0,
     this.cedula = '',
     this.nombreFormularioKiva = '',
+    this.solicitudCreditoId = '',
   });
 
   @override
@@ -34,6 +36,7 @@ class KivaRouteState extends Equatable {
         cantidadHijos,
         cedula,
         nombreFormularioKiva,
+        solicitudCreditoId
       ];
 
   KivaRouteState copyWith({
@@ -46,6 +49,7 @@ class KivaRouteState extends Equatable {
     int? cantidadHijos,
     String? cedula,
     String? nombreFormularioKiva,
+    String? solicitudCreditoId,
   }) {
     return KivaRouteState(
       currentRoute: currentRoute ?? this.currentRoute,
@@ -57,6 +61,7 @@ class KivaRouteState extends Equatable {
       cantidadHijos: cantidadHijos ?? this.cantidadHijos,
       cedula: cedula ?? this.cedula,
       nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
+      solicitudCreditoId: solicitudCreditoId ?? this.solicitudCreditoId,
     );
   }
 }

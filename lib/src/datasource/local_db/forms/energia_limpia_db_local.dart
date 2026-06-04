@@ -24,4 +24,7 @@ class EnergiaLimpiaDbLocal {
   String? otrosDatosCliente;
   String? problemasEnergiaDescripcion;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

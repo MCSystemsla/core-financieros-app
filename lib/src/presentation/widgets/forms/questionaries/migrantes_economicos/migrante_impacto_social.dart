@@ -272,7 +272,7 @@ class _RecurrentFormState extends State<_RecurrentForm> {
               CommentaryWidget(
                 textEditingController: quienApoya,
                 title:
-                    '¿Hay alguien que le esté apoyando en este nuevo préstamo? ',
+                    '¿Hay alguien que le esté apoyando en este nuevo préstamo?',
               ),
               const Gap(20),
               WhiteCard(

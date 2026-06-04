@@ -1,7 +1,9 @@
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/services/biometric/biometric_auth_service.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -14,16 +16,17 @@ final getIt = GetIt.instance;
 
 Future<void> setUpGlobalLocator({required Flavor flavor}) async {
   global = GetIt.I;
-
+  _injectFlavor(flavor: flavor);
+  final objectBoxService = await ObjectBoxService.init();
+  final objectBoxServiceHN = await SolicitudesHnBoxService.init();
+  final objectBoxAnalisisServiceHn = await AnalisisBoxServiceHn.init();
+  global.registerSingleton<ObjectBoxService>(objectBoxService);
+  global.registerSingleton<SolicitudesHnBoxService>(objectBoxServiceHN);
+  global.registerSingleton<AnalisisBoxServiceHn>(objectBoxAnalisisServiceHn);
   global.registerLazySingleton(() => Logger());
   global.registerFactory<APIRepository>(() => DefaultAPIRepository());
-  final objectBoxService = await ObjectBoxService.init();
-  global.registerSingleton<ObjectBoxService>(objectBoxService);
   global.registerSingleton<BiometricCubit>(
     BiometricCubit(BiometricAuthService()),
-  );
-  global.registerSingleton<FlavorCubit>(
-    FlavorCubit()..setFlavor(flavor),
   );
 
   _injectStorage();
@@ -31,4 +34,9 @@ Future<void> setUpGlobalLocator({required Flavor flavor}) async {
 
 void _injectStorage() {
   // global.registerSingleton<FCMTokenStorage>(FCMTokenStorage());
+}
+void _injectFlavor({required Flavor flavor}) {
+  global.registerSingleton<FlavorCubit>(
+    FlavorCubit()..setFlavor(flavor),
+  );
 }

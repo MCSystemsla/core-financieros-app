@@ -135,7 +135,7 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                                 metasProximas: metasProximas.text.trim(),
                                 otrosDatosCliente:
                                     otrosDatosCliente.text.trim(),
-                                solicitudNuevamenorId: int.parse(
+                                solicitudNuevamenorId: int.tryParse(
                                   context
                                       .read<KivaRouteCubit>()
                                       .state
@@ -325,7 +325,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           siguientePaso: siguientePaso.text.trim(),
                           explicacionAlcanzaraMeta:
                               explicacionAlcanzaraMeta.text.trim(),
-                          objSolicitudRecurrenteId: int.parse(
+                          objSolicitudRecurrenteId: int.tryParse(
                             context.read<KivaRouteCubit>().state.solicitudId,
                           ),
                         );

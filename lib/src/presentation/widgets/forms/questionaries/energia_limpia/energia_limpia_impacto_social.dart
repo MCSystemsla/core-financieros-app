@@ -97,7 +97,7 @@ class _EnergiaLimpiaImpactoSocialState extends State<EnergiaLimpiaImpactoSocial>
                               motivoPrestamo: motivoPrestamo.text.trim(),
                               otrosDatosCliente: otrosDatosCliente.text.trim(),
                               planesFuturo: planesFuturo.text.trim(),
-                              solicitudNuevamenorId: int.parse(
+                              solicitudNuevamenorId: int.tryParse(
                                 context
                                     .read<KivaRouteCubit>()
                                     .state
@@ -259,7 +259,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                           comoMejoraSituacion: comoMejoraSituacion.text.trim(),
                           quienApoya: quienApoya.text.trim(),
                           siguienteMeta: siguienteMeta.text.trim(),
-                          objSolicitudRecurrenteId: int.parse(
+                          objSolicitudRecurrenteId: int.tryParse(
                             context.read<KivaRouteCubit>().state.solicitudId,
                           ),
                         );

@@ -27,4 +27,7 @@ class RecurrenteEnergiaLimpiaDbLocal {
   String? siguienteMeta;
   String? problemasEnergiaDescripcion;
   String? tipoSolicitud;
+  String? solicitudCreditoId;
+  String? numeroSolicitud;
+  String? solicitudId;
 }

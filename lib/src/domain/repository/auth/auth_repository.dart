@@ -1,6 +1,10 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
+import 'package:core_financiero_app/src/datasource/auth/auth_response.dart';
+import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -8,15 +12,17 @@ import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_end
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
-  Future<Map<String, dynamic>> login({
+  Future<AuthResponse> login({
     required String userName,
     required String password,
     required String dbName,
   });
-  Future<BranchTeamResponse> getBranchTeam({required String accessCode});
+  Future<BranchTeamResponse> getBranchTeam();
   Future<ActionsResponse> getActions({required String database});
   Future<String> getLogo();
   Future<TutorialResponse> getTutorials();
+  Future<(String, String)> refreshToken();
+  Future<OtpGenerateResponse> generateOTP();
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -24,7 +30,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   final _logger = Logger();
   @override
-  Future<Map<String, dynamic>> login({
+  Future<AuthResponse> login({
     required String userName,
     required String password,
     required String dbName,
@@ -35,26 +41,51 @@ class AuthRepositoryImpl extends AuthRepository {
       dbName: dbName,
     );
     try {
-      final resp = await _api.request(endpoint: endpoint);
-      return resp;
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
+      if (resp['statusCode'] != 201) {
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = AuthResponse.fromJson(resp);
+      return data;
     } catch (e) {
-      throw AppException.toAppException(e.toString());
+      rethrow;
     }
   }
 
   @override
-  Future<BranchTeamResponse> getBranchTeam({required String accessCode}) async {
-    final endpoint = BranchTeamEndpoint(accessCode: accessCode);
-    final resp = await _api.request(endpoint: endpoint);
-    final data = BranchTeamResponse.fromJson(resp);
-    return data;
+  Future<BranchTeamResponse> getBranchTeam() async {
+    try {
+      final endpoint = BranchTeamEndpoint();
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = BranchTeamResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 
   @override
   Future<ActionsResponse> getActions({required String database}) async {
     final endpoint = ActionsEndpoint(database: database);
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
       await resp['data'] as List<dynamic>;
       final actions = ActionsResponse.fromJson(resp);
       return actions;
@@ -68,7 +99,8 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<String> getLogo() async {
     final endpoint = LogoImageEndpoint();
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp =
+          await _api.request(endpoint: endpoint, needToValidateToken: false);
       final logoUrl = resp['Valor'] as String;
       return logoUrl;
     } catch (e) {
@@ -81,12 +113,59 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<TutorialResponse> getTutorials() async {
     final endpoint = TutorailEndpoint();
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp =
+          await _api.request(endpoint: endpoint, needToValidateToken: false);
       final tutorialResponse = TutorialResponse.fromJson(resp);
       return tutorialResponse;
     } catch (e) {
       _logger.e(e);
       throw AppException(optionalMsg: e.toString());
+    }
+  }
+
+  @override
+  Future<(String, String)> refreshToken() async {
+    final endpoint = RefreshTokenEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      final statusCode = resp['statusCode'];
+
+      if (statusCode != 201) {
+        _logger.e('APIRepository - Token no valido');
+        Future.microtask(() => router.go('/login'));
+
+        throw AppException(
+          optionalMsg:
+              'Una sesión ha expirado, por favor inicia sesión de nuevo.',
+        );
+      }
+      return (
+        resp['accessToken'] as String,
+        resp['refreshToken'] as String,
+      );
+    } catch (e, s) {
+      _logger.e('Error en refreshToken', error: e, stackTrace: s);
+      Future.microtask(() => router.go('/login'));
+
+      rethrow;
+    }
+  }
+
+  @override
+  Future<OtpGenerateResponse> generateOTP() async {
+    final endpoint = OTPEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = OtpGenerateResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e('Error en generateOTP', error: e);
+      rethrow;
     }
   }
 }

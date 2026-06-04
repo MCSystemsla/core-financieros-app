@@ -1,12 +1,20 @@
 // ignore_for_file: deprecated_member_use
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/reportes/hn/reportes_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -38,9 +46,8 @@ class _CarteraScreenState extends State<CarteraScreen> {
 class _CarteraContentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const isProdMode = bool.fromEnvironment('isProdMode');
-
     final actions = LocalStorage().currentActions;
+    final flavor = global<FlavorCubit>().state.flavor;
 
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
@@ -66,86 +73,155 @@ class _CarteraContentWidget extends StatelessWidget {
                       ),
                 ),
               ),
-              if (!isProdMode && actions.contains('LLENARSOLICITUDESMOVIL'))
-                ModuleCard(
-                  onTap: () {
-                    context.push('/solicitudes');
-                  },
-                  title: 'Solicitudes',
-                  subtitle: 'Modulo Solicitudes de Credito',
-                  firstColor: AppColors.blueIndigo,
-                  secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-                  icon: const Icon(
-                    Icons.description,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ModuleCard(
+                visible:
+                    (actions.contains(TypeAction.llenarSolicitudes.codigo)),
+                onTap: () {
+                  context.push('/solicitudes');
+                },
+                title: 'Solicitudes',
+                subtitle: 'Módulo Solicitudes de Crédito',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.description,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (!isProdMode)
-                ModuleCard(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AnalisisSolicitudesScreen(),
-                      ),
-                    );
-                  },
-                  title: 'Analisis'.tr(),
-                  subtitle: 'Analisis de solicitudes de credito',
-                  firstColor: const Color.fromARGB(255, 48, 47, 47),
-                  secondColor: const Color(0xFFBDBDBD),
-                  icon: const Icon(
-                    Icons.analytics,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible: flavor == Flavor.honduras,
+                onTap: () {
+                  state.connectionStatus == ConnectionStatus.connected
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AnalisisInterceptorByFlavor(),
+                          ),
+                        )
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const AnalisisSolicitudesHnOfflineScreen(),
+                          ),
+                        );
+                },
+                title: 'Analisis'.tr(),
+                subtitle: 'Analisis de solicitudes de crédito',
+                secondColor: const Color.fromARGB(255, 48, 47, 47),
+                firstColor: const Color(0xFFBDBDBD),
+                icon: const Icon(
+                  Icons.analytics,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (actions.contains('LLENARKIVAMOVIL'))
-                ModuleCard(
-                  onTap: () {
-                    state.connectionStatus == ConnectionStatus.connected
-                        ? context.push('/cartera/formulario-kiva')
-                        : context.push('/cartera/kiva-offline');
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const SelectTypeKivaScreen(),
-                    //   ),
-                    // );
-                  },
-                  title: 'cartera.kiva'.tr(),
-                  subtitle: 'cartera.kiva_description'.tr(),
-                  firstColor: AppColors.blueIndigo,
-                  secondColor:
-                      AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-                  icon: const Icon(
-                    Icons.dynamic_form_outlined,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible: (flavor == Flavor.honduras &&
+                    state.connectionStatus == ConnectionStatus.connected &&
+                    actions.contains(TypeAction.supervisionDeCredito.codigo)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SelectTipoSupervisionHnScreen(),
+                    ),
+                  );
+                },
+                title: 'Supervisiones'.tr(),
+                subtitle: 'Supervisiones de crédito',
+                secondColor: const Color(0xFF283593),
+                firstColor: const Color(0xFFC5CAE9),
+                icon: const Icon(
+                  Icons.supervised_user_circle,
+                  color: AppColors.white,
+                  size: 35,
                 ),
-              if (state.connectionStatus == ConnectionStatus.connected &&
-                  actions.contains('LLENARKIVAMOVIL'))
-                ModuleCard(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const KivaHistoryRequestScreen(),
-                      ),
-                    );
-                  },
-                  title: 'KIVA Histórico',
-                  subtitle: 'Modulo Solicitudes Kiva Enviadas',
-                  firstColor: AppColors.blueIndigo,
-                  secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
-                  icon: const Icon(
-                    Icons.send_to_mobile_rounded,
-                    color: AppColors.white,
-                    size: 35,
-                  ),
+              ),
+              ModuleCard(
+                visible: (actions.contains(TypeAction.llenarKiva.codigo)),
+                onTap: () {
+                  state.connectionStatus == ConnectionStatus.connected
+                      ? context.push('/cartera/formulario-kiva')
+                      : context.push('/cartera/kiva-offline');
+                },
+                title: 'cartera.kiva'.tr(),
+                subtitle: 'cartera.kiva_description'.tr(),
+                firstColor: AppColors.blueIndigo,
+                secondColor:
+                    AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.dynamic_form_outlined,
+                  color: AppColors.white,
+                  size: 35,
                 ),
+              ),
+              ModuleCard(
+                visible:
+                    (state.connectionStatus == ConnectionStatus.connected &&
+                        actions.contains(TypeAction.llenarKiva.codigo)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const KivaHistoryRequestScreen(),
+                    ),
+                  );
+                },
+                title: 'KIVA Histórico',
+                subtitle: 'Módulo Solicitudes Kiva Enviadas',
+                firstColor: AppColors.blueIndigo,
+                secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
+                icon: const Icon(
+                  Icons.send_to_mobile_rounded,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
+              ModuleCard(
+                visible: (flavor == Flavor.honduras &&
+                    state.connectionStatus == ConnectionStatus.connected &&
+                    actions.contains(TypeAction.comite.codigo)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ComiteScreenHn(),
+                    ),
+                  );
+                },
+                title: 'Comité',
+                subtitle: 'Módulo de Comité',
+                firstColor: const Color(0xFF112D4E),
+                secondColor: const Color(0xFF3F72AF),
+                icon: const Icon(
+                  Icons.groups_rounded,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
+              ModuleCard(
+                visible: (flavor == Flavor.honduras &&
+                    state.connectionStatus == ConnectionStatus.connected),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ReportesScreenHn(),
+                    ),
+                  );
+                },
+                title: 'Reporteria',
+                subtitle: 'Módulo de Reporteria',
+                firstColor: const Color(0xFF2C003E),
+                secondColor: const Color(0xFF512DA8),
+                icon: const Icon(
+                  Icons.edit_document,
+                  color: AppColors.white,
+                  size: 35,
+                ),
+              ),
             ],
           ),
         );
@@ -161,6 +237,7 @@ class ModuleCard extends StatelessWidget {
   final Color firstColor;
   final Color secondColor;
   final VoidCallback onTap;
+  final bool visible;
   const ModuleCard({
     super.key,
     required this.title,
@@ -169,12 +246,13 @@ class ModuleCard extends StatelessWidget {
     required this.firstColor,
     required this.secondColor,
     required this.onTap,
+    this.visible = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-
+    if (!visible) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.all(14),
       width: size.width,

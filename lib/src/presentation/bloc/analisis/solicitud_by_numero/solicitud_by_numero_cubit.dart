@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/analisis/nuevamenor/analisis_nueva_menor.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/analisis_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_repository.dart';
 import 'package:equatable/equatable.dart';
 
 part 'solicitud_by_numero_state.dart';

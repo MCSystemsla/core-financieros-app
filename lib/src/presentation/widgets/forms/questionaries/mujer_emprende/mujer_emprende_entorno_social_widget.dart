@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -152,15 +152,17 @@ class _MujerEmprendeEntornoSocialWidgetState
                     ),
                   ),
                   CommentaryWidget(
-                    title: 'Cantdad de hijos:',
+                    title: 'Cantidad de hijos:',
                     readOnly: true,
                     initialValue: cantidadHijos.toString(),
                   ),
                   if (cantidadHijos > 0) ...[
+                    const Gap(20),
                     CommentaryWidget(
                       title: '¿Que edades tienen sus hijos?',
                       textEditingController: question2,
                     ),
+                    const Gap(20),
                     WhiteCard(
                       padding: const EdgeInsets.all(5),
                       child: JLuxDropdown(

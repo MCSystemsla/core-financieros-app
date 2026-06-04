@@ -106,12 +106,12 @@ class SolicitudNuevaMenorState extends Equatable {
   final String nacionalidadConyugue;
   final String database;
   final String ubicacion;
-  final bool espeps;
+  final String espeps;
   final String nombreDeEntidadPeps;
   final String paisPeps;
   final String periodoPeps;
   final String cargoOficialPeps;
-  final bool tieneFamiliarPeps;
+  final String tieneFamiliarPeps;
   final String nombreFamiliarPeps2;
   final String parentescoFamiliarPeps2;
   final String cargoFamiliarPeps2;
@@ -122,7 +122,7 @@ class SolicitudNuevaMenorState extends Equatable {
   final String objRubroActividadVer;
   final String objActividadPredominante;
   final String objActividadPredominanteVer;
-  final bool esFamiliarEmpleado;
+  final String esFamiliarEmpleado;
   final String nombreFamiliar;
   final String cedulaFamiliar;
   final String objTipoDocumentoId;
@@ -153,6 +153,8 @@ class SolicitudNuevaMenorState extends Equatable {
   final String paisPeps2Ver;
   final String nacionalidadConyugueVer;
   final bool isOffline;
+  final String nombreFormularioKiva;
+  final List<HistorialCredito> historialCredito;
   const SolicitudNuevaMenorState({
     this.isOffline = false,
     this.numeroSolicitud = '',
@@ -254,8 +256,8 @@ class SolicitudNuevaMenorState extends Equatable {
     this.objProductoIdVer = '',
     this.observacion = '',
     this.sucursal = '',
-    this.ubicacionLongitud = '',
-    this.ubicacionLatitud = '',
+    this.ubicacionLongitud = '0',
+    this.ubicacionLatitud = '0',
     this.ubicacionGradosLongitud = '',
     this.ubicacionGradosLatitud = '',
     this.objEscolaridadId = '',
@@ -269,12 +271,12 @@ class SolicitudNuevaMenorState extends Equatable {
     this.nacionalidadConyugue = '',
     this.database = '',
     this.ubicacion = '',
-    this.espeps = false,
+    this.espeps = '',
     this.nombreDeEntidadPeps = '',
     this.paisPeps = '',
     this.periodoPeps = '',
     this.cargoOficialPeps = '',
-    this.tieneFamiliarPeps = false,
+    this.tieneFamiliarPeps = '',
     this.nombreFamiliarPeps2 = '',
     this.parentescoFamiliarPeps2 = '',
     this.cargoFamiliarPeps2 = '',
@@ -285,7 +287,7 @@ class SolicitudNuevaMenorState extends Equatable {
     this.objRubroActividadVer = '',
     this.objActividadPredominante = '',
     this.objActividadPredominanteVer = '',
-    this.esFamiliarEmpleado = false,
+    this.esFamiliarEmpleado = '',
     this.nombreFamiliar = '',
     this.cedulaFamiliar = '',
     this.objTipoDocumentoId = '',
@@ -305,10 +307,14 @@ class SolicitudNuevaMenorState extends Equatable {
     this.fechaPrimerPagoSolicitud = '',
     this.prestamoInteres = 0,
     this.fechaDesembolso = '',
+    this.nombreFormularioKiva = '',
+    this.historialCredito = const [],
   });
 
   @override
   List<Object> get props => [
+        historialCredito,
+        nombreFormularioKiva,
         departamentoNegocio,
         departamentoNegocioVer,
         frecuenciaPagoMeses,
@@ -413,7 +419,6 @@ class SolicitudNuevaMenorState extends Equatable {
         nacionalidadConyugue,
         database,
         ubicacion,
-        espeps,
         nombreDeEntidadPeps,
         paisPeps,
         periodoPeps,
@@ -450,6 +455,7 @@ class SolicitudNuevaMenorState extends Equatable {
         prestamoInteres,
         fechaDesembolso,
         createdAt,
+        espeps,
         isDone
       ];
 
@@ -558,12 +564,12 @@ class SolicitudNuevaMenorState extends Equatable {
     String? nacionalidadConyugue,
     String? database,
     String? ubicacion,
-    bool? espeps,
+    String? espeps,
     String? nombreDeEntidadPeps,
     String? paisPeps,
     String? periodoPeps,
     String? cargoOficialPeps,
-    bool? tieneFamiliarPeps,
+    String? tieneFamiliarPeps,
     String? nombreFamiliarPeps2,
     String? parentescoFamiliarPeps2,
     String? cargoFamiliarPeps2,
@@ -574,7 +580,7 @@ class SolicitudNuevaMenorState extends Equatable {
     String? objRubroActividadVer,
     String? objActividadPredominante,
     String? objActividadPredominanteVer,
-    bool? esFamiliarEmpleado,
+    String? esFamiliarEmpleado,
     String? nombreFamiliar,
     String? cedulaFamiliar,
     String? objTipoDocumentoId,
@@ -605,6 +611,8 @@ class SolicitudNuevaMenorState extends Equatable {
     String? paisPeps2Ver,
     String? nacionalidadConyugueVer,
     bool? isOffline,
+    String? nombreFormularioKiva,
+    List<HistorialCredito>? historialCredito,
   }) {
     return SolicitudNuevaMenorState(
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
@@ -798,6 +806,8 @@ class SolicitudNuevaMenorState extends Equatable {
       nacionalidadConyugueVer:
           nacionalidadConyugueVer ?? this.nacionalidadConyugueVer,
       isOffline: isOffline ?? this.isOffline,
+      nombreFormularioKiva: nombreFormularioKiva ?? this.nombreFormularioKiva,
+      historialCredito: historialCredito ?? this.historialCredito,
     );
   }
 }

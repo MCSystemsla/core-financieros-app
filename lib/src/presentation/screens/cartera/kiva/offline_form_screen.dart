@@ -2,11 +2,14 @@ import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendient
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/solicitudes_kiva_offline/solicitudes_kiva_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_formulario_kiva/tipo_formulario_kiva_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -30,6 +33,27 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const SolicitudesKivaOffline(),
+            ),
+          );
+        },
+        label: const Text(
+          'Crear nueva solicitud KIVA',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.black,
+      ),
       appBar: AppBar(
         title: const Text('Solicitudes en Tramite (Offline)'),
       ),
@@ -182,7 +206,24 @@ class _RequestWidgetState extends State<_RequestWidget> {
           ).showDialog(context);
           return;
         }
-        await context.push('/online', extra: widget.solicitud.nombreFormulario);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => KivaInterceptor(
+              currentRoute: widget.solicitud.producto ?? '',
+              solicitudId: widget.solicitud.solicitudId ?? '',
+              nombre: widget.solicitud.nombre ?? '',
+              tipoSolicitud: widget.solicitud.tipoSolicitud ?? '',
+              numero: widget.solicitud.numero ?? '',
+              cedula: widget.solicitud.cedula ?? '',
+              nombreFormularioKiva:
+                  widget.solicitud.nombreFormulario!.toFormularioKival()!,
+              solicitudCreditoId: widget.solicitud.solicitudId ?? '',
+              motivoAnterior: widget.solicitud.motivoAnterior ?? '',
+              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+            ),
+          ),
+        );
       },
       subtitle: Text(
         widget.solicitud.fecha?.formatDateV2() ?? '',

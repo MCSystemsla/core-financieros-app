@@ -12,15 +12,19 @@ class PhotoCedulaClientWidget extends StatelessWidget {
   final VoidCallback onCedulaFrontalPressed;
   final XFile? fotoCedulaTrasera;
   final VoidCallback onCedulaTraseraPressed;
+  final XFile? fotoFirma;
+  final VoidCallback? onFirmaPressed;
   final VoidCallback onNextPressed;
   const PhotoCedulaClientWidget({
     super.key,
     required this.controller,
     this.fotoCedulaFrontal,
     this.fotoCedulaTrasera,
+    this.fotoFirma,
     required this.onCedulaFrontalPressed,
     required this.onCedulaTraseraPressed,
     required this.onNextPressed,
+    this.onFirmaPressed,
   });
 
   final PageController controller;
@@ -42,6 +46,14 @@ class PhotoCedulaClientWidget extends StatelessWidget {
             title: 'Foto Cedula Trasera',
             onPressed: onCedulaTraseraPressed,
           ),
+          if (fotoFirma != null) ...[
+            const Gap(30),
+            UploadImageWidget(
+              selectedImage: fotoFirma,
+              title: 'Foto Firma Digital',
+              onPressed: onFirmaPressed ?? () => {},
+            ),
+          ],
           const Gap(30),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),

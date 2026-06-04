@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/user_cedula/user_by_cedula_solicitud.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_by_cedula_solicitud.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
-import 'package:core_financiero_app/src/presentation/screens/solicitudes/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:equatable/equatable.dart';
 
@@ -34,6 +34,7 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
               cedula: cedula,
               tipoDocumento: tipoDocumento.value,
               paisEmisor: paisEmisor,
+              tipoPersona: '',
             ),
           ),
         );
@@ -46,14 +47,15 @@ class UserByCedulaCubit extends Cubit<UserByCedulaState> {
             cedula: cedula,
             tipoDocumento: resp?.data.tipoDocumento ?? '',
             paisEmisor: paisEmisor,
-            primerNombre: resp?.data.primerNombre,
-            segundoNombre: resp?.data.segundoNombre,
-            primerApellido: resp?.data.primerApellido,
-            segundoApellido: resp?.data.segundoApellido,
+            primerNombre: resp?.data.primerNombre ?? '',
+            segundoNombre: resp?.data.segundoNombre ?? '',
+            primerApellido: resp?.data.primerApellido ?? '',
+            segundoApellido: resp?.data.segundoApellido ?? '',
             fechaNacimiento: resp?.data.fechaNacimiento,
             fechaEmision: resp?.data.fechaEmision,
             fechaVencimiento: resp?.data.fechaExpira,
-            sexo: resp?.data.sexo,
+            sexo: resp?.data.sexo ?? '',
+            tipoPersona: '',
           ),
         ),
       );

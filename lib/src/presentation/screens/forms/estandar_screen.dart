@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/kiva/kiva_file.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -44,7 +42,10 @@ import 'package:signature/signature.dart';
 
 class EstandarScreen extends StatelessWidget {
   final String typeProduct;
-  const EstandarScreen({super.key, required this.typeProduct});
+  const EstandarScreen({
+    super.key,
+    required this.typeProduct,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -341,6 +342,8 @@ class _EstandarSignState extends State<EstandarSign> {
                               final localPath =
                                   await KivaFile.saveImageSignature(
                                 controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
                               );
                               if (!context.mounted) return;
                               await saveOfflineResponses(
@@ -352,6 +355,10 @@ class _EstandarSignState extends State<EstandarSign> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -403,6 +410,9 @@ class _EstandarSignState extends State<EstandarSign> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
+
     context.read<SolicitudesPendientesLocalDbCubit>().saveEstandarForm(
           estandarDBLocal: EstandarDbLocal()
             ..tipoSolicitud = state.tipoSolicitud
@@ -423,6 +433,7 @@ class _EstandarSignState extends State<EstandarSign> {
             ..personasCargo = state.personasCargo
             ..planesFuturo = state.planesFuturo
             ..publicitarNegocio = state.publicitarNegocio
+            ..solicitudCreditoId = solicitudCreditoId
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {
@@ -652,34 +663,12 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                         .state
                                         .solicitudId,
                                   );
-                              final directory =
-                                  await getApplicationDocumentsDirectory();
-                              final customDir =
-                                  Directory('${directory.path}/MySignatures');
-
-                              // Crea el directorio si no existe
-                              if (!await customDir.exists()) {
-                                await customDir.create(recursive: true);
-                                log('Directorio creado: ${customDir.path}');
-                              }
-
-                              // Define la ruta de la imagen directamente en el directorio
                               final localPath =
-                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
-
-                              // Genera la imagen de la firma
-                              final signatureImage =
-                                  await controller.toPngBytes();
-
-                              if (signatureImage != null) {
-                                // Guarda la imagen directamente en el directorio
-                                final file = File(localPath);
-                                await file.writeAsBytes(signatureImage);
-                                log('Firma guardada en: $localPath');
-                              } else {
-                                log('No se pudo generar la imagen de la firma.');
-                                return;
-                              }
+                                  await KivaFile.saveImageSignature(
+                                controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
+                              );
 
                               if (!context.mounted) return;
 
@@ -692,6 +681,10 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.parse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -752,6 +745,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
 
     context.read<SolicitudesPendientesLocalDbCubit>().saveRecurrentEstandarForm(
           recurrenteEstandarModel: RecurrenteEstandarDbLocal()
@@ -773,6 +768,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..personaAutoSuficiente = state.personaAutoSuficiente
             ..tipoEstudioHijos = state.tipoEstudioHijos
             ..siguientePaso = state.siguientePaso
+            ..solicitudCreditoId = solicitudCreditoId
             ..personasCargo = state.personasCargo,
         );
     if (!isConnected) {

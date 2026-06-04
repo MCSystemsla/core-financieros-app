@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -35,7 +36,7 @@ class ButtonActionsWidget extends StatelessWidget {
           const Gap(20),
           Expanded(
             child: disabled == null || disabled == true
-                ? const CircularProgressIndicator()
+                ? const LoadingWidget()
                 : CustomElevatedButton(
                     alignment: MainAxisAlignment.center,
                     text: nextTitle,

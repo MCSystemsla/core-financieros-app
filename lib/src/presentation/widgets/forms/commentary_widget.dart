@@ -1,3 +1,6 @@
+// ignore_for_file: deprecated_member_use
+
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +79,10 @@ class CommentaryWidget extends StatelessWidget {
               ),
             ),
             child: TextFormField(
-              inputFormatters: inputFormatters,
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+                ...?inputFormatters,
+              ],
               keyboardType: textInputType,
               controller: textEditingController,
               validator: validator,
@@ -87,7 +93,7 @@ class CommentaryWidget extends StatelessWidget {
               textCapitalization: textCapitalization ?? TextCapitalization.none,
               readOnly: readOnly ?? false,
               style: TextStyle(
-                color: AppColors.greyWithOpacityV4,
+                color: Colors.black.withOpacity(0.7),
                 fontSize: 16,
               ),
               decoration: !haveCounter

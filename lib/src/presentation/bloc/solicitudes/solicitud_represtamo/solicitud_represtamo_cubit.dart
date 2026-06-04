@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/represtamo_autosave.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/represtamo/solicitud_represtamo.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
@@ -21,7 +22,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   Future<void> createSolicitudReprestamo() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
           isOffline: state.isOffline,
@@ -77,6 +78,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
           celularReprestamo: state.celularReprestamo,
           fechaPrimerPagoSolicitud:
               DateTime.parse(state.fechaPrimerPagoSolicitud),
+          historialCredito: state.historialCredito,
         ),
       );
       if (!isOk) {
@@ -96,11 +98,11 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     }
   }
 
-  void sendCedulaImages({required String numeroSolicitud}) async {
+  void sendCedulaImages({required int numeroSolicitud}) async {
     try {
       await _solicitudesCreditoRepository
           .sendCedulaImageWhenSolicitudCreditoCreated(
-        numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+        numeroSolicitud: numeroSolicitud,
         cedulaCliente: state.cedula,
         imagenFrontal: state.cedulaFrontPath,
         imagenTrasera: state.cedulaBackPath,
@@ -136,6 +138,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
 
     return ReprestamoResponsesLocalDb(
       id: prev?.id ?? 0,
+      nombreFormularioKiva:
+          _prefer(state.nombreFormularioKiva, prev?.nombreFormularioKiva),
       paisPepsVer: _prefer(state.paisPepsVer, prev?.paisPepsVer),
       paisPeps2Ver: _prefer(state.paisPeps2Ver, prev?.paisPeps2Ver),
       parentescoFamiliarPeps2Ver: _prefer(
@@ -208,9 +212,8 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
           _prefer(state.objFrecuenciaIdVer, prev?.objFrecuenciaIdVer),
       fechaDesembolso:
           _preferDate(state.fechaDesembolso, prev?.fechaDesembolso),
-      hasVerified:
-          !state.hasVerified ? (prev?.hasVerified ?? false) : state.hasVerified,
-      isDone: !state.isDone ? (prev?.isDone ?? false) : state.isDone,
+      hasVerified: boolPrefer(state.hasVerified, prev?.hasVerified),
+      isDone: boolPrefer(state.isDone, prev?.isDone),
       prestamoInteres: state.tasaInteres == 0
           ? (prev?.prestamoInteres ?? 0)
           : state.tasaInteres,
@@ -282,6 +285,10 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
     );
   }
 
+  bool boolPrefer(bool stateValue, bool? prevValue) {
+    return stateValue ? true : (prevValue ?? false);
+  }
+
   void onFieldChanged(SolicitudReprestamoState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();
@@ -300,6 +307,48 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       state.copyWith(
         cedulaFrontPath: cedulaFrontPath,
         cedulaBackPath: cedulaBackPath,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

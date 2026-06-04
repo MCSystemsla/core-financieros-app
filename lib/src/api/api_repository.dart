@@ -7,6 +7,8 @@ import 'dart:io';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
+import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -14,33 +16,40 @@ import 'package:logger/logger.dart';
 
 import '../../global_locator.dart';
 // import '../utils/lang/type_safety.dart';
-import 'package:http_parser/http_parser.dart';
+// import 'package:http_parser/http_parser.dart';
 import 'endpoint.dart';
 
 enum Protocol { http, https }
 
 abstract class APIRepository {
-  Future<Map<String, dynamic>> request({required Endpoint endpoint});
+  Future<Map<String, dynamic>> request({
+    required Endpoint endpoint,
+    bool needToValidateToken = true,
+  });
 }
 
 class DefaultAPIRepository implements APIRepository {
   final _logger = global<Logger>();
-  final kHttpTimeout = Duration(seconds: 40);
+  final kHttpTimeout = Duration(seconds: 60);
 
   @override
-  Future<Map<String, dynamic>> request({required Endpoint endpoint}) async {
+  Future<Map<String, dynamic>> request({
+    required Endpoint endpoint,
+    bool needToValidateToken = true,
+  }) async {
     _logger.d('Request endpoint: ${endpoint.body}');
+    final apiUrl = endpoint.setApiUrl ?? const String.fromEnvironment('apiUrl');
     Uri url;
     try {
       if (const String.fromEnvironment('protocol') == Protocol.https.name) {
         url = Uri.https(
-          const String.fromEnvironment('apiUrl'),
+          apiUrl,
           endpoint.path,
           endpoint.queryParameters,
         );
       } else {
         url = Uri.http(
-          const String.fromEnvironment('apiUrl'),
+          apiUrl,
           endpoint.path,
           endpoint.queryParameters,
         );
@@ -69,8 +78,28 @@ class DefaultAPIRepository implements APIRepository {
       if (endpoint.typeBody == TypeBody.formData) {
         return _formData(endpoint: endpoint, headers: headers);
       } else {
-        final result = await requestDistributor(endpoint, url, headers);
-        return _handleResponse(result);
+        Response response = await requestDistributor(endpoint, url, headers);
+
+// 🔥 Si es 401 y no es el refresh
+        if (response.statusCode == 401 &&
+            needToValidateToken &&
+            endpoint is! RefreshTokenEndpoint) {
+          try {
+            // 1️⃣ Refresh
+            final (accessToken, refreshToken) =
+                await AuthRepositoryImpl().refreshToken();
+
+            await LocalStorage().setJWT(accessToken);
+            await LocalStorage().setRefreshToken(refreshToken);
+
+            headers['Authorization'] = 'Bearer ${LocalStorage().jwt}';
+            response = await requestDistributor(endpoint, url, headers);
+          } catch (e) {
+            return {'statusCode': 401, 'message': 'Unauthorized'};
+          }
+        }
+
+        return _handleResponse(response, needToValidateToken);
       }
     } catch (e) {
       return _handlerError(e);
@@ -140,7 +169,8 @@ class DefaultAPIRepository implements APIRepository {
         .timeout(kHttpTimeout);
   }
 
-  Future<Map<String, dynamic>> _handleResponse(Response response) async {
+  Future<Map<String, dynamic>> _handleResponse(
+      Response response, bool needToValidateToken) async {
     _logger.d('Response - statusCode: ${response.statusCode}');
     final decodedBody = json.decode(response.body);
     // if (response.headers.containsKey('authorization')) {
@@ -149,8 +179,26 @@ class DefaultAPIRepository implements APIRepository {
     // } else if (decodedBody.containsKey('token')) {
     //   // LocalStorage(). = decodedBody['token'] ?? '';
     // }
+    // if (needToValidateToken && response.statusCode == 401) {
+    //   final (accessToken, refreshToken) =
+    //       await AuthRepositoryImpl().refreshToken();
+
+    //   await Future.wait([
+    //     LocalStorage().setJWT(accessToken),
+    //     LocalStorage().setRefreshToken(refreshToken),
+    //   ]);
+    // }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
+      // if (needToValidateToken) {
+      //   final (accessToken, refreshToken) =
+      //       await AuthRepositoryImpl().refreshToken();
+
+      //   await Future.wait([
+      //     LocalStorage().setJWT(accessToken),
+      //     LocalStorage().setRefreshToken(refreshToken),
+      //   ]);
+      // }
       Map<String, dynamic>? map = cast<Map<String, dynamic>>(decodedBody);
       if (map != null) {
         map.addAll({'statusCode': response.statusCode});

@@ -87,6 +87,8 @@ class DownloadCatalogoLoading extends StatelessWidget {
   final bool? isSucess;
   final bool isUploadingForms;
   final VoidCallback? onDownloadComplete;
+  final List<String> unsyncedCatalogos;
+
   const DownloadCatalogoLoading({
     super.key,
     required this.lottieAsset,
@@ -95,6 +97,7 @@ class DownloadCatalogoLoading extends StatelessWidget {
     this.isSucess = false,
     this.isUploadingForms = false,
     this.onDownloadComplete,
+    this.unsyncedCatalogos = const [],
   });
 
   @override
@@ -120,6 +123,32 @@ class DownloadCatalogoLoading extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            if (unsyncedCatalogos.isNotEmpty) ...[
+              const Gap(10),
+              Text(
+                unsyncedCatalogos.length > 1
+                    ? 'Algunos catalogos no se pudieron sincronizar:'
+                    : 'No se pudo sincronizar el catalogo:',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontSize: 16,
+                    ),
+              ),
+              const Gap(10),
+              ...unsyncedCatalogos.map(
+                (error) => ListTile(
+                  title: Text(
+                    error,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  leading: const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
             if (isSucess ?? false) ...[
               const Gap(20),
               SizedBox(

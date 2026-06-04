@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/kiva/kiva_file.dart';
@@ -382,6 +381,10 @@ class _RecurrentSignState extends State<_RecurrentSign> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -437,6 +440,8 @@ class _RecurrentSignState extends State<_RecurrentSign> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context
         .read<SolicitudesPendientesLocalDbCubit>()
         .saveRecurrentSaneamientoForm(
@@ -462,6 +467,7 @@ class _RecurrentSignState extends State<_RecurrentSign> {
             ..tiempoActividad = state.tiempoActividad
             ..tieneTrabajo = state.tieneTrabajo
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion
+            ..solicitudCreditoId = solicitudCreditoId
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
     if (!isConnected) {
@@ -689,34 +695,13 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                         .state
                                         .solicitudId,
                                   );
-                              final directory =
-                                  await getApplicationDocumentsDirectory();
-                              final customDir =
-                                  Directory('${directory.path}/MySignatures');
-
-                              // Crea el directorio si no existe
-                              if (!await customDir.exists()) {
-                                await customDir.create(recursive: true);
-                                log('Directorio creado: ${customDir.path}');
-                              }
-
-                              // Define la ruta de la imagen directamente en el directorio
                               final localPath =
-                                  '${customDir.path}/${DateTime.now().millisecondsSinceEpoch}.png';
+                                  await KivaFile.saveImageSignature(
+                                controller: controller,
+                                numeroSoicitud:
+                                    context.read<KivaRouteCubit>().state.numero,
+                              );
 
-                              // Genera la imagen de la firma
-                              final signatureImage =
-                                  await controller.toPngBytes();
-
-                              if (signatureImage != null) {
-                                // Guarda la imagen directamente en el directorio
-                                final file = File(localPath);
-                                await file.writeAsBytes(signatureImage);
-                                log('Firma guardada en: $localPath');
-                              } else {
-                                log('No se pudo generar la imagen de la firma.');
-                                return;
-                              }
                               if (!context.mounted) return;
 
                               await saveAnswersOnLocalDB(
@@ -728,6 +713,10 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
                                   ..imagen1 = imageProvider.imagen1
                                   ..imagen2 = imageProvider.imagen2
                                   ..imagen3 = imageProvider.imagen3
+                                  ..solicitudUuid = context
+                                      .read<KivaRouteCubit>()
+                                      .state
+                                      .solicitudCreditoId
                                   ..solicitudId = int.tryParse(
                                     context
                                         .read<KivaRouteCubit>()
@@ -783,6 +772,8 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
+    final solicitudCreditoId =
+        context.read<KivaRouteCubit>().state.solicitudCreditoId;
     context.read<SolicitudesPendientesLocalDbCubit>().saveSaneamientoForm(
           saneamientoDbLocal: SaneamientoDbLocal()
             ..tipoSolicitud = state.tipoSolicitud
@@ -808,6 +799,7 @@ class _SaneamientoSignState extends State<_SaneamientoSign> {
             ..tiempoActividad = state.tiempoActividad
             ..tieneTrabajo = state.tieneTrabajo
             ..tipoEstudioHijos = state.tipoEstudioHijos
+            ..solicitudCreditoId = solicitudCreditoId
             ..trabajoNegocioDescripcion = state.trabajoNegocioDescripcion,
         );
     if (!isConnected) {

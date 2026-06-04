@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/asign_solicitud_asesor/bottom_sheet/show_asignar_solicitud_bottom_sheet.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asign_solicitud_asesor/bottom_sheet/show_asignar_solicitud_bottom_sheet.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ class CreditProductItem extends StatelessWidget {
             CustomAlertDialog(
               context: context,
               title:
-                  'No puedes asignar una solicitud que ya está asignada a un asesor de credito',
+                  'No puedes asignar una solicitud que ya está asignada a un asesor de crédito',
               onDone: () => context.pop(),
             ).showDialog(context);
             return;

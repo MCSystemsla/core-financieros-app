@@ -19,6 +19,10 @@ class LocalStorage {
     return prefs.getString('jwt') ?? '';
   }
 
+  String get refreshToken {
+    return prefs.getString('refreshToken') ?? '';
+  }
+
   String get database {
     return prefs.getString('database') ?? '';
   }
@@ -36,11 +40,19 @@ class LocalStorage {
   }
 
   String get lastDeleteDate {
-    return prefs.getString('last_delete_date') ?? '';
+    return prefs.getString('lastDeleteDate') ?? '';
+  }
+
+  int get lastActiveTime {
+    return prefs.getInt('lastActiveTime') ?? 0;
   }
 
   String get currentUserName {
     return prefs.getString('currentUserName') ?? '';
+  }
+
+  String get rolUser {
+    return prefs.getString('rolUser') ?? '';
   }
 
   Future<void> setLanguage(String value) async {
@@ -77,5 +89,17 @@ class LocalStorage {
 
   Future<void> setLastDeleteDate(String lastDeleteDate) async {
     await prefs.setString('last_delete_date', lastDeleteDate);
+  }
+
+  Future<void> setLastActiveTime(int lastActiveTime) async {
+    await prefs.setInt('lastActiveTime', lastActiveTime);
+  }
+
+  Future<void> setRefreshToken(String expirationToken) async {
+    await prefs.setString('refreshToken', expirationToken);
+  }
+
+  Future<void> setRolUser(String rolUser) async {
+    await prefs.setString('rolUser', rolUser);
   }
 }

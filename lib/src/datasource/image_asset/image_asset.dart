@@ -2,6 +2,7 @@ abstract class ImageAsset {
   static const String icon = 'assets/images/app_icon.png';
   static const String logo = 'assets/images/logo.png';
   static const String logoNi = 'assets/images/logo_original.png';
+  static const String logoHN = 'assets/images/icon_logo_hn.png';
   static const String homeLangESUrl = 'assets/images/bandera_espanol.svg';
   static const String homeLangENUrl = 'assets/images/bandera_ingles.svg';
   static const String loader = 'assets/images/loader.gif';
@@ -51,6 +52,11 @@ abstract class ImageAsset {
   // CEDULA
   static const String cedulaPhoto = 'assets/images/document.svg';
 
+  static const String solicitudSignature =
+      'assets/images/solicitud_signature.svg';
+
   static const String mySolicitudesAssignments =
       'assets/images/my_solicitudes_asignadas.svg';
+
+  static const String identification = 'assets/images/indentification.svg';
 }

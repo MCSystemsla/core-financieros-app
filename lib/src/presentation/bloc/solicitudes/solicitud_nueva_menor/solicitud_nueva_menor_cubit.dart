@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/autosave/autosave_helper.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/responses_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/nueva_menor/solicitud_nueva_menor.dart';
-import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
+import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,7 +23,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     try {
       emit(state.copyWith(status: Status.inProgress));
       await Future.delayed(const Duration(seconds: 3));
-      final (isOk, msg, numeroSolicitud) =
+      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId) =
           await repository.createSolicitudCreditoNuevaMenor(
               solicitudNuevaMenor: SolicitudNuevaMenor(
         isOffline: state.isOffline,
@@ -97,12 +99,12 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
         nacionalidadConyugue: state.nacionalidadConyugue,
         database: state.database,
         ubicacion: state.ubicacion,
-        espeps: state.espeps,
+        espeps: state.espeps == 'input.yes'.tr(),
         nombreDeEntidadPeps: state.nombreDeEntidadPeps,
         paisPeps: state.paisPeps,
         periodoPeps: state.periodoPeps,
         cargoOficialPeps: state.cargoOficialPeps,
-        tieneFamiliarPeps: state.tieneFamiliarPeps,
+        tieneFamiliarPeps: state.tieneFamiliarPeps == 'input.yes'.tr(),
         nombreFamiliarPeps2: state.nombreFamiliarPeps2,
         parentescoFamiliarPeps2: state.parentescoFamiliarPeps2,
         cargoFamiliarPeps2: state.cargoFamiliarPeps2,
@@ -111,7 +113,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
         paisPeps2: state.paisPeps2,
         objRubroActividad: state.objRubroActividad,
         objActividadPredominante: state.objActividadPredominante,
-        esFamiliarEmpleado: state.esFamiliarEmpleado,
+        esFamiliarEmpleado: state.esFamiliarEmpleado == 'input.yes'.tr(),
         nombreFamiliar: state.nombreFamiliar,
         cedulaFamiliar: state.cedulaFamiliar,
         objTipoDocumentoId: state.objTipoDocumentoId,
@@ -124,6 +126,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
         telefonoBeneficiarioSeguro1: state.telefonoBeneficiarioSeguro1,
         plazoSolicitud: state.plazoSolicitud,
         fechaPrimerPagoSolicitud: state.fechaPrimerPagoSolicitud,
+        historialCredito: state.historialCredito,
       ));
       if (!isOk) {
         return emit(state.copyWith(status: Status.error, errorMsg: msg));
@@ -138,9 +141,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
     }
   }
 
-  void sendCedulaImages({required String numeroSolicitud}) async {
+  void sendCedulaImages({required int numeroSolicitud}) async {
     await repository.sendCedulaImageWhenSolicitudCreditoCreated(
-      numeroSolicitud: int.tryParse(numeroSolicitud) ?? 0,
+      numeroSolicitud: numeroSolicitud,
       cedulaCliente: state.cedula,
       imagenFrontal: state.cedulaFrontPath,
       imagenTrasera: state.cedulaBackPath,
@@ -172,6 +175,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       id: prev?.id ?? 0,
       departamentoNegocio:
           _prefer(state.departamentoNegocio, prev?.departamentoNegocio),
+      nombreFormularioKiva:
+          _prefer(state.nombreFormularioKiva, prev?.nombreFormularioKiva),
       departamentoNegocioVer:
           _prefer(state.departamentoNegocioVer, prev?.departamentoNegocioVer),
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
@@ -186,9 +191,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           state.montoMaximo == 0 ? prev?.montoMaximo : state.montoMaximo,
       montoMinimo:
           state.montoMinimo == 0 ? prev?.montoMinimo : state.montoMinimo,
-      hasVerified: state.hasVerified,
+      hasVerified: boolPrefer(state.hasVerified, prev?.hasVerified),
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
-      isDone: state.isDone,
+      isDone: boolPrefer(state.isDone, prev?.isDone),
       createdAt: prev?.createdAt ?? DateTime.now(),
       objOrigenSolicitudId:
           _prefer(state.objOrigenSolicitudId, prev?.objOrigenSolicitudId),
@@ -250,15 +255,14 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       ubicacion: state.ubicacion.isNotEmpty
           ? state.ubicacion
           : (prev?.ubicacion ?? ''),
-      espeps: !state.espeps ? prev?.espeps : state.espeps,
+      espeps: _prefer(state.espeps, prev?.espeps),
       nombreDeEntidadPeps:
           _prefer(state.nombreDeEntidadPeps, prev?.nombreDeEntidadPeps),
       paisPeps: _prefer(state.paisPeps, prev?.paisPeps),
       periodoPeps: _prefer(state.periodoPeps, prev?.periodoPeps),
       cargoOficialPeps: _prefer(state.cargoOficialPeps, prev?.cargoOficialPeps),
-      tieneFamiliarPeps: !state.tieneFamiliarPeps
-          ? prev?.tieneFamiliarPeps
-          : state.tieneFamiliarPeps,
+      tieneFamiliarPeps:
+          _prefer(state.tieneFamiliarPeps, prev?.tieneFamiliarPeps),
       nombreFamiliarPeps2:
           _prefer(state.nombreFamiliarPeps2, prev?.nombreFamiliarPeps2),
       parentescoFamiliarPeps2:
@@ -273,9 +277,8 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
           _prefer(state.objRubroActividad, prev?.objRubroActividad),
       objActividadPredominante: _prefer(
           state.objActividadPredominante, prev?.objActividadPredominante),
-      esFamiliarEmpleado: !state.esFamiliarEmpleado
-          ? prev?.esFamiliarEmpleado
-          : state.esFamiliarEmpleado,
+      esFamiliarEmpleado:
+          _prefer(state.esFamiliarEmpleado, prev?.esFamiliarEmpleado),
       nombreFamiliar: _prefer(state.nombreFamiliar, prev?.nombreFamiliar),
       cedulaFamiliar: _prefer(state.cedulaFamiliar, prev?.cedulaFamiliar),
       objTipoDocumentoId:
@@ -431,6 +434,9 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
 
   String _prefer(String? current, String? previous) =>
       current?.isNotEmpty == true ? current! : previous ?? '';
+  bool boolPrefer(bool stateValue, bool? prevValue) {
+    return stateValue ? true : (prevValue ?? false);
+  }
 
   @override
   Future<void> close() {
@@ -446,6 +452,48 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       state.copyWith(
         cedulaFrontPath: cedulaFrontPath,
         cedulaBackPath: cedulaBackPath,
+      ),
+    );
+  }
+
+  void saveHistorialCredito({
+    required HistorialCredito historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: [
+          ...state.historialCredito,
+          historialCredito,
+        ],
+      ),
+    );
+  }
+
+  void saveHistorialesCreditoOnState({
+    required List<HistorialCredito> historialCredito,
+  }) {
+    emit(
+      state.copyWith(
+        historialCredito: historialCredito,
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito.map((item) {
+          return item.uuid == updated.uuid ? updated : item;
+        }).toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
       ),
     );
   }

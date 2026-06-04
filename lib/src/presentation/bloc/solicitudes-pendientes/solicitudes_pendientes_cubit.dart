@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:core_financiero_app/src/config/helpers/delete_folder/delete_folder.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/socilitudes_pendientes_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
@@ -16,8 +15,8 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
   Future<void> getSolicitudesPendientes() async {
     emit(state.copyWith(status: Status.inProgress));
 
-    final isDeleted =
-        await DeleteFolderImpl().deleteCoreFinancieroFolderByDetermineDate();
+    // final isDeleted =
+    // await DeleteFolderImpl().deleteCoreFinancieroFolderByDetermineDate();
 
     try {
       final data =
@@ -27,7 +26,7 @@ class SolicitudesPendientesCubit extends Cubit<SolicitudesPendientesState> {
           solicitudesPendienteResponse: data.solicitudes,
           filteredSolicitudes: data.solicitudes,
           status: Status.done,
-          isColletionTablesDelted: isDeleted,
+          // isColletionTablesDelted: isDeleted,
         ),
       );
     } on AppException catch (e) {

@@ -20,6 +20,8 @@
         android:icon="@mipmap/ic_launcher"
         android:largeHeap="true"
         >
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBCBLtwZIqnHAFTMLbQcrRotJRZmHyVu4Y"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

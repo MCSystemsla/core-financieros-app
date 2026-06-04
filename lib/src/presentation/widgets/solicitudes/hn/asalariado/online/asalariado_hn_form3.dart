@@ -1,0 +1,446 @@
+// ignore_for_file: deprecated_member_use
+import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
+import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/solicitud_aslariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
+import 'package:gap/gap.dart';
+
+class AsalariadoHnForm3 extends StatefulWidget {
+  final PageController controller;
+  const AsalariadoHnForm3({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  State<AsalariadoHnForm3> createState() => _AsalariadoHnForm3State();
+}
+
+class _AsalariadoHnForm3State extends State<AsalariadoHnForm3>
+    with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final cubit = context.read<SolicitudAslariadoHnCubit>();
+    return BlocBuilder<SolicitudAslariadoHnCubit, SolicitudAslariadoHnState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const MiCreditoProgress(
+                  currentStep: 3,
+                  steps: 7,
+                ),
+                const Gap(30),
+                Column(
+                  children: [
+                    SearchDropdownWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Profesión',
+                      title: 'Profesión',
+                      codigo: 'PROFESION',
+                      flavor: global<FlavorCubit>().state.flavor,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            profesionCodigo: item.value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    SearchDropdownWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.value),
+                      hintText: 'Ocupación',
+                      title: 'Ocupación',
+                      codigo: 'OCUPACION',
+                      flavor: global<FlavorCubit>().state.flavor,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            ocupacionCodigo: item.value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: 'Cargo',
+                      icon:
+                          Icon(Icons.badge, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Cargo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            cargo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Nombre del Trabajo',
+                      icon: Icon(Icons.business,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Nombre del Trabajo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            nombreTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Pais del Trabajo',
+                      title: 'Pais del Trabajo',
+                      codigo: 'PAIS',
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            paisTrabajoCodigo: item.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Departamento del trabajo',
+                      title: 'Departamento del trabajo',
+                      codigo: 'DEP',
+                      where: state.paisTrabajoCodigo,
+                      onChanged: (item) {
+                        if (item == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            departamentoTrabajoCodigo: item.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      codigo: 'MUN',
+                      hintText: 'Municipio del trabajo',
+                      title: 'Municipio del trabajo',
+                      where: state.departamentoTrabajoCodigo,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            municipioTrabajoCodigo: value.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CatalogoValorNacionalidad(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value?.valor),
+                      hintText: 'Aldea del trabajo',
+                      title: 'Aldea del trabajo',
+                      codigo: 'ALD',
+                      where: state.municipioTrabajoCodigo,
+                      onChanged: (value) {
+                        if (value == null || !mounted) return;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            aldeaTrabajoCodigo: value.valor,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Caserio del Trabajo',
+                      icon: Icon(Icons.location_on,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      title: 'Caserio del Trabajo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            caserioTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Dirección del Trabajo',
+                      icon: Icon(Icons.location_on,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      title: 'Direccion del Trabajo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            direccionTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Barrio del Trabajo',
+                      icon: Icon(Icons.location_city,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Barrio del Trabajo',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(50),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            barrioTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    CountryInput(
+                      isRequired: false,
+                      maxLength: 15,
+                      countryCodeInput: CountryCodeInput.hn,
+                      hintText: 'Teléfono del Trabajo',
+                      icon:
+                          Icon(Icons.phone, color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.phone,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Teléfono del Trabajo',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            telefonoTrabajo: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: 'Tiempo de Laborar',
+                      icon: Icon(Icons.access_time,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Tiempo de Laborar',
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            tiempoLaborar: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: 'Lugar de Trabajo Anterior',
+                      icon: Icon(Icons.work_history,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      title: 'Lugar del Trabajo Anterior',
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
+                      ],
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            lugarTrabajoAnterior: value,
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      hintText: 'Salario Neto',
+                      icon: Icon(Icons.wallet,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Salario Neto',
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final salarioNeto = int.tryParse(newValue) ?? 0;
+                        final total = state.salarioNetoCordoba + salarioNeto;
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            salarioNetoCordoba: salarioNeto,
+                            totalIngresoMes: total,
+                            salarioNetoMensual: salarioNeto.toDouble(),
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: 'Otros Ingresos',
+                      icon: Icon(Icons.payments,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.none,
+                      title: 'Otros Ingresos',
+                      inputFormatters: [
+                        CurrencyInputFormatter(
+                          mantissaLength: 0,
+                        ),
+                      ],
+                      onChange: (value) {
+                        final newValue =
+                            value.replaceAll(RegExp(r'[^0-9]'), '');
+                        final otrosIngresos = int.tryParse(newValue) ?? 0;
+
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            otrosIngresosCordoba: otrosIngresos,
+                            totalIngresoMes: state.totalIngresoMes +
+                                (int.tryParse(newValue) ?? 0),
+                            otrosIngresos: otrosIngresos.toDouble(),
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(30),
+                    OutlineTextfieldWidget(
+                      hintText: 'Fuente de Otros Ingresos',
+                      icon: Icon(Icons.source,
+                          color: AppColors.getPrimaryColor()),
+                      textInputType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                        LengthLimitingTextInputFormatter(100),
+                      ],
+                      title: 'Fuente Otros Ingresos',
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            fuenteOtrosIngresos: value,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const Gap(30),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  width: double.infinity,
+                  child: CustomElevatedButton(
+                    text: 'Siguiente',
+                    color: AppColors.greenLatern.withOpacity(0.4),
+                    onPressed: () {
+                      if (!formKey.currentState!.validate()) return;
+
+                      widget.controller.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                  ),
+                ),
+                const Gap(20),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutLineButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    text: 'Cancelar',
+                    textColor: AppColors.red,
+                    color: AppColors.red,
+                  ),
+                ),
+                const Gap(20),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+}

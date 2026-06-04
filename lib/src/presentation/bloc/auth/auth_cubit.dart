@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
-import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,26 +19,20 @@ class AuthCubit extends Cubit<AuthState> {
     required String dbName,
   }) async {
     try {
-      emit(state.copyWith(status: Status.inProgress));
+      emit(state.copyWith(status: AuthStatus.authenticating));
       final resp = await repository.login(
         userName: userName,
         password: password,
         dbName: dbName,
       );
-      if (resp['statusCode'] != 201) {
-        final (errorMsg, _) =
-            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
-        emit(state.copyWith(
-          errorMsg: errorMsg,
-          status: Status.error,
-        ));
-        return;
-      }
+
       await saveCredentialsOnLocalStorage(
-        accessToken: resp['accessToken'],
+        accessToken: resp.accessToken,
+        refreshToken: resp.refreshToken,
         dbName: dbName,
-        userId: resp['usuarioId'],
-        username: resp['username'],
+        userId: resp.usuarioId,
+        username: resp.username,
+        rolUser: resp.rol,
       );
       final haveToSync = CatalogoSync.needToSync();
       if (!haveToSync) {
@@ -48,26 +40,33 @@ class AuthCubit extends Cubit<AuthState> {
             .setLastUpdate(DateTime.now().millisecondsSinceEpoch);
       }
       final actions = await repository.getActions(database: dbName);
-      LocalStorage().setActions(actions.data);
-      emit(state.copyWith(status: Status.done));
+      await LocalStorage().setActions(actions.data);
+      emit(state.copyWith(status: AuthStatus.authenticated));
     } on AppException catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      emit(state.copyWith(
+        status: AuthStatus.unauthenticated,
+        errorMsg: e.optionalMsg,
+      ));
     } catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      emit(state.copyWith(status: AuthStatus.error, errorMsg: e.toString()));
     }
   }
 
   Future<void> saveCredentialsOnLocalStorage({
     required String accessToken,
+    required String refreshToken,
     required String dbName,
     required String userId,
     required String username,
+    required String rolUser,
   }) async {
     await Future.wait([
       LocalStorage().setJWT(accessToken),
+      LocalStorage().setRefreshToken(refreshToken),
       LocalStorage().setDatabase(dbName),
       LocalStorage().setUserId(userId),
       LocalStorage().setCurrentUsername(username),
+      LocalStorage().setRolUser(rolUser),
     ]);
   }
 

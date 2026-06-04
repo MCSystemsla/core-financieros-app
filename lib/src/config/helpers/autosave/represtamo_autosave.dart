@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:core_financiero_app/objectbox.g.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/local_db/responses/represtamo_responses_local_db.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 
 class ReprestamoAutosave {
   final Box<ReprestamoResponsesLocalDb> box;
@@ -22,7 +22,7 @@ class ReprestamoAutosave {
 
   void trigger() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 700), _save);
+    _debounce = Timer(const Duration(milliseconds: 500), _save);
   }
 
   void _save() {

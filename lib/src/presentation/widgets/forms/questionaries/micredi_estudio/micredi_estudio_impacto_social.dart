@@ -177,7 +177,7 @@ class _ImpactoSocialCrediEstudioWidgetState
                                   question5Controller.text.trim(),
                               otrosDatosCliente:
                                   question6Controller.text.trim(),
-                              objSolicitudNuevamenorId: int.parse(
+                              objSolicitudNuevamenorId: int.tryParse(
                                 context
                                     .read<KivaRouteCubit>()
                                     .state
@@ -358,7 +358,7 @@ class _RecurrentFormImpactoSocialState
                           explicacionAlcanzaraMeta:
                               explicacionAlcanzaraMeta.text.trim(),
                           siguientePaso: siguentePaso.text.trim(),
-                          objSolicitudRecurrenteId: int.parse(
+                          objSolicitudRecurrenteId: int.tryParse(
                             context.read<KivaRouteCubit>().state.solicitudId,
                           ),
                         );

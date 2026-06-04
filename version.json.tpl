@@ -1,4 +1,0 @@
-{
-  "version": "VERSION DE APP",
-  "apkUrl": "URL DEL ARCHIVO APK PARA CONTROL DE VERSIONAMIENTO"
-}

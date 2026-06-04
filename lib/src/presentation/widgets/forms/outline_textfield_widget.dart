@@ -27,6 +27,9 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final bool isRequired;
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
+  final EdgeInsetsGeometry padding;
+  final Icon? suffixIcon;
+  final TextAlign textAlign;
   const OutlineTextfieldWidget({
     super.key,
     this.hintText = 'Ingresa tu texto',
@@ -47,6 +50,9 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.onTap,
     this.maxLength = 500,
     this.inputFormatters,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    this.suffixIcon,
+    this.textAlign = TextAlign.left,
   }) : haveCounter = false;
   const OutlineTextfieldWidget.withCounter({
     super.key,
@@ -68,12 +74,15 @@ class OutlineTextfieldWidget extends StatelessWidget {
     this.maxLength = 500,
     this.onTap,
     this.inputFormatters,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+    this.suffixIcon,
+    this.textAlign = TextAlign.left,
   }) : haveCounter = true;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -104,6 +113,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    textAlign: textAlign,
                     inputFormatters: inputFormatters,
                     contextMenuBuilder: (context, editableTextState) =>
                         const SizedBox(),
@@ -125,6 +135,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
                     ),
                     decoration: InputDecoration(
                       prefixIcon: icon,
+                      suffixIcon: suffixIcon,
                       counter: const Offstage(),
                       hintText: hintText,
                       border: InputBorder.none,
