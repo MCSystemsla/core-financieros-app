@@ -721,7 +721,7 @@ class InformacionPepsEndpointHN extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/peps/informacion';
+  String get path => '/cartera/peps/informacion';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
