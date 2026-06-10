@@ -150,6 +150,38 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
                     );
                   },
                 ),
+                CustomSwitch(
+                  title: '¿Maneja usted recursos públicos o bienes del estado?',
+                  subtitle:
+                      'Indica si usted maneja recursos públicos o bienes del estado',
+                  value: state.manejaBienesPublicos,
+                  onChanged: (v) {
+                    cubit.onFieldChanged(
+                      () => state.copyWith(
+                        manejaBienesPublicos: v,
+                      ),
+                    );
+                  },
+                ),
+                if (state.manejaBienesPublicos) ...[
+                  const Gap(5),
+                  OutlineTextfieldWidget(
+                    title: 'Descripción de recursos',
+                    icon: const Icon(Icons.account_balance_outlined),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => state.copyWith(
+                          descripcionBienesPublicos: value,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ],
             ],
           ),

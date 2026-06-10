@@ -21,285 +21,289 @@ class EsPepsAuthorizationPage3 extends StatefulWidget {
 
 class _EsPepsAuthorizationPage3State extends State<EsPepsAuthorizationPage3>
     with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(20),
-            Text(
-              'Informacion Familiares',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Abuelos (as)',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'ABUELOSPEPS',
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(20),
+              Text(
+                'Informacion Familiares',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Abuelos (as)',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'ABUELOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Abuelos (as) ',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Abuelos (as) ',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Hermanos (as)',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HERMANOSPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Hermanos (as)',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'HERMANOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Hermanos (as) ',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Hermanos (as) ',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Nombre completo de Esposos(as) de los hermanos ',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'ESPOSOSHERMANOSPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Nombre completo de Esposos(as) de los hermanos ',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'ESPOSOSHERMANOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Esposos(as) de los hermanos ',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Esposos(as) de los hermanos ',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Hijos (as):',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HIJOSPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Hijos (as):',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'HIJOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Hijos (as)',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Hijos (as)',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Nueras (as):',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'NUERASPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Nueras (as):',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'NUERASPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Nuera (s)',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Nuera (s)',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Yerno (os):',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'YERNOSPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Yerno (os):',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'YERNOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Yerno (s)',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Yerno (s)',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Nombres de los Suegros',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'SUEGROPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Nombres de los Suegros',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'SUEGROPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.woman,
+                    label: 'Nombre completo de Suegra',
+                    value: '2',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.woman,
-                  label: 'Nombre completo de Suegra',
-                  value: '2',
-                  color: Colors.blueGrey,
-                ),
-                AnalisisCardItem(
-                  icon: Icons.man,
-                  label: 'Nombre completo de Suegro',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Nieto (as)',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'NIETOSPEPS',
+                  AnalisisCardItem(
+                    icon: Icons.man,
+                    label: 'Nombre completo de Suegro',
+                    value: '',
+                    color: Colors.blueGrey,
+                  ),
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Nieto (as)',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'NIETOSPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Nietos (as)',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Nietos (as)',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Abuelos (as) Cónyuge:',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'ABUELOSCONYUGEPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Abuelos (as) Cónyuge:',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'ABUELOSCONYUGEPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo de Abuelos (as) Cónyuge',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo de Abuelos (as) Cónyuge',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(10),
-            AnalisisCardListHn(
-              title: 'Detalle de Hermanos (as) del cónyuge',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: context.read<InformacionPepsHnCubit>(),
-                      child: const TableDetalleFamiliarPeps(
-                        parentescoCodigo: 'HERMANOSCONYUGEPEPS',
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Detalle de Hermanos (as) del cónyuge',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'HERMANOSCONYUGEPEPS',
+                        ),
                       ),
                     ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.person,
+                    label: 'Nombre completo Hermanos (as) de cónyuge',
+                    value: '',
+                    color: Colors.blueGrey,
                   ),
-                );
-              },
-              items: [
-                AnalisisCardItem(
-                  icon: Icons.person,
-                  label: 'Nombre completo Hermanos (as) de cónyuge',
-                  value: '',
-                  color: Colors.blueGrey,
-                ),
-              ],
-            ),
-            const Gap(20),
-            esPepsSiguienteButton(context, widget.pageController),
-            esPepsAtrasButton(context, widget.pageController),
-            const Gap(10),
-          ],
+                ],
+              ),
+              const Gap(20),
+              esPepsSiguienteButton(context, widget.pageController, formKey),
+              esPepsAtrasButton(context, widget.pageController),
+              const Gap(10),
+            ],
+          ),
         ),
       ),
     );

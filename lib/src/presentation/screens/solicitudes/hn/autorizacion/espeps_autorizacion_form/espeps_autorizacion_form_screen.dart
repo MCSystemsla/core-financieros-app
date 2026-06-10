@@ -54,6 +54,7 @@ class EspepsAutorizacionFormScreen extends StatelessWidget {
 Widget esPepsSiguienteButton(
   BuildContext context,
   PageController pageController,
+  GlobalKey<FormState> formKey,
 ) {
   return SafeArea(
     child: Container(
@@ -63,6 +64,10 @@ Widget esPepsSiguienteButton(
         color: AppColors.greenLatern.withOpacity(0.4),
         text: 'Siguiente',
         onPressed: () {
+          final isValid = formKey.currentState?.validate() ?? false;
+
+          if (!isValid) return;
+
           pageController.nextPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -98,6 +103,7 @@ Widget esPepsAtrasButton(
 Widget esPepsEnviarButton(
   BuildContext context,
   PageController pageController,
+  GlobalKey<FormState> formKey,
 ) {
   return BlocConsumer<InformacionPepsHnCubit, InformacionPepsHnState>(
     listenWhen: (previous, current) => previous.status != current.status,
@@ -136,6 +142,25 @@ Widget esPepsEnviarButton(
             color: AppColors.greenLatern.withOpacity(0.4),
             text: 'Enviar',
             onPressed: () {
+              final isValid = formKey.currentState?.validate() ?? false;
+              if (!isValid) return;
+              final currentState = context.read<InformacionPepsHnCubit>().state;
+              if (currentState.detallePeps.isEmpty) {
+                showV2CustomSnackbar(
+                  context,
+                  title: 'Es necesario agregar al menos un cargo desempeñado',
+                  type: SnackbarType.warning,
+                );
+                return;
+              }
+              if (currentState.relacionPeps.isEmpty) {
+                showV2CustomSnackbar(
+                  context,
+                  title: 'Es necesario agregar al menos un tipo de relación',
+                  type: SnackbarType.warning,
+                );
+                return;
+              }
               context.read<InformacionPepsHnCubit>().createInformacionPeps();
             },
           ),

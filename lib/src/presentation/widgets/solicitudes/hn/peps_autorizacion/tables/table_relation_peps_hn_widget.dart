@@ -7,8 +7,9 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -187,7 +188,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       },
                     ),
                     const Gap(10),
-                    SheetSearchDropdown(
+                    SearchDropdownWidget(
                       selectedItem: Item(
                         name: tipoRelacionCodigo ?? '',
                         value: tipoRelacionCodigo ?? '',
@@ -200,20 +201,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       },
                       hintText: 'Ingresa un tipo de relación',
                       enabled: true,
-                      items: const [
-                        Item(
-                          name: 'ONG',
-                          value: 'ONG',
-                        ),
-                        Item(
-                          name: 'Clubes sociales o deportivos',
-                          value: 'Clubes sociales o deportivos',
-                        ),
-                        Item(
-                          name: 'Federaciones',
-                          value: 'Federaciones',
-                        ),
-                      ],
+                      codigo: CatalogoType.tipoRelacionPeps.codigo,
                     ),
                     const Gap(20),
                     Container(
