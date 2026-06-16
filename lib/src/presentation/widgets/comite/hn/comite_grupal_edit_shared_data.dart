@@ -63,7 +63,7 @@ class _ComiteGrupalEditSharedDataState extends State<ComiteGrupalEditSharedData>
             context: context,
             title: state.errorMsg,
             onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
+          ).showDialog(context, dialogType: DialogType.warning);
         }
       },
       builder: (context, state) {

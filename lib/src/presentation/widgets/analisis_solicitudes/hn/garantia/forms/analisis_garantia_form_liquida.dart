@@ -307,7 +307,7 @@ class _AnalisisGarantiaFormLiquidaState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

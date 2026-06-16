@@ -1,13 +1,15 @@
-import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/v2_crear_garantia_detalle_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/crear_garantia_moda_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_articulo/tipo_articulo_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -105,14 +107,22 @@ class _ListItems extends StatelessWidget {
             itemBuilder: (context, index) {
               final e = analisisGarantia[index];
               return AnalisisCardVentasDay(
-                subtitle: e.tipoGarantia,
-                title: 'Cédula Cliente ${e.cedulaCliente}',
-                description: e.tipoPersona,
+                color: e.asignacionID == null ? Colors.indigo.shade600 : null,
+                subtitle: e.articuloTipo ?? '',
+                title: e.tipoPersonaCodigo ?? '',
+                description: e.asignacionID == null
+                    ? 'Agregar Bien de garantia'
+                    : 'Bien de garantia asignado',
                 onTap: () {
-                  showHistorialCreditoOptionsBottomSheet(
-                    context: context,
-                    onEdit: () => {},
-                    onDelete: () {},
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => V2CrearGarantiaDetalleScreen(
+                        tipoGarantia: e.articuloTipo!.toTipoGarantiaEnumV2!,
+                        objAnalisisGarantiaId: e.garantiaID!,
+                        tipoArticulo: e.articuloCodigo!.toTipoArticuloEnum!,
+                      ),
+                    ),
                   );
                 },
               );

@@ -379,7 +379,7 @@ class _BottomButton extends StatelessWidget {
             onDone: () => context.pop(),
           ).showDialog(
             context,
-            dialogType: DialogType.error,
+            dialogType: DialogType.warning,
           );
         }
       },

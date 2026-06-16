@@ -51,7 +51,13 @@ enum ErrorNetworkCode {
       ErrorNetworkCode.unauthorized
     );
   }
-  if (msg.contains('<!DOCTYPE html>')) {
+  if (msg.contains('<!doctype html>')) {
+    return (
+      'El servidor se encuentra fuera de servicio, por favor intente nuevamente. ${resp['message']}',
+      ErrorNetworkCode.serverError,
+    );
+  }
+  if (msg.contains('failed to connect')) {
     return (
       'El servidor se encuentra fuera de servicio, por favor intente nuevamente. ${resp['message']}',
       ErrorNetworkCode.serverError,

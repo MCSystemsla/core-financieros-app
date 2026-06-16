@@ -143,7 +143,7 @@ class _UserLocationContentState extends State<UserLocationContent> {
             onDone: () => context.pop(),
           ).showDialog(
             context,
-            dialogType: DialogType.error,
+            dialogType: DialogType.warning,
           );
         }
         if (state.statusCreation == Status.done) {

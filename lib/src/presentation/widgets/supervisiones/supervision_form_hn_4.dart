@@ -161,7 +161,7 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                       onDone: () => context.pop(),
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

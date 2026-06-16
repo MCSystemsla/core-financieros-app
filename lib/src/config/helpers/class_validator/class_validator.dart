@@ -196,13 +196,13 @@ class ClassValidator {
       return 'RTN inválido';
     }
 
-    final departamento = int.parse(rtn.substring(0, 2));
+    // final departamento = int.parse(rtn.substring(0, 2));
     final year = int.parse(rtn.substring(4, 8));
     final correlativo = rtn.substring(8, 14);
 
-    if (departamento < 1 || departamento > 18) {
-      return 'Código de departamento inválido';
-    }
+    // if (departamento < 1 || departamento > 18) {
+    //   return 'Código de departamento inválido';
+    // }
 
     final currentYear = DateTime.now().year;
     if (year < 1900 || year > currentYear) {

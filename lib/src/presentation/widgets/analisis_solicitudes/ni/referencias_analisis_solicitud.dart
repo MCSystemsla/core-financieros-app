@@ -74,7 +74,7 @@ class ReferenciasAnalisisSolicitud extends StatelessWidget {
                     context: context,
                     title: state.errorMessage,
                     onDone: () => context.pop(),
-                  ).showDialog(context, dialogType: DialogType.error);
+                  ).showDialog(context, dialogType: DialogType.warning);
                 }
               },
               builder: (context, state) {

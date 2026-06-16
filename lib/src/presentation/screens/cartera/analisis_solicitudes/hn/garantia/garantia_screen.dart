@@ -1,5 +1,4 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/detalle_garantia_table_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/tipos_garantia_hn_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,11 +51,11 @@ class GarantiaHNScreen extends StatelessWidget {
                 cedulaCliente: cedulaCliente,
               ),
               const Gap(10),
-              DetalleGarantiaTableHNWidget(
-                numeroSolicitud: numeroSolicitud,
-                tipoPersonaCodigo: tipoPersonaCodigo,
-                cedulaCliente: cedulaCliente,
-              ),
+              // DetalleGarantiaTableHNWidget(
+              //   numeroSolicitud: numeroSolicitud,
+              //   tipoPersonaCodigo: tipoPersonaCodigo,
+              //   cedulaCliente: cedulaCliente,
+              // ),
             ],
           ),
         ),

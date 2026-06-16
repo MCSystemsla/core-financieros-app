@@ -6,7 +6,8 @@ enum TipoArticuloEnum {
   maquinaria(351),
   taxi(352),
   mobiliarioYEquipo(353),
-  dpf(355);
+  dpf(355),
+  derecho(354);
 
   final int codigo;
 

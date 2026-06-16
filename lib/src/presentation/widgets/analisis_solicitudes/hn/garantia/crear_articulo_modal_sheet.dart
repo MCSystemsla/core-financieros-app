@@ -146,7 +146,7 @@ class _CreateArticuloModalSheetState extends State<CreateArticuloModalSheet> {
                             onDone: () => context.pop(),
                           ).showDialog(
                             context,
-                            dialogType: DialogType.error,
+                            dialogType: DialogType.warning,
                           );
                         }
                       },

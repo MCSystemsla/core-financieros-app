@@ -146,7 +146,7 @@ class _UpdateSolicitudButton extends StatelessWidget {
             context: context,
             title: state.errorMsg,
             onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
+          ).showDialog(context, dialogType: DialogType.warning);
         }
       },
       builder: (context, state) {

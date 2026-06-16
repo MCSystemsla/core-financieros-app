@@ -355,7 +355,7 @@ class _AnalisisGarantiaFormHipotecarioState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

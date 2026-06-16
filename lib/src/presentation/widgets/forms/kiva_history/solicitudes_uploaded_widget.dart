@@ -70,7 +70,7 @@ class SolicitudesUploadedWidget extends StatelessWidget {
                       context: context,
                       title: 'Error inesperado, ${state.errorMsg}',
                       onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.error);
+                    ).showDialog(context, dialogType: DialogType.warning);
                   }
                 },
                 builder: (context, state) {

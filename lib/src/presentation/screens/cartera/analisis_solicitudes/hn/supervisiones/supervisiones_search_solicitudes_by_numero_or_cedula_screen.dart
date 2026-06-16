@@ -87,7 +87,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
             onDone: () => context.pop(),
           ).showDialog(
             context,
-            dialogType: DialogType.error,
+            dialogType: DialogType.warning,
           );
         }
       },

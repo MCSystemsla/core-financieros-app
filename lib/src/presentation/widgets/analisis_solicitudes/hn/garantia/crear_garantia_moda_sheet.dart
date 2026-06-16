@@ -207,7 +207,7 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                             onDone: () => context.pop(),
                           ).showDialog(
                             context,
-                            dialogType: DialogType.error,
+                            dialogType: DialogType.warning,
                           );
                         }
                       },

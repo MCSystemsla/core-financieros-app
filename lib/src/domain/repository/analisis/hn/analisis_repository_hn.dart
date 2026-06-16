@@ -20,6 +20,9 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_r
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/bien_garantia_created_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_bien_schema_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_grupal.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_menor_mil.dart';
@@ -126,6 +129,12 @@ abstract class AnalisisRepositoryHn {
   Future<GetDataAnalisisNuevaMenorMil> getAnalisisDataNuevaMenorMil({
     required String numeroSolicitud,
     required String tipoSolicitud,
+  });
+  Future<BienGarantiaCreatedResponse> createGarantiaBien({
+    required CreateGarantiaBienSchemaHn data,
+  });
+  Future<String> createAsignacionGarantia({
+    required CreateAsignacionGarantiaHn data,
   });
 }
 
@@ -778,6 +787,44 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       final Map<String, dynamic> respBody = resp['data'];
       final data = GetDataAnalisisNuevaMenorMil.fromJson(respBody);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<BienGarantiaCreatedResponse> createGarantiaBien({
+    required CreateGarantiaBienSchemaHn data,
+  }) async {
+    final endpoint = CreateGarantiaBienEndpointHn(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return BienGarantiaCreatedResponse.fromJson(resp);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> createAsignacionGarantia({
+    required CreateAsignacionGarantiaHn data,
+  }) async {
+    final endpoint = CreateAsignacionGarantiaHN(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message'];
     } catch (e) {
       _logger.e(e);
       rethrow;

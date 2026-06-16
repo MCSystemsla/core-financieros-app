@@ -242,7 +242,7 @@ class _AnalisisGarantiaFormPrendarioMobiliarioState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

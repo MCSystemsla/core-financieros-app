@@ -21,7 +21,7 @@ class AnalisisGarantiaCreditoHn {
   Map<String, dynamic> toJson() => {
         'database': LocalStorage().database,
         'NumeroSolicitud': numeroSolicitud,
-        'SolicitudCodigo': solicitudCodigo,
+        'TipoSolicitudCodigo': solicitudCodigo,
         ...analisisGarantia.toJson(),
         // 'AnalisisGarantiaDetalle':
         // List<dynamic>.from(analisisGarantiaDetalle.map((x) => x.toJson())),
@@ -59,6 +59,7 @@ class AnalisisGarantia {
       'NumGarantiaAnterior': numGarantiaAnterior,
       'ArticuloCodigo': articuloCodigo,
       'FiadorID': fiadorId,
+      'objPropietarioID': fiadorId,
     };
     data.removeWhere(
         (key, value) => value == null || value == '' || value == 0);

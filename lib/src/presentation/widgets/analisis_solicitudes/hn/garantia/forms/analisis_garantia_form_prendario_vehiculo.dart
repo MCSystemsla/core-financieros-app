@@ -326,7 +326,7 @@ class _AnalisisGarantiaFormVehiculoState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

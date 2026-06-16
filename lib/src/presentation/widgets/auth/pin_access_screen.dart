@@ -123,7 +123,7 @@ class _PinPutFieldState extends State<_PinPutField> {
               onDone: () => context.pop(),
             ).showDialog(
               context,
-              dialogType: DialogType.error,
+              dialogType: DialogType.warning,
             );
             pinController.clear();
             return;
