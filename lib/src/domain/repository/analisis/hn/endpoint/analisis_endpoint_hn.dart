@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_bien_schema_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
@@ -555,6 +556,23 @@ class CreateAsignacionGarantiaHN extends Endpoint {
 
   @override
   String get path => '/cartera/analisis-garantias/create-garantia-asignacion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class CreateAsignacionGarantiaLiquidaHNEndpoint extends Endpoint {
+  final CreateAndAsignacionGarantiaLiquidaHn data;
+
+  CreateAsignacionGarantiaLiquidaHNEndpoint({required this.data});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-garantias/create-garantia-dpf';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

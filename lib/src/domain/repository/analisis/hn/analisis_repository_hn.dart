@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/bien_garantia_created_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_bien_schema_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
@@ -135,6 +136,9 @@ abstract class AnalisisRepositoryHn {
   });
   Future<String> createAsignacionGarantia({
     required CreateAsignacionGarantiaHn data,
+  });
+  Future<String> createAsignacionGarantiaDPF({
+    required CreateAndAsignacionGarantiaLiquidaHn data,
   });
 }
 
@@ -817,6 +821,28 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
     required CreateAsignacionGarantiaHn data,
   }) async {
     final endpoint = CreateAsignacionGarantiaHN(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message'];
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> createAsignacionGarantiaDPF({
+    required CreateAndAsignacionGarantiaLiquidaHn data,
+  }) async {
+    final endpoint = CreateAsignacionGarantiaLiquidaHNEndpoint(
+      data: data,
+    );
+
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {

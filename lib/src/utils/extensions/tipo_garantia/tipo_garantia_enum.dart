@@ -15,7 +15,7 @@ enum TipoGarantiaEnum {
 enum TipoGarantiaEnumV2 {
   prendaria('PRENDARIA'),
   hipotecario('HIPOTECARIO'),
-  liquido('LIQUIDO');
+  liquido('LIQUIDA');
 
   final String codigo;
 

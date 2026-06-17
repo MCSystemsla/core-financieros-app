@@ -1,26 +1,31 @@
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/evaluadores_cnbs/evaluadores_cnbs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/v2/hipotecario/crear_detalle_bien_hipotecario.dart';
-
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/v2/liquida/crear_detalle_dpf.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/v2/prendario/crear_detalle_bien_prendario_hn.dart';
-
 import 'package:core_financiero_app/src/utils/extensions/tipo_articulo/tipo_articulo_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../../bloc/analisis/hn/analisis_create_asignacion_garantia_dpf/analisis_create_asignacion_garantia_dpf_cubit.dart';
 import '../../../../../bloc/analisis/hn/analisis_create_garantia_bien/analisis_create_garantia_bien_cubit.dart';
+import '../../../../../bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dart';
 
 class V2CrearGarantiaDetalleScreen extends StatelessWidget {
   final TipoGarantiaEnumV2 tipoGarantia;
   final int objAnalisisGarantiaId;
   final TipoArticuloEnum tipoArticulo;
+  final int articuloCodigo;
+  final String tipoPersonaCodigo;
+  final String cedulaCliente;
   const V2CrearGarantiaDetalleScreen({
     super.key,
     required this.tipoGarantia,
     required this.objAnalisisGarantiaId,
     required this.tipoArticulo,
+    required this.articuloCodigo,
+    required this.tipoPersonaCodigo,
+    required this.cedulaCliente,
   });
 
   @override
@@ -38,6 +43,19 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
             repository,
           ),
         ),
+        BlocProvider(
+          create: (ctx) => AnalisisCreateAsignacionGarantiaDpfCubit(
+            repository,
+          ),
+        ),
+        BlocProvider(
+          create: (ctx) => AnalisisDpfsCubit(
+            repository,
+          )..getDpfsByCedula(
+              tipoPersona: tipoPersonaCodigo,
+              cedula: cedulaCliente,
+            ),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -47,6 +65,7 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
           tipoGarantia: tipoGarantia,
           objAnalisisGarantiaId: objAnalisisGarantiaId,
           tipoArticulo: tipoArticulo,
+          articuloCodigo: articuloCodigo,
         ),
       ),
     );
@@ -57,11 +76,13 @@ class V2CreateGarantiaDetalleBienInterceptor extends StatelessWidget {
   final TipoGarantiaEnumV2 tipoGarantia;
   final int objAnalisisGarantiaId;
   final TipoArticuloEnum tipoArticulo;
+  final int articuloCodigo;
   const V2CreateGarantiaDetalleBienInterceptor({
     super.key,
     required this.tipoGarantia,
     required this.objAnalisisGarantiaId,
     required this.tipoArticulo,
+    required this.articuloCodigo,
   });
 
   @override
@@ -74,7 +95,10 @@ class V2CreateGarantiaDetalleBienInterceptor extends StatelessWidget {
       TipoGarantiaEnumV2.hipotecario => CrearDetalleBienHipotecario(
           objAnalisisGarantiaId: objAnalisisGarantiaId,
         ),
-      TipoGarantiaEnumV2.liquido => const Text('Liquido'),
+      TipoGarantiaEnumV2.liquido => CrearDetalleDPF(
+          objAnalisisGarantiaId: objAnalisisGarantiaId,
+          articuloCodigo: articuloCodigo,
+        ),
     };
   }
 }

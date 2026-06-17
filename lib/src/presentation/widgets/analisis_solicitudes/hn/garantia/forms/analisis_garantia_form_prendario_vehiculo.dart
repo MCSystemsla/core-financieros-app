@@ -148,7 +148,7 @@ class _AnalisisGarantiaFormVehiculoState
               ),
               const Gap(12),
               OutlineTextfieldWidget(
-                title: 'Ano',
+                title: 'Año',
                 icon: Icon(
                   Icons.inventory_2_outlined,
                   color: AppColors.getPrimaryColor(),
