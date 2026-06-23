@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 class CrearDetalleBienPrendario extends StatefulWidget {
   final int objAnalisisGarantiaId;
   final TipoArticuloEnum tipoArticulo;
+  final String tipoPersonaCodigo;
   const CrearDetalleBienPrendario({
     super.key,
     required this.objAnalisisGarantiaId,
     required this.tipoArticulo,
+    required this.tipoPersonaCodigo,
   });
 
   @override
@@ -25,15 +27,19 @@ class _CrearDetalleBienPrendarioState extends State<CrearDetalleBienPrendario> {
     return switch (widget.tipoArticulo) {
       TipoArticuloEnum.vehiculo => VehiculoGarantiaForm(
           objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+          tipoPersonaCodigo: widget.tipoPersonaCodigo,
         ),
       TipoArticuloEnum.maquinaria => MaquinariaGarantiaForm(
           objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+          tipoPersonaCodigo: widget.tipoPersonaCodigo,
         ),
       TipoArticuloEnum.taxi => MaquinariaGarantiaForm(
           objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+          tipoPersonaCodigo: widget.tipoPersonaCodigo,
         ),
       TipoArticuloEnum.derecho => DerechoGarantiaForm(
           objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+          tipoPersonaCodigo: widget.tipoPersonaCodigo,
         ),
       _ => const SizedBox.shrink(),
     };

@@ -8,6 +8,10 @@ String createGarantiaBienSchemaHnToJson(CreateGarantiaBienSchemaHn data) =>
 
 class CreateGarantiaBienSchemaHn {
   final int objAnalisisGarantiaID;
+  final String? departamentoCodigo;
+  final String? municipioCodigo;
+  final String? aldeaCodigo;
+  final String? cedulaPropietario;
   final String observaciones;
   final DetalleGarantiaHn detalle;
   final GarantiaAsignacionValoracion valoracion;
@@ -15,17 +19,31 @@ class CreateGarantiaBienSchemaHn {
   CreateGarantiaBienSchemaHn({
     required this.detalle,
     required this.valoracion,
+    this.departamentoCodigo,
+    this.municipioCodigo,
+    this.aldeaCodigo,
+    this.cedulaPropietario,
     required this.observaciones,
     required this.objAnalisisGarantiaID,
   });
 
-  Map<String, dynamic> toJson() => {
-        'database': LocalStorage().database,
-        'objAnalisisGarantiaID': objAnalisisGarantiaID,
-        'Observaciones': observaciones,
-        'detalle': detalle.toJson(),
-        'valoracion': valoracion.toJson(),
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {
+      'database': LocalStorage().database,
+      'objAnalisisGarantiaID': objAnalisisGarantiaID,
+      'DepartamentoCodigo': departamentoCodigo,
+      'MunicipioCodigo': municipioCodigo,
+      'AldeaCodigo': aldeaCodigo,
+      'CedulaPropietario': cedulaPropietario,
+      'Observaciones': observaciones,
+      'detalle': detalle.toJson(),
+      'valoracion': valoracion.toJson(),
+    };
+    data.removeWhere(
+      (key, value) => value == null || value == '',
+    );
+    return data;
+  }
 }
 
 class DetalleGarantiaHn {
@@ -51,9 +69,7 @@ class DetalleGarantiaHnData {
   final double? areaVaras2;
   final double? areaMetros2;
   final String? direccion;
-  final String? departamentoCodigo;
-  final String? municipioCodigo;
-  final String? aldeaCodigo;
+
   final String? tipo;
   final String? marca;
   final String? modelo;
@@ -77,9 +93,6 @@ class DetalleGarantiaHnData {
     this.areaVaras2,
     this.areaMetros2,
     this.direccion,
-    this.departamentoCodigo,
-    this.municipioCodigo,
-    this.aldeaCodigo,
     this.tipo,
     this.marca,
     this.modelo,
@@ -103,12 +116,9 @@ class DetalleGarantiaHnData {
       'Folio': folio,
       'NumEscritura': numEscritura,
       'FechaInscripcion': fechaInscripcion?.toUtc().toIso8601String(),
-      'AreaVaras2': areaVaras2,
-      'AreaMetros2': areaMetros2,
+      'AreaVarasCuadradas': areaVaras2,
+      'AreaMetrosCuadrados': areaMetros2,
       'Direccion': direccion,
-      'DepartamentoCodigo': departamentoCodigo,
-      'MunicipioCodigo': municipioCodigo,
-      'AldeaCodigo': aldeaCodigo,
       'Tipo': tipo,
       'Marca': marca,
       'Modelo': modelo,

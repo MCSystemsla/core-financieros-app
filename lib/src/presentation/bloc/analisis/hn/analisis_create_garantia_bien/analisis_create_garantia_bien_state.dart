@@ -32,6 +32,7 @@ class AnalisisCreateGarantiaBienState extends Equatable {
   final String lugar;
   final String numeroReferencia;
   final String descripcion;
+  final String cedulaPropietario;
   const AnalisisCreateGarantiaBienState({
     this.status = Status.notStarted,
     this.erroMsg = '',
@@ -63,10 +64,12 @@ class AnalisisCreateGarantiaBienState extends Equatable {
     this.lugar = '',
     this.numeroReferencia = '',
     this.descripcion = '',
+    this.cedulaPropietario = '',
   });
 
   @override
   List<Object> get props => [
+        cedulaPropietario,
         status,
         erroMsg,
         familia,
@@ -130,6 +133,7 @@ class AnalisisCreateGarantiaBienState extends Equatable {
     String? lugar,
     String? numeroReferencia,
     String? descripcion,
+    String? cedulaPropietario,
   }) {
     return AnalisisCreateGarantiaBienState(
       status: status ?? this.status,
@@ -162,6 +166,7 @@ class AnalisisCreateGarantiaBienState extends Equatable {
       lugar: lugar ?? this.lugar,
       numeroReferencia: numeroReferencia ?? this.numeroReferencia,
       descripcion: descripcion ?? this.descripcion,
+      cedulaPropietario: cedulaPropietario ?? this.cedulaPropietario,
     );
   }
 }

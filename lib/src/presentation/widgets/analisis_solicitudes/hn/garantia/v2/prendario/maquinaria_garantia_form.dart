@@ -23,9 +23,11 @@ import 'package:flutter/material.dart';
 
 class MaquinariaGarantiaForm extends StatefulWidget {
   final int objAnalisisGarantiaId;
+  final String tipoPersonaCodigo;
   const MaquinariaGarantiaForm({
     super.key,
     required this.objAnalisisGarantiaId,
+    required this.tipoPersonaCodigo,
   });
 
   @override
@@ -97,6 +99,26 @@ class _MaquinariaGarantiaFormState extends State<MaquinariaGarantiaForm> {
                         ),
                   ),
                 ),
+                if (widget.tipoPersonaCodigo != 'DEUDOR') ...[
+                  const Gap(12),
+                  OutlineTextfieldWidget(
+                    title: 'Cedula del Propietario',
+                    icon: Icon(
+                      Icons.inventory_2_outlined,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(cedulaPropietario: value),
+                      );
+                    },
+                  ),
+                ],
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Tipo',

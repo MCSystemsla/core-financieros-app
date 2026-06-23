@@ -26,9 +26,11 @@ import '../../../../../../bloc/analisis/hn/analisis_create_garantia_bien/analisi
 
 class CrearDetalleBienHipotecario extends StatefulWidget {
   final int objAnalisisGarantiaId;
+  final String tipoPersonaCodigo;
   const CrearDetalleBienHipotecario({
     super.key,
     required this.objAnalisisGarantiaId,
+    required this.tipoPersonaCodigo,
   });
 
   @override
@@ -88,6 +90,26 @@ class _CrearDetalleBienHipotecarioState
                         ),
                   ),
                 ),
+                if (widget.tipoPersonaCodigo != 'DEUDOR') ...[
+                  const Gap(12),
+                  OutlineTextfieldWidget(
+                    title: 'Cedula del Propietario',
+                    icon: Icon(
+                      Icons.inventory_2_outlined,
+                      color: AppColors.getPrimaryColor(),
+                    ),
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                    inputFormatters: [
+                      UpperCaseTextFormatter(),
+                    ],
+                    onChange: (value) {
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(cedulaPropietario: value),
+                      );
+                    },
+                  ),
+                ],
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Direccion',

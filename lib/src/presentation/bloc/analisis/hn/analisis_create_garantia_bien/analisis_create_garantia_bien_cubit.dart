@@ -24,6 +24,10 @@ class AnalisisCreateGarantiaBienCubit
         data: CreateGarantiaBienSchemaHn(
           observaciones: state.observaciones,
           objAnalisisGarantiaID: objAnalisisGarantiaId,
+          departamentoCodigo: state.departamentoCodigo,
+          municipioCodigo: state.municipioCodigo,
+          aldeaCodigo: state.aldeaCodigo,
+          cedulaPropietario: state.cedulaPropietario,
           valoracion: GarantiaAsignacionValoracion(
             valorComercial: state.valorComercial,
             valorAvaluo: state.valorAvaluo,
@@ -40,9 +44,6 @@ class AnalisisCreateGarantiaBienCubit
               areaVaras2: state.areaVaras2,
               areaMetros2: state.areaMetros2,
               direccion: state.direccion,
-              departamentoCodigo: state.departamentoCodigo,
-              municipioCodigo: state.municipioCodigo,
-              aldeaCodigo: state.aldeaCodigo,
               tipo: state.tipo,
               marca: state.marca,
               modelo: state.modelo,

@@ -122,7 +122,7 @@ class _ListItems extends StatelessWidget {
                         objAnalisisGarantiaId: e.garantiaID!,
                         tipoArticulo: e.articuloCodigo!.toTipoArticuloEnum!,
                         articuloCodigo: e.articuloCodigo!,
-                        cedulaCliente: e.cedulaPropietario!,
+                        cedulaCliente: e.cedulaDeudor ?? '',
                         tipoPersonaCodigo: e.tipoPersonaCodigo!,
                       ),
                     ),

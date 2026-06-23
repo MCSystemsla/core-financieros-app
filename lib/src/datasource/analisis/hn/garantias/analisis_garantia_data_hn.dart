@@ -28,7 +28,7 @@ class AnalisisGarantiaDataHn {
 
 class GarantiaData {
   final String? tipoGarantia;
-  final String? cedulaCliente;
+  final String? cedulaDeudor;
   final int? objArticuloID;
   final int? articuloCodigo;
   final int? objGarantiaBienID;
@@ -51,7 +51,7 @@ class GarantiaData {
 
   GarantiaData({
     required this.tipoGarantia,
-    required this.cedulaCliente,
+    required this.cedulaDeudor,
     required this.objArticuloID,
     this.articuloCodigo,
     this.objGarantiaBienID,
@@ -75,7 +75,7 @@ class GarantiaData {
 
   factory GarantiaData.fromJson(Map<String, dynamic> json) => GarantiaData(
         tipoGarantia: json['tipoGarantia'],
-        cedulaCliente: json['cedulaCliente'],
+        cedulaDeudor: json['CedulaDeudor'],
         objArticuloID: parseInt(json['objArticuloID']),
         articuloCodigo: parseInt(json['ArticuloCodigo']),
         objGarantiaBienID: parseInt(json['objGarantiaBienID']),
@@ -89,7 +89,7 @@ class GarantiaData {
         tipoPersonaCodigo: json['TipoPersonaCodigo'],
         tipoSolicitudValor: json['TipoSolicitudValor'],
         tipoSolicitudCodigo: json['TipoSolicitudCodigo'],
-        asignacionID: parseInt(json['asignacionID']),
+        asignacionID: parseInt(json['AsignacionID']),
         estadoNombre: json['EstadoGarantiaNombre'],
         estadoCodigo: json['EstadoGarantiaCodigo'],
         articuloTipo: json['ArticuloTipo'],
@@ -101,7 +101,7 @@ class GarantiaData {
         'id': garantiaID,
         'tipoPersona': tipoPersonaValor,
         'tipoGarantia': tipoGarantia,
-        'cedulaCliente': cedulaCliente,
+        'cedulaCliente': cedulaDeudor,
         'objArticuloID': objArticuloID,
         'articuloCodigo': articuloCodigo,
       };

@@ -17,6 +17,15 @@ class CameraService {
     String numeroSoicitud = 'numeroSoicitud',
   }) async {
     final photo = await controller.takePicture();
+    final bytes = await photo.readAsBytes();
+    img.Image? originalImage = img.decodeImage(bytes);
+
+    if (originalImage != null) {
+      img.Image fixedImage = img.bakeOrientation(originalImage);
+
+      await File(photo.path)
+          .writeAsBytes(img.encodeJpg(fixedImage, quality: 90));
+    }
     final appDir = await getApplicationDocumentsDirectory();
     final customDir = Directory('${appDir.path}/KivaImages');
     final customDirImages = Directory(

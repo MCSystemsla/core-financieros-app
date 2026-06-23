@@ -47,7 +47,7 @@ class GarantiaDpfDetalle {
   });
 
   Map<String, dynamic> toJson() => {
-        'FormaAplicacionCodigo': 'MAN',
+        'FormaAplicacionCodigo': 'TOT',
         'Comentario': comentario,
       };
 }

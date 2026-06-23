@@ -1,11 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -13,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,6 +43,7 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
   String? tipoArticulo;
   String? cedulaFiador;
   String? fiadorId;
+  double? montoGarantia;
   @override
   void initState() {
     super.initState();
@@ -134,7 +138,7 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                                 cedulaFiador = v?.anotherValue;
                               });
                             },
-                            hintText: 'Selecciona fiador de garantia ',
+                            hintText: 'Selecciona fiador de garantia',
                             enabled: true,
                             items: state.data
                                 .map(
@@ -177,6 +181,23 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                         },
                       ),
                     ],
+                    const Gap(12),
+                    OutlineTextfieldWidget(
+                      title: 'Monto de la Garantia',
+                      icon: Icon(
+                        Icons.wallet,
+                        color: AppColors.getPrimaryColor(),
+                      ),
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
+                      inputFormatters: [
+                        CurrencyInputFormatter(),
+                      ],
+                      onChange: (value) {
+                        final newValue = toNumericString(value);
+                        montoGarantia = double.tryParse(newValue);
+                      },
+                    ),
                     const Gap(20),
                     BlocConsumer<AnalisisGarantiaCubit, AnalisisGarantiaState>(
                       listenWhen: (prev, curr) =>
@@ -238,6 +259,7 @@ class _CreateGarantiaModalSheetState extends State<CreateGarantiaModalSheet> {
                                       cedulaPropietario: cedulaFiador!,
                                       fiadorId:
                                           int.tryParse(fiadorId ?? '0') ?? 0,
+                                      montoGarantia: montoGarantia!,
                                     ),
                                   );
                             },

@@ -292,4 +292,6 @@ class AnalisisBoxServiceHn {
 
     query.close();
   }
+
+  void removeAnalisisFormsByDate() {}
 }

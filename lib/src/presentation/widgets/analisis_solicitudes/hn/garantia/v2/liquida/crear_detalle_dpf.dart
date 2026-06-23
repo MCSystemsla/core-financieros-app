@@ -26,10 +26,12 @@ import '../../../../../../bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dar
 class CrearDetalleDPF extends StatefulWidget {
   final int objAnalisisGarantiaId;
   final int articuloCodigo;
+  final String tipoPersonaCodigo;
   const CrearDetalleDPF({
     super.key,
     required this.objAnalisisGarantiaId,
     required this.articuloCodigo,
+    required this.tipoPersonaCodigo,
   });
 
   @override

@@ -500,7 +500,6 @@ class _SolicitudAsalariadoOffline1State
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: state.cedula,
-                      readOnly: true,
                       hintText: 'Documento',
                       icon: Icon(Icons.credit_card,
                           color: AppColors.getPrimaryColor()),
@@ -512,7 +511,7 @@ class _SolicitudAsalariadoOffline1State
                       title: 'Documento',
                       onChange: (value) {
                         cubit.onFieldChanged(
-                          () => cubit.state.copyWith(
+                          () => state.copyWith(
                             cedula: value,
                           ),
                         );

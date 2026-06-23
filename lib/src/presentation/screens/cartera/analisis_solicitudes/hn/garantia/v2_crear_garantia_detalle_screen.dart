@@ -66,6 +66,7 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
           objAnalisisGarantiaId: objAnalisisGarantiaId,
           tipoArticulo: tipoArticulo,
           articuloCodigo: articuloCodigo,
+          tipoPersonaCodigo: tipoPersonaCodigo,
         ),
       ),
     );
@@ -77,12 +78,14 @@ class V2CreateGarantiaDetalleBienInterceptor extends StatelessWidget {
   final int objAnalisisGarantiaId;
   final TipoArticuloEnum tipoArticulo;
   final int articuloCodigo;
+  final String tipoPersonaCodigo;
   const V2CreateGarantiaDetalleBienInterceptor({
     super.key,
     required this.tipoGarantia,
     required this.objAnalisisGarantiaId,
     required this.tipoArticulo,
     required this.articuloCodigo,
+    required this.tipoPersonaCodigo,
   });
 
   @override
@@ -91,13 +94,16 @@ class V2CreateGarantiaDetalleBienInterceptor extends StatelessWidget {
       TipoGarantiaEnumV2.prendaria => CrearDetalleBienPrendario(
           objAnalisisGarantiaId: objAnalisisGarantiaId,
           tipoArticulo: tipoArticulo,
+          tipoPersonaCodigo: tipoPersonaCodigo,
         ),
       TipoGarantiaEnumV2.hipotecario => CrearDetalleBienHipotecario(
           objAnalisisGarantiaId: objAnalisisGarantiaId,
+          tipoPersonaCodigo: tipoPersonaCodigo,
         ),
       TipoGarantiaEnumV2.liquido => CrearDetalleDPF(
           objAnalisisGarantiaId: objAnalisisGarantiaId,
           articuloCodigo: articuloCodigo,
+          tipoPersonaCodigo: tipoPersonaCodigo,
         ),
     };
   }
