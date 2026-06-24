@@ -26,6 +26,6 @@ class AuthResponse {
         rol: json['rol'],
         accessToken: json['accessToken'],
         refreshToken: json['refreshToken'] ?? '',
-        passwordPorVencer: json['passwordPorVencer'],
+        passwordPorVencer: json['passwordPorVencer'] ?? false,
       );
 }
