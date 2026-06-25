@@ -228,6 +228,24 @@ class _ExpansionButtonsWidget extends StatelessWidget {
     return Column(
       children: [
         CustomElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ConfirmationOfflineResponsesScreen(
+                  typeProduct: solicitud.nombreFormulario ?? '',
+                  solicitudId: solicitud.solicitudId.toString(),
+                  nombre: solicitud.nombre ?? '',
+                  needGoBack: true,
+                ),
+              ),
+            );
+          },
+          text: '📝 Enviar Formulario Kiva',
+          color: AppColors.getSecondaryColor(),
+        ),
+        const Gap(15),
+        CustomElevatedButton(
           enabled: status != Status.inProgress,
           onPressed: () {
             if (!context.mounted) return;
@@ -248,24 +266,6 @@ class _ExpansionButtonsWidget extends StatelessWidget {
           },
           text: '📤 Enviar Imágenes Kiva',
           color: AppColors.getPrimaryColor(),
-        ),
-        const Gap(15),
-        CustomElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ConfirmationOfflineResponsesScreen(
-                  typeProduct: solicitud.nombreFormulario ?? '',
-                  solicitudId: solicitud.solicitudId.toString(),
-                  nombre: solicitud.nombre ?? '',
-                  needGoBack: true,
-                ),
-              ),
-            );
-          },
-          text: '📝 Enviar Formulario Kiva',
-          color: AppColors.getSecondaryColor(),
         ),
       ],
     );
@@ -299,7 +299,7 @@ class _ExpansionRowTitle extends StatelessWidget {
         ],
         Expanded(
           child: Text(
-            '${solicitud.nombre}, ${solicitud.solicitudId}',
+            '${solicitud.nombre}, ${solicitud.numero}',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

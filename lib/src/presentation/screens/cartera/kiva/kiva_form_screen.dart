@@ -101,7 +101,7 @@ class _KivaFormScreenState extends State<KivaFormScreen> {
                   solicitudesPendienteResponse:
                       state.solicitudesPendienteResponse,
                 ),
-              _ => const SizedBox()
+              _ => const SizedBox.shrink(),
             };
           },
         ),
@@ -164,7 +164,7 @@ class _KIvaFormContentState extends State<_KIvaFormContent>
               builder: (context, state) {
                 return switch (state.status) {
                   Status.inProgress => const LinearProgressIndicator(),
-                  _ => const SizedBox(),
+                  _ => const SizedBox.shrink(),
                 };
               },
             ),
@@ -230,6 +230,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
   int? numSolicitud;
   bool isMatching = false;
   KivaStatusForm statusForm = KivaStatusForm.notMatching;
+
   @override
   void initState() {
     super.initState();
@@ -241,6 +242,8 @@ class _RequestWidgetState extends State<_RequestWidget> {
         .read<SolicitudesPendientesLocalDbCubit>()
         .getItemsRecurrents(typeProduct: widget.solicitud.nombreFormulario);
 
+    if (!mounted) return;
+
     setState(() {
       isMatching = result.contains(int.tryParse(widget.solicitud.id) ?? 0);
       statusForm =
@@ -248,80 +251,168 @@ class _RequestWidgetState extends State<_RequestWidget> {
     });
   }
 
+  void _onCardPressed() {
+    context.read<KivaRouteCubit>().setCurrentRouteProduct(
+          nombreFormularioKiva: widget.solicitud.nombreFormulario,
+          cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+          cedula: widget.solicitud.cedula ?? '',
+          tipoSolicitud: widget.solicitud.tipoSolicitud,
+          route: widget.solicitud.producto,
+          solicitudId: widget.solicitud.id,
+          nombre: widget.solicitud.nombre,
+          numero: widget.solicitud.numero,
+          motivoAnterior: widget.solicitud.motivoAnterior ??
+              'Motivo Anterior no registrado',
+        );
+
+    if (isMatching) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ConfirmationOfflineResponsesScreen(
+            typeProduct: widget.solicitud.nombreFormulario,
+            solicitudId: widget.solicitud.id,
+            nombre: widget.solicitud.nombre,
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => KivaInterceptor(
+          currentRoute: widget.solicitud.producto,
+          solicitudId: widget.solicitud.id,
+          nombre: widget.solicitud.nombre,
+          tipoSolicitud: widget.solicitud.tipoSolicitud,
+          numero: widget.solicitud.numero,
+          cedula: widget.solicitud.cedula ?? '',
+          nombreFormularioKiva:
+              widget.solicitud.nombreFormulario.toFormularioKival()!,
+          solicitudCreditoId: widget.solicitud.id,
+          motivoAnterior: widget.solicitud.motivoAnterior ?? '',
+          cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-          '${widget.solicitud.numero} - ${widget.solicitud.nombre.capitalizeAll}'),
-      onTap: () {
-        context.read<KivaRouteCubit>().setCurrentRouteProduct(
-              nombreFormularioKiva: widget.solicitud.nombreFormulario,
-              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
-              cedula: widget.solicitud.cedula ?? '',
-              tipoSolicitud: widget.solicitud.tipoSolicitud,
-              route: widget.solicitud.producto,
-              solicitudId: widget.solicitud.id,
-              nombre: widget.solicitud.nombre,
-              numero: widget.solicitud.numero,
-              motivoAnterior: widget.solicitud.motivoAnterior ??
-                  'Motivo Anterior no registrado',
-            );
+    final theme = Theme.of(context);
 
-        if (isMatching) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ConfirmationOfflineResponsesScreen(
-                typeProduct: widget.solicitud.nombreFormulario,
-                solicitudId: widget.solicitud.id,
-                nombre: widget.solicitud.nombre,
+    final statusColor = switch (statusForm) {
+      KivaStatusForm.matching => Colors.yellow.shade700,
+      KivaStatusForm.notMatching => Colors.green,
+    };
+
+    final statusBgColor = switch (statusForm) {
+      KivaStatusForm.matching => Colors.yellow.shade50,
+      KivaStatusForm.notMatching => Colors.green.shade50,
+    };
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(
+          color: Colors.grey.shade200,
+          width: 1.0,
+        ),
+      ),
+      child: InkWell(
+        onTap: _onCardPressed,
+        borderRadius: BorderRadius.circular(12.0),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: statusBgColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.wallet_rounded,
+                  color: statusColor,
+                  size: 22,
+                ),
               ),
-            ),
-          );
-          return;
-        }
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => KivaInterceptor(
-              currentRoute: widget.solicitud.producto,
-              solicitudId: widget.solicitud.id,
-              nombre: widget.solicitud.nombre,
-              tipoSolicitud: widget.solicitud.tipoSolicitud,
-              numero: widget.solicitud.numero,
-              cedula: widget.solicitud.cedula ?? '',
-              nombreFormularioKiva:
-                  widget.solicitud.nombreFormulario.toFormularioKival()!,
-              solicitudCreditoId: widget.solicitud.id,
-              motivoAnterior: widget.solicitud.motivoAnterior ?? '',
-              cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
-            ),
+              const Gap(14),
+
+              // Información Central
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Identificador superior sutil
+                    Text(
+                      'Solicitud N. #${widget.solicitud.numero}',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.grey.shade500,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const Gap(3),
+                    // Nombre del cliente destacado
+                    Text(
+                      widget.solicitud.nombre.capitalizeAll,
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Gap(4),
+                    // Fecha de registro
+                    Text(
+                      widget.solicitud.fecha.formatDateV2(),
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(12),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${widget.solicitud.monto.toString().toCurrencyString()} ${widget.solicitud.moneda}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 14,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  const Gap(6),
+                  Text(
+                    widget.solicitud.estado,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      color: statusColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        );
-      },
-      subtitle: Text(
-        widget.solicitud.fecha.formatDateV2(),
-      ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${widget.solicitud.monto.toString().toCurrencyString()} ${widget.solicitud.moneda}',
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
-            ),
-          ),
-          const Gap(5),
-          Text(widget.solicitud.estado),
-        ],
-      ),
-      leading: CircleAvatar(
-        backgroundColor: switch (statusForm) {
-          KivaStatusForm.matching => Colors.yellow,
-          KivaStatusForm.notMatching => Colors.green,
-        },
-        child: const Icon(Icons.wallet),
+        ),
       ),
     );
   }

@@ -194,7 +194,32 @@ class _EsPepsAuthorizationPage3State extends State<EsPepsAuthorizationPage3>
               ),
               const Gap(10),
               AnalisisCardListHn(
-                title: 'Nombres de los Suegros',
+                title: 'Nombres del la Suegra',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<InformacionPepsHnCubit>(),
+                        child: const TableDetalleFamiliarPeps(
+                          parentescoCodigo: 'SUEGRAPEPS',
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                items: [
+                  AnalisisCardItem(
+                    icon: Icons.woman,
+                    label: 'Nombre completo de Suegra',
+                    value: '',
+                    color: Colors.blueGrey,
+                  ),
+                ],
+              ),
+              const Gap(10),
+              AnalisisCardListHn(
+                title: 'Nombre del Suegro',
                 onTap: () {
                   Navigator.push(
                     context,
@@ -209,12 +234,6 @@ class _EsPepsAuthorizationPage3State extends State<EsPepsAuthorizationPage3>
                   );
                 },
                 items: [
-                  AnalisisCardItem(
-                    icon: Icons.woman,
-                    label: 'Nombre completo de Suegra',
-                    value: '2',
-                    color: Colors.blueGrey,
-                  ),
                   AnalisisCardItem(
                     icon: Icons.man,
                     label: 'Nombre completo de Suegro',
