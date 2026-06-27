@@ -115,6 +115,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       final (savedPath, photo) = await CameraService.takeAndsavePhoto(
         controller: _controller,
         numeroSoicitud: widget.numeroSoicitud,
+        orientation: CameraDeviceOrientation.portrait,
       );
       if (!context.mounted || !mounted) return;
       setState(() {

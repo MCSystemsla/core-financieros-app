@@ -129,15 +129,21 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] == 409) {
-        _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
 
-        return (false, errorMsg, null, null, null);
-      }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, errorCode) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
 
         return (false, errorMsg, null, null, null);
       }
@@ -259,16 +265,21 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] == 409) {
-        _logger.i(endpoint.body);
-        AppException(optionalMsg: resp.toString());
-        final (errorMsg, _) = getErrorMessage(resp);
-
-        return (false, errorMsg, null, null, null);
-      }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
+
         return (false, errorMsg, null, null, null);
       }
 
@@ -317,9 +328,20 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {
-        _logger.e(resp);
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
+
         return (false, errorMsg, null, null, null);
       }
       _logger.i(resp);
