@@ -119,8 +119,7 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                     children: [
                       CommentaryWidget(
                         title: '¿Tiene otros ingresos?¿Cuales?*',
-                        initialValue: resp
-                            .recurrenteEstandarDbLocal?.otrosIngresos
+                        hintText: resp.recurrenteEstandarDbLocal?.otrosIngresos
                             .toString(),
                         readOnly: true,
                       ),

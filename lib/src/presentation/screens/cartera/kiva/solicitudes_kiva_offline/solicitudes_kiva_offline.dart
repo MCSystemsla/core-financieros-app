@@ -100,7 +100,7 @@ class _KivaSolicitudOfflineRequestState
               route: 'N/A',
               solicitudId: widget.solicitudesCreditoKiva.uuid,
               nombre: widget.solicitudesCreditoKiva.nombre,
-              numero: 'N/A',
+              numero: '',
               motivoAnterior: 'Motivo Anterior no registrado',
               solicitudCreditoId: widget.solicitudesCreditoKiva.uuid,
             );

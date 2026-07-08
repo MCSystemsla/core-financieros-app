@@ -352,7 +352,7 @@ class SolicitudNuevaMenorHn {
       'ActividadEconomicaCNBS3Codigo': actividadEconomicaCnbs3Codigo,
       'ActividadEconomicaDescripcion1': actividaEconomicaDescipcion1,
       'ActividadEconomicaDescripcion2': actividaEconomicaDescipcion2,
-      'ActividadEconomicaDescripcion3 ': actividaEconomicaDescipcion3,
+      'ActividadEconomicaDescripcion3': actividaEconomicaDescipcion3,
       'EjerceAPNFD': ejerceApnfd,
       'EsAPNFD': esApnfd,
       'NacinalidadCodigo': nacinalidadCodigo,
