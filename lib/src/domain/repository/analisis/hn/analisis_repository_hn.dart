@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/crear_fiadores_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiadores_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
@@ -49,7 +50,7 @@ abstract class AnalisisRepositoryHn {
   Future<void> createAnalisisPlanInversion({
     required AnalisisPlanDeInversion analisisPlanDeInversion,
   });
-  Future<void> createAnalisisFiador({
+  Future<CrearFiadorResponseHn> createAnalisisFiador({
     required AnalisisFiadoresHn analisisFiadoresHn,
   });
   Future<AnalisisFiadoresSearchClientByDocument?> getAnalisisFiadorByDocument({
@@ -126,6 +127,10 @@ abstract class AnalisisRepositoryHn {
   Future<GetDataAnalisisNuevaMenorMil> getAnalisisDataNuevaMenorMil({
     required String numeroSolicitud,
     required String tipoSolicitud,
+  });
+  Future<(bool, String)> fiadoresEnviarFirmaDigital({
+    required String idFiador,
+    required String firmaFiador,
   });
 }
 
@@ -213,7 +218,7 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   }
 
   @override
-  Future<void> createAnalisisFiador({
+  Future<CrearFiadorResponseHn> createAnalisisFiador({
     required AnalisisFiadoresHn analisisFiadoresHn,
   }) async {
     final endpoint = CreateAnalisisFiadorEndpoinHN(
@@ -226,6 +231,9 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+      _logger.i(resp);
+      final data = CrearFiadorResponseHn.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;
@@ -781,6 +789,65 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
     } catch (e) {
       _logger.e(e);
       rethrow;
+    }
+  }
+
+  @override
+  Future<(bool, String)> fiadoresEnviarFirmaDigital({
+    required String idFiador,
+    required String firmaFiador,
+  }) async {
+    const apiUrl = String.fromEnvironment('apiUrl');
+    const protocol = String.fromEnvironment('protocol');
+    const url = '$protocol://$apiUrl/cartera/analisis-fiador/subir-firma';
+
+    try {
+      var request = http.MultipartRequest('PATCH', Uri.parse(url));
+      request.fields['ID'] = idFiador;
+      request.fields['database'] = LocalStorage().database;
+      request.files.add(await http.MultipartFile.fromPath(
+        'FirmaPreImpresa',
+        firmaFiador,
+        filename: firmaFiador,
+      ));
+
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+        'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
+        'CF-Access-Client-Secret':
+            const String.fromEnvironment('CFAccessClientSecret'),
+      });
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+      final Map<String, dynamic> jsonBody = json.decode(responseBody.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        _logger.i('imagen Firma enviada exitosamente: ${responseBody.body}');
+      } else {
+        await ErrorReporter.registerError(
+          errorMessage: 'Error enviando imagen Firma: ${jsonBody['message']}',
+          statusCode: response.statusCode.toString(),
+          username: LocalStorage().currentUserName,
+        );
+        _logger.e(
+            'Error del servidor: ${response.statusCode}, ${responseBody.body}, ${responseBody.reasonPhrase}, ${responseBody.request}');
+        return (
+          false,
+          jsonBody['message'] as String,
+        );
+      }
+      _logger.i(response.reasonPhrase);
+      return (true, 'imagen Firma enviada exitosamente!');
+    } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error enviando imagen de firma Solicitudes: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+      _logger.e(e);
+      return (false, e.toString());
     }
   }
 }
