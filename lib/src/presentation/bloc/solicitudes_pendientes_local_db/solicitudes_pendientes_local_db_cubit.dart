@@ -24,6 +24,7 @@ import 'package:core_financiero_app/src/datasource/local_db/forms/saneamiento/sa
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 import 'package:logger/logger.dart';
@@ -113,6 +114,18 @@ class SolicitudesPendientesLocalDbCubit
     } catch (e) {
       _logger.e(e);
       emit(state.copyWith(status: Status.error));
+    }
+  }
+
+  Future<void> saveSolicitudPendente({
+    required SolicitudesPendientes solicitud,
+  }) async {
+    try {
+      await state.isar?.writeTxn(() async {
+        await state.isar?.solicitudesPendientes.put(solicitud);
+      });
+    } catch (e) {
+      _logger.e(e);
     }
   }
 
@@ -1202,6 +1215,7 @@ class SolicitudesPendientesLocalDbCubit
     String numeroSolicitud,
     String solcitudId,
     String tipoProducto,
+    int tipoSolicitudId,
   ) async {
     return switch (tipoProducto) {
       'ScrKivaCreditoEstandar' => await state.isar?.writeTxn(() async {
@@ -1213,6 +1227,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.estandarDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1221,6 +1237,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1234,6 +1251,9 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+
             await state.isar?.recurrenteEstandarDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1242,6 +1262,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1253,6 +1274,9 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.solicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
+
             await state.isar?.mejoraViviendaDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1261,6 +1285,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1272,6 +1297,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.recurrenteMejoraViviendaDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1280,6 +1307,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1291,6 +1319,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.miCrediEstudioDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1299,6 +1329,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1310,6 +1341,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.recurrenteMiCrediEstudioDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1318,6 +1351,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1329,6 +1363,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.mujerEmprendeDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1337,6 +1373,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1348,6 +1385,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.recurrenteMujerEmprendeDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1356,6 +1395,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1367,6 +1407,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.saneamientoDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1375,6 +1417,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1387,6 +1430,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.recurrenteSaneamientoDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1395,6 +1440,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1406,6 +1452,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.solicitudNuevamenorId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.energiaLimpiaDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1414,6 +1462,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1425,6 +1474,8 @@ class SolicitudesPendientesLocalDbCubit
           if (solicitud != null) {
             solicitud.solicitudId = solcitudId;
             solicitud.numeroSolicitud = numeroSolicitud;
+            solicitud.objSolicitudRecurrenteId = int.tryParse(solcitudId) ?? 0;
+            solicitud.tipoSolicitud = tipoSolicitudId.toTypeFormId();
             await state.isar?.recurrenteEnergiaLimpiaDbLocals.put(solicitud);
           }
           final images = await state.isar?.imageModels
@@ -1433,6 +1484,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
+            images.solicitudId = int.parse(solcitudId);
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1446,95 +1498,94 @@ class SolicitudesPendientesLocalDbCubit
     required String tipoProducto,
     required String solicitudId,
   }) async {
+    final isar = state.isar;
+    if (isar == null) return null;
     return switch (tipoProducto) {
-      'ScrKivaCreditoEstandar' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.estandarDbLocals
+      'ScrKivaCreditoEstandar' => await isar.writeTxn(() async {
+          final solicitud = await isar.estandarDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaCreditoEstandarRecurrente' =>
-        await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteEstandarDbLocals
+      'ScrKivaCreditoEstandarRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteEstandarDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMejoraVivienda' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.mejoraViviendaDbLocals
+      'ScrKivaMejoraVivienda' => await isar.writeTxn(() async {
+          final solicitud = await isar.mejoraViviendaDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMejoraViviendaRecurrente' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteMejoraViviendaDbLocals
+      'ScrKivaMejoraViviendaRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteMejoraViviendaDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMiCrediEstudio' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.miCrediEstudioDbLocals
+      'ScrKivaMiCrediEstudio' => await isar.writeTxn(() async {
+          final solicitud = await isar.miCrediEstudioDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMiCrediEstudioRecurrente' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteMiCrediEstudioDbLocals
+      'ScrKivaMiCrediEstudioRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteMiCrediEstudioDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMujerEmprende' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.mujerEmprendeDbLocals
+      'ScrKivaMujerEmprende' => await isar.writeTxn(() async {
+          final solicitud = await isar.mujerEmprendeDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaMujerEmprendeRecurrente' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteMujerEmprendeDbLocals
+      'ScrKivaMujerEmprendeRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteMujerEmprendeDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaAguaSaneamiento' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.saneamientoDbLocals
+      'ScrKivaAguaSaneamiento' => await isar.writeTxn(() async {
+          final solicitud = await isar.saneamientoDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaAguaSaneamientoRecurrente' =>
-        await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteSaneamientoDbLocals
+      'ScrKivaAguaSaneamientoRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteSaneamientoDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaEnergiaLimpia' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.energiaLimpiaDbLocals
+      'ScrKivaEnergiaLimpia' => await isar.writeTxn(() async {
+          final solicitud = await isar.energiaLimpiaDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      'ScrKivaEnergiaLimpiaRecurrente' => await state.isar?.writeTxn(() async {
-          final solicitud = await state.isar?.recurrenteEnergiaLimpiaDbLocals
+      'ScrKivaEnergiaLimpiaRecurrente' => await isar.writeTxn(() async {
+          final solicitud = await isar.recurrenteEnergiaLimpiaDbLocals
               .filter()
               .solicitudCreditoIdEqualTo(uuid)
               .findFirst();
           return solicitud;
         }),
-      _ => throw UnsupportedError(
-          'Solicitud de tipo $tipoProducto no soportado en el envío automático.'),
+      _ => null,
     };
   }
 

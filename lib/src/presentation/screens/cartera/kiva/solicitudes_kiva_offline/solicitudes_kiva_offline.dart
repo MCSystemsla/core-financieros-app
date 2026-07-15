@@ -21,7 +21,7 @@ class SolicitudesKivaOffline extends StatelessWidget {
       )..getSolicitudesOffline(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Solicitudes KIVA Offline'),
+          title: const Text('Solicitudes kiva con solicitud offline'),
         ),
         body: const Padding(
           padding: EdgeInsets.all(12),
@@ -59,7 +59,7 @@ class _KivaOfflineList extends StatelessWidget {
                       );
                     },
                   ),
-                _ => const SizedBox(),
+                _ => const SizedBox.shrink(),
               };
             },
           ),
@@ -86,56 +86,95 @@ class _KivaSolicitudOfflineRequestState
     extends State<_KivaSolicitudOfflineRequest> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        widget.solicitudesCreditoKiva.nombre.capitalizeAll,
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: BorderSide(
+          color: Colors.grey.shade200,
+          width: 1.0,
+        ),
       ),
-      onTap: () {
-        context.read<KivaRouteCubit>().setCurrentRouteProduct(
-              nombreFormularioKiva:
-                  widget.solicitudesCreditoKiva.nombreFormularioKiva,
-              cantidadHijos: widget.solicitudesCreditoKiva.cantidadHijos,
-              cedula: '',
-              tipoSolicitud: '',
-              route: 'N/A',
-              solicitudId: widget.solicitudesCreditoKiva.uuid,
-              nombre: widget.solicitudesCreditoKiva.nombre,
-              numero: '',
-              motivoAnterior: 'Motivo Anterior no registrado',
-              solicitudCreditoId: widget.solicitudesCreditoKiva.uuid,
-            );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SolicitudesCreditoKivaOfflineInterceptor(
-              nombreFormularioKiva:
-                  widget.solicitudesCreditoKiva.nombreFormularioKiva,
+      child: InkWell(
+        onTap: () {
+          context.read<KivaRouteCubit>().setCurrentRouteProduct(
+                nombreFormularioKiva:
+                    widget.solicitudesCreditoKiva.nombreFormularioKiva,
+                cantidadHijos: widget.solicitudesCreditoKiva.cantidadHijos,
+                cedula: '',
+                tipoSolicitud: '',
+                route: 'N/A',
+                solicitudId: widget.solicitudesCreditoKiva.uuid,
+                nombre: widget.solicitudesCreditoKiva.nombre,
+                numero: '',
+                motivoAnterior: 'Motivo Anterior no registrado',
+                solicitudCreditoId: widget.solicitudesCreditoKiva.uuid,
+              );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SolicitudesCreditoKivaOfflineInterceptor(
+                nombreFormularioKiva:
+                    widget.solicitudesCreditoKiva.nombreFormularioKiva,
+              ),
             ),
+          );
+        },
+        borderRadius: BorderRadius.circular(12.0),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: const BoxDecoration(
+                  color: Colors.indigo,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.wallet_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+              const Gap(14),
+
+              // Información Central
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Identificador superior sutil
+                    Text(
+                      'Formulario ${widget.solicitudesCreditoKiva.nombreFormularioKiva}',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.grey.shade500,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const Gap(3),
+                    // Nombre del cliente destacado
+                    Text(
+                      widget.solicitudesCreditoKiva.nombre.capitalizeAll,
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -0.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Gap(4),
+                    // Fecha de registro
+                  ],
+                ),
+              ),
+            ],
           ),
-        );
-      },
-      // subtitle: Text(
-      //   widget.solicitud.fecha?.formatDateV2() ?? '',
-      // ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            widget.solicitudesCreditoKiva.nombreFormularioKiva,
-            style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 12,
-            ),
-          ),
-          // const Gap(5),
-          // Text(widget.solicitud.estado ?? 'N/A'),
-        ],
-      ),
-      leading: const CircleAvatar(
-        backgroundColor: Colors.indigo,
-        child: Icon(
-          Icons.wallet,
-          color: Colors.white,
         ),
       ),
     );

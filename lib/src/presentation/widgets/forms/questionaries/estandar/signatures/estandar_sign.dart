@@ -142,8 +142,7 @@ class _EstandarSignatureState extends State<EstandarSignature> {
     EstandarState state,
     ImageModel imageModel,
   ) async {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final statusConnection = context.read<InternetConnectionCubit>().state;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -173,18 +172,25 @@ class _EstandarSignatureState extends State<EstandarSignature> {
             ..solicitudCreditoId = solicitudCreditoId
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
+    final isOffline =
+        statusConnection.connectionStatus == ConnectionStatus.disconnected ||
+            statusConnection.connectionStatus ==
+                ConnectionStatus.handleOfflineActivation;
 
-    if (!isConnected) {
+    if (isOffline) {
       if (!context.mounted) return;
-      NoInternetPopUpOnKiva(
-        context: context,
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }
-
-/// --- WIDGETS PRIVADOS EXTRAÍDOS PARA LIMPIEZA DE CÓDIGO ---
 
 class _SignatureCanvas extends StatelessWidget {
   final SignatureController controller;

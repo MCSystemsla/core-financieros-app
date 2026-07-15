@@ -617,6 +617,38 @@ class ObjectBoxService {
     }
   }
 
+  void updateWhenSolicitdIsDone({
+    required int solicitudId,
+  }) {
+    try {
+      final solicitud = solicitudesResponsesBox.get(solicitudId);
+      final solicitudReprestamo =
+          solicitudesReprestamoResponsesBox.get(solicitudId);
+      final solicitudAsalariado =
+          solicitudesAsalariadoResponsesBox.get(solicitudId);
+      if (solicitud != null) {
+        solicitud.hasVerified = true;
+        solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
+      }
+      if (solicitudReprestamo != null) {
+        solicitudReprestamo.hasVerified = true;
+        solicitudesReprestamoResponsesBox.put(
+          solicitudReprestamo,
+          mode: PutMode.update,
+        );
+      }
+      if (solicitudAsalariado != null) {
+        solicitudAsalariado.hasVerified = true;
+        solicitudesAsalariadoResponsesBox.put(
+          solicitudAsalariado,
+          mode: PutMode.update,
+        );
+      }
+    } catch (e) {
+      _logger.e(e.toString());
+    }
+  }
+
   CatalogoLocalDb? getParametroByName({required String nombre}) {
     try {
       final result = catalogoBox

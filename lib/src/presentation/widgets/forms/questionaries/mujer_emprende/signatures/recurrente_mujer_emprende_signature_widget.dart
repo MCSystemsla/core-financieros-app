@@ -396,20 +396,23 @@ class _SignatureActionButtons extends StatelessWidget {
     pendingDbCubit.saveRecurrenteMujerEmprendeForm(
       recurrenteMujerEmprendeDbLocal: state.toDbLocal(solicitudCreditoId),
     );
-
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
-    if (!isConnected) {
-      NoInternetPopUpOnKiva(
-        context: context,
-        info: '',
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }
 
-/// Mapeador Limpio para evitar asignaciones manuales masivas dentro de la UI
 extension on RecurrenteMujerEmprendeState {
   RecurrenteMujerEmprendeDbLocal toDbLocal(String solicitudCreditoId) {
     return RecurrenteMujerEmprendeDbLocal()

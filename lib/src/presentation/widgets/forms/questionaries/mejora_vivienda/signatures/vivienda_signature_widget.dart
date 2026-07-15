@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/domain/repository/kiva/responses/respons
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
@@ -318,6 +319,8 @@ class _ViviendaSignatureWidgettState extends State<ViviendaSignatureWidget> {
     String solicitudCreditoId,
   ) {
     final localDbCubit = context.read<SolicitudesPendientesLocalDbCubit>();
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     localDbCubit.saveImagesLocal(imageModel: imageModel);
     localDbCubit.saveMejoraViviendaForm(
@@ -343,5 +346,19 @@ class _ViviendaSignatureWidgettState extends State<ViviendaSignatureWidget> {
         ..solicitudCreditoId = solicitudCreditoId
         ..username = '',
     );
+
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
+    }
   }
 }

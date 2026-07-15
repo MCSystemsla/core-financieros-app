@@ -22,6 +22,7 @@ typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
   required String nombreFomularioKiva,
   required String cedula,
   required int tipoSolicitudId,
+  required String nombreCliente,
 });
 
 class EnviarSolicitudWhenIsdoneCubit
@@ -101,12 +102,18 @@ class EnviarSolicitudWhenIsdoneCubit
             nombreFomularioKiva: solicitud.nombreFormularioKiva!,
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
+            nombreCliente:
+                '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
           );
           if (!isKivFormIsOk) {
             unSentKivaForms.add(
               'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
             );
           }
+          solicitudesSent.add(
+              'Historia Kiva de Cedula a sido creada: $cedula ${solicitud.objProductoIdVer}');
+
+          objectBoxService.updateWhenSolicitdIsDone(solicitudId: solicitud.id);
           // objectBoxService.removeSolicitudWhenisUploaded(
           //   solicitudId: solicitud.id,
           // );
@@ -140,6 +147,7 @@ class EnviarSolicitudWhenIsdoneCubit
             nombreFomularioKiva: solicitud.nombreFormularioKiva!,
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
+            nombreCliente: '${solicitud.nombreCompletoCliente}*',
           );
           if (!isKivFormIsOk) {
             unSentKivaForms.add(
@@ -179,6 +187,8 @@ class EnviarSolicitudWhenIsdoneCubit
             nombreFomularioKiva: solicitud.nombreFormularioKiva!,
             cedula: solicitud.cedula ?? '',
             tipoSolicitudId: result.$5 ?? 0,
+            nombreCliente:
+                '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
           );
           if (!isKivFormIsOk) {
             unSentKivaForms.add(
@@ -189,7 +199,8 @@ class EnviarSolicitudWhenIsdoneCubit
           //   solicitudId: solicitud.id,
           // );
         }
-        solicitudesSent.add('Solicitud con cedula ${solicitud.cedula}');
+        solicitudesSent
+            .add('Solicitud de credito creadacon cedula ${solicitud.cedula}');
         hasAnySent = true;
       }
       if (hasAnySent == true && errors.isEmpty && unSentCedulas.isEmpty) {
@@ -211,8 +222,10 @@ class EnviarSolicitudWhenIsdoneCubit
           ),
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       _logger.e(e);
+      _logger.e('Error crítico procesando solicitud individual',
+          error: e, stackTrace: stackTrace);
       emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
     }
   }

@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/auto
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/success_clay_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
@@ -52,6 +53,7 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                 required String nombreFomularioKiva,
                 required String cedula,
                 required int tipoSolicitudId,
+                required String nombreCliente,
               }) async {
                 return await processSolicitud(
                   uuid: uuid,
@@ -63,6 +65,7 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   cedula: cedula,
                   kivaRepository: kivaRepository,
                   kivaProvider: kivaProvider,
+                  nombreCliente: nombreCliente,
                 );
               },
             ),
@@ -84,14 +87,14 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   lottieAsset: ImageAsset.enviarSolicitudOfflines,
                   text: 'Enviando Solicitudes Offline al Servidor',
                 ),
-              OnEnviarSolicitudWhenIsdoneSuccess() => DownloadCatalogoLoading(
+              OnEnviarSolicitudWhenIsdoneSuccess() => SuccessClayWidget(
                   onDownloadComplete: () {
                     context.push('/solicitudes');
                   },
                   isSucess: true,
                   lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  text:
-                      'Solicitudes offline enviadas exitosamente!!\n\n${state.solicitudesSent.isNotEmpty ? state.solicitudesSent.join('\n') : ''}',
+                  solicitudesSent: state.solicitudesSent,
+                  text: '',
                   repeat: false,
 
                   // isUploadingForms: true,
@@ -99,32 +102,34 @@ class SelectSolicitudScreenNi extends StatelessWidget {
               OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                   errorMsg: state.msgError,
                   onPressed: () {
-                    // context
-                    //     .read<EnviarSolicitudWhenIsdoneCubit>()
-                    //     .sendSolicitudWhenIsDone(
-                    //       isConnected: isConnected,
-                    //       onSolicitudCreditoIsKivaFn: ({
-                    //         required String solicitudId,
-                    //         required String numeroSolicitud,
-                    //         required String uuid,
-                    //         required String tipoProducto,
-                    //         required String nombreFomularioKiva,
-                    //         required String cedula,
-                    //         required int tipoSolicitudId,
-                    //       }) async {
-                    //         return await processSolicitud(
-                    //           uuid: uuid,
-                    //           numeroSolicitud: numeroSolicitud,
-                    //           solicitudId: solicitudId,
-                    //           tipoProducto: tipoProducto,
-                    //           tipoSolicitudId: tipoSolicitudId,
-                    //           nombreFomularioKiva: nombreFomularioKiva,
-                    //           cedula: cedula,
-                    //           kivaRepository: kivaRepository,
-                    //           kivaProvider: kivaProvider,
-                    //         );
-                    //       },
-                    //     );
+                    context
+                        .read<EnviarSolicitudWhenIsdoneCubit>()
+                        .sendSolicitudWhenIsDone(
+                          isConnected: isConnected,
+                          onSolicitudCreditoIsKivaFn: ({
+                            required String solicitudId,
+                            required String numeroSolicitud,
+                            required String uuid,
+                            required String tipoProducto,
+                            required String nombreFomularioKiva,
+                            required String cedula,
+                            required int tipoSolicitudId,
+                            required String nombreCliente,
+                          }) async {
+                            return await processSolicitud(
+                              uuid: uuid,
+                              numeroSolicitud: numeroSolicitud,
+                              solicitudId: solicitudId,
+                              tipoProducto: tipoProducto,
+                              tipoSolicitudId: tipoSolicitudId,
+                              nombreFomularioKiva: nombreFomularioKiva,
+                              cedula: cedula,
+                              kivaRepository: kivaRepository,
+                              kivaProvider: kivaProvider,
+                              nombreCliente: nombreCliente,
+                            );
+                          },
+                        );
                   },
                 ),
               OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(

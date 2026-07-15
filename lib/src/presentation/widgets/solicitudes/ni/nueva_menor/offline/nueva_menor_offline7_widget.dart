@@ -323,10 +323,14 @@ class _NuevaMenorOffline7WidgetState extends State<NuevaMenorOffline7Widget>
                           isDone: true,
                         ),
                       );
-                      if (state.connectionStatus ==
-                          ConnectionStatus.disconnected) {
+                      final isOffline = state.connectionStatus ==
+                              ConnectionStatus.disconnected ||
+                          state.connectionStatus ==
+                              ConnectionStatus.handleOfflineActivation;
+                      if (isOffline) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
+                            isOffline: true,
                             errorMsg:
                                 'No tienes conexion a internet, La solicitud se a guardado de manera local',
                           ),

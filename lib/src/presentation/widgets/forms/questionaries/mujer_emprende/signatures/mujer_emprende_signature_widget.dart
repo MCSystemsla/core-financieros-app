@@ -312,8 +312,6 @@ class _MujerEmprendeSignatureWidgetState
     ImageModel imageModel,
     String msgDialog,
   ) async {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final solicitudCreditoId =
         context.read<KivaRouteCubit>().state.solicitudCreditoId;
 
@@ -344,12 +342,19 @@ class _MujerEmprendeSignatureWidgetState
             ..tipoEstudioHijos = state.tipoEstudioHijos,
         );
 
-    if (!isConnected) {
-      return NoInternetPopUpOnKiva(
-        context: context,
-        info: msgDialog,
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }

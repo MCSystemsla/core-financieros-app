@@ -206,7 +206,12 @@ class _ReprestamoForm5State extends State<ReprestamoForm5>
                           isOffline: !state.isConnected,
                         ),
                       );
-                      if (!state.isConnected) {
+                      final isOffline = state.connectionStatus ==
+                              ConnectionStatus.disconnected ||
+                          state.connectionStatus ==
+                              ConnectionStatus.handleOfflineActivation;
+
+                      if (isOffline) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             errorMsg:

@@ -330,6 +330,8 @@ class _RecurrenteViviendaSignatureWidgetState
     bool isConnected,
   ) {
     final localDbCubit = context.read<SolicitudesPendientesLocalDbCubit>();
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     localDbCubit.saveImagesLocal(imageModel: imageModel);
     localDbCubit.saveRecurrenteMejoraViviendaForm(
@@ -358,12 +360,17 @@ class _RecurrenteViviendaSignatureWidgetState
         ..viviendaAntesDespues = state.viviendaAntesDespues,
     );
 
-    if (!isConnected) {
-      NoInternetPopUpOnKiva(
-        context: context,
-        info: '',
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }

@@ -147,8 +147,8 @@ class _RecurrentEstandarSignatureState
     ImageModel imageModel,
     String msgDialog,
   ) async {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
 
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
@@ -178,19 +178,23 @@ class _RecurrentEstandarSignatureState
             ..solicitudCreditoId = routeState.solicitudCreditoId
             ..personasCargo = state.personasCargo,
         );
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
 
-    if (!isConnected && msgDialog.isNotEmpty) {
+    if (isOffline) {
       if (!context.mounted) return;
-      NoInternetPopUpOnKiva(
-        context: context,
-        info: msgDialog,
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }
-
-/// --- SUB-WIDGETS EXTRAÍDOS ---
 
 class _SignatureCanvas extends StatelessWidget {
   final SignatureController controller;

@@ -483,8 +483,11 @@ class __FormContentState extends State<_FormContent> {
                                 ),
                               );
                               if (!context.mounted) return;
-                              if (state.connectionStatus ==
-                                  ConnectionStatus.disconnected) {
+                              final isOffline = state.connectionStatus ==
+                                      ConnectionStatus.disconnected ||
+                                  state.connectionStatus ==
+                                      ConnectionStatus.handleOfflineActivation;
+                              if (isOffline) {
                                 cubit.onFieldChanged(
                                   () => cubit.state.copyWith(
                                     isOffline: true,

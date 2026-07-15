@@ -208,8 +208,11 @@ class _ReprestamoOfflineForm5State extends State<ReprestamoOfflineForm5>
                           isOffline: !state.isConnected,
                         ),
                       );
-                      if (state.connectionStatus ==
-                          ConnectionStatus.disconnected) {
+                      final isOffline = state.connectionStatus ==
+                              ConnectionStatus.disconnected ||
+                          state.connectionStatus ==
+                              ConnectionStatus.handleOfflineActivation;
+                      if (isOffline) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
                             errorMsg: 'No tienes conexion a internet',
