@@ -23,7 +23,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         state.consumoFamiliar;
     emit(state.copyWith(status: Status.inProgress));
     try {
-      await _repository.createAnalisisFiador(
+      final resp = await _repository.createAnalisisFiador(
         analisisFiadoresHn: AnalisisFiadoresHn(
           database: state.database,
           numeroSolicitud: state.numeroSolicitud,
@@ -127,7 +127,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           historialCredito: state.historialCredito,
         ),
       );
-      emit(state.copyWith(status: Status.done));
+      emit(state.copyWith(status: Status.done, fiadorId: resp.data.id));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -178,6 +178,13 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           return e.uuid != uuid;
         }).toList(),
       ),
+    );
+  }
+
+  Future<void> fiadoresEnviarFirmaDigital() async {
+    await _repository.fiadoresEnviarFirmaDigital(
+      idFiador: state.fiadorId,
+      firmaFiador: state.firmaFiador,
     );
   }
 }

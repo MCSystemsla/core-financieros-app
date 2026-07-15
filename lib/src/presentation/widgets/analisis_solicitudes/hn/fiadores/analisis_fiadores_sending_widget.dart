@@ -27,7 +27,11 @@ class _AnalisisFiadoresSendingWidgetState
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AnalisisFiadoresCubit, AnalisisFiadoresState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.status == Status.done) {
+          context.read<AnalisisFiadoresCubit>().fiadoresEnviarFirmaDigital();
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
