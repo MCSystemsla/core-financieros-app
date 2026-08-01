@@ -119,10 +119,6 @@ Widget esPepsEnviarButton(
           title: 'Información enviada exitosamente',
           type: SnackbarType.success,
         );
-        pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
       }
       if (state.status == Status.error) {
         context.hideLoading();
