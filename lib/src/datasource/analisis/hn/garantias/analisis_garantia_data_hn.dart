@@ -48,6 +48,8 @@ class GarantiaData {
   final String? articuloTipo;
   final String? articuloDescripcion;
   final String? tipoSolicitud;
+  final String? tipoPersonaCodigoDeudor;
+  final String? bienCodigo;
 
   GarantiaData({
     required this.tipoGarantia,
@@ -71,6 +73,8 @@ class GarantiaData {
     this.articuloTipo,
     this.articuloDescripcion,
     this.tipoSolicitud,
+    this.tipoPersonaCodigoDeudor,
+    this.bienCodigo,
   });
 
   factory GarantiaData.fromJson(Map<String, dynamic> json) => GarantiaData(
@@ -95,6 +99,8 @@ class GarantiaData {
         articuloTipo: json['ArticuloTipo'],
         articuloDescripcion: json['ArticuloDescripcion'],
         tipoSolicitud: json['tipoSolicitud'],
+        tipoPersonaCodigoDeudor: json['TipoPersonaCodigoDeudor'],
+        bienCodigo: json['BienCodigo'],
       );
 
   Map<String, dynamic> toJson() => {

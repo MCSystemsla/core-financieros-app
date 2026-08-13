@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_r
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_obtener_bien_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/bien_garantia_created_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
@@ -144,6 +145,9 @@ abstract class AnalisisRepositoryHn {
   Future<(bool, String)> fiadoresEnviarFirmaDigital({
     required String idFiador,
     required String firmaFiador,
+  });
+  Future<AnalisisGarantiaObtenerBienResponse> obtenerGarantiaBienByCodigo({
+    required String bienCodigo,
   });
 }
 
@@ -921,6 +925,26 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       );
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaObtenerBienResponse> obtenerGarantiaBienByCodigo({
+    required String bienCodigo,
+  }) async {
+    final endpoint = GarantiaObtenerBienByCodigo(bienCodigo: bienCodigo);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = AnalisisGarantiaObtenerBienResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

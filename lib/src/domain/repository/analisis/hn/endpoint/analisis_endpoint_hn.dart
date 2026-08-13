@@ -580,3 +580,23 @@ class CreateAsignacionGarantiaLiquidaHNEndpoint extends Endpoint {
   @override
   Map<String, dynamic> get body => data.toJson();
 }
+
+class GarantiaObtenerBienByCodigo extends Endpoint {
+  final String bienCodigo;
+
+  GarantiaObtenerBienByCodigo({required this.bienCodigo});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-garantias/obtener-bien-by-codigo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'bienCodigo': bienCodigo,
+      };
+}
