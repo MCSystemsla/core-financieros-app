@@ -18,6 +18,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/crear_fiadores_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiadores_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_actualizar_garantia.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
@@ -151,6 +152,9 @@ abstract class AnalisisRepositoryHn {
   });
   Future<void> anularGarantia({
     required int analisisGarantiaID,
+  });
+  Future<void> actualizarGarantia({
+    required AnalisisActualizarGarantia data,
   });
 }
 
@@ -956,6 +960,24 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
     final endpoint = GarantiaAnularEndpointHN(
       analisisGarantiaID: analisisGarantiaID,
     );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> actualizarGarantia({
+    required AnalisisActualizarGarantia data,
+  }) async {
+    final endpoint = GarantiaActualizarEndpointHN(data: data);
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 200) {

@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mi
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_actualizar_garantia.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
@@ -619,4 +620,21 @@ class GarantiaAnularEndpointHN extends Endpoint {
         'database': LocalStorage().database,
         'AnalisisGarantiaID': analisisGarantiaID,
       };
+}
+
+class GarantiaActualizarEndpointHN extends Endpoint {
+  final AnalisisActualizarGarantia data;
+
+  GarantiaActualizarEndpointHN({required this.data});
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-garantias/update-bien-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
 }
