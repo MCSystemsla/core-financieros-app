@@ -1,4 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_anular_garantia/analisis_anular_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_garantia/fiadores_garantia_cubit.dart';
@@ -6,15 +9,18 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/v2_actualizar_garantia_detalle_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/v2_crear_garantia_detalle_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/crear_garantia_moda_sheet.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/garantia_options_sheet.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/tiles/option_tile.dart';
+import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_articulo/tipo_articulo_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_garantia_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class CrearGarantiaScreen extends StatelessWidget {
   final int numeroSolicitud;
@@ -49,6 +55,9 @@ class CrearGarantiaScreen extends StatelessWidget {
                 BlocProvider.value(
                   value: context.read<FiadoresGarantiaCubit>(),
                 ),
+                BlocProvider.value(
+                  value: context.read<AnalisisAnularGarantiaCubit>(),
+                ),
               ],
               child: CreateGarantiaModalSheet(
                 numeroSolicitud: numeroSolicitud,
@@ -70,18 +79,62 @@ class CrearGarantiaScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<AnalisisGarantiaCubit, AnalisisGarantiaState>(
-        builder: (context, state) {
-          return switch (state.status) {
-            Status.inProgress => const LoadingWidget(),
-            Status.error => Text('Error: //${state.errorMsg}'),
-            Status.done => _ListItems(
-                analisisGarantia: state.analisisGarantia,
-              ),
-            _ => const SizedBox(),
-          };
-        },
+      body: _AnularGarantiaHandler(
+        numeroSolicitud: numeroSolicitud,
+        child: BlocBuilder<AnalisisGarantiaCubit, AnalisisGarantiaState>(
+          builder: (context, state) {
+            return switch (state.status) {
+              Status.inProgress => const LoadingWidget(),
+              Status.error => Text('Error: //${state.errorMsg}'),
+              Status.done => _ListItems(
+                  analisisGarantia: state.analisisGarantia,
+                ),
+              _ => const SizedBox(),
+            };
+          },
+        ),
       ),
+    );
+  }
+}
+
+class _AnularGarantiaHandler extends StatelessWidget {
+  final int numeroSolicitud;
+  final Widget child;
+  const _AnularGarantiaHandler({
+    required this.numeroSolicitud,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AnalisisAnularGarantiaCubit,
+        AnalisisAnularGarantiaState>(
+      listener: (context, state) {
+        if (state.status == Status.inProgress) {
+          context.showLoading(message: 'Anulando Garantia...');
+        }
+        if (state.status == Status.done) {
+          context.hideLoading();
+          showV2CustomSnackbar(
+            context,
+            title: 'Garantía anulada exitosamente',
+            type: SnackbarType.success,
+          );
+          context.read<AnalisisGarantiaCubit>().getGarantiasByNumero(
+                numeroSolicitud: numeroSolicitud,
+              );
+        }
+        if (state.status == Status.error) {
+          context.hideLoading();
+          showV2CustomSnackbar(
+            context,
+            title: state.errorMsg,
+            type: SnackbarType.error,
+          );
+        }
+      },
+      child: child,
     );
   }
 }
@@ -116,7 +169,12 @@ class _ListItems extends StatelessWidget {
                     ? 'Pendiente: toca para asignar un bien'
                     : 'Bien asignado: toca para ver opciones',
                 onTap: () => e.bienCodigo != null
-                    ? _showGarantiaOptionsBottomSheet(context, e)
+                    ? showGarantiaOptionsSheet(
+                        context,
+                        onActualizar: () =>
+                            _navigateToActualizarDetalle(context, e),
+                        onRechazar: () => _confirmarRechazo(context, e),
+                      )
                     : _navigateToDetalle(context, e),
               );
             },
@@ -162,100 +220,19 @@ class _ListItems extends StatelessWidget {
     );
   }
 
-  void _showGarantiaOptionsBottomSheet(BuildContext context, GarantiaData e) {
-    showModalBottomSheet(
+  void _confirmarRechazo(BuildContext context, GarantiaData e) {
+    ExitConfirmationDialog(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-            decoration: BoxDecoration(
-              color: Theme.of(sheetContext).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Gap(12),
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-                const Gap(16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Opciones del bien',
-                      style: Theme.of(sheetContext)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ),
-                ),
-                const Gap(16),
-                OptionTile(
-                  icon: Icons.edit_outlined,
-                  color: Colors.indigo,
-                  title: 'Actualizar Bien',
-                  subtitle: 'Editar la información del bien registrado',
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    _navigateToActualizarDetalle(context, e);
-                  },
-                ),
-                const Gap(4),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Divider(height: 1),
-                ),
-                const Gap(4),
-                OptionTile(
-                  icon: Icons.close_rounded,
-                  color: Colors.red,
-                  title: 'Rechazar Bien',
-                  subtitle: 'Descartar este bien de garantía',
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const RechazarBienScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Gap(16),
-              ],
-            ),
-          ),
-        );
+      title: 'Seguro que quieres rechazar esta garantia?',
+      onYes: () {
+        context.pop();
+        context.read<AnalisisAnularGarantiaCubit>().anularGarantia(
+              analisisGarantiaId: e.garantiaID!,
+            );
       },
-    );
-  }
-}
-
-class RechazarBienScreen extends StatelessWidget {
-  const RechazarBienScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rechazar Bien'),
-      ),
-      body: const Center(
-        child: Text('Pantalla en construcción'),
-      ),
+    ).showDialog(
+      context,
+      dialogType: DialogType.infoReverse,
     );
   }
 }

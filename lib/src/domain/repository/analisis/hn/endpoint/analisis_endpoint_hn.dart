@@ -600,3 +600,23 @@ class GarantiaObtenerBienByCodigo extends Endpoint {
         'bienCodigo': bienCodigo,
       };
 }
+
+class GarantiaAnularEndpointHN extends Endpoint {
+  final int analisisGarantiaID;
+
+  GarantiaAnularEndpointHN({required this.analisisGarantiaID});
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-garantias/anular-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'AnalisisGarantiaID': analisisGarantiaID,
+      };
+}

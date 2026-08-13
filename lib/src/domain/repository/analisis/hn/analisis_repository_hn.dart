@@ -149,6 +149,9 @@ abstract class AnalisisRepositoryHn {
   Future<AnalisisGarantiaObtenerBienResponse> obtenerGarantiaBienByCodigo({
     required String bienCodigo,
   });
+  Future<void> anularGarantia({
+    required int analisisGarantiaID,
+  });
 }
 
 class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
@@ -942,6 +945,24 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
       final data = AnalisisGarantiaObtenerBienResponse.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> anularGarantia({required int analisisGarantiaID}) async {
+    final endpoint = GarantiaAnularEndpointHN(
+      analisisGarantiaID: analisisGarantiaID,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;
