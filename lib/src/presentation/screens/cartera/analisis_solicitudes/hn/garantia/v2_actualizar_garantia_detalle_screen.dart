@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_gara
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../bloc/analisis/hn/analisis_garantia_actualizar/analisis_garantia_actualizar_cubit.dart';
 import '../../../../../bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
 
 class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
@@ -37,6 +38,11 @@ class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
     final repository = AnalisisRepositoryHNImpl();
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (ctx) => AnalisisGarantiaActualizarCubit(
+            repository,
+          ),
+        ),
         BlocProvider(
           create: (ctx) => EvaluadoresCnbsCubit(
             repository,

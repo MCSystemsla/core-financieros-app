@@ -65,6 +65,16 @@ class AnalisisActualizarGarantiaData {
   final double? areaVarasCuadradas;
   final double? areaMetrosCuadrados;
   final String? direccion;
+  final String? tipo;
+  final String? marca;
+  final String? modelo;
+  final int? anio;
+  final String? color;
+  final String? placa;
+  final String? serie;
+  final String? lugar;
+  final String? numeroReferencia;
+  final String? descripcion;
 
   AnalisisActualizarGarantiaData({
     this.numEscritura,
@@ -74,17 +84,43 @@ class AnalisisActualizarGarantiaData {
     this.areaVarasCuadradas,
     this.areaMetrosCuadrados,
     this.direccion,
+    this.tipo,
+    this.marca,
+    this.modelo,
+    this.anio,
+    this.color,
+    this.placa,
+    this.serie,
+    this.lugar,
+    this.numeroReferencia,
+    this.descripcion,
   });
 
-  Map<String, dynamic> toJson() => {
-        'NumEscritura': numEscritura,
-        'NumTomo': numTomo,
-        'Folio': folio,
-        'FechaInscripcion': fechaInscripcion?.toIso8601String(),
-        'AreaVarasCuadradas': areaVarasCuadradas,
-        'AreaMetrosCuadrados': areaMetrosCuadrados,
-        'Direccion': direccion,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'NumEscritura': numEscritura,
+      'NumTomo': numTomo,
+      'Folio': folio,
+      'FechaInscripcion': fechaInscripcion?.toIso8601String(),
+      'AreaVarasCuadradas': areaVarasCuadradas,
+      'AreaMetrosCuadrados': areaMetrosCuadrados,
+      'Direccion': direccion,
+      'Tipo': tipo,
+      'Marca': marca,
+      'Modelo': modelo,
+      'Anio': anio,
+      'Color': color,
+      'Placa': placa,
+      'Serie': serie,
+      'Lugar': lugar,
+      'NumeroReferencia': numeroReferencia,
+      'Descripcion': descripcion,
+    };
+    data.removeWhere(
+      (key, value) => value == null || value == '',
+    );
+    return data;
+  }
 }
 
 class AnalisisActualizarGarantiaValoracion {

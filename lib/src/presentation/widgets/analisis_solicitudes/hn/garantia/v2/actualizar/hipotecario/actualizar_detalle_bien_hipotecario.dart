@@ -1,11 +1,16 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/select_date/select_date_helper.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_actualizar/analisis_garantia_actualizar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/evaluadores_cnbs_dropdown_widget.dart';
@@ -15,12 +20,14 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_err
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class ActualizarDetalleBienHipotecario extends StatelessWidget {
   final int objAnalisisGarantiaId;
@@ -69,48 +76,48 @@ class _HipotecarioForm extends StatefulWidget {
 }
 
 class _HipotecarioFormState extends State<_HipotecarioForm> {
-  String? cedulaPropietario;
   String? departamento;
   String? municipio;
-  String? aldea;
-  String? numEscritura;
-  String? numDeLomo;
-  String? folio;
-  String? vrs2;
-  String? mts2;
   DateTime? fechaInscripcion;
-  String? direccion;
-  double? valorComercial;
-  double? valorAvaluo;
-  String? observaciones;
-  String? evaluadorCodigo;
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     final bien = widget.bien;
-    cedulaPropietario = bien.cedulaPropietario;
-    direccion = bien.direccion;
-    numDeLomo = bien.numTomo;
-    folio = bien.folio;
-    vrs2 = bien.areaVarasCuadradas.toString();
-    mts2 = bien.areaMetrosCuadrados.toString();
-    observaciones = bien.observaciones;
-    valorComercial = bien.valorComercial.toDouble();
-    valorAvaluo = bien.valorAvaluo.toDouble();
-    evaluadorCodigo =
-        bien.evaluadorId == 0 ? null : bien.evaluadorId.toString();
-    fechaInscripcion = DateTime.tryParse(bien.fechaInscripcion);
     departamento =
         bien.departamentoCodigo.isEmpty ? null : bien.departamentoCodigo;
     municipio = bien.municipioCodigo.isEmpty ? null : bien.municipioCodigo;
-    aldea = bien.aldeaCodigo.isEmpty ? null : bien.aldeaCodigo;
+    fechaInscripcion = DateTime.tryParse(bien.fechaInscripcion);
+    final cubit = context.read<AnalisisGarantiaActualizarCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        codigoBien: bien.bienCodigo,
+        objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+        cedulaPropietario: bien.cedulaPropietario,
+        observaciones: bien.observaciones,
+        departamentoCodigo: bien.departamentoCodigo,
+        municipioCodigo: bien.municipioCodigo,
+        aldeaCodigo: bien.aldeaCodigo,
+        valorComercial: bien.valorComercial.toDouble(),
+        valorAvaluo: bien.valorAvaluo.toDouble(),
+        tipoValoracionCodigo: bien.tipoValoracionCodigo,
+        objValuadorId: bien.evaluadorId,
+        numEscritura: bien.asiento,
+        numTomo: bien.numTomo,
+        folio: bien.folio,
+        fechaInscripcion: bien.fechaInscripcion,
+        areaVarasCuadradas: bien.areaVarasCuadradas.toDouble(),
+        areaMetrosCuadrados: bien.areaMetrosCuadrados.toDouble(),
+        direccion: bien.direccion,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final bien = widget.bien;
+    final cubit = context.read<AnalisisGarantiaActualizarCubit>();
     return Form(
       key: formKey,
       child: FadeIn(
@@ -156,7 +163,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                       UpperCaseTextFormatter(),
                     ],
                     onChange: (value) {
-                      cedulaPropietario = value;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(cedulaPropietario: value),
+                      );
                     },
                   ),
                 ],
@@ -168,6 +177,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (v) {
                     if (v == null) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoValoracionCodigo: v.value,
+                      ),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -183,7 +197,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    direccion = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(direccion: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -206,8 +222,14 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     setState(() {
                       departamento = v.valor;
                       municipio = null;
-                      aldea = null;
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoCodigo: v.valor,
+                        municipioCodigo: '',
+                        aldeaCodigo: '',
+                      ),
+                    );
                   },
                   codigo: 'DEP',
                 ),
@@ -231,8 +253,13 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                       if (v == null) return;
                       setState(() {
                         municipio = v.valor;
-                        aldea = null;
                       });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          municipioCodigo: v.valor,
+                          aldeaCodigo: '',
+                        ),
+                      );
                     },
                     codigo: 'MUN',
                   ),
@@ -255,9 +282,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
                       if (v == null) return;
-                      setState(() {
-                        aldea = v.valor;
-                      });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(aldeaCodigo: v.valor),
+                      );
                     },
                     codigo: 'ALD',
                   ),
@@ -279,7 +306,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
-                    valorComercial = double.tryParse(newValue);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        valorComercial: double.tryParse(newValue),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -299,7 +330,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
-                    valorAvaluo = double.tryParse(newValue);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        valorAvaluo: double.tryParse(newValue),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -311,7 +346,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                           value: bien.evaluadorId.toString(),
                         ),
                   onChanged: (value) {
-                    evaluadorCodigo = value?.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objValuadorId: int.tryParse(value?.value ?? ''),
+                      ),
+                    );
                   },
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -329,7 +368,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    observaciones = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(observaciones: value),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -346,7 +387,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChange: (value) {
-                    numEscritura = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(numEscritura: value),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -363,7 +406,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChange: (value) {
-                    numDeLomo = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(numTomo: value),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -379,7 +424,9 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    folio = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(folio: value),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -404,6 +451,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     setState(() {
                       fechaInscripcion = pickedDate;
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        fechaInscripcion: pickedDate.toIso8601String(),
+                      ),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -420,7 +472,11 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChange: (value) {
-                    vrs2 = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        areaVarasCuadradas: double.tryParse(value ?? ''),
+                      ),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -437,26 +493,72 @@ class _HipotecarioFormState extends State<_HipotecarioForm> {
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChange: (value) {
-                    mts2 = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        areaMetrosCuadrados: double.tryParse(value ?? ''),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Actualizar',
-                    // ignore: deprecated_member_use
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      // TODO: wire this up to the update endpoint for garantia
-                      // bien once it exists on AnalisisRepositoryHn. The edited
-                      // values live in this state's fields, the bien being
-                      // edited is widget.bien.bienId and the familia for this
-                      // form is 'INMUEBLE'.
-                    },
-                  ),
+                BlocConsumer<AnalisisGarantiaActualizarCubit,
+                    AnalisisGarantiaActualizarState>(
+                  listenWhen: (prev, curr) => prev.status != curr.status,
+                  listener: (ctx, state) {
+                    if (state.status == Status.inProgress) {
+                      context.showLoading(
+                          message: 'Actualizando Detalle garantia');
+                    }
+                    if (state.status == Status.done) {
+                      context.hideLoading();
+                      showV2CustomSnackbar(
+                        context,
+                        title: 'Garantia actualizada exitosamente',
+                        type: SnackbarType.success,
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AnalisisInterceptorByFlavor(),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.error) {
+                      context.hideLoading();
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => {
+                          context.pop(),
+                        },
+                      ).showDialog(
+                        context,
+                        dialogType: DialogType.warning,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: state.status != Status.inProgress,
+                        text: state.status == Status.inProgress
+                            ? 'Actualizando...'
+                            : 'Actualizar',
+                        // ignore: deprecated_member_use
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          cubit.actualizarGarantia(
+                            familia: 'INMUEBLE',
+                            objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+                            codigoBien: widget.bien.bienCodigo,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const Gap(20),
               ],

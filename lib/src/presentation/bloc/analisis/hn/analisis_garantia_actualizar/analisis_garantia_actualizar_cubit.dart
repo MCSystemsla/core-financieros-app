@@ -13,13 +13,22 @@ class AnalisisGarantiaActualizarCubit
   AnalisisGarantiaActualizarCubit(this._repository)
       : super(AnalisisGarantiaActualizarInitial());
 
-  Future<void> actualizarGarantia() async {
-    emit(state.copyWith(status: Status.inProgress));
+  Future<void> actualizarGarantia({
+    required String familia,
+    required int objAnalisisGarantiaId,
+    required String codigoBien,
+  }) async {
+    emit(state.copyWith(
+      status: Status.inProgress,
+      familia: familia,
+      objAnalisisGarantiaId: objAnalisisGarantiaId,
+      codigoBien: codigoBien,
+    ));
     try {
       await _repository.actualizarGarantia(
         data: AnalisisActualizarGarantia(
-          codigoBien: state.codigoBien,
-          objAnalisisGarantiaId: state.objAnalisisGarantiaId,
+          codigoBien: codigoBien,
+          objAnalisisGarantiaId: objAnalisisGarantiaId,
           observaciones: state.observaciones,
           cedulaPropietario: state.cedulaPropietario,
           departamentoCodigo: state.departamentoCodigo,
@@ -32,7 +41,7 @@ class AnalisisGarantiaActualizarCubit
             objValuadorId: state.objValuadorId,
           ),
           detalle: AnalisisActualizarGarantiaDetalle(
-            familia: state.familia,
+            familia: familia,
             data: AnalisisActualizarGarantiaData(
               numEscritura: state.numEscritura,
               numTomo: state.numTomo,
@@ -41,6 +50,16 @@ class AnalisisGarantiaActualizarCubit
               areaVarasCuadradas: state.areaVarasCuadradas,
               areaMetrosCuadrados: state.areaMetrosCuadrados,
               direccion: state.direccion,
+              tipo: state.tipo,
+              marca: state.marca,
+              modelo: state.modelo,
+              anio: state.anio,
+              color: state.color,
+              placa: state.placa,
+              serie: state.serie,
+              lugar: state.lugar,
+              numeroReferencia: state.numeroReferencia,
+              descripcion: state.descripcion,
             ),
           ),
         ),

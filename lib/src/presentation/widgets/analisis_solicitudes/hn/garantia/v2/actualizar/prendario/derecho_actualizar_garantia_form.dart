@@ -1,19 +1,28 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_actualizar/analisis_garantia_actualizar_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/evaluadores_cnbs_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
+import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class DerechoActualizarGarantiaForm extends StatefulWidget {
   final int objAnalisisGarantiaId;
@@ -33,40 +42,42 @@ class DerechoActualizarGarantiaForm extends StatefulWidget {
 
 class _DerechoActualizarGarantiaFormState
     extends State<DerechoActualizarGarantiaForm> {
-  String? cedulaPropietario;
-  String? numeroReferencia;
-  String? descripcion;
-  String? lugar;
   String? departamento;
   String? municipio;
-  String? aldea;
-  String? observaciones;
-  double? valorComercial;
-  double? valorAvaluo;
-  String? evaluadorCodigo;
   final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     final bien = widget.bien;
-    cedulaPropietario = bien.cedulaPropietario;
-    numeroReferencia = bien.numeroReferencia;
-    lugar = bien.lugar;
-    observaciones = bien.observaciones;
-    valorComercial = bien.valorComercial.toDouble();
-    valorAvaluo = bien.valorAvaluo.toDouble();
-    evaluadorCodigo =
-        bien.evaluadorId == 0 ? null : bien.evaluadorId.toString();
     departamento =
         bien.departamentoCodigo.isEmpty ? null : bien.departamentoCodigo;
     municipio = bien.municipioCodigo.isEmpty ? null : bien.municipioCodigo;
-    aldea = bien.aldeaCodigo.isEmpty ? null : bien.aldeaCodigo;
+    final cubit = context.read<AnalisisGarantiaActualizarCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        codigoBien: bien.bienCodigo,
+        objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+        cedulaPropietario: bien.cedulaPropietario,
+        observaciones: bien.observaciones,
+        departamentoCodigo: bien.departamentoCodigo,
+        municipioCodigo: bien.municipioCodigo,
+        aldeaCodigo: bien.aldeaCodigo,
+        valorComercial: bien.valorComercial.toDouble(),
+        valorAvaluo: bien.valorAvaluo.toDouble(),
+        tipoValoracionCodigo: bien.tipoValoracionCodigo,
+        objValuadorId: bien.evaluadorId,
+        numeroReferencia: bien.numeroReferencia,
+        descripcion: bien.articuloDescripcion,
+        lugar: bien.lugar,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final bien = widget.bien;
+    final cubit = context.read<AnalisisGarantiaActualizarCubit>();
     return Form(
       key: formKey,
       child: FadeIn(
@@ -113,7 +124,9 @@ class _DerechoActualizarGarantiaFormState
                       UpperCaseTextFormatter(),
                     ],
                     onChange: (value) {
-                      cedulaPropietario = value;
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(cedulaPropietario: value),
+                      );
                     },
                   ),
                 ],
@@ -125,6 +138,11 @@ class _DerechoActualizarGarantiaFormState
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (v) {
                     if (v == null) return;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        tipoValoracionCodigo: v.value,
+                      ),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -140,12 +158,15 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    numeroReferencia = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(numeroReferencia: value),
+                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Descripcion',
+                  initialValue: bien.articuloDescripcion,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -155,7 +176,9 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    descripcion = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(descripcion: value),
+                    );
                   },
                 ),
                 const Gap(12),
@@ -171,7 +194,9 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    lugar = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(lugar: value),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -194,8 +219,14 @@ class _DerechoActualizarGarantiaFormState
                     setState(() {
                       departamento = v.valor;
                       municipio = null;
-                      aldea = null;
                     });
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        departamentoCodigo: v.valor,
+                        municipioCodigo: '',
+                        aldeaCodigo: '',
+                      ),
+                    );
                   },
                   codigo: 'DEP',
                 ),
@@ -219,8 +250,13 @@ class _DerechoActualizarGarantiaFormState
                       if (v == null) return;
                       setState(() {
                         municipio = v.valor;
-                        aldea = null;
                       });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(
+                          municipioCodigo: v.valor,
+                          aldeaCodigo: '',
+                        ),
+                      );
                     },
                     codigo: 'MUN',
                   ),
@@ -243,9 +279,9 @@ class _DerechoActualizarGarantiaFormState
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
                       if (v == null) return;
-                      setState(() {
-                        aldea = v.valor;
-                      });
+                      cubit.onFieldChanged(
+                        () => cubit.state.copyWith(aldeaCodigo: v.valor),
+                      );
                     },
                     codigo: 'ALD',
                   ),
@@ -267,7 +303,11 @@ class _DerechoActualizarGarantiaFormState
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value);
-                    valorComercial = double.tryParse(newValue);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        valorComercial: double.tryParse(newValue),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -287,7 +327,11 @@ class _DerechoActualizarGarantiaFormState
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
-                    valorAvaluo = double.tryParse(newValue);
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        valorAvaluo: double.tryParse(newValue),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -299,7 +343,11 @@ class _DerechoActualizarGarantiaFormState
                           value: bien.evaluadorId.toString(),
                         ),
                   onChanged: (value) {
-                    evaluadorCodigo = value?.value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(
+                        objValuadorId: int.tryParse(value?.value ?? ''),
+                      ),
+                    );
                   },
                 ),
                 const Gap(20),
@@ -315,26 +363,70 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    observaciones = value;
+                    cubit.onFieldChanged(
+                      () => cubit.state.copyWith(observaciones: value),
+                    );
                   },
                 ),
                 const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Actualizar',
-                    // ignore: deprecated_member_use
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      // TODO: wire this up to the update endpoint for garantia
-                      // bien once it exists on AnalisisRepositoryHn. The edited
-                      // values live in this state's fields, the bien being
-                      // edited is widget.bien.bienId and the familia for this
-                      // form is 'DERECHO'.
-                    },
-                  ),
+                BlocConsumer<AnalisisGarantiaActualizarCubit,
+                    AnalisisGarantiaActualizarState>(
+                  listenWhen: (prev, curr) => prev.status != curr.status,
+                  listener: (ctx, state) {
+                    if (state.status == Status.inProgress) {
+                      context.showLoading(
+                          message: 'Actualizando Detalle garantia');
+                    }
+                    if (state.status == Status.done) {
+                      context.hideLoading();
+                      showV2CustomSnackbar(
+                        context,
+                        title: 'Garantia actualizada exitosamente',
+                        type: SnackbarType.success,
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AnalisisInterceptorByFlavor(),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.error) {
+                      context.hideLoading();
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => {
+                          context.pop(),
+                        },
+                      ).showDialog(
+                        context,
+                        dialogType: DialogType.warning,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: state.status != Status.inProgress,
+                        text: state.status == Status.inProgress
+                            ? 'Actualizando...'
+                            : 'Actualizar',
+                        // ignore: deprecated_member_use
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          cubit.actualizarGarantia(
+                            familia: 'DERECHO',
+                            objAnalisisGarantiaId: widget.objAnalisisGarantiaId,
+                            codigoBien: widget.bien.bienCodigo,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const Gap(20),
               ],
