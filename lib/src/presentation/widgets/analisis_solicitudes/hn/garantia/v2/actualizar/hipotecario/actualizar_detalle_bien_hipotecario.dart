@@ -3,11 +3,17 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/select_date/select_date_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_create_garantia_bien/analisis_create_garantia_bien_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/evaluadores_cnbs_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +22,7 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
 
-class ActualizarDetalleBienHipotecario extends StatefulWidget {
+class ActualizarDetalleBienHipotecario extends StatelessWidget {
   final int objAnalisisGarantiaId;
   final String tipoPersonaCodigo;
   const ActualizarDetalleBienHipotecario({
@@ -26,12 +32,44 @@ class ActualizarDetalleBienHipotecario extends StatefulWidget {
   });
 
   @override
-  State<ActualizarDetalleBienHipotecario> createState() =>
-      _ActualizarDetalleBienHipotecarioState();
+  Widget build(BuildContext context) {
+    return BlocBuilder<AnalisisObtenerBienByCodigoCubit,
+        AnalisisObtenerBienByCodigoState>(
+      builder: (context, state) {
+        return switch (state.status) {
+          Status.inProgress => const LoadingWidget(),
+          Status.error => OnErrorWidget(
+              errorMsg: state.errorMsg,
+              onPressed: () {},
+            ),
+          Status.done => _HipotecarioForm(
+              objAnalisisGarantiaId: objAnalisisGarantiaId,
+              tipoPersonaCodigo: tipoPersonaCodigo,
+              bien: state,
+            ),
+          _ => const SizedBox(),
+        };
+      },
+    );
+  }
 }
 
-class _ActualizarDetalleBienHipotecarioState
-    extends State<ActualizarDetalleBienHipotecario> {
+class _HipotecarioForm extends StatefulWidget {
+  final int objAnalisisGarantiaId;
+  final String tipoPersonaCodigo;
+  final AnalisisObtenerBienByCodigoState bien;
+  const _HipotecarioForm({
+    required this.objAnalisisGarantiaId,
+    required this.tipoPersonaCodigo,
+    required this.bien,
+  });
+
+  @override
+  State<_HipotecarioForm> createState() => _HipotecarioFormState();
+}
+
+class _HipotecarioFormState extends State<_HipotecarioForm> {
+  String? cedulaPropietario;
   String? departamento;
   String? municipio;
   String? aldea;
@@ -44,13 +82,35 @@ class _ActualizarDetalleBienHipotecarioState
   String? direccion;
   double? valorComercial;
   double? valorAvaluo;
-  String? descripcion;
+  String? observaciones;
   String? evaluadorCodigo;
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    final bien = widget.bien;
+    cedulaPropietario = bien.cedulaPropietario;
+    direccion = bien.direccion;
+    numDeLomo = bien.numTomo;
+    folio = bien.folio;
+    vrs2 = bien.areaVarasCuadradas.toString();
+    mts2 = bien.areaMetrosCuadrados.toString();
+    observaciones = bien.observaciones;
+    valorComercial = bien.valorComercial.toDouble();
+    valorAvaluo = bien.valorAvaluo.toDouble();
+    evaluadorCodigo =
+        bien.evaluadorId == 0 ? null : bien.evaluadorId.toString();
+    fechaInscripcion = DateTime.tryParse(bien.fechaInscripcion);
+    departamento =
+        bien.departamentoCodigo.isEmpty ? null : bien.departamentoCodigo;
+    municipio = bien.municipioCodigo.isEmpty ? null : bien.municipioCodigo;
+    aldea = bien.aldeaCodigo.isEmpty ? null : bien.aldeaCodigo;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisCreateGarantiaBienCubit>();
+    final bien = widget.bien;
     return Form(
       key: formKey,
       child: FadeIn(
@@ -85,6 +145,7 @@ class _ActualizarDetalleBienHipotecarioState
                   const Gap(12),
                   OutlineTextfieldWidget(
                     title: 'Cedula del Propietario',
+                    initialValue: bien.cedulaPropietario,
                     icon: Icon(
                       Icons.inventory_2_outlined,
                       color: AppColors.getPrimaryColor(),
@@ -95,15 +156,24 @@ class _ActualizarDetalleBienHipotecarioState
                       UpperCaseTextFormatter(),
                     ],
                     onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(cedulaPropietario: value),
-                      );
+                      cedulaPropietario = value;
                     },
                   ),
                 ],
+                SearchDropdownWidget(
+                  codigo: CatalogoType.tipoValoracionGarantia.codigo,
+                  title: 'Tipo Valoración de Garantia',
+                  hintText: 'Selecciona un tipo de valoración de garantia',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  onChanged: (v) {
+                    if (v == null) return;
+                  },
+                ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Direccion',
+                  initialValue: bien.direccion,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -114,15 +184,20 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     direccion = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(direccion: direccion),
-                    );
                   },
                 ),
                 const Gap(20),
                 CatalogoValorNacionalidad(
                   hintText: 'Ingresa Departamento',
                   title: 'Departamento',
+                  selectedItem: bien.departamentoCodigo.isEmpty
+                      ? null
+                      : ItemNacionalidad(
+                          id: 0,
+                          valor: bien.departamentoCodigo,
+                          nombre: bien.departamentoNombre,
+                          relacion: '',
+                        ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   where: 'HN',
@@ -130,11 +205,9 @@ class _ActualizarDetalleBienHipotecarioState
                     if (v == null) return;
                     setState(() {
                       departamento = v.valor;
+                      municipio = null;
+                      aldea = null;
                     });
-                    cubit.onFieldChanged(
-                      () => cubit.state
-                          .copyWith(departamentoCodigo: departamento),
-                    );
                   },
                   codigo: 'DEP',
                 ),
@@ -144,16 +217,22 @@ class _ActualizarDetalleBienHipotecarioState
                     where: departamento,
                     hintText: 'Ingresa Municipio',
                     title: 'Municipio',
+                    selectedItem: bien.municipioCodigo.isEmpty
+                        ? null
+                        : ItemNacionalidad(
+                            id: 0,
+                            valor: bien.municipioCodigo,
+                            nombre: bien.municipioNombre,
+                            relacion: '',
+                          ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
                       if (v == null) return;
                       setState(() {
                         municipio = v.valor;
+                        aldea = null;
                       });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(municipioCodigo: municipio),
-                      );
                     },
                     codigo: 'MUN',
                   ),
@@ -164,6 +243,14 @@ class _ActualizarDetalleBienHipotecarioState
                     where: municipio,
                     hintText: 'Ingresa Aldea',
                     title: 'Aldea',
+                    selectedItem: bien.aldeaCodigo.isEmpty
+                        ? null
+                        : ItemNacionalidad(
+                            id: 0,
+                            valor: bien.aldeaCodigo,
+                            nombre: bien.aldeaNombre,
+                            relacion: '',
+                          ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
@@ -171,9 +258,6 @@ class _ActualizarDetalleBienHipotecarioState
                       setState(() {
                         aldea = v.valor;
                       });
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(aldeaCodigo: aldea),
-                      );
                     },
                     codigo: 'ALD',
                   ),
@@ -181,6 +265,9 @@ class _ActualizarDetalleBienHipotecarioState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Valor de mercado',
+                  initialValue: bien.valorComercial == 0
+                      ? null
+                      : bien.valorComercial.toString(),
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -193,15 +280,14 @@ class _ActualizarDetalleBienHipotecarioState
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
                     valorComercial = double.tryParse(newValue);
-                    cubit.onFieldChanged(
-                      () =>
-                          cubit.state.copyWith(valorComercial: valorComercial),
-                    );
                   },
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Valor de avaluo',
+                  initialValue: bien.valorAvaluo == 0
+                      ? null
+                      : bien.valorAvaluo.toString(),
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -214,19 +300,18 @@ class _ActualizarDetalleBienHipotecarioState
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
                     valorAvaluo = double.tryParse(newValue);
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(valorAvaluo: valorAvaluo),
-                    );
                   },
                 ),
                 const Gap(20),
                 EvaluadoresCnbsDropdownWidget(
+                  selectedItem: bien.evaluadorId == 0
+                      ? null
+                      : Item(
+                          name: bien.evaluadorNombre,
+                          value: bien.evaluadorId.toString(),
+                        ),
                   onChanged: (value) {
                     evaluadorCodigo = value?.value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                          objValuadorID: int.tryParse(evaluadorCodigo ?? '0')),
-                    );
                   },
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -234,6 +319,7 @@ class _ActualizarDetalleBienHipotecarioState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Observaciones',
+                  initialValue: bien.observaciones,
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -243,14 +329,12 @@ class _ActualizarDetalleBienHipotecarioState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    descripcion = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(observaciones: descripcion),
-                    );
+                    observaciones = value;
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
+                  initialValue: bien.asiento,
                   title: 'No. de escritura',
                   icon: Icon(
                     Icons.inventory_2_outlined,
@@ -263,14 +347,12 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     numEscritura = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(numEscritura: numEscritura),
-                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'No. de tomo',
+                  initialValue: bien.numTomo,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -282,14 +364,12 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     numDeLomo = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(numTomo: numDeLomo),
-                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Folio',
+                  initialValue: bien.folio,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -300,9 +380,6 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     folio = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(folio: folio),
-                    );
                   },
                 ),
                 const Gap(12),
@@ -320,23 +397,19 @@ class _ActualizarDetalleBienHipotecarioState
                   onTap: () async {
                     final pickedDate = await pickDate(
                       context,
-                      initialDate: DateTime.now(),
+                      initialDate: fechaInscripcion ?? DateTime.now(),
                       lastDate: DateTime.now(),
                     );
                     if (pickedDate == null) return;
                     setState(() {
                       fechaInscripcion = pickedDate;
                     });
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                          fechaInscripcion:
-                              fechaInscripcion?.toUtc().toIso8601String()),
-                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Vrs2',
+                  initialValue: bien.areaVarasCuadradas.toString(),
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -348,15 +421,12 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     vrs2 = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state
-                          .copyWith(areaVaras2: double.tryParse(vrs2 ?? '0')),
-                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Mts2',
+                  initialValue: bien.areaMetrosCuadrados.toString(),
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -368,10 +438,6 @@ class _ActualizarDetalleBienHipotecarioState
                   ],
                   onChange: (value) {
                     mts2 = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state
-                          .copyWith(areaMetros2: double.tryParse(mts2 ?? '0')),
-                    );
                   },
                 ),
                 const Gap(20),
@@ -384,11 +450,11 @@ class _ActualizarDetalleBienHipotecarioState
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      // TODO: wire this up to the update endpoint for
-                      // garantia bien once it exists on AnalisisRepositoryHn.
-                      // The edited values are already accumulated in
-                      // AnalisisCreateGarantiaBienCubit's state, and the
-                      // familia for this form is 'INMUEBLE'.
+                      // TODO: wire this up to the update endpoint for garantia
+                      // bien once it exists on AnalisisRepositoryHn. The edited
+                      // values live in this state's fields, the bien being
+                      // edited is widget.bien.bienId and the familia for this
+                      // form is 'INMUEBLE'.
                     },
                   ),
                 ),

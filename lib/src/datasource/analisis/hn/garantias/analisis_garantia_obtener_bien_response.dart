@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
-
 AnalisisGarantiaObtenerBienResponse analisisGarantiaObtenerBienResponseFromJson(
         String str) =>
     AnalisisGarantiaObtenerBienResponse.fromJson(json.decode(str));
@@ -31,7 +29,7 @@ class AnalisisGarantiaObtenerBienData {
   final String? marca;
   final String? modelo;
   final String? color;
-  final String? anio;
+  final int? anio;
   final String? placa;
   final String? serie;
   final String? lugar;
@@ -40,16 +38,28 @@ class AnalisisGarantiaObtenerBienData {
   final String? numTomo;
   final String? folio;
   final DateTime? fechaInscripcion;
-  final double? areaVarasCuadradas;
-  final double? areaMetrosCuadrados;
+  final int? areaVarasCuadradas;
+  final int? areaMetrosCuadrados;
   final String? direccion;
-  final String? objTipoGarantiaId;
+  final int? objTipoGarantiaId;
   final String? departamentoCodigo;
   final String? departamentoNombre;
   final String? municipioCodigo;
   final String? municipioNombre;
   final String? aldeaCodigo;
   final String? aldeaNombre;
+  final String? analisisGarantiaId;
+  final String? numeroSolicitud;
+  final int? montoGarantia;
+  final int? articuloCodigo;
+  final String? articuloTipo;
+  final String? articuloDescripcion;
+  final String? tipoValoracionCodigo;
+  final String? tipoValoracionNombre;
+  final int? valorComercial;
+  final int? valorAvaluo;
+  final int? evaluadorId;
+  final String? evaluadorNombre;
 
   AnalisisGarantiaObtenerBienData({
     this.bienId,
@@ -79,6 +89,18 @@ class AnalisisGarantiaObtenerBienData {
     this.municipioNombre,
     this.aldeaCodigo,
     this.aldeaNombre,
+    this.analisisGarantiaId,
+    this.numeroSolicitud,
+    this.montoGarantia,
+    this.articuloCodigo,
+    this.articuloTipo,
+    this.articuloDescripcion,
+    this.tipoValoracionCodigo,
+    this.tipoValoracionNombre,
+    this.valorComercial,
+    this.valorAvaluo,
+    this.evaluadorId,
+    this.evaluadorNombre,
   });
 
   factory AnalisisGarantiaObtenerBienData.fromJson(Map<String, dynamic> json) =>
@@ -99,9 +121,11 @@ class AnalisisGarantiaObtenerBienData {
         asiento: json['Asiento'],
         numTomo: json['NumTomo'],
         folio: json['Folio'],
-        fechaInscripcion: parseDate(json['FechaInscripcion']),
-        areaVarasCuadradas: parseDouble(json['AreaVarasCuadradas']),
-        areaMetrosCuadrados: parseDouble(json['AreaMetrosCuadrados']),
+        fechaInscripcion: json['FechaInscripcion'] == null
+            ? null
+            : DateTime.parse(json['FechaInscripcion']),
+        areaVarasCuadradas: json['AreaVarasCuadradas'],
+        areaMetrosCuadrados: json['AreaMetrosCuadrados'],
         direccion: json['Direccion'],
         objTipoGarantiaId: json['objTipoGarantiaID'],
         departamentoCodigo: json['DepartamentoCodigo'],
@@ -110,5 +134,17 @@ class AnalisisGarantiaObtenerBienData {
         municipioNombre: json['MunicipioNombre'],
         aldeaCodigo: json['AldeaCodigo'],
         aldeaNombre: json['AldeaNombre'],
+        analisisGarantiaId: json['AnalisisGarantiaID'],
+        numeroSolicitud: json['NumeroSolicitud'],
+        montoGarantia: json['MontoGarantia'],
+        articuloCodigo: json['ArticuloCodigo'],
+        articuloTipo: json['ArticuloTipo'],
+        articuloDescripcion: json['ArticuloDescripcion'],
+        tipoValoracionCodigo: json['TipoValoracionCodigo'],
+        tipoValoracionNombre: json['TipoValoracionNombre'],
+        valorComercial: json['ValorComercial'],
+        valorAvaluo: json['ValorAvaluo'],
+        evaluadorId: json['EvaluadorId'],
+        evaluadorNombre: json['EvaluadorNombre'],
       );
 }

@@ -2,13 +2,15 @@ import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_create_garantia_bien/analisis_create_garantia_bien_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/evaluadores_cnbs_dropdown_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_utils.dart';
 import 'package:gap/gap.dart';
@@ -16,10 +18,12 @@ import 'package:gap/gap.dart';
 class DerechoActualizarGarantiaForm extends StatefulWidget {
   final int objAnalisisGarantiaId;
   final String tipoPersonaCodigo;
+  final AnalisisObtenerBienByCodigoState bien;
   const DerechoActualizarGarantiaForm({
     super.key,
     required this.objAnalisisGarantiaId,
     required this.tipoPersonaCodigo,
+    required this.bien,
   });
 
   @override
@@ -29,19 +33,40 @@ class DerechoActualizarGarantiaForm extends StatefulWidget {
 
 class _DerechoActualizarGarantiaFormState
     extends State<DerechoActualizarGarantiaForm> {
-  double? valorComercial;
+  String? cedulaPropietario;
+  String? numeroReferencia;
+  String? descripcion;
+  String? lugar;
   String? departamento;
   String? municipio;
   String? aldea;
-  String? descripcion;
+  String? observaciones;
+  double? valorComercial;
   double? valorAvaluo;
   String? evaluadorCodigo;
   final formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisCreateGarantiaBienCubit>();
+  void initState() {
+    super.initState();
+    final bien = widget.bien;
+    cedulaPropietario = bien.cedulaPropietario;
+    numeroReferencia = bien.numeroReferencia;
+    lugar = bien.lugar;
+    observaciones = bien.observaciones;
+    valorComercial = bien.valorComercial.toDouble();
+    valorAvaluo = bien.valorAvaluo.toDouble();
+    evaluadorCodigo =
+        bien.evaluadorId == 0 ? null : bien.evaluadorId.toString();
+    departamento =
+        bien.departamentoCodigo.isEmpty ? null : bien.departamentoCodigo;
+    municipio = bien.municipioCodigo.isEmpty ? null : bien.municipioCodigo;
+    aldea = bien.aldeaCodigo.isEmpty ? null : bien.aldeaCodigo;
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    final bien = widget.bien;
     return Form(
       key: formKey,
       child: FadeIn(
@@ -77,6 +102,7 @@ class _DerechoActualizarGarantiaFormState
                   const Gap(12),
                   OutlineTextfieldWidget(
                     title: 'Cedula del Propietario',
+                    initialValue: bien.cedulaPropietario,
                     icon: Icon(
                       Icons.inventory_2_outlined,
                       color: AppColors.getPrimaryColor(),
@@ -87,15 +113,24 @@ class _DerechoActualizarGarantiaFormState
                       UpperCaseTextFormatter(),
                     ],
                     onChange: (value) {
-                      cubit.onFieldChanged(
-                        () => cubit.state.copyWith(cedulaPropietario: value),
-                      );
+                      cedulaPropietario = value;
                     },
                   ),
                 ],
+                SearchDropdownWidget(
+                  codigo: CatalogoType.tipoValoracionGarantia.codigo,
+                  title: 'Tipo Valoración de Garantia',
+                  hintText: 'Selecciona un tipo de valoración de garantia',
+                  validator: (value) =>
+                      ClassValidator.validateRequired(value?.value),
+                  onChanged: (v) {
+                    if (v == null) return;
+                  },
+                ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Numero de Referencia',
+                  initialValue: bien.numeroReferencia,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -105,9 +140,7 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(numeroReferencia: value),
-                    );
+                    numeroReferencia = value;
                   },
                 ),
                 const Gap(12),
@@ -123,14 +156,12 @@ class _DerechoActualizarGarantiaFormState
                   ],
                   onChange: (value) {
                     descripcion = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(descripcion: descripcion),
-                    );
                   },
                 ),
                 const Gap(12),
                 OutlineTextfieldWidget(
                   title: 'Lugar',
+                  initialValue: bien.lugar,
                   icon: Icon(
                     Icons.inventory_2_outlined,
                     color: AppColors.getPrimaryColor(),
@@ -140,15 +171,21 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(lugar: value),
-                    );
+                    lugar = value;
                   },
                 ),
                 const Gap(20),
                 CatalogoValorNacionalidad(
                   hintText: 'Ingresa Departamento',
                   title: 'Departamento',
+                  selectedItem: bien.departamentoCodigo.isEmpty
+                      ? null
+                      : ItemNacionalidad(
+                          id: 0,
+                          valor: bien.departamentoCodigo,
+                          nombre: bien.departamentoNombre,
+                          relacion: '',
+                        ),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   where: 'HN',
@@ -156,10 +193,8 @@ class _DerechoActualizarGarantiaFormState
                     if (v == null) return;
                     setState(() {
                       departamento = v.valor;
-                      cubit.onFieldChanged(
-                        () => cubit.state
-                            .copyWith(departamentoCodigo: departamento),
-                      );
+                      municipio = null;
+                      aldea = null;
                     });
                   },
                   codigo: 'DEP',
@@ -170,16 +205,21 @@ class _DerechoActualizarGarantiaFormState
                     where: departamento,
                     hintText: 'Ingresa Municipio',
                     title: 'Municipio',
+                    selectedItem: bien.municipioCodigo.isEmpty
+                        ? null
+                        : ItemNacionalidad(
+                            id: 0,
+                            valor: bien.municipioCodigo,
+                            nombre: bien.municipioNombre,
+                            relacion: '',
+                          ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
                       if (v == null) return;
                       setState(() {
                         municipio = v.valor;
-                        cubit.onFieldChanged(
-                          () =>
-                              cubit.state.copyWith(municipioCodigo: municipio),
-                        );
+                        aldea = null;
                       });
                     },
                     codigo: 'MUN',
@@ -191,15 +231,20 @@ class _DerechoActualizarGarantiaFormState
                     where: municipio,
                     hintText: 'Ingresa Aldea',
                     title: 'Aldea',
+                    selectedItem: bien.aldeaCodigo.isEmpty
+                        ? null
+                        : ItemNacionalidad(
+                            id: 0,
+                            valor: bien.aldeaCodigo,
+                            nombre: bien.aldeaNombre,
+                            relacion: '',
+                          ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.valor),
                     onChanged: (v) {
                       if (v == null) return;
                       setState(() {
                         aldea = v.valor;
-                        cubit.onFieldChanged(
-                          () => cubit.state.copyWith(aldeaCodigo: aldea),
-                        );
                       });
                     },
                     codigo: 'ALD',
@@ -208,6 +253,9 @@ class _DerechoActualizarGarantiaFormState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Valor Comercial',
+                  initialValue: bien.valorComercial == 0
+                      ? null
+                      : bien.valorComercial.toString(),
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -220,15 +268,14 @@ class _DerechoActualizarGarantiaFormState
                   onChange: (value) {
                     final newValue = toNumericString(value);
                     valorComercial = double.tryParse(newValue);
-                    cubit.onFieldChanged(
-                      () =>
-                          cubit.state.copyWith(valorComercial: valorComercial),
-                    );
                   },
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Valor de avaluo',
+                  initialValue: bien.valorAvaluo == 0
+                      ? null
+                      : bien.valorAvaluo.toString(),
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -241,24 +288,24 @@ class _DerechoActualizarGarantiaFormState
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
                     valorAvaluo = double.tryParse(newValue);
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(valorAvaluo: valorAvaluo),
-                    );
                   },
                 ),
                 const Gap(20),
                 EvaluadoresCnbsDropdownWidget(
+                  selectedItem: bien.evaluadorId == 0
+                      ? null
+                      : Item(
+                          name: bien.evaluadorNombre,
+                          value: bien.evaluadorId.toString(),
+                        ),
                   onChanged: (value) {
                     evaluadorCodigo = value?.value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                          objValuadorID: int.tryParse(evaluadorCodigo ?? '0')),
-                    );
                   },
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Observaciones',
+                  initialValue: bien.observaciones,
                   icon: Icon(
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
@@ -268,10 +315,7 @@ class _DerechoActualizarGarantiaFormState
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    descripcion = value;
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(observaciones: descripcion),
-                    );
+                    observaciones = value;
                   },
                 ),
                 const Gap(20),
@@ -284,11 +328,11 @@ class _DerechoActualizarGarantiaFormState
                     color: AppColors.greenLatern.withOpacity(0.4),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      // TODO: wire this up to the update endpoint for
-                      // garantia bien once it exists on AnalisisRepositoryHn.
-                      // The edited values are already accumulated in
-                      // AnalisisCreateGarantiaBienCubit's state, and the
-                      // familia for this form is 'DERECHO'.
+                      // TODO: wire this up to the update endpoint for garantia
+                      // bien once it exists on AnalisisRepositoryHn. The edited
+                      // values live in this state's fields, the bien being
+                      // edited is widget.bien.bienId and the familia for this
+                      // form is 'DERECHO'.
                     },
                   ),
                 ),

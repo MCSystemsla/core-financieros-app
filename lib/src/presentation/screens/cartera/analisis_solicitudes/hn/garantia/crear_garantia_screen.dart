@@ -156,6 +156,7 @@ class _ListItems extends StatelessWidget {
           cedulaCliente: e.cedulaDeudor ?? '',
           tipoPersonaCodigo: e.tipoPersonaCodigo!,
           tipoPersonaCodigoDeudor: e.tipoPersonaCodigoDeudor,
+          bienCodigo: e.bienCodigo!,
         ),
       ),
     );

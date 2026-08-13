@@ -586,7 +586,7 @@ class GarantiaObtenerBienByCodigo extends Endpoint {
 
   GarantiaObtenerBienByCodigo({required this.bienCodigo});
   @override
-  Method get method => Method.post;
+  Method get method => Method.get;
 
   @override
   String get path => '/cartera/analisis-garantias/obtener-bien-by-codigo';

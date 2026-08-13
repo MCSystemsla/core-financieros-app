@@ -1,6 +1,4 @@
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_create_asignacion_garantia_dpf/analisis_create_asignacion_garantia_dpf_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_create_garantia_bien/analisis_create_garantia_bien_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_dpfs/analisis_dpfs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/evaluadores_cnbs/evaluadores_cnbs_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/v2/actualizar/hipotecario/actualizar_detalle_bien_hipotecario.dart';
@@ -11,6 +9,8 @@ import 'package:core_financiero_app/src/utils/extensions/tipo_garantia/tipo_gara
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
+
 class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
   final TipoGarantiaEnumV2 tipoGarantia;
   final int objAnalisisGarantiaId;
@@ -19,6 +19,7 @@ class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
   final String tipoPersonaCodigo;
   final String cedulaCliente;
   final String? tipoPersonaCodigoDeudor;
+  final String bienCodigo;
   const V2ActualizarGarantiaDetalleScreen({
     super.key,
     required this.tipoGarantia,
@@ -27,6 +28,7 @@ class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
     required this.articuloCodigo,
     required this.tipoPersonaCodigo,
     required this.cedulaCliente,
+    required this.bienCodigo,
     this.tipoPersonaCodigoDeudor,
   });
 
@@ -41,14 +43,9 @@ class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
           )..getEvaluadoresGarantia(),
         ),
         BlocProvider(
-          create: (ctx) => AnalisisCreateGarantiaBienCubit(
+          create: (ctx) => AnalisisObtenerBienByCodigoCubit(
             repository,
-          ),
-        ),
-        BlocProvider(
-          create: (ctx) => AnalisisCreateAsignacionGarantiaDpfCubit(
-            repository,
-          ),
+          )..obtenerBienByCodigo(bienCodigo: bienCodigo),
         ),
         BlocProvider(
           create: (ctx) => AnalisisDpfsCubit(
