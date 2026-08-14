@@ -160,6 +160,11 @@ abstract class AnalisisRepositoryHn {
   Future<AnalisisGarantiaObtenerDetalleDpf> obtenerGarantiaDetalleDPF({
     required int objAnalisisGarantiaID,
   });
+  Future<void> actualizarGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+    required double monto,
+    required String observaciones,
+  });
 }
 
 class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
@@ -1011,6 +1016,30 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       }
       final data = AnalisisGarantiaObtenerDetalleDpf.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> actualizarGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+    required double monto,
+    required String observaciones,
+  }) async {
+    final endpoint = GarantiaActualizarDetalleDPF(
+      objAnalisisGarantiaID: objAnalisisGarantiaID,
+      monto: monto,
+      observaciones: observaciones,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;

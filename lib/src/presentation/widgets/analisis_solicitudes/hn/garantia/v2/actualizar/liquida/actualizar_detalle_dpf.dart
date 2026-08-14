@@ -1,19 +1,25 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia_obtener_detalle/analisis_garantia_obtener_detalle_dpf_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
-import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
+import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../../bloc/analisis/hn/analisis_garantia_actualizar_dpf/analisis_garantia_actualizar_dpf_cubit.dart';
 
 class ActualizarDetalleDPF extends StatelessWidget {
   final int objAnalisisGarantiaId;
@@ -74,16 +80,15 @@ class _DpfFormState extends State<_DpfForm> {
   final formKey = GlobalKey<FormState>();
 
   int? objCuentaDpfId;
-  double? valorComercial;
+  double? monto;
   String? observaciones;
-  String? tipoValoracionCodigo;
 
   @override
   void initState() {
     super.initState();
     final detalle = widget.detalle;
     objCuentaDpfId = detalle.dpfId == 0 ? null : detalle.dpfId;
-    valorComercial = detalle.valorComercial.toDouble();
+    monto = detalle.valorComercial.toDouble();
     observaciones = detalle.observaciones;
   }
 
@@ -140,20 +145,8 @@ class _DpfFormState extends State<_DpfForm> {
                   ),
                 ),
                 const Gap(20),
-                SearchDropdownWidget(
-                  codigo: CatalogoType.tipoValoracionGarantia.codigo,
-                  title: 'Tipo Valoración de Garantia',
-                  hintText: 'Selecciona un tipo de valoración de garantia',
-                  validator: (value) =>
-                      ClassValidator.validateRequired(value?.value),
-                  onChanged: (v) {
-                    if (v == null) return;
-                    tipoValoracionCodigo = v.value;
-                  },
-                ),
-                const Gap(20),
                 OutlineTextfieldWidget(
-                  title: 'Valor Comercial',
+                  title: 'Monto',
                   initialValue: detalle.valorComercial.toCurrencyString(),
                   icon: Icon(
                     Icons.wallet,
@@ -166,7 +159,7 @@ class _DpfFormState extends State<_DpfForm> {
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
-                    valorComercial = double.tryParse(newValue) ?? 0;
+                    monto = double.tryParse(newValue) ?? 0;
                   },
                 ),
                 const Gap(20),
@@ -182,25 +175,72 @@ class _DpfFormState extends State<_DpfForm> {
                     UpperCaseTextFormatter(),
                   ],
                   onChange: (value) {
-                    observaciones = value ?? '';
+                    observaciones = value;
                   },
                 ),
                 const Gap(20),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Actualizar',
-                    // ignore: deprecated_member_use
-                    color: AppColors.greenLatern.withOpacity(0.4),
-                    onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
-                      // TODO: wire this up to the update endpoint for the DPF
-                      // asignacion once it exists on AnalisisRepositoryHn.
-                      // The edited values live in objCuentaDpfId, montoInicial,
-                      // valorComercial, comentario and observaciones.
-                    },
-                  ),
+                BlocConsumer<AnalisisGarantiaActualizarDpfCubit,
+                    AnalisisGarantiaActualizarDpfState>(
+                  listenWhen: (prev, curr) => prev.status != curr.status,
+                  listener: (ctx, state) {
+                    if (state.status == Status.inProgress) {
+                      context.showLoading(
+                          message: 'Actualizando Detalle garantia');
+                    }
+                    if (state.status == Status.done) {
+                      context.hideLoading();
+                      formKey.currentState?.reset();
+                      showV2CustomSnackbar(
+                        context,
+                        title: 'Garantia actualizada exitosamente',
+                        type: SnackbarType.success,
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AnalisisInterceptorByFlavor(),
+                        ),
+                      );
+                    }
+                    if (state.status == Status.error) {
+                      context.hideLoading();
+                      CustomAlertDialog(
+                        context: context,
+                        title: state.errorMsg,
+                        onDone: () => {
+                          context.pop(),
+                        },
+                      ).showDialog(
+                        context,
+                        dialogType: DialogType.warning,
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      width: double.infinity,
+                      child: CustomElevatedButton(
+                        enabled: state.status != Status.inProgress,
+                        text: state.status == Status.inProgress
+                            ? 'Actualizando...'
+                            : 'Actualizar',
+                        // ignore: deprecated_member_use
+                        color: AppColors.greenLatern.withOpacity(0.4),
+                        onPressed: () {
+                          if (!formKey.currentState!.validate()) return;
+                          context
+                              .read<AnalisisGarantiaActualizarDpfCubit>()
+                              .actualizarGarantiaDetalleDPF(
+                                objAnalisisGarantiaID:
+                                    widget.objAnalisisGarantiaId,
+                                monto: monto!,
+                                observaciones: observaciones!,
+                              );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 const Gap(20),
               ],
