@@ -25,7 +25,7 @@ class AnalisisCreateAsignacionGarantiaDpfCubit
           objAnalisisGarantiaId: objAnalisisGarantiaId,
           objCuentaDpfid: state.objCuentaDpfid,
           valorComercial: state.valorComercial,
-          montoInicial: state.montoInicial,
+          montoInicial: state.valorComercial,
           porcentajeCobertura: state.porcentajeCobertura,
           observaciones: state.observaciones,
           garantiaDpfDetalle: GarantiaDpfDetalle(
