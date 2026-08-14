@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisi
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_obtener_bien_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_obtener_detalle_dpf.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/bien_garantia_created_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
@@ -155,6 +156,9 @@ abstract class AnalisisRepositoryHn {
   });
   Future<void> actualizarGarantia({
     required AnalisisActualizarGarantia data,
+  });
+  Future<AnalisisGarantiaObtenerDetalleDpf> obtenerGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
   });
 }
 
@@ -985,6 +989,28 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaObtenerDetalleDpf> obtenerGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+  }) async {
+    final endpoint = GarantiaObtenerDetalleDPFEndpointHN(
+      objAnalisisGarantiaID: objAnalisisGarantiaID,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = AnalisisGarantiaObtenerDetalleDpf.fromJson(resp);
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

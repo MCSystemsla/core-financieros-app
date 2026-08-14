@@ -638,3 +638,23 @@ class GarantiaActualizarEndpointHN extends Endpoint {
   @override
   Map<String, dynamic> get body => data.toJson();
 }
+
+class GarantiaObtenerDetalleDPFEndpointHN extends Endpoint {
+  final int objAnalisisGarantiaID;
+
+  GarantiaObtenerDetalleDPFEndpointHN({required this.objAnalisisGarantiaID});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-garantias/obtener-detalle-dpf-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'objAnalisisGarantiaID': objAnalisisGarantiaID.toString(),
+      };
+}

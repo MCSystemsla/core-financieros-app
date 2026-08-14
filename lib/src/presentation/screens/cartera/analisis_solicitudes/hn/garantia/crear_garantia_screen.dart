@@ -12,7 +12,7 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/garantia/garantia_options_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_articulo/tipo_articulo_extension.dart';
@@ -84,12 +84,12 @@ class CrearGarantiaScreen extends StatelessWidget {
         child: BlocBuilder<AnalisisGarantiaCubit, AnalisisGarantiaState>(
           builder: (context, state) {
             return switch (state.status) {
-              Status.inProgress => const LoadingWidget(),
+              Status.inProgress => const ModernLoadingWidget(),
               Status.error => Text('Error: //${state.errorMsg}'),
               Status.done => _ListItems(
                   analisisGarantia: state.analisisGarantia,
                 ),
-              _ => const SizedBox(),
+              _ => const SizedBox.shrink(),
             };
           },
         ),
@@ -162,13 +162,15 @@ class _ListItems extends StatelessWidget {
             itemBuilder: (context, index) {
               final e = analisisGarantia[index];
               return AnalisisCardVentasDay(
-                color: e.bienCodigo == null ? Colors.indigo.shade600 : null,
+                color: (e.bienCodigo == null) && (!e.tieneGarantiaDPF)
+                    ? Colors.indigo.shade600
+                    : null,
                 subtitle: e.articuloTipo ?? '',
                 title: e.tipoPersonaCodigo ?? '',
-                description: e.bienCodigo == null
+                description: (e.bienCodigo == null) && (!e.tieneGarantiaDPF)
                     ? 'Pendiente: toca para asignar un bien'
                     : 'Bien asignado: toca para ver opciones',
-                onTap: () => e.bienCodigo != null
+                onTap: () => (e.bienCodigo != null) || e.tieneGarantiaDPF
                     ? showGarantiaOptionsSheet(
                         context,
                         onActualizar: () =>
@@ -214,7 +216,7 @@ class _ListItems extends StatelessWidget {
           cedulaCliente: e.cedulaDeudor ?? '',
           tipoPersonaCodigo: e.tipoPersonaCodigo!,
           tipoPersonaCodigoDeudor: e.tipoPersonaCodigoDeudor,
-          bienCodigo: e.bienCodigo!,
+          bienCodigo: e.bienCodigo ?? '',
         ),
       ),
     );

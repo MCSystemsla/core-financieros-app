@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../bloc/analisis/hn/analisis_garantia_actualizar/analisis_garantia_actualizar_cubit.dart';
+import '../../../../../bloc/analisis/hn/analisis_garantia_obtener_detalle/analisis_garantia_obtener_detalle_dpf_cubit.dart';
 import '../../../../../bloc/analisis/hn/analisis_obtener_bien_by_codigo/analisis_obtener_bien_by_codigo_cubit.dart';
 
 class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
@@ -42,6 +43,13 @@ class V2ActualizarGarantiaDetalleScreen extends StatelessWidget {
           create: (ctx) => AnalisisGarantiaActualizarCubit(
             repository,
           ),
+        ),
+        BlocProvider(
+          create: (ctx) => AnalisisGarantiaObtenerDetalleDpfCubit(
+            repository,
+          )..obtenerGarantiaDetalleDPF(
+              objAnalisisGarantiaID: objAnalisisGarantiaId,
+            ),
         ),
         BlocProvider(
           create: (ctx) => EvaluadoresCnbsCubit(
