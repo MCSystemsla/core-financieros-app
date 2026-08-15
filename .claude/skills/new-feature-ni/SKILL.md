@@ -1,13 +1,15 @@
 ---
-name: new-feature-hn
-description: Scaffold a new Honduras-only feature (endpoint + repository + cubit/state) following this repo's existing `hn/` pattern. Use when the user asks to add an API-backed feature, screen action, or cubit that only ships in the Honduras flavor (`micreditoHonduras`, `lib/main_hn.dart`).
+name: new-feature-ni
+description: Scaffold a new Nicaragua-only feature (endpoint + repository + cubit/state) following this repo's existing `ni/` pattern. Use when the user asks to add an API-backed feature, screen action, or cubit that only ships in the Nicaragua flavor (`micreditoNicaragua`, `lib/main.dart`) — note Costa Rica reuses `ni/` code too, so this also reaches Costa Rica unless guarded.
 ---
 
-# new-feature-hn
+# new-feature-ni
 
-Scaffold a Honduras-only feature across the three layers this codebase always uses together: `Endpoint` → `Repository` → `Cubit/State`. Everything generated lives under an `hn/` folder; no `ni` variant is created and Nicaragua/Costa Rica are left untouched.
+Scaffold a Nicaragua-only feature across the three layers this codebase always uses together: `Endpoint` → `Repository` → `Cubit/State`. Everything generated lives under a `ni/` folder; no `hn` variant is created and Honduras is left untouched.
 
-If the feature also needs Nicaragua/Costa Rica, use the `new-feature-hn-ni` skill instead — do not silently generate a `ni` copy from this one.
+**Costa Rica currently reuses `ni/` implementations** (per CLAUDE.md). A `ni/` feature is reachable from both Nicaragua and Costa Rica builds unless explicitly guarded to `Flavor.nicaragua` only — confirm with user in step 1 if this matters for the feature.
+
+If the feature also needs Honduras, use the `new-feature-hn` skill instead — do not silently generate an `hn` copy from this one.
 
 ## 1. Gather inputs
 
@@ -19,10 +21,10 @@ Before asking, drop any of the four the user already answered in their request; 
 
 | # | Question | Options to offer |
 |---|---|---|
-| 1 | **Domain group** under `lib/src/domain/repository/` | the real folders that already have an `hn/` subfolder (`solicitudes_credito`, `comite`, `analisis`, `supervisiones`, …), plus "Otro" for a new group |
+| 1 | **Domain group** under `lib/src/domain/repository/` | the real folders that already have a `ni/` subfolder (`solicitudes_credito`, `comite`, `analisis`, `supervisiones`, …), plus "Otro" for a new group |
 | 2 | **HTTP method** | `GET`, `POST`, `PUT`, `PATCH`/`DELETE` |
 | 3 | **Feature name** (PascalCase, e.g. `RenovarPromesaPago`) | placeholder only — label `Escribir nombre en Otro`. Never suggest a name. |
-| 4 | **Full hn path** | placeholder only — label `Escribir ruta completa en Otro`; a second option may show the module prefix *shape* seen in siblings (`/cartera/...`, `/ahorro/...`, `/pla/...`) as a format hint. Never a full guessed path. |
+| 4 | **Full ni path** | placeholder only — label `Escribir ruta completa en Otro`; a second option may show the module prefix *shape* seen in siblings (`/cartera/...`, `/ahorro/...`, `/pla/...`) as a format hint. Never a full guessed path. |
 
 Feature name and path are new values only the user knows: do not scan siblings for candidates, do not invent plausible ones. After the answer, grep the repo for the path — if it already exists, say so and re-ask just that one.
 
@@ -43,16 +45,16 @@ Report every inference in the final message (step 6) so the user can correct it 
 ## 2. Endpoint layer
 
 Add one class per call to:
-- `lib/src/domain/repository/<group>/hn/endpoint/<group>_hn_endpoint.dart`
+- `lib/src/domain/repository/<group>/ni/endpoint/<group>_ni_endpoint.dart`
 
 Pattern (copy exactly, only the body/queryParameters/path/method/generics change) — **GET** uses `queryParameters`, never `body`:
 
 ```dart
-class <FeatureName>HNEndpoint extends Endpoint {
+class <FeatureName>NIEndpoint extends Endpoint {
   final String algunFiltro; // one field per queryParameter gathered from the user
   final int? otroFiltro;
 
-  <FeatureName>HNEndpoint({required this.algunFiltro, this.otroFiltro});
+  <FeatureName>NIEndpoint({required this.algunFiltro, this.otroFiltro});
 
   @override
   Method get method => Method.get;
@@ -77,10 +79,10 @@ class <FeatureName>HNEndpoint extends Endpoint {
 **POST/PUT/PATCH/DELETE** use `body` instead:
 
 ```dart
-class <FeatureName>HNEndpoint extends Endpoint {
+class <FeatureName>NIEndpoint extends Endpoint {
   final Map<String, dynamic> data; // default: raw map, NOT an existing request model
 
-  <FeatureName>HNEndpoint({required this.data});
+  <FeatureName>NIEndpoint({required this.data});
 
   @override
   Method get method => Method.post; // post/put/patch/delete
@@ -107,16 +109,16 @@ Rules learned from existing code:
 - Every authenticated endpoint sets `Authorization` header from `LocalStorage().jwt`.
 - Almost every GET/POST body or query includes `'database': LocalStorage().database` (multi-tenant db selector) — check a sibling endpoint in the same group before omitting it.
 - `TypeBody.formData` + `files` list only for file/image uploads; otherwise leave `typeBody` at its `raw` default.
-- Keep the `HN` infix in the class name even though nothing else is generated — it matches every existing Honduras endpoint and keeps imports unambiguous.
+- Keep the `NI` infix in the class name even though nothing else is generated — it matches every existing Nicaragua endpoint and keeps imports unambiguous.
 
 ## 3. Repository layer
 
-Add the method signature to the existing `abstract class <Group>HnRepository` (or create the interface + `Impl` if the group is new, matching `lib/src/domain/repository/solicitudes_credito/hn/solicitudes_credito_hn_repository.dart` as the template) and implement it in `<...>Impl`:
+Add the method signature to the existing `abstract class <Group>NiRepository` (or create the interface + `Impl` if the group is new, matching `lib/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_ni_repository.dart` as the template) and implement it in `<...>Impl`:
 
 ```dart
 @override
 Future<ReturnType> <methodName>({required Args args}) async {
-  final endpoint = <FeatureName>HNEndpoint(data: args);
+  final endpoint = <FeatureName>NIEndpoint(data: args);
   try {
     final resp = await _api.request(endpoint: endpoint);
     if (resp['statusCode'] != <expectedCode>) {
@@ -139,12 +141,12 @@ Future<ReturnType> <methodName>({required Args args}) async {
 
 Success status code conventions seen in this repo: `200` for GET/most PATCH, `201` for POST creates. Apply the convention directly — do not ask; report the chosen code in the final message so the user can correct it.
 
-Do not touch the sibling `ni/` repository, and do not add the new method to a shared/base interface that `ni` also implements — that would break the Nicaragua build.
+Do not touch the sibling `hn/` repository, and do not add the new method to a shared/base interface that `hn` also implements — that would break the Honduras build.
 
 ## 4. Cubit/State layer (skip if the user said no cubit needed)
 
 Directory convention:
-- `lib/src/presentation/bloc/<parent-feature>/hn/<feature_snake>/`
+- `lib/src/presentation/bloc/<parent-feature>/ni/<feature_snake>/`
 
 Two files, `<feature_snake>_cubit.dart` and `<feature_snake>_state.dart`, always paired with `part`/`part of`:
 
@@ -158,7 +160,7 @@ import 'package:equatable/equatable.dart';
 part '<feature_snake>_state.dart';
 
 class <FeatureName>Cubit extends Cubit<<FeatureName>State> {
-  final <Group>HnRepository _repository;
+  final <Group>NiRepository _repository;
   <FeatureName>Cubit(this._repository) : super(<FeatureName>Initial());
 
   Future<void> <action>() async {
@@ -211,23 +213,31 @@ final class <FeatureName>Initial extends <FeatureName>State {}
 
 `Status` (`notStarted, inProgress, done, error`) is defined once in `lib/src/presentation/bloc/auth/branch_team/branchteam_state.dart` — import and reuse it, never redefine a local status enum.
 
-## 5. Wiring (Honduras-only)
+## 5. Wiring (Nicaragua + Costa Rica)
 
-Because this feature exists only for Honduras, it must never be reachable from the Nicaragua/Costa Rica builds:
+Because `ni/` code is shared by both Nicaragua and Costa Rica, a `ni/`-only feature is reachable from both unless guarded further:
 
-- Prefer providing the cubit locally at the Honduras screen that uses it (`BlocProvider` in that screen's build), not globally. Only register it in the `MultiBlocProvider` in `lib/app.dart` if truly app-wide — that provider tree is shared by all flavors, so a global registration also constructs the repository on NI/CR.
-- Guard any UI entry point with the flavor switch from `lib/src/presentation/widgets/solicitudes/solicitudes_by_flavor_interceptor.dart`:
+- Prefer providing the cubit locally at the screen that uses it (`BlocProvider` in that screen's build), not globally. Only register it in the `MultiBlocProvider` in `lib/app.dart` if truly app-wide — that provider tree is shared by all flavors, so a global registration also constructs the repository on HN.
+- The standard flavor switch (`SolicitudesByFlavorInterceptor` pattern) treats `ni` as the `_` default branch, so a plain switch already covers both Nicaragua and Costa Rica:
   ```dart
   switch (global<FlavorCubit>().state.flavor) {
-    Flavor.honduras => HnWidget(),
-    _ => const SizedBox.shrink(), // or the existing NI widget, if one exists
+    Flavor.honduras => const SizedBox.shrink(), // or the existing HN widget, if one exists
+    _ => NiWidget(), // reached by both Flavor.nicaragua and Flavor.costaRica
   }
   ```
-- If a `go_router` route is added in `lib/src/config/router/router.dart`, keep the route registered but make the screen itself flavor-guarded (or redirect non-HN flavors away) — the route table is shared across flavors.
+- If the feature must be Nicaragua-only and NOT reach Costa Rica, guard explicitly instead of relying on the default branch:
+  ```dart
+  switch (global<FlavorCubit>().state.flavor) {
+    Flavor.nicaragua => NiWidget(),
+    _ => const SizedBox.shrink(),
+  }
+  ```
+  Confirm with the user which of these two shapes they want before wiring — the default-branch shape silently includes Costa Rica, which is easy to miss.
+- If a `go_router` route is added in `lib/src/config/router/router.dart`, keep the route registered but make the screen itself flavor-guarded (or redirect the excluded flavor away) — the route table is shared across flavors.
 
 ## 6. After generating
 
 - Run `flutter analyze` and fix anything flagged.
 - If a new datasource model with `fromJson`/`toJson` was added, no code generation is needed unless it's an Isar/ObjectBox entity (`@Entity`/`@collection`) — in that case run `dart run tool/build_script.dart` (or just `flutter pub run build_runner build`) before considering the task done.
-- Tell the user which files were created/edited, and state explicitly that only the Honduras variant was generated and where the flavor guard was placed.
+- Tell the user which files were created/edited, and state explicitly whether the feature reaches Costa Rica too (default `ni/` reuse) or was guarded to Nicaragua only.
 - List every value that was **inferred** instead of asked (status code, cubit yes/no, request fields, response model) in one short block, so a wrong inference is a one-line correction rather than a re-run.
