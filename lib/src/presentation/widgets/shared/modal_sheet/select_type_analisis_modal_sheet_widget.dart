@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/grupal/supervision_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -46,6 +47,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
   final String monto;
   final String tipoSolicitudString;
   final bool esGrupal;
+  final int? cicloGrupoId;
 
   const SelectTypeAnalisisModalSheetWidget({
     super.key,
@@ -62,6 +64,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
     required this.monto,
     required this.tipoSolicitudString,
     required this.esGrupal,
+    this.cicloGrupoId,
   });
 
   @override
@@ -319,32 +322,54 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         ),
                       },
                     ),
-                    SelectableCardItem(
-                      userHaveDataAlready: state.tieneSupervision,
-                      isLoading: state.status == Status.inProgress,
-                      icon: Icons.verified_user_sharp,
-                      color: Colors.deepPurple,
-                      title: 'Tiene Supervision',
-                      subtitle: 'El analisis tiene supervision realizada?',
-                      onTap: () {
-                        if (state.tieneSupervision) {
-                          CustomAlertDialog(
-                            context: context,
-                            title: 'El analisis ya tiene supervision',
-                            onDone: () => context.pop(),
-                          ).showDialog(context,
-                              dialogType: DialogType.infoReverse);
-                          return;
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const SelectTipoSupervisionHnScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    if (!esGrupal) ...[
+                      SelectableCardItem(
+                        userHaveDataAlready: state.tieneSupervision,
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.verified_user_sharp,
+                        color: Colors.deepPurple,
+                        title: 'Tiene Supervision',
+                        subtitle: 'El analisis tiene supervision realizada?',
+                        onTap: () {
+                          if (state.tieneSupervision) {
+                            CustomAlertDialog(
+                              context: context,
+                              title: 'El analisis ya tiene supervision',
+                              onDone: () => context.pop(),
+                            ).showDialog(context,
+                                dialogType: DialogType.infoReverse);
+                            return;
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const SelectTipoSupervisionHnScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                    if (esGrupal && state.tieneAnalisis) ...[
+                      SelectableCardItem(
+                        userHaveDataAlready: state.tieneSupervision,
+                        isLoading: state.status == Status.inProgress,
+                        icon: Icons.verified_user_sharp,
+                        color: Colors.deepPurple,
+                        title: 'Supervision Grupal',
+                        subtitle: 'El analisis tiene supervision grupal?',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => SupervisionGrupalHnScreen(
+                                cicloGrupoId: cicloGrupoId!,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     if (actions
                         .contains(TypeAction.rechazarSolicitud.codigo)) ...[
                       BlocConsumer<RechazarSolicitudHnCubit,
