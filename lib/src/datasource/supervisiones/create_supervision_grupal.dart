@@ -23,16 +23,21 @@ class CreateSupervisionGrupal {
     required this.monto,
   });
 
-  Map<String, dynamic> toJson() => {
-        'database': LocalStorage().database,
-        'CicloGrupoID': cicloGrupoID,
-        'LugarReunionGrupo': lugarReunionGrupo,
-        'TelefonoCasa': telefonoCasa,
-        'TelefonoCelular': telefonoCelular,
-        'ReferenciasBuroCredito': referenciasBuroCredito,
-        'AnalisisVoluntadPago': analisisVoluntadPago,
-        'VerificacionActivosFijos': verificacionActivosFijos,
-        'OtrasObservaciones': otrasObservaciones,
-        'Monto': monto,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'database': LocalStorage().database,
+      'CicloGrupoID': cicloGrupoID,
+      'LugarReunionGrupo': lugarReunionGrupo,
+      'TelefonoCasa': telefonoCasa,
+      'TelefonoCelular': telefonoCelular,
+      'ReferenciasBuroCredito': referenciasBuroCredito,
+      'AnalisisVoluntadPago': analisisVoluntadPago,
+      'VerificacionActivosFijos': verificacionActivosFijos,
+      'OtrasObservaciones': otrasObservaciones,
+      'Monto': monto,
+    };
+    data.removeWhere(
+        (key, value) => value == null || value == '' || value == 0);
+    return data;
+  }
 }

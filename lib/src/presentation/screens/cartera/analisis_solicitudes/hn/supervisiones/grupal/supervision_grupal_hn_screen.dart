@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/supervisiones_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -64,7 +65,15 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
               CustomAlertDialog(
                 context: context,
                 title: 'Supervisión creada exitosamente',
-                onDone: () => context.pop(),
+                onDone: () {
+                  context.pop();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AnalisisInterceptorByFlavor(),
+                    ),
+                  );
+                },
               ).showDialog(context, dialogType: DialogType.success);
             }
           },
@@ -93,6 +102,24 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Gap(4),
+                      const Text(
+                        'Datos de la supervisión grupal',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Gap(4),
+                      const Text(
+                        'Completa la información del grupo supervisado',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const Gap(12),
+                      const Divider(height: 1),
                       const Gap(10),
                       OutlineTextfieldWidget(
                         title: 'Lugar de reunión del grupo',
@@ -113,6 +140,8 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
                         title: 'Teléfono de casa',
                         icon: const Icon(Icons.phone),
                         textInputType: TextInputType.phone,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
@@ -143,6 +172,8 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
                         inputFormatters: [
                           UpperCaseTextFormatter(),
                         ],
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
                         onChange: (value) {
                           cubit.onFieldChanged(
                             () => state.copyWith(referenciasBuroCredito: value),
@@ -187,8 +218,8 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
                       ),
                       const Gap(10),
                       OutlineTextfieldWidget(
-                        title: 'Monto',
-                        icon: const Icon(Icons.attach_money),
+                        title: 'Monto de Propuesta',
+                        icon: const Icon(Icons.wallet),
                         textInputType: TextInputType.number,
                         inputFormatters: [
                           CurrencyInputFormatter(),
