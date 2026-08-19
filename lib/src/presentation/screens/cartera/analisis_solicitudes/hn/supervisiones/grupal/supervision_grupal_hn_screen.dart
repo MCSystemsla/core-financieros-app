@@ -98,6 +98,7 @@ class _SupervisionGrupalHnForm extends StatelessWidget {
                   ],
                 ),
                 child: Form(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
