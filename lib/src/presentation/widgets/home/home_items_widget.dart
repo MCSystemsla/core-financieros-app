@@ -5,7 +5,6 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/home/home_item_card.dart';
-import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
@@ -34,12 +33,14 @@ class HomeItemsWidget extends StatelessWidget {
       HomeItemCard(
         visible: actions.contains(TypeAction.menuCartera.codigo),
         title: 'home.item5'.tr(),
-        subtitle: 'Descripcion',
+        subtitle: 'Solicitudes, análisis y comité',
         icon: const Icon(
-          Icons.wallet_rounded,
+          Icons.account_balance_wallet_outlined,
           color: AppColors.white,
+          size: 22,
         ),
-        color: AppColors.primaryColorWithOpacity(),
+        color: const Color(0xff3FB6A8),
+        gradientColor: const Color(0xff2E9C93),
         onTap: () => context.pushWithSyncCheck(
           connectionStatus: connection.connectionStatus,
           destination: const CarteraScreen(),
@@ -50,12 +51,14 @@ class HomeItemsWidget extends StatelessWidget {
             flavor == Flavor.honduras &&
             actions.contains(TypeAction.moduloOtp.codigo)),
         title: 'OTP',
-        subtitle: 'Descripcion',
+        subtitle: 'Validación del cliente',
         icon: const Icon(
-          Icons.phone_android,
+          Icons.phone_iphone_rounded,
           color: AppColors.white,
+          size: 22,
         ),
-        color: Colors.deepPurple,
+        color: const Color(0xff7A3FD4),
+        gradientColor: const Color(0xff6A2FC4),
         onTap: () => context.pushWithSyncCheck(
           connectionStatus: connection.connectionStatus,
           destination: const OtpScreen(),
@@ -65,12 +68,14 @@ class HomeItemsWidget extends StatelessWidget {
         visible: (connection.connectionStatus == ConnectionStatus.connected &&
             (flavor == Flavor.nicaragua || flavor == Flavor.costaRica)),
         title: 'Tutoriales',
-        subtitle: 'Descripcion',
+        subtitle: 'Guías de uso de la app',
         icon: const Icon(
-          Icons.assignment,
+          Icons.play_circle_outline_rounded,
           color: AppColors.white,
+          size: 22,
         ),
-        color: AppColors.blueIndigo,
+        color: const Color(0xff4C5DD1),
+        gradientColor: const Color(0xff3B49B0),
         onTap: () {
           Navigator.push(
             context,
@@ -95,14 +100,29 @@ class HomeItemsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _GreetingsWidget(),
-          Container(
-            margin: const EdgeInsets.all(5),
+          const Padding(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 12),
+            child: Text(
+              'MÓDULOS',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.4,
+                color: Color(0xff8A7F72),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GridView.builder(
-              padding: const EdgeInsets.all(2),
+              padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
+                crossAxisSpacing: 14,
+                mainAxisSpacing: 14,
+                childAspectRatio: 0.86,
               ),
               itemCount: visibleItems.length,
               itemBuilder: (BuildContext context, int index) => _ItemWidget(
@@ -110,6 +130,7 @@ class HomeItemsWidget extends StatelessWidget {
               ),
             ),
           ),
+          const Gap(16),
         ],
       ),
     );
@@ -190,39 +211,44 @@ class _ItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => homeItemCard.onTap(),
-      child: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            height: 150,
-            width: 136,
-            margin: const EdgeInsets.all(10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: const Image(
-                fit: BoxFit.cover,
-                image: AssetImage(ImageAsset.homeItemBg),
-              ),
-            ),
+    final baseColor = homeItemCard.color;
+    final endColor = homeItemCard.gradientColor ??
+        Color.lerp(baseColor, Colors.black, 0.18)!;
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(22),
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [baseColor, endColor],
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: homeItemCard.color,
+          boxShadow: [
+            BoxShadow(
+              color: baseColor.withOpacity(0.32),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
-            height: 150,
-            width: 136,
-            margin: const EdgeInsets.all(10),
+          ],
+        ),
+        child: InkWell(
+          onTap: () => homeItemCard.onTap(),
+          borderRadius: BorderRadius.circular(22),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white.withOpacity(0.14),
+                Container(
+                  height: 42,
+                  width: 42,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.18),
+                    borderRadius: BorderRadius.circular(13),
+                  ),
                   child: Badge(
                     isLabelVisible: false,
                     smallSize: 11,
@@ -230,28 +256,34 @@ class _ItemWidget extends StatelessWidget {
                     child: homeItemCard.icon,
                   ),
                 ),
+                const Spacer(),
                 Text(
                   homeItemCard.title,
-                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800,
                     color: Colors.white,
+                    height: 1.1,
                   ),
                 ),
+                const Gap(4),
                 Text(
                   homeItemCard.subtitle,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12.5,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(0.85),
+                    height: 1.25,
                   ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
