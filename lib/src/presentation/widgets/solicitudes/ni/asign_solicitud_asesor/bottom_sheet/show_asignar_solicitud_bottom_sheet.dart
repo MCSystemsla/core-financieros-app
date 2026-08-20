@@ -121,7 +121,7 @@ void showAsignarSolicitudBottomSheet(
                                   Icons.keyboard_arrow_down_rounded,
                                   size: 12,
                                 ),
-                                value: asesorSeleccionado,
+                                initialValue: asesorSeleccionado,
                                 validator: (value) =>
                                     ClassValidator.validateRequired(
                                   value?.nombre,

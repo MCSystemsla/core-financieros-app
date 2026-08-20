@@ -21,18 +21,20 @@ class CameraService {
   }) async {
     final photo = await controller.takePicture();
     final bytes = await photo.readAsBytes();
-    img.Image? originalImage = img.decodeImage(bytes);
+    img.Image? originalImage = img.decodeJpg(bytes) ?? img.decodeImage(bytes);
 
     if (originalImage != null) {
       img.Image fixedImage = img.bakeOrientation(originalImage);
 
       if (orientation == CameraDeviceOrientation.portrait &&
-          (fixedImage.width > fixedImage.height)) {
+          fixedImage.width > fixedImage.height) {
         fixedImage = img.copyRotate(fixedImage, angle: 90);
       }
 
       await File(photo.path)
           .writeAsBytes(img.encodeJpg(fixedImage, quality: 90));
+    } else {
+      log('No se pudo decodificar la imagen para corregir orientacion: ${photo.path}');
     }
     final appDir = await getApplicationDocumentsDirectory();
     final customDir = Directory('${appDir.path}/KivaImages');

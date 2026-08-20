@@ -28,7 +28,7 @@ class OutlineTextfieldWidget extends StatelessWidget {
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final EdgeInsetsGeometry padding;
-  final Icon? suffixIcon;
+  final Widget? suffixIcon;
   final TextAlign textAlign;
   const OutlineTextfieldWidget({
     super.key,

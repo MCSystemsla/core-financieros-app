@@ -7,6 +7,8 @@ import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_r
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_articulo/analisis_articulo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_garantia/analisis_garantia_cubit.dart';
 
+import '../../../../../bloc/analisis/hn/analisis_anular_garantia/analisis_anular_garantia_cubit.dart';
+
 class GarantiaHNScreen extends StatelessWidget {
   final int numeroSolicitud;
   final String solicitudCodigo;
@@ -34,6 +36,9 @@ class GarantiaHNScreen extends StatelessWidget {
         ),
         BlocProvider(
           create: (ctx) => FiadoresGarantiaCubit(repository),
+        ),
+        BlocProvider(
+          create: (ctx) => AnalisisAnularGarantiaCubit(repository),
         ),
       ],
       child: Scaffold(

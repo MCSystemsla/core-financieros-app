@@ -24,6 +24,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
 
   Future<void> createSolicitudNuevaMenor() async {
     emit(state.copyWith(status: Status.inProgress));
+    final isGrupal = state.esGrupal == 'input.yes'.tr();
     try {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudNuevaMenor(
@@ -31,8 +32,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           esRecurrente: state.esRecurrente,
           aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
           ingresoMensualConyuge: state.ingresoMensualConyuge,
-          cargoGrupoCodigo: state.cargoGrupoCodigo,
-          grupoCodigo: state.grupoCodigo,
+          cargoGrupoCodigo: isGrupal ? state.cargoGrupoCodigo : '',
+          grupoCodigo: isGrupal ? state.grupoCodigo : '',
           historialCredito: state.historialCredito,
           actividadEconomicaCnbs3Codigo: state.actividadEconomicaCnbs3Codigo,
           email: state.email,
@@ -252,6 +253,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     SolicitudNuevaMenorHnLocalDb? existing,
   ) {
     final prev = existing;
+    final esGrupalValue = _prefer(state.esGrupal, prev?.esGrupal);
+    final isGrupal = esGrupalValue == 'input.yes'.tr();
 
     return SolicitudNuevaMenorHnLocalDb(
       id: prev?.id ?? 0,
@@ -265,12 +268,18 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           : state.ingresoMensualConyuge,
       clientSignatureStatus: _prefer(
           state.clientSignatureStatus.name, prev?.clientSignatureStatus),
-      esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
-      cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
-      grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
-      cargoGrupoNombre: _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
-      grupoCodigoNombre:
-          _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
+      esGrupal: esGrupalValue,
+      cargoGrupoCodigo: isGrupal
+          ? _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo)
+          : '',
+      grupoCodigo:
+          isGrupal ? _prefer(state.grupoCodigo, prev?.grupoCodigo) : '',
+      cargoGrupoNombre: isGrupal
+          ? _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre)
+          : '',
+      grupoCodigoNombre: isGrupal
+          ? _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre)
+          : '',
       database: _prefer(state.database, prev?.database),
       apellido2: _prefer(state.apellido2, prev?.apellido2),
       nombre2: _prefer(state.nombre2, prev?.nombre2),

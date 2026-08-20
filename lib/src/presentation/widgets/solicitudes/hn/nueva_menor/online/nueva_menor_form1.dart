@@ -77,6 +77,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
     _selectedDate = widget.userByDocumentHn?.fechaExpira;
     fechaNacimiento = widget.userByDocumentHn?.fechaNacimiento;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    isSolicitudGrupal = cubit.state.esGrupal == 'input.yes'.tr();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
@@ -251,6 +252,12 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                         .contains(TypeAction.crearGrupoCredito.codigo)) ...[
                       SheetSearchDropdown(
                         key: const Key('esGrupalDropdown'),
+                        selectedItem: state.esGrupal.isEmpty
+                            ? null
+                            : Item(
+                                name: state.esGrupal,
+                                value: state.esGrupal,
+                              ),
                         isRequired: true,
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),

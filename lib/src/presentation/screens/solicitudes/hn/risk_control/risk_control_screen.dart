@@ -161,7 +161,9 @@ class _PdfView extends StatelessWidget {
             ),
             backgroundColor: Colors.transparent,
             enableKeyboardNavigation: true,
-            maxScale: 3.0,
+            sizeDelegateProvider: PdfViewerSizeDelegateProviderLegacy(
+              maxScale: 3.0,
+            ),
           ),
         ),
       ),
@@ -226,7 +228,6 @@ class PDFRiskControlView extends StatelessWidget {
             pdfData,
             sourceName: 'risk_control.pdf',
             params: const PdfViewerParams(
-              maxScale: 8.0,
               enableKeyboardNavigation: true,
             ),
           ),

@@ -107,26 +107,26 @@ class _CrearDetalleDPFState extends State<CrearDetalleDPF> {
                     };
                   },
                 ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  title: 'Monto Inicial',
-                  icon: Icon(
-                    Icons.wallet,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                  textInputType: TextInputType.number,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  inputFormatters: [
-                    CurrencyInputFormatter(mantissaLength: 0),
-                  ],
-                  onChange: (value) {
-                    final newValue = toNumericString(value, allowPeriod: true);
-                    cubit.onFieldChanged(
-                      () => cubit.state.copyWith(
-                          montoInicial: double.tryParse(newValue) ?? 0),
-                    );
-                  },
-                ),
+                // const Gap(20),
+                // OutlineTextfieldWidget(
+                //   title: 'Monto Inicial',
+                //   icon: Icon(
+                //     Icons.wallet,
+                //     color: AppColors.getPrimaryColor(),
+                //   ),
+                //   textInputType: TextInputType.number,
+                //   validator: (value) => ClassValidator.validateRequired(value),
+                //   inputFormatters: [
+                //     CurrencyInputFormatter(mantissaLength: 0),
+                //   ],
+                //   onChange: (value) {
+                //     final newValue = toNumericString(value, allowPeriod: true);
+                //     cubit.onFieldChanged(
+                //       () => cubit.state.copyWith(
+                //           montoInicial: double.tryParse(newValue) ?? 0),
+                //     );
+                //   },
+                // ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Valor Comercial',

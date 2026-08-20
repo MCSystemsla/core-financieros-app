@@ -10,10 +10,8 @@ class AnalisisCreateAsignacionGarantiaDpfState extends Equatable {
   final int objAnalisisGarantiaId;
   final double valorComercial;
   final double montoInicial;
-  final String estadoCodigo;
   final int porcentajeCobertura;
   final String observaciones;
-  final String formaAplicacionCodigo;
   final String comentario;
   const AnalisisCreateAsignacionGarantiaDpfState({
     this.articuloCodigo = 0,
@@ -21,10 +19,8 @@ class AnalisisCreateAsignacionGarantiaDpfState extends Equatable {
     this.objAnalisisGarantiaId = 0,
     this.valorComercial = 0,
     this.montoInicial = 0,
-    this.estadoCodigo = '',
     this.porcentajeCobertura = 0,
     this.observaciones = '',
-    this.formaAplicacionCodigo = '',
     this.comentario = '',
     this.status = Status.notStarted,
     this.errorMsg = '',
@@ -38,10 +34,8 @@ class AnalisisCreateAsignacionGarantiaDpfState extends Equatable {
         objAnalisisGarantiaId,
         valorComercial,
         montoInicial,
-        estadoCodigo,
         porcentajeCobertura,
         observaciones,
-        formaAplicacionCodigo,
         comentario,
         status,
         errorMsg,
@@ -57,10 +51,8 @@ class AnalisisCreateAsignacionGarantiaDpfState extends Equatable {
     int? objAnalisisGarantiaId,
     double? valorComercial,
     double? montoInicial,
-    String? estadoCodigo,
     int? porcentajeCobertura,
     String? observaciones,
-    String? formaAplicacionCodigo,
     String? comentario,
   }) {
     return AnalisisCreateAsignacionGarantiaDpfState(
@@ -73,11 +65,8 @@ class AnalisisCreateAsignacionGarantiaDpfState extends Equatable {
           objAnalisisGarantiaId ?? this.objAnalisisGarantiaId,
       valorComercial: valorComercial ?? this.valorComercial,
       montoInicial: montoInicial ?? this.montoInicial,
-      estadoCodigo: estadoCodigo ?? this.estadoCodigo,
       porcentajeCobertura: porcentajeCobertura ?? this.porcentajeCobertura,
       observaciones: observaciones ?? this.observaciones,
-      formaAplicacionCodigo:
-          formaAplicacionCodigo ?? this.formaAplicacionCodigo,
       comentario: comentario ?? this.comentario,
     );
   }

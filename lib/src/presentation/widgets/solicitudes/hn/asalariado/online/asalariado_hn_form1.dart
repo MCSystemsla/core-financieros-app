@@ -75,6 +75,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
     fechaEmisionCedula = widget.userByDocumentHnData?.fechaEmision;
     fechaNacimiento = widget.userByDocumentHnData?.fechaNacimiento;
     final cubit = context.read<SolicitudAslariadoHnCubit>();
+    isSolicitudGrupal = cubit.state.esGrupal == 'input.yes'.tr();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         tipoPersonaCnbsidCodigo: 'HNTPCNBS1',
@@ -245,6 +246,12 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
                         .contains(TypeAction.crearGrupoCredito.codigo)) ...[
                       SheetSearchDropdown(
                         key: const Key('esGrupalDropdown'),
+                        selectedItem: state.esGrupal.isEmpty
+                            ? null
+                            : Item(
+                                name: state.esGrupal,
+                                value: state.esGrupal,
+                              ),
                         isRequired: true,
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),

@@ -58,9 +58,9 @@ class AnalisisGarantia {
       'NumCredito': numCredito,
       'ArticuloCodigo': articuloCodigo,
       'FiadorID': fiadorId,
-      'EstadoCodigo': 'ACT',
+      // 'EstadoCodigo': 'ACT',
       'MontoGarantia': montoGarantia,
-      'PorcentajeCoberturaCodigo': 'TOT'
+      // 'PorcentajeCoberturaCodigo': 'TOT'
     };
     data.removeWhere(
         (key, value) => value == null || value == '' || value == 0);
