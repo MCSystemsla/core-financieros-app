@@ -18,9 +18,12 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/crear_fiadores_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiadores_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_actualizar_garantia.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_dpfs_response_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_obtener_bien_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_obtener_detalle_dpf.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/bien_garantia_created_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
@@ -144,6 +147,23 @@ abstract class AnalisisRepositoryHn {
   Future<(bool, String)> fiadoresEnviarFirmaDigital({
     required String idFiador,
     required String firmaFiador,
+  });
+  Future<AnalisisGarantiaObtenerBienResponse> obtenerGarantiaBienByCodigo({
+    required String bienCodigo,
+  });
+  Future<void> anularGarantia({
+    required int analisisGarantiaID,
+  });
+  Future<void> actualizarGarantia({
+    required AnalisisActualizarGarantia data,
+  });
+  Future<AnalisisGarantiaObtenerDetalleDpf> obtenerGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+  });
+  Future<void> actualizarGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+    required double monto,
+    required String observaciones,
   });
 }
 
@@ -921,6 +941,108 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       );
       _logger.e(e);
       return (false, e.toString());
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaObtenerBienResponse> obtenerGarantiaBienByCodigo({
+    required String bienCodigo,
+  }) async {
+    final endpoint = GarantiaObtenerBienByCodigo(bienCodigo: bienCodigo);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = AnalisisGarantiaObtenerBienResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> anularGarantia({required int analisisGarantiaID}) async {
+    final endpoint = GarantiaAnularEndpointHN(
+      analisisGarantiaID: analisisGarantiaID,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> actualizarGarantia({
+    required AnalisisActualizarGarantia data,
+  }) async {
+    final endpoint = GarantiaActualizarEndpointHN(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisGarantiaObtenerDetalleDpf> obtenerGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+  }) async {
+    final endpoint = GarantiaObtenerDetalleDPFEndpointHN(
+      objAnalisisGarantiaID: objAnalisisGarantiaID,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = AnalisisGarantiaObtenerDetalleDpf.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> actualizarGarantiaDetalleDPF({
+    required int objAnalisisGarantiaID,
+    required double monto,
+    required String observaciones,
+  }) async {
+    final endpoint = GarantiaActualizarDetalleDPF(
+      objAnalisisGarantiaID: objAnalisisGarantiaID,
+      monto: monto,
+      observaciones: observaciones,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
     }
   }
 }

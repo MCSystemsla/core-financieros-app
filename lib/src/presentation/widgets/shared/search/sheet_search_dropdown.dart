@@ -15,6 +15,7 @@ class SheetSearchDropdown extends StatefulWidget {
   final bool enabled;
   final Item? selectedItem;
   final List<Item> items;
+  final bool isLoading;
   const SheetSearchDropdown({
     super.key,
     required this.title,
@@ -25,6 +26,7 @@ class SheetSearchDropdown extends StatefulWidget {
     required this.enabled,
     this.selectedItem,
     required this.items,
+    this.isLoading = false,
   });
 
   @override
@@ -46,10 +48,19 @@ class _SheetSearchDropdownState extends State<SheetSearchDropdown> {
       child: OutlineTextfieldWidget(
         readOnly: true,
         title: widget.title,
-        suffixIcon: const Icon(
-          Icons.keyboard_arrow_down,
-          size: 30,
-        ),
+        suffixIcon: widget.isLoading
+            ? const Padding(
+                padding: EdgeInsets.all(12),
+                child: SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              )
+            : const Icon(
+                Icons.keyboard_arrow_down,
+                size: 30,
+              ),
         hintText: (selectedItem?.name.isNotEmpty ?? false)
             ? selectedItem!.name
             : widget.hintText,
@@ -57,7 +68,7 @@ class _SheetSearchDropdownState extends State<SheetSearchDropdown> {
           // Aquí solo usamos tu validator directamente
           return widget.validator?.call(selectedItem);
         },
-        onTap: !widget.enabled
+        onTap: !widget.enabled || widget.isLoading
             ? null
             : () {
                 DropDownState<Item>(

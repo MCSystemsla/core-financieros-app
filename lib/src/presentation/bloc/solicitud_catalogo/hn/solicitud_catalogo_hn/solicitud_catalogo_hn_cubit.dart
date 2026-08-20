@@ -126,6 +126,7 @@ class SolicitudCatalogoHnCubit extends Cubit<SolicitudCatalogoHnState> {
     CatalogoType.programa,
     CatalogoType.tipoDesembolsos,
     CatalogoType.tipoRelacionPeps,
+    CatalogoType.tipoValoracionGarantia,
   ];
 
   Future<void> saveCatalogosToDatabase() async {

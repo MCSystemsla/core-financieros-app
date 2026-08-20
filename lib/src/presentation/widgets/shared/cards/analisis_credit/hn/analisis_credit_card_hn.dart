@@ -22,6 +22,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
   final String monto;
   final String tipoSolicitudString;
   final bool esGrupal;
+  final int? cicloGrupoId;
   const AnalisisCreditCardHn({
     super.key,
     required this.index,
@@ -37,6 +38,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
     this.monto = '0',
     this.tipoSolicitudString = '',
     this.esGrupal = false,
+    this.cicloGrupoId,
   });
 
   @override
@@ -74,6 +76,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
                             monto: monto,
                             tipoSolicitudString: tipoSolicitudString,
                             esGrupal: esGrupal,
+                            cicloGrupoId: cicloGrupoId,
                           ),
                         ),
                       ),

@@ -6,7 +6,6 @@ class CreateAndAsignacionGarantiaLiquidaHn {
   final int objAnalisisGarantiaId;
   final double valorComercial;
   final double montoInicial;
-  final String estadoCodigo;
   final int porcentajeCobertura;
   final String observaciones;
   final GarantiaDpfDetalle garantiaDpfDetalle;
@@ -17,7 +16,6 @@ class CreateAndAsignacionGarantiaLiquidaHn {
     required this.objAnalisisGarantiaId,
     required this.valorComercial,
     required this.montoInicial,
-    required this.estadoCodigo,
     required this.porcentajeCobertura,
     required this.observaciones,
     required this.garantiaDpfDetalle,
@@ -30,7 +28,6 @@ class CreateAndAsignacionGarantiaLiquidaHn {
         'objAnalisisGarantiaID': objAnalisisGarantiaId,
         'ValorComercial': valorComercial,
         'MontoInicial': montoInicial,
-        'EstadoCodigo': 'ACT',
         'PorcentajeCobertura': porcentajeCobertura,
         'Observaciones': observaciones,
         'GarantiaDPFDetalle': garantiaDpfDetalle.toJson(),
@@ -38,16 +35,13 @@ class CreateAndAsignacionGarantiaLiquidaHn {
 }
 
 class GarantiaDpfDetalle {
-  final String formaAplicacionCodigo;
   final String comentario;
 
   GarantiaDpfDetalle({
-    required this.formaAplicacionCodigo,
     required this.comentario,
   });
 
   Map<String, dynamic> toJson() => {
-        'FormaAplicacionCodigo': 'TOT',
         'Comentario': comentario,
       };
 }

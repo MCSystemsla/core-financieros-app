@@ -18,6 +18,7 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
   final int articuloCodigo;
   final String tipoPersonaCodigo;
   final String cedulaCliente;
+  final String? tipoPersonaCodigoDeudor;
   const V2CrearGarantiaDetalleScreen({
     super.key,
     required this.tipoGarantia,
@@ -26,6 +27,7 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
     required this.articuloCodigo,
     required this.tipoPersonaCodigo,
     required this.cedulaCliente,
+    this.tipoPersonaCodigoDeudor,
   });
 
   @override
@@ -52,7 +54,7 @@ class V2CrearGarantiaDetalleScreen extends StatelessWidget {
           create: (ctx) => AnalisisDpfsCubit(
             repository,
           )..getDpfsByCedula(
-              tipoPersona: tipoPersonaCodigo,
+              tipoPersona: tipoPersonaCodigoDeudor ?? '',
               cedula: cedulaCliente,
             ),
         ),

@@ -7,6 +7,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../bloc/analisis/hn/analisis_anular_garantia/analisis_anular_garantia_cubit.dart';
+
 class TiposGarantiaHNWidget extends StatelessWidget {
   final int numeroSolicitud;
   final String solicitudCodigo;
@@ -39,6 +41,9 @@ class TiposGarantiaHNWidget extends StatelessWidget {
                     ),
                     BlocProvider.value(
                       value: context.read<FiadoresGarantiaCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: context.read<AnalisisAnularGarantiaCubit>(),
                     ),
                   ],
                   child: CrearGarantiaScreen(
