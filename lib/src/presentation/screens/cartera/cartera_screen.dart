@@ -2,8 +2,8 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
@@ -12,7 +12,9 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/reportes/hn/reportes_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/banner/custom_banner_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
@@ -36,14 +38,45 @@ class _CarteraScreenState extends State<CarteraScreen> {
           context.push('/');
         }
       },
-      child: Scaffold(
-        body: _CarteraContentWidget(),
+      child: const Scaffold(
+        backgroundColor: RedesignColors.background,
+        body: SafeArea(
+          bottom: false,
+          child: _CarteraContentWidget(),
+        ),
       ),
     );
   }
 }
 
 class _CarteraContentWidget extends StatelessWidget {
+  const _CarteraContentWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ScreenHeaderWidget(
+            title: 'home.item5'.tr(),
+            subtitle: 'cartera.description'.tr(),
+            onBack: () => context.push('/'),
+          ),
+          const Gap(24),
+          const _SolicitudesAnalisisSection(),
+          const _KivaSection(),
+          const _SeguimientoSection(),
+          const Gap(28),
+        ],
+      ),
+    );
+  }
+}
+
+class _SolicitudesAnalisisSection extends StatelessWidget {
+  const _SolicitudesAnalisisSection();
+
   @override
   Widget build(BuildContext context) {
     final actions = LocalStorage().currentActions;
@@ -51,47 +84,28 @@ class _CarteraContentWidget extends StatelessWidget {
 
     return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
       builder: (context, state) {
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomBannerWidget(
-                icon: const Icon(
-                  Icons.wallet_rounded,
-                  color: AppColors.white,
-                ),
-                title: 'home.item5'.tr(),
-                image: ImageAsset.carteraBg,
-              ),
-              const Gap(20),
-              Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
-                  'cartera.description'.tr(),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontSize: 19,
-                      ),
-                ),
-              ),
-              ModuleCard(
-                visible:
-                    (actions.contains(TypeAction.llenarSolicitudes.codigo)),
-                onTap: () {
+        return SectionBlockWidget(
+          label: 'SOLICITUDES Y ANÁLISIS',
+          children: [
+            if (actions.contains(TypeAction.llenarSolicitudes.codigo))
+              ModuleTileWidget(
+                icon: Icons.description_outlined,
+                iconColor: RedesignColors.green,
+                iconBackground: RedesignColors.greenTint,
+                title: 'Solicitudes',
+                subtitle: 'Comercial, asalariado, grupal y asignaciones',
+                onPressed: () {
                   context.push('/solicitudes');
                 },
-                title: 'Solicitudes',
-                subtitle: 'Módulo Solicitudes de Crédito',
-                firstColor: AppColors.blueIndigo,
-                secondColor: AppColors.getPrimaryColor().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.description,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible: flavor == Flavor.honduras,
-                onTap: () {
+            if (flavor == Flavor.honduras)
+              ModuleTileWidget(
+                icon: Icons.bar_chart_rounded,
+                iconColor: RedesignColors.teal,
+                iconBackground: RedesignColors.tealTint,
+                title: 'Análisis',
+                subtitle: 'Capacidad de pago, fiadores y garantías',
+                onPressed: () {
                   state.connectionStatus == ConnectionStatus.connected
                       ? Navigator.push(
                           context,
@@ -107,21 +121,18 @@ class _CarteraContentWidget extends StatelessWidget {
                           ),
                         );
                 },
-                title: 'Analisis'.tr(),
-                subtitle: 'Analisis de solicitudes de crédito',
-                secondColor: const Color.fromARGB(255, 48, 47, 47),
-                firstColor: const Color(0xFFBDBDBD),
-                icon: const Icon(
-                  Icons.analytics,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible: (flavor == Flavor.honduras &&
-                    state.connectionStatus == ConnectionStatus.connected &&
-                    actions.contains(TypeAction.supervisionDeCredito.codigo)),
-                onTap: () {
+            if (flavor == Flavor.honduras &&
+                state.connectionStatus == ConnectionStatus.connected &&
+                actions.contains(TypeAction.supervisionDeCredito.codigo))
+              ModuleTileWidget(
+                icon: Icons.shield_outlined,
+                iconColor: RedesignColors.indigo,
+                iconBackground: RedesignColors.indigoTint,
+                title: 'Supervisiones',
+                subtitle: 'Crédito, riesgo y regional',
+                tag: 'Solo en línea',
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -129,39 +140,54 @@ class _CarteraContentWidget extends StatelessWidget {
                     ),
                   );
                 },
-                title: 'Supervisiones'.tr(),
-                subtitle: 'Supervisiones de crédito',
-                secondColor: const Color(0xFF283593),
-                firstColor: const Color(0xFFC5CAE9),
-                icon: const Icon(
-                  Icons.supervised_user_circle,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible: (actions.contains(TypeAction.llenarKiva.codigo)),
-                onTap: () {
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _KivaSection extends StatelessWidget {
+  const _KivaSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+    final flavor = global<FlavorCubit>().state.flavor;
+    final isKivaFlavor =
+        flavor == Flavor.nicaragua || flavor == Flavor.costaRica;
+
+    if (!isKivaFlavor) return const SizedBox.shrink();
+
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return SectionBlockWidget(
+          label: 'FORMULARIOS KIVA',
+          children: [
+            if (actions.contains(TypeAction.llenarKiva.codigo))
+              ModuleTileWidget(
+                icon: Icons.dynamic_form_outlined,
+                iconColor: RedesignColors.green,
+                iconBackground: RedesignColors.greenTint,
+                title: 'cartera.kiva'.tr(),
+                subtitle: 'cartera.kiva_description'.tr(),
+                onPressed: () {
                   state.connectionStatus == ConnectionStatus.connected
                       ? context.push('/cartera/formulario-kiva')
                       : context.push('/cartera/kiva-offline');
                 },
-                title: 'cartera.kiva'.tr(),
-                subtitle: 'cartera.kiva_description'.tr(),
-                firstColor: AppColors.blueIndigo,
-                secondColor:
-                    AppColors.getFourthgColorWithOpacity().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.dynamic_form_outlined,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible:
-                    (state.connectionStatus == ConnectionStatus.connected &&
-                        actions.contains(TypeAction.llenarKiva.codigo)),
-                onTap: () {
+            if (state.connectionStatus == ConnectionStatus.connected &&
+                actions.contains(TypeAction.llenarKiva.codigo))
+              ModuleTileWidget(
+                icon: Icons.history_rounded,
+                iconColor: RedesignColors.teal,
+                iconBackground: RedesignColors.tealTint,
+                title: 'KIVA Histórico',
+                subtitle: 'Solicitudes Kiva ya enviadas',
+                tag: 'Solo en línea',
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -169,21 +195,38 @@ class _CarteraContentWidget extends StatelessWidget {
                     ),
                   );
                 },
-                title: 'KIVA Histórico',
-                subtitle: 'Módulo Solicitudes Kiva Enviadas',
-                firstColor: AppColors.blueIndigo,
-                secondColor: AppColors.getSecondaryColor().withOpacity(0.4),
-                icon: const Icon(
-                  Icons.send_to_mobile_rounded,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible: (flavor == Flavor.honduras &&
-                    state.connectionStatus == ConnectionStatus.connected &&
-                    actions.contains(TypeAction.comite.codigo)),
-                onTap: () {
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _SeguimientoSection extends StatelessWidget {
+  const _SeguimientoSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+    final flavor = global<FlavorCubit>().state.flavor;
+
+    return BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
+      builder: (context, state) {
+        return SectionBlockWidget(
+          label: 'SEGUIMIENTO',
+          children: [
+            if (flavor == Flavor.honduras &&
+                state.connectionStatus == ConnectionStatus.connected &&
+                actions.contains(TypeAction.comite.codigo))
+              ModuleTileWidget(
+                icon: Icons.groups_outlined,
+                iconColor: RedesignColors.indigo,
+                iconBackground: RedesignColors.indigoTint,
+                title: 'Comité',
+                subtitle: 'Resoluciones individuales y grupales',
+                tag: 'Solo en línea',
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -191,20 +234,17 @@ class _CarteraContentWidget extends StatelessWidget {
                     ),
                   );
                 },
-                title: 'Comité',
-                subtitle: 'Módulo de Comité',
-                firstColor: const Color(0xFF112D4E),
-                secondColor: const Color(0xFF3F72AF),
-                icon: const Icon(
-                  Icons.groups_rounded,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-              ModuleCard(
-                visible: (flavor == Flavor.honduras &&
-                    state.connectionStatus == ConnectionStatus.connected),
-                onTap: () {
+            if (flavor == Flavor.honduras &&
+                state.connectionStatus == ConnectionStatus.connected)
+              ModuleTileWidget(
+                icon: Icons.insert_chart_outlined_rounded,
+                iconColor: RedesignColors.purple,
+                iconBackground: RedesignColors.purpleTint,
+                title: 'Reporteria',
+                subtitle: 'Reportes de cartera y colocación',
+                tag: 'Solo en línea',
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -212,24 +252,16 @@ class _CarteraContentWidget extends StatelessWidget {
                     ),
                   );
                 },
-                title: 'Reporteria',
-                subtitle: 'Módulo de Reporteria',
-                firstColor: const Color(0xFF2C003E),
-                secondColor: const Color(0xFF512DA8),
-                icon: const Icon(
-                  Icons.edit_document,
-                  color: AppColors.white,
-                  size: 35,
-                ),
               ),
-            ],
-          ),
+          ],
         );
       },
     );
   }
 }
 
+/// Tarjeta del diseño anterior. Cartera ya no la usa — la mantiene
+/// `TutorialsScreen`, que la importa desde aquí.
 class ModuleCard extends StatelessWidget {
   final String title;
   final String subtitle;
