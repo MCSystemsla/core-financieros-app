@@ -18,6 +18,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/s
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/cerrar_analisis/cerrar_analisis_listener.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/analisis_credit_card_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/loading_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 
@@ -166,8 +167,8 @@ class _ListDataWidget extends StatefulWidget {
 }
 
 class _ListDataWidgetState extends State<_ListDataWidget> {
-  bool isLoadingMore = false;
   final ScrollController _scrollController = ScrollController();
+  bool _isLoadingDialogOpen = false;
   @override
   void initState() {
     super.initState();
@@ -176,33 +177,45 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
 
-  void _onScroll() async {
+  void _showLoadingMoreDialog() {
+    if (_isLoadingDialogOpen) return;
+    _isLoadingDialogOpen = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      builder: (_) => const LoadingDialog(message: 'Cargando solicitudes...'),
+    ).then((_) => _isLoadingDialogOpen = false);
+  }
+
+  void _hideLoadingMoreDialog() {
+    if (!_isLoadingDialogOpen) return;
+    _isLoadingDialogOpen = false;
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  void _onScroll() {
+    if (!mounted || !_scrollController.hasClients) return;
     final cubit = context.read<SolicitudesByEstadoHnCubit>();
-    final isSuccess = cubit.state.status == Status.done;
-    final hasMore = isSuccess ? cubit.state.hasMore : false;
-    final isAtBottom = _scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200;
-
-    if (isAtBottom && hasMore && !isLoadingMore) {
-      setState(() => isLoadingMore = true);
-
-      cubit.changePage(cubit.state.pagina + 1);
-
-      if (!context.mounted || !mounted) return;
-
-      context.read<SolicitudesByEstadoHnCubit>().getSolicitudesByEstado(
-            isAsignadaToAsesorCredito:
-                isSuccess ? cubit.state.isAsignadaToAsesorCredito : false,
-            estadoCredito: EstadoCredito.asignada,
-          );
-      if (!mounted) return;
-
-      setState(() => isLoadingMore = false);
+    final state = cubit.state;
+    if (state.status != Status.done || !state.hasMore || state.isLoadingMore) {
+      return;
     }
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400;
+    if (!isAtBottom) return;
+
+    cubit.changePage(state.pagina + 1);
+    cubit.getSolicitudesByEstado(
+      isAsignadaToAsesorCredito: state.isAsignadaToAsesorCredito,
+      estadoCredito: EstadoCredito.asignada,
+      isLoadMore: true,
+    );
   }
 
   @override
@@ -213,30 +226,42 @@ class _ListDataWidgetState extends State<_ListDataWidget> {
     }
     return Expanded(
       flex: 4,
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: widget.data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return AnalisisCreditCardHn(
-            monto: widget.data[index].monto!,
-            tipoPersonaCodigo: widget.data[index].tipoPersonaCodigo,
-            cedulaCliente: widget.data[index].cedulaCliente,
-            numeroSolicitud: widget.data[index].numero,
-            tipoSolicitud: getTipoSolicitud(
-              tipoSolicitud: widget.data[index].tipoSolicitud,
-              monto: widget.data[index].monto!,
-              esGrupal: widget.data[index].esSolicitudGrupal,
-            ),
-            tipoSolicitudString: widget.data[index].tipoSolicitud,
-            index: index,
-            title:
-                'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud} ${widget.data[index].nombreGrupo ?? ''}',
-            subtitle: widget.data[index].nombreCompleto ?? 'N/A',
-            description: widget.data[index].monto?.toCurrencyString() ?? 'N/A',
-            esGrupal: widget.data[index].esSolicitudGrupal,
-            cicloGrupoId: widget.data[index].cicloGrupoID,
-          );
+      child:
+          BlocListener<SolicitudesByEstadoHnCubit, SolicitudesByEstadoHnState>(
+        listenWhen: (prev, curr) => prev.isLoadingMore != curr.isLoadingMore,
+        listener: (context, state) {
+          if (state.isLoadingMore) {
+            _showLoadingMoreDialog();
+          } else {
+            _hideLoadingMoreDialog();
+          }
         },
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: widget.data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return AnalisisCreditCardHn(
+              monto: widget.data[index].monto!,
+              tipoPersonaCodigo: widget.data[index].tipoPersonaCodigo,
+              cedulaCliente: widget.data[index].cedulaCliente,
+              numeroSolicitud: widget.data[index].numero,
+              tipoSolicitud: getTipoSolicitud(
+                tipoSolicitud: widget.data[index].tipoSolicitud,
+                monto: widget.data[index].monto!,
+                esGrupal: widget.data[index].esSolicitudGrupal,
+              ),
+              tipoSolicitudString: widget.data[index].tipoSolicitud,
+              index: index,
+              title:
+                  'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud} ${widget.data[index].nombreGrupo ?? ''}',
+              subtitle: widget.data[index].nombreCompleto ?? 'N/A',
+              description:
+                  widget.data[index].monto?.toCurrencyString() ?? 'N/A',
+              esGrupal: widget.data[index].esSolicitudGrupal,
+              cicloGrupoId: widget.data[index].cicloGrupoID,
+            );
+          },
+        ),
       ),
     );
   }

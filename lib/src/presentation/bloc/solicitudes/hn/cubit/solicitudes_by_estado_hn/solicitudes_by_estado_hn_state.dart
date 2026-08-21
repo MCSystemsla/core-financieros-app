@@ -12,6 +12,7 @@ class SolicitudesByEstadoHnState extends Equatable {
   final bool isNumeroSolicitudFilter;
   final bool isCedulaSolicitudFilter;
   final int pagina;
+  final bool isLoadingMore;
   const SolicitudesByEstadoHnState({
     this.status = Status.notStarted,
     this.errorMsg = '',
@@ -23,6 +24,7 @@ class SolicitudesByEstadoHnState extends Equatable {
     this.numeroSolicitud = '',
     this.cedulaCliente = '',
     this.pagina = 1,
+    this.isLoadingMore = false,
   });
 
   @override
@@ -37,6 +39,7 @@ class SolicitudesByEstadoHnState extends Equatable {
         numeroSolicitud,
         cedulaCliente,
         pagina,
+        isLoadingMore,
       ];
 
   SolicitudesByEstadoHnState copyWith({
@@ -50,6 +53,7 @@ class SolicitudesByEstadoHnState extends Equatable {
     bool? isNumeroSolicitudFilter,
     bool? isCedulaSolicitudFilter,
     int? pagina,
+    bool? isLoadingMore,
   }) {
     return SolicitudesByEstadoHnState(
       status: status ?? this.status,
@@ -65,6 +69,7 @@ class SolicitudesByEstadoHnState extends Equatable {
       isCedulaSolicitudFilter:
           isCedulaSolicitudFilter ?? this.isCedulaSolicitudFilter,
       pagina: pagina ?? this.pagina,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 }

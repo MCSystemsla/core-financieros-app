@@ -19,6 +19,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
     EstadoCredito estadoCredito = EstadoCredito.registrada,
     int? codigoGrupo,
     bool isCustomEstadoCredito = false,
+    bool isLoadMore = false,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
     List<EstadoCredito> estadosCredito = const [
       EstadoCredito.registrada,
@@ -27,7 +28,12 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       EstadoCredito.enComite
     ],
   }) async {
-    emit(state.copyWith(status: Status.inProgress));
+    if (isLoadMore) {
+      if (state.isLoadingMore) return;
+      emit(state.copyWith(isLoadingMore: true));
+    } else {
+      emit(state.copyWith(status: Status.inProgress));
+    }
 
     try {
       final resp = await _repository.getSolicitudesByEstado(
@@ -51,12 +57,27 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
         hasMore: resp.metaDataPagination.hasMore,
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
         pagina: resp.metaDataPagination.paginaActual,
+        isLoadingMore: false,
       ));
     } on AppException catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
+      _emitError(e.optionalMsg, isLoadMore: isLoadMore);
     } catch (e) {
-      emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      _emitError(e.toString(), isLoadMore: isLoadMore);
     }
+  }
+
+  void _emitError(String errorMsg, {required bool isLoadMore}) {
+    // Al paginar no se destruye la lista ya cargada: solo se corta el load more
+    // y se devuelve la pagina para poder reintentar.
+    if (isLoadMore) {
+      emit(state.copyWith(
+        isLoadingMore: false,
+        hasMore: false,
+        pagina: state.pagina > 1 ? state.pagina - 1 : 1,
+      ));
+      return;
+    }
+    emit(state.copyWith(status: Status.error, errorMsg: errorMsg));
   }
 
   void cleanState() {
@@ -67,6 +88,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       numeroSolicitud: '',
       cedulaCliente: '',
       solicitudes: [],
+      isLoadingMore: false,
     ));
   }
 
