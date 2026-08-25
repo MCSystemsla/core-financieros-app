@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
@@ -9,6 +10,9 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
@@ -34,26 +38,25 @@ class _AnalisisSolicitudesHnOfflineScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PopScope(
-        onPopInvokedWithResult: (pop, result) {
-          context.push('/');
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Analisis de solicitudes offline'),
-          ),
-          body: Column(
+    return PopScope(
+      onPopInvokedWithResult: (pop, result) {
+        context.push('/');
+      },
+      child: Scaffold(
+        backgroundColor: RedesignColors.background,
+        body: SafeArea(
+          bottom: false,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Gap(10),
-              const Expanded(
-                child: _AnalisisSolicitudesTitle(),
+              ScreenHeaderWidget(
+                title: 'Análisis offline',
+                subtitle:
+                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes y la ubicación sin conexión.',
+                onBack: () => context.push('/'),
               ),
-              _ListDataWidget(
-                data: data,
-              ),
-              const Gap(15),
+              const Gap(20),
+              _ListDataWidget(data: data),
             ],
           ),
         ),
@@ -93,76 +96,42 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   }
 }
 
-class _AnalisisSolicitudesTitle extends StatelessWidget {
-  const _AnalisisSolicitudesTitle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Analisis de solicitudes crédito',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          const Gap(10),
-          Text(
-            'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ListDataWidget extends StatefulWidget {
+class _ListDataWidget extends StatelessWidget {
   final List<AnalisisListDataHn> data;
   const _ListDataWidget({
     required this.data,
   });
 
   @override
-  State<_ListDataWidget> createState() => _ListDataWidgetState();
-}
-
-class _ListDataWidgetState extends State<_ListDataWidget> {
-  @override
   Widget build(BuildContext context) {
-    if (widget.data.isEmpty) {
+    if (data.isEmpty) {
       return const Expanded(
-          child: EmptyListWidget(message: 'No hay solicitudes por analizar'));
+        child: EmptyListWidget(message: 'No hay solicitudes por analizar'),
+      );
     }
+
     return Expanded(
-      flex: 4,
       child: ListView.builder(
-        itemCount: widget.data.length,
-        shrinkWrap: true,
+        itemCount: data.length,
+        padding: const EdgeInsets.only(bottom: 24),
         itemBuilder: (BuildContext context, int index) {
+          final analisis = data[index];
           return AnalisisCreditoOfflineCard(
-            monto: widget.data[index].monto!,
-            tipoPersonaCodigo: widget.data[index].tipoPersonaCodigo!,
-            cedulaCliente: widget.data[index].cedulaCliente!,
-            numeroSolicitud: widget.data[index].numero!,
+            monto: analisis.monto!,
+            tipoPersonaCodigo: analisis.tipoPersonaCodigo!,
+            cedulaCliente: analisis.cedulaCliente!,
+            numeroSolicitud: analisis.numero!,
             tipoSolicitud: getTipoSolicitud(
-              tipoSolicitud: widget.data[index].tipoSolicitud!,
-              monto: widget.data[index].monto!,
-              esGrupal: widget.data[index].esSolicitudGrupal,
+              tipoSolicitud: analisis.tipoSolicitud!,
+              monto: analisis.monto!,
+              esGrupal: analisis.esSolicitudGrupal,
             ),
-            tipoSolicitudString: widget.data[index].tipoSolicitud ?? '',
+            tipoSolicitudString: analisis.tipoSolicitud ?? '',
             index: index,
             title:
-                'Número Solicitud: ${widget.data[index].numero} ${widget.data[index].tipoSolicitud}',
-            subtitle: widget.data[index].nombreCompleto ?? 'N/A',
-            description: widget.data[index].monto?.toCurrencyString() ?? 'N/A',
+                'Número Solicitud: ${analisis.numero} ${analisis.tipoSolicitud}',
+            subtitle: analisis.nombreCompleto ?? 'N/A',
+            description: analisis.monto?.toCurrencyString() ?? 'N/A',
           );
         },
       ),
@@ -199,99 +168,122 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
     this.tipoSolicitudString = '',
   });
 
+  static const _staggerGroupSize = 8;
+
+  void _openAnalisisSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => _SelectTypeAnalisis(
+        index: index,
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        numeroSolicitud: numeroSolicitud,
+        cedulaCliente: cedulaCliente,
+        tipoPersonaCodigo: tipoPersonaCodigo,
+        monto: monto,
+        tipoSolicitud: tipoSolicitud,
+        tipoSolicitudString: tipoSolicitudString,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SlideInLeft(
-      duration: animate ? const Duration(milliseconds: 500) : Duration.zero,
-      delay: animate ? Duration(milliseconds: 100 * index) : Duration.zero,
+    return FadeInUp(
+      from: 16,
+      duration: animate ? const Duration(milliseconds: 320) : Duration.zero,
+      delay: animate
+          ? Duration(milliseconds: 40 * (index % _staggerGroupSize))
+          : Duration.zero,
       child: Hero(
         tag: 'analisis-credito-$index',
-        child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.grey.shade200),
-          ),
-          child: InkWell(
-            onTap: enabled
-                ? () => {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (ctx) => _SelectTypeAnalisis(
-                          index: index,
-                          title: title,
-                          subtitle: subtitle,
-                          description: description,
-                          numeroSolicitud: numeroSolicitud,
-                          cedulaCliente: cedulaCliente,
-                          tipoPersonaCodigo: tipoPersonaCodigo,
-                          monto: monto,
-                          tipoSolicitud: tipoSolicitud,
-                          tipoSolicitudString: tipoSolicitudString,
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          child: Material(
+            color: RedesignColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            child: InkWell(
+              onTap: enabled ? () => _openAnalisisSheet(context) : null,
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: RedesignColors.border),
+                ),
+                child: Row(
+                  children: [
+                    const ModuleIconTile(
+                      icon: Icons.account_balance_outlined,
+                      color: RedesignColors.indigo,
+                      background: RedesignColors.indigoTint,
+                    ),
+                    const Gap(13),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.15,
+                              color: RedesignColors.ink,
+                            ),
+                          ),
+                          const Gap(3),
+                          Text(
+                            'Solicitud N. $numeroSolicitud',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              height: 1.35,
+                              color: RedesignColors.inkMuted,
+                            ),
+                          ),
+                          const Gap(8),
+                          Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: [
+                              CardTagWidget(
+                                label: 'L. $description',
+                                color: RedesignColors.green,
+                                background: RedesignColors.greenTint,
+                              ),
+                              if (tipoSolicitudString.isNotEmpty)
+                                CardTagWidget(
+                                  label: tipoSolicitudString,
+                                  color: RedesignColors.teal,
+                                  background: RedesignColors.tealTint,
+                                ),
+                              const CardTagWidget(
+                                label: 'En el teléfono',
+                                color: RedesignColors.amber,
+                                background: RedesignColors.amberTint,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    }
-                : null,
-            borderRadius: BorderRadius.circular(20),
-            child: Padding(
-              padding: const EdgeInsets.all(18),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      // ignore: deprecated_member_use
-                      color: Colors.indigo.withOpacity(0.1),
-                      shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.account_balance_outlined,
-                      size: 24,
-                      color: Colors.indigo,
-                    ),
-                  ),
-                  const Gap(16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Gap(4),
-                        Text(
-                          subtitle,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                        ),
-                        const Gap(4),
-                        Text(
-                          'L. $description',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.green.shade700,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(
-                    Icons.chevron_right,
-                    color: Colors.grey,
-                    size: 28,
-                  ),
-                ],
+                    if (enabled) ...[
+                      const Gap(10),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        size: 20,
+                        color: RedesignColors.chevron,
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -335,17 +327,16 @@ class _SelectTypeAnalisis extends StatelessWidget {
       builder: (_, controller) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xfff9fafb),
-            borderRadius: const BorderRadius.vertical(
+          decoration: const BoxDecoration(
+            color: Color(0xfff9fafb),
+            borderRadius: BorderRadius.vertical(
               top: Radius.circular(28),
             ),
             boxShadow: [
               BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.12),
+                color: Color(0x1F000000),
                 blurRadius: 25,
-                offset: const Offset(0, -3),
+                offset: Offset(0, -3),
               ),
             ],
           ),
