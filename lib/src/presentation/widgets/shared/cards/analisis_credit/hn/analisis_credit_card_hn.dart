@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/select_type_analisis_modal_sheet_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -143,18 +144,18 @@ class AnalisisCreditCardHn extends StatelessWidget {
                         spacing: 6,
                         runSpacing: 6,
                         children: [
-                          _CardTag(
+                          CardTagWidget(
                             label: 'L. $description',
                             color: RedesignColors.green,
                             background: RedesignColors.greenTint,
                           ),
-                          _CardTag(
+                          CardTagWidget(
                             label: tipoSolicitudString,
                             color: RedesignColors.teal,
                             background: RedesignColors.tealTint,
                           ),
                           if (esGrupal) ...[
-                            const _CardTag(
+                            const CardTagWidget(
                               label: 'Grupal',
                               color: RedesignColors.purple,
                               background: RedesignColors.purpleTint,
@@ -202,36 +203,6 @@ class _PressableCard extends StatelessWidget {
             border: Border.all(color: RedesignColors.border),
           ),
           child: child,
-        ),
-      ),
-    );
-  }
-}
-
-class _CardTag extends StatelessWidget {
-  final String label;
-  final Color color;
-  final Color background;
-  const _CardTag({
-    required this.label,
-    required this.color,
-    required this.background,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: color,
         ),
       ),
     );
