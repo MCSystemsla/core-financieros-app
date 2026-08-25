@@ -298,6 +298,34 @@ class _FolioRow extends StatelessWidget {
   }
 }
 
+/// Boton de cierre del AppBar en las pantallas de envio.
+class SendingCloseButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const SendingCloseButton({super.key, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(13),
+      child: Container(
+        height: 44,
+        width: 44,
+        decoration: BoxDecoration(
+          color: RedesignColors.surface,
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(color: RedesignColors.border),
+        ),
+        child: const Icon(
+          Icons.close_rounded,
+          size: 20,
+          color: RedesignColors.ink,
+        ),
+      ),
+    );
+  }
+}
+
 /// Animacion Lottie recortada al circulo de estado.
 class SendingStatusLottie extends StatelessWidget {
   final String asset;
