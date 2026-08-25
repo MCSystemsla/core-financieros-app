@@ -1,7 +1,5 @@
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/represtamo/local_db/solicitud_represtamo_hn_local_db.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/solicitudes_asalariado_pendientes_items.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/represtamo/solicitudes_offline/solicitudes_represtamo_pendientes_items_hn.dart';
 import 'package:flutter/material.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/solicitudes_offline/solicitudes_asalariado_pendientes_items.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitud_asalariado_hn_db_local.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
@@ -19,7 +17,6 @@ class SolicitudesPendientesScreenHN extends StatefulWidget {
 class _SolicitudesPendientesScreenHNState
     extends State<SolicitudesPendientesScreenHN> {
   List<SolicitudNuevaMenorHnLocalDb> solicitudesNuevasOffline = [];
-  List<SolicitudReprestamoHnLocalDb> solicitudesReprestamoOffline = [];
   List<SolicitudAsalariadoHnDbLocal> solicitudesAsalariadoOffline = [];
 
   @override
@@ -28,7 +25,6 @@ class _SolicitudesPendientesScreenHNState
     final localDbProvider = global<SolicitudesHnBoxService>();
     localDbProvider.deleteRowsByDeterminateTime();
     solicitudesNuevasOffline = localDbProvider.getSolicitudesNueva();
-    solicitudesReprestamoOffline = localDbProvider.getSolicitudesReprestamo();
     solicitudesAsalariadoOffline = localDbProvider.getSolicitudesAsalariado();
   }
 
@@ -41,7 +37,6 @@ class _SolicitudesPendientesScreenHNState
       body: SolicitudesCreditoView(
         solicitudesAsalariado: solicitudesAsalariadoOffline,
         solicitudesOffline: solicitudesNuevasOffline,
-        solicitudesOfflineReprestamo: solicitudesReprestamoOffline,
       ),
     );
   }
@@ -49,13 +44,11 @@ class _SolicitudesPendientesScreenHNState
 
 class SolicitudesCreditoView extends StatelessWidget {
   final List<SolicitudNuevaMenorHnLocalDb> solicitudesOffline;
-  final List<SolicitudReprestamoHnLocalDb> solicitudesOfflineReprestamo;
   final List<SolicitudAsalariadoHnDbLocal> solicitudesAsalariado;
 
   const SolicitudesCreditoView({
     super.key,
     required this.solicitudesOffline,
-    required this.solicitudesOfflineReprestamo,
     required this.solicitudesAsalariado,
   });
 
@@ -90,19 +83,6 @@ class SolicitudesCreditoView extends StatelessWidget {
                 (element) => element.isDone == true,
               )
               .toList(),
-        ),
-        SolicitudesReprestamoPendientesItemsHN(
-          solicitudesReprestamoOfflinePending: solicitudesOfflineReprestamo
-              .where(
-                (element) => element.isDone == false,
-              )
-              .toList(),
-          solicitudesReprestamoOfflineDone: solicitudesOfflineReprestamo
-              .where(
-                (element) => element.isDone == true,
-              )
-              .toList(),
-          controller: controller,
         ),
       ],
     );
