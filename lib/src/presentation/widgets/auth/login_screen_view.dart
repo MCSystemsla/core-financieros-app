@@ -63,15 +63,13 @@ class _LoginScreenViewState extends State<LoginScreenView>
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) =>
-              AutoupdateCubit(flavor)..verificarActualizacion(context),
+          create: (_) => AutoupdateCubit(flavor)..verificarActualizacion(),
         ),
         BlocProvider(
-          create: (ctx) =>
-              BranchteamCubit(AuthRepositoryImpl())..getBranchTeam(),
+          create: (_) => BranchteamCubit(AuthRepositoryImpl())..getBranchTeam(),
         ),
       ],
-      child: BlocConsumer<AutoupdateCubit, AutoupdateState>(
+      child: BlocListener<AutoupdateCubit, AutoupdateState>(
         listener: (context, state) {
           if (state is AutoupdateSuccess && isProdMode) {
             UpdateAppDialog(
@@ -83,38 +81,37 @@ class _LoginScreenViewState extends State<LoginScreenView>
             ).showDialog(context, dismissOnBackKeyPress: false);
           }
         },
-        builder: (context, state) {
-          return Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: PopScope(
-              canPop: false,
-              child: FadeIn(
-                child: CustomBackground(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SafeArea(
-                            child: Image(
-                              height: 180,
-                              image: AssetImage(flavor.toLogoExtension),
-                            ),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: PopScope(
+            canPop: false,
+            child: FadeIn(
+              child: CustomBackground(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SafeArea(
+                          child: Image(
+                            height: 180,
+                            image: AssetImage(flavor.toLogoExtension),
                           ),
-                          const Gap(5),
-                          const LoginFormWidget(),
-                          const Gap(20),
-                        ],
-                      ),
+                        ),
+                        const Gap(5),
+                        const LoginFormWidget(),
+                        const Gap(20),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
@@ -128,8 +125,8 @@ class LoginFormWidget extends StatefulWidget {
 }
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
-  String? username;
-  String? password;
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   String? branchTeam;
   bool isPasswordVisible = false;
   String? turnstileToken;
@@ -137,6 +134,13 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   final localStorage = LocalStorage();
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,182 +153,173 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
       ),
       child: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            children: [
-              const Gap(20),
-              InputSimple(
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                ],
-                icon: const Icon(
-                  Icons.person_2,
-                  size: 20,
-                ),
-                title: 'auth.user'.tr(),
-                activeColor: true,
-                hintText: 'Ejem: DGALEAS',
-                enabled: true,
-                onChanged: (value) {
-                  username = value;
-                  setState(() {});
-                },
-                textFieldSettings: TextFieldSettings(
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.characters,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'auth.errors.username'.tr();
-                    }
-                    return null;
-                  },
-                ),
+        child: Column(
+          children: [
+            const Gap(20),
+            InputSimple(
+              inputFormatters: [
+                UpperCaseTextFormatter(),
+              ],
+              icon: const Icon(
+                Icons.person_2,
+                size: 20,
               ),
-              const Gap(25),
-              InputSimple(
-                title: 'auth.password'.tr(),
-                icon: const Icon(
-                  Icons.security_outlined,
-                  size: 20,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isPasswordVisible
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: AppColors.grey,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isPasswordVisible = !isPasswordVisible;
-                    });
-                  },
-                ),
-                activeColor: true,
-                hintText: '****',
-                isPasswordField: !isPasswordVisible,
-                enabled: true,
-                textFieldSettings: TextFieldSettings(
-                  keyboardType: TextInputType.text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'auth.errors.password'.tr();
-                    }
-                    return null;
-                  },
-                ),
-                onChanged: (value) {
-                  password = value;
-                  setState(() {});
+              title: 'auth.user'.tr(),
+              controller: _usernameController,
+              activeColor: true,
+              hintText: 'Ejem: DGALEAS',
+              enabled: true,
+              textFieldSettings: TextFieldSettings(
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.characters,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'auth.errors.username'.tr();
+                  }
+                  return null;
                 },
               ),
-              const Gap(25),
-              BlocBuilder<BranchteamCubit, BranchteamState>(
-                builder: (context, state) {
-                  return SearchBranchSheetDelegate(
-                    title: 'auth.branch'.tr(),
-                    isRequired: true,
-                    onChanged: (item) {
-                      if (item == null) return;
-                      branchTeam = item.nombreDb;
-                      setState(() {});
-                    },
-                    hintText: state.status == Status.error
-                        ? state.errorMsg
-                        : 'auth.select_branch'.tr(),
-                    enabled: state.status == Status.done,
-                    isLoading: state.status == Status.inProgress,
-                    items: state.branchTeams,
-                    validator: (value) {
-                      if (value == null) return 'auth.errors.branchTeam'.tr();
+            ),
+            const Gap(25),
+            InputSimple(
+              title: 'auth.password'.tr(),
+              icon: const Icon(
+                Icons.security_outlined,
+                size: 20,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  isPasswordVisible
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: AppColors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+              ),
+              activeColor: true,
+              hintText: '****',
+              controller: _passwordController,
+              isPasswordField: !isPasswordVisible,
+              enabled: true,
+              textFieldSettings: TextFieldSettings(
+                keyboardType: TextInputType.text,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'auth.errors.password'.tr();
+                  }
+                  return null;
+                },
+              ),
+            ),
+            const Gap(25),
+            BlocBuilder<BranchteamCubit, BranchteamState>(
+              builder: (context, state) {
+                return SearchBranchSheetDelegate(
+                  title: 'auth.branch'.tr(),
+                  isRequired: true,
+                  onChanged: (item) {
+                    if (item == null) return;
+                    branchTeam = item.nombreDb;
+                    setState(() {});
+                  },
+                  hintText: state.status == Status.error
+                      ? state.errorMsg
+                      : 'auth.select_branch'.tr(),
+                  enabled: state.status == Status.done,
+                  isLoading: state.status == Status.inProgress,
+                  items: state.branchTeams,
+                  validator: (value) {
+                    if (value == null) return 'auth.errors.branchTeam'.tr();
 
-                      return null;
-                    },
-                  );
-                },
-              ),
-              const VersionControlWidget(),
-              if (localStorage.currentUserName.isNotEmpty &&
-                  localStorage.jwt.isNotEmpty)
-                SwitchListTile(
-                  title: const Text('Entrar al modo offline:'),
-                  subtitle: Text(localStorage.currentUserName),
-                  value: isOffline,
-                  onChanged: (e) async {
-                    if (e == isOffline) return;
-                    setState(() => isOffline = e);
-                    await Future.delayed(const Duration(milliseconds: 500));
-                    if (!context.mounted) return;
-                    if (isOffline) {
-                      context
-                          .read<InternetConnectionCubit>()
-                          .makeToOfflineMode();
-                      global<BiometricCubit>().deactivateBiometricAuth();
-                      context.pushReplacement('/');
-                      showV2CustomSnackbar(
-                        context,
-                        title: 'Modo offline Activado',
-                        type: SnackbarType.success,
-                        message:
-                            'Has entrado al modo offline, puedes gestionar tus datos sin conexión a internet.',
-                      );
-                    }
+                    return null;
                   },
-                ),
-              const Gap(14),
-              BlocConsumer<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  final status = state.status;
-                  if (status == AuthStatus.unauthenticated) {
-                    showV2CustomSnackbar(
-                      context,
-                      title: state.errorMsg,
-                      type: SnackbarType.warning,
-                    );
-                  }
-                  if (status == AuthStatus.error) {
-                    showV2CustomSnackbar(
-                      context,
-                      title: state.errorMsg,
-                      type: SnackbarType.error,
-                    );
-                  }
-                  if (state.status == AuthStatus.authenticated) {
-                    if (!context.mounted) return;
-                    if (global<BiometricCubit>().state.isAuthenticated) {
-                      global<BiometricCubit>().deactivateBiometricAuth();
-                    }
+                );
+              },
+            ),
+            const VersionControlWidget(),
+            if (localStorage.currentUserName.isNotEmpty &&
+                localStorage.jwt.isNotEmpty)
+              SwitchListTile(
+                title: const Text('Entrar al modo offline:'),
+                subtitle: Text(localStorage.currentUserName),
+                value: isOffline,
+                onChanged: (e) async {
+                  if (e == isOffline) return;
+                  setState(() => isOffline = e);
+                  await Future.delayed(const Duration(milliseconds: 500));
+                  if (!context.mounted) return;
+                  if (isOffline) {
+                    context.read<InternetConnectionCubit>().makeToOfflineMode();
+                    global<BiometricCubit>().deactivateBiometricAuth();
                     context.pushReplacement('/');
                     showV2CustomSnackbar(
                       context,
-                      title: 'auth.logged'.tr(),
+                      title: 'Modo offline Activado',
                       type: SnackbarType.success,
+                      message:
+                          'Has entrado al modo offline, puedes gestionar tus datos sin conexión a internet.',
                     );
                   }
                 },
-                builder: (context, state) {
-                  return CustomElevatedButton(
-                    enabled: state.status != AuthStatus.authenticating,
-                    text: 'button.login'.tr(),
-                    color: Colors.black,
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-
-                      if (_formKey.currentState?.validate() ?? false) {
-                        context.read<AuthCubit>().login(
-                              userName: username!.trim(),
-                              password: password!.trim(),
-                              dbName: branchTeam!,
-                            );
-                      }
-                    },
-                  );
-                },
               ),
-              const Gap(5),
-            ],
-          ),
+            const Gap(14),
+            BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                final status = state.status;
+                if (status == AuthStatus.unauthenticated) {
+                  showV2CustomSnackbar(
+                    context,
+                    title: state.errorMsg,
+                    type: SnackbarType.warning,
+                  );
+                }
+                if (status == AuthStatus.error) {
+                  showV2CustomSnackbar(
+                    context,
+                    title: state.errorMsg,
+                    type: SnackbarType.error,
+                  );
+                }
+                if (state.status == AuthStatus.authenticated) {
+                  if (!context.mounted) return;
+                  if (global<BiometricCubit>().state.isAuthenticated) {
+                    global<BiometricCubit>().deactivateBiometricAuth();
+                  }
+                  context.pushReplacement('/');
+                  showV2CustomSnackbar(
+                    context,
+                    title: 'auth.logged'.tr(),
+                    type: SnackbarType.success,
+                  );
+                }
+              },
+              builder: (context, state) {
+                return CustomElevatedButton(
+                  enabled: state.status != AuthStatus.authenticating,
+                  text: 'button.login'.tr(),
+                  color: Colors.black,
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+
+                    final isValid = _formKey.currentState?.validate() ?? false;
+                    final dbName = branchTeam;
+                    if (!isValid || dbName == null) return;
+
+                    context.read<AuthCubit>().login(
+                          userName: _usernameController.text.trim(),
+                          password: _passwordController.text.trim(),
+                          dbName: dbName,
+                        );
+                  },
+                );
+              },
+            ),
+            const Gap(5),
+          ],
         ),
       ),
     );
