@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
+import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
@@ -72,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void logOut({required BuildContext context}) {
     // resetLocalStorage();
+    global<BiometricCubit>().deactivateBiometricAuth();
     context.pushReplacement('/login');
   }
 

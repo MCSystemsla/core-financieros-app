@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 class BiometricAuthService {
   final LocalAuthentication _auth = LocalAuthentication();
   final Logger _logger = Logger();
+  bool? _cachedAvailability;
 
   Future<bool> isBiometricAvailable() async {
     try {
@@ -24,7 +25,14 @@ class BiometricAuthService {
     }
   }
 
+  void invalidateAvailabilityCache() {
+    _cachedAvailability = null;
+  }
+
   Future<bool> haveBiometricAvailable() async {
+    final cached = _cachedAvailability;
+    if (cached != null) return cached;
+
     final isBiometricAvailable = await this.isBiometricAvailable();
     final availableBiometrics = await getAvailableBiometrics();
     final hasFingerprintOrFace =
@@ -33,11 +41,16 @@ class BiometricAuthService {
 
     _logger.d(
         'Biometría disponible: $isBiometricAvailable, Tipos: $availableBiometrics');
-    return isBiometricAvailable && hasFingerprintOrFace;
+
+    final result = isBiometricAvailable && hasFingerprintOrFace;
+    _cachedAvailability = result;
+
+    return result;
   }
 
   Future<bool> authenticate({String reason = 'Autenticación requerida'}) async {
     final isBiometricAvailable = await haveBiometricAvailable();
+    await _auth.stopAuthentication();
     try {
       final isAuth = await _auth.authenticate(
         localizedReason: reason,
