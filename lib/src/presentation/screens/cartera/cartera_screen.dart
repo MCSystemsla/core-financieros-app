@@ -260,8 +260,6 @@ class _SeguimientoSection extends StatelessWidget {
   }
 }
 
-/// Tarjeta del diseño anterior. Cartera ya no la usa — la mantiene
-/// `TutorialsScreen`, que la importa desde aquí.
 class ModuleCard extends StatelessWidget {
   final String title;
   final String subtitle;

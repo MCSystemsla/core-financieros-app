@@ -23,6 +23,7 @@ class SolicitudEstadoCard extends StatelessWidget {
   final String? nombrePromotor;
   final String? sucursal;
   final VoidCallback? onTap;
+  final String currency;
 
   const SolicitudEstadoCard({
     super.key,
@@ -37,6 +38,7 @@ class SolicitudEstadoCard extends StatelessWidget {
     this.nombrePromotor,
     this.sucursal,
     this.onTap,
+    this.currency = 'L.',
   });
 
   static const _staggerGroupSize = 8;
@@ -104,7 +106,7 @@ class SolicitudEstadoCard extends StatelessWidget {
                           runSpacing: 6,
                           children: [
                             CardTagWidget(
-                              label: 'L. $monto',
+                              label: '$currency $monto',
                               color: RedesignColors.green,
                               background: RedesignColors.greenTint,
                             ),

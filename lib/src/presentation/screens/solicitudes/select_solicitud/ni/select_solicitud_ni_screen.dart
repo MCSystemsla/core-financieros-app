@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/kiva/kiva_proccess_solicitud/kiva_proccess_solicitud.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
@@ -15,7 +16,10 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/represt
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/success_clay_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_entry_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -72,82 +76,83 @@ class SelectSolicitudScreenNi extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pushReplacement('/cartera'),
-          ),
-        ),
-        body: BlocBuilder<EnviarSolicitudWhenIsdoneCubit,
-            EnviarSolicitudWhenIsdoneState>(
-          builder: (context, state) {
-            return switch (state) {
-              OnEnviarSolicitudWhenIsdoneLoading() =>
-                const DownloadCatalogoLoading(
-                  lottieAsset: ImageAsset.enviarSolicitudOfflines,
-                  text: 'Enviando Solicitudes Offline al Servidor',
-                ),
-              OnEnviarSolicitudWhenIsdoneSuccess() => SuccessClayWidget(
-                  onDownloadComplete: () {
-                    context.push('/solicitudes');
-                  },
-                  isSucess: true,
-                  lottieAsset: ImageAsset.nuevaMenorSuccess,
-                  solicitudesSent: state.solicitudesSent,
-                  text: '',
-                  repeat: false,
+        backgroundColor: RedesignColors.background,
+        body: SafeArea(
+          bottom: false,
+          child: BlocBuilder<EnviarSolicitudWhenIsdoneCubit,
+              EnviarSolicitudWhenIsdoneState>(
+            builder: (context, state) {
+              return switch (state) {
+                OnEnviarSolicitudWhenIsdoneLoading() =>
+                  const DownloadCatalogoLoading(
+                    lottieAsset: ImageAsset.enviarSolicitudOfflines,
+                    text: 'Enviando Solicitudes Offline al Servidor',
+                  ),
+                OnEnviarSolicitudWhenIsdoneSuccess() => SuccessClayWidget(
+                    onDownloadComplete: () {
+                      context.push('/solicitudes');
+                    },
+                    isSucess: true,
+                    lottieAsset: ImageAsset.nuevaMenorSuccess,
+                    solicitudesSent: state.solicitudesSent,
+                    text: '',
+                    repeat: false,
 
-                  // isUploadingForms: true,
-                ),
-              OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
-                  errorMsg: state.msgError,
-                  onPressed: () {
-                    context
-                        .read<EnviarSolicitudWhenIsdoneCubit>()
-                        .sendSolicitudWhenIsDone(
-                          isConnected: isConnected,
-                          onSolicitudCreditoIsKivaFn: ({
-                            required String solicitudId,
-                            required String numeroSolicitud,
-                            required String uuid,
-                            required String tipoProducto,
-                            required String nombreFomularioKiva,
-                            required String cedula,
-                            required int tipoSolicitudId,
-                            required String nombreCliente,
-                          }) async {
-                            return await processSolicitud(
-                              uuid: uuid,
-                              numeroSolicitud: numeroSolicitud,
-                              solicitudId: solicitudId,
-                              tipoProducto: tipoProducto,
-                              tipoSolicitudId: tipoSolicitudId,
-                              nombreFomularioKiva: nombreFomularioKiva,
-                              cedula: cedula,
-                              kivaRepository: kivaRepository,
-                              kivaProvider: kivaProvider,
-                              nombreCliente: nombreCliente,
-                            );
-                          },
-                        );
-                  },
-                ),
-              OnEnviarSolicitudWhenIsdonePendingVerification() => OnErrorWidget(
-                  areUnsentKivaForms: state.unsentKivaForms.isNotEmpty,
-                  unsentKivaForms: state.unsentKivaForms,
-                  areUnsentCedulas: state.unsentCedulas.isNotEmpty,
-                  unsentCedulas: state.unsentCedulas,
-                  solicitudesSent: state.solicitudesSent,
-                  errors: state.errors,
-                  btnTitle: 'OK',
-                  errorMsg: state.msgError,
-                  onPressed: () {
-                    context.read<EnviarSolicitudWhenIsdoneCubit>().resetState();
-                  },
-                ),
-              _ => const _SelectSolicitud(),
-            };
-          },
+                    // isUploadingForms: true,
+                  ),
+                OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
+                    errorMsg: state.msgError,
+                    onPressed: () {
+                      context
+                          .read<EnviarSolicitudWhenIsdoneCubit>()
+                          .sendSolicitudWhenIsDone(
+                            isConnected: isConnected,
+                            onSolicitudCreditoIsKivaFn: ({
+                              required String solicitudId,
+                              required String numeroSolicitud,
+                              required String uuid,
+                              required String tipoProducto,
+                              required String nombreFomularioKiva,
+                              required String cedula,
+                              required int tipoSolicitudId,
+                              required String nombreCliente,
+                            }) async {
+                              return await processSolicitud(
+                                uuid: uuid,
+                                numeroSolicitud: numeroSolicitud,
+                                solicitudId: solicitudId,
+                                tipoProducto: tipoProducto,
+                                tipoSolicitudId: tipoSolicitudId,
+                                nombreFomularioKiva: nombreFomularioKiva,
+                                cedula: cedula,
+                                kivaRepository: kivaRepository,
+                                kivaProvider: kivaProvider,
+                                nombreCliente: nombreCliente,
+                              );
+                            },
+                          );
+                    },
+                  ),
+                OnEnviarSolicitudWhenIsdonePendingVerification() =>
+                  OnErrorWidget(
+                    areUnsentKivaForms: state.unsentKivaForms.isNotEmpty,
+                    unsentKivaForms: state.unsentKivaForms,
+                    areUnsentCedulas: state.unsentCedulas.isNotEmpty,
+                    unsentCedulas: state.unsentCedulas,
+                    solicitudesSent: state.solicitudesSent,
+                    errors: state.errors,
+                    btnTitle: 'OK',
+                    errorMsg: state.msgError,
+                    onPressed: () {
+                      context
+                          .read<EnviarSolicitudWhenIsdoneCubit>()
+                          .resetState();
+                    },
+                  ),
+                _ => const _SelectSolicitud(),
+              };
+            },
+          ),
         ),
       ),
     );
@@ -159,65 +164,129 @@ class _SelectSolicitud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final actions = LocalStorage().currentActions;
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
-
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                'Seleccionar un tipo de Credito',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontSize: 19,
-                    ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                'Por favor, elige una de las siguientes opciones:',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(),
-              ),
-            ),
-            const Gap(20),
-            const _SolicitudCardsRow1(),
-            const Gap(20),
-            const _SolicitudesCardsRow2(),
-            const Gap(20),
-            const _MySolicitudesAsignmentsCard(),
-            if (actions.contains(TypeAction.asignacion.codigo) &&
-                isConnected == ConnectionStatus.connected) ...[
-              const Gap(20),
-              const _SolicitudesCardsRow3(),
-            ],
-            const Gap(20),
-            // const _SolicitudesCardsRow4(),
-            // const Gap(20),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ScreenHeaderWidget(
+            title: 'Solicitudes',
+            subtitle:
+                'Elige el tipo de crédito que vas a registrar o el trámite que vas a continuar.',
+            onBack: () => context.pushReplacement('/cartera'),
+          ),
+          const Gap(24),
+          const _CreditoNuevoSection(),
+          const _GestionSection(),
+          const _MiTrabajoSection(),
+          const Gap(28),
+        ],
       ),
     );
   }
 }
 
-class _SolicitudesCardsRow3 extends StatelessWidget {
-  const _SolicitudesCardsRow3();
+class _CreditoNuevoSection extends StatelessWidget {
+  const _CreditoNuevoSection();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final connectionStatus =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+
+    return SectionBlockWidget(
+      label: 'CREAR SOLICITUD',
       children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg5,
-            title: 'Asignacion de Solicitudes Crédito',
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ModuleEntryCard(
+                  icon: Icons.storefront_outlined,
+                  iconColor: RedesignColors.green,
+                  iconBackground: RedesignColors.greenTint,
+                  title: 'Nueva',
+                  subtitle: 'Negocio propio',
+                  onPressed: () {
+                    context.pushTransparentRoute(
+                      const AddUserCedulaScreen(
+                        typeForm: TypeForm.nueva,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Gap(8),
+              Expanded(
+                child: ModuleEntryCard(
+                  icon: Icons.badge_outlined,
+                  iconColor: RedesignColors.teal,
+                  iconBackground: RedesignColors.tealTint,
+                  title: 'Asalariado',
+                  subtitle: 'Con constancia salarial',
+                  onPressed: () {
+                    context.pushTransparentRoute(
+                      const AddUserCedulaScreen(
+                        typeForm: TypeForm.asalariado,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        ModuleTileWidget(
+          icon: Icons.autorenew_rounded,
+          iconColor: RedesignColors.indigo,
+          iconBackground: RedesignColors.indigoTint,
+          title: 'Represtamo',
+          subtitle: 'Renovar crédito de un cliente actual',
+          onPressed: () {
+            if (connectionStatus != ConnectionStatus.connected) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const CrearSolicitudScreenNi(
+                        typeForm: TypeForm.represtamo,
+                      )),
+                ),
+              );
+              return;
+            }
+            context.pushTransparentRoute(
+              const ReprestamoAddUserCedulaScreen(
+                typeForm: TypeForm.represtamo,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _GestionSection extends StatelessWidget {
+  const _GestionSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final actions = LocalStorage().currentActions;
+    final connectionStatus =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+
+    return SectionBlockWidget(
+      label: 'GESTIÓN DE SOLICITUDES',
+      children: [
+        if (actions.contains(TypeAction.asignacion.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.person_add_alt_outlined,
+            iconColor: RedesignColors.indigo,
+            iconBackground: RedesignColors.indigoTint,
+            title: 'Asignación',
+            tag: 'Solo en línea',
+            subtitle: 'Repartir solicitudes al equipo',
             onPressed: () {
               Navigator.push(
                 context,
@@ -227,151 +296,44 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
               );
             },
           ),
-        ),
-        const Gap(10),
       ],
     );
   }
 }
 
-class _MySolicitudesAsignmentsCard extends StatelessWidget {
-  const _MySolicitudesAsignmentsCard();
+class _MiTrabajoSection extends StatelessWidget {
+  const _MiTrabajoSection();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return SectionBlockWidget(
+      label: 'MI TRABAJO',
       children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.mySolicitudesAssignments,
-            title: 'Mi Solicitudes Asignadas',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const SolicitudesAsesorScreen()),
-                ),
-              );
-            },
-          ),
+        ModuleTileWidget(
+          icon: Icons.cloud_upload_outlined,
+          iconColor: RedesignColors.amber,
+          iconBackground: RedesignColors.amberTint,
+          title: 'Solicitudes en proceso offline',
+          subtitle: 'Guardadas en el telefono',
+          onPressed: () {
+            context.push('/solicitudes/solicitudes-pendientes');
+          },
         ),
-        const Gap(10),
-      ],
-    );
-  }
-}
-
-// class _SolicitudesCardsRow4 extends StatelessWidget {
-//   const _SolicitudesCardsRow4();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         const Gap(10),
-//         Expanded(
-//           child: SolicitudCard(
-//             svgPath: ImageAsset.nuevaMenorBg6,
-//             title: 'Autorizacion de Solicitudes Crédito',
-//             onPressed: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: ((_) => const AutorizacionSolcitudScreen()),
-//                 ),
-//               );
-//             },
-//           ),
-//         ),
-//         const Gap(10),
-//       ],
-//     );
-//   }
-// }
-
-class _SolicitudesCardsRow2 extends StatelessWidget {
-  const _SolicitudesCardsRow2();
-
-  @override
-  Widget build(BuildContext context) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            svgPath: ImageAsset.nuevaMenorBg3,
-            title: 'Represtamo',
-            onPressed: () {
-              if (isConnected != ConnectionStatus.connected) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const CrearSolicitudScreenNi(
-                          typeForm: TypeForm.represtamo,
-                        )),
-                  ),
-                );
-                return;
-              }
-              context.pushTransparentRoute(
-                const ReprestamoAddUserCedulaScreen(
-                  typeForm: TypeForm.represtamo,
-                ),
-              );
-            },
-          ),
+        ModuleTileWidget(
+          icon: Icons.assignment_ind_outlined,
+          iconColor: RedesignColors.teal,
+          iconBackground: RedesignColors.tealTint,
+          title: 'Mis solicitudes asignadas',
+          subtitle: 'Las solicitudes que estan a mi nombre',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((_) => const SolicitudesAsesorScreen()),
+              ),
+            );
+          },
         ),
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              context.push('/solicitudes/solicitudes-pendientes');
-            },
-            svgPath: ImageAsset.cedulaPhoto,
-            title: 'Solicitudes en proceso offline',
-          ),
-        ),
-        const Gap(10),
-      ],
-    );
-  }
-}
-
-class _SolicitudCardsRow1 extends StatelessWidget {
-  const _SolicitudCardsRow1();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              context.pushTransparentRoute(const AddUserCedulaScreen(
-                typeForm: TypeForm.nueva,
-              ));
-            },
-            svgPath: ImageAsset.nuevaMenorBg,
-            title: 'Nueva',
-          ),
-        ),
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              context.pushTransparentRoute(const AddUserCedulaScreen(
-                typeForm: TypeForm.asalariado,
-              ));
-            },
-            svgPath: ImageAsset.nuevaMenorBg2,
-            title: 'Asalariado',
-          ),
-        ),
-        const Gap(10),
       ],
     );
   }

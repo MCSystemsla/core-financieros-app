@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/solicitudes/analisis_solicitudes_cubit.dart';
@@ -7,10 +8,12 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class AnalisisSolicitudesScreen extends StatelessWidget {
   const AnalisisSolicitudesScreen({super.key});
@@ -22,37 +25,40 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
         SolicitudCreditoRepositoryImpl(),
       )..getSolicitudesByEstado(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Analisis de solicitudes'),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(10),
-            const Expanded(
-              child: _AnalisisSolicitudesTitle(),
-            ),
-            BlocBuilder<AnalisisSolicitudesCubit, AnalisisSolicitudesState>(
-              builder: (context, state) {
-                return switch (state.status) {
-                  Status.inProgress => const Expanded(child: LoadingWidget()),
-                  Status.error => OnErrorWidget(
-                      errorMsg: state.errorMsg,
-                      onPressed: () {
-                        context
-                            .read<AnalisisSolicitudesCubit>()
-                            .getSolicitudesByEstado();
-                      },
-                    ),
-                  Status.done => _AnilisListDataWidget(
-                      data: state.data,
-                    ),
-                  _ => const SizedBox(),
-                };
-              },
-            ),
-            const Gap(15),
-          ],
+        backgroundColor: RedesignColors.background,
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ScreenHeaderWidget(
+                title: 'Análisis de solicitudes',
+                subtitle:
+                    'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
+                onBack: () => context.pushReplacement('/cartera'),
+              ),
+              const Gap(20),
+              BlocBuilder<AnalisisSolicitudesCubit, AnalisisSolicitudesState>(
+                builder: (context, state) {
+                  return switch (state.status) {
+                    Status.inProgress => const Expanded(child: LoadingWidget()),
+                    Status.error => OnErrorWidget(
+                        errorMsg: state.errorMsg,
+                        onPressed: () {
+                          context
+                              .read<AnalisisSolicitudesCubit>()
+                              .getSolicitudesByEstado();
+                        },
+                      ),
+                    Status.done => _AnilisListDataWidget(
+                        data: state.data,
+                      ),
+                    _ => const SizedBox(),
+                  };
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -84,37 +90,6 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   }
 }
 
-class _AnalisisSolicitudesTitle extends StatelessWidget {
-  const _AnalisisSolicitudesTitle();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Analisis de solicitudes credito',
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.copyWith(fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          const Gap(10),
-          Text(
-            'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _AnilisListDataWidget extends StatelessWidget {
   final List<SolicitudEstado> data;
 
@@ -123,15 +98,16 @@ class _AnilisListDataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data.isEmpty) {
-      return const EmptyListWidget(
-        message: 'No hay analisis analisis pendientes.',
+      return const Expanded(
+        child: EmptyListWidget(
+          message: 'No hay analisis pendientes.',
+        ),
       );
     }
     return Expanded(
-      flex: 5,
       child: ListView.builder(
         itemCount: data.length,
-        shrinkWrap: true,
+        padding: const EdgeInsets.only(bottom: 24),
         itemBuilder: (BuildContext context, int index) {
           return AnalisisCreditCard(
             numeroSolicitud: data[index].numero,
@@ -140,8 +116,8 @@ class _AnilisListDataWidget extends StatelessWidget {
               monto: data[index].monto!,
             ),
             index: index,
-            title:
-                'Numero Solicitud: ${data[index].numero} ${data[index].tipoSolicitud}',
+            title: 'Solicitud N. ${data[index].numero}',
+            tipoSolicitudString: data[index].tipoSolicitud,
             subtitle: data[index].nombreCompleto ?? 'N/A',
             description: data[index].monto?.toCurrencyString() ?? 'N/A',
           );
