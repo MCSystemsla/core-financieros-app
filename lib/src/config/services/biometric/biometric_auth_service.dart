@@ -50,16 +50,24 @@ class BiometricAuthService {
 
   Future<bool> authenticate({String reason = 'Autenticación requerida'}) async {
     final isBiometricAvailable = await haveBiometricAvailable();
-    await _auth.stopAuthentication();
     try {
-      final isAuth = await _auth.authenticate(
+      final isAuth = await _auth
+          .authenticate(
         localizedReason: reason,
         options: AuthenticationOptions(
-          stickyAuth: true,
+          stickyAuth: false,
           biometricOnly: isBiometricAvailable,
           sensitiveTransaction: true,
           useErrorDialogs: true,
         ),
+      )
+          .timeout(
+        const Duration(seconds: 90),
+        onTimeout: () {
+          _logger.e('Timeout esperando la autenticación biométrica');
+
+          return false;
+        },
       );
 
       _logger.i('Estado de auth $isAuth');

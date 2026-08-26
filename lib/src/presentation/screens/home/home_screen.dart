@@ -40,13 +40,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final bioCubit = global<BiometricCubit>();
     final connection = context.read<InternetConnectionCubit>().state;
 
-    if (!bioCubit.state.isAuthenticated) {
-      await bioCubit.authenticate(context);
+    bool isAuthenticated = bioCubit.state.isAuthenticated;
+    if (!isAuthenticated) {
+      try {
+        isAuthenticated = await bioCubit.authenticate(context);
+      } catch (_) {
+        isAuthenticated = false;
+      }
     }
 
-    if (!mounted || !bioCubit.state.isAuthenticated) return;
+    if (!mounted) return;
 
-    final needsSync = CatalogoSync.needToSync();
+    final needsSync = isAuthenticated && CatalogoSync.needToSync();
 
     setState(() {
       _shouldSync = needsSync &&
