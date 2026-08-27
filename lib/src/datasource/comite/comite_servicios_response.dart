@@ -46,7 +46,7 @@ class ComiteServicesData {
         id: json['Id'],
         codigo: json['Codigo'],
         nombre: json['Nombre'],
-        monto: json['Monto'],
+        monto: json['Monto'] ?? 0.00,
         tipoCalculo: json['TipoCalculo'],
         isSelected: json['IsSelected'],
       );
