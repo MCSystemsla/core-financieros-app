@@ -1,6 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +109,17 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                 color: const Color(0xffF6153F),
                 title: 'Registrar Plan de inversion',
                 subtitle: 'Crear plan de inversion',
-                onTap: () {},
+                onTap: () {
+                  context.pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => PlanInversionScreen(
+                        numeroSolicitud: int.parse(numeroSolicitud),
+                      ),
+                    ),
+                  );
+                },
               ),
               SelectableCardItem(
                 userHaveDataAlready: false,
@@ -114,7 +127,18 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                 color: const Color(0xff455A64),
                 title: 'Registrar Imágenes del negocio',
                 subtitle: 'Ingresa fotografías del negocio',
-                onTap: () {},
+                onTap: () {
+                  context.pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => ImagenesNegocioHnScreen(
+                        numeroSolicitud: numeroSolicitud,
+                        cedulaCliente: cedulaCliente,
+                      ),
+                    ),
+                  );
+                },
               ),
               // SelectableCardItem(
               //   userHaveDataAlready: false,
@@ -138,7 +162,19 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                 color: const Color(0xFF0EA5E9),
                 title: 'Registrar Ubicacion',
                 subtitle: 'Crear ubicacion de cliente',
-                onTap: () {},
+                onTap: () {
+                  context.pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (ctx) => UbiacacionClienteHnScreen(
+                        documentoCliente: cedulaCliente,
+                        numeroSolicitud: int.parse(numeroSolicitud),
+                        tipoSolicitud: tipoSolicitudString,
+                      ),
+                    ),
+                  );
+                },
               ),
               SelectableCardItem(
                 userHaveDataAlready: false,
