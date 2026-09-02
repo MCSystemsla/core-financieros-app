@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -37,7 +38,7 @@ class _ActualizarAnalisisMenorMilForm1State
             Container(
               margin: const EdgeInsets.all(18),
               child: Text(
-                'Balance general expresado en lempira',
+                'Balance general expresado en ${CurrencyHelper.currencyName()}',
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,

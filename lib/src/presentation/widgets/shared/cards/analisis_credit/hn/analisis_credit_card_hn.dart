@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -145,7 +146,7 @@ class AnalisisCreditCardHn extends StatelessWidget {
                         runSpacing: 6,
                         children: [
                           CardTagWidget(
-                            label: 'L. $description',
+                            label: '${CurrencyHelper.currencyPrefix()} $description',
                             color: RedesignColors.green,
                             background: RedesignColors.greenTint,
                           ),

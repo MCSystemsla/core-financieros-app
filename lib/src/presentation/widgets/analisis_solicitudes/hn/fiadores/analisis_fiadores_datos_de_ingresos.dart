@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
@@ -54,7 +55,8 @@ class _AnalisisFiadoresDatosDeIngresosState
             child: Column(
               children: [
                 OutlineTextfieldWidget(
-                  title: 'Sueldo/Salario neto: (L)',
+                  title:
+                      'Sueldo/Salario neto: (${CurrencyHelper.currencySymbol()})',
                   inputFormatters: [
                     CurrencyInputFormatter(mantissaLength: 0),
                   ],
@@ -71,7 +73,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                 const Gap(20),
 
                 OutlineTextfieldWidget(
-                  title: 'Otros: (L)',
+                  title: 'Otros: (${CurrencyHelper.currencySymbol()})',
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(mantissaLength: 0),
@@ -107,7 +109,8 @@ class _AnalisisFiadoresDatosDeIngresosState
                   hintText: totalIngresosFamiliares.toCurrencyString(
                     mantissaLength: 0,
                   ),
-                  title: 'Total ingresos neto: (L)',
+                  title:
+                      'Total ingresos neto: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -120,7 +123,7 @@ class _AnalisisFiadoresDatosDeIngresosState
 
                 // ----------- INFORMACIÓN DEL NEGOCIO ----------------
                 OutlineTextfieldWidget(
-                  title: 'Ventas: (L)',
+                  title: 'Ventas: (${CurrencyHelper.currencySymbol()})',
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(mantissaLength: 0),
@@ -141,7 +144,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                   inputFormatters: [
                     CurrencyInputFormatter(mantissaLength: 0),
                   ],
-                  title: 'Costos de ventas: (L)',
+                  title: 'Costos de ventas: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     final newValue = toNumericString(v);
                     cubit.onFieldChanged(
@@ -158,7 +161,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                   inputFormatters: [
                     CurrencyInputFormatter(mantissaLength: 0),
                   ],
-                  title: 'Gastos operativos: (L)',
+                  title: 'Gastos operativos: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     final newValue = toNumericString(v);
                     cubit.onFieldChanged(
@@ -175,7 +178,8 @@ class _AnalisisFiadoresDatosDeIngresosState
                   hintText: ganaciasNegocio.toCurrencyString(
                     mantissaLength: 0,
                   ),
-                  title: 'Ganancias del negocio: (L)',
+                  title:
+                      'Ganancias del negocio: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -193,7 +197,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                       mantissaLength: 0,
                     ),
                   ],
-                  title: 'Otros ingresos: (L)',
+                  title: 'Otros ingresos: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     final newValue = toNumericString(v);
                     cubit.onFieldChanged(
@@ -212,7 +216,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                       mantissaLength: 0,
                     ),
                   ],
-                  title: 'Consumo familiar: (L)',
+                  title: 'Consumo familiar: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     final newValue = toNumericString(v);
                     cubit.onFieldChanged(
@@ -229,7 +233,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                   hintText: saldoDisponible.toCurrencyString(
                     mantissaLength: 0,
                   ),
-                  title: 'Saldo disponible: (L)',
+                  title: 'Saldo disponible: (${CurrencyHelper.currencySymbol()})',
                   onChange: (v) {
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
@@ -304,7 +308,7 @@ class _AnalisisFiadoresDatosDeIngresosState
                 const Gap(20),
 
                 OutlineTextfieldWidget(
-                  title: 'Pago de alquiler: (L)',
+                  title: 'Pago de alquiler: (${CurrencyHelper.currencySymbol()})',
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(

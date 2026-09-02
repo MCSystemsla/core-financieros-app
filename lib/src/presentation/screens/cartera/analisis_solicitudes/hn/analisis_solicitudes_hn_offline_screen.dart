@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
@@ -254,7 +255,8 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
                             runSpacing: 6,
                             children: [
                               CardTagWidget(
-                                label: 'L. $description',
+                                label:
+                                    '${CurrencyHelper.currencyPrefix()} $description',
                                 color: RedesignColors.green,
                                 background: RedesignColors.greenTint,
                               ),

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -63,17 +64,17 @@ void inventarioBottomSheet(
                 children: [
                   _detailRow(
                     'Precio venta',
-                    "C\$. ${inventario.precioVenta?.toCurrencyString() ?? 'N/A'}",
+                    '${CurrencyHelper.currencyPrefix()} ${inventario.precioVenta?.toCurrencyString() ?? 'N/A'}',
                   ),
                   _divider(),
                   _detailRow('Cantidad', '${inventario.cantidad}'),
                   _divider(),
                   _detailRow('Costo compra',
-                      "C\$. ${inventario.costoCompra?.toCurrencyString() ?? 'N/A'}"),
+                      '${CurrencyHelper.currencyPrefix()} ${inventario.costoCompra?.toCurrencyString() ?? 'N/A'}'),
                   _divider(),
                   _detailRow(
                     'Total',
-                    "C\$. ${inventario.total?.toCurrencyString() ?? 'N/A'}",
+                    '${CurrencyHelper.currencyPrefix()} ${inventario.total?.toCurrencyString() ?? 'N/A'}',
                     highlight: true,
                   ),
                 ],

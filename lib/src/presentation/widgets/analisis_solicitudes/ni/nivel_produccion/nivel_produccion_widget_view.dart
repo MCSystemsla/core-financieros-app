@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nivel_produccion/nivel_produccion_articulo_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/nivel_produccion/nivel_produccion_card.dart';
 import 'package:flutter/material.dart';
@@ -40,14 +41,14 @@ class NivelProduccionWidgetView extends StatelessWidget {
             NivelProduccionArticuloCard(
               title: 'Frecuencia Credito: Anual',
               subtitle: 'Nombre Articulo',
-              description: 'Total: C\$. 50,000',
+              description: 'Total: ${CurrencyHelper.currencyPrefix()} 50,000',
               precioVentaUnidad: 33000,
               onTap: () {},
             ),
             NivelProduccionArticuloCard(
               title: 'Frecuencia Credito: Anual',
               subtitle: 'Chapodadora',
-              description: 'Total: C\$. 5,000',
+              description: 'Total: ${CurrencyHelper.currencyPrefix()} 5,000',
               precioVentaUnidad: 33000,
               onTap: () {},
             ),

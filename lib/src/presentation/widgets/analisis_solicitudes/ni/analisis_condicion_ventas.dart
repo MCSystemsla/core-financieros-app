@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/ventas_days_card.dart';
 import 'package:flutter/material.dart';
@@ -30,43 +31,43 @@ class AnalisisCondicionVentas extends StatelessWidget {
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Lunes',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Martes',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Miercoles',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Jueves',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Viernes',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Sabado',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Domingo',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             const Gap(20),
