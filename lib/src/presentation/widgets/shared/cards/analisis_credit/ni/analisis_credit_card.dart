@@ -1,11 +1,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/ni/select_type_analisis_modal_sheet_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import '../../../../../screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart'
+    show AnalisisSolicitudesInterceptorType;
 
 class AnalisisCreditCard extends StatelessWidget {
   final int index;
@@ -32,6 +34,24 @@ class AnalisisCreditCard extends StatelessWidget {
 
   static const _staggerGroupSize = 8;
 
+  void _openAnalisisSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => SelectTypeAnalisisModalSheetNiWidget(
+        index: index,
+        animate: false,
+        enabled: true,
+        numeroSolicitud: numeroSolicitud,
+        tipoSolicitud: tipoSolicitud,
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        tipoSolicitudString: tipoSolicitudString,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FadeInUp(
@@ -48,23 +68,7 @@ class AnalisisCreditCard extends StatelessWidget {
             color: RedesignColors.surface,
             borderRadius: BorderRadius.circular(16),
             child: InkWell(
-              onTap: enabled
-                  ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => AnalisisSolicitudesInterceptor(
-                            index: index,
-                            type: tipoSolicitud!,
-                            title: title,
-                            subtitle: subtitle,
-                            description: description,
-                            numeroSolicitud: numeroSolicitud,
-                          ),
-                        ),
-                      );
-                    }
-                  : null,
+              onTap: enabled ? () => _openAnalisisSheet(context) : null,
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 padding: const EdgeInsets.all(14),
