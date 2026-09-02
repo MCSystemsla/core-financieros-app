@@ -1,5 +1,5 @@
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_nueva_menor_mil_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_asalariado_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitudes_nueva_mayor_a_mil.dart';
 import 'package:flutter/material.dart';
 
@@ -32,12 +32,13 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (type) {
-      AnalisisSolicitudesInterceptorType.nueva => AnalisisSolicitudFormScreen(
+      AnalisisSolicitudesInterceptorType.nueva => AnalisisNuevaMenorMilHnForm(
           index: index,
           title: title,
           subtitle: subtitle,
           description: description,
-          numeroSolicitud: numeroSolicitud,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          tipoSolicitud: type,
         ),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
         AnalisisSolicitudNuevaMayorAMil(

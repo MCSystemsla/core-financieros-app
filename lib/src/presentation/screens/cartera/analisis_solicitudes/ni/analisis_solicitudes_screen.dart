@@ -15,15 +15,17 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../bloc/solicitudes/solicitudes_by_asesor/solicitudes_by_asesor_cubit.dart';
+
 class AnalisisSolicitudesScreen extends StatelessWidget {
   const AnalisisSolicitudesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => AnalisisSolicitudesCubit(
+      create: (ctx) => SolicitudesByAsesorCubit(
         SolicitudCreditoRepositoryImpl(),
-      )..getSolicitudesByEstado(),
+      )..getSolicitudesByAsesor(),
       child: Scaffold(
         backgroundColor: RedesignColors.background,
         body: SafeArea(
@@ -35,25 +37,26 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
                 title: 'Análisis de solicitudes',
                 subtitle:
                     'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
-                onBack: () => context.pushReplacement('/cartera'),
+                onBack: () => context.pop(),
               ),
               const Gap(20),
-              BlocBuilder<AnalisisSolicitudesCubit, AnalisisSolicitudesState>(
+              BlocBuilder<SolicitudesByAsesorCubit, SolicitudesByAsesorState>(
                 builder: (context, state) {
-                  return switch (state.status) {
-                    Status.inProgress => const Expanded(child: LoadingWidget()),
-                    Status.error => OnErrorWidget(
+                  return switch (state) {
+                    OnSolicitudesByAsesorLoading() =>
+                      const Expanded(child: LoadingWidget()),
+                    OnSolicitudesByAsesorError() => OnErrorWidget(
                         errorMsg: state.errorMsg,
                         onPressed: () {
                           context
-                              .read<AnalisisSolicitudesCubit>()
-                              .getSolicitudesByEstado();
+                              .read<SolicitudesByAsesorCubit>()
+                              .getSolicitudesByAsesor();
                         },
                       ),
-                    Status.done => _AnilisListDataWidget(
-                        data: state.data,
+                    OnSolicitudesByAsesorSuccess() => _AnilisListDataWidget(
+                        data: state.solicitudes.data,
                       ),
-                    _ => const SizedBox(),
+                    _ => const SizedBox.shrink(),
                   };
                 },
               ),

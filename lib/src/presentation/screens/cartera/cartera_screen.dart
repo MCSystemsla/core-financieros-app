@@ -98,30 +98,30 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
                   context.push('/solicitudes');
                 },
               ),
-            if (flavor == Flavor.honduras)
-              ModuleTileWidget(
-                icon: Icons.bar_chart_rounded,
-                iconColor: RedesignColors.teal,
-                iconBackground: RedesignColors.tealTint,
-                title: 'Análisis',
-                subtitle: 'Capacidad de pago, fiadores y garantías',
-                onPressed: () {
-                  state.connectionStatus == ConnectionStatus.connected
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const AnalisisInterceptorByFlavor(),
-                          ),
-                        )
-                      : Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const AnalisisSolicitudesHnOfflineScreen(),
-                          ),
-                        );
-                },
-              ),
+            // if (flavor == Flavor.honduras)
+            ModuleTileWidget(
+              icon: Icons.bar_chart_rounded,
+              iconColor: RedesignColors.teal,
+              iconBackground: RedesignColors.tealTint,
+              title: 'Análisis',
+              subtitle: 'Capacidad de pago, fiadores y garantías',
+              onPressed: () {
+                state.connectionStatus == ConnectionStatus.connected
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AnalisisInterceptorByFlavor(),
+                        ),
+                      )
+                    : Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const AnalisisSolicitudesHnOfflineScreen(),
+                        ),
+                      );
+              },
+            ),
             if (flavor == Flavor.honduras &&
                 state.connectionStatus == ConnectionStatus.connected &&
                 actions.contains(TypeAction.supervisionDeCredito.codigo))
