@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/asig
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/solicitudes_asesor/solicitudes_asesor_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/rechazar_solicitud/rechazar_solicitud_screen_ni.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/success_clay_widget.dart';
@@ -311,6 +312,24 @@ class _GestionSection extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: ((_) => const AutorizacionSolcitudScreen()),
+                ),
+              );
+            },
+          ),
+        if (actions.contains(TypeAction.rechazarSolicitud.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.cancel_outlined,
+            iconColor: RedesignColors.red,
+            iconBackground: RedesignColors.redTint,
+            title: 'Rechazar Solicitud',
+            tag: 'Solo en línea',
+            subtitle: 'Denegar solicitud de crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const RechazarSolicitudScreenNi()),
                 ),
               );
             },

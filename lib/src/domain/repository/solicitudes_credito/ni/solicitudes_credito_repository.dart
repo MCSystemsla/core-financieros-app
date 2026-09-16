@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/so
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitudes/rechazar_solicitud/rechazar_solicitud_ni.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
@@ -117,6 +118,9 @@ abstract class SolicitudesCreditoRepository {
   Future<void> autorizarSolicitudCredito({
     required int numeroSolicitud,
     required String tipoSolicitud,
+  });
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudNi data,
   });
 }
 
@@ -853,6 +857,26 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
             getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
         throw AppException(optionalMsg: errorMsg);
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudNi data,
+  }) async {
+    final endpoint = RechazarSolicitudNiEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message']?.toString() ?? 'Solicitud rechazada exitosamente.';
     } catch (e) {
       _logger.e(e);
       rethrow;
