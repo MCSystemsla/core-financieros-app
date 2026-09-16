@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/enviar_solicitud_when_isdone/enviar_solicitud_when_isdone_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/add_user_cedula_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/asignacion_solicitud/nueva/asignacion_nueva_list_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/autorizacion_solcitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/autorizacion_solicitud/solicitudes_asesor/solicitudes_asesor_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
@@ -296,6 +297,24 @@ class _GestionSection extends StatelessWidget {
               );
             },
           ),
+        // if (actions.contains(TypeAction.autorizacion.codigo) &&
+        // connectionStatus == ConnectionStatus.connected)
+        ModuleTileWidget(
+          icon: Icons.verified_user_outlined,
+          iconColor: RedesignColors.indigo,
+          iconBackground: RedesignColors.indigoTint,
+          title: 'Autorizacion',
+          tag: 'Solo en línea',
+          subtitle: 'Autorizar solicitudes de crédito',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((_) => const AutorizacionSolcitudScreen()),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

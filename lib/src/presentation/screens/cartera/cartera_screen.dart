@@ -87,17 +87,17 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
         return SectionBlockWidget(
           label: 'SOLICITUDES Y ANÁLISIS',
           children: [
-            if (actions.contains(TypeAction.llenarSolicitudes.codigo))
-              ModuleTileWidget(
-                icon: Icons.description_outlined,
-                iconColor: RedesignColors.green,
-                iconBackground: RedesignColors.greenTint,
-                title: 'Solicitudes',
-                subtitle: 'Comercial, asalariado, grupal y asignaciones',
-                onPressed: () {
-                  context.push('/solicitudes');
-                },
-              ),
+            // if (actions.contains(TypeAction.llenarSolicitudes.codigo))
+            ModuleTileWidget(
+              icon: Icons.description_outlined,
+              iconColor: RedesignColors.green,
+              iconBackground: RedesignColors.greenTint,
+              title: 'Solicitudes',
+              subtitle: 'Comercial, asalariado, grupal y asignaciones',
+              onPressed: () {
+                context.push('/solicitudes');
+              },
+            ),
             // if (flavor == Flavor.honduras)
             ModuleTileWidget(
               icon: Icons.bar_chart_rounded,

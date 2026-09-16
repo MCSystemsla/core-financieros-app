@@ -445,6 +445,30 @@ class AsignarSolicitudAsalariadoEndpoint extends Endpoint {
       };
 }
 
+class AutorizarSolicitudCreditoEndpoint extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  AutorizarSolicitudCreditoEndpoint({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/autorizar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud,
+        'TipoSolicitud': tipoSolicitud,
+      };
+}
+
 class KivaConfiguaracionSolicitudEndpoint extends Endpoint {
   KivaConfiguaracionSolicitudEndpoint();
   @override

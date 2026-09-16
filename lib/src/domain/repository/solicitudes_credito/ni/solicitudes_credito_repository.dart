@@ -114,6 +114,10 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor();
   Future<KivaConfiguracionResponse> getKivaConfiguracion();
+  Future<void> autorizarSolicitudCredito({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -826,6 +830,29 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       final data = KivaConfiguracionResponse.fromJson(resp);
       _logger.i(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> autorizarSolicitudCredito({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = AutorizarSolicitudCreditoEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
     } catch (e) {
       _logger.e(e);
       rethrow;
