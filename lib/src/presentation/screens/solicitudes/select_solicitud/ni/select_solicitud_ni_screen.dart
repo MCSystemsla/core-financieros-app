@@ -297,24 +297,24 @@ class _GestionSection extends StatelessWidget {
               );
             },
           ),
-        // if (actions.contains(TypeAction.autorizacion.codigo) &&
-        // connectionStatus == ConnectionStatus.connected)
-        ModuleTileWidget(
-          icon: Icons.verified_user_outlined,
-          iconColor: RedesignColors.indigo,
-          iconBackground: RedesignColors.indigoTint,
-          title: 'Autorizacion',
-          tag: 'Solo en línea',
-          subtitle: 'Autorizar solicitudes de crédito',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: ((_) => const AutorizacionSolcitudScreen()),
-              ),
-            );
-          },
-        ),
+        if (actions.contains(TypeAction.autorizacion.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.verified_user_outlined,
+            iconColor: RedesignColors.indigo,
+            iconBackground: RedesignColors.indigoTint,
+            title: 'Autorizacion',
+            tag: 'Solo en línea',
+            subtitle: 'Autorizar solicitudes de crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolcitudScreen()),
+                ),
+              );
+            },
+          ),
       ],
     );
   }
