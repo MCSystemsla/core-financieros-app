@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_asalariado_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_nueva_menor_mil_hn_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_represtamo_hn_form.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/analisis_solicitud_nueva_mayor_a_mil_hn.dart';
 import 'package:flutter/material.dart';
 
@@ -55,9 +56,21 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
           subtitle: subtitle,
           title: title,
         ),
-      AnalisisSolicitudesInterceptorType.represtamo => const Text('represtamo'),
+      AnalisisSolicitudesInterceptorType.represtamo => AnalisisReprestamoHnForm(
+          index: index,
+          title: title,
+          subtitle: subtitle,
+          description: description,
+          numeroSolicitud: int.parse(numeroSolicitud),
+        ),
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
-        const Text('represtamoMayor a mil'),
+        AnalisisReprestamoHnForm(
+          description: description,
+          index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          subtitle: subtitle,
+          title: title,
+        ),
       _ => const Text('grupal'),
     };
   }
