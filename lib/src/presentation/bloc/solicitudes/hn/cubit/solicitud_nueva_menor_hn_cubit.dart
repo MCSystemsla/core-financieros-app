@@ -29,14 +29,17 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     emit(state.copyWith(status: Status.inProgress));
     final isGrupal = state.esGrupal == 'input.yes'.tr();
     final esConPareja = _esConPareja(state.estadoCivilCodigo);
+    final conyugeTrabaja =
+        esConPareja && state.trabajaConyugue == 'input.yes'.tr();
     try {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
           esRecurrente: state.esRecurrente,
           aniosLugarTrabajoConyuge:
-              esConPareja ? state.aniosLugarTrabajoConyuge : 0,
-          ingresoMensualConyuge: esConPareja ? state.ingresoMensualConyuge : 0,
+              conyugeTrabaja ? state.aniosLugarTrabajoConyuge : 0,
+          ingresoMensualConyuge:
+              conyugeTrabaja ? state.ingresoMensualConyuge : 0,
           cargoGrupoCodigo: isGrupal ? state.cargoGrupoCodigo : '',
           grupoCodigo: isGrupal ? state.grupoCodigo : '',
           historialCredito: state.historialCredito,
@@ -82,13 +85,12 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           personasACargo: state.personasACargo,
           estadoCivilCodigo: state.estadoCivilCodigo,
           nombreConyugue: esConPareja ? state.nombreConyugue : '',
-          trabajaConyugue:
-              esConPareja && state.trabajaConyugue == 'input.yes'.tr(),
-          trabajoConyugue: esConPareja ? state.trabajoConyugue : '',
+          trabajaConyugue: conyugeTrabaja,
+          trabajoConyugue: conyugeTrabaja ? state.trabajoConyugue : '',
           direccionTrabajoConyugue:
-              esConPareja ? state.direccionTrabajoConyugue : '',
+              conyugeTrabaja ? state.direccionTrabajoConyugue : '',
           telefonoTrabajoConyugue:
-              esConPareja ? state.telefonoTrabajoConyugue : '',
+              conyugeTrabaja ? state.telefonoTrabajoConyugue : '',
           productoCodigo: state.productoCodigo,
           observacion: state.observacion,
           sucursal: state.sucursal,
@@ -269,17 +271,21 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     final estadoCivilValue =
         _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo);
     final esConPareja = _esConPareja(estadoCivilValue);
+    final trabajaConyugueValue = esConPareja
+        ? _prefer(state.trabajaConyugue, prev?.trabajaConyugue)
+        : '';
+    final conyugeTrabaja = trabajaConyugueValue == 'input.yes'.tr();
 
     return SolicitudNuevaMenorHnLocalDb(
       id: prev?.id ?? 0,
       esRecurrente: state.esRecurrente,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-      aniosLugarTrabajoConyuge: !esConPareja
+      aniosLugarTrabajoConyuge: !conyugeTrabaja
           ? 0
           : state.aniosLugarTrabajoConyuge == 0
               ? (prev?.aniosLugarTrabajoConyuge ?? 0)
               : state.aniosLugarTrabajoConyuge,
-      ingresoMensualConyuge: !esConPareja
+      ingresoMensualConyuge: !conyugeTrabaja
           ? 0
           : state.ingresoMensualConyuge == 0
               ? (prev?.ingresoMensualConyuge ?? 0)
@@ -416,17 +422,15 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       nombreConyugue: esConPareja
           ? _prefer(state.nombreConyugue, prev?.nombreConyugue)
           : '',
-      trabajaConyugue: esConPareja
-          ? _prefer(state.trabajaConyugue, prev?.trabajaConyugue)
-          : '',
-      trabajoConyugue: esConPareja
+      trabajaConyugue: trabajaConyugueValue,
+      trabajoConyugue: conyugeTrabaja
           ? _prefer(state.trabajoConyugue, prev?.trabajoConyugue)
           : '',
-      direccionTrabajoConyugue: esConPareja
+      direccionTrabajoConyugue: conyugeTrabaja
           ? _prefer(
               state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue)
           : '',
-      telefonoTrabajoConyugue: esConPareja
+      telefonoTrabajoConyugue: conyugeTrabaja
           ? _prefer(
               state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue)
           : '',

@@ -256,9 +256,26 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                         onChanged: (item) {
                           if (item == null || !mounted) return;
 
+                          final bool conyugeTrabaja =
+                              item.value == 'input.yes'.tr();
+
                           cubit.onFieldChanged(
                             () => state.copyWith(
                               trabajaConyugue: item.value,
+                              trabajoConyugue:
+                                  conyugeTrabaja ? state.trabajoConyugue : '',
+                              direccionTrabajoConyugue: conyugeTrabaja
+                                  ? state.direccionTrabajoConyugue
+                                  : '',
+                              telefonoTrabajoConyugue: conyugeTrabaja
+                                  ? state.telefonoTrabajoConyugue
+                                  : '',
+                              aniosLugarTrabajoConyuge: conyugeTrabaja
+                                  ? state.aniosLugarTrabajoConyuge
+                                  : 0,
+                              ingresoMensualConyuge: conyugeTrabaja
+                                  ? state.ingresoMensualConyuge
+                                  : 0,
                             ),
                           );
                         },
