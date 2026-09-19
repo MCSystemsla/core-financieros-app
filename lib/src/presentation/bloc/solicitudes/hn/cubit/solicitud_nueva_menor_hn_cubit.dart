@@ -22,16 +22,21 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     this.localDbProvider,
   ) : super(SolicitudNuevaMenorHnInitial());
 
+  static bool _esConPareja(String estadoCivilCodigo) =>
+      estadoCivilCodigo == 'UNI' || estadoCivilCodigo == 'CAS';
+
   Future<void> createSolicitudNuevaMenor() async {
     emit(state.copyWith(status: Status.inProgress));
     final isGrupal = state.esGrupal == 'input.yes'.tr();
+    final esConPareja = _esConPareja(state.estadoCivilCodigo);
     try {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudNuevaMenor(
         solicitud: SolicitudNuevaMenorHn(
           esRecurrente: state.esRecurrente,
-          aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge,
-          ingresoMensualConyuge: state.ingresoMensualConyuge,
+          aniosLugarTrabajoConyuge:
+              esConPareja ? state.aniosLugarTrabajoConyuge : 0,
+          ingresoMensualConyuge: esConPareja ? state.ingresoMensualConyuge : 0,
           cargoGrupoCodigo: isGrupal ? state.cargoGrupoCodigo : '',
           grupoCodigo: isGrupal ? state.grupoCodigo : '',
           historialCredito: state.historialCredito,
@@ -76,11 +81,14 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           horarioVisita: state.horarioVisita,
           personasACargo: state.personasACargo,
           estadoCivilCodigo: state.estadoCivilCodigo,
-          nombreConyugue: state.nombreConyugue,
-          trabajaConyugue: state.trabajaConyugue == 'input.yes'.tr(),
-          trabajoConyugue: state.trabajoConyugue,
-          direccionTrabajoConyugue: state.direccionTrabajoConyugue,
-          telefonoTrabajoConyugue: state.telefonoTrabajoConyugue,
+          nombreConyugue: esConPareja ? state.nombreConyugue : '',
+          trabajaConyugue:
+              esConPareja && state.trabajaConyugue == 'input.yes'.tr(),
+          trabajoConyugue: esConPareja ? state.trabajoConyugue : '',
+          direccionTrabajoConyugue:
+              esConPareja ? state.direccionTrabajoConyugue : '',
+          telefonoTrabajoConyugue:
+              esConPareja ? state.telefonoTrabajoConyugue : '',
           productoCodigo: state.productoCodigo,
           observacion: state.observacion,
           sucursal: state.sucursal,
@@ -91,7 +99,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           nombrePublico: state.nombrePublico,
           sexoCodigo: state.sexoCodigo,
           paisNacimientoCodigo: state.paisNacimientoCodigo,
-          nacionalidadConyugue: state.nacionalidadConyugue,
+          nacionalidadConyugue: esConPareja ? state.nacionalidadConyugue : '',
           ubicacion: state.ubicacion,
           espeps: state.espeps == 'input.yes'.tr(),
           nombreDeEntidadPeps: state.nombreDeEntidadPeps,
@@ -120,7 +128,8 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           rtn: state.rtn,
           telefonoNegocio: state.telefonoNegocio,
           celularNegocio: state.celularNegocio,
-          actividadDescripcionConyugue: state.actividadDescripcionConyugue,
+          actividadDescripcionConyugue:
+              esConPareja ? state.actividadDescripcionConyugue : '',
           exeperiencia: state.exeperiencia,
           puestoNegocio: state.puestoNegocio,
           actividadEconomicaCnbs1Codigo: state.actividadEconomicaCnbs1Codigo,
@@ -141,7 +150,7 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           aldeaNegocioCodigo: state.aldeaNegocioCodigo,
           departamentoNegocioCodigo: state.departamentoNegocioCodigo,
           nivelAproximadoIngresosCodigo: state.nivelAproximadoIngresosCodigo,
-          documentoConyuge: state.documentoConyuge,
+          documentoConyuge: esConPareja ? state.documentoConyuge : '',
           ocupacionCodigo: state.ocupacionCodigo,
           profesionCodigo: state.profesionCodigo,
           aldeaCasaCodigo: state.aldeaCasaCodigo,
@@ -153,9 +162,11 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
           barrioDestino: state.barrioDestino,
           descripcionDestino: state.descripcionDestino,
           ingresosNetos: state.ingresosNetos,
-          nombreCompletoConyugue:
-              '${state.nombreConyugue} ${state.apellidosConyugue}',
-          tipoDocumentoConyugeCodigo: state.tipoDocumentoConyugue,
+          nombreCompletoConyugue: esConPareja
+              ? '${state.nombreConyugue} ${state.apellidosConyugue}'
+              : '',
+          tipoDocumentoConyugeCodigo:
+              esConPareja ? state.tipoDocumentoConyugue : '',
         ),
       );
       if (!isOk) {
@@ -255,17 +266,24 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
     final prev = existing;
     final esGrupalValue = _prefer(state.esGrupal, prev?.esGrupal);
     final isGrupal = esGrupalValue == 'input.yes'.tr();
+    final estadoCivilValue =
+        _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo);
+    final esConPareja = _esConPareja(estadoCivilValue);
 
     return SolicitudNuevaMenorHnLocalDb(
       id: prev?.id ?? 0,
       esRecurrente: state.esRecurrente,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-      aniosLugarTrabajoConyuge: state.aniosLugarTrabajoConyuge == 0
-          ? (prev?.aniosLugarTrabajoConyuge ?? 0)
-          : state.aniosLugarTrabajoConyuge,
-      ingresoMensualConyuge: state.ingresoMensualConyuge == 0
-          ? (prev?.ingresoMensualConyuge ?? 0)
-          : state.ingresoMensualConyuge,
+      aniosLugarTrabajoConyuge: !esConPareja
+          ? 0
+          : state.aniosLugarTrabajoConyuge == 0
+              ? (prev?.aniosLugarTrabajoConyuge ?? 0)
+              : state.aniosLugarTrabajoConyuge,
+      ingresoMensualConyuge: !esConPareja
+          ? 0
+          : state.ingresoMensualConyuge == 0
+              ? (prev?.ingresoMensualConyuge ?? 0)
+              : state.ingresoMensualConyuge,
       clientSignatureStatus: _prefer(
           state.clientSignatureStatus.name, prev?.clientSignatureStatus),
       esGrupal: esGrupalValue,
@@ -348,7 +366,9 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       nivelAproximadoIngresosCodigo: _prefer(
           state.nivelAproximadoIngresosCodigo,
           prev?.nivelAproximadoIngresosCodigo),
-      documentoConyuge: _prefer(state.documentoConyuge, prev?.documentoConyuge),
+      documentoConyuge: esConPareja
+          ? _prefer(state.documentoConyuge, prev?.documentoConyuge)
+          : '',
       ocupacionCodigo: _prefer(state.ocupacionCodigo, prev?.ocupacionCodigo),
       profesionCodigo: _prefer(state.profesionCodigo, prev?.profesionCodigo),
       aldeaCasaCodigo: _prefer(state.aldeaCasaCodigo, prev?.aldeaCasaCodigo),
@@ -364,8 +384,10 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       ingresosNetos: state.ingresosNetos == 0
           ? (prev?.ingresosNetos ?? 0)
           : state.ingresosNetos,
-      actividadDescripcionConyugue: _prefer(state.actividadDescripcionConyugue,
-          prev?.actividadDescripcionConyugue),
+      actividadDescripcionConyugue: esConPareja
+          ? _prefer(state.actividadDescripcionConyugue,
+              prev?.actividadDescripcionConyugue)
+          : '',
       exeperiencia: state.exeperiencia == 0
           ? (prev?.exeperiencia ?? 0)
           : state.exeperiencia,
@@ -390,15 +412,24 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       personasACargo: state.personasACargo == 0
           ? (prev?.personasACargo ?? 0)
           : state.personasACargo,
-      estadoCivilCodigo:
-          _prefer(state.estadoCivilCodigo, prev?.estadoCivilCodigo),
-      nombreConyugue: _prefer(state.nombreConyugue, prev?.nombreConyugue),
-      trabajaConyugue: _prefer(state.trabajaConyugue, prev?.trabajaConyugue),
-      trabajoConyugue: _prefer(state.trabajoConyugue, prev?.trabajoConyugue),
-      direccionTrabajoConyugue: _prefer(
-          state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue),
-      telefonoTrabajoConyugue:
-          _prefer(state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue),
+      estadoCivilCodigo: estadoCivilValue,
+      nombreConyugue: esConPareja
+          ? _prefer(state.nombreConyugue, prev?.nombreConyugue)
+          : '',
+      trabajaConyugue: esConPareja
+          ? _prefer(state.trabajaConyugue, prev?.trabajaConyugue)
+          : '',
+      trabajoConyugue: esConPareja
+          ? _prefer(state.trabajoConyugue, prev?.trabajoConyugue)
+          : '',
+      direccionTrabajoConyugue: esConPareja
+          ? _prefer(
+              state.direccionTrabajoConyugue, prev?.direccionTrabajoConyugue)
+          : '',
+      telefonoTrabajoConyugue: esConPareja
+          ? _prefer(
+              state.telefonoTrabajoConyugue, prev?.telefonoTrabajoConyugue)
+          : '',
       cantidadHijos: state.cantidadHijos == 0
           ? (prev?.cantidadHijos ?? 0)
           : state.cantidadHijos,
@@ -406,8 +437,9 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
       sexoCodigo: _prefer(state.sexoCodigo, prev?.sexoCodigo),
       paisNacimientoCodigo:
           _prefer(state.paisNacimientoCodigo, prev?.paisNacimientoCodigo),
-      nacionalidadConyugue:
-          _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugue),
+      nacionalidadConyugue: esConPareja
+          ? _prefer(state.nacionalidadConyugue, prev?.nacionalidadConyugue)
+          : '',
       ubicacion: _prefer(state.ubicacion, prev?.ubicacion),
       espeps: _prefer(state.espeps, prev?.espeps),
       nombreDeEntidadPeps:
@@ -616,14 +648,18 @@ class SolicitudNuevaMenorHnCubit extends Cubit<SolicitudNuevaMenorHnState> {
         state.tipoPersonaCnbsCodigoNombre,
         prev?.tipoPersonaCnbsCodigoNombre,
       ),
-      apellidosConyugue: _prefer(
-        state.apellidosConyugue,
-        prev?.apellidosConyugue,
-      ),
-      tipoDocumentoConyugeCodigo: _prefer(
-        state.tipoDocumentoConyugue,
-        prev?.tipoDocumentoConyugeCodigo,
-      ),
+      apellidosConyugue: esConPareja
+          ? _prefer(
+              state.apellidosConyugue,
+              prev?.apellidosConyugue,
+            )
+          : '',
+      tipoDocumentoConyugeCodigo: esConPareja
+          ? _prefer(
+              state.tipoDocumentoConyugue,
+              prev?.tipoDocumentoConyugeCodigo,
+            )
+          : '',
       cuotaWithDecimal: state.cuotaWithDecimal == 0
           ? (prev?.cuotaWithDecimal ?? 0)
           : state.cuotaWithDecimal,
