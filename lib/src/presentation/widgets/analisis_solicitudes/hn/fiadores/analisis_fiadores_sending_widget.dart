@@ -37,12 +37,7 @@ class _AnalisisFiadoresSendingWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisFiadoresCubit, AnalisisFiadoresState>(
-      listener: (context, state) {
-        if (state.status == Status.done) {
-          context.read<AnalisisFiadoresCubit>().fiadoresEnviarFirmaDigital();
-        }
-      },
+    return BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
       builder: (context, state) {
         final numeroSolicitud =
             state.numeroSolicitud == 0 ? '' : state.numeroSolicitud.toString();
@@ -85,12 +80,21 @@ class _AnalisisFiadoresSendingWidgetState
                 title: 'Enviando fiador…',
                 message:
                     'No cierres la app. Esto suele tardar menos de un minuto.',
-                steps: const [
+                steps: [
                   SendingStep(
-                    label: 'Creando fiador en el servidor',
-                    state: SendingStepState.active,
+                    label: state.fiadorId.isEmpty
+                        ? 'Creando fiador en el servidor'
+                        : 'Fiador creado en el servidor',
+                    state: state.fiadorId.isEmpty
+                        ? SendingStepState.active
+                        : SendingStepState.done,
                   ),
-                  SendingStep(label: 'Registrando firma del fiador'),
+                  SendingStep(
+                    label: 'Registrando firma del fiador',
+                    state: state.firmaStatus == Status.inProgress
+                        ? SendingStepState.active
+                        : SendingStepState.pending,
+                  ),
                 ],
                 value: numeroSolicitud,
               ),
@@ -136,12 +140,17 @@ class _AnalisisFiadoresSendingWidgetState
                 value: numeroSolicitud,
                 actions: [
                   CustomElevatedButton(
-                    text: 'Reintentar envío',
+                    text: state.fiadorId.isEmpty
+                        ? 'Reintentar envío'
+                        : 'Reintentar firma',
                     color: RedesignColors.green,
                     onPressed: () {
-                      context
-                          .read<AnalisisFiadoresCubit>()
-                          .createAnalisisFiador();
+                      final cubit = context.read<AnalisisFiadoresCubit>();
+                      if (cubit.state.fiadorId.isNotEmpty) {
+                        cubit.fiadoresEnviarFirmaDigital();
+                        return;
+                      }
+                      cubit.createAnalisisFiador();
                     },
                   ),
                   CustomOutLineButton(
@@ -149,7 +158,7 @@ class _AnalisisFiadoresSendingWidgetState
                     color: RedesignColors.border,
                     textColor: RedesignColors.ink,
                     borderRadius: 12,
-                    onPressed: _goToAnalisis,
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
