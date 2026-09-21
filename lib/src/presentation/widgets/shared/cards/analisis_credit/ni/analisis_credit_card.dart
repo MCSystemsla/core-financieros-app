@@ -18,6 +18,9 @@ class AnalisisCreditCard extends StatelessWidget {
   final String description;
   final String numeroSolicitud;
   final String tipoSolicitudString;
+  final String cedulaCliente;
+  final String tipoPersonaCodigo;
+  final bool esGrupal;
   final AnalisisSolicitudesInterceptorType? tipoSolicitud;
   const AnalisisCreditCard({
     super.key,
@@ -30,6 +33,9 @@ class AnalisisCreditCard extends StatelessWidget {
     this.tipoSolicitud,
     required this.numeroSolicitud,
     this.tipoSolicitudString = '',
+    this.cedulaCliente = '',
+    this.tipoPersonaCodigo = '',
+    this.esGrupal = false,
   });
 
   static const _staggerGroupSize = 8;
@@ -48,6 +54,9 @@ class AnalisisCreditCard extends StatelessWidget {
         subtitle: subtitle,
         description: description,
         tipoSolicitudString: tipoSolicitudString,
+        cedulaCliente: cedulaCliente,
+        tipoPersonaCodigo: tipoPersonaCodigo,
+        esGrupal: esGrupal,
       ),
     );
   }

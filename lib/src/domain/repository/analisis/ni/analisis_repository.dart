@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/analisis_checks_response_ni.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/endpoint/analisis_endpoint.dart';
@@ -22,6 +23,16 @@ abstract class AnalisisRepository {
     required bool isAnalisisAreCreated,
     required AnalisisNuevaMenorData analisisSolicitudNuevaMenor,
     required String numeroSolicitud,
+  });
+  Future<void> closeAnalisis({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
+  Future<AnalisisChecksNiResponse> analisisChecks({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+    required String cedulaCliente,
+    required bool esGrupal,
   });
 }
 
@@ -124,5 +135,56 @@ class AnalisisRepositoryImpl implements AnalisisRepository {
           numeroSolicitud: numeroSolicitud,
         ),
     };
+  }
+
+  @override
+  Future<void> closeAnalisis({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = CloseAnalisisEndpointNi(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, _) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AnalisisChecksNiResponse> analisisChecks({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+    required String cedulaCliente,
+    required bool esGrupal,
+  }) async {
+    final endpoint = GetAnalisisChecksEndpointNi(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+      cedulaCliente: cedulaCliente,
+      esGrupal: esGrupal,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.queryParameters);
+        final (errorMsg, _) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+
+      final data = AnalisisChecksNiResponse.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 }

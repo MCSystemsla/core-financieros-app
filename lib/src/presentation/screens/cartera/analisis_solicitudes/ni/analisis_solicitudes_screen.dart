@@ -119,6 +119,9 @@ class _AnilisListDataWidget extends StatelessWidget {
             index: index,
             title: 'Solicitud N. ${data[index].numero}',
             tipoSolicitudString: data[index].tipoSolicitud,
+            cedulaCliente: data[index].cedulaCliente,
+            tipoPersonaCodigo: data[index].tipoPersonaCodigo,
+            esGrupal: data[index].esSolicitudGrupal,
             subtitle: data[index].nombreCompleto ?? 'N/A',
             description: data[index].monto?.toCurrencyString() ?? 'N/A',
           );
