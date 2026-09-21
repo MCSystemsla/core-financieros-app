@@ -56,12 +56,14 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
           subtitle: subtitle,
           title: title,
         ),
-      AnalisisSolicitudesInterceptorType.represtamo => AnalisisReprestamoHnForm(
+      AnalisisSolicitudesInterceptorType.represtamo =>
+        AnalisisNuevaMenorMilHnForm(
           index: index,
           title: title,
           subtitle: subtitle,
           description: description,
           numeroSolicitud: int.parse(numeroSolicitud),
+          tipoSolicitud: type,
         ),
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
         AnalisisReprestamoHnForm(
