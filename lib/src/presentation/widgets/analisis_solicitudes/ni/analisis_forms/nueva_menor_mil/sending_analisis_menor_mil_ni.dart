@@ -1,0 +1,169 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/sending_status_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class SendingAnalisisMenorMilNi extends StatefulWidget {
+  final AnalisisSolicitudesInterceptorType tipoSolicitud;
+  const SendingAnalisisMenorMilNi({super.key, required this.tipoSolicitud});
+
+  @override
+  State<SendingAnalisisMenorMilNi> createState() =>
+      _SendingAnalisisReprestamoHnState();
+}
+
+class _SendingAnalisisReprestamoHnState
+    extends State<SendingAnalisisMenorMilNi> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AnalisisMenorMilCubit>().createAnalisisMenorMil(
+          tipoSolicitud: widget.tipoSolicitud,
+        );
+  }
+
+  void _goToAnalisis() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AnalisisInterceptorByFlavor(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final numeroSolicitud =
+            state.numeroSolicitud == 0 ? '' : state.numeroSolicitud.toString();
+
+        return Scaffold(
+          backgroundColor: RedesignColors.background,
+          appBar: AppBar(
+            backgroundColor: RedesignColors.background,
+            surfaceTintColor: RedesignColors.background,
+            elevation: 0,
+            titleSpacing: 0,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 6, bottom: 6),
+              child: SendingCloseButton(
+                onPressed: () {
+                  ExitConfirmationDialog(
+                    context: context,
+                    title: '¿Estás seguro de que quieres salir?',
+                    onYes: _goToAnalisis,
+                  ).showDialog(context);
+                },
+              ),
+            ),
+            title: const Text(
+              'ANÁLISIS NUEVAMENOR',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.2,
+                color: RedesignColors.inkMuted,
+              ),
+            ),
+          ),
+          body: switch (state.status) {
+            Status.inProgress => SendingStatusView(
+                artTint: RedesignColors.tealTint,
+                art: const SendingStatusLottie(
+                  asset: ImageAsset.nuevaMenorUploading,
+                ),
+                title: 'Enviando análisis…',
+                message:
+                    'No cierres la app. Esto suele tardar menos de un minuto.',
+                steps: const [
+                  SendingStep(
+                    label: 'Enviando análisis al servidor',
+                    state: SendingStepState.active,
+                  ),
+                  SendingStep(label: 'Registrando inventario'),
+                  SendingStep(label: 'Registrando referencias'),
+                ],
+                value: numeroSolicitud,
+              ),
+            Status.done => SendingStatusView(
+                artTint: RedesignColors.greenTint,
+                art: const SendingStatusLottie(
+                  asset: ImageAsset.nuevaMenorSuccess,
+                  repeat: false,
+                ),
+                title: 'Análisis enviado',
+                message:
+                    'El análisis quedó registrado correctamente en el servidor.',
+                steps: const [
+                  SendingStep(
+                    label: 'Análisis enviado al servidor',
+                    state: SendingStepState.done,
+                  ),
+                  SendingStep(
+                    label: 'Inventario registrado',
+                    state: SendingStepState.done,
+                  ),
+                  SendingStep(
+                    label: 'Referencias registradas',
+                    state: SendingStepState.done,
+                  ),
+                ],
+                value: numeroSolicitud,
+                actions: [
+                  CustomElevatedButton(
+                    text: 'Volver a análisis',
+                    color: RedesignColors.green,
+                    onPressed: _goToAnalisis,
+                  ),
+                ],
+              ),
+            Status.error => SendingStatusView(
+                artTint: RedesignColors.indigoTint,
+                art: const Icon(
+                  Icons.warning_amber_rounded,
+                  size: 58,
+                  color: RedesignColors.indigo,
+                ),
+                title: 'Análisis no se pudo enviar',
+                message:
+                    'Guardamos el análisis en el dispositivo, puedes reintentar sin perder los datos.',
+                errorDetail: state.errorMsg,
+                value: numeroSolicitud,
+                actions: [
+                  CustomElevatedButton(
+                    text: 'Reintentar envío',
+                    color: RedesignColors.green,
+                    onPressed: () {
+                      context
+                          .read<AnalisisMenorMilCubit>()
+                          .createAnalisisMenorMil(
+                            tipoSolicitud: widget.tipoSolicitud,
+                          );
+                    },
+                  ),
+                  CustomOutLineButton(
+                    text: 'Volver',
+                    color: RedesignColors.border,
+                    textColor: RedesignColors.ink,
+                    borderRadius: 12,
+                    onPressed: _goToAnalisis,
+                  ),
+                ],
+              ),
+            _ => const SizedBox.shrink(),
+          },
+        );
+      },
+    );
+  }
+}
