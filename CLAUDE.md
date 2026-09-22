@@ -61,8 +61,19 @@ No test suite exists in this repo currently.
 - **`domain/repository/`** — one repository interface + `*Impl` per feature, calling `APIRepository` under the hood. Where a feature diverges by country it is split into `hn/` and `ni/` subfolders with parallel endpoint sets and sometimes parallel repositories (e.g. `solicitudes_credito/hn` vs `solicitudes_credito/ni`, `analisis/hn` vs `analisis/ni`, `comite/hn` vs `comite/ni`, `supervisiones/hn` vs `supervisiones/ni`). Costa Rica currently reuses the `ni` implementations. When adding a feature that differs per country, follow this same `hn`/`ni` split rather than branching inside one class.
 - **`presentation/bloc/`** — `flutter_bloc` Cubits/Blocs, one directory per feature, mirroring the domain repository split (e.g. `bloc/solicitudes-pendientes`, `bloc/comite`, `bloc/analisis`). `FlavorCubit` holds the active `Flavor` and is read via `global<FlavorCubit>()` (not `BlocProvider.of`) in places that branch UI/logic by country — see `SolicitudesByFlavorInterceptor` for the standard pattern: `switch (global<FlavorCubit>().state.flavor) { Flavor.honduras => HnScreen(), _ => NiScreen() }`.
 - **`presentation/screens/`** and **`presentation/widgets/`** — screens grouped by feature; shared/reusable UI in `widgets/shared`.
-- **`config/`** — cross-cutting concerns: `router/router.dart` (`go_router` route table), `theme/`, `local_storage/` (SharedPreferences wrapper — JWT/refresh token/current user/language live here), `services/` (biometric auth, camera, geolocation, Firebase, bitácora/audit logging), `helpers/` (formatters, validators, error handling/reporting, sync helpers, kiva-specific logic).
+- **`config/`** — cross-cutting concerns: `router/router.dart` (`go_router` route table), `theme/`, `local_storage/` (SharedPreferences wrapper — JWT/refresh token/current user/language live here), `services/` (biometric auth, camera, geolocation, Firebase, bitácora/audit logging), `helpers/` (formatters, validators, error handling/reporting, sync helpers, kiva-specific logic), `data/` (static data such as the Google Maps custom style).
 - **`utils/extensions/`** — most enum-like domain concepts (garantía type, artículo type, form type, role, order type, etc.) are modeled as extensions on `String`/enums rather than standalone classes — check here before adding a new type helper.
+
+### UI redesign (2026)
+
+Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`AppColors`) + `app_theme.dart` (`AppTheme.getTheme`, Material 3 seeded from `AppColors.getPrimaryColor()`); the new one is `config/theme/redesign_colors.dart` (`RedesignColors`: `background`, `surface`, `border`, `ink`, `inkMuted`, plus tint/solid pairs like `greenTint`/`green`) together with the shared component set in `presentation/widgets/shared/v2_redesign/`:
+
+- `ScreenHeaderWidget` — standard screen header (back button, big title, subtitle, trailing slot defaulting to `ConnectionPillWidget`).
+- `ModuleTileWidget` / `ModuleIconTile` / `ModuleEntryCard` — module list rows and entry cards; `tag` surfaces business rules the advisor must see before tapping (e.g. `'Solo en línea'`).
+- `SolicitudEstadoCard` + `CardTagWidget` — credit-request cards for the by-state lists (assigned, reject, update, supervisiones). Replaces `CreditProductDynamicHn`.
+- `SectionBlockWidget`, `HeaderBackButton`, `ConnectionPillWidget` (reads `InternetConnectionCubit`), `SendingStatusView` (Lottie-driven send/progress screens).
+
+Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.
 
 ### Dependency injection
 
@@ -71,3 +82,7 @@ No test suite exists in this repo currently.
 ### Localization
 
 `flutter_translate` with `es` (fallback) and `en`, driven by `LangCubit`/`LocalizationDelegate`; translation JSON lives under `assets/i18n/` (declared in `pubspec.yaml` assets).
+
+### Adding a country-specific feature
+
+`.claude/skills/new-feature-hn/` and `.claude/skills/new-feature-ni/` scaffold the full endpoint + repository + cubit/state chain for a single country, following the existing `hn/`/`ni/` layout. Use them instead of hand-copying an existing feature. Remember Costa Rica reuses the `ni` implementations, so an `ni` feature also ships to Costa Rica unless it is guarded by `FlavorCubit`.
