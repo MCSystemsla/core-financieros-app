@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_menor_mil/sending_analisis_menor_mil_ni.dart';
@@ -37,7 +37,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
   late DateTime? fechaVerificacion3 =
       isAddReferenciaAditionalClicked ? DateTime.now() : null;
   Future<void> selectFechaVerificacion(BuildContext context) async {
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -58,7 +58,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
   }
 
   Future<void> selectFechaVerificacion2(BuildContext context) async {
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -79,7 +79,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
   }
 
   Future<void> selectFechaVerificacion3(BuildContext context) async {
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -101,8 +101,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -700,7 +700,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                             context,
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
-                                value: context.read<AnalisisMenorMilCubit>(),
+                                value: context.read<AnalisisMenorMilNiCubit>(),
                                 child: SendingAnalisisMenorMilNi(
                                   tipoSolicitud: widget.tipoSolicitud,
                                 ),

@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -32,7 +32,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
     fechaEmisionPermiso = DateTime.tryParse(cubit.state.fechaEmisionLicencia);
     fechaVencimientoPermiso =
         DateTime.tryParse(cubit.state.fechaVencimientoLicencia);
@@ -42,7 +42,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   }
 
   Future<void> selectDateFechaEmision(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -64,7 +64,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   }
 
   Future<void> selectDateFechaVencimiento(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaVencimientoPermiso,
@@ -85,7 +85,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   }
 
   Future<void> selectDateFechaEmisionLicencia(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -106,7 +106,7 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   }
 
   Future<void> selectDateFechaVencimientoLicencia(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -129,8 +129,8 @@ class _AnalisisConstanciaPermisosReprestamoHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisReprestamoCubit>();
-    return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
+    return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
       builder: (context, state) {
         return Form(
           key: formKey,

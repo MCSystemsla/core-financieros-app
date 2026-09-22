@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/analisis_balances_general_represtamo_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/analisis_ciclo_ventas_represtamo_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/analisis_compras_represtamo_ni.dart';
@@ -37,8 +37,8 @@ class AnalisisReprestamoNiForm extends StatelessWidget {
       numeroSolicitud: numeroSolicitud,
     );
     return BlocProvider(
-      create: (ctx) => AnalisisReprestamoCubit(
-        AnalisisRepositoryHNImpl(),
+      create: (ctx) => AnalisisReprestamoNiCubit(
+        AnalisisFormsRepositoryNiImpl(),
       )
         ..initAutoSave(numeroSolicitud: numeroSolicitud)
         ..loadFromLocalDb(currentSolicitud),

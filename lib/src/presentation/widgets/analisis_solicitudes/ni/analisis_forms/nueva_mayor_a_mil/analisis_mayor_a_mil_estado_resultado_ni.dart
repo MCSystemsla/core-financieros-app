@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -24,9 +24,9 @@ class AnalisisMayorAMilEstadoResultadoNI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
               0,
@@ -563,7 +563,7 @@ class AnalisisMayorAMilEstadoResultadoNI extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
                                   value: context
-                                      .read<AnalisisNuevaMayorMilHnCubit>(),
+                                      .read<AnalisisNuevaMayorMilNiCubit>(),
                                   child: AnalisisMayorMilSendingFormNi(
                                     numeroSolicitud: numeroSolicitud,
                                   ),

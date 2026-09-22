@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -98,7 +98,7 @@ class _EstadoResultadoForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
     final relacionMaxRazonCuotaParam = switch (tipoSolicitud) {
       AnalisisSolicitudesInterceptorType.nueva =>
         'RELACIONMAXRAZONCUOTACREDITONUEVO',
@@ -110,7 +110,7 @@ class _EstadoResultadoForm extends StatelessWidget {
     final relacionMinRazonCuota = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: relacionMaxRazonCuotaParam);
 
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         final totalIngresosCalc = state.ventasContado + state.recuperaciones;
 

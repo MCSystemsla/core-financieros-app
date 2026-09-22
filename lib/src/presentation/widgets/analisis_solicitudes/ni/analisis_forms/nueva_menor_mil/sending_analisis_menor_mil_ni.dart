@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
@@ -25,7 +25,7 @@ class _SendingAnalisisReprestamoHnState
   @override
   void initState() {
     super.initState();
-    context.read<AnalisisMenorMilCubit>().createAnalisisMenorMil(
+    context.read<AnalisisMenorMilNiCubit>().createAnalisisMenorMil(
           tipoSolicitud: widget.tipoSolicitud,
         );
   }
@@ -41,7 +41,7 @@ class _SendingAnalisisReprestamoHnState
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    return BlocConsumer<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       listener: (context, state) {},
       builder: (context, state) {
         final numeroSolicitud =
@@ -145,7 +145,7 @@ class _SendingAnalisisReprestamoHnState
                     color: RedesignColors.green,
                     onPressed: () {
                       context
-                          .read<AnalisisMenorMilCubit>()
+                          .read<AnalisisMenorMilNiCubit>()
                           .createAnalisisMenorMil(
                             tipoSolicitud: widget.tipoSolicitud,
                           );

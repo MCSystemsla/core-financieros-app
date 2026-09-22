@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_menor_mil/analisis_menor_form2.dart';
@@ -38,8 +38,8 @@ class AnalisisNuevaMenorMilNiForm extends StatelessWidget {
       numeroSolicitud: numeroSolicitud,
     );
     return BlocProvider(
-      create: (ctx) => AnalisisMenorMilCubit(
-        AnalisisRepositoryHNImpl(),
+      create: (ctx) => AnalisisMenorMilNiCubit(
+        AnalisisFormsRepositoryNiImpl(),
       )
         ..initAutoSave(numeroSolicitud: numeroSolicitud)
         ..loadFromLocalDb(currentSolicitud),

@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_asalariado/analisis_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_asalariado/analisis_asalariado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -22,10 +22,10 @@ class AnalisisAsalariadoEstadoResultadoNi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
     final incobrablesxCobrar = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
-    return BlocBuilder<AnalisisAsalariadoHnCubit, AnalisisAsalariadoHnState>(
+    return BlocBuilder<AnalisisAsalariadoNiCubit, AnalisisAsalariadoNiState>(
       builder: (context, state) {
         final totalIngresosCalc =
             state.ingresoNetoSalario + state.otrosIngresos;

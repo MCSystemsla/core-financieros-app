@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
@@ -28,7 +28,7 @@ class _AnalisisMayorMilSendingFormState
   void initState() {
     super.initState();
     context
-        .read<AnalisisNuevaMayorMilHnCubit>()
+        .read<AnalisisNuevaMayorMilNiCubit>()
         .createAnalisisNuevaMayorMil(numeroSolicitud: widget.numeroSolicitud);
   }
 
@@ -47,8 +47,8 @@ class _AnalisisMayorMilSendingFormState
         ? ''
         : widget.numeroSolicitud.toString();
 
-    return BlocConsumer<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocConsumer<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
@@ -149,7 +149,7 @@ class _AnalisisMayorMilSendingFormState
                     color: RedesignColors.green,
                     onPressed: () {
                       context
-                          .read<AnalisisNuevaMayorMilHnCubit>()
+                          .read<AnalisisNuevaMayorMilNiCubit>()
                           .createAnalisisNuevaMayorMil(
                             numeroSolicitud: widget.numeroSolicitud,
                           );

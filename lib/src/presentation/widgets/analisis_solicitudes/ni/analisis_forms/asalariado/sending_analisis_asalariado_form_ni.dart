@@ -9,7 +9,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_asalariado/analisis_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_asalariado/analisis_asalariado_ni_cubit.dart';
 
 class SendingAnalisisAsalariadoFormNi extends StatefulWidget {
   const SendingAnalisisAsalariadoFormNi({super.key});
@@ -24,7 +24,7 @@ class _SendingAnalisisAsalariadoFormHnState
   @override
   void initState() {
     super.initState();
-    context.read<AnalisisAsalariadoHnCubit>().createAnalisisAsalariado();
+    context.read<AnalisisAsalariadoNiCubit>().createAnalisisAsalariado();
   }
 
   void _goToAnalisis() {
@@ -38,7 +38,7 @@ class _SendingAnalisisAsalariadoFormHnState
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisAsalariadoHnCubit, AnalisisAsalariadoHnState>(
+    return BlocConsumer<AnalisisAsalariadoNiCubit, AnalisisAsalariadoNiState>(
       listener: (context, state) {},
       builder: (context, state) {
         final numeroSolicitud =
@@ -142,7 +142,7 @@ class _SendingAnalisisAsalariadoFormHnState
                     color: RedesignColors.green,
                     onPressed: () {
                       context
-                          .read<AnalisisAsalariadoHnCubit>()
+                          .read<AnalisisAsalariadoNiCubit>()
                           .createAnalisisAsalariado();
                     },
                   ),

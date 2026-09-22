@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 
 class AnalisisMayorAMilConstanciasLicenciasPermisosNI extends StatefulWidget {
   const AnalisisMayorAMilConstanciasLicenciasPermisosNI({
@@ -34,7 +34,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     fechaEmisionPermiso = DateTime.tryParse(cubit.state.fechaEmisionLicencia);
     fechaVencimientoPermiso =
         DateTime.tryParse(cubit.state.fechaVencimientoLicencia);
@@ -44,7 +44,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   }
 
   Future<void> selectDateFechaEmision(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -66,7 +66,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   }
 
   Future<void> selectDateFechaVencimiento(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: fechaVencimientoPermiso,
@@ -87,7 +87,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   }
 
   Future<void> selectDateFechaEmisionLicencia(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -108,7 +108,7 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
   }
 
   Future<void> selectDateFechaVencimientoLicencia(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -131,9 +131,9 @@ class _AnalisisMayorAMilConstanciasLicenciasPermisosHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         return Form(
           key: formKey,

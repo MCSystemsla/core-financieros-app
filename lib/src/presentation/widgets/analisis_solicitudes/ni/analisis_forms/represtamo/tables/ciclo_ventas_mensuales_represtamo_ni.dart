@@ -2,7 +2,7 @@
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
@@ -32,7 +32,7 @@ class _CicloVentasMensualesReprestamoHnState
       appBar: AppBar(
         title: const Text('Ciclo de ventas mensuales'),
       ),
-      body: BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+      body: BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
         builder: (context, state) {
           return SingleChildScrollView(
             child: Column(
@@ -53,7 +53,7 @@ class _CicloVentasMensualesReprestamoHnState
                           context: context,
                           isScrollControlled: true,
                           builder: (ctx) => CreateValorizacionMesNI(
-                            cubit: context.read<AnalisisReprestamoCubit>(),
+                            cubit: context.read<AnalisisReprestamoNiCubit>(),
                             numeroSolicitud: state.numeroSolicitud,
                             mes: e.mes,
                           ),
@@ -73,7 +73,7 @@ class _CicloVentasMensualesReprestamoHnState
 }
 
 class CreateValorizacionMesNI extends StatefulWidget {
-  final AnalisisReprestamoCubit cubit;
+  final AnalisisReprestamoNiCubit cubit;
   final String mes;
   final int numeroSolicitud;
   const CreateValorizacionMesNI({

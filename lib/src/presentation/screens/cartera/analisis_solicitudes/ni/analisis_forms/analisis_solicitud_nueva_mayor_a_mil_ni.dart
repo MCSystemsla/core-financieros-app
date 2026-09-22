@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_estado_resultado_ni.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_ciclo_de_compras_ni.dart';
@@ -40,8 +40,8 @@ class AnalisisSolicitudNuevaMayorAMilNi extends StatelessWidget {
     );
 
     return BlocProvider(
-      create: (ctx) => AnalisisNuevaMayorMilHnCubit(
-        AnalisisRepositoryHNImpl(),
+      create: (ctx) => AnalisisNuevaMayorMilNiCubit(
+        AnalisisFormsRepositoryNiImpl(),
         global<AnalisisBoxServiceHn>(),
       )
         ..initAutoSave(

@@ -6,7 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
@@ -42,7 +42,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMilNi> {
             isScrollControlled: true,
             context: context,
             builder: (ctx) => _CompraSemanalHN(
-              cubit: context.read<AnalisisMenorMilCubit>(),
+              cubit: context.read<AnalisisMenorMilNiCubit>(),
               numeroSolicitud: widget.numeroSolicitud,
             ),
           );
@@ -64,7 +64,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMilNi> {
       appBar: AppBar(
         title: const Text('Inventario'),
       ),
-      body: BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+      body: BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
         builder: (context, state) {
           if (state.inventarioHn.isEmpty) {
             return const EmptyListWidget(
@@ -93,7 +93,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMilNi> {
                               isScrollControlled: true,
                               context: context,
                               builder: (ctx) => _CompraSemanalHN(
-                                cubit: context.read<AnalisisMenorMilCubit>(),
+                                cubit: context.read<AnalisisMenorMilNiCubit>(),
                                 numeroSolicitud: widget.numeroSolicitud,
                                 inventorio: e,
                                 isUpdate: true,
@@ -102,7 +102,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMilNi> {
                           },
                           onDelete: () {
                             context
-                                .read<AnalisisMenorMilCubit>()
+                                .read<AnalisisMenorMilNiCubit>()
                                 .deleteInventario(
                                   uuid: e.uuid,
                                   numeroSolicitud: widget.numeroSolicitud,
@@ -124,7 +124,7 @@ class _TableInventarioMenorMilState extends State<TableInventarioMenorMilNi> {
 }
 
 class _CompraSemanalHN extends StatefulWidget {
-  final AnalisisMenorMilCubit cubit;
+  final AnalisisMenorMilNiCubit cubit;
   final int numeroSolicitud;
   final InventarioHN? inventorio;
   final bool isUpdate;

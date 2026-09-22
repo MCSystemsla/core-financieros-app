@@ -6,7 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_costo_de_personal_hn_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -29,8 +29,8 @@ class TableCostoPersonalNiWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton.extended(
@@ -39,7 +39,7 @@ class TableCostoPersonalNiWidget extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (ctx) => _CompraPorArticuloSheetHn(
-                  cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                  cubit: context.read<AnalisisNuevaMayorMilNiCubit>(),
                   numeroSolicitud: state.numeroSolicitud,
                 ),
               );
@@ -111,7 +111,7 @@ class _NivelProduccionWidget extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (ctx) => _CompraPorArticuloSheetHn(
-                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    cubit: context.read<AnalisisNuevaMayorMilNiCubit>(),
                     numeroSolicitud: numeroSolicitud,
                     costoDePersonal: e,
                     isUpdate: true,
@@ -120,7 +120,7 @@ class _NivelProduccionWidget extends StatelessWidget {
               },
               onDelete: () {
                 context
-                    .read<AnalisisNuevaMayorMilHnCubit>()
+                    .read<AnalisisNuevaMayorMilNiCubit>()
                     .deleteCostoPersonal(
                       uuid: e.uuid,
                       numeroSolicitud: numeroSolicitud,
@@ -135,7 +135,7 @@ class _NivelProduccionWidget extends StatelessWidget {
 }
 
 class _CompraPorArticuloSheetHn extends StatefulWidget {
-  final AnalisisNuevaMayorMilHnCubit cubit;
+  final AnalisisNuevaMayorMilNiCubit cubit;
   final int numeroSolicitud;
   final bool isUpdate;
   final CostoDePersonalHN? costoDePersonal;

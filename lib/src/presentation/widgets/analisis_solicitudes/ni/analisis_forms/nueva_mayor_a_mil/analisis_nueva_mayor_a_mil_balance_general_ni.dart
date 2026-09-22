@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_activos_fijos_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_inventario_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_otros_creditos_ni_widget.dart';
@@ -39,7 +39,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     cubit.loadActivosFijosFromLocalDb(
       numeroSolicitud: widget.numeroSolicitud,
     );
@@ -56,12 +56,12 @@ class _AnalisisMayorAMilBalanceGeneralHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     final incobrablesxCobrar = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
 
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final totalActivosFijos =
             state.activos.fold(0, (sum, e) => sum + e.monto);
@@ -110,7 +110,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child: TableInventarioNiWidget(
                             numeroSolicitud: widget.numeroSolicitud,
                           ),
@@ -394,7 +394,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child: const TableActivosFijosNiWidget(),
                         ),
                       ),
@@ -442,7 +442,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child: const TablePasivosFijosNiWidget(),
                         ),
                       ),
@@ -466,7 +466,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child: const TableOtrosCreditosNiWidget(),
                         ),
                       ),

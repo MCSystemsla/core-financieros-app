@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_ventas_card_days_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_ventas_card_months_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -26,21 +26,21 @@ class _AnalisisMayorAMilCicloDeVentasHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     cubit.initCicloVentasMensuales(cubit.state.numeroSolicitud);
     cubit.initCicloVentasDiarias(cubit.state.numeroSolicitud);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final cicloMeses = context
-            .read<AnalisisNuevaMayorMilHnCubit>()
+            .read<AnalisisNuevaMayorMilNiCubit>()
             .getCicloVentasMensuales();
         final cicloDiarios = context
-            .read<AnalisisNuevaMayorMilHnCubit>()
+            .read<AnalisisNuevaMayorMilNiCubit>()
             .getCicloVentasDiarios();
         final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
               0,
@@ -68,7 +68,7 @@ class _AnalisisMayorAMilCicloDeVentasHNState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                        value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                         child: const TableVentasCardMonthsNiWidget(),
                       ),
                     ),
@@ -85,7 +85,7 @@ class _AnalisisMayorAMilCicloDeVentasHNState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                        value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                         child: const TableVentasCardDaysNiWidget(),
                       ),
                     ),

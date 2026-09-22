@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_compras_a_proveedores_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/compras_por_proveedor_represtamo_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/compras_por_semana_represtamo_ni.dart';
@@ -29,7 +29,7 @@ class _AnalisisComprasReprestamoHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
     cubit.initCicloComprasSemanales(widget.numeroSolicitud);
     cubit.loadComprasProveedorFromLocalDb(
       numeroSolicitud: widget.numeroSolicitud,
@@ -38,10 +38,10 @@ class _AnalisisComprasReprestamoHNState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+    return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
       builder: (context, state) {
         final comprasPorSemana = context
-            .read<AnalisisReprestamoCubit>()
+            .read<AnalisisReprestamoNiCubit>()
             .getcomprasSemanasMensuales();
 
         final comprasMensuales = state.cicloDeComprasSemanales.cicloCompra
@@ -61,7 +61,7 @@ class _AnalisisComprasReprestamoHNState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisReprestamoCubit>(),
+                        value: context.read<AnalisisReprestamoNiCubit>(),
                         child: const ComprasPorProveedorReprestamoNi(),
                       ),
                     ),
@@ -78,7 +78,7 @@ class _AnalisisComprasReprestamoHNState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisReprestamoCubit>(),
+                        value: context.read<AnalisisReprestamoNiCubit>(),
                         child: const ComprasPorSemanaReprestamoNi(),
                       ),
                     ),

@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_asalariado/analisis_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_asalariado/analisis_asalariado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/asalariado/sending_analisis_asalariado_form_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -37,7 +37,7 @@ class _AnalisisAsalariadoReferenciasHnState
       isAddReferenciaAditionalClicked ? DateTime.now() : null;
   final formKey = GlobalKey<FormState>();
   Future<void> selectFechaVerificacion(BuildContext context) async {
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -58,7 +58,7 @@ class _AnalisisAsalariadoReferenciasHnState
   }
 
   Future<void> selectFechaVerificacion2(BuildContext context) async {
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -79,7 +79,7 @@ class _AnalisisAsalariadoReferenciasHnState
   }
 
   Future<void> selectFechaVerificacion3(BuildContext context) async {
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -101,8 +101,8 @@ class _AnalisisAsalariadoReferenciasHnState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
-    return BlocBuilder<AnalisisAsalariadoHnCubit, AnalisisAsalariadoHnState>(
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
+    return BlocBuilder<AnalisisAsalariadoNiCubit, AnalisisAsalariadoNiState>(
       builder: (context, state) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -673,7 +673,7 @@ class _AnalisisAsalariadoReferenciasHnState
                               MaterialPageRoute(
                                 builder: (_) => BlocProvider.value(
                                   value:
-                                      context.read<AnalisisAsalariadoHnCubit>(),
+                                      context.read<AnalisisAsalariadoNiCubit>(),
                                   child:
                                       const SendingAnalisisAsalariadoFormNi(),
                                 ),

@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_costo_personal_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_costo_personal_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -30,15 +30,15 @@ class _AnalisisMayorAMilConsumoFamiliaresState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     cubit.loadCostoPersonalFromLocalDb(numeroSolicitud: widget.numeroSolicitud);
   }
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final totalCostoPersonal = state.costoDePersonal
             .fold<double>(0, (sum, e) => sum + e.salarioMensual);
@@ -56,7 +56,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child: const TableCostoPersonalNiWidget(),
                         ),
                       ),

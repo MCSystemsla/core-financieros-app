@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -21,8 +21,8 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final cubit = context.read<AnalisisReprestamoCubit>();
-    return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
+    return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
       builder: (context, state) {
         final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
               0,

@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/sending_analisis_represtamo_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -36,7 +36,7 @@ class _AnalisisReferenciasReprestamoHNState
       isAddReferenciaAditionalClicked ? DateTime.now() : null;
   final formKey = GlobalKey<FormState>();
   Future<void> selectFechaVerificacion(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -57,7 +57,7 @@ class _AnalisisReferenciasReprestamoHNState
   }
 
   Future<void> selectFechaVerificacion2(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -78,7 +78,7 @@ class _AnalisisReferenciasReprestamoHNState
   }
 
   Future<void> selectFechaVerificacion3(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoCubit>();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -100,8 +100,8 @@ class _AnalisisReferenciasReprestamoHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisReprestamoCubit>();
-    return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
+    return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
       builder: (context, state) {
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -673,7 +673,7 @@ class _AnalisisReferenciasReprestamoHNState
                             context,
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
-                                value: context.read<AnalisisReprestamoCubit>(),
+                                value: context.read<AnalisisReprestamoNiCubit>(),
                                 child: const SendingAnalisisReprestamoNi(),
                               ),
                             ),

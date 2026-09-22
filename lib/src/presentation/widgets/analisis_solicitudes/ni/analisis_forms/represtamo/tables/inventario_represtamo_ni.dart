@@ -6,7 +6,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
@@ -36,7 +36,7 @@ class InventarioReprestamoNi extends StatelessWidget {
             isScrollControlled: true,
             context: context,
             builder: (ctx) => _CompraSemanalHN(
-              cubit: context.read<AnalisisReprestamoCubit>(),
+              cubit: context.read<AnalisisReprestamoNiCubit>(),
               numeroSolicitud: numeroSolicitud,
             ),
           );
@@ -58,7 +58,7 @@ class InventarioReprestamoNi extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Inventario'),
       ),
-      body: BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
+      body: BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
         builder: (context, state) {
           if (state.inventario.isEmpty) {
             return const EmptyListWidget(
@@ -87,7 +87,7 @@ class InventarioReprestamoNi extends StatelessWidget {
                               isScrollControlled: true,
                               context: context,
                               builder: (ctx) => _CompraSemanalHN(
-                                cubit: context.read<AnalisisReprestamoCubit>(),
+                                cubit: context.read<AnalisisReprestamoNiCubit>(),
                                 numeroSolicitud: numeroSolicitud,
                                 inventorio: e,
                                 isUpdate: true,
@@ -96,7 +96,7 @@ class InventarioReprestamoNi extends StatelessWidget {
                           },
                           onDelete: () {
                             context
-                                .read<AnalisisReprestamoCubit>()
+                                .read<AnalisisReprestamoNiCubit>()
                                 .deleteInventario(
                                   uuid: e.uuid,
                                   numeroSolicitud: numeroSolicitud,
@@ -118,7 +118,7 @@ class InventarioReprestamoNi extends StatelessWidget {
 }
 
 class _CompraSemanalHN extends StatefulWidget {
-  final AnalisisReprestamoCubit cubit;
+  final AnalisisReprestamoNiCubit cubit;
   final int numeroSolicitud;
   final InventarioHN? inventorio;
   final bool isUpdate;

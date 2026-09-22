@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
-import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_asalariado/analisis_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_asalariado/analisis_asalariado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/asalariado/analisis_asalariado_activos_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/asalariado/analisis_asalariado_estado_resultado_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/asalariado/analisis_asalariado_pasivos_ni.dart';
@@ -35,8 +35,8 @@ class AnalisisAsalariadoNiForm extends StatelessWidget {
     );
 
     return BlocProvider(
-      create: (ctx) => AnalisisAsalariadoHnCubit(
-        AnalisisRepositoryHNImpl(),
+      create: (ctx) => AnalisisAsalariadoNiCubit(
+        AnalisisFormsRepositoryNiImpl(),
       )
         ..initAutoSave(
           uuid: currentSolicitud?.uuid,

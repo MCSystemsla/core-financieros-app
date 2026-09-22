@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 
 class AnalisisMayorAMilCreditosNI extends StatefulWidget {
   const AnalisisMayorAMilCreditosNI({
@@ -34,7 +34,7 @@ class _AnalisisMayorAMilCreditosHNState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     cubit.loadNegocioFamiliarFueraNegocioFromLocalDb(
       numeroSolicitud: widget.numeroSolicitud,
     );
@@ -42,9 +42,9 @@ class _AnalisisMayorAMilCreditosHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final totalIngresosFueraNegocio = state.ingeresosFamilaresFueraNegocio
             .fold(0, (sum, e) => sum + e.ingresosFamiliaresFueraNegocio);
@@ -261,7 +261,7 @@ class _AnalisisMayorAMilCreditosHNState
                       context,
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
-                          value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                          value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                           child:
                               const TableIngresosFamiliaresFueraNegocioNiWidget(),
                         ),

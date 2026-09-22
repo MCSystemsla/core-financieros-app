@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_compras_a_proveedores_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_comprar_por_semana_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_compras_por_proveedor_o_articulos_ni_widget.dart';
@@ -28,7 +28,7 @@ class _AnalisisMayorAMilCicloDeComprasState
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
     cubit.initCicloComprasSemanales(widget.numeroSolicitud);
     cubit.loadComprasProveedorFromLocalDb(
         numeroSolicitud: widget.numeroSolicitud);
@@ -36,10 +36,10 @@ class _AnalisisMayorAMilCicloDeComprasState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         final totalComprasMensualSemanal = cubit.getcomprasSemanasMensuales();
         final totalComprasProveedores = state.comprasProveedorArticulo
@@ -60,7 +60,7 @@ class _AnalisisMayorAMilCicloDeComprasState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                        value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                         child: const TableComprarPorSemanaNiWidget(),
                       ),
                     ),
@@ -74,7 +74,7 @@ class _AnalisisMayorAMilCicloDeComprasState
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                        value: context.read<AnalisisNuevaMayorMilNiCubit>(),
                         child:
                             const TableComprasPorProveedorOArticulosNiWidget(),
                       ),

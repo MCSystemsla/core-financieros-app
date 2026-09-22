@@ -1,6 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_asalariado/analisis_asalariado_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_asalariado/analisis_asalariado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
@@ -20,8 +20,8 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final cubit = context.read<AnalisisAsalariadoHnCubit>();
-    return BlocBuilder<AnalisisAsalariadoHnCubit, AnalisisAsalariadoHnState>(
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
+    return BlocBuilder<AnalisisAsalariadoNiCubit, AnalisisAsalariadoNiState>(
       builder: (context, state) {
         final totalActivosCalc = state.activo +
             state.cuentasXCobrar +

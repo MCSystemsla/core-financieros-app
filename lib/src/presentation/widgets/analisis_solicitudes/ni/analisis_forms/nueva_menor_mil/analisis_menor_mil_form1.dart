@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/menor_mil/table_inventario_menor_mil.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -95,8 +95,8 @@ class _AnalisisMenorMilForm1State extends State<AnalisisMenorMilForm1Ni> {
 class _PasivosForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         final totalInventarioCalc = state.inventarioHn.fold(
           0,
@@ -265,7 +265,7 @@ class _ActivosFormState extends State<_ActivosForm> {
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
     cubit.loadInventarioFromLocalDb(
       numeroSolicitud: widget.numeroSolicitud,
     );
@@ -273,8 +273,8 @@ class _ActivosFormState extends State<_ActivosForm> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         final totalInventarioCalc = state.inventarioHn.fold(
           0,
@@ -377,7 +377,7 @@ class _ActivosFormState extends State<_ActivosForm> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => BlocProvider.value(
-                        value: context.read<AnalisisMenorMilCubit>(),
+                        value: context.read<AnalisisMenorMilNiCubit>(),
                         child: TableInventarioMenorMilNi(
                           numeroSolicitud: widget.numeroSolicitud,
                         ),

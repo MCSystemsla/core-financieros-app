@@ -19,15 +19,15 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 
 class TableIngresosFamiliaresFueraNegocioNiWidget extends StatelessWidget {
   const TableIngresosFamiliaresFueraNegocioNiWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         return Scaffold(
           floatingActionButton: FloatingActionButton.extended(
@@ -36,7 +36,7 @@ class TableIngresosFamiliaresFueraNegocioNiWidget extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 builder: (ctx) => _CompraPorArticuloSheetHn(
-                  cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                  cubit: context.read<AnalisisNuevaMayorMilNiCubit>(),
                   numeroSolicitud: state.numeroSolicitud,
                 ),
               );
@@ -109,7 +109,7 @@ class _NivelProduccionWidget extends StatelessWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (ctx) => _CompraPorArticuloSheetHn(
-                    cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+                    cubit: context.read<AnalisisNuevaMayorMilNiCubit>(),
                     numeroSolicitud: numeroSolicitud,
                     isUpdate: true,
                     ingresosFamiliaresFueraNegocio: e,
@@ -118,7 +118,7 @@ class _NivelProduccionWidget extends StatelessWidget {
               },
               onDelete: () {
                 context
-                    .read<AnalisisNuevaMayorMilHnCubit>()
+                    .read<AnalisisNuevaMayorMilNiCubit>()
                     .deleteIngresosFamiliaresFueraDelNegocio(
                       numeroSolicitud: numeroSolicitud,
                       uuid: e.uuid,
@@ -133,7 +133,7 @@ class _NivelProduccionWidget extends StatelessWidget {
 }
 
 class _CompraPorArticuloSheetHn extends StatefulWidget {
-  final AnalisisNuevaMayorMilHnCubit cubit;
+  final AnalisisNuevaMayorMilNiCubit cubit;
   final int numeroSolicitud;
   final IngresosFamilaresFueraNegocioHN? ingresosFamiliaresFueraNegocio;
   final bool isUpdate;

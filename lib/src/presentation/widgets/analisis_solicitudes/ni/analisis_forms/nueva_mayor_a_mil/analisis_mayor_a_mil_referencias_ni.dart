@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -39,7 +39,7 @@ class _AnalisisMayorAMilReferenciasHNState
       isAddReferenciaAditionalClicked ? DateTime.now() : null;
   final formKey = GlobalKey<FormState>();
   Future<void> selectFechaVerificacion(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -60,7 +60,7 @@ class _AnalisisMayorAMilReferenciasHNState
   }
 
   Future<void> selectFechaVerificacion2(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -81,7 +81,7 @@ class _AnalisisMayorAMilReferenciasHNState
   }
 
   Future<void> selectFechaVerificacion3(BuildContext context) async {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
 
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -103,9 +103,9 @@ class _AnalisisMayorAMilReferenciasHNState
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisNuevaMayorMilHnCubit>();
-    return BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-        AnalisisNuevaMayorMilHnState>(
+    final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
+    return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+        AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

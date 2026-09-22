@@ -1,4 +1,4 @@
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -84,9 +84,9 @@ class _AnalisisMenorMilForm4State extends State<AnalisisMenorMilForm4Ni> {
 class _NombreProveedores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
 
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -157,8 +157,8 @@ class _NombreProveedores extends StatelessWidget {
 class _PrincipalesClientes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -229,8 +229,8 @@ class _PrincipalesClientes extends StatelessWidget {
 class _DetalleCredito extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<AnalisisMenorMilCubit>();
-    return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
         final totalIngresosCalc = state.ventasContado + state.recuperaciones;
 

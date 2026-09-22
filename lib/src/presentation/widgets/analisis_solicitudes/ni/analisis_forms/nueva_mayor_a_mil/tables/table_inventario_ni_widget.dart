@@ -19,7 +19,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 
 class TableInventarioNiWidget extends StatelessWidget {
   final int numeroSolicitud;
@@ -37,7 +37,7 @@ class TableInventarioNiWidget extends StatelessWidget {
             isScrollControlled: true,
             context: context,
             builder: (ctx) => _CompraSemanalHN(
-              cubit: context.read<AnalisisNuevaMayorMilHnCubit>(),
+              cubit: context.read<AnalisisNuevaMayorMilNiCubit>(),
               numeroSolicitud: numeroSolicitud,
             ),
           );
@@ -59,8 +59,8 @@ class TableInventarioNiWidget extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Inventario'),
       ),
-      body: BlocBuilder<AnalisisNuevaMayorMilHnCubit,
-          AnalisisNuevaMayorMilHnState>(
+      body: BlocBuilder<AnalisisNuevaMayorMilNiCubit,
+          AnalisisNuevaMayorMilNiState>(
         builder: (context, state) {
           if (state.inventario.isEmpty) {
             return const EmptyListWidget(
@@ -90,7 +90,7 @@ class TableInventarioNiWidget extends StatelessWidget {
                               context: context,
                               builder: (ctx) => _CompraSemanalHN(
                                 cubit: context
-                                    .read<AnalisisNuevaMayorMilHnCubit>(),
+                                    .read<AnalisisNuevaMayorMilNiCubit>(),
                                 numeroSolicitud: numeroSolicitud,
                                 inventorio: e,
                                 isUpdate: true,
@@ -99,7 +99,7 @@ class TableInventarioNiWidget extends StatelessWidget {
                           },
                           onDelete: () {
                             context
-                                .read<AnalisisNuevaMayorMilHnCubit>()
+                                .read<AnalisisNuevaMayorMilNiCubit>()
                                 .deleteInventario(
                                   uuid: e.uuid,
                                   numeroSolicitud: numeroSolicitud,
@@ -121,7 +121,7 @@ class TableInventarioNiWidget extends StatelessWidget {
 }
 
 class _CompraSemanalHN extends StatefulWidget {
-  final AnalisisNuevaMayorMilHnCubit cubit;
+  final AnalisisNuevaMayorMilNiCubit cubit;
   final int numeroSolicitud;
   final InventarioHN? inventorio;
   final bool isUpdate;
