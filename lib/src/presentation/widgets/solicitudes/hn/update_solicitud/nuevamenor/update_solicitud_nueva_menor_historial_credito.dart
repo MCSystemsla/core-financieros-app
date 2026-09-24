@@ -30,9 +30,13 @@ import '../../../../../bloc/solicitudes/hn/cubit/update_solicitud_nueva_menor/up
 
 class UpdateSolicitudNuevaMenorHistorialCredito extends StatelessWidget {
   final PageController controller;
+  final int currentStep;
+  final int steps;
   const UpdateSolicitudNuevaMenorHistorialCredito({
     super.key,
     required this.controller,
+    this.currentStep = 8,
+    this.steps = 9,
   });
 
   @override
@@ -46,9 +50,9 @@ class UpdateSolicitudNuevaMenorHistorialCredito extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MiCreditoProgress(
-            currentStep: 8,
-            steps: 9,
+          MiCreditoProgress(
+            currentStep: currentStep,
+            steps: steps,
           ),
           const Gap(20),
           Container(
