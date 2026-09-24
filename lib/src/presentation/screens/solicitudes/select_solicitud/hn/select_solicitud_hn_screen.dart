@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/actualizacion_solicitud/actualizacion_solicitud_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/add_user_cedula_asalariado_screen.dart';
@@ -11,7 +11,10 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/mis_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/rechazar_solicitud/rechazar_solicitud_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/hn/solicitudes_pendientes/solicitudes_pendientes_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitud_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_entry_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,14 +26,12 @@ class SelectSolicitudScreenHN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pushReplacement('/cartera'),
-        ),
+    return const Scaffold(
+      backgroundColor: RedesignColors.background,
+      body: SafeArea(
+        bottom: false,
+        child: _SelectSolicitud(),
       ),
-      body: const _SelectSolicitud(),
     );
   }
 }
@@ -40,48 +41,29 @@ class _SelectSolicitud extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                'Seleccionar un tipo de Crédito',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontSize: 19,
-                    ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(
-                'Por favor, elige una de las siguientes opciones:',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
-              ),
-            ),
-            const Gap(20),
-            const _SolicitudCardsRow1(),
-            const Gap(20),
-            const _SolicitudesCardsRow2(),
-            const Gap(20),
-            const _SolicitudesCardsRow3(),
-            const Gap(20),
-            const _SolicitudesCardsRow4(),
-            const Gap(20),
-            const _SolicitudCardsRow5(),
-            const Gap(20),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ScreenHeaderWidget(
+            title: 'Solicitudes',
+            subtitle:
+                'Elige el tipo de crédito que vas a registrar o el trámite que vas a continuar.',
+            onBack: () => context.pushReplacement('/cartera'),
+          ),
+          const Gap(24),
+          const _CreditoNuevoSection(),
+          const _GestionSection(),
+          const _MiTrabajoSection(),
+          const Gap(28),
+        ],
       ),
     );
   }
 }
 
-class _SolicitudesCardsRow3 extends StatelessWidget {
-  const _SolicitudesCardsRow3();
+class _CreditoNuevoSection extends StatelessWidget {
+  const _CreditoNuevoSection();
 
   @override
   Widget build(BuildContext context) {
@@ -89,214 +71,205 @@ class _SolicitudesCardsRow3 extends StatelessWidget {
     final connectionStatus =
         context.read<InternetConnectionCubit>().state.connectionStatus;
 
-    return Row(
+    return SectionBlockWidget(
+      label: 'CREAR SOLICITUD',
       children: [
-        if (actions.contains(TypeAction.asignacion.codigo)) ...[
-          const Gap(10),
-          Expanded(
-            child: SolicitudCard(
-              svgPath: ImageAsset.nuevaMenorBg5,
-              title: 'Asignación de Solicitudes Crédito',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const AsignacionListHnScreen()),
-                  ),
-                );
-              },
-            ),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ModuleEntryCard(
+                  icon: Icons.storefront_outlined,
+                  iconColor: RedesignColors.green,
+                  iconBackground: RedesignColors.greenTint,
+                  title: 'Comercial',
+                  subtitle: 'Negocio propio',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((_) => const AddUserCedulaHnScreen(
+                              typeForm: TypeForm.nueva,
+                            )),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Gap(8),
+              Expanded(
+                child: ModuleEntryCard(
+                  icon: Icons.badge_outlined,
+                  iconColor: RedesignColors.teal,
+                  iconBackground: RedesignColors.tealTint,
+                  title: 'Asalariado',
+                  subtitle: 'Con constancia salarial',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((_) => const AddUserCedulaAsalariadoScreen(
+                              typeForm: TypeForm.asalariado,
+                            )),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-          const Gap(10),
-        ],
+        ),
         if (actions.contains(TypeAction.crearGrupoCredito.codigo) &&
-            connectionStatus == ConnectionStatus.connected) ...[
-          Expanded(
-            child: SolicitudCard(
-              svgPath: ImageAsset.nuevaMenorBg6,
-              title: 'Grupales',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const CrearGrupoCreditoGrupalScreen()),
-                  ),
-                );
-              },
-            ),
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.groups_outlined,
+            iconColor: RedesignColors.indigo,
+            iconBackground: RedesignColors.indigoTint,
+            title: 'Grupales',
+            subtitle: 'Gestionar grupo de crédito grupal',
+            tag: 'Solo en línea',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const CrearGrupoCreditoGrupalScreen()),
+                ),
+              );
+            },
           ),
-        ],
-        const Gap(10),
       ],
     );
   }
 }
 
-class _SolicitudesCardsRow4 extends StatelessWidget {
-  const _SolicitudesCardsRow4();
+class _GestionSection extends StatelessWidget {
+  const _GestionSection();
 
   @override
   Widget build(BuildContext context) {
     final actions = LocalStorage().currentActions;
-    return Row(
+    final connectionStatus =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+
+    return SectionBlockWidget(
+      label: 'GESTIÓN DE SOLICITUDES',
       children: [
-        if (actions.contains(TypeAction.autorizacion.codigo)) ...[
-          const Gap(10),
-          Expanded(
-            child: SolicitudCard(
-              svgPath: ImageAsset.nuevaMenorBg6,
-              title: 'Autorizacion de Solicitudes Crédito',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const AutorizacionSolicitudHnScreen()),
-                  ),
-                );
-              },
-            ),
+        if (actions.contains(TypeAction.solicitudCreditoModificar.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.edit_outlined,
+            iconColor: RedesignColors.purple,
+            iconBackground: RedesignColors.purpleTint,
+            tag: 'Solo en línea',
+            title: 'Modificación',
+            subtitle: 'Corregir datos de una solicitud',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const ActualizacionSolicitudHn()),
+                ),
+              );
+            },
           ),
-        ],
-        if (actions.contains(TypeAction.rechazarSolicitud.codigo)) ...[
-          const Gap(10),
-          Expanded(
-            child: SolicitudCard(
-              svgPath: ImageAsset.nuevaAddDni,
-              title: 'Rechazar Solicitud de Credito',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const RechazarSolicitudHnScreen()),
-                  ),
-                );
-              },
-            ),
+        if (actions.contains(TypeAction.asignacion.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.person_add_alt_outlined,
+            iconColor: RedesignColors.indigo,
+            iconBackground: RedesignColors.indigoTint,
+            title: 'Asignación',
+            tag: 'Solo en línea',
+            subtitle: 'Repartir solicitudes al equipo',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AsignacionListHnScreen()),
+                ),
+              );
+            },
           ),
-        ],
-        const Gap(10),
+        if (actions.contains(TypeAction.autorizacion.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.verified_user_outlined,
+            iconColor: RedesignColors.green,
+            iconBackground: RedesignColors.greenTint,
+            title: 'Autorización',
+            tag: 'Solo en línea',
+            subtitle: 'Autorizar solicitudes de crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolicitudHnScreen()),
+                ),
+              );
+            },
+          ),
+        if (actions.contains(TypeAction.rechazarSolicitud.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.cancel_outlined,
+            iconColor: RedesignColors.red,
+            iconBackground: RedesignColors.redTint,
+            title: 'Rechazar Solicitud',
+            subtitle: 'Denegar solicitud de credito',
+            tag: 'Solo en línea',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const RechazarSolicitudHnScreen()),
+                ),
+              );
+            },
+          ),
       ],
     );
   }
 }
 
-class _SolicitudesCardsRow2 extends StatelessWidget {
-  const _SolicitudesCardsRow2();
+class _MiTrabajoSection extends StatelessWidget {
+  const _MiTrabajoSection();
 
   @override
   Widget build(BuildContext context) {
-    final actions = LocalStorage().currentActions;
-
-    return Row(
+    return SectionBlockWidget(
+      label: 'MI TRABAJO',
       children: [
-        const Gap(10),
-        if (actions.contains(TypeAction.solicitudCreditoModificar.codigo)) ...[
-          Expanded(
-            child: SolicitudCard(
-              svgPath: ImageAsset.nuevaMenorBg5,
-              title: 'Modificacion de solicitudes crédito',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((_) => const ActualizacionSolicitudHn()),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const SolicitudesPendientesScreenHN()),
-                ),
-              );
-            },
-            svgPath: ImageAsset.cedulaPhoto,
-            title: 'Solicitudes en proceso offline',
-          ),
+        ModuleTileWidget(
+          icon: Icons.cloud_upload_outlined,
+          iconColor: RedesignColors.amber,
+          iconBackground: RedesignColors.amberTint,
+          title: 'Solicitudes en proceso offline',
+          subtitle: 'Guardadas en el telefono',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((_) => const SolicitudesPendientesScreenHN()),
+              ),
+            );
+          },
         ),
-        const Gap(10),
-      ],
-    );
-  }
-}
-
-class _SolicitudCardsRow1 extends StatelessWidget {
-  const _SolicitudCardsRow1();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AddUserCedulaHnScreen(
-                        typeForm: TypeForm.nueva,
-                      )),
-                ),
-              );
-            },
-            svgPath: ImageAsset.nuevaMenorBg,
-            title: 'Comercial',
-          ),
+        ModuleTileWidget(
+          icon: Icons.assignment_ind_outlined,
+          iconColor: RedesignColors.teal,
+          iconBackground: RedesignColors.tealTint,
+          title: 'Mis solicitudes asignadas',
+          subtitle: 'Las solicitudes que estan a mi nombre',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((_) => const MisSolicitudesAsignadasHnScreen()),
+              ),
+            );
+          },
         ),
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const AddUserCedulaAsalariadoScreen(
-                        typeForm: TypeForm.asalariado,
-                      )),
-                ),
-              );
-            },
-            svgPath: ImageAsset.nuevaMenorBg2,
-            title: 'Asalariado',
-          ),
-        ),
-        const Gap(10),
-      ],
-    );
-  }
-}
-
-class _SolicitudCardsRow5 extends StatelessWidget {
-  const _SolicitudCardsRow5();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Gap(10),
-        Expanded(
-          child: SolicitudCard(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((_) => const MisSolicitudesAsignadasHnScreen()),
-                ),
-              );
-            },
-            svgPath: ImageAsset.nuevaMenorBg3,
-            title: 'Mis Solicitudes Asignadas',
-          ),
-        ),
-        const Gap(10),
       ],
     );
   }

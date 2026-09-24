@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_ingresos_familiares_fuera_negocio_hn_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -272,7 +273,7 @@ class _AnalisisMayorAMilCreditosHNState
                       icon: Icons.sell,
                       label: 'Total de ingresos',
                       value: totalIngresosFueraNegocio.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.indigo,

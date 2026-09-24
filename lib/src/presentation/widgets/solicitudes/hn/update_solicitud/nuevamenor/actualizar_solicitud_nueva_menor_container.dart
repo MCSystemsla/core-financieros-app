@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/upda
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/nuevamenor/update_solicitud_nueva_menor_form6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/nuevamenor/update_solicitud_nueva_menor_form7.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/nuevamenor/update_solicitud_nueva_menor_form8.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/nuevamenor/update_solicitud_nueva_menor_historial_credito.dart';
 import 'package:flutter/material.dart';
 
 class ActualizarSolicitudNuevaMenorContainer extends StatefulWidget {
@@ -23,10 +24,16 @@ class ActualizarSolicitudNuevaMenorContainer extends StatefulWidget {
 
 class _ActualizarSolicitudNuevaMenorContainerState
     extends State<ActualizarSolicitudNuevaMenorContainer> {
+  final pageController = PageController();
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController();
-
     return Column(
       children: [
         const Navbar(
@@ -58,6 +65,9 @@ class _ActualizarSolicitudNuevaMenorContainerState
                   controller: pageController,
                 ),
                 UpdateSolicitudNuevaMenorForm7(
+                  controller: pageController,
+                ),
+                UpdateSolicitudNuevaMenorHistorialCredito(
                   controller: pageController,
                 ),
                 UpdateSolicitudNuevaMenorForm8(

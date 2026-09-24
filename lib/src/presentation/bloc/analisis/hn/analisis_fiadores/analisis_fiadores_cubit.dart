@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
@@ -21,7 +23,11 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         ganaciasNegocio +
         state.otrosIngresos -
         state.consumoFamiliar;
-    emit(state.copyWith(status: Status.inProgress));
+    emit(state.copyWith(
+      status: Status.inProgress,
+      firmaStatus: Status.notStarted,
+      errorMsg: '',
+    ));
     try {
       final resp = await _repository.createAnalisisFiador(
         analisisFiadoresHn: AnalisisFiadoresHn(
@@ -127,7 +133,16 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
           historialCredito: state.historialCredito,
         ),
       );
-      emit(state.copyWith(status: Status.done, fiadorId: resp.data.id));
+      if (resp.data.id.isEmpty) {
+        emit(state.copyWith(
+          status: Status.error,
+          errorMsg:
+              'El servidor no devolvió el ID del fiador, no se puede registrar la firma.',
+        ));
+        return;
+      }
+      emit(state.copyWith(fiadorId: resp.data.id));
+      await fiadoresEnviarFirmaDigital();
     } on AppException catch (e) {
       emit(state.copyWith(
         status: Status.error,
@@ -182,9 +197,46 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
   }
 
   Future<void> fiadoresEnviarFirmaDigital() async {
-    await _repository.fiadoresEnviarFirmaDigital(
-      idFiador: state.fiadorId,
-      firmaFiador: state.firmaFiador,
-    );
+    if (state.fiadorId.isEmpty) {
+      emit(state.copyWith(
+        status: Status.error,
+        firmaStatus: Status.error,
+        errorMsg:
+            'No se encontró el ID del fiador, no se puede enviar la firma.',
+      ));
+      return;
+    }
+    if (state.firmaFiador.isEmpty ||
+        !File(state.firmaFiador).existsSync()) {
+      emit(state.copyWith(
+        status: Status.error,
+        firmaStatus: Status.error,
+        errorMsg:
+            'No se encontró la firma del fiador en el dispositivo. Vuelve a firmar.',
+      ));
+      return;
+    }
+    emit(state.copyWith(status: Status.inProgress, firmaStatus: Status.inProgress));
+    try {
+      final (isOk, message) = await _repository.fiadoresEnviarFirmaDigital(
+        idFiador: state.fiadorId,
+        firmaFiador: state.firmaFiador,
+      );
+      if (!isOk) {
+        emit(state.copyWith(
+          status: Status.error,
+          firmaStatus: Status.error,
+          errorMsg: message,
+        ));
+        return;
+      }
+      emit(state.copyWith(status: Status.done, firmaStatus: Status.done));
+    } catch (e) {
+      emit(state.copyWith(
+        status: Status.error,
+        firmaStatus: Status.error,
+        errorMsg: e.toString(),
+      ));
+    }
   }
 }

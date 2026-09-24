@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/cuentas_por_cobrar/analisis_cuenta_card_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/cuenta_por_cobrar_card.dart';
 import 'package:flutter/material.dart';
@@ -41,14 +42,14 @@ class AnalisisCuentasPorCobrarWidget extends StatelessWidget {
             AnalisisCuentaCreditosCardWidget(
               title: 'Frecuencia Credito: Anual',
               subtitle: 'Nombre credito',
-              description: 'Total: C\$. 50,000',
+              description: 'Total: ${CurrencyHelper.currencyPrefix()} 50,000',
               montoCredito: 33000,
               onTap: () {},
             ),
             AnalisisCuentaCreditosCardWidget(
               title: 'Frecuencia Credito: Anual',
               subtitle: 'ESTANDAR NUEVO',
-              description: 'Total: C\$. 5,000',
+              description: 'Total: ${CurrencyHelper.currencyPrefix()} 5,000',
               montoCredito: 33000,
               onTap: () {},
             ),

@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_represtamo/analisis_represtamo_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/represtamo/tables/analisis_fijos_represtamo_hn.dart';
@@ -116,7 +117,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                 Container(
                   margin: const EdgeInsets.all(18),
                   child: Text(
-                    'Balance General Expresado en Lempira',
+                    'Balance General Expresado en ${CurrencyHelper.currencyName()}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -243,7 +244,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                       icon: Icons.sell,
                       label: 'Total Cuentas por cobrar',
                       value: totalCuentasxCobrar.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.indigo,
@@ -339,7 +340,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                       icon: Icons.inventory,
                       label: 'Total Inventario',
                       value: totalInventario.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.indigo,
@@ -373,7 +374,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                       icon: Icons.sell,
                       label: 'Total Activos Fijos',
                       value: totalActivosFijos.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.indigo,
@@ -382,7 +383,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                       icon: Icons.business_center_rounded,
                       label: 'Total Activos',
                       value: totalActivos.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.green,

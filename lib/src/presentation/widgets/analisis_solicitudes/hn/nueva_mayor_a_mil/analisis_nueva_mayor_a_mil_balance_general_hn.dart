@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/nueva_mayor_a_mil/tables/table_activos_fijos_hn_widget.dart';
@@ -96,7 +97,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                 Container(
                   margin: const EdgeInsets.all(18),
                   child: Text(
-                    'Balance General Expresado en Lempira',
+                    'Balance General Expresado en ${CurrencyHelper.currencyName()}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -122,7 +123,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                       icon: Icons.inventory,
                       label: 'Total Inventario',
                       value: totalInventario.toCurrencyString(
-                        leadingSymbol: 'L.',
+                        leadingSymbol: CurrencyHelper.currencyPrefix(),
                         mantissaLength: 0,
                       ),
                       color: Colors.indigo,

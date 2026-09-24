@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/solicitud_asalariado_hn.dart';
@@ -29,7 +27,6 @@ class UpdateSolicitudNuevaMenorCubit
         tipoSolicitud: tipoSolicitud,
         idSolicitud: idSolicitud,
       );
-      log('Resp: ${resp.data.cuota}');
       emit(
         state.copyWith(
           status: Status.done,
@@ -242,10 +239,8 @@ class UpdateSolicitudNuevaMenorCubit
           salarioNetoMensualConyuge: resp.data.salarioNetoMensualConyuge,
           aniosLugarTrabajoConyuge: resp.data.aniosLugarTrabajoConyuge,
           telefonoConyuge: resp.data.telefonoTrabajoConyugue,
-
           cedulaConyuge: resp.data.cedulaConyuge,
-
-          // historialCredito:  resp.data.hi.,
+          historialCredito: resp.data.historialCredito,
         ),
       );
     } on AppException catch (e) {
@@ -263,6 +258,33 @@ class UpdateSolicitudNuevaMenorCubit
 
   void onFieldChanged(UpdateSolicitudNuevaMenorState Function() copyWithFn) {
     emit(copyWithFn());
+  }
+
+  void saveHistorialCredito({required HistorialCredito historialCredito}) {
+    emit(
+      state.copyWith(
+        historialCredito: [...state.historialCredito, historialCredito],
+      ),
+    );
+  }
+
+  void updateHistorialCredito({required HistorialCredito updated}) {
+    emit(
+      state.copyWith(
+        historialCredito: state.historialCredito
+            .map((item) => item.uuid == updated.uuid ? updated : item)
+            .toList(),
+      ),
+    );
+  }
+
+  void deleteHistorialCredito({required String uuid}) {
+    emit(
+      state.copyWith(
+        historialCredito:
+            state.historialCredito.where((item) => item.uuid != uuid).toList(),
+      ),
+    );
   }
 
   updateSolicitud({

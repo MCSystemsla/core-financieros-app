@@ -48,6 +48,64 @@ class CreateAnalisisGetNuevaMenorByNumeroSolicitud extends Endpoint {
       };
 }
 
+class CloseAnalisisEndpointNi extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+
+  CloseAnalisisEndpointNi({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/analisis/cerrar';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'NumeroSolicitud': numeroSolicitud,
+        'TipoSolicitud': tipoSolicitud,
+        'database': LocalStorage().database,
+      };
+}
+
+class GetAnalisisChecksEndpointNi extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  final String cedulaCliente;
+  final bool esGrupal;
+
+  GetAnalisisChecksEndpointNi({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+    required this.cedulaCliente,
+    required this.esGrupal,
+  });
+
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/analisis/checks';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'NumeroSolicitud': numeroSolicitud.toString(),
+        'database': LocalStorage().database,
+        'TipoSolicitud': tipoSolicitud,
+        'DocumentoCliente': cedulaCliente,
+        'EsGrupal': esGrupal.toString(),
+      };
+}
+
 class UpdateAnalisisGetNuevaMenorByNumeroSolicitud extends Endpoint {
   final AnalisisNuevaMenorData analisisSolicitudNuevaMenor;
   final String numeroSolicitud;

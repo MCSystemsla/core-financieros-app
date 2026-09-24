@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/nuevamenor/analisis_nueva_menor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/analisis_solicitud_nueva_menor/analisis_solicitud_nueva_menor_cubit.dart';
@@ -41,7 +42,7 @@ class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud> {
             ),
             ExpansionTitleCustom(
               title: Text(
-                'Balance General Expresado en cordobas',
+                'Balance General Expresado en ${CurrencyHelper.currencyNamePlural()}',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -74,7 +75,7 @@ class _AnalisisFormSolicitudState extends State<AnalisisFormSolicitud> {
             ExpansionTitleCustom(
               childrenPadding: const EdgeInsets.symmetric(vertical: 15),
               title: Text(
-                'Estado de resultado expresado en cordobas',
+                'Estado de resultado expresado en ${CurrencyHelper.currencyNamePlural()}',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

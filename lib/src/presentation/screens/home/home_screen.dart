@@ -29,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isChecking = true;
   bool _shouldSync = false;
+
   @override
   void initState() {
     super.initState();
@@ -39,19 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
     final bioCubit = global<BiometricCubit>();
     final connection = context.read<InternetConnectionCubit>().state;
 
-    if (!bioCubit.state.isAuthenticated) {
-      await bioCubit.authenticate(context);
+    bool isAuthenticated = bioCubit.state.isAuthenticated;
+    if (!isAuthenticated) {
+      try {
+        isAuthenticated = await bioCubit.authenticate(context);
+      } catch (_) {
+        isAuthenticated = false;
+      }
     }
 
-    if (bioCubit.state.isAuthenticated) {
-      final needsSync = CatalogoSync.needToSync();
+    if (!mounted) return;
 
-      setState(() {
-        _shouldSync = needsSync &&
-            connection.connectionStatus == ConnectionStatus.connected;
-        _isChecking = false;
-      });
-    }
+    final needsSync = isAuthenticated && CatalogoSync.needToSync();
+
+    setState(() {
+      _shouldSync = needsSync &&
+          connection.connectionStatus == ConnectionStatus.connected;
+      _isChecking = false;
+    });
   }
 
   @override
@@ -75,13 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       );
     }
-    return BlocConsumer<BiometricCubit, BiometricState>(
+    return BlocBuilder<BiometricCubit, BiometricState>(
       bloc: global<BiometricCubit>(),
-      listener: (context, state) {
-        if (!state.isAuthenticated) {
-          global<BiometricCubit>().authenticate(context);
-        }
-      },
       builder: (context, state) {
         return BlocBuilder<DeviceStorageCubit, DeviceStorageState>(
           builder: (context, state) {

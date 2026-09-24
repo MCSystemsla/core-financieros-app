@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/image_asset/image_asset.dart'
 import 'package:core_financiero_app/src/presentation/bloc/catalogo_nacionalidad/catologo_nacionalidad_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,19 @@ class _DownsloadingCatalogosWidgetState
   @override
   void initState() {
     super.initState();
+    _sincronizar();
+  }
+
+  void _sincronizar() {
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
-          context: context,
-          isConnected:
-              context.read<InternetConnectionCubit>().state.isConnected,
+          isConnected: isConnected,
+          solicitudesPendientesLocalDbCubit:
+              context.read<SolicitudesPendientesLocalDbCubit>(),
         );
     context.read<CatologoNacionalidadCubit>().saveAllCatalogos(
-          isConnected:
-              context.read<InternetConnectionCubit>().state.isConnected,
+          isConnected: isConnected,
         );
   }
 
@@ -52,23 +58,10 @@ class _DownsloadingCatalogosWidgetState
                 repeat: false,
                 isSucess: true,
                 onDownloadComplete: widget.onDownloadComplete,
+                unsyncedCatalogos: state.unsyncedCatalogos,
               ),
             SolicitudCatalogoError() => OnErrorWidget(
-                onPressed: () {
-                  context.read<SolicitudCatalogoCubit>().saveAllCatalogos(
-                        context: context,
-                        isConnected: context
-                            .read<InternetConnectionCubit>()
-                            .state
-                            .isConnected,
-                      );
-                  context.read<CatologoNacionalidadCubit>().saveAllCatalogos(
-                        isConnected: context
-                            .read<InternetConnectionCubit>()
-                            .state
-                            .isConnected,
-                      );
-                },
+                onPressed: _sincronizar,
                 btnTitle: 'Intentar de nuevo',
                 errorMsg: state.error,
               ),

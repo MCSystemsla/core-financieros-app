@@ -59,6 +59,7 @@ class _UpdateSolicitudNuevaMenorForm1State
   CatalogoLocalDb? edadMinima;
   CatalogoLocalDb? edadMaxima;
   final localDpProvider = global<SolicitudesHnBoxService>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -185,7 +186,6 @@ class _UpdateSolicitudNuevaMenorForm1State
   Widget build(BuildContext context) {
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
     final actions = LocalStorage().currentActions;
-    final formKey = GlobalKey<FormState>();
     final gruposActivos =
         context.watch<GruposActivosCubit>().state.gruposActivos;
     return SingleChildScrollView(
@@ -748,6 +748,7 @@ class _UpdateSolicitudNuevaMenorForm1State
                         cubit.onFieldChanged(
                           () => state.copyWith(
                             escolaridadCodigo: item.value,
+                            escolaridadNombre: item.name,
                           ),
                         );
                       },
@@ -841,11 +842,11 @@ class _UpdateSolicitudNuevaMenorForm1State
                         setState(() {
                           tieneVinculosUsa = item.value == 'input.yes'.tr();
                         });
-                        // cubit.onFieldChanged(
-                        //   () => cubit.state.copyWith(
-                        //     tieneVinculosUsa: item.value,
-                        //   ),
-                        // );
+                        if (!tieneVinculosUsa) {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(codigoUsa: ''),
+                          );
+                        }
                       },
                       hintText: 'input.select_option'.tr(),
                       enabled: true,

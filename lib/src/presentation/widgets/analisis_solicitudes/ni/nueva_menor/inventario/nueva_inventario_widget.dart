@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
@@ -76,7 +77,7 @@ class NuevaInventarioWidget extends StatelessWidget {
                       description:
                           'Cantidad: ${state.inventarioList[index].cantidad}',
                       subtitle:
-                          'C\$. ${state.inventarioList[index].precioVenta?.toCurrencyString()}',
+                          '${CurrencyHelper.currencyPrefix()} ${state.inventarioList[index].precioVenta?.toCurrencyString()}',
                       onTap: () {
                         inventarioBottomSheet(
                           context,

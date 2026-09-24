@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitudes/rechazar_solicitud/rechazar_solicitud_ni.dart';
 
 class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   final SolicitudNuevaMenor solicitudNuevaMenor;
@@ -199,6 +200,22 @@ class CatalogoFrecuenciaPagoEndpoint extends Endpoint {
 
   @override
   String get path => '/solicitudes/obtener-frecuencia-pago';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
+
+class CatalogoEmpleadosActivosEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/catalogo/empleados-activos';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -443,6 +460,47 @@ class AsignarSolicitudAsalariadoEndpoint extends Endpoint {
         'idSolicitud': idSolicitud,
         'idPromotor': idPromotor,
       };
+}
+
+class AutorizarSolicitudCreditoEndpoint extends Endpoint {
+  final int numeroSolicitud;
+  final String tipoSolicitud;
+  AutorizarSolicitudCreditoEndpoint({
+    required this.numeroSolicitud,
+    required this.tipoSolicitud,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/autorizar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud,
+        'TipoSolicitud': tipoSolicitud,
+      };
+}
+
+class RechazarSolicitudNiEndpoint extends Endpoint {
+  final RechazarSolicitudNi data;
+  RechazarSolicitudNiEndpoint({required this.data});
+
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/solicitudes/general/rechazar-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
 }
 
 class KivaConfiguaracionSolicitudEndpoint extends Endpoint {

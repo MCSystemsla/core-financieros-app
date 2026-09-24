@@ -1,0 +1,140 @@
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_compras_a_proveedores_ni.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/compras_por_proveedor_represtamo_ni.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/compras_por_semana_represtamo_ni.dart';
+import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/hn/compras_week_card_per_week_hn.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+
+class AnalisisComprasReprestamoNI extends StatefulWidget {
+  final int numeroSolicitud;
+  const AnalisisComprasReprestamoNI({
+    super.key,
+    required this.pageController,
+    required this.numeroSolicitud,
+  });
+
+  final PageController pageController;
+
+  @override
+  State<AnalisisComprasReprestamoNI> createState() =>
+      _AnalisisComprasReprestamoHNState();
+}
+
+class _AnalisisComprasReprestamoHNState
+    extends State<AnalisisComprasReprestamoNI> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<AnalisisReprestamoNiCubit>();
+    cubit.initCicloComprasSemanales(widget.numeroSolicitud);
+    cubit.loadComprasProveedorFromLocalDb(
+      numeroSolicitud: widget.numeroSolicitud,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
+      builder: (context, state) {
+        final comprasPorSemana = context
+            .read<AnalisisReprestamoNiCubit>()
+            .getcomprasSemanasMensuales();
+
+        final comprasMensuales = state.cicloDeComprasSemanales.cicloCompra
+            .fold(0, (sum, e) => sum + e.cantidadCompra);
+
+        final totalComprasProveedores = state.comprasProveedorArticulo
+            .fold(0.0, (sum, e) => sum + e.totalCompraMensual);
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(20),
+              AnalisisMayorAMilComprasAProveedoresNi(
+                ventasMensuales: totalComprasProveedores.toInt(),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<AnalisisReprestamoNiCubit>(),
+                        child: const ComprasPorProveedorReprestamoNi(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ComprasWeekCardPerWeekHn(
+                semanasBuenas: comprasPorSemana['semanasBuenas'],
+                semanasNormales: comprasPorSemana['semanasNormales'],
+                semanasMalos: comprasPorSemana['semanasMalas'],
+                comprasMensuales: comprasMensuales,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<AnalisisReprestamoNiCubit>(),
+                        child: const ComprasPorSemanaReprestamoNi(),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomElevatedButton(
+                  onPressed: () {
+                    final semanasVacias = state.cicloVentaMensual.ciclo.every(
+                      (e) => e.venta == 0,
+                    );
+                    if (semanasVacias) {
+                      CustomAlertDialog(
+                        context: context,
+                        title: 'Las compras por semana son requeridas',
+                      ).showDialog(context);
+                      return;
+                    }
+                    if (state.comprasProveedorArticulo.isEmpty) {
+                      CustomAlertDialog(
+                        context: context,
+                        title: 'Las Compras por proveedor son requeridas',
+                      ).showDialog(context);
+                      return;
+                    }
+
+                    widget.pageController.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  text: 'Siguiente',
+                  color: Colors.green,
+                ),
+              ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: CustomElevatedButton(
+                  onPressed: () {
+                    widget.pageController.previousPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  text: 'Anterior',
+                  color: Colors.red,
+                ),
+              ),
+              const Gap(20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
@@ -41,7 +42,7 @@ class _AnalisisMenorMilForm2State extends State<AnalisisMenorMilForm2> {
             Container(
               margin: const EdgeInsets.all(18),
               child: Text(
-                'Estado de resultado expresado en Lempira',
+                'Estado de resultado expresado en ${CurrencyHelper.currencyName()}',
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,

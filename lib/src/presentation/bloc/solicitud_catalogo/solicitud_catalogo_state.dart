@@ -12,8 +12,13 @@ final class SolicitudCatalogoInitial extends SolicitudCatalogoState {}
 final class SolicitudCatalogoLoading extends SolicitudCatalogoState {}
 
 final class SolicitudCatalogoSuccess extends SolicitudCatalogoState {
+  /// Códigos de catálogo que fallaron sin abortar la sincronización.
+  final List<String> unsyncedCatalogos;
+
+  const SolicitudCatalogoSuccess({this.unsyncedCatalogos = const []});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [unsyncedCatalogos];
 }
 
 final class SolicitudCatalogoError extends SolicitudCatalogoState {

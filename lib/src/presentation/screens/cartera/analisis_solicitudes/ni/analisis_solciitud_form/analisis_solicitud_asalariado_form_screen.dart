@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/asalariado/analisis_asalariados_form_widget.dart';
@@ -50,7 +51,7 @@ class _AnalisisSolicitudAsalariadoFormScreenState
               animate: false,
               title: 'Numero Solicitud #12345',
               subtitle: 'Jaime Velásquez',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               numeroSolicitud: '',
             ),
           ),

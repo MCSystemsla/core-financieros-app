@@ -1,9 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -16,8 +14,8 @@ class BiometricNeedAuthScreen extends StatelessWidget {
     return BlocConsumer<BiometricCubit, BiometricState>(
       bloc: global<BiometricCubit>(),
       listener: (context, state) {
-        if (state.isAuthenticated) {
-          context.pushTransparentRoute(const HomeScreen());
+        if (state.isAuthenticated && Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
         }
       },
       builder: (context, state) {

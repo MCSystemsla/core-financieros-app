@@ -11,9 +11,11 @@ class CrearFiadorResponseHn {
 
   factory CrearFiadorResponseHn.fromJson(Map<String, dynamic> json) =>
       CrearFiadorResponseHn(
-        ok: json['ok'],
-        message: json['message'],
-        data: CrearFiadorDataHN.fromJson(json['data']),
+        ok: json['ok'] as bool? ?? false,
+        message: json['message']?.toString() ?? '',
+        data: CrearFiadorDataHN.fromJson(
+          json['data'] as Map<String, dynamic>? ?? const {},
+        ),
       );
 }
 
@@ -26,9 +28,15 @@ class CrearFiadorDataHN {
     required this.numeroSolicitud,
   });
 
-  factory CrearFiadorDataHN.fromJson(Map<String, dynamic> json) =>
-      CrearFiadorDataHN(
-        id: json['ID'],
-        numeroSolicitud: json['NumeroSolicitud'],
-      );
+  factory CrearFiadorDataHN.fromJson(Map<String, dynamic> json) {
+    final rawId = json['FiadorID'] ?? json['id'] ?? json['Id'];
+    final rawNumeroSolicitud = json['FiadorSolicitude'];
+
+    return CrearFiadorDataHN(
+      id: rawId?.toString() ?? '',
+      numeroSolicitud: rawNumeroSolicitud is num
+          ? rawNumeroSolicitud.toInt()
+          : int.tryParse(rawNumeroSolicitud?.toString() ?? '') ?? 0,
+    );
+  }
 }

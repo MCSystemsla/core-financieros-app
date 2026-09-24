@@ -1,16 +1,13 @@
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_asalariado_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitud_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solciitud_form/analisis_solicitudes_nueva_mayor_a_mil.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_forms/analisis_asalariado_ni_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_forms/analisis_nueva_menor_mil_ni_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_forms/analisis_represtamo_ni_form.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_forms/analisis_solicitud_nueva_mayor_a_mil_ni.dart';
 import 'package:flutter/material.dart';
 
-enum AnalisisSolicitudesInterceptorType {
-  nueva,
-  nuevaMayorAMil,
-  represtamo,
-  represtamoMayorAMil,
-  asalariado,
-  grupal
-}
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
+
+/// Se reexporta el enum para no romper los imports existentes de Honduras.
+export 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 
 class AnalisisSolicitudesInterceptor extends StatelessWidget {
   final AnalisisSolicitudesInterceptorType type;
@@ -32,27 +29,46 @@ class AnalisisSolicitudesInterceptor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (type) {
-      AnalisisSolicitudesInterceptorType.nueva => AnalisisSolicitudFormScreen(
+      AnalisisSolicitudesInterceptorType.nueva => AnalisisNuevaMenorMilNiForm(
           index: index,
           title: title,
           subtitle: subtitle,
           description: description,
-          numeroSolicitud: numeroSolicitud,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          tipoSolicitud: type,
         ),
       AnalisisSolicitudesInterceptorType.nuevaMayorAMil =>
-        AnalisisSolicitudNuevaMayorAMil(
+        AnalisisSolicitudNuevaMayorAMilNi(
           title: title,
           subtitle: subtitle,
           description: description,
           index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
         ),
-      AnalisisSolicitudesInterceptorType.asalariado =>
-        AnalisisSolicitudAsalariadoFormScreen(
+      AnalisisSolicitudesInterceptorType.asalariado => AnalisisAsalariadoNiForm(
+          description: description,
           index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          subtitle: subtitle,
+          title: title,
         ),
-      AnalisisSolicitudesInterceptorType.represtamo => const Text('represtamo'),
+      AnalisisSolicitudesInterceptorType.represtamo =>
+        AnalisisNuevaMenorMilNiForm(
+          index: index,
+          title: title,
+          subtitle: subtitle,
+          description: description,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          tipoSolicitud: type,
+        ),
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
-        const Text('represtamoMayor a mil'),
+        AnalisisReprestamoNiForm(
+          description: description,
+          index: index,
+          numeroSolicitud: int.parse(numeroSolicitud),
+          subtitle: subtitle,
+          title: title,
+        ),
       _ => const Text('grupal'),
     };
   }
