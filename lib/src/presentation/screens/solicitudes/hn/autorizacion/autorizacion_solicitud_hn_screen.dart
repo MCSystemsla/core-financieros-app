@@ -300,6 +300,7 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (_) => EspepsAutorizacionFormScreen(
                                   numeroSolicitud: numeroSolicitud,
+                                  tipoSolicitud: tipoSolicitud,
                                 ),
                               ),
                             );
