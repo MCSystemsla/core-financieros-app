@@ -50,6 +50,7 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<ParametroValor> getParametroByName({required String nombre});
   Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago();
+  Future<CatalogoValor> getEmpleadosActivos();
   Future<(UserCedulaData?, bool, String)> getUserByCedulaAsalariado({
     required String cedula,
   });
@@ -405,6 +406,27 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         throw AppException(optionalMsg: '$errorMsg - $status');
       }
       final data = CatalogoFrecuenciaPago.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getEmpleadosActivos() async {
+    final endpoint = CatalogoEmpleadosActivosEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
+      final data = CatalogoValor.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);

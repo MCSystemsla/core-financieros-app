@@ -48,7 +48,6 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     'ACTIVIDADECONOMICA',
     'TIPODOCUMENTOPERSONA',
     'ESTADOPRESTAMO',
-    'EMPLEADOS',
   ];
 
   /// Punto de entrada único: descarga y persiste todos los catálogos.
@@ -100,6 +99,14 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     }
     log('Catalogos guardados');
 
+    try {
+      await getAndSaveEmpleadosActivos();
+      log('Empleados activos guardados');
+    } catch (e) {
+      log('Error sincronizando catalogo EMPLEADOS: $e');
+      unsynced.add('EMPLEADOS');
+    }
+
     await getAndSaveProductos();
     log('Productos guardados');
 
@@ -124,6 +131,20 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
           interes: item.interes,
           montoMaximo: item.montoMaximo,
           montoMinimo: item.montoMinimo?.toInt(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> getAndSaveEmpleadosActivos() async {
+    final empleados = await _repository.getEmpleadosActivos();
+    _replaceCatalogoByType(
+      type: 'EMPLEADOS',
+      items: empleados.data.map(
+        (item) => CatalogoLocalDb(
+          valor: item.valor,
+          nombre: item.nombre,
+          type: 'EMPLEADOS',
         ),
       ),
     );

@@ -5,11 +5,6 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mi
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 
-/// Endpoints de los formularios de análisis de Nicaragua.
-///
-/// Son independientes de los de Honduras (`analisis/hn/endpoint/`) para poder
-/// cambiar ruta o payload de un país sin afectar al otro.
-
 class CreateAnalisisNuevaMayorMilNiEndpoint extends Endpoint {
   final AnalisisNuevaMayorMilHn analisisSolicitudNuevaMenor;
   CreateAnalisisNuevaMayorMilNiEndpoint({
@@ -19,8 +14,7 @@ class CreateAnalisisNuevaMayorMilNiEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path =>
-      '/cartera/analisis-nueva-menor/crear-analisis-nueva-menor-mayor-mil';
+  String get path => '/cartera/analisis/nueva-menor/mayor-mil';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -38,7 +32,7 @@ class CreateAnalisisAsalariadoNiEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path => '/cartera/analisis-asalariado/crear-analisis-asalariado';
+  String get path => '/cartera/analisis/asalariado';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -56,8 +50,7 @@ class CreateAnalisisReprestamoNiEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path =>
-      '/cartera/analisis-represtamo/crear-analisis-represtamo-mayor-mil';
+  String get path => '/cartera/analisis/represtamo/mayor-mil';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -76,14 +69,16 @@ class CrearAnalisisMenorMilNuevaNiEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path =>
-      '/cartera/analisis-nueva-menor/crear-analisis-nueva-menor-mil';
+  String get path => '/cartera/analisis/nueva-menor/menor-mil';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
+  Map<String, dynamic> get body => {
+        ...analisisSolicitudMenorMil.toJson(),
+        'database': LocalStorage().database,
+      };
 }
 
 class CrearAnalisisMenorMilReprestamoNiEndpoint extends Endpoint {
@@ -96,8 +91,7 @@ class CrearAnalisisMenorMilReprestamoNiEndpoint extends Endpoint {
   Method get method => Method.post;
 
   @override
-  String get path =>
-      '/cartera/analisis-represtamo/crear-analisis-represtamo-menor-mil';
+  String get path => '/cartera/analisis/represtamo/menor-mil';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',

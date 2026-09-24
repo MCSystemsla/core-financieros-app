@@ -210,6 +210,22 @@ class CatalogoFrecuenciaPagoEndpoint extends Endpoint {
       };
 }
 
+class CatalogoEmpleadosActivosEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/catalogo/empleados-activos';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+      };
+}
+
 class AsalariadoObtenerSolicitudesPorEstadoEndpoint extends Endpoint {
   final EstadoCredito estadoCredito;
   final bool isAsignadaToAsesorCredito;
