@@ -4,7 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/autorizar_solicitud/autorizar_solicitud_ni_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -20,7 +20,7 @@ void showAutorizarSolicitudBottomSheet(
   int numeroSolicitud,
   String tipoSolicitud,
   String nombreCliente,
-  SolicitudNuevaByEstadoCubit cubit,
+  SolicitudesByEstadoNiCubit cubit,
 ) {
   showModalBottomSheet(
     context: context,
@@ -55,7 +55,7 @@ class _AutorizarSolicitudSheetContent extends StatelessWidget {
   final int numeroSolicitud;
   final String tipoSolicitud;
   final String nombreCliente;
-  final SolicitudNuevaByEstadoCubit cubit;
+  final SolicitudesByEstadoNiCubit cubit;
 
   const _AutorizarSolicitudSheetContent({
     required this.numeroSolicitud,

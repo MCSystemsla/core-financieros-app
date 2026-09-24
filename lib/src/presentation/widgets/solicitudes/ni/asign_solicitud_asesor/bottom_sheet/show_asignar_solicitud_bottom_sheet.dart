@@ -5,7 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/asesor/asesor.
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asesores/asesores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/asign_solicitud_to_asesor/asign_solicitud_to_asesor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -20,7 +20,7 @@ void showAsignarSolicitudBottomSheet(
   String numeroSolicitud,
   String nombreCliente,
   TypeForm typeForm,
-  SolicitudNuevaByEstadoCubit cubit,
+  SolicitudesByEstadoNiCubit cubit,
 ) {
   showModalBottomSheet(
     context: context,

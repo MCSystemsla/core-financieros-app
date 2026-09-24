@@ -22,6 +22,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/us
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -103,6 +104,22 @@ abstract class SolicitudesCreditoRepository {
     required String? cedulaCliente,
     required int? pagina,
   });
+  Future<SolicitudByEstado> getSolicitudesByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+    required int pagina,
+    required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
+  });
+  Future<int?> getRolId();
   Future<(bool, String)> asignSolicitudCreditoToAsesor({
     required int idSolicitud,
     required int idPromotor,
@@ -816,6 +833,75 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       final data = SolicitudByEstado.fromJson(resp);
       _logger.i(resp);
       return (true, data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<SolicitudByEstado> getSolicitudesByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+    required int pagina,
+    required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
+  }) async {
+    final rolId = await getRolId();
+    final endpoint = GetSolicitudesByEstadoNiEndpoint(
+      estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
+      pagina: pagina,
+      usuarioId: rolId,
+      isCustomEstadoCredito: isCustomEstadoCredito,
+      filterEstadosCredito: filterEstadosCredito,
+      estadosCredito: estadosCredito,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int?> getRolId() async {
+    final endpoint = GetUsuarioIdSolicitudesByEstadoNiEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = resp['data']['ID'] as int?;
+      return data;
     } catch (e) {
       _logger.e(e);
       rethrow;

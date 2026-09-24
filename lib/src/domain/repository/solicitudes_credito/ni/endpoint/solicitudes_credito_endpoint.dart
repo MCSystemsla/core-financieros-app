@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/sol
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/solicitud_nueva_menor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitudes/rechazar_solicitud/rechazar_solicitud_ni.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 
 class SolicitudesCreditoNuevaMenorEndpoint extends Endpoint {
   final SolicitudNuevaMenor solicitudNuevaMenor;
@@ -317,6 +318,75 @@ class GetSolicitudesCreditoByEstado extends Endpoint {
         if (numeroSolicitud != null) 'Numero': numeroSolicitud,
         if (cedulaCliente != null) 'Cedula': cedulaCliente,
         if (pagina != null) 'Pagina': pagina.toString(),
+      };
+}
+
+class GetSolicitudesByEstadoNiEndpoint extends Endpoint {
+  final EstadoCredito estadoCredito;
+  final bool isAsignadaToAsesorCredito;
+  final String? numeroSolicitud;
+  final String? cedulaCliente;
+  final int? pagina;
+  final int? usuarioId;
+  final bool isCustomEstadoCredito;
+  final FilterEstadosCredito filterEstadosCredito;
+  final List<EstadoCredito> estadosCredito;
+  GetSolicitudesByEstadoNiEndpoint({
+    required this.estadoCredito,
+    required this.isAsignadaToAsesorCredito,
+    this.numeroSolicitud,
+    this.cedulaCliente,
+    this.pagina,
+    this.usuarioId,
+    this.isCustomEstadoCredito = false,
+    this.filterEstadosCredito = FilterEstadosCredito.all,
+    this.estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path =>
+      '/cartera/solicitudes/general/obtener-solicitud-por-estado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'EstadoSolicitudCodigo': isCustomEstadoCredito
+            ? estadosCredito.map((e) => e.codigo).join(',')
+            : estadoCredito.codigo,
+        'OficialCreditoAsignado': isAsignadaToAsesorCredito.toString(),
+        if (numeroSolicitud != null && numeroSolicitud!.isNotEmpty)
+          'Numero': numeroSolicitud,
+        if (cedulaCliente != null && cedulaCliente!.isNotEmpty)
+          'Cedula': cedulaCliente,
+        if (pagina != null) 'Pagina': pagina.toString(),
+        if (usuarioId != null) 'OficialCreditoCodigo': usuarioId.toString(),
+        'TipoSolicitudFiltro': filterEstadosCredito.codigo,
+      };
+}
+
+class GetUsuarioIdSolicitudesByEstadoNiEndpoint extends Endpoint {
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/solicitudes/general/asesor-by-user-id';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
       };
 }
 

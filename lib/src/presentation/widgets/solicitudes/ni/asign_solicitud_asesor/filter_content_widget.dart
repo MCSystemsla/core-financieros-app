@@ -1,5 +1,4 @@
-import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/show_filter_creditos_by_estado.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asign_solicitud_asesor/bottom_sheet/show_filter_get_by_cedula_and_numero.dart';
@@ -17,22 +16,9 @@ class FilterContent extends StatefulWidget {
 class _FilterContentState extends State<FilterContent> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SolicitudNuevaByEstadoCubit,
-        SolicitudNuevaByEstadoState>(
+    return BlocBuilder<SolicitudesByEstadoNiCubit, SolicitudesByEstadoNiState>(
       builder: (context, state) {
-        final cubit = context.read<SolicitudNuevaByEstadoCubit>();
-        final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
-
-        final estadoCredito =
-            isSuccess ? state.estadoCredito : EstadoCredito.registrada;
-        final isAsignadaToAsesorCredito =
-            isSuccess ? state.isAsignadaToAsesorCredito : false;
-        final isNumeroSolicitudFilter =
-            isSuccess ? state.isNumeroSolicitudFilter : false;
-        final isCedulaSolicitudFilter =
-            isSuccess ? state.isCedulaSolicitudFilter : false;
-        final numeroSolicitud = isSuccess ? state.numeroSolicitud : null;
-        final cedulaCliente = isSuccess ? state.cedulaCliente : null;
+        final cubit = context.read<SolicitudesByEstadoNiCubit>();
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -46,10 +32,10 @@ class _FilterContentState extends State<FilterContent> {
                   onTap: () {
                     showFilterGetByCedualAndNumeroSolicitud(
                       context,
-                      isNumeroSolicitudFilter,
-                      numeroSolicitud,
-                      isCedulaSolicitudFilter,
-                      cedulaCliente,
+                      state.isNumeroSolicitudFilter,
+                      state.numeroSolicitud,
+                      state.isCedulaSolicitudFilter,
+                      state.cedulaCliente,
                       cubit,
                     );
                   },
@@ -61,8 +47,8 @@ class _FilterContentState extends State<FilterContent> {
                   onTap: () {
                     showFilterCreditosByEstado(
                       context,
-                      estadoCredito,
-                      isAsignadaToAsesorCredito,
+                      state.estadoCredito,
+                      state.isAsignadaToAsesorCredito,
                       cubit,
                     );
                   },

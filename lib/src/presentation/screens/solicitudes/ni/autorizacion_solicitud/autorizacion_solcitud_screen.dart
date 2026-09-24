@@ -1,7 +1,8 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
@@ -22,7 +23,7 @@ class AutorizacionSolcitudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => SolicitudNuevaByEstadoCubit(
+      create: (ctx) => SolicitudesByEstadoNiCubit(
         SolicitudCreditoRepositoryImpl(),
       )..getSolicitudesByEstado(
           isAsignadaToAsesorCredito: true,
@@ -46,8 +47,6 @@ class _AutorizacionListView extends StatefulWidget {
 }
 
 class _AutorizacionListViewState extends State<_AutorizacionListView> {
-  int pagina = 1;
-  bool isLoadingMore = false;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -63,28 +62,23 @@ class _AutorizacionListViewState extends State<_AutorizacionListView> {
     super.dispose();
   }
 
-  void _onScroll() async {
-    final state = context.read<SolicitudNuevaByEstadoCubit>().state;
-    final isSuccess = state is OnSolicitudNuevaByEstadoSuccess;
-    final hasMore =
-        isSuccess ? state.solicitudByEstado.metaDataPagination.hasMore : false;
-    final isAtBottom = _scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200;
-
-    if (isAtBottom && hasMore && !isLoadingMore) {
-      setState(() => isLoadingMore = true);
-      pagina++;
-      if (!context.mounted || !mounted) return;
-
-      context.read<SolicitudNuevaByEstadoCubit>().getSolicitudesByEstado(
-            pagina: pagina,
-            isAsignadaToAsesorCredito:
-                isSuccess ? state.isAsignadaToAsesorCredito : true,
-          );
-      if (!mounted) return;
-
-      setState(() => isLoadingMore = false);
+  void _onScroll() {
+    if (!mounted || !_scrollController.hasClients) return;
+    final cubit = context.read<SolicitudesByEstadoNiCubit>();
+    final state = cubit.state;
+    if (state.status != Status.done || !state.hasMore || state.isLoadingMore) {
+      return;
     }
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400;
+    if (!isAtBottom) return;
+
+    cubit.changePage(state.pagina + 1);
+    cubit.getSolicitudesByEstado(
+      estadoCredito: state.estadoCredito,
+      isAsignadaToAsesorCredito: state.isAsignadaToAsesorCredito,
+      isLoadMore: true,
+    );
   }
 
   /// Regla de negocio: solo se autoriza una solicitud REGISTRADA que ya tenga
@@ -111,7 +105,7 @@ class _AutorizacionListViewState extends State<_AutorizacionListView> {
       int.tryParse(solicitud.numero) ?? 0,
       solicitud.tipoSolicitud,
       solicitud.nombreCompleto ?? 'N/A',
-      context.read<SolicitudNuevaByEstadoCubit>(),
+      context.read<SolicitudesByEstadoNiCubit>(),
     );
   }
 
@@ -138,32 +132,33 @@ class _AutorizacionListViewState extends State<_AutorizacionListView> {
         const FilterContent(),
         const Gap(12),
         Expanded(
-          child: BlocBuilder<SolicitudNuevaByEstadoCubit,
-              SolicitudNuevaByEstadoState>(
+          child: BlocBuilder<SolicitudesByEstadoNiCubit,
+              SolicitudesByEstadoNiState>(
             builder: (context, state) {
-              return switch (state) {
-                OnSolicitudNuevaByEstadoLoading() => const ModernLoadingWidget(
+              return switch (state.status) {
+                Status.inProgress => const ModernLoadingWidget(
                     message: 'Cargando solicitudes por autorizar...',
                   ),
-                OnSolicitudNuevaByEstadoError() => OnErrorWidget(
+                Status.error => OnErrorWidget(
                     errorMsg: state.errorMsg,
                     onPressed: () {
                       context
-                          .read<SolicitudNuevaByEstadoCubit>()
+                          .read<SolicitudesByEstadoNiCubit>()
                           .getSolicitudesByEstado(
+                            estadoCredito: state.estadoCredito,
                             isAsignadaToAsesorCredito: true,
                           );
                     },
                   ),
-                OnSolicitudNuevaByEstadoSuccess() => state.solicitudes.isEmpty
+                Status.done => state.solicitudes.isEmpty
                     ? const EmptyListWidget(
                         message: 'No hay solicitudes por autorizar',
                       )
                     : ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.only(bottom: 24),
-                        itemCount:
-                            state.solicitudes.length + (isLoadingMore ? 1 : 0),
+                        itemCount: state.solicitudes.length +
+                            (state.isLoadingMore ? 1 : 0),
                         itemBuilder: (BuildContext context, int index) {
                           if (index >= state.solicitudes.length) {
                             return const Padding(
