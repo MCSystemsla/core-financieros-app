@@ -48,6 +48,7 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     'ACTIVIDADECONOMICA',
     'TIPODOCUMENTOPERSONA',
     'ESTADOPRESTAMO',
+    'UBICACIONGPS',
   ];
 
   /// Punto de entrada único: descarga y persiste todos los catálogos.
