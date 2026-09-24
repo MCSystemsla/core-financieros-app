@@ -386,6 +386,29 @@ class CrearAnalisisMenorMilNuevaHNEndpoint extends Endpoint {
   Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
 }
 
+class ActualizarAnalisisMenorMilHNEndpoint extends Endpoint {
+  final AnalisisMenorMilHN analisisSolicitudMenorMil;
+
+  ActualizarAnalisisMenorMilHNEndpoint({
+    required this.analisisSolicitudMenorMil,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path =>
+      '/cartera/analisis-nueva-menor/actualizar-analisis-nueva-menor-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        ...analisisSolicitudMenorMil.toJson(),
+        'database': LocalStorage().database,
+      };
+}
+
 class CrearAnalisisMenorMilReprestamoHNEndpoint extends Endpoint {
   final AnalisisMenorMilHN analisisSolicitudMenorMil;
 

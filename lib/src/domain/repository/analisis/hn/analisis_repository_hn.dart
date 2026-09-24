@@ -127,6 +127,9 @@ abstract class AnalisisRepositoryHn {
   Future<void> updateAnalisisGrupal({
     required AnalisisGrupal analisisSolicitudGrupal,
   });
+  Future<void> updateAnalisisMenorMil({
+    required AnalisisMenorMilHN analisis,
+  });
   Future<GetDataAnalisisGrupalResponse> getAnalisisData({
     required String numeroSolicitud,
     required String tipoSolicitud,
@@ -762,6 +765,26 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
   }) async {
     final endpoint = UpdateAnalisisGrupalEndpoint(
       data: analisisSolicitudGrupal,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateAnalisisMenorMil({
+    required AnalisisMenorMilHN analisis,
+  }) async {
+    final endpoint = ActualizarAnalisisMenorMilHNEndpoint(
+      analisisSolicitudMenorMil: analisis,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

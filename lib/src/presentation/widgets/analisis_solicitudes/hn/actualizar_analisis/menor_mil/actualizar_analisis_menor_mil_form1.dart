@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../bloc/analisis/hn/get_analisis_menor_mil_data/get_analisis_menor_mil_data_cubit.dart';
+import '../../../../../bloc/analisis/hn/actualizar_analisis_menor_mil/actualizar_analisis_menor_mil_cubit.dart';
 
 class ActualizarAnalisisMenorMilForm1 extends StatefulWidget {
   final PageController pageController;
@@ -67,13 +67,8 @@ class _ActualizarAnalisisMenorMilForm1State
                   ),
                   const Gap(10),
                   CustomElevatedButton(
-                    onPressed: () {
-                      widget.pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    text: 'Anterior',
+                    onPressed: () => Navigator.of(context).pop(),
+                    text: 'Cancelar',
                     color: Colors.red,
                   ),
                 ],
@@ -87,43 +82,13 @@ class _ActualizarAnalisisMenorMilForm1State
   }
 }
 
-class _ActivosForm extends StatefulWidget {
+class _ActivosForm extends StatelessWidget {
   const _ActivosForm();
-  @override
-  State<_ActivosForm> createState() => _ActivosFormState();
-}
-
-class _ActivosFormState extends State<_ActivosForm> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final cubit = context.read<AnalisisMenorMilCubit>();
-  //   cubit.loadInventarioFromLocalDb(
-  //     numeroSolicitud: widget.numeroSolicitud,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
-    final analisisDataCubit = context.watch<GetAnalisisMenorMilDataCubit>();
-
-    final totalInventarioCalc = analisisDataCubit.state.inventarioTb.fold(
-      0.00,
-      (sum, element) => sum + (element.total ?? 0),
-    );
-
-    final totalActivosCirculantesCalc = analisisDataCubit.state.caja +
-        analisisDataCubit.state.banco +
-        analisisDataCubit.state.cuentasXCobrar +
-        analisisDataCubit.state.otrosActivos +
-        totalInventarioCalc;
-
-    final totalActivoCalc =
-        analisisDataCubit.state.activoFijo + totalActivosCirculantesCalc;
-
-    final costoPorcentajeVenta = analisisDataCubit.state.inventarioTb.fold(
-            0.0, (sum, element) => sum + (element.costoVentaPorcentaje ?? 0)) /
-        (analisisDataCubit.state.inventarioTb.length);
+    final cubit = context.watch<ActualizarAnalisisMenorMilCubit>();
+    final state = cubit.state;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -152,162 +117,137 @@ class _ActivosFormState extends State<_ActivosForm> {
             ),
           ),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.caja
+            initialValue: state.caja
                 .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             title: 'Caja',
             textAlign: TextAlign.end,
             icon: const Icon(Icons.add_box),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     caja: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  caja: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.banco
+            initialValue: state.banco
                 .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             textAlign: TextAlign.end,
             title: 'Banco',
             textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     banco: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  banco: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
             icon: const Icon(Icons.account_balance),
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.cuentasXCobrar
-                .toCurrencyString()
+            initialValue: state.cuentasXCobrar
+                .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             title: 'Cuentas por cobrar',
             textAlign: TextAlign.end,
             icon: const Icon(Icons.wallet),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     cuentasXCobrar: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  cuentasXCobrar: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
-          // AnalisisCardListHn(
-          //   title: 'Inventario',
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (_) => BlocProvider.value(
-          //           value: context.read<AnalisisMenorMilCubit>(),
-          //           child: TableInventarioMenorMil(
-          //             numeroSolicitud: widget.numeroSolicitud,
-          //           ),
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   items: [
-          //     AnalisisCardItem(
-          //       icon: Icons.inventory,
-          //       label: 'Total Inventario',
-          //       value: totalInventarioCalc.toCurrencyString(),
-          //       color: Colors.indigo,
-          //     ),
-          //     AnalisisCardItem(
-          //       icon: Icons.percent,
-          //       label: 'Costo de ventas promedio',
-          //       value: '${costoPorcentajeVenta.toSafeString(2)}%',
-          //       color: Colors.blueGrey,
-          //     ),
-          //   ],
-          // ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.otrosActivos
+            hintText: state.totalInventario.toCurrencyString(),
+            textAlign: TextAlign.end,
+            readOnly: true,
+            title: 'Total inventario',
+            icon: const Icon(Icons.inventory),
+          ),
+          const Gap(10),
+          OutlineTextfieldWidget(
+            initialValue: state.otrosActivos
                 .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             textAlign: TextAlign.end,
             title: 'Otros activos',
             icon: const Icon(Icons.wallet),
             textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     otrosActivos: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  otrosActivos: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            hintText: totalActivosCirculantesCalc.toCurrencyString(),
+            hintText: state.totalActivosCirculantes.toCurrencyString(),
             textAlign: TextAlign.end,
             readOnly: true,
             title: 'Total activos circulantes',
             icon: const Icon(Icons.wallet),
-            textInputType: TextInputType.number,
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     totalAc: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.activoFijo
+            initialValue: state.activoFijo
                 .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             textAlign: TextAlign.end,
             title: 'Activos fijos',
             icon: const Icon(Icons.wallet),
             textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     activoFijo: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  activoFijo: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            hintText: totalActivoCalc.toCurrencyString(),
+            hintText: state.totalActivo.toCurrencyString(),
             textAlign: TextAlign.end,
             readOnly: true,
             title: 'Total activo',
             icon: const Icon(Icons.wallet),
-            textInputType: TextInputType.number,
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     totalActivo: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(20),
         ],
       ),
     );
-    // },
-    // );
   }
 }
 
@@ -316,27 +256,8 @@ class _PasivosForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final analisisDataCubit = context.watch<GetAnalisisMenorMilDataCubit>();
-    final totalInventarioCalc = analisisDataCubit.state.inventarioTb.fold(
-      0.00,
-      (sum, element) => sum + (element.total ?? 0),
-    );
-    final totalActivosCirculantesCalc = analisisDataCubit.state.caja +
-        analisisDataCubit.state.banco +
-        analisisDataCubit.state.cuentasXCobrar +
-        analisisDataCubit.state.otrosActivos +
-        totalInventarioCalc;
-
-    final totalPasivosCalc = analisisDataCubit.state.proveedores +
-        analisisDataCubit.state.cuentasXPagar +
-        analisisDataCubit.state.otrasDeudas;
-
-    final totalActivoCalc =
-        analisisDataCubit.state.activoFijo + totalActivosCirculantesCalc;
-
-    final totalCapitalCalc = totalActivoCalc - totalPasivosCalc;
-
-    final pasivosCapitalCalc = totalPasivosCalc + totalCapitalCalc;
+    final cubit = context.watch<ActualizarAnalisisMenorMilCubit>();
+    final state = cubit.state;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -365,106 +286,90 @@ class _PasivosForm extends StatelessWidget {
             ),
           ),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.proveedores
-                .toCurrencyString()
+            initialValue: state.proveedores
+                .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             title: 'Proveedores',
             textAlign: TextAlign.end,
             icon: const Icon(Icons.add_box),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     proveedores: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  proveedores: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.cuentasXPagar
-                .toCurrencyString()
+            initialValue: state.cuentasXPagar
+                .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             textAlign: TextAlign.end,
             title: 'Cuentas por pagar',
             textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             icon: const Icon(Icons.account_balance),
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     cuentasXPagar: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  cuentasXPagar: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            initialValue: analisisDataCubit.state.otrasDeudas
-                .toCurrencyString()
+            initialValue: state.otrasDeudas
+                .toCurrencyString(mantissaLength: 0)
                 .toNullIfEmptyOrZero(),
             title: 'Otras deudas',
             textAlign: TextAlign.end,
             icon: const Icon(Icons.wallet),
+            textInputType: TextInputType.number,
+            inputFormatters: [
+              CurrencyInputFormatter(mantissaLength: 0),
+            ],
             onChange: (value) {
               final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     otrasDeudas: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
+              cubit.onFieldChanged(
+                () => cubit.state.copyWith(
+                  otrasDeudas: double.tryParse(newValue) ?? 0,
+                ),
+              );
             },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            hintText: totalPasivosCalc.toCurrencyString(),
+            hintText: state.totalPasivo.toCurrencyString(),
             textAlign: TextAlign.end,
             readOnly: true,
             title: 'Total pasivos',
             icon: const Icon(Icons.wallet),
-            textInputType: TextInputType.number,
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     totalPasivo: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            hintText: totalCapitalCalc.toCurrencyString(),
+            hintText: state.capital.toCurrencyString(),
             textAlign: TextAlign.end,
             title: 'Capital',
             icon: const Icon(Icons.wallet),
             readOnly: true,
-            textInputType: TextInputType.number,
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     capital: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(10),
           OutlineTextfieldWidget(
-            hintText: pasivosCapitalCalc.toCurrencyString(),
+            hintText: state.pasivoCapital.toCurrencyString(),
             readOnly: true,
             textAlign: TextAlign.end,
             title: 'Pasivos + Capital',
             icon: const Icon(Icons.wallet),
-            textInputType: TextInputType.number,
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     pasivoCapital: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(20),
         ],

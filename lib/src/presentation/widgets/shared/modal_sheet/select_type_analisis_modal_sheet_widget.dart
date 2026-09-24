@@ -174,7 +174,7 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         );
                       },
                     ),
-                    if (state.tieneAnalisis && esGrupal)
+                    if (state.tieneAnalisis)
                       SelectableCardItem(
                         userHaveDataAlready: false,
                         isLoading: state.status == Status.inProgress,
