@@ -208,7 +208,6 @@ class _AnalisisAsalariadoReferenciasHnState
                     // ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
                     textInputType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => state.copyWith(cedulaReferencia1: value),
@@ -379,9 +378,6 @@ class _AnalisisAsalariadoReferenciasHnState
                     title: 'Número de cédula:',
                     textInputType: TextInputType.number,
                     icon: const Icon(Icons.person),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => state.copyWith(cedulaReferencia2: value),
@@ -567,9 +563,6 @@ class _AnalisisAsalariadoReferenciasHnState
                       // validator: (value) =>
                       // ClassValidator.validateRequired(value),
                       icon: const Icon(Icons.person),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => state.copyWith(cedulaReferencia3: value),

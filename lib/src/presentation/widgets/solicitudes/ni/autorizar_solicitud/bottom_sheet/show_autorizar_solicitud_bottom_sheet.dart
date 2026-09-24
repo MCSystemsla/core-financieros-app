@@ -174,7 +174,9 @@ class _AutorizarSolicitudSheetContent extends StatelessWidget {
                       cubit.getSolicitudesByEstado(
                         isAsignadaToAsesorCredito: true,
                       );
-                      Navigator.of(context).pop();
+                      final navigator = Navigator.of(context);
+                      navigator.pop();
+                      navigator.pop();
                     },
                   ).showDialog(
                     context,

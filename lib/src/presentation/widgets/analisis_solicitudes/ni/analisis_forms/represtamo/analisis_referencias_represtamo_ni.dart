@@ -196,7 +196,6 @@ class _AnalisisReferenciasReprestamoHNState
                   // validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   textInputType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -372,9 +371,6 @@ class _AnalisisReferenciasReprestamoHNState
                   title: 'Número de cédula:',
                   textInputType: TextInputType.number,
                   icon: const Icon(Icons.person),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -563,9 +559,6 @@ class _AnalisisReferenciasReprestamoHNState
                     // validator: (value) =>
                     // ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => state.copyWith(
@@ -673,7 +666,8 @@ class _AnalisisReferenciasReprestamoHNState
                             context,
                             MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
-                                value: context.read<AnalisisReprestamoNiCubit>(),
+                                value:
+                                    context.read<AnalisisReprestamoNiCubit>(),
                                 child: const SendingAnalisisReprestamoNi(),
                               ),
                             ),

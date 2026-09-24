@@ -210,10 +210,6 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         // ClassValidator.validateRequired(value),
                         icon: const Icon(Icons.person),
                         textInputType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(13),
-                        ],
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
                                 cedulaReferencia1: value,
@@ -397,10 +393,6 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         title: 'Número de cédula:',
                         textInputType: TextInputType.number,
                         icon: const Icon(Icons.person),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(13),
-                        ],
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
                                 cedulaReferencia2: value,
@@ -598,10 +590,6 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                           // validator: (value) =>
                           // ClassValidator.validateRequired(value),
                           icon: const Icon(Icons.person),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(13),
-                          ],
                           onChange: (value) {
                             cubit.onFieldChanged(() => state.copyWith(
                                   cedulaReferencia3: value,
