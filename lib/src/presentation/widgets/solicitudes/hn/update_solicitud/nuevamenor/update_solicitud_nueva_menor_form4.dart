@@ -39,6 +39,18 @@ class _UpdateSolicitudNuevaMenorForm4State
   final formKey = GlobalKey<FormState>();
   bool trabajaConyuge = false;
   Item? estadoCivil;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<UpdateSolicitudNuevaMenorCubit>().state;
+    trabajaConyuge = state.trabajaConyugue;
+    estadoCivil = Item(
+      name: state.estadoCivilNombre,
+      value: state.estadoCivilCodigo,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
@@ -217,7 +229,7 @@ class _UpdateSolicitudNuevaMenorForm4State
                       });
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          trabajaConyugue: item.value,
+                          trabajaConyugue: trabajaConyuge,
                         ),
                       );
                     },
@@ -306,10 +318,11 @@ class _UpdateSolicitudNuevaMenorForm4State
                   const Gap(30),
                   SearchDropdownWidget(
                     selectedItem: Item(
-                      name: cubit.state.tipoDocumentoNombre,
-                      value: cubit.state.tipoDocumentoCodigo,
+                      name: cubit.state.tipoDocumentoConyugeNombre,
+                      value: cubit.state.tipoDocumentoConyugeCodigo,
                     ),
                     codigo: 'TIPODOCUMENTOPERSONA',
+                    flavor: global<FlavorCubit>().state.flavor,
                     isRequired: true,
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),

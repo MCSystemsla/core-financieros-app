@@ -33,6 +33,22 @@ class _UpdateSolicitudNuevaMenorForm8State
   bool isApnfd3 = false;
 
   @override
+  void initState() {
+    super.initState();
+    isApnfd = context.read<UpdateSolicitudNuevaMenorCubit>().state.esApnfd;
+  }
+
+  void _updateEsApnfd(UpdateSolicitudNuevaMenorCubit cubit) {
+    final esApnfd = isApnfd || isApnfd2 || isApnfd3;
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        esApnfd: esApnfd,
+        ejerceApnfd: esApnfd ? cubit.state.ejerceApnfd : false,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
     return SingleChildScrollView(
@@ -71,6 +87,7 @@ class _UpdateSolicitudNuevaMenorForm8State
                         actividadEconomicaCiuu1Nombre: item.nombre,
                       ),
                     );
+                    _updateEsApnfd(cubit);
                   },
                   title: 'Actividad Económica CNBS',
                 ),
@@ -118,6 +135,7 @@ class _UpdateSolicitudNuevaMenorForm8State
                         actividadEconomicaCiuu2Nombre: item.nombre,
                       ),
                     );
+                    _updateEsApnfd(cubit);
                   },
                   hintText: 'selecciona actividad económica',
                   title: 'Actividad Económica CNBS 2',
@@ -166,8 +184,10 @@ class _UpdateSolicitudNuevaMenorForm8State
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         actividadEconomicaCiuu3Codigo: item.valor,
+                        actividadEconomicaCiuu3Nombre: item.nombre,
                       ),
                     );
+                    _updateEsApnfd(cubit);
                   },
                   title: 'Actividad Económica CNBS 3',
                   isRequired: true,
@@ -205,7 +225,7 @@ class _UpdateSolicitudNuevaMenorForm8State
                       name: cubit.state.ejerceApnfd
                           ? 'input.yes'.tr()
                           : 'input.no'.tr(),
-                      value: cubit.state.esApnfd.toString(),
+                      value: cubit.state.ejerceApnfd.toString(),
                     ),
                     isRequired: true,
                     validator: (value) =>
@@ -218,10 +238,10 @@ class _UpdateSolicitudNuevaMenorForm8State
                     hintText: '¿Ejerce APNFD?',
                     title: '¿Ejerce APNFD?',
                     onChanged: (value) {
+                      if (value == null || !mounted) return;
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          ejerceApnfd: value?.value,
-                          esApnfd: value?.value,
+                          ejerceApnfd: value.value == 'input.yes'.tr(),
                         ),
                       );
                     },
