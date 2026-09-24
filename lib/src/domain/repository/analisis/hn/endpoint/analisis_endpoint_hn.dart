@@ -50,6 +50,25 @@ class CreateAnalisisAsalariadoEndpoint extends Endpoint {
   Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
 }
 
+class ActualizarAnalisisAsalariadoHNEndpoint extends Endpoint {
+  final AnalisisAsalariadoHn analisisSolicitudAsalariado;
+  ActualizarAnalisisAsalariadoHNEndpoint({
+    required this.analisisSolicitudAsalariado,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path =>
+      '/cartera/analisis-asalariado/actualizar-analisis-asalariado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
+}
+
 class CreateAnalisisReprestamoEndpoint extends Endpoint {
   final AnalisisReprestamoHn analisisSolicitudReprestamo;
   CreateAnalisisReprestamoEndpoint({

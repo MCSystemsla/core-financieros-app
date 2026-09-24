@@ -29,6 +29,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_bien_schema_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/evaluador_cnbs_response.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_grupal.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/get_data_analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
@@ -129,6 +130,13 @@ abstract class AnalisisRepositoryHn {
   });
   Future<void> updateAnalisisMenorMil({
     required AnalisisMenorMilHN analisis,
+  });
+  Future<void> updateAnalisisAsalariado({
+    required AnalisisAsalariadoHn analisis,
+  });
+  Future<GetDataAnalisisAsalariado> getAnalisisDataAsalariado({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
   });
   Future<GetDataAnalisisGrupalResponse> getAnalisisData({
     required String numeroSolicitud,
@@ -793,6 +801,50 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         final (errorMsg, errorCode) = getErrorMessage(resp);
         throw AppException(optionalMsg: errorMsg.toString());
       }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateAnalisisAsalariado({
+    required AnalisisAsalariadoHn analisis,
+  }) async {
+    final endpoint = ActualizarAnalisisAsalariadoHNEndpoint(
+      analisisSolicitudAsalariado: analisis,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<GetDataAnalisisAsalariado> getAnalisisDataAsalariado({
+    required String numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = GetAnalisisDataEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final Map<String, dynamic> respBody = resp['data'];
+      return GetDataAnalisisAsalariado.fromJson(respBody);
     } catch (e) {
       _logger.e(e);
       rethrow;

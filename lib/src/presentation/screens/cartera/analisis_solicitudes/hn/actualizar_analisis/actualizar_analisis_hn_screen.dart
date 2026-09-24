@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/loading/load
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/actualizar_analisis/actualizar_analisis_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/actualizar_analisis/actualizar_analisis_asalariado_hn_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../bloc/analisis/hn/actualizar_analisis_menor_mil/actualizar_analisis_menor_mil_cubit.dart';
@@ -56,7 +57,14 @@ class ActualizarAnalisisHnInterceptor extends StatelessWidget {
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
         const Text('Represtamo en proceso'),
       AnalisisSolicitudesInterceptorType.asalariado =>
-        const Text('Asalariado en proceso'),
+        ActualizarAnalisisAsalariadoHnScreen(
+          numeroSolicitud: numeroSolicitud,
+          tipoSolicitud: tipoSolicitudString,
+          title: title,
+          subtitle: subtitle,
+          description: description,
+          index: index,
+        ),
       AnalisisSolicitudesInterceptorType.grupal =>
         ActualizarAnalisisGrupalHnScreen(
           numeroSolicitud: numeroSolicitud,
