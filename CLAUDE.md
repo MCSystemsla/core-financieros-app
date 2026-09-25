@@ -70,10 +70,21 @@ Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`A
 
 - `ScreenHeaderWidget` — standard screen header (back button, big title, subtitle, trailing slot defaulting to `ConnectionPillWidget`).
 - `ModuleTileWidget` / `ModuleIconTile` / `ModuleEntryCard` — module list rows and entry cards; `tag` surfaces business rules the advisor must see before tapping (e.g. `'Solo en línea'`).
-- `SolicitudEstadoCard` + `CardTagWidget` — credit-request cards for the by-state lists (assigned, reject, update, supervisiones). Replaces `CreditProductDynamicHn`.
+- `SolicitudEstadoCard` + `CardTagWidget` — credit-request cards for the by-state lists in both countries (HN: assigned, reject, update, supervisiones; NI: asignación, autorización, rechazo, análisis). Replaces `CreditProductDynamicHn` / `CreditProductItemHn` (NI's `CreditProductItem` is already deleted).
 - `SectionBlockWidget`, `HeaderBackButton`, `ConnectionPillWidget` (reads `InternetConnectionCubit`), `SendingStatusView` (Lottie-driven send/progress screens).
 
 Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.
+
+### Solicitudes by estado (paginated lists)
+
+Lists of credit requests filtered by `EstadoCredito` go through one cubit per country: `SolicitudesByEstadoHnCubit` (`bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/`) and `SolicitudesByEstadoNiCubit` (`bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/`, backed by `SolicitudesCreditoRepository.getSolicitudesByEstado` in `domain/repository/solicitudes_credito/ni/`). The NI cubit replaced the old `SolicitudNuevaByEstadoCubit`. Pattern:
+
+- Each screen creates its own instance with `BlocProvider(create: ...)` (not in `app.dart`) and calls `getSolicitudesByEstado(estadoCredito: ..., estadosCredito: [...], filterEstadosCredito: ..., isAsignadaToAsesorCredito: ...)`.
+- Pagination is done through `isLoadMore: true`, `hasMore`, and `isLoadingMore`. If a load-more call fails, the list already loaded stays, and `pagina` rolls back so the user can retry.
+- Filters by `numeroSolicitud` / `cedulaCliente` are set in state through `onFieldChanged(() => state.copyWith(...))` before the fetch. `cleanState()` resets them.
+- Bottom sheets (`show_filter_creditos_by_estado.dart`, `show_asignar_solicitud_bottom_sheet.dart`, `show_autorizar_solicitud_bottom_sheet.dart`, `show_filter_get_by_cedula_and_numero.dart`) get the cubit passed in as a parameter, because they open outside the provider's subtree. Widgets inside the tree, like `filter_content_widget.dart`, read it from `context` instead.
+
+Use this cubit for any new NI list screen instead of writing a separate fetch cubit.
 
 ### Dependency injection
 
