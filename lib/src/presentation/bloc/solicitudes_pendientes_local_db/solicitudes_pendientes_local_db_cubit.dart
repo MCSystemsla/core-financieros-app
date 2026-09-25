@@ -152,14 +152,17 @@ class SolicitudesPendientesLocalDbCubit
   }) async {
     try {
       await state.isar?.writeTxn(() async {
+        // Puede haber más de una fila por solicitudId (el sync offline guarda
+        // una nueva); se marcan todas para que ninguna quede como fallida.
         final existing = await state.isar?.solicitudesPendientes
-            .filter()
-            .solicitudIdEqualTo(solicitudId)
-            .findFirst();
-        if (existing != null) {
-          existing.imagesSended = true;
-          await state.isar?.solicitudesPendientes.put(existing);
+                .filter()
+                .solicitudIdEqualTo(solicitudId)
+                .findAll() ??
+            [];
+        for (final solicitud in existing) {
+          solicitud.imagesSended = true;
         }
+        await state.isar?.solicitudesPendientes.putAll(existing);
       });
     } catch (e) {
       _logger.e(e);
@@ -182,10 +185,15 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  /// Solo se purgan solicitudes cuyas imágenes ya se confirmaron en el
+  /// servidor: si se borra el ImageModel antes, se pierden las rutas de las
+  /// fotos y ya no hay forma de reintentar la subida.
   Future<List<SolicitudesPendientes>> _getSolicitudesEnviadas() {
     return state.isar!.solicitudesPendientes
         .filter()
         .isSendedEqualTo(true)
+        .and()
+        .imagesSendedEqualTo(true)
         .findAll();
   }
 

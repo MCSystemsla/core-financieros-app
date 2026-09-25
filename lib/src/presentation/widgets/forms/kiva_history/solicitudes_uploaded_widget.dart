@@ -247,9 +247,12 @@ class _ExpansionButtonsWidget extends StatelessWidget {
         const Gap(15),
         CustomElevatedButton(
           enabled: status != Status.inProgress,
-          onPressed: () {
+          onPressed: () async {
             if (!context.mounted) return;
-            context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+            final localDb = context.read<SolicitudesPendientesLocalDbCubit>();
+            final imagesSended = await context
+                .read<UploadUserFileCubit>()
+                .uploadUserFilesOffline(
                   fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
                   solicitudId: int.parse(
                     solicitud.solicitudId ?? '0',
@@ -263,6 +266,11 @@ class _ExpansionButtonsWidget extends StatelessWidget {
                   imagen3: imagenes?.imagen3 ?? 'NO PATH',
                   typeSigner: imagenes?.typeSigner ?? '',
                 );
+            if (imagesSended) {
+              await localDb.updateIsImagesSendedOnSolicitud(
+                solicitudId: solicitud.solicitudId ?? '',
+              );
+            }
           },
           text: '📤 Enviar Imágenes Kiva',
           color: AppColors.getPrimaryColor(),

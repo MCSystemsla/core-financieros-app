@@ -111,24 +111,41 @@ class ObjectBoxService {
     _store.close(); // Cierra la conexión con la base de datos.
   }
 
+  /// Borra registros viejos, excepto los terminados que aún no se han enviado
+  /// al servidor (isDone && !hasVerified): esos esperan la próxima
+  /// sincronización y borrarlos perdería la solicitud.
   void deleteRowsByDeterminateTime({
     Duration duration = const Duration(days: 30),
   }) {
-    final now = DateTime.now().subtract(duration);
-    solicitudesResponsesBox
-        .query(ResponseLocalDb_.createdAt.lessThan(now.millisecondsSinceEpoch))
-        .build()
-        .remove();
-    solicitudesReprestamoResponsesBox
-        .query(ReprestamoResponsesLocalDb_.createdAt
-            .lessThan(now.millisecondsSinceEpoch))
-        .build()
-        .remove();
-    solicitudesAsalariadoResponsesBox
-        .query(AsalariadoResponsesLocalDb_.createdAt
-            .lessThan(now.millisecondsSinceEpoch))
-        .build()
-        .remove();
+    final limit = DateTime.now().subtract(duration).millisecondsSinceEpoch;
+
+    final nuevasQuery = solicitudesResponsesBox
+        .query(ResponseLocalDb_.createdAt.lessThan(limit).and(ResponseLocalDb_
+            .hasVerified
+            .equals(true)
+            .or(ResponseLocalDb_.isDone.equals(false))))
+        .build();
+    final represtamosQuery = solicitudesReprestamoResponsesBox
+        .query(ReprestamoResponsesLocalDb_.createdAt.lessThan(limit).and(
+            ReprestamoResponsesLocalDb_.hasVerified
+                .equals(true)
+                .or(ReprestamoResponsesLocalDb_.isDone.equals(false))))
+        .build();
+    final asalariadosQuery = solicitudesAsalariadoResponsesBox
+        .query(AsalariadoResponsesLocalDb_.createdAt.lessThan(limit).and(
+            AsalariadoResponsesLocalDb_.hasVerified
+                .equals(true)
+                .or(AsalariadoResponsesLocalDb_.isDone.equals(false))))
+        .build();
+    try {
+      nuevasQuery.remove();
+      represtamosQuery.remove();
+      asalariadosQuery.remove();
+    } finally {
+      nuevasQuery.close();
+      represtamosQuery.close();
+      asalariadosQuery.close();
+    }
   }
 
   List<dynamic> sendSolicitudesWhenIsDone() {

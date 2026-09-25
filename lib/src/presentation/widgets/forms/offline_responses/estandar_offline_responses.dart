@@ -68,7 +68,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (state.status == Status.done) {
-              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              final imagesSended = await context
+                  .read<UploadUserFileCubit>()
+                  .uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -84,6 +86,13 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                         .state
                         .nombreFormularioKiva,
                   );
+              if (imagesSended && context.mounted) {
+                await context
+                    .read<SolicitudesPendientesLocalDbCubit>()
+                    .updateIsImagesSendedOnSolicitud(
+                      solicitudId: widget.solicitudId.toString(),
+                    );
+              }
 
               if (!context.mounted) return;
               // context
@@ -97,7 +106,9 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
                 dismissOnTouchOutside: false,
                 size: size,
                 title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: 'Las respuestas se han enviado Exitosamente',
+                subtitle: imagesSended
+                    ? 'Las respuestas se han enviado Exitosamente'
+                    : 'Las respuestas se enviaron, pero las imágenes no se pudieron subir. Reintente desde el historial Kiva.',
                 dialogType: DialogType.success,
                 buttonAcept: true,
                 textButtonAcept: 'Ok',
@@ -406,7 +417,9 @@ class _EstandarFormState extends State<EstandarForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (stateEstandar.status == Status.done) {
-              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              final imagesSended = await context
+                  .read<UploadUserFileCubit>()
+                  .uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -422,6 +435,13 @@ class _EstandarFormState extends State<EstandarForm> {
                         .state
                         .nombreFormularioKiva,
                   );
+              if (imagesSended && context.mounted) {
+                await context
+                    .read<SolicitudesPendientesLocalDbCubit>()
+                    .updateIsImagesSendedOnSolicitud(
+                      solicitudId: widget.solicitudId.toString(),
+                    );
+              }
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()
               //     .removeWhenFormIsUpload(
@@ -434,7 +454,9 @@ class _EstandarFormState extends State<EstandarForm> {
                 dismissOnTouchOutside: false,
                 size: size,
                 title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: 'Las respuestas se han enviado Exitosamente',
+                subtitle: imagesSended
+                    ? 'Las respuestas se han enviado Exitosamente'
+                    : 'Las respuestas se enviaron, pero las imágenes no se pudieron subir. Reintente desde el historial Kiva.',
                 dialogType: DialogType.success,
                 buttonAcept: true,
                 textButtonAcept: 'Ok',

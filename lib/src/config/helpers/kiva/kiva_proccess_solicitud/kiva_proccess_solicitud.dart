@@ -59,8 +59,11 @@ Future<bool> processSolicitud({
   if (isOk) {
     final imagesModel =
         await kivaProvider.getImageModelSolicitudCredito(solicitudId);
+    // Si no hay imágenes locales o la subida falla, la solicitud queda con
+    // imagesSended = false para que aparezca en "Kivas fallidos" y no se purgue.
+    bool imagesSended = false;
     if (imagesModel != null) {
-      await proccessImagesSolicitud(
+      imagesSended = await proccessImagesSolicitud(
         imageModel: imagesModel,
         kivaRepository: kivaRepository,
         solicitudId: solicitudId,
@@ -81,7 +84,7 @@ Future<bool> processSolicitud({
         ..isSended = true
         ..dateSended = DateTime.now()
         ..nombre = nombreCliente
-        ..imagesSended = true
+        ..imagesSended = imagesSended
         ..fecha = DateTime.now();
 
       await kivaProvider.saveSolicitudPendente(
@@ -94,7 +97,8 @@ Future<bool> processSolicitud({
   return isOk;
 }
 
-Future<void> proccessImagesSolicitud({
+/// Devuelve `true` solo si el servidor confirmó la subida de las imágenes.
+Future<bool> proccessImagesSolicitud({
   required ImageModel imageModel,
   required ResponsesRepository kivaRepository,
   required String solicitudId,
@@ -103,21 +107,28 @@ Future<void> proccessImagesSolicitud({
   required String cedula,
   required int tipoSolicitudId,
 }) async {
-  await kivaRepository.uploadUserFiles(
-    imagen1: imageModel.imagen1 ?? 'No path',
-    imagen2: imageModel.imagen2 ?? 'No path',
-    imagen3: imageModel.imagen3 ?? 'No path',
-    fotoFirma: imageModel.imagenFirma ?? 'No path',
-    solicitudId: int.tryParse(solicitudId) ?? 0,
-    formularioKiva: nombreFomularioKiva,
-    database: LocalStorage().database,
-    tipoSolicitud: tipoSolicitudId.toTypeFormId(),
-    numero: numeroSolicitud,
-    cedula: cedula,
-    typeSigner: (imageModel.typeSigner ?? '') == 'cliente'
-        ? TypeSigner.cliente
-        : TypeSigner.asesor,
-  );
+  try {
+    final (isOk, msg) = await kivaRepository.uploadUserFiles(
+      imagen1: imageModel.imagen1 ?? 'No path',
+      imagen2: imageModel.imagen2 ?? 'No path',
+      imagen3: imageModel.imagen3 ?? 'No path',
+      fotoFirma: imageModel.imagenFirma ?? 'No path',
+      solicitudId: int.tryParse(solicitudId) ?? 0,
+      formularioKiva: nombreFomularioKiva,
+      database: LocalStorage().database,
+      tipoSolicitud: tipoSolicitudId.toTypeFormId(),
+      numero: numeroSolicitud,
+      cedula: cedula,
+      typeSigner: (imageModel.typeSigner ?? '') == 'cliente'
+          ? TypeSigner.cliente
+          : TypeSigner.asesor,
+    );
+    if (!isOk) log('Error al subir imágenes Kiva de $solicitudId: $msg');
+    return isOk;
+  } catch (e) {
+    log('Error al subir imágenes Kiva de $solicitudId: $e');
+    return false;
+  }
 }
 
 Future<(bool isOk, String msg)> sendSolicitudKiva({
