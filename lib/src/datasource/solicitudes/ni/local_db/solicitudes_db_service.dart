@@ -583,66 +583,48 @@ class ObjectBoxService {
     }
   }
 
-  void updateWhenSolicitdIsFailed(
-      {required int solicitudId, String? errorMsg}) {
-    try {
-      final solicitud = solicitudesResponsesBox.get(solicitudId);
-      final solicitudReprestamo =
-          solicitudesReprestamoResponsesBox.get(solicitudId);
-      final solicitudAsalariado =
-          solicitudesAsalariadoResponsesBox.get(solicitudId);
-      if (solicitud != null) {
-        solicitud.hasVerified = true;
-        solicitud.errorMsg = errorMsg;
-        solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
-        solicitudesReprestamoResponsesBox.put(solicitudReprestamo!,
-            mode: PutMode.update);
-      }
-      if (solicitudReprestamo != null) {
-        solicitudReprestamo.hasVerified = true;
-        solicitudReprestamo.errorMsg = errorMsg;
-        solicitudesReprestamoResponsesBox.put(solicitudReprestamo,
-            mode: PutMode.update);
-      }
-      if (solicitudAsalariado != null) {
-        solicitudAsalariado.hasVerified = true;
-        solicitudAsalariado.errorMsg = errorMsg;
-        solicitudesAsalariadoResponsesBox.put(
-          solicitudAsalariado,
-          mode: PutMode.update,
-        );
-      }
-    } catch (e) {
-      _logger.e(e.toString());
-    }
+  /// Marca como procesada (hasVerified) la solicitud en SU caja.
+  /// Los ids de ObjectBox son autoincrementales por caja, así que buscar el
+  /// mismo id en las tres cajas marcaría solicitudes que no corresponden.
+  void updateWhenSolicitdIsFailed({
+    required dynamic solicitud,
+    String? errorMsg,
+  }) {
+    _markSolicitudVerified(solicitud: solicitud, errorMsg: errorMsg);
   }
 
-  void updateWhenSolicitdIsDone({
-    required int solicitudId,
+  void updateWhenSolicitdIsDone({required dynamic solicitud}) {
+    _markSolicitudVerified(solicitud: solicitud);
+  }
+
+  void _markSolicitudVerified({
+    required dynamic solicitud,
+    String? errorMsg,
   }) {
     try {
-      final solicitud = solicitudesResponsesBox.get(solicitudId);
-      final solicitudReprestamo =
-          solicitudesReprestamoResponsesBox.get(solicitudId);
-      final solicitudAsalariado =
-          solicitudesAsalariadoResponsesBox.get(solicitudId);
-      if (solicitud != null) {
-        solicitud.hasVerified = true;
-        solicitudesResponsesBox.put(solicitud, mode: PutMode.update);
-      }
-      if (solicitudReprestamo != null) {
-        solicitudReprestamo.hasVerified = true;
-        solicitudesReprestamoResponsesBox.put(
-          solicitudReprestamo,
-          mode: PutMode.update,
-        );
-      }
-      if (solicitudAsalariado != null) {
-        solicitudAsalariado.hasVerified = true;
-        solicitudesAsalariadoResponsesBox.put(
-          solicitudAsalariado,
-          mode: PutMode.update,
-        );
+      switch (solicitud) {
+        case ResponseLocalDb():
+          final current = solicitudesResponsesBox.get(solicitud.id);
+          if (current == null) return;
+          current.hasVerified = true;
+          current.errorMsg = errorMsg;
+          solicitudesResponsesBox.put(current, mode: PutMode.update);
+        case ReprestamoResponsesLocalDb():
+          final current = solicitudesReprestamoResponsesBox.get(solicitud.id);
+          if (current == null) return;
+          current.hasVerified = true;
+          current.errorMsg = errorMsg;
+          solicitudesReprestamoResponsesBox.put(current, mode: PutMode.update);
+        case AsalariadoResponsesLocalDb():
+          final current = solicitudesAsalariadoResponsesBox.get(solicitud.id);
+          if (current == null) return;
+          current.hasVerified = true;
+          current.errorMsg = errorMsg;
+          solicitudesAsalariadoResponsesBox.put(current, mode: PutMode.update);
+        default:
+          _logger.e(
+            'Tipo de solicitud ${solicitud.runtimeType} no soportado al marcar hasVerified',
+          );
       }
     } catch (e) {
       _logger.e(e.toString());

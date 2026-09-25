@@ -33,185 +33,130 @@ class EnviarSolicitudWhenIsdoneCubit
       : super(EnviarSolicitudWhenIsdoneInitial());
   final _logger = Logger();
 
+  /// Evita dos sincronizaciones simultáneas (p. ej. dos instancias de la
+  /// pantalla de solicitudes), que crearían solicitudes duplicadas en el
+  /// servidor al leer los mismos registros con hasVerified == false.
+  static bool _isSyncing = false;
+
+  void _safeEmit(EnviarSolicitudWhenIsdoneState state) {
+    if (!isClosed) emit(state);
+  }
+
   void sendSolicitudWhenIsDone({
     required bool isConnected,
     required OnSolicitudCreditoIsKivaFn onSolicitudCreditoIsKivaFn,
   }) async {
+    if (_isSyncing) {
+      _safeEmit(EnviarSolicitudWhenIsdoneInitial());
+      return;
+    }
+
     List<String> errors = [];
     List<String> solicitudesSent = [];
     List<String> unSentCedulas = [];
     List<String> unSentKivaForms = [];
 
-    (
-      bool isSuccess,
-      String errorMessage,
-      String? numerSolicitud,
-      String? solciitudId,
-      int? tipoSolicitudId,
-    ) result = (false, '', null, null, null);
-
     bool hasAnySent = false;
 
-    emit(OnEnviarSolicitudWhenIsdoneLoading());
+    _isSyncing = true;
+    _safeEmit(OnEnviarSolicitudWhenIsdoneLoading());
 
     try {
       final solicitudes = objectBoxService.sendSolicitudesWhenIsDone();
       if (solicitudes.isEmpty || !isConnected) {
-        emit(EnviarSolicitudWhenIsdoneInitial());
+        _safeEmit(EnviarSolicitudWhenIsdoneInitial());
         return;
       }
       for (var solicitud in solicitudes) {
-        result = await _sendSolicitud(solicitud: solicitud);
+        final data = _extractSyncData(solicitud);
+
+        (bool, String, String?, String?, int?) result;
+        try {
+          result = await _sendSolicitud(solicitud: solicitud);
+        } catch (e, stackTrace) {
+          // No sabemos si el servidor la creó: no se marca, se reintenta en
+          // la próxima sincronización.
+          _logger.e('Error creando solicitud ${data.cedula}',
+              error: e, stackTrace: stackTrace);
+          errors.add('Solicitud con cedula ${data.cedula}: $e');
+          continue;
+        }
 
         if (!result.$1) {
           objectBoxService.updateWhenSolicitdIsFailed(
-            solicitudId: solicitud.id,
+            solicitud: solicitud,
             errorMsg: result.$2,
           );
-
-          errors.add('Solicitud con cedula ${solicitud.cedula}: ${result.$2}');
-
+          errors.add('Solicitud con cedula ${data.cedula}: ${result.$2}');
           continue;
         }
-        if (solicitud is ResponseLocalDb && result.$1) {
-          final String? cedula = solicitud.cedula;
-          if (cedula == null) return;
-          final cedulaCliente = objectBoxService.getCedula(
-            cedula: cedula,
-            tipoSolicitud: 'NUEVA_MENOR',
-          );
-          if (cedulaCliente != null) {
-            final (isSent, msg) =
-                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
-              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: cedula,
-              imagenFrontal: cedulaCliente.imageFrontCedula!,
-              imagenTrasera: cedulaCliente.imageBackCedula!,
-            );
-            if (!isSent) {
-              unSentCedulas.add(
-                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
-              );
-            }
-          }
-          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
-            solicitudId: result.$4 ?? '0',
-            numeroSolicitud: result.$3 ?? '0',
-            uuid: solicitud.uuid ?? '',
-            tipoProducto: solicitud.nombreFormularioKiva ?? '',
-            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
-            cedula: solicitud.cedula ?? '',
-            tipoSolicitudId: result.$5 ?? 0,
-            nombreCliente:
-                '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
-          );
-          if (!isKivFormIsOk) {
-            unSentKivaForms.add(
-              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
-            );
-          }
-          solicitudesSent.add(
-              'Historia Kiva de Cedula a sido creada: $cedula ${solicitud.objProductoIdVer}');
 
-          objectBoxService.updateWhenSolicitdIsDone(solicitudId: solicitud.id);
-          // objectBoxService.removeSolicitudWhenisUploaded(
-          //   solicitudId: solicitud.id,
-          // );
-        }
-        if (solicitud is ReprestamoResponsesLocalDb && result.$1) {
-          final String? cedula = solicitud.cedula;
-          if (cedula == null) return;
-          final cedulaCliente = objectBoxService.getCedula(
-            cedula: cedula,
-            tipoSolicitud: 'REPRESTAMO',
-          );
-          if (cedulaCliente != null) {
-            final (isSent, msg) =
-                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
-              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: cedula,
-              imagenFrontal: cedulaCliente.imageFrontCedula!,
-              imagenTrasera: cedulaCliente.imageBackCedula!,
-            );
-            if (!isSent) {
-              unSentCedulas.add(
-                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
-              );
-            }
-          }
-          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
-            solicitudId: result.$4 ?? '0',
-            numeroSolicitud: result.$3 ?? '0',
-            uuid: solicitud.uuid ?? '',
-            tipoProducto: solicitud.nombreFormularioKiva ?? '',
-            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
-            cedula: solicitud.cedula ?? '',
-            tipoSolicitudId: result.$5 ?? 0,
-            nombreCliente: '${solicitud.nombreCompletoCliente}*',
-          );
-          if (!isKivFormIsOk) {
-            unSentKivaForms.add(
-              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
-            );
-          }
-          // objectBoxService.removeSolicitudReprestamoWhenisUploaded(
-          //   solicitudId: solicitud.id,
-          // );
-        }
-        if (solicitud is AsalariadoResponsesLocalDb && result.$1) {
-          final String? cedula = solicitud.cedula;
-          if (cedula == null) return;
-          final cedulaCliente = objectBoxService.getCedula(
-            cedula: cedula,
-            tipoSolicitud: 'ASALARIADO',
-          );
-          if (cedulaCliente != null) {
-            final (isSent, msg) =
-                await repository.sendCedulaImageWhenSolicitudCreditoCreated(
-              numeroSolicitud: int.tryParse(result.$3 ?? '0') ?? 0,
-              cedulaCliente: cedula,
-              imagenFrontal: cedulaCliente.imageFrontCedula!,
-              imagenTrasera: cedulaCliente.imageBackCedula!,
-            );
-            if (!isSent) {
-              unSentCedulas.add(
-                'Error al enviar la imagen de la cédula $cedula al expediente digital.',
-              );
-            }
-          }
-          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
-            solicitudId: result.$4 ?? '0',
-            numeroSolicitud: result.$3 ?? '0',
-            uuid: solicitud.uuid ?? '',
-            tipoProducto: solicitud.nombreFormularioKiva ?? '',
-            nombreFomularioKiva: solicitud.nombreFormularioKiva!,
-            cedula: solicitud.cedula ?? '',
-            tipoSolicitudId: result.$5 ?? 0,
-            nombreCliente:
-                '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
-          );
-          if (!isKivFormIsOk) {
-            unSentKivaForms.add(
-              'Error al enviar formulario Kiva: ${solicitud.objProductoIdVer}',
-            );
-          }
-          // objectBoxService.removeSolicitudAsalariadoWhenisUploaded(
-          //   solicitudId: solicitud.id,
-          // );
-        }
-        solicitudesSent
-            .add('Solicitud de credito creadacon cedula ${solicitud.cedula}');
+        // La solicitud ya existe en el servidor: marcarla antes de cualquier
+        // paso posterior para que un fallo en cédulas/Kiva no provoque que se
+        // vuelva a crear en la próxima sincronización.
+        objectBoxService.updateWhenSolicitdIsDone(solicitud: solicitud);
         hasAnySent = true;
+        solicitudesSent
+            .add('Solicitud de credito creada con cedula ${data.cedula}');
+
+        try {
+          final cedulaError = await _sendCedulaImages(
+            cedula: data.cedula,
+            tipoSolicitud: data.tipoSolicitud,
+            numeroSolicitud: result.$3,
+          );
+          if (cedulaError != null) unSentCedulas.add(cedulaError);
+        } catch (e, stackTrace) {
+          _logger.e('Error enviando cédula ${data.cedula}',
+              error: e, stackTrace: stackTrace);
+          unSentCedulas.add(
+            'Error al enviar la imagen de la cédula ${data.cedula} al expediente digital.',
+          );
+        }
+
+        final nombreFormularioKiva = data.nombreFormularioKiva ?? '';
+        if (nombreFormularioKiva.isEmpty) continue;
+
+        try {
+          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
+            solicitudId: result.$4 ?? '0',
+            numeroSolicitud: result.$3 ?? '0',
+            uuid: data.uuid ?? '',
+            tipoProducto: nombreFormularioKiva,
+            nombreFomularioKiva: nombreFormularioKiva,
+            cedula: data.cedula ?? '',
+            tipoSolicitudId: result.$5 ?? 0,
+            nombreCliente: data.nombreCliente,
+          );
+          if (!isKivFormIsOk) {
+            unSentKivaForms.add(
+              'Error al enviar formulario Kiva: ${data.objProductoIdVer}',
+            );
+          } else {
+            solicitudesSent.add(
+              'Historia Kiva de Cedula a sido creada: ${data.cedula} ${data.objProductoIdVer}',
+            );
+          }
+        } catch (e, stackTrace) {
+          _logger.e('Error enviando formulario Kiva ${data.cedula}',
+              error: e, stackTrace: stackTrace);
+          unSentKivaForms.add(
+            'Error al enviar formulario Kiva: ${data.objProductoIdVer}',
+          );
+        }
       }
-      if (hasAnySent == true && errors.isEmpty && unSentCedulas.isEmpty) {
-        emit(
+      if (hasAnySent &&
+          errors.isEmpty &&
+          unSentCedulas.isEmpty &&
+          unSentKivaForms.isEmpty) {
+        _safeEmit(
           OnEnviarSolicitudWhenIsdoneSuccess(
             unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
           ),
         );
       } else {
-        emit(
+        _safeEmit(
           OnEnviarSolicitudWhenIsdonePendingVerification(
             unsentCedulas: unSentCedulas,
             solicitudesSent: solicitudesSent,
@@ -223,15 +168,88 @@ class EnviarSolicitudWhenIsdoneCubit
         );
       }
     } catch (e, stackTrace) {
-      _logger.e(e);
-      _logger.e('Error crítico procesando solicitud individual',
+      _logger.e('Error crítico sincronizando solicitudes offline',
           error: e, stackTrace: stackTrace);
-      emit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
+      _safeEmit(OnEnviarSolicitudWhenIsdoneError(msgError: e.toString()));
+    } finally {
+      _isSyncing = false;
     }
   }
 
   void resetState() {
-    emit(EnviarSolicitudWhenIsdoneInitial());
+    _safeEmit(EnviarSolicitudWhenIsdoneInitial());
+  }
+
+  /// Devuelve el mensaje de error si la cédula no se pudo enviar, o null.
+  Future<String?> _sendCedulaImages({
+    required String? cedula,
+    required String tipoSolicitud,
+    required String? numeroSolicitud,
+  }) async {
+    if (cedula == null || cedula.isEmpty) return null;
+    final cedulaCliente = objectBoxService.getCedula(
+      cedula: cedula,
+      tipoSolicitud: tipoSolicitud,
+    );
+    if (cedulaCliente == null) return null;
+
+    final frontal = cedulaCliente.imageFrontCedula;
+    final trasera = cedulaCliente.imageBackCedula;
+    if (frontal == null || trasera == null) {
+      return 'La cédula $cedula no tiene ambas imágenes guardadas.';
+    }
+
+    final (isSent, _) =
+        await repository.sendCedulaImageWhenSolicitudCreditoCreated(
+      numeroSolicitud: int.tryParse(numeroSolicitud ?? '0') ?? 0,
+      cedulaCliente: cedula,
+      imagenFrontal: frontal,
+      imagenTrasera: trasera,
+    );
+    return isSent
+        ? null
+        : 'Error al enviar la imagen de la cédula $cedula al expediente digital.';
+  }
+
+  ({
+    String? cedula,
+    String? uuid,
+    String? nombreFormularioKiva,
+    String? objProductoIdVer,
+    String nombreCliente,
+    String tipoSolicitud,
+  }) _extractSyncData(dynamic solicitud) {
+    return switch (solicitud) {
+      ResponseLocalDb() => (
+          cedula: solicitud.cedula,
+          uuid: solicitud.uuid,
+          nombreFormularioKiva: solicitud.nombreFormularioKiva,
+          objProductoIdVer: solicitud.objProductoIdVer,
+          nombreCliente:
+              '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
+          tipoSolicitud: 'NUEVA_MENOR',
+        ),
+      ReprestamoResponsesLocalDb() => (
+          cedula: solicitud.cedula,
+          uuid: solicitud.uuid,
+          nombreFormularioKiva: solicitud.nombreFormularioKiva,
+          objProductoIdVer: solicitud.objProductoIdVer,
+          nombreCliente: '${solicitud.nombreCompletoCliente}*',
+          tipoSolicitud: 'REPRESTAMO',
+        ),
+      AsalariadoResponsesLocalDb() => (
+          cedula: solicitud.cedula,
+          uuid: solicitud.uuid,
+          nombreFormularioKiva: solicitud.nombreFormularioKiva,
+          objProductoIdVer: solicitud.objProductoIdVer,
+          nombreCliente:
+              '${solicitud.nombre1} ${solicitud.nombre2} ${solicitud.apellido1} ${solicitud.apellido2}*',
+          tipoSolicitud: 'ASALARIADO',
+        ),
+      _ => throw UnsupportedError(
+          'Solicitud de tipo ${solicitud.runtimeType} no soportada en el envío automático.',
+        ),
+    };
   }
 
   Future<(bool, String, String?, String?, int?)> _sendSolicitud({
