@@ -216,7 +216,9 @@ class _UpdateSolicitudNuevaMenorForm4State
                       name: cubit.state.trabajaConyugue
                           ? 'input.yes'.tr()
                           : 'input.no'.tr(),
-                      value: cubit.state.trabajaConyugue,
+                      value: cubit.state.trabajaConyugue
+                          ? 'input.yes'.tr()
+                          : 'input.no'.tr(),
                     ),
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
@@ -387,6 +389,7 @@ class _UpdateSolicitudNuevaMenorForm4State
                 ],
                 const Gap(30),
                 OutlineTextfieldWidget(
+                  key: const ValueKey('ingresosMensuales'),
                   initialValue: cubit.state.ingresosNetos.toCurrencyString(),
                   isRequired: true,
                   validator: (value) => ClassValidator.validateNotZero(value),

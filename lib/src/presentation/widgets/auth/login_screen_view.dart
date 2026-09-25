@@ -166,7 +166,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               title: 'auth.user'.tr(),
               controller: _usernameController,
               activeColor: true,
-              hintText: 'Ejem: DGALEAS',
+              hintText: 'Ejem: BGODOY',
               enabled: true,
               textFieldSettings: TextFieldSettings(
                 keyboardType: TextInputType.name,
