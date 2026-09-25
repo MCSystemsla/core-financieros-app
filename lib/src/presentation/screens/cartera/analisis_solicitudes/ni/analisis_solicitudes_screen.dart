@@ -1,6 +1,8 @@
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_credit_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -13,17 +15,18 @@ import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.d
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../bloc/solicitudes/solicitudes_by_asesor/solicitudes_by_asesor_cubit.dart';
-
 class AnalisisSolicitudesScreen extends StatelessWidget {
   const AnalisisSolicitudesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => SolicitudesByAsesorCubit(
+      create: (ctx) => SolicitudesByEstadoNiCubit(
         SolicitudCreditoRepositoryImpl(),
-      )..getSolicitudesByAsesor(),
+      )..getSolicitudesByEstado(
+          estadoCredito: EstadoCredito.asignada,
+          isAsignadaToAsesorCredito: true,
+        ),
       child: PopScope(
         onPopInvokedWithResult: (didPop, _) {
           if (didPop) {
@@ -44,25 +47,28 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
                   onBack: () => context.pop(),
                 ),
                 const Gap(20),
-                BlocBuilder<SolicitudesByAsesorCubit, SolicitudesByAsesorState>(
-                  builder: (context, state) {
-                    return switch (state) {
-                      OnSolicitudesByAsesorLoading() =>
-                        const Expanded(child: LoadingWidget()),
-                      OnSolicitudesByAsesorError() => OnErrorWidget(
-                          errorMsg: state.errorMsg,
-                          onPressed: () {
-                            context
-                                .read<SolicitudesByAsesorCubit>()
-                                .getSolicitudesByAsesor();
-                          },
-                        ),
-                      OnSolicitudesByAsesorSuccess() => _AnilisListDataWidget(
-                          data: state.solicitudes.data,
-                        ),
-                      _ => const SizedBox.shrink(),
-                    };
-                  },
+                Expanded(
+                  child: BlocBuilder<SolicitudesByEstadoNiCubit,
+                      SolicitudesByEstadoNiState>(
+                    builder: (context, state) {
+                      return switch (state.status) {
+                        Status.inProgress => const LoadingWidget(),
+                        Status.error => OnErrorWidget(
+                            errorMsg: state.errorMsg,
+                            onPressed: () {
+                              context
+                                  .read<SolicitudesByEstadoNiCubit>()
+                                  .getSolicitudesByEstado(
+                                    estadoCredito: EstadoCredito.asignada,
+                                    isAsignadaToAsesorCredito: true,
+                                  );
+                            },
+                          ),
+                        Status.done => const _AnalisisListDataWidget(),
+                        _ => const SizedBox.shrink(),
+                      };
+                    },
+                  ),
                 ),
               ],
             ),
@@ -98,42 +104,95 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   }
 }
 
-class _AnilisListDataWidget extends StatelessWidget {
-  final List<SolicitudEstado> data;
+class _AnalisisListDataWidget extends StatefulWidget {
+  const _AnalisisListDataWidget();
 
-  const _AnilisListDataWidget({required this.data});
+  @override
+  State<_AnalisisListDataWidget> createState() =>
+      _AnalisisListDataWidgetState();
+}
+
+class _AnalisisListDataWidgetState extends State<_AnalisisListDataWidget> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!mounted || !_scrollController.hasClients) return;
+    final cubit = context.read<SolicitudesByEstadoNiCubit>();
+    final state = cubit.state;
+    if (state.status != Status.done || !state.hasMore || state.isLoadingMore) {
+      return;
+    }
+    final isAtBottom = _scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 400;
+    if (!isAtBottom) return;
+
+    cubit.changePage(state.pagina + 1);
+    cubit.getSolicitudesByEstado(
+      estadoCredito: EstadoCredito.asignada,
+      isAsignadaToAsesorCredito: true,
+      isLoadMore: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<SolicitudesByEstadoNiCubit>().state;
+    final data = state.solicitudes;
+
     if (data.isEmpty) {
-      return const Expanded(
-        child: EmptyListWidget(
-          message: 'No hay analisis pendientes.',
-        ),
+      return const EmptyListWidget(
+        message: 'No hay analisis pendientes.',
       );
     }
-    return Expanded(
-      child: ListView.builder(
-        itemCount: data.length,
-        padding: const EdgeInsets.only(bottom: 24),
-        itemBuilder: (BuildContext context, int index) {
-          return AnalisisCreditCard(
-            numeroSolicitud: data[index].numero,
-            tipoSolicitud: getTipoSolicitud(
-              tipoSolicitud: data[index].tipoSolicitud,
-              monto: data[index].monto!,
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: data.length + (state.isLoadingMore ? 1 : 0),
+      padding: const EdgeInsets.only(bottom: 24),
+      itemBuilder: (BuildContext context, int index) {
+        if (index >= data.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 20),
+            child: Center(
+              child: SizedBox(
+                height: 26,
+                width: 26,
+                child: CircularProgressIndicator(strokeWidth: 2.5),
+              ),
             ),
-            index: index,
-            title: 'Solicitud N. ${data[index].numero}',
-            tipoSolicitudString: data[index].tipoSolicitud,
-            cedulaCliente: data[index].cedulaCliente,
-            tipoPersonaCodigo: data[index].tipoPersonaCodigo,
-            esGrupal: data[index].esSolicitudGrupal,
-            subtitle: data[index].nombreCompleto ?? 'N/A',
-            description: data[index].monto?.toCurrencyString() ?? 'N/A',
           );
-        },
-      ),
+        }
+
+        final solicitud = data[index];
+        return AnalisisCreditCard(
+          key: ValueKey(solicitud.id),
+          numeroSolicitud: solicitud.numero,
+          tipoSolicitud: getTipoSolicitud(
+            tipoSolicitud: solicitud.tipoSolicitud,
+            monto: solicitud.monto!,
+          ),
+          index: index,
+          title: 'Solicitud N. ${solicitud.numero}',
+          tipoSolicitudString: solicitud.tipoSolicitud,
+          cedulaCliente: solicitud.cedulaCliente,
+          tipoPersonaCodigo: solicitud.tipoPersonaCodigo,
+          esGrupal: solicitud.esSolicitudGrupal,
+          subtitle: solicitud.nombreCompleto ?? 'N/A',
+          description: solicitud.monto?.toCurrencyString() ?? 'N/A',
+        );
+      },
     );
   }
 }
