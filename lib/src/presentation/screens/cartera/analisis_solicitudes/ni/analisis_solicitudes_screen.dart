@@ -24,41 +24,48 @@ class AnalisisSolicitudesScreen extends StatelessWidget {
       create: (ctx) => SolicitudesByAsesorCubit(
         SolicitudCreditoRepositoryImpl(),
       )..getSolicitudesByAsesor(),
-      child: Scaffold(
-        backgroundColor: RedesignColors.background,
-        body: SafeArea(
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ScreenHeaderWidget(
-                title: 'Análisis de solicitudes',
-                subtitle:
-                    'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
-                onBack: () => context.pop(),
-              ),
-              const Gap(20),
-              BlocBuilder<SolicitudesByAsesorCubit, SolicitudesByAsesorState>(
-                builder: (context, state) {
-                  return switch (state) {
-                    OnSolicitudesByAsesorLoading() =>
-                      const Expanded(child: LoadingWidget()),
-                    OnSolicitudesByAsesorError() => OnErrorWidget(
-                        errorMsg: state.errorMsg,
-                        onPressed: () {
-                          context
-                              .read<SolicitudesByAsesorCubit>()
-                              .getSolicitudesByAsesor();
-                        },
-                      ),
-                    OnSolicitudesByAsesorSuccess() => _AnilisListDataWidget(
-                        data: state.solicitudes.data,
-                      ),
-                    _ => const SizedBox.shrink(),
-                  };
-                },
-              ),
-            ],
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, _) {
+          if (didPop) {
+            context.pushReplacement('/cartera');
+          }
+        },
+        child: Scaffold(
+          backgroundColor: RedesignColors.background,
+          body: SafeArea(
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScreenHeaderWidget(
+                  title: 'Análisis de solicitudes',
+                  subtitle:
+                      'Evaluación detallada de las solicitudes de crédito para determinar su viabilidad y cumplimiento de criterios financieros.',
+                  onBack: () => context.pop(),
+                ),
+                const Gap(20),
+                BlocBuilder<SolicitudesByAsesorCubit, SolicitudesByAsesorState>(
+                  builder: (context, state) {
+                    return switch (state) {
+                      OnSolicitudesByAsesorLoading() =>
+                        const Expanded(child: LoadingWidget()),
+                      OnSolicitudesByAsesorError() => OnErrorWidget(
+                          errorMsg: state.errorMsg,
+                          onPressed: () {
+                            context
+                                .read<SolicitudesByAsesorCubit>()
+                                .getSolicitudesByAsesor();
+                          },
+                        ),
+                      OnSolicitudesByAsesorSuccess() => _AnilisListDataWidget(
+                          data: state.solicitudes.data,
+                        ),
+                      _ => const SizedBox.shrink(),
+                    };
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
