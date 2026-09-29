@@ -4,12 +4,14 @@ import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/datasource/auth/auth_response.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/exceptions/password_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
@@ -48,7 +50,9 @@ class AuthRepositoryImpl extends AuthRepository {
       if (resp['statusCode'] != 201) {
         final (errorMsg, _) =
             getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
-        if (resp['statusCode'] == 402) {
+        final isHonduras =
+            global<FlavorCubit>().state.flavor == Flavor.honduras;
+        if (isHonduras && resp['statusCode'] == 402) {
           throw PasswordExpiredException(optionalMsg: errorMsg);
         }
         throw AppException(optionalMsg: errorMsg);
