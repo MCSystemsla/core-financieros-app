@@ -25,6 +25,7 @@ class OtpCubit extends Cubit<OtpState> {
         remainingSeconds: resp.data.fechaVenceOtp
             .difference(resp.data.fechaCreacionOtp)
             .inSeconds,
+        percent: 0,
         expiresAt: resp.data.fechaVenceOtp,
         createdAt: resp.data.fechaCreacionOtp,
       ));

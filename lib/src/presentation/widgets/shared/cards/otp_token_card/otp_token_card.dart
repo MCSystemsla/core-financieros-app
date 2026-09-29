@@ -1,8 +1,8 @@
-// ignore_for_file: deprecated_member_use
+import 'dart:math' as math;
 
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/widgets/solicitudes/solicitudes_pendientes/ni/solicitudes_pendientes_widget.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/utils/extensions/int/int_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,158 +17,104 @@ class OtpTokenCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isExpiring = state.remainingSeconds <= 10;
+    final isExpiring = state.remainingSeconds <= 10;
+    final accent = isExpiring ? RedesignColors.red : RedesignColors.green;
 
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(24),
-      decoration: _buildCardDecoration(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Gap(10),
-          _AccountHeader(state: state, isExpiring: isExpiring),
-          const SizedBox(height: 32),
-          _OtpDisplay(state: state, isExpiring: isExpiring),
-        ],
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: RedesignColors.border),
       ),
-    );
-  }
-
-  BoxDecoration _buildCardDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(24),
-      boxShadow: [
-        BoxShadow(
-          color: AppColors.getPrimaryColor().withOpacity(0.08),
-          blurRadius: 20,
-          offset: const Offset(0, 10),
-        ),
-      ],
-    );
-  }
-}
-
-class _AccountHeader extends StatelessWidget {
-  final OtpState state;
-  final bool isExpiring;
-
-  const _AccountHeader({required this.state, required this.isExpiring});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Text(
-                'Codigo de Seguridad',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey[800],
-                  letterSpacing: 0.5,
+              Expanded(
+                child: Text(
+                  state.token.toOtpFormat,
+                  style: const TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 4,
+                    color: RedesignColors.ink,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
-              Text(
-                'Codigo de seguridad generado',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.grey[500],
-                  fontWeight: FontWeight.w400,
-                ),
+              _CountdownPie(
+                progress: (1 - state.percent).clamp(0.0, 1.0),
+                color: accent,
               ),
+              const Gap(4),
+              _CopyButton(token: state.token),
             ],
           ),
-        ),
-        _TimerWidget(state: state, isExpiring: isExpiring),
-      ],
-    );
-  }
-}
-
-class _TimerWidget extends StatelessWidget {
-  final OtpState state;
-  final bool isExpiring;
-
-  const _TimerWidget({required this.state, required this.isExpiring});
-
-  @override
-  Widget build(BuildContext context) {
-    final Color timerColor = isExpiring
-        ? Colors.redAccent.withOpacity(.7)
-        : AppColors.getPrimaryColor().withOpacity(.3);
-
-    return SizedBox(
-      height: 55,
-      width: 55,
-      child: Char(
-        percent: state.remainingSeconds.toDouble(),
-        color: timerColor,
-      ),
-    );
-  }
-}
-
-class _OtpDisplay extends StatelessWidget {
-  final OtpState state;
-  final bool isExpiring;
-
-  const _OtpDisplay({required this.state, required this.isExpiring});
-
-  @override
-  Widget build(BuildContext context) {
-    final Color primaryColor = AppColors.getPrimaryColor();
-    final Color bgColor = isExpiring
-        ? Colors.red.withOpacity(0.05)
-        : primaryColor.withOpacity(0.05);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          _GradientText(text: state.token.toOtpFormat, color: primaryColor),
-          const Spacer(),
-          _CopyButton(token: state.token),
+          const Gap(4),
+          Text(
+            'Expira en ${state.remainingSeconds.toRemainingTimeFormat}',
+            style: TextStyle(
+              fontSize: 12.5,
+              color: isExpiring ? accent : RedesignColors.inkMuted,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _GradientText extends StatelessWidget {
-  final String text;
+/// Círculo que se vacía poco a poco hasta que expira el código,
+/// al estilo de Google Authenticator.
+class _CountdownPie extends StatelessWidget {
+  final double progress;
   final Color color;
 
-  const _GradientText({required this.text, required this.color});
+  const _CountdownPie({required this.progress, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) => LinearGradient(
-        colors: [color, color.withOpacity(0.8)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ).createShader(bounds),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 40,
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
-          letterSpacing: 4.0,
-        ),
-      ),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(end: progress),
+      duration: const Duration(seconds: 1),
+      curve: Curves.linear,
+      builder: (context, value, _) {
+        return CustomPaint(
+          size: const Size.square(26),
+          painter: _PiePainter(progress: value, color: color),
+        );
+      },
     );
   }
+}
+
+class _PiePainter extends CustomPainter {
+  final double progress;
+  final Color color;
+
+  _PiePainter({required this.progress, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+
+    canvas.drawOval(rect, Paint()..color = RedesignColors.tagBackground);
+    canvas.drawArc(
+      rect,
+      -math.pi / 2,
+      -2 * math.pi * progress,
+      true,
+      Paint()..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_PiePainter oldDelegate) =>
+      oldDelegate.progress != progress || oldDelegate.color != color;
 }
 
 class _CopyButton extends StatelessWidget {
@@ -179,20 +125,21 @@ class _CopyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(
+      tooltip: 'Copiar código',
+      icon: const Icon(
         Icons.copy_rounded,
-        color: AppColors.getPrimaryColor().withOpacity(0.6),
         size: 22,
+        color: RedesignColors.inkMuted,
       ),
       onPressed: () async {
         await Clipboard.setData(ClipboardData(text: token));
         if (context.mounted) {
+          HapticFeedback.lightImpact();
           showV2CustomSnackbar(
             context,
-            title: 'Codigo de seguridad copiado.',
+            title: 'Código de seguridad copiado.',
             type: SnackbarType.success,
           );
-          HapticFeedback.lightImpact();
         }
       },
     );
