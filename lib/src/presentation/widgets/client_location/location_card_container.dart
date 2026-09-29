@@ -1,20 +1,16 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_user_location/analisis_user_location_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationCardContainer extends StatelessWidget {
@@ -138,36 +134,8 @@ class _UserLocationContentState extends State<UserLocationContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisUserLocationCubit, AnalisisUserLocationState>(
-      listenWhen: (previous, current) =>
-          previous.statusCreation != current.statusCreation,
-      listener: (context, state) {
-        if (state.statusCreation == Status.error) {
-          CustomAlertDialog(
-            context: context,
-            title: state.errorMsg,
-            onDone: () => context.pop(),
-          ).showDialog(
-            context,
-            dialogType: DialogType.warning,
-          );
-        }
-        if (state.statusCreation == Status.done) {
-          CustomAlertDialog(
-            context: context,
-            title: 'La ubicación del cliente fue registrada exitosamente',
-            onDone: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AnalisisInterceptorByFlavor(),
-              ),
-            ),
-          ).showDialog(
-            context,
-            dialogType: DialogType.success,
-          );
-        }
-      },
+    // El progreso/resultado del envío lo muestra SendingUbicacionClienteView.
+    return BlocBuilder<AnalisisUserLocationCubit, AnalisisUserLocationState>(
       builder: (context, state) {
         return switch (state.status) {
           Status.inProgress => const Column(

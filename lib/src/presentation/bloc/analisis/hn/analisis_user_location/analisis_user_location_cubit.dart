@@ -56,7 +56,13 @@ class AnalisisUserLocationCubit extends Cubit<AnalisisUserLocationState> {
       controller: controller,
       fileName: '${dir.path}/analisis_ubicacion_cliente.png',
     );
-    if (file == null) return;
+    if (file == null) {
+      emit(state.copyWith(
+        statusCreation: Status.error,
+        errorMsg: 'No se pudo capturar la imagen del mapa.',
+      ));
+      return;
+    }
     try {
       await _repository.createUserLocation(
         ubicacionImage: file,
@@ -80,5 +86,10 @@ class AnalisisUserLocationCubit extends Cubit<AnalisisUserLocationState> {
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  /// Vuelve al formulario de ubicación tras un envío fallido.
+  void resetCreationStatus() {
+    emit(state.copyWith(statusCreation: Status.notStarted));
   }
 }

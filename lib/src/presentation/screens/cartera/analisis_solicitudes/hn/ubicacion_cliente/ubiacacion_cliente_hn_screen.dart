@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocatio
 import 'package:core_financiero_app/src/presentation/widgets/client_location/location_card_container.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/location_saved_container.dart';
 import 'package:core_financiero_app/src/presentation/widgets/client_location/select_location_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/client_location/sending_ubicacion_cliente_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/geolocation_permission/geolocation_permission_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
@@ -303,6 +304,9 @@ class _MapContentWidgetState extends State<_MapContentWidget> {
             referenciaAdicional: referenciaAdicional,
             ubicacionGpsCodigo: ubicacionGpsCodigo,
           ),
+          SendingUbicacionClienteView(
+            numeroSolicitud: widget.numeroSolicitud,
+          ),
         ],
         if (!isUserSelectedLocation) ...[
           SelectLocationWidget(
@@ -366,9 +370,6 @@ class _MapTitleWidget extends StatelessWidget {
   }
 }
 
-/// Pin fijo en el centro del mapa. Se desplaza hacia arriba la mitad de su
-/// alto para que la punta (no el centro del ícono) marque el centro de la
-/// cámara, que es el punto que se guarda.
 class _MapPinWidget extends StatelessWidget {
   const _MapPinWidget();
 
