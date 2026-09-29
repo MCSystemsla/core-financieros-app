@@ -7,7 +7,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,11 +36,6 @@ class _AsalariadoHnForm6State extends State<AsalariadoHnForm6>
         key: formKey,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              currentStep: 6,
-              steps: 7,
-            ),
-            const Gap(30),
             Column(
               children: [
                 OutlineTextfieldWidget(

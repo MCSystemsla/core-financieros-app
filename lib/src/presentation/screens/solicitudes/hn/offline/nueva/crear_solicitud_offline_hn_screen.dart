@@ -8,7 +8,8 @@ import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocatio
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/actividades_economicas_alias_filtered_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_historial_crediticio_offline_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/solicitudes_offline/forms/nueva_menor_offline_hn_2.dart';
@@ -27,6 +28,20 @@ import '../../../../../bloc/solicitudes/hn/cubit/calculo_cuota_hn/calculo_cuota_
 import '../../../../../bloc/solicitudes/hn/cubit/enviar_cedula_solicitud_hn/enviar_cedula_solicitud_hn_cubit.dart';
 import '../../../../../bloc/solicitudes/hn/cubit/enviar_firma_digital_hn/enviar_firma_digital_solicitud_hn_cubit.dart';
 import '../../../../../bloc/solicitudes/hn/cubit/solicitud_nueva_menor_hn_cubit.dart';
+
+// Same order as the PageView children below.
+const _offlineSteps = [
+  'Archivos de la solicitud',
+  'Datos generales',
+  'Domicilio',
+  'Negocio',
+  'Ocupación y familia',
+  'Persona expuesta (PEPS)',
+  'Ubicación de destino',
+  'Crédito solicitado',
+  'Historial crediticio',
+  'Actividad económica',
+];
 
 class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
   final SolicitudNuevaMenorHnLocalDb solicitudNuevaMenorHnLocalDb;
@@ -99,13 +114,18 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                 );
               },
             ),
-            body: Column(
-              children: [
-                const Navbar(
-                  title: 'Crear nueva Solicitud Nueva',
-                ),
-                Expanded(
-                  child: SafeArea(
+            backgroundColor: RedesignColors.background,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  FormStepHeaderWidget(
+                    title: 'Solicitud Comercio',
+                    subtitle:
+                        'Revise y complete la solicitud guardada sin conexión',
+                    controller: pageController,
+                    steps: _offlineSteps,
+                  ),
+                  Expanded(
                     child: PageView(
                       physics: const NeverScrollableScrollPhysics(),
                       controller: pageController,
@@ -223,8 +243,8 @@ class CrearSolicitudNuevaOfflineHnScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

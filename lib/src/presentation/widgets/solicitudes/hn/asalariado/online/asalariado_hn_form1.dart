@@ -23,7 +23,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/car
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form1.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -235,11 +234,6 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 1,
-                  steps: 7,
-                ),
-                const Gap(30),
                 Column(
                   children: [
                     if (actions

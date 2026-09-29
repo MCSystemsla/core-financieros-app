@@ -13,7 +13,8 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crea
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_historial_credito_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/asalariado/online/asalariado_hn_form2.dart';
@@ -47,6 +48,8 @@ class AsalariadoHnForm extends StatefulWidget {
 }
 
 class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
+  final pageController = PageController();
+
   @override
   void initState() {
     super.initState();
@@ -59,129 +62,157 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
   }
 
   @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userByDocumentProvider =
         context.read<UserByDocumentAsalariadoCubit>().state;
     final userHaveCedulaAlready = context.watch<UserHaveCedulaCubit>().state;
 
-    final pageController = PageController();
-    return Column(
-      children: [
-        const Navbar(
-          title: 'Crear nueva Solicitud Asalariado',
-          imageUrl: ImageAsset.represtamoBg,
-        ),
-        Expanded(
-          child: SafeArea(
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
+    // Same order and conditions as the PageView children below.
+    final steps = [
+      'Firma del cliente',
+      if (userHaveCedulaAlready.tieneFotoCedula) 'Cédula registrada',
+      if (userHaveCedulaAlready.isUserSelectUpdateImage ||
+          !userHaveCedulaAlready.tieneFotoCedula)
+        'Documento de identidad',
+      'Datos generales',
+      'Domicilio',
+      'Ocupación y empleo',
+      'Estado civil y cónyuge',
+      'Persona expuesta (PEPS)',
+      'Referencia familiar',
+      'Ubicación de destino',
+      'Actividad económica',
+      'Historial crediticio',
+      'Crédito solicitado',
+    ];
+
+    return ColoredBox(
+      color: RedesignColors.background,
+      child: SafeArea(
+        child: Column(
+          children: [
+            FormStepHeaderWidget(
+              title: 'Solicitud Asalariado',
               controller: pageController,
-              children: [
-                SolicitudSignatureAsalariado(
-                  pageController: pageController,
-                  cedula: userByDocumentProvider.cedula,
-                ),
-                if (userHaveCedulaAlready.tieneFotoCedula)
-                  UserIdentificationAlertDialog(
-                    pageController: pageController,
-                  ),
-                if (userHaveCedulaAlready.isUserSelectUpdateImage ||
-                    !userHaveCedulaAlready.tieneFotoCedula)
-                  AddCedulaPhotosScreen(
-                    controller: pageController,
-                    onCedulaFrontTaken: (imagePath) {
-                      context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                            imagenFrontal: imagePath,
-                          );
-                    },
-                    onCedulaBackTaken: (imagePath) {
-                      context.read<SolicitudAslariadoHnCubit>().saveCedula(
-                            imagenTrasera: imagePath,
-                          );
-                    },
-                  ),
-                // RiskControlScreen(
-                //   nombre1: userByDocumentProvider.primerNombre,
-                //   nombre2: userByDocumentProvider.segundoNombre,
-                //   apellido1: userByDocumentProvider.primerApellido,
-                //   apellido2: userByDocumentProvider.segundoApellido,
-                //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
-                //   identificacion: userByDocumentProvider.cedula,
-                //   tipoOrganizacion: 'PERSONANATURAL',
-                //   pageController: pageController,
-                // ),
-                AsalariadoHnForm1(
-                  controller: pageController,
-                  userByDocumentHnData: UserDocumentDataHN(
-                    cedula: userByDocumentProvider.cedula,
-                    primerNombre: userByDocumentProvider.primerNombre,
-                    segundoNombre: userByDocumentProvider.segundoNombre,
-                    primerApellido: userByDocumentProvider.primerApellido,
-                    segundoApellido: userByDocumentProvider.segundoApellido,
-                    fechaNacimiento: DateTime.tryParse(
-                        userByDocumentProvider.fechaNacimiento),
-                    sexo: userByDocumentProvider.sexo,
-                    direccion: userByDocumentProvider.direccion,
-                    fechaEmision:
-                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                    fechaExpira:
-                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                    tipoDocumento: userByDocumentProvider.tipoDocumento,
-                    esRecurrente: userByDocumentProvider.esRecurrente,
-                  ),
-                ),
-                AsalariadoHnForm2(
-                  controller: pageController,
-                  userByDocumentHnData: UserDocumentDataHN(
-                    cedula: userByDocumentProvider.cedula,
-                    primerNombre: userByDocumentProvider.primerNombre,
-                    segundoNombre: userByDocumentProvider.segundoNombre,
-                    primerApellido: userByDocumentProvider.primerApellido,
-                    segundoApellido: userByDocumentProvider.segundoApellido,
-                    fechaNacimiento: DateTime.tryParse(
-                        userByDocumentProvider.fechaNacimiento),
-                    sexo: userByDocumentProvider.sexo,
-                    direccion: userByDocumentProvider.direccion,
-                    fechaEmision:
-                        DateTime.tryParse(userByDocumentProvider.fechaEmision),
-                    fechaExpira:
-                        DateTime.tryParse(userByDocumentProvider.fechaExpira),
-                    tipoDocumento: userByDocumentProvider.tipoDocumento,
-                    esRecurrente: userByDocumentProvider.esRecurrente,
-                  ),
-                ),
-                AsalariadoHnForm3(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm4(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm5(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm6(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm7(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm8(
-                  controller: pageController,
-                ),
-                AsalariadoHistorialCreditoHn(
-                  controller: pageController,
-                ),
-                AsalariadoHnForm9(
-                  controller: pageController,
-                  isUserSelectUpdateImage:
-                      userHaveCedulaAlready.isUserSelectUpdateImage,
-                  tieneFotoCedula: userHaveCedulaAlready.tieneFotoCedula,
-                ),
-              ],
+              steps: steps,
             ),
-          ),
+            Expanded(
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: pageController,
+                children: [
+                  SolicitudSignatureAsalariado(
+                    pageController: pageController,
+                    cedula: userByDocumentProvider.cedula,
+                  ),
+                  if (userHaveCedulaAlready.tieneFotoCedula)
+                    UserIdentificationAlertDialog(
+                      pageController: pageController,
+                    ),
+                  if (userHaveCedulaAlready.isUserSelectUpdateImage ||
+                      !userHaveCedulaAlready.tieneFotoCedula)
+                    AddCedulaPhotosScreen(
+                      controller: pageController,
+                      onCedulaFrontTaken: (imagePath) {
+                        context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                              imagenFrontal: imagePath,
+                            );
+                      },
+                      onCedulaBackTaken: (imagePath) {
+                        context.read<SolicitudAslariadoHnCubit>().saveCedula(
+                              imagenTrasera: imagePath,
+                            );
+                      },
+                    ),
+                  // RiskControlScreen(
+                  //   nombre1: userByDocumentProvider.primerNombre,
+                  //   nombre2: userByDocumentProvider.segundoNombre,
+                  //   apellido1: userByDocumentProvider.primerApellido,
+                  //   apellido2: userByDocumentProvider.segundoApellido,
+                  //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
+                  //   identificacion: userByDocumentProvider.cedula,
+                  //   tipoOrganizacion: 'PERSONANATURAL',
+                  //   pageController: pageController,
+                  // ),
+                  AsalariadoHnForm1(
+                    controller: pageController,
+                    userByDocumentHnData: UserDocumentDataHN(
+                      cedula: userByDocumentProvider.cedula,
+                      primerNombre: userByDocumentProvider.primerNombre,
+                      segundoNombre: userByDocumentProvider.segundoNombre,
+                      primerApellido: userByDocumentProvider.primerApellido,
+                      segundoApellido: userByDocumentProvider.segundoApellido,
+                      fechaNacimiento: DateTime.tryParse(
+                          userByDocumentProvider.fechaNacimiento),
+                      sexo: userByDocumentProvider.sexo,
+                      direccion: userByDocumentProvider.direccion,
+                      fechaEmision: DateTime.tryParse(
+                          userByDocumentProvider.fechaEmision),
+                      fechaExpira:
+                          DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                      tipoDocumento: userByDocumentProvider.tipoDocumento,
+                      esRecurrente: userByDocumentProvider.esRecurrente,
+                    ),
+                  ),
+                  AsalariadoHnForm2(
+                    controller: pageController,
+                    userByDocumentHnData: UserDocumentDataHN(
+                      cedula: userByDocumentProvider.cedula,
+                      primerNombre: userByDocumentProvider.primerNombre,
+                      segundoNombre: userByDocumentProvider.segundoNombre,
+                      primerApellido: userByDocumentProvider.primerApellido,
+                      segundoApellido: userByDocumentProvider.segundoApellido,
+                      fechaNacimiento: DateTime.tryParse(
+                          userByDocumentProvider.fechaNacimiento),
+                      sexo: userByDocumentProvider.sexo,
+                      direccion: userByDocumentProvider.direccion,
+                      fechaEmision: DateTime.tryParse(
+                          userByDocumentProvider.fechaEmision),
+                      fechaExpira:
+                          DateTime.tryParse(userByDocumentProvider.fechaExpira),
+                      tipoDocumento: userByDocumentProvider.tipoDocumento,
+                      esRecurrente: userByDocumentProvider.esRecurrente,
+                    ),
+                  ),
+                  AsalariadoHnForm3(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm4(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm5(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm6(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm7(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm8(
+                    controller: pageController,
+                  ),
+                  AsalariadoHistorialCreditoHn(
+                    controller: pageController,
+                  ),
+                  AsalariadoHnForm9(
+                    controller: pageController,
+                    isUserSelectUpdateImage:
+                        userHaveCedulaAlready.isUserSelectUpdateImage,
+                    tieneFotoCedula: userHaveCedulaAlready.tieneFotoCedula,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

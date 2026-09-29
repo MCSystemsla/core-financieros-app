@@ -10,7 +10,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,11 +58,6 @@ class _AsalariadoHnForm2State extends State<AsalariadoHnForm2>
         key: formKey,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              currentStep: 2,
-              steps: 7,
-            ),
-            const Gap(30),
             Column(
               children: [
                 const Gap(30),

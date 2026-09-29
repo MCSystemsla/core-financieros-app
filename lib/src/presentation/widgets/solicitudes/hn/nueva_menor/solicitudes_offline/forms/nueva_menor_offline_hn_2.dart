@@ -12,7 +12,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/catalogo_valor_nacionalidad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,11 +55,6 @@ class _NuevaMenorOfflineHn2State extends State<NuevaMenorOfflineHn2>
         key: formKey,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              currentStep: 2,
-              steps: 7,
-            ),
-            const Gap(30),
             Column(
               children: [
                 CatalogoValorNacionalidad(

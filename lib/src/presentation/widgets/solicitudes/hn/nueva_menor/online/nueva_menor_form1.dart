@@ -26,7 +26,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -241,11 +240,6 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 1,
-                  steps: 7,
-                ),
-                const Gap(30),
                 Column(
                   children: [
                     if (actions

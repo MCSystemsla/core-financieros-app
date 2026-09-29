@@ -10,7 +10,6 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/sending_form_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -51,11 +50,6 @@ class _NuevaMenorForm8State extends State<NuevaMenorForm8>
         key: formKey,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              currentStep: 8,
-              steps: 8,
-            ),
-            const Gap(30),
             Column(
               children: [
                 CatalogoActividadesCNBSDropdown(
