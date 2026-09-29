@@ -312,28 +312,28 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
               ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                initialValue: widget.data.periodoGracia
-                    ?.toCurrencyString()
-                    .toNullIfEmptyOrZero(),
-                title: 'Periodo de gracia',
-                icon: Icon(
-                  Icons.timer,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
-                      periodoGracia: int.tryParse(value) ?? 0,
-                    ),
-                  );
-                },
-              ),
+              // const Gap(12),
+              // OutlineTextfieldWidget(
+              //   initialValue: widget.data.periodoGracia
+              //       ?.toCurrencyString()
+              //       .toNullIfEmptyOrZero(),
+              //   title: 'Periodo de gracia',
+              //   icon: Icon(
+              //     Icons.timer,
+              //     color: AppColors.getPrimaryColor(),
+              //   ),
+              //   textInputType: TextInputType.number,
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.digitsOnly,
+              //   ],
+              //   onChange: (value) {
+              //     cubit.onFieldChanged(
+              //       () => cubit.state.copyWith(
+              //         periodoGracia: int.tryParse(value) ?? 0,
+              //       ),
+              //     );
+              //   },
+              // ),
               const Gap(12),
               TiposCreditoDropdown(
                 selectedItem: tipoCredito,
