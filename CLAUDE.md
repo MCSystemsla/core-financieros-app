@@ -40,7 +40,9 @@ flutter build appbundle --flavor micreditoNicaragua --dart-define-from-file=api-
 flutter build ipa --flavor micreditoHonduras --dart-define-from-file=api-key.json --target=lib/main_hn.dart --release --obfuscate --split-debug-info=../
 ```
 
-App version scheme: `X.Y.Z` — X for breaking platform changes, Y for new features/modules, Z for bugfixes/small tweaks. Android flavor blocks in `android/app/build.gradle` carry their own independent `versionName`/`versionCode` per country.
+App version scheme: `X.Y.Z` — X for breaking platform changes, Y for new features/modules, Z for bugfixes/small tweaks. Android flavor blocks in `android/app/build.gradle` carry their own independent `versionName`/`versionCode` per country; `versionCode` always goes up by 1 per release of that flavor.
+
+For releases, use the `release-captain` agent (`.claude/agents/release-captain.md`). It bumps the flavor's version, runs `flutter analyze`, flags block issues (missing `dimension "country"`, `signingConfigs.debug` on a production flavor), and gives you the obfuscated build command. It does not build or commit unless asked.
 
 ## Lint / analyze
 
@@ -85,6 +87,14 @@ Lists of credit requests filtered by `EstadoCredito` go through one cubit per co
 - Bottom sheets (`show_filter_creditos_by_estado.dart`, `show_asignar_solicitud_bottom_sheet.dart`, `show_autorizar_solicitud_bottom_sheet.dart`, `show_filter_get_by_cedula_and_numero.dart`) get the cubit passed in as a parameter, because they open outside the provider's subtree. Widgets inside the tree, like `filter_content_widget.dart`, read it from `context` instead.
 
 Use this cubit for any new NI list screen instead of writing a separate fetch cubit.
+
+### Auth: expired password (HN only)
+
+`AuthRepositoryImpl.login` throws `PasswordExpiredException` (`domain/exceptions/password_expired_exception.dart`) when the login response is `402` and the flavor is Honduras; other countries still get a plain `AppException`. `AuthCubit` maps it to `AuthStatus.mustChangePassword`, and `LoginFormWidget` (`widgets/auth/login_screen_view.dart`) shows a warning snackbar and pushes `ChangePasswordScreen` (`screens/auth/change_password/`) with the username and selected database. The form uses `ClassValidator.passwordRequirements` / `validateNewPassword` / `validateConfirmPassword` and the widgets in `widgets/auth/change_password/`. Still pending: the submit is a `TODO` (no change-password endpoint/cubit wired yet), and the password rules are placeholders that need to be confirmed with backend.
+
+### Module availability per country
+
+`references/app-modules-reference.md` maps which Home / Cartera / Solicitudes modules exist in each country, which are online-only, and which `TypeAction` permission gates them (plus known gaps, e.g. Análisis in Costa Rica is a placeholder). Check it before assuming a module ships in a country, and update it when you add or gate a module.
 
 ### Dependency injection
 
