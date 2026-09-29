@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/auth/change_password/change_password_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -141,6 +142,18 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     super.dispose();
   }
 
+  Future<void> _openChangePassword() {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChangePasswordScreen(
+          username: _usernameController.text.trim(),
+          database: branchTeam ?? '',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -266,8 +279,17 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               ),
             const Gap(14),
             BlocConsumer<AuthCubit, AuthState>(
-              listener: (context, state) {
+              listener: (context, state) async {
                 final status = state.status;
+                if (status == AuthStatus.mustChangePassword) {
+                  showV2CustomSnackbar(
+                    context,
+                    title: state.errorMsg,
+                    type: SnackbarType.warning,
+                  );
+                  _openChangePassword();
+                  return;
+                }
                 if (status == AuthStatus.unauthenticated) {
                   showV2CustomSnackbar(
                     context,

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sy
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/password_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,14 @@ class AuthCubit extends Cubit<AuthState> {
       }
       final actions = await repository.getActions(database: dbName);
       await LocalStorage().setActions(actions.data);
-      emit(state.copyWith(status: AuthStatus.authenticated));
+      emit(state.copyWith(
+        status: AuthStatus.authenticated,
+      ));
+    } on PasswordExpiredException catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.mustChangePassword,
+        errorMsg: e.optionalMsg,
+      ));
     } on AppException catch (e) {
       emit(state.copyWith(
         status: AuthStatus.unauthenticated,

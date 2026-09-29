@@ -1,7 +1,56 @@
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
+/// Regla que debe cumplir una contraseña nueva.
+class PasswordRequirement {
+  final String label;
+  final bool Function(String password) isMet;
+  const PasswordRequirement({required this.label, required this.isMet});
+}
+
 class ClassValidator {
+  // TODO: confirmar con backend las políticas reales de contraseña.
+  static final passwordRequirements = [
+    PasswordRequirement(
+      label: '8+ caracteres',
+      isMet: (password) => password.length >= 8,
+    ),
+    PasswordRequirement(
+      label: 'Mayúscula',
+      isMet: (password) => password.contains(RegExp(r'[A-Z]')),
+    ),
+    PasswordRequirement(
+      label: 'Minúscula',
+      isMet: (password) => password.contains(RegExp(r'[a-z]')),
+    ),
+    PasswordRequirement(
+      label: 'Número',
+      isMet: (password) => password.contains(RegExp(r'[0-9]')),
+    ),
+  ];
+
+  static String? validateNewPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'La contraseña nueva es obligatoria';
+    }
+    final isMissingRequirement =
+        passwordRequirements.any((requirement) => !requirement.isMet(value));
+    if (isMissingRequirement) {
+      return 'La contraseña no cumple los requisitos';
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(String? value, String newPassword) {
+    if (value == null || value.isEmpty) {
+      return 'Confirma la contraseña nueva';
+    }
+    if (value != newPassword) {
+      return 'Las contraseñas no coinciden';
+    }
+    return null;
+  }
+
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return null;
     final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');

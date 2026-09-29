@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dar
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/password_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
 import 'package:logger/logger.dart';
 
@@ -27,7 +28,6 @@ abstract class AuthRepository {
 
 class AuthRepositoryImpl extends AuthRepository {
   final _api = global<APIRepository>();
-
   final _logger = Logger();
   @override
   Future<AuthResponse> login({
@@ -48,6 +48,9 @@ class AuthRepositoryImpl extends AuthRepository {
       if (resp['statusCode'] != 201) {
         final (errorMsg, _) =
             getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        if (resp['statusCode'] == 402) {
+          throw PasswordExpiredException(optionalMsg: errorMsg);
+        }
         throw AppException(optionalMsg: errorMsg);
       }
       final data = AuthResponse.fromJson(resp);
