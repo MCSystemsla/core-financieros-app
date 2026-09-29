@@ -95,6 +95,33 @@ class RefreshTokenEndpoint extends Endpoint {
       };
 }
 
+class RenovarPasswordVencidaEndpoint extends Endpoint {
+  final String userName;
+  final String dbName;
+  final String currentPassword;
+  final String newPassword;
+  RenovarPasswordVencidaEndpoint({
+    required this.userName,
+    required this.dbName,
+    required this.currentPassword,
+    required this.newPassword,
+  });
+
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/auth/renovar-password-vencida';
+
+  @override
+  Map<String, dynamic> get body => {
+        'username': userName,
+        'database': dbName,
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      };
+}
+
 class OTPEndpoint extends Endpoint {
   OTPEndpoint();
 

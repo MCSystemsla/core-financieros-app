@@ -26,6 +26,12 @@ abstract class AuthRepository {
   Future<TutorialResponse> getTutorials();
   Future<(String, String)> refreshToken();
   Future<OtpGenerateResponse> generateOTP();
+  Future<void> renovarPasswordVencida({
+    required String userName,
+    required String dbName,
+    required String currentPassword,
+    required String newPassword,
+  });
 }
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -52,7 +58,7 @@ class AuthRepositoryImpl extends AuthRepository {
             getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
         final isHonduras =
             global<FlavorCubit>().state.flavor == Flavor.honduras;
-        if (isHonduras && resp['statusCode'] == 402) {
+        if (isHonduras && resp['passwordVencida'] == true) {
           throw PasswordExpiredException(optionalMsg: errorMsg);
         }
         throw AppException(optionalMsg: errorMsg);
@@ -172,6 +178,36 @@ class AuthRepositoryImpl extends AuthRepository {
       return data;
     } catch (e) {
       _logger.e('Error en generateOTP', error: e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> renovarPasswordVencida({
+    required String userName,
+    required String dbName,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final endpoint = RenovarPasswordVencidaEndpoint(
+      userName: userName,
+      dbName: dbName,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+    try {
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
+      final statusCode = resp['statusCode'];
+      if (statusCode != 200 && statusCode != 201) {
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      _logger.e('Error en renovarPasswordVencida', error: e);
       rethrow;
     }
   }

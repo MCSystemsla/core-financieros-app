@@ -142,15 +142,24 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     super.dispose();
   }
 
-  Future<void> _openChangePassword() {
-    return Navigator.push(
+  Future<void> _openChangePassword() async {
+    final changed = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (_) => ChangePasswordScreen(
           username: _usernameController.text.trim(),
           database: branchTeam ?? '',
+          currentPassword: _passwordController.text.trim(),
         ),
       ),
+    );
+    if (changed != true || !mounted) return;
+    _passwordController.clear();
+    showV2CustomSnackbar(
+      context,
+      title: 'Contraseña actualizada',
+      message: 'Inicia sesión con tu nueva contraseña.',
+      type: SnackbarType.success,
     );
   }
 
