@@ -4,7 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cedula/cedula_capture.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/custom_painter/cedula_frame_painter.dart';
@@ -164,41 +164,201 @@ class _CedulaCaptureScreenState extends State<CedulaCaptureScreen> {
         ? (previewSize?.width ?? 0) / (previewSize?.height ?? 0)
         : (previewSize?.height ?? 0) / (previewSize?.width ?? 0);
     if (!_isCameraInitialized) {
-      return const Center(
-        child: CircularProgressIndicator(),
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 2.5,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Preparando cámara...',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          SafeArea(
-            child: AspectRatio(
-              aspectRatio: cameraAspectRatio,
-              child: CameraPreview(
-                _controller!,
-                child: Positioned.fill(
-                  child: CustomPaint(
-                    painter: CedulaFramePainter(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            SafeArea(
+              child: AspectRatio(
+                aspectRatio: cameraAspectRatio,
+                child: CameraPreview(
+                  _controller!,
+                  child: Positioned.fill(
+                    child: CustomPaint(
+                      painter: CedulaFramePainter(),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            child: CameraWidgets(
-              onTakePhoto: () => _takePhoto(),
-              controller: _controller!,
-              isLoading: isLoading,
+            const CloseCaptureCedulaWidget(),
+            CaptureCedulaTitle(
+              title: widget.title,
             ),
+            const CaptureCedulaDescription(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _CedulaCameraControls(
+                onTakePhoto: () => _takePhoto(),
+                controller: _controller!,
+                isLoading: isLoading,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CedulaCameraControls extends StatefulWidget {
+  final VoidCallback onTakePhoto;
+  final CameraController controller;
+  final bool isLoading;
+  const _CedulaCameraControls({
+    required this.onTakePhoto,
+    required this.controller,
+    required this.isLoading,
+  });
+
+  @override
+  State<_CedulaCameraControls> createState() => _CedulaCameraControlsState();
+}
+
+class _CedulaCameraControlsState extends State<_CedulaCameraControls> {
+  bool flashMode = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          colors: [
+            Colors.black.withValues(alpha: 0.65),
+            Colors.transparent,
+          ],
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(32, 32, 32, 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _RoundControlButton(
+                icon: flashMode
+                    ? Icons.flash_on_rounded
+                    : Icons.flash_off_rounded,
+                isActive: flashMode,
+                onTap: () {
+                  flashMode = !flashMode;
+                  final flashModeData =
+                      flashMode ? FlashMode.always : FlashMode.off;
+                  setState(() {});
+                  widget.controller.setFlashMode(flashModeData);
+                },
+              ),
+              _ShutterButton(
+                isLoading: widget.isLoading,
+                onTap: widget.isLoading ? null : widget.onTakePhoto,
+              ),
+              const SizedBox(width: 52, height: 52),
+            ],
           ),
-          const CloseCaptureCedulaWidget(),
-          CaptureCedulaTitle(
-            title: widget.title,
+        ),
+      ),
+    );
+  }
+}
+
+class _ShutterButton extends StatelessWidget {
+  final bool isLoading;
+  final VoidCallback? onTap;
+  const _ShutterButton({required this.isLoading, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 78,
+        height: 78,
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 4),
+        ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color:
+                isLoading ? Colors.white.withValues(alpha: 0.6) : Colors.white,
           ),
-          const CaptureCedulaDescription(),
-        ],
+          child: isLoading
+              ? const Padding(
+                  padding: EdgeInsets.all(18),
+                  child: CircularProgressIndicator(
+                    color: RedesignColors.ink,
+                    strokeWidth: 2.5,
+                  ),
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+}
+
+class _RoundControlButton extends StatelessWidget {
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback onTap;
+  const _RoundControlButton({
+    required this.icon,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: isActive
+          ? RedesignColors.amberTint
+          : Colors.white.withValues(alpha: 0.16),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 52,
+          height: 52,
+          child: Icon(
+            icon,
+            size: 24,
+            color: isActive ? RedesignColors.amber : Colors.white,
+          ),
+        ),
       ),
     );
   }
