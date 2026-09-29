@@ -114,6 +114,11 @@ class RenovarPasswordVencidaEndpoint extends Endpoint {
   String get path => '/auth/renovar-password-vencida';
 
   @override
+  Map<String, String> get headers => {
+        'x-api-key': const String.fromEnvironment('AUTH_API-KEY'),
+      };
+
+  @override
   Map<String, dynamic> get body => {
         'username': userName,
         'database': dbName,
