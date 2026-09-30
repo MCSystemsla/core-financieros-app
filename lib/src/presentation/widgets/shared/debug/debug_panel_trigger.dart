@@ -18,7 +18,6 @@ class DebugPanelTrigger extends StatefulWidget {
 }
 
 class _DebugPanelTriggerState extends State<DebugPanelTrigger> {
-  static const _isProdMode = bool.fromEnvironment('isProdMode');
   static const _tapsToOpen = 7;
   static const _tapWindow = Duration(milliseconds: 600);
 
@@ -47,8 +46,6 @@ class _DebugPanelTriggerState extends State<DebugPanelTrigger> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isProdMode) return widget.child;
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _onTap,
