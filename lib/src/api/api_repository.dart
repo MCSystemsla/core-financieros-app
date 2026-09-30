@@ -94,6 +94,12 @@ class DefaultAPIRepository implements APIRepository {
 
             headers['Authorization'] = 'Bearer ${LocalStorage().jwt}';
             response = await requestDistributor(endpoint, url, headers);
+
+            // Token recién renovado y sigue en 401: sesión inválida.
+            if (response.statusCode == 401) {
+              await AuthRepositoryImpl.forceLogout();
+              return {'statusCode': 401, 'message': 'Unauthorized'};
+            }
           } catch (e) {
             return {'statusCode': 401, 'message': 'Unauthorized'};
           }

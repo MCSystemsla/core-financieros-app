@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/datasource/auth/auth_response.dart';
@@ -136,32 +137,54 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  /// Refresh in flight, shared by every request that gets a 401 at the same
+  /// time. Without it, parallel requests each call `/auth/refresh` with the
+  /// same refresh token; the backend rotates it on the first call and the
+  /// rest fail.
+  static Future<(String, String)>? _refreshInFlight;
+
   @override
-  Future<(String, String)> refreshToken() async {
-    final endpoint = RefreshTokenEndpoint();
+  Future<(String, String)> refreshToken() {
+    return _refreshInFlight ??=
+        _doRefreshToken().whenComplete(() => _refreshInFlight = null);
+  }
+
+  Future<(String, String)> _doRefreshToken() async {
+    const sessionExpiredMsg =
+        'La sesión ha expirado, por favor inicia sesión de nuevo.';
+    if (LocalStorage().refreshToken.isEmpty) {
+      _logger.e('APIRepository - No hay refresh token');
+      await forceLogout();
+      throw AppException(optionalMsg: sessionExpiredMsg);
+    }
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(endpoint: RefreshTokenEndpoint());
       final statusCode = resp['statusCode'];
+      final accessToken = resp['accessToken'];
+      final refreshToken = resp['refreshToken'];
 
-      if (statusCode != 201) {
-        _logger.e('APIRepository - Token no valido');
-        Future.microtask(() => router.go('/login'));
-
-        throw AppException(
-          optionalMsg:
-              'Una sesión ha expirado, por favor inicia sesión de nuevo.',
-        );
+      if ((statusCode != 200 && statusCode != 201) ||
+          accessToken is! String ||
+          refreshToken is! String ||
+          accessToken.isEmpty) {
+        _logger.e('APIRepository - Token no valido: $resp');
+        throw AppException(optionalMsg: sessionExpiredMsg);
       }
-      return (
-        resp['accessToken'] as String,
-        resp['refreshToken'] as String,
-      );
+      return (accessToken, refreshToken);
     } catch (e, s) {
       _logger.e('Error en refreshToken', error: e, stackTrace: s);
-      Future.microtask(() => router.go('/login'));
-
+      await forceLogout();
       rethrow;
     }
+  }
+
+  static Future<void> forceLogout() async {
+    await LocalStorage().setJWT('');
+    await LocalStorage().setRefreshToken('');
+    Future.microtask(() {
+      final currentPath = router.routerDelegate.currentConfiguration.uri.path;
+      if (currentPath != '/login') router.go('/login');
+    });
   }
 
   @override
