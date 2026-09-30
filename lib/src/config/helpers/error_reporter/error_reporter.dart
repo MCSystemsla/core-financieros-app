@@ -7,25 +7,28 @@ class ErrorReporter {
   static final _logger = Logger();
   static const _versionJsonUrl =
       String.fromEnvironment('GOOGLE_SHEET_ERROR_LOG_URL');
+  static const _timeout = Duration(seconds: 30);
   static Future<void> registerError({
     required String errorMessage,
     required String statusCode,
     required String username,
   }) async {
     try {
-      await http.post(
-        Uri.parse(_versionJsonUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(
-          {
-            'error': errorMessage,
-            'usuario': username,
-            'statusCode': statusCode,
-          },
-        ),
-      );
+      await http
+          .post(
+            Uri.parse(_versionJsonUrl),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode(
+              {
+                'error': errorMessage,
+                'usuario': username,
+                'statusCode': statusCode,
+              },
+            ),
+          )
+          .timeout(_timeout);
     } catch (e) {
       _logger.e(e);
     }
