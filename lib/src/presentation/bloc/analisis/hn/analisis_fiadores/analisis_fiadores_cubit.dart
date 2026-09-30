@@ -23,11 +23,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         ganaciasNegocio +
         state.otrosIngresos -
         state.consumoFamiliar;
-    emit(state.copyWith(
-      status: Status.inProgress,
-      firmaStatus: Status.notStarted,
-      errorMsg: '',
-    ));
+    emit(state.copyWith(status: Status.inProgress));
     try {
       final resp = await _repository.createAnalisisFiador(
         analisisFiadoresHn: AnalisisFiadoresHn(
@@ -206,8 +202,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
       ));
       return;
     }
-    if (state.firmaFiador.isEmpty ||
-        !File(state.firmaFiador).existsSync()) {
+    if (state.firmaFiador.isEmpty || !File(state.firmaFiador).existsSync()) {
       emit(state.copyWith(
         status: Status.error,
         firmaStatus: Status.error,
@@ -216,7 +211,8 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
       ));
       return;
     }
-    emit(state.copyWith(status: Status.inProgress, firmaStatus: Status.inProgress));
+    emit(state.copyWith(
+        status: Status.inProgress, firmaStatus: Status.inProgress));
     try {
       final (isOk, message) = await _repository.fiadoresEnviarFirmaDigital(
         idFiador: state.fiadorId,

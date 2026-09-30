@@ -29,11 +29,10 @@ class CrearFiadorDataHN {
   });
 
   factory CrearFiadorDataHN.fromJson(Map<String, dynamic> json) {
-    final rawId = json['FiadorID'] ?? json['id'] ?? json['Id'];
     final rawNumeroSolicitud = json['FiadorSolicitude'];
 
     return CrearFiadorDataHN(
-      id: rawId?.toString() ?? '',
+      id: json['FiadorID'] ?? '',
       numeroSolicitud: rawNumeroSolicitud is num
           ? rawNumeroSolicitud.toInt()
           : int.tryParse(rawNumeroSolicitud?.toString() ?? '') ?? 0,
