@@ -9,7 +9,6 @@ class PasswordRequirement {
 }
 
 class ClassValidator {
-  // TODO: confirmar con backend las políticas reales de contraseña.
   static final passwordRequirements = [
     PasswordRequirement(
       label: '8+ caracteres',
