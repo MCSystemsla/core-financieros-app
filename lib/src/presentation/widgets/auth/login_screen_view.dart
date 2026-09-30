@@ -13,6 +13,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/screens/auth/change_password/change_password_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/debug/debug_panel_trigger.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/search_branch_sheet_delegate.dart';
@@ -96,9 +97,11 @@ class _LoginScreenViewState extends State<LoginScreenView>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SafeArea(
-                          child: Image(
-                            height: 180,
-                            image: AssetImage(flavor.toLogoExtension),
+                          child: DebugPanelTrigger(
+                            child: Image(
+                              height: 180,
+                              image: AssetImage(flavor.toLogoExtension),
+                            ),
                           ),
                         ),
                         const Gap(5),
