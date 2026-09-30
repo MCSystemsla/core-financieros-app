@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/celebration_burst.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
@@ -27,6 +28,11 @@ class SendingStatusView extends StatelessWidget {
   final String? errorDetail;
   final List<Widget> actions;
 
+  /// Dispara [CelebrationBurst] (confeti + haptic) al mostrarse. Si es null se
+  /// deduce del [artTint]: el estado de exito de todas las pantallas de envio
+  /// usa `RedesignColors.greenTint`, asi no hay que tocar cada pantalla.
+  final bool? celebrate;
+
   const SendingStatusView({
     super.key,
     required this.art,
@@ -38,27 +44,37 @@ class SendingStatusView extends StatelessWidget {
     this.value,
     this.errorDetail,
     this.actions = const [],
+    this.celebrate,
   });
 
   @override
   Widget build(BuildContext context) {
     final showFolio = (value ?? '').trim().isNotEmpty;
+    final shouldCelebrate = celebrate ?? artTint == RedesignColors.greenTint;
 
     return SafeArea(
       top: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-            child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(minHeight: constraints.maxHeight - 28),
-              child: IntrinsicHeight(
-                child: _buildContent(showFolio),
-              ),
+      child: Stack(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                child: ConstrainedBox(
+                  constraints:
+                      BoxConstraints(minHeight: constraints.maxHeight - 28),
+                  child: IntrinsicHeight(
+                    child: _buildContent(showFolio),
+                  ),
+                ),
+              );
+            },
+          ),
+          if (shouldCelebrate)
+            const Positioned.fill(
+              child: CelebrationBurst(origin: Alignment(0, -0.72)),
             ),
-          );
-        },
+        ],
       ),
     );
   }
