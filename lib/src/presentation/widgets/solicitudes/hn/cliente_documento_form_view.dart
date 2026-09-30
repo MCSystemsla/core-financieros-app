@@ -34,8 +34,12 @@ class ClienteDocumentoFormView extends StatelessWidget {
   final ValueChanged<Item?> onTipoDocumentoChanged;
   final bool isLoading;
   final VoidCallback onSubmit;
+  final String? title;
+  final String? subtitle;
   const ClienteDocumentoFormView({
     super.key,
+    this.title,
+    this.subtitle,
     required this.tipoCredito,
     required this.formKey,
     required this.controllers,
@@ -61,8 +65,9 @@ class ClienteDocumentoFormView extends StatelessWidget {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         children: [
           ScreenHeaderWidget(
-            title: 'Datos del cliente',
-            subtitle: 'Crédito $tipoCredito. Ingresa los datos del cliente.',
+            title: title ?? 'Datos del cliente',
+            subtitle: subtitle ??
+                'Crédito $tipoCredito. Ingresa los datos del cliente.',
             onBack: () => Navigator.pop(context),
           ),
           const Gap(10),
