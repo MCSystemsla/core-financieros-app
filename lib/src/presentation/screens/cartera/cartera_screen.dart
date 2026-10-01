@@ -235,6 +235,24 @@ class _SeguimientoSection extends StatelessWidget {
                   );
                 },
               ),
+            // if (flavor == Flavor.honduras &&
+            //     state.connectionStatus == ConnectionStatus.connected)
+            //   ModuleTileWidget(
+            //     icon: Icons.groups_outlined,
+            //     iconColor: RedesignColors.amber,
+            //     iconBackground: RedesignColors.amberTint,
+            //     title: 'Formalización',
+            //     subtitle: 'Resoluciones individuales y grupales',
+            //     tag: 'Solo en línea',
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (_) => const ComiteScreenHn(),
+            //         ),
+            //       );
+            //     },
+            //   ),
             if (flavor == Flavor.honduras &&
                 state.connectionStatus == ConnectionStatus.connected)
               ModuleTileWidget(

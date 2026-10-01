@@ -268,7 +268,7 @@ class _UbicacionGpsFormCardState extends State<UbicacionGpsFormCard> {
                         opacity: animation,
                         child: SizeTransition(
                           sizeFactor: animation,
-                          axisAlignment: -1,
+                          alignment: Alignment.topCenter,
                           child: child,
                         ),
                       ),
@@ -502,7 +502,7 @@ class _AnimatedPendienteItemState extends State<_AnimatedPendienteItem>
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: _size,
-      axisAlignment: -1,
+      alignment: Alignment.topCenter,
       child: FadeTransition(
         opacity: _size,
         child: SlideTransition(
