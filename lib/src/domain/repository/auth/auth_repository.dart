@@ -178,13 +178,24 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  static bool _loggingOut = false;
+
   static Future<void> forceLogout() async {
-    await LocalStorage().setJWT('');
-    await LocalStorage().setRefreshToken('');
-    Future.microtask(() {
-      final currentPath = router.routerDelegate.currentConfiguration.uri.path;
-      if (currentPath != '/login') router.go('/login');
-    });
+    if (_loggingOut) return;
+    _loggingOut = true;
+    try {
+      await LocalStorage().setJWT('');
+      await LocalStorage().setRefreshToken('');
+    } finally {
+      // `currentConfiguration.uri` ignores routes opened with push /
+      // pushReplacement / Navigator.push, so it can still read '/login'
+      // while the user is on another screen. Always `go`: it rebuilds the
+      // stack from scratch and drops every route and dialog on top.
+      Future.microtask(() {
+        router.go('/login');
+        _loggingOut = false;
+      });
+    }
   }
 
   @override
