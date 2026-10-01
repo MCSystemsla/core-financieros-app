@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_coordinador/supervision_coordinador_cubit.dart';
@@ -31,17 +32,11 @@ class _SupervisionFormHN1State extends State<SupervisionFormHN1>
     super.build(context);
     final cubit = context.read<SupervisionCoordinadorCubit>();
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          )
-        ],
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -50,12 +45,14 @@ class _SupervisionFormHN1State extends State<SupervisionFormHN1>
           children: [
             const Gap(20),
             Container(
-              margin: const EdgeInsets.all(18),
-              child: Text(
-                'Supervisiones de coordinadores',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+              margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+              child: const Text(
+                'Datos de la solicitud',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: RedesignColors.ink,
+                ),
               ),
             ),
             const Gap(10),
@@ -214,18 +211,7 @@ class _SupervisionFormHN1State extends State<SupervisionFormHN1>
                       );
                     },
                     text: 'Siguiente',
-                    color: Colors.green,
-                  ),
-                  const Gap(10),
-                  CustomElevatedButton(
-                    onPressed: () {
-                      widget.pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    text: 'Anterior',
-                    color: Colors.red,
+                    color: RedesignColors.green,
                   ),
                 ],
               ),

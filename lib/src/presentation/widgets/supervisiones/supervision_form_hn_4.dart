@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_coordinador/supervision_coordinador_cubit.dart';
@@ -45,17 +47,11 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
     final cubit = context.read<SupervisionCoordinadorCubit>();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          )
-        ],
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -66,12 +62,14 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
             children: [
               const Gap(20),
               Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
+                margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+                child: const Text(
                   'Propuesta',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: RedesignColors.ink,
+                  ),
                 ),
               ),
               const Gap(10),
@@ -183,10 +181,10 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                           text: state.status == Status.inProgress
                               ? 'Enviando...'
                               : 'Siguiente',
-                          color: Colors.green,
+                          color: RedesignColors.green,
                         ),
                         const Gap(10),
-                        CustomElevatedButton(
+                        CustomOutLineButton(
                           onPressed: () {
                             widget.pageController.previousPage(
                               duration: const Duration(milliseconds: 500),
@@ -194,7 +192,8 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                             );
                           },
                           text: 'Anterior',
-                          color: Colors.red,
+                          color: RedesignColors.border,
+                          textColor: RedesignColors.ink,
                         ),
                       ],
                     ),

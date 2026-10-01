@@ -1,6 +1,8 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/supervisiones_repository_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form3.dart';
@@ -10,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../bloc/analisis/hn/get_plan_inversion/get_plan_inversion_cubit.dart';
 import '../../../../../../bloc/supervisiones/supervisiones_riesgo/supervisiones_riesgo_cubit.dart';
 
-class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
+class SupervisionesFormRiesgoHnScreen extends StatefulWidget {
   final SupervisionData data;
   final String nombreCoordinador;
   final num cuota;
@@ -26,8 +28,23 @@ class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
   });
 
   @override
+  State<SupervisionesFormRiesgoHnScreen> createState() =>
+      _SupervisionesFormRiesgoHnScreenState();
+}
+
+class _SupervisionesFormRiesgoHnScreenState
+    extends State<SupervisionesFormRiesgoHnScreen> {
+  final pagecontroller = PageController();
+
+  @override
+  void dispose() {
+    pagecontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final pagecontroller = PageController();
+    final data = widget.data;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -46,24 +63,42 @@ class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Crear Supervision Credito'),
-        ),
+        backgroundColor: RedesignColors.background,
         body: SafeArea(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pagecontroller,
+          child: Column(
             children: [
-              SupervisionRiesgoForm1(
-                data: data,
-                pagecontroller: pagecontroller,
+              FormStepHeaderWidget(
+                title: 'Supervisión de riesgo',
+                subtitle:
+                    'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
+                tag: 'Supervisión',
+                controller: pagecontroller,
+                onBack: () => Navigator.pop(context),
+                // Same order as the PageView children below.
+                steps: const [
+                  'Datos del cliente',
+                  'DDC',
+                  'Plan de inversión',
+                ],
               ),
-              SupervisionRiesgoForm2(
-                pagecontroller: pagecontroller,
-              ),
-              SupervisionRiesgoForm3(
-                pagecontroller: pagecontroller,
-                numeroSolicitud: int.tryParse(data.numeroSolicitud) ?? 0,
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pagecontroller,
+                  children: [
+                    SupervisionRiesgoForm1(
+                      data: data,
+                      pagecontroller: pagecontroller,
+                    ),
+                    SupervisionRiesgoForm2(
+                      pagecontroller: pagecontroller,
+                    ),
+                    SupervisionRiesgoForm3(
+                      pagecontroller: pagecontroller,
+                      numeroSolicitud: int.tryParse(data.numeroSolicitud) ?? 0,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

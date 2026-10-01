@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
@@ -13,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
@@ -24,7 +27,7 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class SupervisionesFormRegionalHnScreen extends StatelessWidget {
+class SupervisionesFormRegionalHnScreen extends StatefulWidget {
   final SupervisionData data;
   final String tipoSolicitud;
   const SupervisionesFormRegionalHnScreen({
@@ -34,31 +37,63 @@ class SupervisionesFormRegionalHnScreen extends StatelessWidget {
   });
 
   @override
+  State<SupervisionesFormRegionalHnScreen> createState() =>
+      _SupervisionesFormRegionalHnScreenState();
+}
+
+class _SupervisionesFormRegionalHnScreenState
+    extends State<SupervisionesFormRegionalHnScreen> {
+  final pagecontroller = PageController();
+
+  @override
+  void dispose() {
+    pagecontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final pagecontroller = PageController();
+    final data = widget.data;
     return BlocProvider(
       create: (ctx) => SupervisionRegionalCubit(
         SupervisionesRepositoryHnImpl(),
       )..setNumberSolicitudAndTipoSolicitud(
           numberSolicitud: int.tryParse(data.numeroSolicitud) ?? 0,
-          tipoSolicitud: tipoSolicitud,
+          tipoSolicitud: widget.tipoSolicitud,
         ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Crear Supervision Regional'),
-        ),
+        backgroundColor: RedesignColors.background,
         body: SafeArea(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pagecontroller,
+          child: Column(
             children: [
-              SupervisionRegionalPage1(
-                pagecontroller: pagecontroller,
-                data: data,
+              FormStepHeaderWidget(
+                title: 'Supervisión regional',
+                subtitle:
+                    'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
+                tag: 'Supervisión',
+                controller: pagecontroller,
+                onBack: () => Navigator.pop(context),
+                // Same order as the PageView children below.
+                steps: const [
+                  'Datos del cliente',
+                  'Evaluación',
+                ],
               ),
-              SupervisionRegionalPage2(
-                pagecontroller: pagecontroller,
-                data: data,
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pagecontroller,
+                  children: [
+                    SupervisionRegionalPage1(
+                      pagecontroller: pagecontroller,
+                      data: data,
+                    ),
+                    SupervisionRegionalPage2(
+                      pagecontroller: pagecontroller,
+                      data: data,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -114,17 +149,11 @@ class _SupervisionRegionalPage2State extends State<SupervisionRegionalPage2>
       },
       builder: (context, state) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          margin: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              )
-            ],
+            color: RedesignColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: RedesignColors.border),
           ),
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -632,10 +661,10 @@ class _SupervisionRegionalPage2State extends State<SupervisionRegionalPage2>
                                 .createSupervisionRegional();
                           },
                           text: 'Enviar',
-                          color: Colors.green,
+                          color: RedesignColors.green,
                         ),
                         const Gap(10),
-                        CustomElevatedButton(
+                        CustomOutLineButton(
                           onPressed: () {
                             widget.pagecontroller.previousPage(
                               duration: const Duration(milliseconds: 500),
@@ -643,7 +672,8 @@ class _SupervisionRegionalPage2State extends State<SupervisionRegionalPage2>
                             );
                           },
                           text: 'Anterior',
-                          color: Colors.red,
+                          color: RedesignColors.border,
+                          textColor: RedesignColors.ink,
                         ),
                       ],
                     ),
@@ -674,17 +704,11 @@ class SupervisionRegionalPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          )
-        ],
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -693,12 +717,14 @@ class SupervisionRegionalPage1 extends StatelessWidget {
           children: [
             const Gap(20),
             Container(
-              margin: const EdgeInsets.all(18),
-              child: Text(
-                'Supervisiones de Regional',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+              margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+              child: const Text(
+                'Datos del cliente',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: RedesignColors.ink,
+                ),
               ),
             ),
             const Gap(10),
@@ -789,18 +815,7 @@ class SupervisionRegionalPage1 extends StatelessWidget {
                       );
                     },
                     text: 'Siguiente',
-                    color: Colors.green,
-                  ),
-                  const Gap(10),
-                  CustomElevatedButton(
-                    onPressed: () {
-                      pagecontroller.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    text: 'Anterior',
-                    color: Colors.red,
+                    color: RedesignColors.green,
                   ),
                 ],
               ),

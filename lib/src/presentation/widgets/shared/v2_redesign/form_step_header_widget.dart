@@ -1,5 +1,6 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/connection_pill_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/header_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -14,6 +15,9 @@ class FormStepHeaderWidget extends StatelessWidget {
   final String tag;
   final PageController controller;
   final List<String> steps;
+
+  /// Shows a [HeaderBackButton] before the tag when set.
+  final VoidCallback? onBack;
   const FormStepHeaderWidget({
     super.key,
     required this.title,
@@ -21,6 +25,7 @@ class FormStepHeaderWidget extends StatelessWidget {
     required this.steps,
     this.subtitle = 'Complete los detalles para registrar una nueva solicitud',
     this.tag = 'Solicitud de crédito',
+    this.onBack,
   });
 
   @override
@@ -52,6 +57,10 @@ class FormStepHeaderWidget extends StatelessWidget {
         children: [
           Row(
             children: [
+              if (onBack != null) ...[
+                HeaderBackButton(onPressed: onBack!),
+                const Gap(10),
+              ],
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
