@@ -1,31 +1,27 @@
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/supervisiones_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_regional/supervision_regional_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/supervisiones/sending_supervision_view.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
-import 'package:core_financiero_app/src/utils/extensions/loading/loading_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_supervisor/tipo_supervisor_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SupervisionesFormRegionalHnScreen extends StatefulWidget {
   final SupervisionData data;
@@ -63,40 +59,64 @@ class _SupervisionesFormRegionalHnScreenState
         ),
       child: Scaffold(
         backgroundColor: RedesignColors.background,
-        body: SafeArea(
-          child: Column(
-            children: [
-              FormStepHeaderWidget(
-                title: 'Supervisión regional',
-                subtitle:
-                    'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
-                tag: 'Supervisión',
-                controller: pagecontroller,
-                onBack: () => Navigator.pop(context),
-                // Same order as the PageView children below.
-                steps: const [
-                  'Datos del cliente',
-                  'Evaluación',
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  FormStepHeaderWidget(
+                    title: 'Supervisión regional',
+                    subtitle:
+                        'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
+                    tag: 'Supervisión',
+                    controller: pagecontroller,
+                    onBack: () => Navigator.pop(context),
+                    // Same order as the PageView children below.
+                    steps: const [
+                      'Datos del cliente',
+                      'Evaluación',
+                    ],
+                  ),
+                  Expanded(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pagecontroller,
+                      children: [
+                        SupervisionRegionalPage1(
+                          pagecontroller: pagecontroller,
+                          data: data,
+                        ),
+                        SupervisionRegionalPage2(
+                          pagecontroller: pagecontroller,
+                          data: data,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: pagecontroller,
-                  children: [
-                    SupervisionRegionalPage1(
-                      pagecontroller: pagecontroller,
-                      data: data,
-                    ),
-                    SupervisionRegionalPage2(
-                      pagecontroller: pagecontroller,
-                      data: data,
-                    ),
-                  ],
-                ),
+            ),
+            BlocBuilder<SupervisionRegionalCubit, SupervisionRegionalState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
+              builder: (context, state) => SendingSupervisionView(
+                status: state.status,
+                errorMsg: state.errorMsg,
+                numeroSolicitud: data.numeroSolicitud,
+                tipo: 'regional',
+                onRetry: () => context
+                    .read<SupervisionRegionalCubit>()
+                    .createSupervisionRegional(),
+                onReview: () {
+                  final cubit = context.read<SupervisionRegionalCubit>();
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(status: Status.notStarted),
+                  );
+                },
+                onClose: () => Navigator.pop(context),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -119,34 +139,14 @@ class SupervisionRegionalPage2 extends StatefulWidget {
 
 class _SupervisionRegionalPage2State extends State<SupervisionRegionalPage2>
     with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final formKey = GlobalKey<FormState>();
     final cubit = context.read<SupervisionRegionalCubit>();
-    return BlocConsumer<SupervisionRegionalCubit, SupervisionRegionalState>(
-      listenWhen: (previous, current) => previous.status != current.status,
-      listener: (context, state) {
-        if (state.status == Status.inProgress) {
-          context.showLoading(message: 'Supervision en proceso');
-        }
-        if (state.status == Status.error) {
-          context.hideLoading();
-          showV2CustomSnackbar(
-            context,
-            title: state.errorMsg,
-            type: SnackbarType.error,
-          );
-        }
-        if (state.status == Status.done) {
-          context.hideLoading();
-          CustomAlertDialog(
-            context: context,
-            title: 'Supervision creada exitosamente',
-            onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.success);
-        }
-      },
+    // El progreso/resultado del envío lo muestra SendingSupervisionView.
+    return BlocBuilder<SupervisionRegionalCubit, SupervisionRegionalState>(
       builder: (context, state) {
         return Container(
           margin: const EdgeInsets.all(16),

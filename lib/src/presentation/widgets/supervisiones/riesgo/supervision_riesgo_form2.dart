@@ -13,7 +13,7 @@ import 'package:gap/gap.dart';
 
 import '../../../bloc/supervisiones/supervisiones_riesgo/supervisiones_riesgo_cubit.dart';
 
-class SupervisionRiesgoForm2 extends StatelessWidget {
+class SupervisionRiesgoForm2 extends StatefulWidget {
   const SupervisionRiesgoForm2({
     super.key,
     required this.pagecontroller,
@@ -22,8 +22,21 @@ class SupervisionRiesgoForm2 extends StatelessWidget {
   final PageController pagecontroller;
 
   @override
+  State<SupervisionRiesgoForm2> createState() => _SupervisionRiesgoForm2State();
+}
+
+class _SupervisionRiesgoForm2State extends State<SupervisionRiesgoForm2>
+    with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+
+  PageController get pagecontroller => widget.pagecontroller;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    super.build(context);
     final cubit = context.read<SupervisionesRiesgoCubit>();
     return BlocBuilder<SupervisionesRiesgoCubit, SupervisionesRiesgoState>(
       builder: (context, state) {

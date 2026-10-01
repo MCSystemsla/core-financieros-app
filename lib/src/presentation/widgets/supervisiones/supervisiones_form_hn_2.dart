@@ -27,10 +27,11 @@ class SupervisionFormHN2 extends StatefulWidget {
 
 class _SupervisionFormHN2State extends State<SupervisionFormHN2>
     with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final formKey = GlobalKey<FormState>();
     final cubit = context.read<SupervisionCoordinadorCubit>();
 
     return Container(

@@ -1,9 +1,7 @@
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/plan_inversion_response.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../bloc/analisis/hn/get_plan_inversion/get_plan_inversion_cubit.dart';
 import '../../../bloc/supervisiones/supervisiones_riesgo/supervisiones_riesgo_cubit.dart';
@@ -75,29 +72,10 @@ class SupervisionRiesgoForm3 extends StatelessWidget {
               },
             ),
             const Gap(25),
-            BlocConsumer<SupervisionesRiesgoCubit, SupervisionesRiesgoState>(
-              listener: (context, state) {
-                if (state.status == Status.done) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Supervision de Riesgo enviadas exitosamente',
-                    onDone: () => context.pop(),
-                  ).showDialog(
-                    context,
-                    dialogType: DialogType.success,
-                  );
-                }
-                if (state.status == Status.error) {
-                  CustomAlertDialog(
-                    context: context,
-                    title: state.errorMsg,
-                    onDone: () => context.pop(),
-                  ).showDialog(
-                    context,
-                    dialogType: DialogType.warning,
-                  );
-                }
-              },
+            // El progreso/resultado del envío lo muestra SendingSupervisionView.
+            BlocBuilder<SupervisionesRiesgoCubit, SupervisionesRiesgoState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
               builder: (context, state) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

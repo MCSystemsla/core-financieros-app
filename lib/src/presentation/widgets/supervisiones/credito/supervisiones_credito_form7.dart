@@ -1,21 +1,17 @@
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_credito/supervision_credito_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SupervisionesCreditoForm7 extends StatefulWidget {
   final PageController pagecontroller;
@@ -136,32 +132,11 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
                 //   },
                 // ),
                 const Gap(25),
-                BlocConsumer<SupervisionCreditoCubit, SupervisionCreditoState>(
+                // El progreso/resultado del envío lo muestra
+                // SendingSupervisionView.
+                BlocBuilder<SupervisionCreditoCubit, SupervisionCreditoState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
-                  listener: (context, state) {
-                    if (state.status == Status.done) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Supervision creada exitosamente',
-                        onDone: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                          );
-                        },
-                      ).showDialog(context, dialogType: DialogType.success);
-                    }
-                    if (state.status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context);
-                    }
-                  },
                   builder: (context, state) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -3,7 +3,9 @@ import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_r
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/supervisiones_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_coordinador/supervision_coordinador_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_montos/supervision_montos_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/supervisiones/sending_supervision_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/supervision_form_hn_4.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/supervisiones_form_hn_1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/supervisiones_form_hn_2.dart';
@@ -63,56 +65,83 @@ class _SupervisionesFormHnScreenState extends State<SupervisionesFormHnScreen> {
       ],
       child: Scaffold(
         backgroundColor: RedesignColors.background,
-        body: SafeArea(
-          child: Column(
-            children: [
-              FormStepHeaderWidget(
-                title: 'Supervisión de coordinador',
-                subtitle:
-                    'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
-                tag: 'Supervisión',
-                controller: pagecontroller,
-                onBack: () => Navigator.pop(context),
-                // Same order as the PageView children below.
-                steps: const [
-                  'Datos de la solicitud',
-                  'Aspectos cualitativos',
-                  'Aspectos cuantitativos',
-                  'Propuesta',
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  FormStepHeaderWidget(
+                    title: 'Supervisión de coordinador',
+                    subtitle:
+                        'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
+                    tag: 'Supervisión',
+                    controller: pagecontroller,
+                    onBack: () => Navigator.pop(context),
+                    // Same order as the PageView children below.
+                    steps: const [
+                      'Datos de la solicitud',
+                      'Aspectos cualitativos',
+                      'Aspectos cuantitativos',
+                      'Propuesta',
+                    ],
+                  ),
+                  Expanded(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pagecontroller,
+                      children: [
+                        SupervisionFormHN1(
+                          pageController: pagecontroller,
+                          data: data,
+                          nombreCoordinador: widget.nombreCoordinador,
+                        ),
+                        SupervisionFormHN2(
+                          pageController: pagecontroller,
+                        ),
+                        SupervisionFormHN3(
+                          pageController: pagecontroller,
+                          cuota: widget.cuota,
+                          razonEndeudamiento: widget.razonEndeudamiento,
+                        ),
+                        SupervisionFormHN4(
+                          pageController: pagecontroller,
+                          tipoSolicitud: widget.tipoSolicitud,
+                          montoSolicitud: data.monto.toInt(),
+                          cuotaSolicitud: data.cuota.toInt(),
+                          plazoSolicitud: data.plazoSolicitud,
+                          producto: data.producto,
+                          frecuenciaPago: data.frecuenciaPago,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: pagecontroller,
-                  children: [
-                    SupervisionFormHN1(
-                      pageController: pagecontroller,
-                      data: data,
-                      nombreCoordinador: widget.nombreCoordinador,
-                    ),
-                    SupervisionFormHN2(
-                      pageController: pagecontroller,
-                    ),
-                    SupervisionFormHN3(
-                      pageController: pagecontroller,
-                      cuota: widget.cuota,
-                      razonEndeudamiento: widget.razonEndeudamiento,
-                    ),
-                    SupervisionFormHN4(
-                      pageController: pagecontroller,
+            ),
+            BlocBuilder<SupervisionCoordinadorCubit,
+                SupervisionCoordinadorState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
+              builder: (context, state) => SendingSupervisionView(
+                status: state.status,
+                errorMsg: state.errorMsg,
+                numeroSolicitud: data.numeroSolicitud,
+                tipo: 'de coordinador',
+                onRetry: () => context
+                    .read<SupervisionCoordinadorCubit>()
+                    .createSupervisonCoordinador(
                       tipoSolicitud: widget.tipoSolicitud,
-                      montoSolicitud: data.monto.toInt(),
-                      cuotaSolicitud: data.cuota.toInt(),
-                      plazoSolicitud: data.plazoSolicitud,
-                      producto: data.producto,
-                      frecuenciaPago: data.frecuenciaPago,
                     ),
-                  ],
-                ),
+                onReview: () {
+                  final cubit = context.read<SupervisionCoordinadorCubit>();
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(status: Status.notStarted),
+                  );
+                },
+                onClose: () => Navigator.pop(context),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
