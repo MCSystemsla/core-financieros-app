@@ -1,12 +1,10 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
-import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_coordinador/supervision_coordinador_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/info_row_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/solicitud_cliente_header.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class SupervisionFormHN1 extends StatefulWidget {
@@ -30,7 +28,7 @@ class _SupervisionFormHN1State extends State<SupervisionFormHN1>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final cubit = context.read<SupervisionCoordinadorCubit>();
+    final data = widget.data;
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -39,184 +37,82 @@ class _SupervisionFormHN1State extends State<SupervisionFormHN1>
         border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SolicitudClienteHeader(data: data),
+            const Divider(height: 1, color: RedesignColors.border),
             const Gap(20),
-            Container(
-              margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
-              child: const Text(
-                'Datos de la solicitud',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: RedesignColors.ink,
+            SectionBlockWidget(
+              label: 'EQUIPO',
+              children: [
+                InfoRowWidget(
+                  icon: Icons.supervisor_account_outlined,
+                  color: RedesignColors.indigo,
+                  background: RedesignColors.indigoTint,
+                  label: 'Coordinador',
+                  value: widget.nombreCoordinador,
                 ),
-              ),
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: widget.nombreCoordinador,
-              readOnly: true,
-              title: 'Nombre del coordinador',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
+                InfoRowWidget(
+                  icon: Icons.badge_outlined,
+                  color: RedesignColors.indigo,
+                  background: RedesignColors.indigoTint,
+                  label: 'Asesor integral del cliente',
+                  value: data.nombrePromotor,
+                ),
               ],
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
             ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.numeroSolicitud,
-              title: 'Numero de solicitud',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(
-                    numeroSolicitud: int.tryParse(value) ?? 0,
-                  ),
-                );
-              },
+            SectionBlockWidget(
+              label: 'UBICACIÓN',
+              children: [
+                InfoRowWidget(
+                  icon: Icons.home_outlined,
+                  color: RedesignColors.teal,
+                  background: RedesignColors.tealTint,
+                  label: 'Dirección del domicilio',
+                  value: data.direccionCasa,
+                ),
+                InfoRowWidget(
+                  icon: Icons.storefront_outlined,
+                  color: RedesignColors.teal,
+                  background: RedesignColors.tealTint,
+                  label: 'Dirección del negocio',
+                  value: data.direccionNegocio,
+                ),
+              ],
             ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.fecha.selectorFormat(),
-              title: 'Fecha de solicitud',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {},
+            SectionBlockWidget(
+              label: 'CRÉDITO',
+              children: [
+                InfoRowWidget(
+                  icon: Icons.flag_outlined,
+                  color: RedesignColors.purple,
+                  background: RedesignColors.purpleTint,
+                  label: 'Destino del crédito',
+                  value: data.destino,
+                ),
+                InfoRowWidget(
+                  icon: Icons.work_outline,
+                  color: RedesignColors.purple,
+                  background: RedesignColors.purpleTint,
+                  label: 'Actividad / sector económico',
+                  value: data.sectorComercialNombre,
+                ),
+              ],
             ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.nombrePromotor,
-              title: 'Asesor integral del cliente',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.nombreCliente,
-              title: 'Cliente',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.cedulaCliente,
-              title: 'Numero de cedula',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.direccionCasa,
-              title: 'Direccion del domicilio',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.direccionNegocio,
-              title: 'Direccion del negocio',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.destino,
-              title: 'Destino del credito',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.sectorComercialNombre,
-              title: 'Actividad economica',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              readOnly: true,
-              initialValue: widget.data.sectorComercialNombre,
-              title: 'Sector economico',
-              icon: const Icon(Icons.food_bank),
-              textInputType: TextInputType.number,
-              onChange: (value) {
-                cubit.onFieldChanged(
-                  () => cubit.state.copyWith(),
-                );
-              },
-            ),
-            const Gap(25),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  CustomElevatedButton(
-                    onPressed: () {
-                      widget.pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    text: 'Siguiente',
-                    color: RedesignColors.green,
-                  ),
-                ],
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+              child: CustomElevatedButton(
+                onPressed: () {
+                  widget.pageController.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                text: 'Siguiente',
+                color: RedesignColors.green,
               ),
             ),
-            const Gap(20),
           ],
         ),
       ),

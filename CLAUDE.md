@@ -73,6 +73,7 @@ Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`A
 - `ScreenHeaderWidget` — standard screen header (back button, big title, subtitle, trailing slot defaulting to `ConnectionPillWidget`).
 - `ModuleTileWidget` / `ModuleIconTile` / `ModuleEntryCard` — module list rows and entry cards; `tag` surfaces business rules the advisor must see before tapping (e.g. `'Solo en línea'`).
 - `SolicitudEstadoCard` + `CardTagWidget` — credit-request cards for the by-state lists in both countries (HN: assigned, reject, update, supervisiones; NI: asignación, autorización, rechazo, análisis). Replaces `CreditProductDynamicHn` / `CreditProductItemHn` (NI's `CreditProductItem` is already deleted).
+- `SolicitudClienteHeader` + `InfoRowWidget` — read-only request/client data (step 1 of the supervisiones forms). Use these instead of `OutlineTextfieldWidget(readOnly: true)`.
 - `SectionBlockWidget`, `HeaderBackButton`, `ConnectionPillWidget` (reads `InternetConnectionCubit`), `SendingStatusView` (Lottie-driven send/progress screens).
 
 Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.

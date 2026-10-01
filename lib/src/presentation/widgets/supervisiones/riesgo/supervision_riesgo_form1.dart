@@ -1,9 +1,9 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
-import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/info_row_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/solicitud_cliente_header.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -27,116 +27,56 @@ class SupervisionRiesgoForm1 extends StatelessWidget {
         border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SolicitudClienteHeader(data: data),
+            const Divider(height: 1, color: RedesignColors.border),
             const Gap(20),
-            Container(
-              margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
-              child: const Text(
-                'Datos del cliente',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: RedesignColors.ink,
+            SectionBlockWidget(
+              label: 'EQUIPO',
+              children: [
+                InfoRowWidget(
+                  icon: Icons.badge_outlined,
+                  color: RedesignColors.indigo,
+                  background: RedesignColors.indigoTint,
+                  label: 'Oficial de crédito',
+                  value: data.nombrePromotor,
                 ),
-              ),
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: data.fecha.selectorFormat(),
-              readOnly: true,
-              title: 'Fecha',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
               ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
             ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: data.nombrePromotor,
-              readOnly: true,
-              title: 'Oficial de credito',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
+            SectionBlockWidget(
+              label: 'CRÉDITO',
+              children: [
+                InfoRowWidget(
+                  icon: Icons.flag_outlined,
+                  color: RedesignColors.purple,
+                  background: RedesignColors.purpleTint,
+                  label: 'Destino del crédito',
+                  value: data.destino,
+                ),
+                InfoRowWidget(
+                  icon: Icons.work_outline,
+                  color: RedesignColors.purple,
+                  background: RedesignColors.purpleTint,
+                  label: 'Actividad económica',
+                  value: data.sectorComercialNombre,
+                ),
               ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
             ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: data.nombreCliente,
-              readOnly: true,
-              title: 'Cliente',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: data.sectorComercialNombre,
-              readOnly: true,
-              title: 'Actividad economica',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
-            ),
-            const Gap(10),
-            OutlineTextfieldWidget(
-              initialValue: data.destino,
-              readOnly: true,
-              title: 'Destino del credito',
-              icon: const Icon(Icons.food_bank),
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              onChange: (value) {
-                // cubit.onFieldChanged(
-                //   () => cubit.state.copyWith(),
-                // );
-              },
-            ),
-            const Gap(25),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  CustomElevatedButton(
-                    onPressed: () {
-                      pagecontroller.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    text: 'Siguiente',
-                    color: RedesignColors.green,
-                  ),
-                ],
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+              child: CustomElevatedButton(
+                onPressed: () {
+                  pagecontroller.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                text: 'Siguiente',
+                color: RedesignColors.green,
               ),
             ),
-            const Gap(20),
           ],
         ),
       ),
