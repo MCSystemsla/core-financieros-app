@@ -31,9 +31,9 @@ Archivos de llaves (`--dart-define-from-file`) presentes en el repo: `api-key.js
 1. **Confirma entradas.** Necesitas: país/flavor, tipo de bump (major/minor/patch o versión explícita), artefacto (`apk`, `appbundle`, `ipa`) y archivo de llaves. Si falta algo, pregunta antes de editar.
 2. **Revisa el estado de git.** Corre `git status --short` y `git branch --show-current`. Si hay cambios sin commitear que no son tuyos, avisa al usuario antes de seguir.
 3. **Lee el bloque del flavor** en `android/app/build.gradle` (dentro de `productFlavors`). Toma `versionName` y `versionCode` actuales. Edita solo las líneas activas de ese bloque; no toques líneas comentadas ni otros flavors.
-4. **Chequeos del bloque** (reporta, no corrijas sin permiso):
+4. **Chequeos del bloque** (solo informa en el reporte final; no corrijas, no ofrezcas corregir y no preguntes al usuario si quiere cambiarlo):
    - Falta `dimension "country"` (hoy le falta a `micreditoCostaRica`).
-   - `signingConfig signingConfigs.debug` en un flavor que se va a producción (hoy Honduras y Costa Rica). Un appbundle o apk firmado con debug no sirve para Play Store.
+   - `signingConfig signingConfigs.debug` en un flavor que se va a producción (hoy Honduras y Costa Rica). Un appbundle o apk firmado con debug no sirve para Play Store. Menciónalo como advertencia de una línea; la firma la decide el equipo fuera de este flujo.
 5. **Analiza.** Corre `flutter analyze`. Si hay `error`, detente y reporta los errores (archivo:línea). Los `warning`/`info` se resumen con su cantidad, pero no bloquean.
 6. **Entrega el comando de build**, siempre con `--release --obfuscate --split-debug-info=../`:
 
