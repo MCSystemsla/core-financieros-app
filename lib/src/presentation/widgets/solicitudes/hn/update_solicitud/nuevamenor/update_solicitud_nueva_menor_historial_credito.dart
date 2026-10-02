@@ -238,7 +238,7 @@ class _HistorialCreditoFormState extends State<_HistorialCreditoForm> {
     }
     widget.onSave(
       HistorialCredito(
-        id: widget.initial?.id,
+        id: widget.initial?.id ?? 0,
         uuid: widget.initial?.uuid ?? const Uuid().v4(),
         entidad: entidad,
         monto: monto,
