@@ -24,12 +24,23 @@ class FiadorSignatureWidget extends StatefulWidget {
   State<FiadorSignatureWidget> createState() => _FiadorSignatureWidgetState();
 }
 
-class _FiadorSignatureWidgetState extends State<FiadorSignatureWidget> {
+class _FiadorSignatureWidgetState extends State<FiadorSignatureWidget>
+    with AutomaticKeepAliveClientMixin {
   final formKey = GlobalKey<FormState>();
   final controller = SignatureController();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final cubit = context.read<AnalisisFiadoresCubit>();
     return SingleChildScrollView(
       child: Padding(
