@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.da
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/exceptions/password_expired_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/session_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:logger/logger.dart';
@@ -149,13 +150,15 @@ class AuthRepositoryImpl extends AuthRepository {
         _doRefreshToken().whenComplete(() => _refreshInFlight = null);
   }
 
+  /// Throws [SessionExpiredException] when the backend rejects the refresh
+  /// token (the caller shows the re-auth dialog), or a plain [AppException]
+  /// on network/server errors, which keep the session as it is.
   Future<(String, String)> _doRefreshToken() async {
     const sessionExpiredMsg =
         'La sesión ha expirado, por favor inicia sesión de nuevo.';
     if (LocalStorage().refreshToken.isEmpty) {
       _logger.e('APIRepository - No hay refresh token');
-      await forceLogout();
-      throw AppException(optionalMsg: sessionExpiredMsg);
+      throw SessionExpiredException(optionalMsg: sessionExpiredMsg);
     }
     try {
       final resp = await _api.request(endpoint: RefreshTokenEndpoint());
@@ -163,18 +166,33 @@ class AuthRepositoryImpl extends AuthRepository {
       final accessToken = resp['accessToken'];
       final refreshToken = resp['refreshToken'];
 
+      // DefaultAPIRepository reports network errors and timeouts as
+      // statusCode '500' (String). A real answer from the backend comes as an
+      // int: 4xx, or a 500 (it wraps "REFRESH TOKEN EXPIRADO" and
+      // "Unauthorized" as 500), means the refresh token was rejected.
+      // 502/503/504 are gateway/infra errors and keep the session.
+      final isRejected =
+          statusCode is int && statusCode >= 400 && statusCode <= 500;
+      if (isRejected) {
+        _logger.e('APIRepository - Refresh token rechazado: $resp');
+        throw SessionExpiredException(optionalMsg: sessionExpiredMsg);
+      }
       if ((statusCode != 200 && statusCode != 201) ||
           accessToken is! String ||
           refreshToken is! String ||
           accessToken.isEmpty) {
-        _logger.e('APIRepository - Token no valido: $resp');
-        throw AppException(optionalMsg: sessionExpiredMsg);
+        _logger.e('APIRepository - Error al refrescar token: $resp');
+        throw AppException(
+          optionalMsg:
+              (resp['message'] ?? 'Error al renovar la sesión.').toString(),
+        );
       }
       return (accessToken, refreshToken);
+    } on AppException {
+      rethrow;
     } catch (e, s) {
       _logger.e('Error en refreshToken', error: e, stackTrace: s);
-      await forceLogout();
-      rethrow;
+      throw AppException(optionalMsg: e.toString());
     }
   }
 

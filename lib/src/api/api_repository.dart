@@ -6,7 +6,10 @@ import 'dart:io';
 
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/helpers/session/session_reauth_handler.dart';
 import 'package:core_financiero_app/src/config/services/bitacora/bitacora_service.dart';
+import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/session_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
 import 'package:core_financiero_app/src/utils/lang/type_safety.dart';
@@ -20,6 +23,27 @@ import '../../global_locator.dart';
 import 'endpoint.dart';
 
 enum Protocol { http, https }
+
+/// The backend answers an invalid or expired JWT with a 401, but some
+/// endpoints wrap it as a 500 whose message is "Unauthorized"
+/// (`{statusCode: 500, message: Unauthorized}`). Both mean the token was
+/// rejected.
+bool isUnauthorizedResponse(Object? statusCode, Object? body) {
+  if (statusCode == 401 || statusCode == '401') return true;
+  if (statusCode != 500 && statusCode != '500') return false;
+  Object? message;
+  if (body is Map) {
+    message = body['message'];
+  } else if (body is String) {
+    try {
+      final decoded = json.decode(body);
+      if (decoded is Map) message = decoded['message'];
+    } catch (_) {
+      message = body;
+    }
+  }
+  return message is String && message.trim().toLowerCase() == 'unauthorized';
+}
 
 abstract class APIRepository {
   Future<Map<String, dynamic>> request({
@@ -81,9 +105,12 @@ class DefaultAPIRepository implements APIRepository {
         Response response = await requestDistributor(endpoint, url, headers);
 
 // 🔥 Si es 401 y no es el refresh
-        if (response.statusCode == 401 &&
+        if (isUnauthorizedResponse(response.statusCode, response.body) &&
             needToValidateToken &&
             endpoint is! RefreshTokenEndpoint) {
+          const unauthorized = {'statusCode': 401, 'message': 'Unauthorized'};
+          var reauthenticated = false;
+          _logger.w('Unauthorized en ${url.path}, intentando refresh');
           try {
             // 1️⃣ Refresh
             final (accessToken, refreshToken) =
@@ -91,17 +118,34 @@ class DefaultAPIRepository implements APIRepository {
 
             await LocalStorage().setJWT(accessToken);
             await LocalStorage().setRefreshToken(refreshToken);
+          } on SessionExpiredException {
+            // 2️⃣ Refresh rechazado: el usuario se re-autentica en un dialog
+            // sobre la pantalla actual y la petición se reintenta.
+            if (!await SessionReauthHandler.reauthenticate()) {
+              return {...unauthorized};
+            }
+            reauthenticated = true;
+          } catch (e) {
+            // Error de red al refrescar: se conserva la sesión.
+            _logger.w('Refresh falló sin rechazo del backend: $e');
+            return _handlerError(e is AppException ? e.optionalMsg : e);
+          }
 
+          headers['Authorization'] = 'Bearer ${LocalStorage().jwt}';
+          response = await requestDistributor(endpoint, url, headers);
+
+          // Token renovado y sigue en 401: se pide login una vez más.
+          if (isUnauthorizedResponse(response.statusCode, response.body) &&
+              !reauthenticated) {
+            if (!await SessionReauthHandler.reauthenticate()) {
+              return {...unauthorized};
+            }
             headers['Authorization'] = 'Bearer ${LocalStorage().jwt}';
             response = await requestDistributor(endpoint, url, headers);
-
-            // Token recién renovado y sigue en 401: sesión inválida.
-            if (response.statusCode == 401) {
-              await AuthRepositoryImpl.forceLogout();
-              return {'statusCode': 401, 'message': 'Unauthorized'};
-            }
-          } catch (e) {
-            return {'statusCode': 401, 'message': 'Unauthorized'};
+          }
+          if (isUnauthorizedResponse(response.statusCode, response.body)) {
+            await AuthRepositoryImpl.forceLogout();
+            return {...unauthorized};
           }
         }
 
@@ -178,7 +222,16 @@ class DefaultAPIRepository implements APIRepository {
   Future<Map<String, dynamic>> _handleResponse(
       Response response, bool needToValidateToken) async {
     _logger.d('Response - statusCode: ${response.statusCode}');
-    final decodedBody = json.decode(response.body);
+    final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
+    dynamic decodedBody;
+    try {
+      decodedBody = json.decode(response.body);
+    } catch (_) {
+      // An error with an empty or non-JSON body (e.g. a plain "Unauthorized")
+      // must keep its real statusCode instead of turning into a '500'.
+      if (isSuccess) rethrow;
+      decodedBody = <String, dynamic>{'message': response.body};
+    }
     // if (response.headers.containsKey('authorization')) {
     //   String token = response.headers['authorization'] ?? '';
     //   LocalStorage().setFcmToken();
