@@ -38,8 +38,8 @@ class AnalisisGarantiaObtenerBienData {
   final String? numTomo;
   final String? folio;
   final DateTime? fechaInscripcion;
-  final int? areaVarasCuadradas;
-  final int? areaMetrosCuadrados;
+  final double? areaVarasCuadradas;
+  final double? areaMetrosCuadrados;
   final String? direccion;
   final int? objTipoGarantiaId;
   final String? departamentoCodigo;
@@ -50,14 +50,14 @@ class AnalisisGarantiaObtenerBienData {
   final String? aldeaNombre;
   final String? analisisGarantiaId;
   final String? numeroSolicitud;
-  final int? montoGarantia;
+  final double? montoGarantia;
   final int? articuloCodigo;
   final String? articuloTipo;
   final String? articuloDescripcion;
   final String? tipoValoracionCodigo;
   final String? tipoValoracionNombre;
-  final int? valorComercial;
-  final int? valorAvaluo;
+  final double? valorComercial;
+  final double? valorAvaluo;
   final int? evaluadorId;
   final String? evaluadorNombre;
 
@@ -124,8 +124,8 @@ class AnalisisGarantiaObtenerBienData {
         fechaInscripcion: json['FechaInscripcion'] == null
             ? null
             : DateTime.parse(json['FechaInscripcion']),
-        areaVarasCuadradas: json['AreaVarasCuadradas'],
-        areaMetrosCuadrados: json['AreaMetrosCuadrados'],
+        areaVarasCuadradas: (json['AreaVarasCuadradas'] as num?)?.toDouble(),
+        areaMetrosCuadrados: (json['AreaMetrosCuadrados'] as num?)?.toDouble(),
         direccion: json['Direccion'],
         objTipoGarantiaId: json['objTipoGarantiaID'],
         departamentoCodigo: json['DepartamentoCodigo'],
@@ -136,14 +136,14 @@ class AnalisisGarantiaObtenerBienData {
         aldeaNombre: json['AldeaNombre'],
         analisisGarantiaId: json['AnalisisGarantiaID'],
         numeroSolicitud: json['NumeroSolicitud'],
-        montoGarantia: json['MontoGarantia'],
+        montoGarantia: (json['MontoGarantia'] as num?)?.toDouble(),
         articuloCodigo: json['ArticuloCodigo'],
         articuloTipo: json['ArticuloTipo'],
         articuloDescripcion: json['ArticuloDescripcion'],
         tipoValoracionCodigo: json['TipoValoracionCodigo'],
         tipoValoracionNombre: json['TipoValoracionNombre'],
-        valorComercial: json['ValorComercial'],
-        valorAvaluo: json['ValorAvaluo'],
+        valorComercial: (json['ValorComercial'] as num?)?.toDouble(),
+        valorAvaluo: (json['ValorAvaluo'] as num?)?.toDouble(),
         evaluadorId: json['EvaluadorId'],
         evaluadorNombre: json['EvaluadorNombre'],
       );
