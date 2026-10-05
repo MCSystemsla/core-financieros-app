@@ -194,10 +194,11 @@ class _CrearDetalleBienHipotecarioState
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  textInputType: TextInputType.number,
+                  textInputType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
-                    CurrencyInputFormatter(mantissaLength: 0),
+                    CurrencyInputFormatter(),
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
@@ -215,10 +216,11 @@ class _CrearDetalleBienHipotecarioState
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  textInputType: TextInputType.number,
+                  textInputType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
-                    CurrencyInputFormatter(mantissaLength: 0),
+                    CurrencyInputFormatter(),
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
