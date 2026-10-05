@@ -377,13 +377,14 @@ class _VehiculoActualizarGarantiaFormState
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  textInputType: TextInputType.number,
+                  textInputType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
-                    CurrencyInputFormatter(mantissaLength: 0),
+                    CurrencyInputFormatter(),
                   ],
                   onChange: (value) {
-                    final newValue = toNumericString(value);
+                    final newValue = toNumericString(value, allowPeriod: true);
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         valorComercial: double.tryParse(newValue),
@@ -401,10 +402,11 @@ class _VehiculoActualizarGarantiaFormState
                     Icons.wallet,
                     color: AppColors.getPrimaryColor(),
                   ),
-                  textInputType: TextInputType.number,
+                  textInputType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
-                    CurrencyInputFormatter(mantissaLength: 0),
+                    CurrencyInputFormatter(),
                   ],
                   onChange: (value) {
                     final newValue = toNumericString(value, allowPeriod: true);
