@@ -74,9 +74,17 @@ Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`A
 - `ModuleTileWidget` / `ModuleIconTile` / `ModuleEntryCard` — module list rows and entry cards; `tag` surfaces business rules the advisor must see before tapping (e.g. `'Solo en línea'`).
 - `SolicitudEstadoCard` + `CardTagWidget` — credit-request cards for the by-state lists in both countries (HN: assigned, reject, update, supervisiones; NI: asignación, autorización, rechazo, análisis). Replaces `CreditProductDynamicHn` / `CreditProductItemHn` (NI's `CreditProductItem` is already deleted).
 - `SolicitudClienteHeader` + `InfoRowWidget` — read-only request/client data (step 1 of the supervisiones forms). Use these instead of `OutlineTextfieldWidget(readOnly: true)`.
+- `FormStepHeaderWidget` — header for multi-step forms driven by a `PageController`: current/next step label, "Paso X de N" and a segmented progress bar. `steps` must follow the same order as the `PageView` children. Used by the HN supervisiones forms, offline nueva solicitud, asalariado and nueva menor.
 - `SectionBlockWidget`, `HeaderBackButton`, `ConnectionPillWidget` (reads `InternetConnectionCubit`), `SendingStatusView` (Lottie-driven send/progress screens).
+- `CelebrationBurst` — one-shot confetti burst with a haptic, drawn with a `CustomPainter` (no assets), ignores touches. `SendingStatusView` fires it through `celebrate`; when that is null, it fires on success, which it detects from `artTint == RedesignColors.greenTint`. When system animations are off, it only fires the haptic.
 
 Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.
+
+Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_garantia_screen.dart`, `tipos_garantia_hn_widget.dart`) and plan de inversión (`plan_inversion_screen.dart`). Garantías use the feature-specific `GarantiaItemCard` (`widgets/analisis_solicitudes/hn/garantia/garantia_item_card.dart`): a dashed "pending slot" while the garantía has no bien assigned (and is not DPF), and a solid card colored by garantía type once assigned.
+
+### HN garantías: decimal amounts
+
+Valor comercial and related currency fields in the HN garantía crear/actualizar forms (vehículo, maquinaria, derecho, DPF, hipotecario under `widgets/analisis_solicitudes/hn/garantia/v2/`) accept decimals: `TextInputType.numberWithOptions(decimal: true)`, `CurrencyInputFormatter()` with no `mantissaLength: 0`, and `toNumericString(value, allowPeriod: true)` when parsing. The response model (`analisis_garantia_obtener_bien_response.dart`) parses these values as `double`, not `int`. Keep this when adding a new garantía form.
 
 ### Solicitudes by estado (paginated lists)
 
@@ -114,3 +122,7 @@ When `/auth/refresh` is rejected (4xx/500, or there is no refresh token), `AuthR
 ### Adding a country-specific feature
 
 `.claude/skills/new-feature-hn/` and `.claude/skills/new-feature-ni/` scaffold the full endpoint + repository + cubit/state chain for a single country, following the existing `hn/`/`ni/` layout. Use them instead of hand-copying an existing feature. Remember Costa Rica reuses the `ni` implementations, so an `ni` feature also ships to Costa Rica unless it is guarded by `FlavorCubit`.
+
+### Spec-driven workflow
+
+For large features, use `/spec <short description>` to design a spec section by section (it asks clarifying questions first and writes to `specs/`), then `/spec-impl <NN-spec-name>` once the spec state is "Approved". `/spec-impl` creates a git branch named after the spec and implements it step by step, pausing to review diffs. Both are user-invoked only (`disable-model-invocation: true`). They come from `Klerith/fernando-skills`, are pinned by hash in `skills-lock.json`, and are mirrored in `.claude/skills/` and `.agents/skills/`. If you change one copy, change the other too.
