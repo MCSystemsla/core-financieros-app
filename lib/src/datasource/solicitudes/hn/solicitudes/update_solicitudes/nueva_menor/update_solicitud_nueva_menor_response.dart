@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
+import 'package:uuid/uuid.dart';
 
 UpdateSolicitudNuevaResponse updateSolicitudNuevaResponseFromJson(String str) =>
     UpdateSolicitudNuevaResponse.fromJson(json.decode(str));
@@ -213,8 +215,10 @@ class UpdateSolicitudNuevaData {
   final double? salarioNetoMensualConyuge;
   final int? aniosLugarTrabajoConyuge;
   final String? cedulaConyuge;
+  final List<HistorialCredito> historialCredito;
 
   UpdateSolicitudNuevaData({
+    this.historialCredito = const [],
     this.id,
     this.origenSolicitudCodigo,
     this.origenSolicitudNombre,
@@ -608,5 +612,32 @@ class UpdateSolicitudNuevaData {
             parseDouble(json['SalarioNetoMensualConyuge']),
         aniosLugarTrabajoConyuge: parseInt(json['AniosLugarTrabajoConyuge']),
         cedulaConyuge: json['CedulaConyuge'],
+        historialCredito: _parseHistorialCredito(
+          json['historialCredito'],
+        ),
       );
+}
+
+List<HistorialCredito> _parseHistorialCredito(dynamic value) {
+  if (value is! List) return [];
+  return value
+      .whereType<Map<String, dynamic>>()
+      .map(
+        (e) => HistorialCredito(
+          id: parseInt(e['ID']) ?? 0,
+          uuid: const Uuid().v4(),
+          entidad: e['Entidad'] ?? '',
+          monto: parseInt(e['Monto']) ?? 0,
+          tipoMonedaCodigo: e['MonedaCodigo'] ?? '',
+          monedaNombre: e['MonedaNombre'] ?? '',
+          tipoFrecuenciaCodigo: e['FrecuenciaCodigo'] ?? '',
+          frecuenciaNombre: e['FrecuenciaNombre'] ?? '',
+          estadoNombre: e['EstadoNombre'] ?? '',
+          cuota: parseInt(e['Cuota']) ?? 0,
+          saldo: parseInt(e['Saldo']) ?? 0,
+          estadoCodigo: e['EstadoCodigo'] ?? '',
+          fechaDesembolso: parseDate(e['FechaDesembolso']) ?? DateTime.now(),
+        ),
+      )
+      .toList();
 }

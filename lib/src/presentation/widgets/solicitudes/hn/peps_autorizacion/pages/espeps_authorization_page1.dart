@@ -20,27 +20,31 @@ class EspepsAuthorizationPage1 extends StatefulWidget {
 
 class _EspepsAuthorizationPage1State extends State<EspepsAuthorizationPage1>
     with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        children: [
-          const _AnalisisSolicitudesTitle(),
-          const Gap(10),
-          const PepsProductosYServiciosUtilizaWidget(),
-          const Divider(),
-          const Gap(20),
-          const PepsInformacionNegocioWidget(),
-          const Divider(),
-          const Gap(20),
-          const PepsFormaDePagoNegocioWidget(),
-          const Divider(),
-          const Gap(20),
-          esPepsSiguienteButton(context, widget.pageController),
-          esPepsAtrasButton(context, widget.pageController),
-        ],
+    return Form(
+      key: formKey,
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
+          children: [
+            const _AnalisisSolicitudesTitle(),
+            const Gap(10),
+            const PepsProductosYServiciosUtilizaWidget(),
+            const Divider(),
+            const Gap(20),
+            const PepsInformacionNegocioWidget(),
+            const Divider(),
+            const Gap(20),
+            const PepsFormaDePagoNegocioWidget(),
+            const Divider(),
+            const Gap(20),
+            esPepsSiguienteButton(context, widget.pageController, formKey),
+            esPepsAtrasButton(context, widget.pageController),
+          ],
+        ),
       ),
     );
   }

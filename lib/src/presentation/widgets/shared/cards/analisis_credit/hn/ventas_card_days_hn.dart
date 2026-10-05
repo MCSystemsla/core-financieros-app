@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
@@ -130,7 +131,7 @@ class VentasCardDaysHn extends StatelessWidget {
             return Text(
               val.toCurrencyString(
                 mantissaLength: 0,
-                leadingSymbol: 'L.',
+                leadingSymbol: CurrencyHelper.currencyPrefix(),
               ),
               style: TextStyle(
                 fontSize: 16,

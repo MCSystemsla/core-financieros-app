@@ -291,8 +291,9 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                                 articulo: articulo!,
                                 costoCompra: costoCompra!,
                                 precioVenta: precioVenta!.toInt(),
-                                costoVentaPorcentaje:
-                                    (costoCompra ?? 0) / (precioVenta ?? 0),
+                                costoVentaPorcentaje: (precioVenta ?? 0) != 0
+                                    ? (costoCompra ?? 0) / (precioVenta ?? 0)
+                                    : 0.0,
                                 total: ((costoCompra ?? 0) * (cantidad ?? 0))
                                     .toInt(),
                               ),

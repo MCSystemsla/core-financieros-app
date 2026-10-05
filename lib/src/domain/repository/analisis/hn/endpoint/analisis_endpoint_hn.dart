@@ -6,7 +6,11 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mi
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_actualizar_garantia.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_garantia_credito_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_and_asignacion_garantia_liquida_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_asignacion_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/create_garantia_bien_schema_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 
 class CreateAnalisisNuevaMayorMilHNEndpoint extends Endpoint {
@@ -38,6 +42,25 @@ class CreateAnalisisAsalariadoEndpoint extends Endpoint {
 
   @override
   String get path => '/cartera/analisis-asalariado/crear-analisis-asalariado';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
+}
+
+class ActualizarAnalisisAsalariadoHNEndpoint extends Endpoint {
+  final AnalisisAsalariadoHn analisisSolicitudAsalariado;
+  ActualizarAnalisisAsalariadoHNEndpoint({
+    required this.analisisSolicitudAsalariado,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path =>
+      '/cartera/analisis-asalariado/actualizar-analisis-asalariado';
   @override
   Map<String, String> get headers => {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
@@ -382,6 +405,29 @@ class CrearAnalisisMenorMilNuevaHNEndpoint extends Endpoint {
   Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
 }
 
+class ActualizarAnalisisMenorMilHNEndpoint extends Endpoint {
+  final AnalisisMenorMilHN analisisSolicitudMenorMil;
+
+  ActualizarAnalisisMenorMilHNEndpoint({
+    required this.analisisSolicitudMenorMil,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path =>
+      '/cartera/analisis-nueva-menor/actualizar-analisis-nueva-menor-mil';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        ...analisisSolicitudMenorMil.toJson(),
+        'database': LocalStorage().database,
+      };
+}
+
 class CrearAnalisisMenorMilReprestamoHNEndpoint extends Endpoint {
   final AnalisisMenorMilHN analisisSolicitudMenorMil;
 
@@ -524,5 +570,160 @@ class GetAnalisisDataEndpoint extends Endpoint {
         'database': LocalStorage().database,
         'NumeroSolicitud': numeroSolicitud,
         'TipoSolicitud': tipoSolicitud,
+      };
+}
+
+class CreateGarantiaBienEndpointHn extends Endpoint {
+  final CreateGarantiaBienSchemaHn data;
+
+  CreateGarantiaBienEndpointHn({required this.data});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-garantias/create-bien-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class CreateAsignacionGarantiaHN extends Endpoint {
+  final CreateAsignacionGarantiaHn data;
+
+  CreateAsignacionGarantiaHN({required this.data});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-garantias/create-garantia-asignacion';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class CreateAsignacionGarantiaLiquidaHNEndpoint extends Endpoint {
+  final CreateAndAsignacionGarantiaLiquidaHn data;
+
+  CreateAsignacionGarantiaLiquidaHNEndpoint({required this.data});
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-garantias/create-garantia-dpf';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class GarantiaObtenerBienByCodigo extends Endpoint {
+  final String bienCodigo;
+
+  GarantiaObtenerBienByCodigo({required this.bienCodigo});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-garantias/obtener-bien-by-codigo';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'bienCodigo': bienCodigo,
+      };
+}
+
+class GarantiaAnularEndpointHN extends Endpoint {
+  final int analisisGarantiaID;
+
+  GarantiaAnularEndpointHN({required this.analisisGarantiaID});
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-garantias/anular-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'AnalisisGarantiaID': analisisGarantiaID,
+      };
+}
+
+class GarantiaActualizarEndpointHN extends Endpoint {
+  final AnalisisActualizarGarantia data;
+
+  GarantiaActualizarEndpointHN({required this.data});
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-garantias/update-bien-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => data.toJson();
+}
+
+class GarantiaObtenerDetalleDPFEndpointHN extends Endpoint {
+  final int objAnalisisGarantiaID;
+
+  GarantiaObtenerDetalleDPFEndpointHN({required this.objAnalisisGarantiaID});
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-garantias/obtener-detalle-dpf-garantia';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'objAnalisisGarantiaID': objAnalisisGarantiaID.toString(),
+      };
+}
+
+class GarantiaActualizarDetalleDPF extends Endpoint {
+  final int objAnalisisGarantiaID;
+  final double monto;
+  final String observaciones;
+  GarantiaActualizarDetalleDPF({
+    required this.objAnalisisGarantiaID,
+    required this.monto,
+    required this.observaciones,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-garantias/update-garantia-dpf';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'database': LocalStorage().database,
+        'objAnalisisGarantiaID': objAnalisisGarantiaID,
+        'Monto': monto,
+        'Observaciones': observaciones,
       };
 }

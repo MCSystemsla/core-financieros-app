@@ -156,7 +156,7 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
             onDone: () => context.pop(),
           ).showDialog(
             context,
-            dialogType: DialogType.error,
+            dialogType: DialogType.warning,
           );
         }
       },

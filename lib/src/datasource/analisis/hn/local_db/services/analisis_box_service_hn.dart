@@ -277,6 +277,10 @@ class AnalisisBoxServiceHn {
         .find();
   }
 
+  bool deleteUbicacionClienteById(int id) {
+    return ubicacionClienteHnLocalDb.remove(id);
+  }
+
   void deleteRowByNumeroSolicitud(String numeroSolicitud) {
     final query = ubicacionClienteHnLocalDb
         .query(
@@ -292,4 +296,6 @@ class AnalisisBoxServiceHn {
 
     query.close();
   }
+
+  void removeAnalisisFormsByDate() {}
 }

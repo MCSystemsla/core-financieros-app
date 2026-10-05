@@ -1,6 +1,10 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/supervisiones/hn/supervisiones_repository_hn.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/supervisiones/sending_supervision_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form2.dart';
 import 'package:core_financiero_app/src/presentation/widgets/supervisiones/riesgo/supervision_riesgo_form3.dart';
@@ -10,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../bloc/analisis/hn/get_plan_inversion/get_plan_inversion_cubit.dart';
 import '../../../../../../bloc/supervisiones/supervisiones_riesgo/supervisiones_riesgo_cubit.dart';
 
-class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
+class SupervisionesFormRiesgoHnScreen extends StatefulWidget {
   final SupervisionData data;
   final String nombreCoordinador;
   final num cuota;
@@ -26,8 +30,23 @@ class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
   });
 
   @override
+  State<SupervisionesFormRiesgoHnScreen> createState() =>
+      _SupervisionesFormRiesgoHnScreenState();
+}
+
+class _SupervisionesFormRiesgoHnScreenState
+    extends State<SupervisionesFormRiesgoHnScreen> {
+  final pagecontroller = PageController();
+
+  @override
+  void dispose() {
+    pagecontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final pagecontroller = PageController();
+    final data = widget.data;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -46,27 +65,70 @@ class SupervisionesFormRiesgoHnScreen extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Crear Supervision Credito'),
-        ),
-        body: SafeArea(
-          child: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pagecontroller,
-            children: [
-              SupervisionRiesgoForm1(
-                data: data,
-                pagecontroller: pagecontroller,
+        backgroundColor: RedesignColors.background,
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  FormStepHeaderWidget(
+                    title: 'Supervisión de riesgo',
+                    subtitle:
+                        'Solicitud #${data.numeroSolicitud} · ${data.nombreCliente}',
+                    tag: 'Supervisión',
+                    controller: pagecontroller,
+                    onBack: () => Navigator.pop(context),
+                    // Same order as the PageView children below.
+                    steps: const [
+                      'Datos del cliente',
+                      'DDC',
+                      'Plan de inversión',
+                    ],
+                  ),
+                  Expanded(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pagecontroller,
+                      children: [
+                        SupervisionRiesgoForm1(
+                          data: data,
+                          pagecontroller: pagecontroller,
+                        ),
+                        SupervisionRiesgoForm2(
+                          pagecontroller: pagecontroller,
+                        ),
+                        SupervisionRiesgoForm3(
+                          pagecontroller: pagecontroller,
+                          numeroSolicitud:
+                              int.tryParse(data.numeroSolicitud) ?? 0,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SupervisionRiesgoForm2(
-                pagecontroller: pagecontroller,
+            ),
+            BlocBuilder<SupervisionesRiesgoCubit, SupervisionesRiesgoState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status,
+              builder: (context, state) => SendingSupervisionView(
+                status: state.status,
+                errorMsg: state.errorMsg,
+                numeroSolicitud: data.numeroSolicitud,
+                tipo: 'de riesgo',
+                onRetry: () => context
+                    .read<SupervisionesRiesgoCubit>()
+                    .createSupervisionesRiesgo(),
+                onReview: () {
+                  final cubit = context.read<SupervisionesRiesgoCubit>();
+                  cubit.onFieldChanged(
+                    () => cubit.state.copyWith(status: Status.notStarted),
+                  );
+                },
+                onClose: () => Navigator.pop(context),
               ),
-              SupervisionRiesgoForm3(
-                pagecontroller: pagecontroller,
-                numeroSolicitud: int.tryParse(data.numeroSolicitud) ?? 0,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

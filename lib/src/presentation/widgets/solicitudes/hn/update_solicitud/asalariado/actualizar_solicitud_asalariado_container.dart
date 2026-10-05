@@ -8,17 +8,31 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/upda
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/asalariado/update_solicitud_asalariado_form7.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/asalariado/update_solicitud_asalariado_form8.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/asalariado/update_solicitud_asalariado_form9.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/update_solicitud/nuevamenor/update_solicitud_nueva_menor_historial_credito.dart';
 import 'package:flutter/material.dart';
 
-class ActualizarSolicitudAsalariadoContainer extends StatelessWidget {
+class ActualizarSolicitudAsalariadoContainer extends StatefulWidget {
   const ActualizarSolicitudAsalariadoContainer({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final pageController = PageController();
+  State<ActualizarSolicitudAsalariadoContainer> createState() =>
+      _ActualizarSolicitudAsalariadoContainerState();
+}
 
+class _ActualizarSolicitudAsalariadoContainerState
+    extends State<ActualizarSolicitudAsalariadoContainer> {
+  final pageController = PageController();
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         const Navbar(
@@ -53,6 +67,11 @@ class ActualizarSolicitudAsalariadoContainer extends StatelessWidget {
                 ),
                 UpdateSolicitudAsalariadoForm8(
                   controller: pageController,
+                ),
+                UpdateSolicitudNuevaMenorHistorialCredito(
+                  controller: pageController,
+                  currentStep: 9,
+                  steps: 10,
                 ),
                 UpdateSolicitudAsalariadoForm9(
                   controller: pageController,

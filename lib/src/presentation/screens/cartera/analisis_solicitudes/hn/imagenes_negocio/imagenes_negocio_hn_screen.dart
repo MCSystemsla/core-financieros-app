@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/imagenes_negocio/imagenes_negocio_hn_local_db.dart';
@@ -7,9 +6,8 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/imagenes_negocio/sending_imagenes_negocio_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
@@ -89,172 +87,154 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
       create: (ctx) => AnalisisImagenesNegocioCubit(
         AnalisisRepositoryHNImpl(),
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Imagenes del Negocio'),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const MiCreditoProgress(
-                    steps: 4,
-                    currentStep: 1,
-                  ),
-                  const Gap(20),
-                  Text(
-                    'Numero Solicitud: ${widget.numeroSolicitud}',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  const Gap(20),
-                  Text(
-                    'Las imágenes se utilizarán para evaluar el estado del negocio del cliente y como referencia en futuras solicitudes.',
-                    textAlign: TextAlign.justify,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                  const Gap(25),
-                  UploadImageWidget(
-                    selectedImage: selectedImage,
-                    title: '1- Foto Negocio',
-                    onPressed: () => context.pushTransparentRoute(
-                      CameraCaptureScreen(
-                        numeroSoicitud: widget.numeroSolicitud,
-                        onImageSelected: (image, path) async {
-                          if (image == null) return;
-                          final savePath = await _savePath(image);
+      child: Stack(
+        children: [
+          _buildForm(localDbProvider),
+          SendingImagenesNegocioView(
+            numeroSolicitud: widget.numeroSolicitud,
+            isOfflineMode: widget.isOfflineMode,
+          ),
+        ],
+      ),
+    );
+  }
 
-                          setState(() {
-                            selectedImage = image;
-                            selectedImage1Path = savePath;
-                          });
-                        },
+  Widget _buildForm(AnalisisBoxServiceHn localDbProvider) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Imagenes del Negocio'),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const MiCreditoProgress(
+                  steps: 4,
+                  currentStep: 1,
+                ),
+                const Gap(20),
+                Text(
+                  'Numero Solicitud: ${widget.numeroSolicitud}',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
                       ),
+                ),
+                const Gap(20),
+                Text(
+                  'Las imágenes se utilizarán para evaluar el estado del negocio del cliente y como referencia en futuras solicitudes.',
+                  textAlign: TextAlign.justify,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                const Gap(25),
+                UploadImageWidget(
+                  selectedImage: selectedImage,
+                  title: '1- Foto Negocio',
+                  onPressed: () => context.pushTransparentRoute(
+                    CameraCaptureScreen(
+                      numeroSoicitud: widget.numeroSolicitud,
+                      onImageSelected: (image, path) async {
+                        if (image == null) return;
+                        final savePath = await _savePath(image);
+
+                        setState(() {
+                          selectedImage = image;
+                          selectedImage1Path = savePath;
+                        });
+                      },
                     ),
                   ),
-                  const Gap(20),
-                  UploadImageWidget(
-                    selectedImage: selectedImage2,
-                    title: '2-  Foto Negocio',
-                    onPressed: () =>
-                        context.pushTransparentRoute(CameraCaptureScreen(
+                ),
+                const Gap(20),
+                UploadImageWidget(
+                  selectedImage: selectedImage2,
+                  title: '2-  Foto Negocio',
+                  onPressed: () =>
+                      context.pushTransparentRoute(CameraCaptureScreen(
+                    numeroSoicitud: widget.numeroSolicitud,
+                    onImageSelected: (image, path) async {
+                      if (image == null) return;
+                      final savePath = await _savePath(image);
+                      setState(() {
+                        selectedImage2 = image;
+                        selectedImage2Path = savePath;
+                      });
+                    },
+                  )),
+                ),
+                const Gap(15),
+                UploadImageWidget(
+                  selectedImage: selectedImage3,
+                  title: '3- Foto Negocio',
+                  onPressed: () => context.pushTransparentRoute(
+                    CameraCaptureScreen(
                       numeroSoicitud: widget.numeroSolicitud,
                       onImageSelected: (image, path) async {
                         if (image == null) return;
                         final savePath = await _savePath(image);
                         setState(() {
-                          selectedImage2 = image;
-                          selectedImage2Path = savePath;
+                          selectedImage3 = image;
+                          selectedImage3Path = savePath;
                         });
                       },
-                    )),
-                  ),
-                  const Gap(15),
-                  UploadImageWidget(
-                    selectedImage: selectedImage3,
-                    title: '3- Foto Negocio',
-                    onPressed: () => context.pushTransparentRoute(
-                      CameraCaptureScreen(
-                        numeroSoicitud: widget.numeroSolicitud,
-                        onImageSelected: (image, path) async {
-                          if (image == null) return;
-                          final savePath = await _savePath(image);
-                          setState(() {
-                            selectedImage3 = image;
-                            selectedImage3Path = savePath;
-                          });
-                        },
-                      ),
                     ),
                   ),
-                  const Gap(20),
-                  BlocConsumer<AnalisisImagenesNegocioCubit,
-                      AnalisisImagenesNegocioState>(
-                    buildWhen: (previous, current) =>
-                        previous.status != current.status,
-                    listener: (context, state) {
-                      if (state.status == Status.done) {
-                        CustomAlertDialog(
+                ),
+                const Gap(20),
+                BlocBuilder<AnalisisImagenesNegocioCubit,
+                    AnalisisImagenesNegocioState>(
+                  buildWhen: (previous, current) =>
+                      previous.status != current.status,
+                  builder: (context, state) {
+                    return ButtonActionsWidget(
+                      onPreviousPressed: () => context.pop(),
+                      disabled: state.status == Status.inProgress,
+                      onNextPressed: () {
+                        if (selectedImage == null ||
+                            selectedImage2 == null ||
+                            selectedImage3 == null) {
+                          ImagesRequiredPopupDialog(
                             context: context,
-                            title: 'Imagenes del negocio enviadas exitosamente',
-                            onDone: () {
-                              if (widget.isOfflineMode) {
-                                context.pop();
-                                return;
-                              }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      const AnalisisInterceptorByFlavor(),
-                                ),
-                              );
-                            }).showDialog(context, dialogType: DialogType.success);
-                      }
-                      if (state.status == Status.error) {
-                        CustomAlertDialog(
-                          context: context,
-                          title: state.errorMsg,
-                          onDone: () => context.pop(),
-                        ).showDialog(context, dialogType: DialogType.error);
-                      }
-                    },
-                    builder: (context, state) {
-                      return ButtonActionsWidget(
-                        onPreviousPressed: () => context.pop(),
-                        disabled: state.status == Status.inProgress,
-                        onNextPressed: () {
-                          if (selectedImage == null ||
-                              selectedImage2 == null ||
-                              selectedImage3 == null) {
-                            ImagesRequiredPopupDialog(
-                              context: context,
-                              onDone: () => context.pop(),
-                            ).showDialog(context);
-                            return;
-                          }
-                          if (context.mounted) {
-                            final imagenNegocio = ImagenesNegocioHnLocalDb(
-                              numeroSolicitud: widget.numeroSolicitud,
-                              pathFoto1: selectedImage1Path,
-                              pathFoto2: selectedImage2Path,
-                              pathFoto3: selectedImage3Path,
-                            );
-                            localDbProvider.saveImagenesNegocioOnLocalDb(
-                              imagenNegocioSchema: imagenNegocio,
-                            );
+                            onDone: () => context.pop(),
+                          ).showDialog(context);
+                          return;
+                        }
+                        if (context.mounted) {
+                          final imagenNegocio = ImagenesNegocioHnLocalDb(
+                            numeroSolicitud: widget.numeroSolicitud,
+                            pathFoto1: selectedImage1Path,
+                            pathFoto2: selectedImage2Path,
+                            pathFoto3: selectedImage3Path,
+                          );
+                          localDbProvider.saveImagenesNegocioOnLocalDb(
+                            imagenNegocioSchema: imagenNegocio,
+                          );
 
-                            context
-                                .read<AnalisisImagenesNegocioCubit>()
-                                .createAnalisisFotoNegocio(
-                                  numeroSolicitud:
-                                      int.tryParse(widget.numeroSolicitud) ?? 0,
-                                  cedulaCliente: widget.cedulaCliente,
-                                  imagenNegocio:
-                                      selectedImage1Path ?? 'NO PATH',
-                                  imagenNegocio2:
-                                      selectedImage2Path ?? 'NO PATH',
-                                  imagenNegocio3:
-                                      selectedImage3Path ?? 'NO PATH',
-                                );
-                          }
-                        },
-                        previousTitle: 'button.exit'.tr(),
-                        nextTitle: 'Enviar imagenes'.tr(),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                          context
+                              .read<AnalisisImagenesNegocioCubit>()
+                              .createAnalisisFotoNegocio(
+                                numeroSolicitud:
+                                    int.tryParse(widget.numeroSolicitud) ?? 0,
+                                cedulaCliente: widget.cedulaCliente,
+                                imagenNegocio: selectedImage1Path ?? 'NO PATH',
+                                imagenNegocio2: selectedImage2Path ?? 'NO PATH',
+                                imagenNegocio3: selectedImage3Path ?? 'NO PATH',
+                              );
+                        }
+                      },
+                      previousTitle: 'button.exit'.tr(),
+                      nextTitle: 'Enviar imagenes'.tr(),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),

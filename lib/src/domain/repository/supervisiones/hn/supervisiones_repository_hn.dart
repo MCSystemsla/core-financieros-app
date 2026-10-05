@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_coordinador.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_credito.dart';
+import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_grupal.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_regional.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/create_supervision_riesgo.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_montos_analisis_response.dart';
@@ -30,6 +31,9 @@ abstract class SupervisionesRepositoryHn {
   });
   Future<void> createSupervisionRegional({
     required CreateSupervisionRegional createSupervisionRegional,
+  });
+  Future<void> createSupervisionGrupal({
+    required CreateSupervisionGrupal createSupervisionGrupal,
   });
 }
 
@@ -150,6 +154,26 @@ class SupervisionesRepositoryHnImpl implements SupervisionesRepositoryHn {
   }) async {
     final endpoint = CreateSupervisionRegionalEndpointHN(
       createSupervisionRegional: createSupervisionRegional,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, errorCode) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> createSupervisionGrupal({
+    required CreateSupervisionGrupal createSupervisionGrupal,
+  }) async {
+    final endpoint = CreateSupervisionGrupalEndpointHN(
+      createSupervisionGrupal: createSupervisionGrupal,
     );
     try {
       final resp = await _api.request(endpoint: endpoint);

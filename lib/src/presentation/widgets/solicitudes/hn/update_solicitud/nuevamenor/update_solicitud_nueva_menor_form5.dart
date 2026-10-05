@@ -38,6 +38,16 @@ class _UpdateSolicitudNuevaMenorForm5State
   bool tieneFamiliarPeps = false;
   bool esFamiliarEmpleado = false;
   bool esApnfd = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<UpdateSolicitudNuevaMenorCubit>().state;
+    esPeps = state.esPeps;
+    tieneFamiliarPeps = state.tieneFamiliarPeps;
+    esFamiliarEmpleado = state.esFamiliarEmpleado;
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<UpdateSolicitudNuevaMenorCubit>();
@@ -71,7 +81,7 @@ class _UpdateSolicitudNuevaMenorForm5State
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        esPeps: item.value,
+                        esPeps: esPeps,
                       ),
                     );
                   },
@@ -196,7 +206,7 @@ class _UpdateSolicitudNuevaMenorForm5State
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        tieneFamiliarPeps: item.value,
+                        tieneFamiliarPeps: tieneFamiliarPeps,
                       ),
                     );
                   },
@@ -371,7 +381,7 @@ class _UpdateSolicitudNuevaMenorForm5State
                     });
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        esFamiliarEmpleado: item.value,
+                        esFamiliarEmpleado: esFamiliarEmpleado,
                       ),
                     );
                   },

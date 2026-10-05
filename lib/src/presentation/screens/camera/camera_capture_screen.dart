@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/src/config/helpers/android_version/android_version.dart';
 import 'package:core_financiero_app/src/config/services/camera/camera_service.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/image_preview_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +48,14 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
 
       _controller = CameraController(
         backCamera,
-        ResolutionPreset.veryHigh,
+        ResolutionPreset.high,
         enableAudio: false,
         imageFormatGroup: ImageFormatGroup.jpeg,
       );
       await _controller.initialize();
+      await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
       await _controller.setFlashMode(FlashMode.off);
       await _controller.setFocusMode(FocusMode.auto);
-      await _controller.lockCaptureOrientation(DeviceOrientation.portraitUp);
 
       if (!mounted) return;
       setState(() {
@@ -115,6 +116,7 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
       final (savedPath, photo) = await CameraService.takeAndsavePhoto(
         controller: _controller,
         numeroSoicitud: widget.numeroSoicitud,
+        orientation: CameraDeviceOrientation.portrait,
       );
       if (!context.mounted || !mounted) return;
       setState(() {
@@ -152,13 +154,24 @@ class _CameraCaptureScreenState extends State<CameraCaptureScreen>
   @override
   Widget build(BuildContext context) {
     if (!_isCameraInitialized) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        backgroundColor: RedesignColors.background,
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
     return Scaffold(
       extendBodyBehindAppBar: false,
+      backgroundColor: RedesignColors.background,
       appBar: AppBar(
-        title: const Text('Tomar Foto'),
+        backgroundColor: RedesignColors.background,
+        foregroundColor: RedesignColors.ink,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          'Tomar foto',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
       ),
       body: Column(

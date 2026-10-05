@@ -6,8 +6,6 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 
 class ImagesRequiredPopupDialog extends OdsDialog {
-  @override
-  // ignore: overridden_fields
   const ImagesRequiredPopupDialog({
     super.key,
     this.onDone,

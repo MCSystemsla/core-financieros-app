@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -31,79 +32,79 @@ class AnalisisCondicionVentasMensuales extends StatelessWidget {
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Enero',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Febrero',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Marzo',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Abril',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Mayo',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Junio',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Julio',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Agosto',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Agosto',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Septiembre',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Octubre',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Noviembre',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             AnalisisCardVentasDay(
               title: 'Estado de ventas: Bueno (B)',
               subtitle: 'Diciembre',
-              description: 'C\$. 50,000',
+              description: '${CurrencyHelper.currencyPrefix()} 50,000',
               onTap: () {},
             ),
             const Gap(20),

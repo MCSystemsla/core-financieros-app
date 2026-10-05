@@ -520,8 +520,11 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                                   calcularCuotaProvider.state.montoPrimeraCuota,
                             ),
                           );
-                          if (state.connectionStatus ==
-                              ConnectionStatus.disconnected) {
+                          final isOffline = state.connectionStatus ==
+                                  ConnectionStatus.disconnected ||
+                              state.connectionStatus ==
+                                  ConnectionStatus.handleOfflineActivation;
+                          if (isOffline) {
                             cubit.onFieldChanged(
                               () => cubit.state.copyWith(
                                 errorMsg:

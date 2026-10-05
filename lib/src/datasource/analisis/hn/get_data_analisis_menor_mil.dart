@@ -297,7 +297,7 @@ class InventarioMenorMilData {
 
   factory InventarioMenorMilData.fromJson(Map<String, dynamic> json) =>
       InventarioMenorMilData(
-        id: json['ID'],
+        id: json['ID']?.toString(),
         cantidad: parseInt(json['Cantidad']),
         costoVentaPorcentaje: parseNum(json['CostoVentaPorcentaje']),
         articulo: json['Articulo'],

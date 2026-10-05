@@ -1,14 +1,19 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/router/router.dart';
 import 'package:core_financiero_app/src/datasource/actions/actions_response.dart';
 import 'package:core_financiero_app/src/datasource/auth/auth_response.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/otp/otp_generate_response.dart';
 import 'package:core_financiero_app/src/datasource/tutorial/tutorial_response.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/password_expired_exception.dart';
+import 'package:core_financiero_app/src/domain/exceptions/session_expired_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/endpoint/auth_endpoint.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:logger/logger.dart';
 
 abstract class AuthRepository {
@@ -23,11 +28,16 @@ abstract class AuthRepository {
   Future<TutorialResponse> getTutorials();
   Future<(String, String)> refreshToken();
   Future<OtpGenerateResponse> generateOTP();
+  Future<void> renovarPasswordVencida({
+    required String userName,
+    required String dbName,
+    required String currentPassword,
+    required String newPassword,
+  });
 }
 
 class AuthRepositoryImpl extends AuthRepository {
   final _api = global<APIRepository>();
-
   final _logger = Logger();
   @override
   Future<AuthResponse> login({
@@ -48,6 +58,11 @@ class AuthRepositoryImpl extends AuthRepository {
       if (resp['statusCode'] != 201) {
         final (errorMsg, _) =
             getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        final isHonduras =
+            global<FlavorCubit>().state.flavor == Flavor.honduras;
+        if (isHonduras && resp['passwordVencida'] == true) {
+          throw PasswordExpiredException(optionalMsg: errorMsg);
+        }
         throw AppException(optionalMsg: errorMsg);
       }
       final data = AuthResponse.fromJson(resp);
@@ -123,31 +138,81 @@ class AuthRepositoryImpl extends AuthRepository {
     }
   }
 
+  /// Refresh in flight, shared by every request that gets a 401 at the same
+  /// time. Without it, parallel requests each call `/auth/refresh` with the
+  /// same refresh token; the backend rotates it on the first call and the
+  /// rest fail.
+  static Future<(String, String)>? _refreshInFlight;
+
   @override
-  Future<(String, String)> refreshToken() async {
-    final endpoint = RefreshTokenEndpoint();
+  Future<(String, String)> refreshToken() {
+    return _refreshInFlight ??=
+        _doRefreshToken().whenComplete(() => _refreshInFlight = null);
+  }
+
+  /// Throws [SessionExpiredException] when the backend rejects the refresh
+  /// token (the caller shows the re-auth dialog), or a plain [AppException]
+  /// on network/server errors, which keep the session as it is.
+  Future<(String, String)> _doRefreshToken() async {
+    const sessionExpiredMsg =
+        'La sesión ha expirado, por favor inicia sesión de nuevo.';
+    if (LocalStorage().refreshToken.isEmpty) {
+      _logger.e('APIRepository - No hay refresh token');
+      throw SessionExpiredException(optionalMsg: sessionExpiredMsg);
+    }
     try {
-      final resp = await _api.request(endpoint: endpoint);
+      final resp = await _api.request(endpoint: RefreshTokenEndpoint());
       final statusCode = resp['statusCode'];
+      final accessToken = resp['accessToken'];
+      final refreshToken = resp['refreshToken'];
 
-      if (statusCode != 201) {
-        _logger.e('APIRepository - Token no valido');
-        Future.microtask(() => router.go('/login'));
-
+      // DefaultAPIRepository reports network errors and timeouts as
+      // statusCode '500' (String). A real answer from the backend comes as an
+      // int: 4xx, or a 500 (it wraps "REFRESH TOKEN EXPIRADO" and
+      // "Unauthorized" as 500), means the refresh token was rejected.
+      // 502/503/504 are gateway/infra errors and keep the session.
+      final isRejected =
+          statusCode is int && statusCode >= 400 && statusCode <= 500;
+      if (isRejected) {
+        _logger.e('APIRepository - Refresh token rechazado: $resp');
+        throw SessionExpiredException(optionalMsg: sessionExpiredMsg);
+      }
+      if ((statusCode != 200 && statusCode != 201) ||
+          accessToken is! String ||
+          refreshToken is! String ||
+          accessToken.isEmpty) {
+        _logger.e('APIRepository - Error al refrescar token: $resp');
         throw AppException(
           optionalMsg:
-              'Una sesión ha expirado, por favor inicia sesión de nuevo.',
+              (resp['message'] ?? 'Error al renovar la sesión.').toString(),
         );
       }
-      return (
-        resp['accessToken'] as String,
-        resp['refreshToken'] as String,
-      );
+      return (accessToken, refreshToken);
+    } on AppException {
+      rethrow;
     } catch (e, s) {
       _logger.e('Error en refreshToken', error: e, stackTrace: s);
-      Future.microtask(() => router.go('/login'));
+      throw AppException(optionalMsg: e.toString());
+    }
+  }
 
-      rethrow;
+  static bool _loggingOut = false;
+
+  static Future<void> forceLogout() async {
+    if (_loggingOut) return;
+    _loggingOut = true;
+    try {
+      await LocalStorage().setJWT('');
+      await LocalStorage().setRefreshToken('');
+    } finally {
+      // `currentConfiguration.uri` ignores routes opened with push /
+      // pushReplacement / Navigator.push, so it can still read '/login'
+      // while the user is on another screen. Always `go`: it rebuilds the
+      // stack from scratch and drops every route and dialog on top.
+      Future.microtask(() {
+        router.go('/login');
+        _loggingOut = false;
+      });
     }
   }
 
@@ -165,6 +230,36 @@ class AuthRepositoryImpl extends AuthRepository {
       return data;
     } catch (e) {
       _logger.e('Error en generateOTP', error: e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> renovarPasswordVencida({
+    required String userName,
+    required String dbName,
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final endpoint = RenovarPasswordVencidaEndpoint(
+      userName: userName,
+      dbName: dbName,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+    try {
+      final resp = await _api.request(
+        endpoint: endpoint,
+        needToValidateToken: false,
+      );
+      final statusCode = resp['statusCode'];
+      if (statusCode != 200 && statusCode != 201) {
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Revisa tu conexion a internet.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      _logger.e('Error en renovarPasswordVencida', error: e);
       rethrow;
     }
   }

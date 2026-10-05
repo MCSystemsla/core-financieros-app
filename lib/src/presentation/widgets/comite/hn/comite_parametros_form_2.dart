@@ -14,11 +14,8 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/sea
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/tipos_credito_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
-import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
 import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
@@ -312,28 +309,28 @@ class _ComiteParametrosForm2State extends State<ComiteParametrosForm2> {
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
               ),
-              const Gap(12),
-              OutlineTextfieldWidget(
-                initialValue: widget.data.periodoGracia
-                    ?.toCurrencyString()
-                    .toNullIfEmptyOrZero(),
-                title: 'Periodo de gracia',
-                icon: Icon(
-                  Icons.timer,
-                  color: AppColors.getPrimaryColor(),
-                ),
-                textInputType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                onChange: (value) {
-                  cubit.onFieldChanged(
-                    () => cubit.state.copyWith(
-                      periodoGracia: int.tryParse(value) ?? 0,
-                    ),
-                  );
-                },
-              ),
+              // const Gap(12),
+              // OutlineTextfieldWidget(
+              //   initialValue: widget.data.periodoGracia
+              //       ?.toCurrencyString()
+              //       .toNullIfEmptyOrZero(),
+              //   title: 'Periodo de gracia',
+              //   icon: Icon(
+              //     Icons.timer,
+              //     color: AppColors.getPrimaryColor(),
+              //   ),
+              //   textInputType: TextInputType.number,
+              //   inputFormatters: [
+              //     FilteringTextInputFormatter.digitsOnly,
+              //   ],
+              //   onChange: (value) {
+              //     cubit.onFieldChanged(
+              //       () => cubit.state.copyWith(
+              //         periodoGracia: int.tryParse(value) ?? 0,
+              //       ),
+              //     );
+              //   },
+              // ),
               const Gap(12),
               TiposCreditoDropdown(
                 selectedItem: tipoCredito,

@@ -10,13 +10,32 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as img;
 import 'package:uuid/uuid.dart';
 
+enum CameraDeviceOrientation { portrait, landscape }
+
 class CameraService {
   final uuid = const Uuid();
   static Future<(String, XFile)> takeAndsavePhoto({
     required CameraController controller,
+    required CameraDeviceOrientation orientation,
     String numeroSoicitud = 'numeroSoicitud',
   }) async {
     final photo = await controller.takePicture();
+    final bytes = await photo.readAsBytes();
+    img.Image? originalImage = img.decodeJpg(bytes) ?? img.decodeImage(bytes);
+
+    if (originalImage != null) {
+      img.Image fixedImage = img.bakeOrientation(originalImage);
+
+      if (orientation == CameraDeviceOrientation.portrait &&
+          fixedImage.width > fixedImage.height) {
+        fixedImage = img.copyRotate(fixedImage, angle: 90);
+      }
+
+      await File(photo.path)
+          .writeAsBytes(img.encodeJpg(fixedImage, quality: 90));
+    } else {
+      log('No se pudo decodificar la imagen para corregir orientacion: ${photo.path}');
+    }
     final appDir = await getApplicationDocumentsDirectory();
     final customDir = Directory('${appDir.path}/KivaImages');
     final customDirImages = Directory(
@@ -48,13 +67,16 @@ class CameraService {
       await imageFileImages.copy(localPathImages);
       log('Imagen guardada en Downloads: $localPathImages');
     }
-    return (localPath, photo);
+    return (localPath, XFile(localPath));
   }
 
   static Future<(String, File)> takeImageAndSaveWithCropped({
     required CameraController controller,
   }) async {
-    final (savedPath, photo) = await takeAndsavePhoto(controller: controller);
+    final (savedPath, photo) = await takeAndsavePhoto(
+      controller: controller,
+      orientation: CameraDeviceOrientation.landscape,
+    );
     final Uint8List originalBytes = await photo.readAsBytes();
     final img.Image? decodedImage = img.decodeImage(originalBytes);
     if (decodedImage == null) {

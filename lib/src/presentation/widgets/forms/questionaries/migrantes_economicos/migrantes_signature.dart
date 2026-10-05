@@ -317,8 +317,6 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -357,12 +355,19 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
             ..piensaRegresar = state.piensaRegresar
             ..otrosDatosCliente = state.otrosDatosCliente,
         );
-    if (!isConnected) {
-      return NoInternetPopUpOnKiva(
-        context: context,
-        info: msgDialog,
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }
@@ -655,8 +660,6 @@ class _RecurrenteMigrantesFormSignatureState
     ImageModel imageModel,
     String msgDialog,
   ) {
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     context.read<SolicitudesPendientesLocalDbCubit>().saveImagesLocal(
           imageModel: imageModel,
         );
@@ -689,12 +692,19 @@ class _RecurrenteMigrantesFormSignatureState
                     state.explicacionMejoraCondiciones
                 ..siguienteMeta = state.siguienteMeta,
         );
-    if (!isConnected) {
-      return NoInternetPopUpOnKiva(
-        context: context,
-        info: msgDialog,
-        header: '',
-      ).showDialog(context, dialogType: DialogType.info);
+    final statusConnection =
+        context.read<InternetConnectionCubit>().state.connectionStatus;
+    final isOffline = statusConnection == ConnectionStatus.disconnected ||
+        statusConnection == ConnectionStatus.handleOfflineActivation;
+    if (isOffline) {
+      if (!context.mounted) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        NoInternetPopUpOnKiva(
+          context: context,
+          header: '',
+        ).showDialog(context, dialogType: DialogType.info);
+      });
     }
   }
 }

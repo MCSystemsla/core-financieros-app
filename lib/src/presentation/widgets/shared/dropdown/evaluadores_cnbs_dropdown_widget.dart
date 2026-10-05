@@ -11,12 +11,14 @@ class EvaluadoresCnbsDropdownWidget extends StatelessWidget {
   final OnEvaluadorChanged? onChanged;
   final EvaluadorValidator? validator;
   final String? initialValue;
+  final Item? selectedItem;
   final bool enabled;
   const EvaluadoresCnbsDropdownWidget({
     super.key,
     this.onChanged,
     this.validator,
     this.initialValue,
+    this.selectedItem,
     this.enabled = true,
   });
 
@@ -33,10 +35,12 @@ class EvaluadoresCnbsDropdownWidget extends StatelessWidget {
             .toList();
 
         return SheetSearchDropdown(
+          key: ValueKey('evaluador-${selectedItem?.value ?? ''}'),
           title: 'Evaluador',
           hintText: 'Selecciona un evaluador',
           isRequired: true,
           enabled: enabled,
+          selectedItem: selectedItem,
           items: dropdownItems,
           onChanged: (value) {
             if (onChanged != null) {

@@ -38,4 +38,8 @@ class AnalisisImagenesNegocioCubit extends Cubit<AnalisisImagenesNegocioState> {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
     }
   }
+
+  void resetStatus() {
+    emit(state.copyWith(status: Status.notStarted, errorMsg: ''));
+  }
 }

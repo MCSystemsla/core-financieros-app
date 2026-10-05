@@ -2,7 +2,10 @@
 part of 'analisis_fiadores_cubit.dart';
 
 class AnalisisFiadoresState extends Equatable {
+  final String fiadorId;
+  final String firmaFiador;
   final Status status;
+  final Status firmaStatus;
   final String errorMsg;
   final String database;
   final int numeroSolicitud;
@@ -103,7 +106,10 @@ class AnalisisFiadoresState extends Equatable {
   final String celularOcupacion;
   final List<HistorialCredito> historialCredito;
   const AnalisisFiadoresState({
+    this.fiadorId = '',
+    this.firmaFiador = '',
     this.status = Status.notStarted,
+    this.firmaStatus = Status.notStarted,
     this.errorMsg = '',
     this.database = '',
     this.numeroSolicitud = 0,
@@ -207,7 +213,10 @@ class AnalisisFiadoresState extends Equatable {
 
   @override
   List<Object> get props => [
+        firmaFiador,
+        fiadorId,
         status,
+        firmaStatus,
         errorMsg,
         database,
         numeroSolicitud,
@@ -310,7 +319,10 @@ class AnalisisFiadoresState extends Equatable {
       ];
 
   AnalisisFiadoresState copyWith({
+    String? fiadorId,
+    String? firmaFiador,
     Status? status,
+    Status? firmaStatus,
     String? errorMsg,
     String? database,
     int? numeroSolicitud,
@@ -412,7 +424,10 @@ class AnalisisFiadoresState extends Equatable {
     List<HistorialCredito>? historialCredito,
   }) {
     return AnalisisFiadoresState(
+      fiadorId: fiadorId ?? this.fiadorId,
+      firmaFiador: firmaFiador ?? this.firmaFiador,
       status: status ?? this.status,
+      firmaStatus: firmaStatus ?? this.firmaStatus,
       errorMsg: errorMsg ?? this.errorMsg,
       database: database ?? this.database,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,

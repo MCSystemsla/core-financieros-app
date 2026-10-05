@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -11,7 +13,7 @@ import 'package:gap/gap.dart';
 
 import '../../../bloc/supervisiones/supervisiones_riesgo/supervisiones_riesgo_cubit.dart';
 
-class SupervisionRiesgoForm2 extends StatelessWidget {
+class SupervisionRiesgoForm2 extends StatefulWidget {
   const SupervisionRiesgoForm2({
     super.key,
     required this.pagecontroller,
@@ -20,23 +22,30 @@ class SupervisionRiesgoForm2 extends StatelessWidget {
   final PageController pagecontroller;
 
   @override
+  State<SupervisionRiesgoForm2> createState() => _SupervisionRiesgoForm2State();
+}
+
+class _SupervisionRiesgoForm2State extends State<SupervisionRiesgoForm2>
+    with AutomaticKeepAliveClientMixin {
+  final formKey = GlobalKey<FormState>();
+
+  PageController get pagecontroller => widget.pagecontroller;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+    super.build(context);
     final cubit = context.read<SupervisionesRiesgoCubit>();
     return BlocBuilder<SupervisionesRiesgoCubit, SupervisionesRiesgoState>(
       builder: (context, state) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          margin: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              )
-            ],
+            color: RedesignColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: RedesignColors.border),
           ),
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -47,12 +56,14 @@ class SupervisionRiesgoForm2 extends StatelessWidget {
                 children: [
                   const Gap(20),
                   Container(
-                    margin: const EdgeInsets.all(18),
-                    child: Text(
+                    margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+                    child: const Text(
                       'DDC',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: RedesignColors.ink,
+                      ),
                     ),
                   ),
                   const Gap(10),
@@ -258,10 +269,10 @@ class SupervisionRiesgoForm2 extends StatelessWidget {
                             );
                           },
                           text: 'Siguiente',
-                          color: Colors.green,
+                          color: RedesignColors.green,
                         ),
                         const Gap(10),
-                        CustomElevatedButton(
+                        CustomOutLineButton(
                           onPressed: () {
                             pagecontroller.previousPage(
                               duration: const Duration(milliseconds: 500),
@@ -269,7 +280,8 @@ class SupervisionRiesgoForm2 extends StatelessWidget {
                             );
                           },
                           text: 'Anterior',
-                          color: Colors.red,
+                          color: RedesignColors.border,
+                          textColor: RedesignColors.ink,
                         ),
                       ],
                     ),

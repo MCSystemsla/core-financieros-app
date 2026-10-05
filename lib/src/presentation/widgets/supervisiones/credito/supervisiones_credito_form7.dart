@@ -1,19 +1,17 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_credito/supervision_credito_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SupervisionesCreditoForm7 extends StatefulWidget {
   final PageController pagecontroller;
@@ -40,17 +38,11 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
     return BlocBuilder<SupervisionCreditoCubit, SupervisionCreditoState>(
       builder: (context, state) {
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+          margin: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              )
-            ],
+            color: RedesignColors.surface,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: RedesignColors.border),
           ),
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -59,12 +51,14 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
               children: [
                 const Gap(20),
                 Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
+                  margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+                  child: const Text(
                     'Propuesta',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: RedesignColors.ink,
+                    ),
                   ),
                 ),
                 const Gap(10),
@@ -138,32 +132,11 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
                 //   },
                 // ),
                 const Gap(25),
-                BlocConsumer<SupervisionCreditoCubit, SupervisionCreditoState>(
+                // El progreso/resultado del envío lo muestra
+                // SendingSupervisionView.
+                BlocBuilder<SupervisionCreditoCubit, SupervisionCreditoState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
-                  listener: (context, state) {
-                    if (state.status == Status.done) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Supervision creada exitosamente',
-                        onDone: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
-                            ),
-                          );
-                        },
-                      ).showDialog(context, dialogType: DialogType.success);
-                    }
-                    if (state.status == Status.error) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: state.errorMsg,
-                        onDone: () => context.pop(),
-                      ).showDialog(context);
-                    }
-                  },
                   builder: (context, state) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -179,10 +152,10 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
                             text: state.status == Status.inProgress
                                 ? 'Creando...'
                                 : 'Enviar',
-                            color: Colors.green,
+                            color: RedesignColors.green,
                           ),
                           const Gap(10),
-                          CustomElevatedButton(
+                          CustomOutLineButton(
                             onPressed: () {
                               widget.pagecontroller.previousPage(
                                 duration: const Duration(milliseconds: 500),
@@ -190,7 +163,8 @@ class _SupervisionesCreditoForm7State extends State<SupervisionesCreditoForm7>
                               );
                             },
                             text: 'Anterior',
-                            color: Colors.red,
+                            color: RedesignColors.border,
+                            textColor: RedesignColors.ink,
                           ),
                         ],
                       ),

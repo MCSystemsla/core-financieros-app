@@ -216,7 +216,7 @@ class _CreateGrupoCreditoGrupalContainerFormState
                             onDone: () => context.pop(),
                           ).showDialog(
                             context,
-                            dialogType: DialogType.error,
+                            dialogType: DialogType.warning,
                           );
                         }
                         if (state.createStatus == Status.done) {
@@ -364,7 +364,7 @@ class _ModalSheetGrupales extends StatelessWidget {
                       onDone: () => context.pop(),
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

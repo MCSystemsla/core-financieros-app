@@ -262,7 +262,7 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                   onDone: () => context.pop(),
                 ).showDialog(
                   context,
-                  dialogType: DialogType.error,
+                  dialogType: DialogType.warning,
                 );
               }
             },
@@ -300,6 +300,7 @@ class AutorizarSolicitudBottomSheet extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (_) => EspepsAutorizacionFormScreen(
                                   numeroSolicitud: numeroSolicitud,
+                                  tipoSolicitud: tipoSolicitud,
                                 ),
                               ),
                             );

@@ -58,7 +58,8 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
     }
   }
 
-  Future<void> uploadUserFilesOffline({
+  /// Devuelve `true` solo si el servidor confirmó la subida.
+  Future<bool> uploadUserFilesOffline({
     required String imagen1,
     required String imagen2,
     required String imagen3,
@@ -89,11 +90,13 @@ class UploadUserFileCubit extends Cubit<UploadUserFileState> {
       );
       if (!isOk) {
         emit(state.copyWith(status: Status.error, errorMsg: msg));
-        return;
+        return false;
       }
       emit(state.copyWith(status: Status.done));
+      return true;
     } catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.toString()));
+      return false;
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 class InputSimple extends StatefulWidget {
   final String title;
   final String? initialValue;
+  final TextEditingController? controller;
   final String? hintText;
   final void Function(String)? onChanged;
   final bool activeColor;
@@ -19,6 +20,7 @@ class InputSimple extends StatefulWidget {
   const InputSimple({
     required this.title,
     this.initialValue,
+    this.controller,
     this.inputFormatters = const [],
     this.activeColor = true,
     this.onChanged,
@@ -29,7 +31,10 @@ class InputSimple extends StatefulWidget {
     this.isPasswordField = false,
     this.suffixIcon,
     this.icon,
-  });
+  }) : assert(
+          controller == null || initialValue == null,
+          'No se puede usar controller e initialValue al mismo tiempo.',
+        );
 
   @override
   State<InputSimple> createState() => InputSimpleState();
@@ -67,6 +72,7 @@ class InputSimpleState extends State<InputSimple> {
             textCapitalization: widget.textFieldSettings?.textCapitalization ??
                 TextCapitalization.none,
             autocorrect: false,
+            controller: widget.controller,
             initialValue: widget.initialValue,
             enabled: widget.enabled,
             inputFormatters: widget.inputFormatters,

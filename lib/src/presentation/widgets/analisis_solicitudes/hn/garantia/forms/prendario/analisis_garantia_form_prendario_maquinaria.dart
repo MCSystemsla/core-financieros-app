@@ -291,7 +291,7 @@ class _AnalisisGarantiaFormPrendarioMaquinariaState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

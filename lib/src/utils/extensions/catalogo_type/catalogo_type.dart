@@ -30,7 +30,9 @@ enum CatalogoType {
   gruposActivos('GRUPOSACTIVOS'),
   programa('PROGRAMA'),
   tipoDesembolsos('TIPOSDESEMBOLSOS'),
-  parentescoPeps('PARENTESCOPEPS');
+  parentescoPeps('PARENTESCOPEPS'),
+  tipoRelacionPeps('TIPORELACIONORGPEPS'),
+  tipoValoracionGarantia('TIPOVALORACIONGARANTIA');
 
   final String codigo;
 

@@ -1,8 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/supervisiones/supervision_coordinador/supervision_coordinador_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class SupervisionFormHN4 extends StatefulWidget {
   final PageController pageController;
@@ -38,24 +37,19 @@ class SupervisionFormHN4 extends StatefulWidget {
 
 class _SupervisionFormHN4State extends State<SupervisionFormHN4>
     with AutomaticKeepAliveClientMixin {
+  final formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final formkey = GlobalKey<FormState>();
     final cubit = context.read<SupervisionCoordinadorCubit>();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          )
-        ],
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -66,12 +60,14 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
             children: [
               const Gap(20),
               Container(
-                margin: const EdgeInsets.all(18),
-                child: Text(
+                margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+                child: const Text(
                   'Propuesta',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: RedesignColors.ink,
+                  ),
                 ),
               ),
               const Gap(10),
@@ -139,32 +135,12 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                 },
               ),
               const Gap(25),
-              BlocConsumer<SupervisionCoordinadorCubit,
+              // El progreso/resultado del envío lo muestra
+              // SendingSupervisionView.
+              BlocBuilder<SupervisionCoordinadorCubit,
                   SupervisionCoordinadorState>(
-                listenWhen: (previous, current) =>
+                buildWhen: (previous, current) =>
                     previous.status != current.status,
-                listener: (context, state) {
-                  if (state.status == Status.done) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: 'Supervisión enviada exitosamente.',
-                      onDone: () => context.pop(),
-                    ).showDialog(
-                      context,
-                      dialogType: DialogType.success,
-                    );
-                  }
-                  if (state.status == Status.error) {
-                    CustomAlertDialog(
-                      context: context,
-                      title: state.errorMsg,
-                      onDone: () => context.pop(),
-                    ).showDialog(
-                      context,
-                      dialogType: DialogType.error,
-                    );
-                  }
-                },
                 builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -182,11 +158,11 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                           },
                           text: state.status == Status.inProgress
                               ? 'Enviando...'
-                              : 'Siguiente',
-                          color: Colors.green,
+                              : 'Enviar',
+                          color: RedesignColors.green,
                         ),
                         const Gap(10),
-                        CustomElevatedButton(
+                        CustomOutLineButton(
                           onPressed: () {
                             widget.pageController.previousPage(
                               duration: const Duration(milliseconds: 500),
@@ -194,7 +170,8 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                             );
                           },
                           text: 'Anterior',
-                          color: Colors.red,
+                          color: RedesignColors.border,
+                          textColor: RedesignColors.ink,
                         ),
                       ],
                     ),

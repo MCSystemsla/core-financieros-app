@@ -221,7 +221,7 @@ class _FabButton extends StatelessWidget {
             },
           ).showDialog(
             context,
-            dialogType: DialogType.error,
+            dialogType: DialogType.warning,
           );
         }
       },

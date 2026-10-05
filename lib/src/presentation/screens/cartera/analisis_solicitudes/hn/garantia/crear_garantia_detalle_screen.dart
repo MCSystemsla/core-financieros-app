@@ -115,8 +115,8 @@ class _ArticuloFormState extends State<_ArticuloForm> {
               enabled: true,
               items: widget.garantias
                   .map((e) => Item(
-                        name: e.tipoGarantia,
-                        value: e.id,
+                        name: e.tipoGarantia!,
+                        value: e.garantiaID,
                         anotherValue: e.articuloCodigo,
                       ))
                   .toList(),

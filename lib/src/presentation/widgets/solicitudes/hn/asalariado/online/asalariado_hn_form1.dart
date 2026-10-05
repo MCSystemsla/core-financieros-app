@@ -23,7 +23,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/car
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/nueva_menor/online/nueva_menor_form1.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -75,6 +74,7 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
     fechaEmisionCedula = widget.userByDocumentHnData?.fechaEmision;
     fechaNacimiento = widget.userByDocumentHnData?.fechaNacimiento;
     final cubit = context.read<SolicitudAslariadoHnCubit>();
+    isSolicitudGrupal = cubit.state.esGrupal == 'input.yes'.tr();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         tipoPersonaCnbsidCodigo: 'HNTPCNBS1',
@@ -234,17 +234,18 @@ class _AsalariadoHnForm1State extends State<AsalariadoHnForm1>
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 1,
-                  steps: 7,
-                ),
-                const Gap(30),
                 Column(
                   children: [
                     if (actions
                         .contains(TypeAction.crearGrupoCredito.codigo)) ...[
                       SheetSearchDropdown(
                         key: const Key('esGrupalDropdown'),
+                        selectedItem: state.esGrupal.isEmpty
+                            ? null
+                            : Item(
+                                name: state.esGrupal,
+                                value: state.esGrupal,
+                              ),
                         isRequired: true,
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),

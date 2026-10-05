@@ -1,3 +1,5 @@
+import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/supervisiones/supervisiones_response.dart';
@@ -33,17 +35,11 @@ class _SupervisionCreditoForm3State extends State<SupervisionCreditoForm3>
     final cubit = context.read<SupervisionCreditoCubit>();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+      margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          )
-        ],
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -52,12 +48,14 @@ class _SupervisionCreditoForm3State extends State<SupervisionCreditoForm3>
           children: [
             const Gap(20),
             Container(
-              margin: const EdgeInsets.all(18),
-              child: Text(
+              margin: const EdgeInsets.fromLTRB(18, 0, 18, 8),
+              child: const Text(
                 'Solicitud y aprobacion del credito',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: RedesignColors.ink,
+                ),
               ),
             ),
             // const Gap(10),
@@ -115,10 +113,10 @@ class _SupervisionCreditoForm3State extends State<SupervisionCreditoForm3>
                       );
                     },
                     text: 'Siguiente',
-                    color: Colors.green,
+                    color: RedesignColors.green,
                   ),
                   const Gap(10),
-                  CustomElevatedButton(
+                  CustomOutLineButton(
                     onPressed: () {
                       widget.pagecontroller.previousPage(
                         duration: const Duration(milliseconds: 500),
@@ -126,7 +124,8 @@ class _SupervisionCreditoForm3State extends State<SupervisionCreditoForm3>
                       );
                     },
                     text: 'Anterior',
-                    color: Colors.red,
+                    color: RedesignColors.border,
+                    textColor: RedesignColors.ink,
                   ),
                 ],
               ),

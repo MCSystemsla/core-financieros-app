@@ -20,8 +20,8 @@ class PlanInversionResponse {
 class PlanInversionData {
   final int cantidad;
   final String descripcion;
-  final int precioUnitario;
-  final int total;
+  final num precioUnitario;
+  final num total;
 
   PlanInversionData({
     required this.cantidad,

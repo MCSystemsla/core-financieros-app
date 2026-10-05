@@ -16,11 +16,13 @@ import 'package:core_financiero_app/src/datasource/solicitudes/ni/nueva_menor/so
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/parametro/parametro_valor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/represtamo/solicitud_represtamo.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitudes/rechazar_solicitud/rechazar_solicitud_ni.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/represtamo_user_cedula.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/user_cedula/user_cedula_response.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/endpoint/solicitudes_credito_endpoint.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
+import 'package:core_financiero_app/src/utils/extensions/filter_estados_credito/filter_estado_credito.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
@@ -49,6 +51,7 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<ParametroValor> getParametroByName({required String nombre});
   Future<CatalogoFrecuenciaPago> getCatalogoFrecuenciaPago();
+  Future<CatalogoValor> getEmpleadosActivos();
   Future<(UserCedulaData?, bool, String)> getUserByCedulaAsalariado({
     required String cedula,
   });
@@ -101,6 +104,22 @@ abstract class SolicitudesCreditoRepository {
     required String? cedulaCliente,
     required int? pagina,
   });
+  Future<SolicitudByEstado> getSolicitudesByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+    required int pagina,
+    required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
+  });
+  Future<int?> getRolId();
   Future<(bool, String)> asignSolicitudCreditoToAsesor({
     required int idSolicitud,
     required int idPromotor,
@@ -114,6 +133,13 @@ abstract class SolicitudesCreditoRepository {
   });
   Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor();
   Future<KivaConfiguracionResponse> getKivaConfiguracion();
+  Future<void> autorizarSolicitudCredito({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  });
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudNi data,
+  });
 }
 
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
@@ -129,15 +155,21 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] == 409) {
-        _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
 
-        return (false, errorMsg, null, null, null);
-      }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, errorCode) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
 
         return (false, errorMsg, null, null, null);
       }
@@ -259,16 +291,21 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     );
     try {
       final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] == 409) {
-        _logger.i(endpoint.body);
-        AppException(optionalMsg: resp.toString());
-        final (errorMsg, _) = getErrorMessage(resp);
-
-        return (false, errorMsg, null, null, null);
-      }
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
+
         return (false, errorMsg, null, null, null);
       }
 
@@ -317,9 +354,20 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     try {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {
-        _logger.e(resp);
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
+        String errorMsg;
+
+        try {
+          final (msg, _) = getErrorMessage(resp);
+          errorMsg = msg;
+        } catch (_) {
+          final validationError =
+              resp['errors']?[0]?['message'] ?? 'Error de validación';
+          final validationPath = resp['errors']?[0]?['path'] ?? '';
+          errorMsg = 'Advertencia antes de continuar verifica: '
+              '$validationError $validationPath';
+        }
+
         return (false, errorMsg, null, null, null);
       }
       _logger.i(resp);
@@ -375,6 +423,27 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         throw AppException(optionalMsg: '$errorMsg - $status');
       }
       final data = CatalogoFrecuenciaPago.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogoValor> getEmpleadosActivos() async {
+    final endpoint = CatalogoEmpleadosActivosEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: '$errorMsg - $status');
+      }
+      final data = CatalogoValor.fromJson(resp);
       return data;
     } catch (e) {
       _logger.e(e);
@@ -771,6 +840,75 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
+  Future<SolicitudByEstado> getSolicitudesByEstado({
+    required EstadoCredito estadoCredito,
+    required bool isAsignadaToAsesorCredito,
+    required String? numeroSolicitud,
+    required String? cedulaCliente,
+    required int pagina,
+    required bool isCustomEstadoCredito,
+    FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
+    List<EstadoCredito> estadosCredito = const [
+      EstadoCredito.registrada,
+      EstadoCredito.asignada,
+      EstadoCredito.enRevision,
+      EstadoCredito.enComite
+    ],
+  }) async {
+    final rolId = await getRolId();
+    final endpoint = GetSolicitudesByEstadoNiEndpoint(
+      estadoCredito: estadoCredito,
+      isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
+      numeroSolicitud: numeroSolicitud,
+      cedulaCliente: cedulaCliente,
+      pagina: pagina,
+      usuarioId: rolId,
+      isCustomEstadoCredito: isCustomEstadoCredito,
+      filterEstadosCredito: filterEstadosCredito,
+      estadosCredito: estadosCredito,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = SolicitudByEstado.fromJson(resp);
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<int?> getRolId() async {
+    final endpoint = GetUsuarioIdSolicitudesByEstadoNiEndpoint();
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg:
+              'Tienes problemas de conexión. Revisa tu conexión a internet.',
+        );
+        throw AppException(optionalMsg: errorMsg);
+      }
+      final data = resp['data']['ID'] as int?;
+      return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
   Future<(bool, SolicitudByEstado)> getSolicitudesByAsesor() async {
     final endpoint = ObtenerSolciitudesPorAsesorEndpoint();
     try {
@@ -804,6 +942,49 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       final data = KivaConfiguracionResponse.fromJson(resp);
       _logger.i(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> autorizarSolicitudCredito({
+    required int numeroSolicitud,
+    required String tipoSolicitud,
+  }) async {
+    final endpoint = AutorizarSolicitudCreditoEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      tipoSolicitud: tipoSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg);
+      }
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> rechazarSolicitud({
+    required RechazarSolicitudNi data,
+  }) async {
+    final endpoint = RechazarSolicitudNiEndpoint(data: data);
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        _logger.e(resp);
+        final (errorMsg, _) =
+            getErrorMessage(resp, errorMsg: 'Tienes problemas de conexión.');
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return resp['message']?.toString() ?? 'Solicitud rechazada exitosamente.';
     } catch (e) {
       _logger.e(e);
       rethrow;

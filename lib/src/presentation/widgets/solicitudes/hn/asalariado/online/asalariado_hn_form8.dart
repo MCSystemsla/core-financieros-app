@@ -8,7 +8,6 @@ import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textf
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -46,11 +45,6 @@ class _AsalariadoHnForm8State extends State<AsalariadoHnForm8>
         key: formKey,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              currentStep: 8,
-              steps: 9,
-            ),
-            const Gap(30),
             Column(
               children: [
                 CatalogoActividadesCNBSDropdown(

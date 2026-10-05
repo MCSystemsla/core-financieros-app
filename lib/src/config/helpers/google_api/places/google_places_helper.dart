@@ -105,6 +105,7 @@ class GooglePlacesHelperImpl implements GooglePlacesHelperRepository {
       request.fields['TipoSolicitud'] = tipoSolicitud;
       request.fields['Referencia'] = referencia;
       request.fields['Ciudad'] = ciudad;
+      request.fields['database'] = LocalStorage().database;
 
       request.files.add(await http.MultipartFile.fromPath(
         'ubicacionImage',

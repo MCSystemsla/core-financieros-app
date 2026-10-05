@@ -2,7 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +14,10 @@ import 'package:go_router/go_router.dart';
 void showFilterGetByCedualAndNumeroSolicitud(
   BuildContext context,
   bool isNumeroSolicitudFilter,
-  String? numeroSolicitud,
+  String numeroSolicitud,
   bool isCedulaSolicitudFilter,
-  String? cedulaCliente,
-  SolicitudNuevaByEstadoCubit cubit,
+  String cedulaCliente,
+  SolicitudesByEstadoNiCubit cubit,
 ) {
   final bottomInset = MediaQuery.of(context).viewInsets.bottom;
   final formKey = GlobalKey<FormState>();
@@ -137,11 +137,18 @@ void showFilterGetByCedualAndNumeroSolicitud(
                       const Gap(20),
                       CustomElevatedButton(
                         onPressed: () {
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              isNumeroSolicitudFilter: false,
+                              isCedulaSolicitudFilter: false,
+                              numeroSolicitud: '',
+                              cedulaCliente: '',
+                            ),
+                          );
                           cubit.getSolicitudesByEstado(
-                            isNumeroSolicitudFilter: false,
-                            isCedulaSolicitudFilter: false,
-                            numeroSolicitud: null,
-                            cedulaCliente: null,
+                            estadoCredito: cubit.state.estadoCredito,
+                            isAsignadaToAsesorCredito:
+                                cubit.state.isAsignadaToAsesorCredito,
                           );
                           context.pop();
                         },
@@ -158,17 +165,20 @@ void showFilterGetByCedualAndNumeroSolicitud(
                             isNumeroSolicitudFilter || isCedulaSolicitudFilter,
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
-                          if (!isNumeroSolicitudFilter) {
-                            numeroSolicitud = null;
-                          }
-                          if (!isCedulaSolicitudFilter) {
-                            cedulaCliente = null;
-                          }
+                          cubit.onFieldChanged(
+                            () => cubit.state.copyWith(
+                              isNumeroSolicitudFilter: isNumeroSolicitudFilter,
+                              isCedulaSolicitudFilter: isCedulaSolicitudFilter,
+                              numeroSolicitud:
+                                  isNumeroSolicitudFilter ? numeroSolicitud : '',
+                              cedulaCliente:
+                                  isCedulaSolicitudFilter ? cedulaCliente : '',
+                            ),
+                          );
                           cubit.getSolicitudesByEstado(
-                            isNumeroSolicitudFilter: isNumeroSolicitudFilter,
-                            isCedulaSolicitudFilter: isCedulaSolicitudFilter,
-                            numeroSolicitud: numeroSolicitud,
-                            cedulaCliente: cedulaCliente,
+                            estadoCredito: cubit.state.estadoCredito,
+                            isAsignadaToAsesorCredito:
+                                cubit.state.isAsignadaToAsesorCredito,
                           );
                           context.pop();
                         },

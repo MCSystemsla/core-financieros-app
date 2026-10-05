@@ -1,16 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CedulaFramePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final borderPaint = Paint()
-      ..color = AppColors.getPrimaryColor()
-      ..strokeWidth = 4
-      ..style = PaintingStyle.stroke;
-
+    // La geometría del recuadro (80% x 25%, centrado) debe mantenerse
+    // alineada con el recorte de CameraService.takeImageAndSaveWithCropped.
     double frameWidth = size.width * 0.8;
     double frameHeight = size.height * 0.25;
 
@@ -18,59 +14,83 @@ class CedulaFramePainter extends CustomPainter {
     double top = (size.height - frameHeight) / 2;
     Rect frameRect = Rect.fromLTWH(left, top, frameWidth, frameHeight);
 
-    // Crea el path de recorte
+    const radius = 16.0;
+    final frameRRect =
+        RRect.fromRectAndRadius(frameRect, const Radius.circular(radius));
+
+    // Oscurece todo lo que queda fuera del recuadro
     final cutout = Path.combine(
       PathOperation.difference,
       Path()..addRect(Offset.zero & size),
-      Path()..addRect(frameRect),
+      Path()..addRRect(frameRRect),
     );
-
-    // Pinta el área fuera del recorte de rojo
-    canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawPath(
       cutout,
       Paint()
-        ..color = Colors.black.withOpacity(0.2)
-        ..blendMode = BlendMode.srcOut
+        ..color = Colors.black.withOpacity(0.55)
         ..style = PaintingStyle.fill,
     );
-    canvas.restore();
 
-    // Líneas en las esquinas
-    double cornerLength = 20;
+    // Borde fino del recuadro
+    canvas.drawRRect(
+      frameRRect,
+      Paint()
+        ..color = Colors.white.withOpacity(0.35)
+        ..strokeWidth = 1.2
+        ..style = PaintingStyle.stroke,
+    );
 
-    // Esquinas
-    canvas.drawLine(Offset(left, top), Offset(left + cornerLength, top),
-        borderPaint); // top-left H
-    canvas.drawLine(Offset(left, top), Offset(left, top + cornerLength),
-        borderPaint); // top-left V
+    // Esquinas redondeadas
+    final cornerPaint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 4
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
 
-    canvas.drawLine(
-        Offset(left + frameWidth, top),
-        Offset(left + frameWidth - cornerLength, top),
-        borderPaint); // top-right H
-    canvas.drawLine(
-        Offset(left + frameWidth, top),
-        Offset(left + frameWidth, top + cornerLength),
-        borderPaint); // top-right V
+    const cornerLength = 28.0;
+    final right = left + frameWidth;
+    final bottom = top + frameHeight;
 
-    canvas.drawLine(
-        Offset(left, top + frameHeight),
-        Offset(left + cornerLength, top + frameHeight),
-        borderPaint); // bottom-left H
-    canvas.drawLine(
-        Offset(left, top + frameHeight),
-        Offset(left, top + frameHeight - cornerLength),
-        borderPaint); // bottom-left V
-
-    canvas.drawLine(
-        Offset(left + frameWidth, top + frameHeight),
-        Offset(left + frameWidth - cornerLength, top + frameHeight),
-        borderPaint); // bottom-right H
-    canvas.drawLine(
-        Offset(left + frameWidth, top + frameHeight),
-        Offset(left + frameWidth, top + frameHeight - cornerLength),
-        borderPaint); // bottom-right V
+    // top-left
+    canvas.drawPath(
+      Path()
+        ..moveTo(left, top + cornerLength)
+        ..lineTo(left, top + radius)
+        ..arcToPoint(Offset(left + radius, top),
+            radius: const Radius.circular(radius))
+        ..lineTo(left + cornerLength, top),
+      cornerPaint,
+    );
+    // top-right
+    canvas.drawPath(
+      Path()
+        ..moveTo(right - cornerLength, top)
+        ..lineTo(right - radius, top)
+        ..arcToPoint(Offset(right, top + radius),
+            radius: const Radius.circular(radius))
+        ..lineTo(right, top + cornerLength),
+      cornerPaint,
+    );
+    // bottom-right
+    canvas.drawPath(
+      Path()
+        ..moveTo(right, bottom - cornerLength)
+        ..lineTo(right, bottom - radius)
+        ..arcToPoint(Offset(right - radius, bottom),
+            radius: const Radius.circular(radius))
+        ..lineTo(right - cornerLength, bottom),
+      cornerPaint,
+    );
+    // bottom-left
+    canvas.drawPath(
+      Path()
+        ..moveTo(left + cornerLength, bottom)
+        ..lineTo(left + radius, bottom)
+        ..arcToPoint(Offset(left, bottom - radius),
+            radius: const Radius.circular(radius))
+        ..lineTo(left, bottom - cornerLength),
+      cornerPaint,
+    );
   }
 
   @override

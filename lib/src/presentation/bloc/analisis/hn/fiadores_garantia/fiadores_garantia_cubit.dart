@@ -15,7 +15,12 @@ class FiadoresGarantiaCubit extends Cubit<FiadoresGarantiaState> {
     required int numeroSolicitud,
     required String tipoFiadorCodigo,
   }) async {
-    emit(state.copyWith(status: Status.inProgress));
+    // Se limpia la lista anterior para no mostrar los fiadores del tipo de
+    // persona previo mientras la nueva peticion esta en curso.
+    emit(state.copyWith(
+      status: Status.inProgress,
+      data: const [],
+    ));
     try {
       final resp = await _repository.getFiadoresByNumeroSolicitud(
         tipoFiadorCodigo: tipoFiadorCodigo,

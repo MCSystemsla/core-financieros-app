@@ -5,6 +5,7 @@ class HomeItemCard {
   final String subtitle;
   final Icon icon;
   final Color color;
+  final Color? gradientColor;
   final VoidCallback onTap;
   final bool visible;
 
@@ -14,6 +15,7 @@ class HomeItemCard {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.gradientColor,
     this.visible = true,
   });
 }

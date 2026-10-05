@@ -6,6 +6,7 @@ class AnalisisCardVentasDay extends StatelessWidget {
   final String subtitle;
   final String description;
   final VoidCallback onTap;
+  final Color? color;
 
   const AnalisisCardVentasDay({
     super.key,
@@ -13,6 +14,7 @@ class AnalisisCardVentasDay extends StatelessWidget {
     required this.subtitle,
     required this.description,
     required this.onTap,
+    this.color,
   });
 
   @override
@@ -73,7 +75,7 @@ class AnalisisCardVentasDay extends StatelessWidget {
                       description,
                       style: TextStyle(
                         fontSize: 15,
-                        color: Colors.green.shade700,
+                        color: color ?? Colors.green.shade600,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

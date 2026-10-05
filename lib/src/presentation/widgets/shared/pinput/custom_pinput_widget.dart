@@ -110,7 +110,7 @@ class _PinPutField extends StatelessWidget {
             context: context,
             title: state.errorMsg,
             onDone: () => context.pop(),
-          ).showDialog(context, dialogType: DialogType.error);
+          ).showDialog(context, dialogType: DialogType.warning);
         }
         if (state is OnCodigoVerificacionInitialSuccess) {
           CustomAlertDialog(

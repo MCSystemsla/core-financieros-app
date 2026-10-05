@@ -15,7 +15,12 @@ class AnalisisArticuloCubit extends Cubit<AnalisisArticuloState> {
   Future<void> getAnalisisGarantiasArticulos({
     required String tipoGarantiaCodigo,
   }) async {
-    emit(state.copyWith(status: Status.inProgress));
+    // Se limpia la lista anterior para no mostrar los articulos del tipo de
+    // garantia previo mientras la nueva peticion esta en curso.
+    emit(state.copyWith(
+      status: Status.inProgress,
+      analisisGarantiaArticuloHn: const [],
+    ));
     try {
       final resp = await _repository.getAnalisisGarantiasArticulos(
         tipoGarantiaCodigo: tipoGarantiaCodigo,

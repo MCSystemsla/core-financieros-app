@@ -260,7 +260,7 @@ class _AnalisisGarantiaFormPrendarioTaxiState
                       },
                     ).showDialog(
                       context,
-                      dialogType: DialogType.error,
+                      dialogType: DialogType.warning,
                     );
                   }
                 },

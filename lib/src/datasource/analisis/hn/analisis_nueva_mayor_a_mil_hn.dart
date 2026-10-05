@@ -424,6 +424,8 @@ class InventarioHN {
   final double costoVentaPorcentaje;
   final int total;
   final String uuid;
+  // ID del registro en el backend; solo se envía al actualizar un análisis.
+  final int? id;
 
   InventarioHN({
     required this.cantidad,
@@ -433,9 +435,11 @@ class InventarioHN {
     required this.costoVentaPorcentaje,
     required this.total,
     required this.uuid,
+    this.id,
   });
 
   Map<String, dynamic> toJson() => {
+        if (id != null) 'ID': id,
         'Cantidad': cantidad,
         'Articulo': articulo,
         'CostoCompra': costoCompra,

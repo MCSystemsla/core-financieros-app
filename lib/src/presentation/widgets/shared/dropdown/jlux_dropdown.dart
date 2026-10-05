@@ -94,7 +94,7 @@ class JLuxDropdown<T> extends StatelessWidget {
                 color: dropdownColor,
                 child: DropdownButtonFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  value: initialValue,
+                  initialValue: initialValue,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 13,

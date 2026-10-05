@@ -20,7 +20,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
@@ -169,11 +168,6 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 1,
-                  steps: 7,
-                ),
-                const Gap(30),
                 Column(
                   children: [
                     if (actions
@@ -488,22 +482,25 @@ class _NuevaMenorOfflineHn1State extends State<NuevaMenorOfflineHn1>
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      initialValue: cubit.state.cedula,
-                      isRequired: true,
-                      readOnly: true,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      hintText: 'Ingresa Documento',
-                      icon: Icon(Icons.credit_card,
-                          color: AppColors.getPrimaryColor()),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
-                      ],
-                      textInputType: TextInputType.number,
-                      textCapitalization: TextCapitalization.none,
-                      title: 'Número de Documento',
-                    ),
+                        initialValue: cubit.state.cedula,
+                        isRequired: true,
+                        validator: (value) =>
+                            ClassValidator.validateRequired(value),
+                        hintText: 'Ingresa Documento',
+                        icon: Icon(Icons.credit_card,
+                            color: AppColors.getPrimaryColor()),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(16),
+                        ],
+                        textInputType: TextInputType.number,
+                        textCapitalization: TextCapitalization.none,
+                        title: 'Número de Documento',
+                        onChange: (v) {
+                          cubit.onFieldChanged(
+                            () => state.copyWith(cedula: v),
+                          );
+                        }),
                     const Gap(30),
                     OutlineTextfieldWidget(
                       initialValue: cubit.state.rtn,

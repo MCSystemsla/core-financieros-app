@@ -3,7 +3,6 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
@@ -16,7 +15,7 @@ class AutoupdateCubit extends Cubit<AutoupdateState> {
   final Flavor flavor;
   final _logger = Logger();
 
-  Future<void> verificarActualizacion(BuildContext context) async {
+  Future<void> verificarActualizacion() async {
     const String versionJsonUrl = String.fromEnvironment('versionUrl');
 
     if (versionJsonUrl.isEmpty) {

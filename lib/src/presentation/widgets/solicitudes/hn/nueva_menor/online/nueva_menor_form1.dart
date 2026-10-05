@@ -26,7 +26,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlu
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/utils/extensions/catalogo_type/catalogo_type.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -77,6 +76,7 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
     _selectedDate = widget.userByDocumentHn?.fechaExpira;
     fechaNacimiento = widget.userByDocumentHn?.fechaNacimiento;
     final cubit = context.read<SolicitudNuevaMenorHnCubit>();
+    isSolicitudGrupal = cubit.state.esGrupal == 'input.yes'.tr();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
@@ -240,17 +240,18 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 1,
-                  steps: 7,
-                ),
-                const Gap(30),
                 Column(
                   children: [
                     if (actions
                         .contains(TypeAction.crearGrupoCredito.codigo)) ...[
                       SheetSearchDropdown(
                         key: const Key('esGrupalDropdown'),
+                        selectedItem: state.esGrupal.isEmpty
+                            ? null
+                            : Item(
+                                name: state.esGrupal,
+                                value: state.esGrupal,
+                              ),
                         isRequired: true,
                         validator: (value) =>
                             ClassValidator.validateRequired(value?.value),
@@ -265,13 +266,18 @@ class _NuevaMenorForm1State extends State<NuevaMenorForm1>
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               esGrupal: item.value,
-                              grupoCodigo: isSolicitudGrupal ? item.value : '',
-                              grupoCodigoNombre:
-                                  isSolicitudGrupal ? item.name : '',
-                              cargoGrupoCodigo:
-                                  isSolicitudGrupal ? item.value : '',
-                              cargoGrupoNombre:
-                                  isSolicitudGrupal ? item.name : '',
+                              grupoCodigo: isSolicitudGrupal
+                                  ? cubit.state.grupoCodigo
+                                  : '',
+                              grupoCodigoNombre: isSolicitudGrupal
+                                  ? cubit.state.grupoCodigoNombre
+                                  : '',
+                              cargoGrupoCodigo: isSolicitudGrupal
+                                  ? cubit.state.cargoGrupoCodigo
+                                  : '',
+                              cargoGrupoNombre: isSolicitudGrupal
+                                  ? cubit.state.cargoGrupoNombre
+                                  : '',
                             ),
                           );
                         },

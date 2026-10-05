@@ -66,7 +66,9 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              final imagesSended = await context
+                  .read<UploadUserFileCubit>()
+                  .uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -82,6 +84,13 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                         .state
                         .nombreFormularioKiva,
                   );
+              if (imagesSended && context.mounted) {
+                await context
+                    .read<SolicitudesPendientesLocalDbCubit>()
+                    .updateIsImagesSendedOnSolicitud(
+                      solicitudId: widget.solicitudId.toString(),
+                    );
+              }
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()
               //     .removeWhenFormIsUpload(
@@ -94,7 +103,9 @@ class _MicrediEstudioFormState extends State<MicrediEstudioForm> {
                 dismissOnTouchOutside: false,
                 size: size,
                 title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: 'Las respuestas se han enviado Exitosamente',
+                subtitle: imagesSended
+                    ? 'Las respuestas se han enviado Exitosamente'
+                    : 'Las respuestas se enviaron, pero las imágenes no se pudieron subir. Reintente desde el historial Kiva.',
                 dialogType: DialogType.success,
                 buttonAcept: true,
                 textButtonAcept: 'Ok',
@@ -481,7 +492,9 @@ class _MiCrediEstudioRecurrenteFormState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
-              await context.read<UploadUserFileCubit>().uploadUserFilesOffline(
+              final imagesSended = await context
+                  .read<UploadUserFileCubit>()
+                  .uploadUserFilesOffline(
                     typeSigner: imageModel?.typeSigner ?? '',
                     cedula: context.read<KivaRouteCubit>().state.cedula,
                     numero: context.read<KivaRouteCubit>().state.numero,
@@ -497,6 +510,13 @@ class _MiCrediEstudioRecurrenteFormState
                         .state
                         .nombreFormularioKiva,
                   );
+              if (imagesSended && context.mounted) {
+                await context
+                    .read<SolicitudesPendientesLocalDbCubit>()
+                    .updateIsImagesSendedOnSolicitud(
+                      solicitudId: widget.solicitudId.toString(),
+                    );
+              }
               // context
               //     .read<SolicitudesPendientesLocalDbCubit>()
               //     .removeWhenFormIsUpload(
@@ -509,7 +529,9 @@ class _MiCrediEstudioRecurrenteFormState
                 dismissOnTouchOutside: false,
                 size: size,
                 title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: 'Las respuestas se han enviado Exitosamente',
+                subtitle: imagesSended
+                    ? 'Las respuestas se han enviado Exitosamente'
+                    : 'Las respuestas se enviaron, pero las imágenes no se pudieron subir. Reintente desde el historial Kiva.',
                 dialogType: DialogType.success,
                 buttonAcept: true,
                 textButtonAcept: 'Ok',

@@ -43,6 +43,7 @@ class InformacionPepsHnCubit extends Cubit<InformacionPepsHnState> {
           ),
         ),
       );
+      emit(state.copyWith(status: Status.done));
     } on AppException catch (e) {
       emit(state.copyWith(status: Status.error, errorMsg: e.optionalMsg));
     } catch (e) {

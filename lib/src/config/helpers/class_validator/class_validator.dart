@@ -1,7 +1,55 @@
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
+/// Regla que debe cumplir una contraseña nueva.
+class PasswordRequirement {
+  final String label;
+  final bool Function(String password) isMet;
+  const PasswordRequirement({required this.label, required this.isMet});
+}
+
 class ClassValidator {
+  static final passwordRequirements = [
+    PasswordRequirement(
+      label: '8+ caracteres',
+      isMet: (password) => password.length >= 8,
+    ),
+    PasswordRequirement(
+      label: 'Mayúscula',
+      isMet: (password) => password.contains(RegExp(r'[A-Z]')),
+    ),
+    PasswordRequirement(
+      label: 'Minúscula',
+      isMet: (password) => password.contains(RegExp(r'[a-z]')),
+    ),
+    PasswordRequirement(
+      label: 'Número',
+      isMet: (password) => password.contains(RegExp(r'[0-9]')),
+    ),
+  ];
+
+  static String? validateNewPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'La contraseña nueva es obligatoria';
+    }
+    final isMissingRequirement =
+        passwordRequirements.any((requirement) => !requirement.isMet(value));
+    if (isMissingRequirement) {
+      return 'La contraseña no cumple los requisitos';
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(String? value, String newPassword) {
+    if (value == null || value.isEmpty) {
+      return 'Confirma la contraseña nueva';
+    }
+    if (value != newPassword) {
+      return 'Las contraseñas no coinciden';
+    }
+    return null;
+  }
+
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) return null;
     final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -196,13 +244,13 @@ class ClassValidator {
       return 'RTN inválido';
     }
 
-    final departamento = int.parse(rtn.substring(0, 2));
+    // final departamento = int.parse(rtn.substring(0, 2));
     final year = int.parse(rtn.substring(4, 8));
     final correlativo = rtn.substring(8, 14);
 
-    if (departamento < 1 || departamento > 18) {
-      return 'Código de departamento inválido';
-    }
+    // if (departamento < 1 || departamento > 18) {
+    //   return 'Código de departamento inválido';
+    // }
 
     final currentYear = DateTime.now().year;
     if (year < 1900 || year > currentYear) {

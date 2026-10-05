@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../bloc/analisis/hn/get_analisis_menor_mil_data/get_analisis_menor_mil_data_cubit.dart';
+import '../../../../../bloc/analisis/hn/actualizar_analisis_menor_mil/actualizar_analisis_menor_mil_cubit.dart';
 
 class ActualizarAnalisisMenorMilForm4 extends StatelessWidget {
   final PageController pageController;
@@ -82,7 +83,7 @@ class ActualizarAnalisisMenorMilForm4 extends StatelessWidget {
 class _NombreProveedores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<GetAnalisisMenorMilDataCubit>();
+    final cubit = context.read<ActualizarAnalisisMenorMilCubit>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -113,48 +114,41 @@ class _NombreProveedores extends StatelessWidget {
             initialValue: cubit.state.proveedor1,
             title: 'Proveedor 1',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       proveedor1: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(proveedor1: value),
+            ),
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             initialValue: cubit.state.proveedor2,
             title: 'Proveedor 2',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       proveedor2: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(proveedor2: value),
+            ),
           ),
           OutlineTextfieldWidget(
             initialValue: cubit.state.proveedor3,
             title: 'Proveedor 3',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       proveedor3: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(proveedor3: value),
+            ),
           ),
           const Gap(20),
         ],
       ),
     );
-    // },
-    // );
   }
 }
 
 class _PrincipalesClientes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<GetAnalisisMenorMilDataCubit>();
-    // return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
-    // builder: (context, state) {
+    final cubit = context.read<ActualizarAnalisisMenorMilCubit>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -185,52 +179,41 @@ class _PrincipalesClientes extends StatelessWidget {
             initialValue: cubit.state.cliente1,
             title: 'Cliente 1',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       cliente1: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(cliente1: value),
+            ),
           ),
           const Gap(20),
           OutlineTextfieldWidget(
             initialValue: cubit.state.cliente2,
             title: 'Cliente 2',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       cliente2: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(cliente2: value),
+            ),
           ),
           OutlineTextfieldWidget(
             initialValue: cubit.state.cliente3,
             title: 'Cliente 3',
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              // cubit.onFieldChanged(() => state.copyWith(
-              //       cliente3: value,
-              //     ));
-            },
+            inputFormatters: [UpperCaseTextFormatter()],
+            onChange: (value) => cubit.onFieldChanged(
+              () => cubit.state.copyWith(cliente3: value),
+            ),
           ),
           const Gap(20),
         ],
       ),
     );
-    // },
-    // );
   }
 }
 
 class _DetalleCredito extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<GetAnalisisMenorMilDataCubit>();
-    // return BlocBuilder<AnalisisMenorMilCubit, AnalisisMenorMilState>(
-    // builder: (context, state) {
-    final totalIngresosCalc =
-        cubit.state.ventasContado + cubit.state.recuperaciones;
-
-    final ingresoAnualVenta = totalIngresosCalc * 12;
+    final state = context.watch<ActualizarAnalisisMenorMilCubit>().state;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
       decoration: BoxDecoration(
@@ -258,24 +241,14 @@ class _DetalleCredito extends StatelessWidget {
             ),
           ),
           OutlineTextfieldWidget(
-            hintText: ingresoAnualVenta.toCurrencyString(),
+            hintText: state.ingresoAnual.toCurrencyString(),
             title: 'Ingreso anual y/o volumen de venta',
             readOnly: true,
             icon: const Icon(Icons.add_box),
-            onChange: (value) {
-              final newValue = toNumericString(value, allowPeriod: true);
-              // cubit.onFieldChanged(
-              //   () => state.copyWith(
-              //     ingresoAnual: double.tryParse(newValue) ?? 0,
-              //   ),
-              // );
-            },
           ),
           const Gap(20),
         ],
       ),
     );
-    // },
-    // );
   }
 }

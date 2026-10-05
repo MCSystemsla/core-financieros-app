@@ -70,7 +70,7 @@ class SolicitudesUploadedWidget extends StatelessWidget {
                       context: context,
                       title: 'Error inesperado, ${state.errorMsg}',
                       onDone: () => context.pop(),
-                    ).showDialog(context, dialogType: DialogType.error);
+                    ).showDialog(context, dialogType: DialogType.warning);
                   }
                 },
                 builder: (context, state) {
@@ -228,29 +228,6 @@ class _ExpansionButtonsWidget extends StatelessWidget {
     return Column(
       children: [
         CustomElevatedButton(
-          enabled: status != Status.inProgress,
-          onPressed: () {
-            if (!context.mounted) return;
-            context.read<UploadUserFileCubit>().uploadUserFilesOffline(
-                  fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
-                  solicitudId: int.parse(
-                    solicitud.solicitudId ?? '0',
-                  ),
-                  formularioKiva: solicitud.nombreFormulario ?? '',
-                  tipoSolicitud: solicitud.tipoSolicitud ?? '',
-                  numero: solicitud.numero ?? '',
-                  cedula: solicitud.cedula ?? '',
-                  imagen1: imagenes?.imagen1 ?? 'NO PATH',
-                  imagen2: imagenes?.imagen2 ?? 'NO PATH',
-                  imagen3: imagenes?.imagen3 ?? 'NO PATH',
-                  typeSigner: imagenes?.typeSigner ?? '',
-                );
-          },
-          text: '📤 Enviar Imágenes Kiva',
-          color: AppColors.getPrimaryColor(),
-        ),
-        const Gap(15),
-        CustomElevatedButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -266,6 +243,37 @@ class _ExpansionButtonsWidget extends StatelessWidget {
           },
           text: '📝 Enviar Formulario Kiva',
           color: AppColors.getSecondaryColor(),
+        ),
+        const Gap(15),
+        CustomElevatedButton(
+          enabled: status != Status.inProgress,
+          onPressed: () async {
+            if (!context.mounted) return;
+            final localDb = context.read<SolicitudesPendientesLocalDbCubit>();
+            final imagesSended = await context
+                .read<UploadUserFileCubit>()
+                .uploadUserFilesOffline(
+                  fotoFirma: imagenes?.imagenFirma ?? 'NO PATH',
+                  solicitudId: int.parse(
+                    solicitud.solicitudId ?? '0',
+                  ),
+                  formularioKiva: solicitud.nombreFormulario ?? '',
+                  tipoSolicitud: solicitud.tipoSolicitud ?? '',
+                  numero: solicitud.numero ?? '',
+                  cedula: solicitud.cedula ?? '',
+                  imagen1: imagenes?.imagen1 ?? 'NO PATH',
+                  imagen2: imagenes?.imagen2 ?? 'NO PATH',
+                  imagen3: imagenes?.imagen3 ?? 'NO PATH',
+                  typeSigner: imagenes?.typeSigner ?? '',
+                );
+            if (imagesSended) {
+              await localDb.updateIsImagesSendedOnSolicitud(
+                solicitudId: solicitud.solicitudId ?? '',
+              );
+            }
+          },
+          text: '📤 Enviar Imágenes Kiva',
+          color: AppColors.getPrimaryColor(),
         ),
       ],
     );
@@ -299,7 +307,7 @@ class _ExpansionRowTitle extends StatelessWidget {
         ],
         Expanded(
           child: Text(
-            '${solicitud.nombre}, ${solicitud.solicitudId}',
+            '${solicitud.nombre}, ${solicitud.numero}',
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

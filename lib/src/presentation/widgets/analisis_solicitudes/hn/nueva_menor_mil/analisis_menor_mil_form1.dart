@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_menor_mil/analisis_menor_mil_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/menor_mil/table_inventario_menor_mil.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -40,7 +41,7 @@ class _AnalisisMenorMilForm1State extends State<AnalisisMenorMilForm1> {
             Container(
               margin: const EdgeInsets.all(18),
               child: Text(
-                'Balance general expresado en lempira',
+                'Balance general expresado en ${CurrencyHelper.currencyName()}',
                 textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,

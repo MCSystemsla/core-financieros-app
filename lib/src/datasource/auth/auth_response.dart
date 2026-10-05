@@ -10,6 +10,7 @@ class AuthResponse {
   final String accessToken;
   final String refreshToken;
   final bool passwordPorVencer;
+  final bool passwordVencida;
 
   AuthResponse({
     required this.username,
@@ -18,6 +19,7 @@ class AuthResponse {
     required this.accessToken,
     required this.refreshToken,
     required this.passwordPorVencer,
+    required this.passwordVencida,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) => AuthResponse(
@@ -26,6 +28,7 @@ class AuthResponse {
         rol: json['rol'],
         accessToken: json['accessToken'],
         refreshToken: json['refreshToken'] ?? '',
-        passwordPorVencer: json['passwordPorVencer'],
+        passwordPorVencer: json['passwordPorVencer'] ?? false,
+        passwordVencida: json['passwordVencida'] ?? false,
       );
 }

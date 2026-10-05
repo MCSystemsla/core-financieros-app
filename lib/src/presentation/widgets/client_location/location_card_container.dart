@@ -1,20 +1,16 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_user_location/analisis_user_location_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationCardContainer extends StatelessWidget {
@@ -48,12 +44,19 @@ class LocationCardContainer extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         child: Container(
           height: size.height * 0.4,
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(20),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+          decoration: BoxDecoration(
+            color: RedesignColors.surface,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(24),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: RedesignColors.ink.withValues(alpha: 0.12),
+                blurRadius: 24,
+                offset: const Offset(0, -6),
+              ),
+            ],
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -64,9 +67,8 @@ class LocationCardContainer extends StatelessWidget {
                   child: Container(
                     width: 42,
                     height: 5,
-                    margin: const EdgeInsets.only(top: 5),
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: RedesignColors.border,
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
@@ -132,36 +134,8 @@ class _UserLocationContentState extends State<UserLocationContent> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AnalisisUserLocationCubit, AnalisisUserLocationState>(
-      listenWhen: (previous, current) =>
-          previous.statusCreation != current.statusCreation,
-      listener: (context, state) {
-        if (state.statusCreation == Status.error) {
-          CustomAlertDialog(
-            context: context,
-            title: state.errorMsg,
-            onDone: () => context.pop(),
-          ).showDialog(
-            context,
-            dialogType: DialogType.error,
-          );
-        }
-        if (state.statusCreation == Status.done) {
-          CustomAlertDialog(
-            context: context,
-            title: 'La ubicación del cliente fue registrada exitosamente',
-            onDone: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const AnalisisInterceptorByFlavor(),
-              ),
-            ),
-          ).showDialog(
-            context,
-            dialogType: DialogType.success,
-          );
-        }
-      },
+    // El progreso/resultado del envío lo muestra SendingUbicacionClienteView.
+    return BlocBuilder<AnalisisUserLocationCubit, AnalisisUserLocationState>(
       builder: (context, state) {
         return switch (state.status) {
           Status.inProgress => const Column(
@@ -176,33 +150,77 @@ class _UserLocationContentState extends State<UserLocationContent> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Gap(8),
-                  Text(
-                    'Ubicación actual',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  const Gap(16),
+                  const Text(
+                    'Registrar ubicación',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: RedesignColors.ink,
+                    ),
                   ),
-                  const Gap(10),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.place_rounded,
-                        size: 18,
-                        color: AppColors.getPrimaryColor(),
-                      ),
-                      const Gap(6),
-                      Expanded(
-                        child: Text(
-                          state.placeAddress,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.grey.shade700,
-                                  ),
+                  const Gap(4),
+                  const Text(
+                    'Confirma la dirección y completa los datos.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: RedesignColors.inkMuted,
+                    ),
+                  ),
+                  const Gap(14),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: RedesignColors.background,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: RedesignColors.border),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 36,
+                          width: 36,
+                          decoration: BoxDecoration(
+                            color: RedesignColors.tealTint,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(
+                            Icons.place_rounded,
+                            size: 18,
+                            color: RedesignColors.teal,
+                          ),
                         ),
-                      ),
-                    ],
+                        const Gap(10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'DIRECCIÓN DETECTADA',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  letterSpacing: 0.6,
+                                  fontWeight: FontWeight.w700,
+                                  color: RedesignColors.inkMuted,
+                                ),
+                              ),
+                              const Gap(2),
+                              Text(
+                                state.placeAddress,
+                                style: const TextStyle(
+                                  fontSize: 13.5,
+                                  height: 1.3,
+                                  fontWeight: FontWeight.w600,
+                                  color: RedesignColors.ink,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const Gap(20),
                   SearchDropdownWidget(
@@ -225,9 +243,9 @@ class _UserLocationContentState extends State<UserLocationContent> {
                     title: 'Referencia adicional',
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.location_on_outlined,
-                      color: AppColors.getPrimaryColor(),
+                      color: RedesignColors.teal,
                     ),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
@@ -239,8 +257,20 @@ class _UserLocationContentState extends State<UserLocationContent> {
                   const Gap(24),
                   SizedBox(
                     width: double.infinity,
-                    height: 48,
-                    child: FilledButton.icon(
+                    height: 52,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: RedesignColors.ink,
+                        foregroundColor: RedesignColors.surface,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
                         context
@@ -263,7 +293,7 @@ class _UserLocationContentState extends State<UserLocationContent> {
                               width: 18,
                               height: 18,
                               child: CircularProgressIndicator(
-                                strokeWidth: 5,
+                                strokeWidth: 2.5,
                                 color: Colors.white,
                               ),
                             )

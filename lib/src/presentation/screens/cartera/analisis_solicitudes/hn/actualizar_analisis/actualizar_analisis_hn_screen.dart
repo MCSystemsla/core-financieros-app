@@ -11,8 +11,10 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/loading/load
 import 'package:flutter/material.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitud_forms/actualizar_analisis/actualizar_analisis_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/actualizar_analisis/actualizar_analisis_asalariado_hn_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../bloc/analisis/hn/actualizar_analisis_menor_mil/actualizar_analisis_menor_mil_cubit.dart';
 import '../../../../../bloc/analisis/hn/get_analisis_menor_mil_data/get_analisis_menor_mil_data_cubit.dart';
 
 class ActualizarAnalisisHnInterceptor extends StatelessWidget {
@@ -55,7 +57,14 @@ class ActualizarAnalisisHnInterceptor extends StatelessWidget {
       AnalisisSolicitudesInterceptorType.represtamoMayorAMil =>
         const Text('Represtamo en proceso'),
       AnalisisSolicitudesInterceptorType.asalariado =>
-        const Text('Asalariado en proceso'),
+        ActualizarAnalisisAsalariadoHnScreen(
+          numeroSolicitud: numeroSolicitud,
+          tipoSolicitud: tipoSolicitudString,
+          title: title,
+          subtitle: subtitle,
+          description: description,
+          index: index,
+        ),
       AnalisisSolicitudesInterceptorType.grupal =>
         ActualizarAnalisisGrupalHnScreen(
           numeroSolicitud: numeroSolicitud,
@@ -102,13 +111,27 @@ class ActualizarAnalisisNuevaMenorMilScreen extends StatelessWidget {
               tipoSolicitud: tipoSolicitud,
             ),
         ),
+        BlocProvider(
+          create: (ctx) => ActualizarAnalisisMenorMilCubit(repository),
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Actualizar Analisis Menor a Mil'),
         ),
-        body: BlocBuilder<GetAnalisisMenorMilDataCubit,
+        body: BlocConsumer<GetAnalisisMenorMilDataCubit,
             GetAnalisisMenorMilDataState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            if (state.status == Status.done) {
+              context
+                  .read<ActualizarAnalisisMenorMilCubit>()
+                  .cargarDatosIniciales(
+                    state,
+                    numeroSolicitud: int.parse(numeroSolicitud),
+                  );
+            }
+          },
           builder: (context, state) {
             return switch (state.status) {
               Status.inProgress => const LoadingWidget(),
@@ -156,6 +179,7 @@ class ActualizarAnalisisNuevaMenorMilScreen extends StatelessWidget {
                             ),
                             ActualizarAnalisisMenorMilForm5(
                               pageController: pageController,
+                              tipoSolicitud: tipoSolicitudType,
                             ),
                           ],
                         ),

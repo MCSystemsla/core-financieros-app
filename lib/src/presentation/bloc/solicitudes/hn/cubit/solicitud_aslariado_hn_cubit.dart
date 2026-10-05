@@ -25,13 +25,14 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
   ) : super(SolicitudAslariadoHnInitial());
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
+    final isGrupal = state.esGrupal == 'input.yes'.tr();
     try {
       final (isOk, msg, numeroSolicitud, idSolicitud) =
           await _repository.createSolicitudAsalariado(
         solicitud: SolicitudAsalariadoHn(
           esRecurrente: state.esRecurrente,
-          cargoGrupoCodigo: state.cargoGrupoCodigo,
-          grupoCodigo: state.grupoCodigo,
+          cargoGrupoCodigo: isGrupal ? state.cargoGrupoCodigo : '',
+          grupoCodigo: isGrupal ? state.grupoCodigo : '',
           // grupoCicloID: state.grupoCicloID,
           cedulaConyuge: state.cedulaConyuge,
           tipoDocumentoConyugeCodigo: state.tipoDocumentoConyugeCodigo,
@@ -267,17 +268,24 @@ class SolicitudAslariadoHnCubit extends Cubit<SolicitudAslariadoHnState> {
     SolicitudAsalariadoHnDbLocal? existing,
   ) {
     final prev = existing;
+    final esGrupalValue = _prefer(state.esGrupal, prev?.esGrupal);
+    final isGrupal = esGrupalValue == 'input.yes'.tr();
 
     return SolicitudAsalariadoHnDbLocal(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
       esRecurrente: state.esRecurrente,
-      esGrupal: _prefer(state.esGrupal, prev?.esGrupal),
-      cargoGrupoCodigo: _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo),
-      grupoCodigo: _prefer(state.grupoCodigo, prev?.grupoCodigo),
-      cargoGrupoNombre: _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre),
-      grupoCodigoNombre:
-          _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre),
+      esGrupal: esGrupalValue,
+      cargoGrupoCodigo: isGrupal
+          ? _prefer(state.cargoGrupoCodigo, prev?.cargoGrupoCodigo)
+          : '',
+      grupoCodigo: isGrupal ? _prefer(state.grupoCodigo, prev?.grupoCodigo) : '',
+      cargoGrupoNombre: isGrupal
+          ? _prefer(state.cargoGrupoNombre, prev?.cargoGrupoNombre)
+          : '',
+      grupoCodigoNombre: isGrupal
+          ? _prefer(state.grupoCodigoNombre, prev?.grupoCodigoNombre)
+          : '',
       clientSignatureStatus: _prefer(
           state.clientSignatureStatus.name, prev?.clientSignatureStatus),
       database: _prefer(state.database, prev?.database),

@@ -21,30 +21,32 @@ class ButtonActionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Expanded(
-            child: CustomElevatedButton(
-              alignment: MainAxisAlignment.center,
-              text: previousTitle,
-              color: Colors.red,
-              onPressed: () => onPreviousPressed!(),
+    return SafeArea(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomElevatedButton(
+                alignment: MainAxisAlignment.center,
+                text: previousTitle,
+                color: Colors.red,
+                onPressed: () => onPreviousPressed!(),
+              ),
             ),
-          ),
-          const Gap(20),
-          Expanded(
-            child: disabled == null || disabled == true
-                ? const LoadingWidget()
-                : CustomElevatedButton(
-                    alignment: MainAxisAlignment.center,
-                    text: nextTitle,
-                    color: AppColors.getPrimaryColor(),
-                    onPressed: () => onNextPressed!(),
-                  ),
-          )
-        ],
+            const Gap(20),
+            Expanded(
+              child: disabled == null || disabled == true
+                  ? const LoadingWidget()
+                  : CustomElevatedButton(
+                      alignment: MainAxisAlignment.center,
+                      text: nextTitle,
+                      color: AppColors.getPrimaryColor(),
+                      onPressed: () => onNextPressed!(),
+                    ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -77,10 +77,15 @@ class _UpdateSolicitudNuevaMenorForm7State
   // }
 
   Future<void> selectDate(BuildContext context) async {
+    final now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: fechaPrimerPago,
-      firstDate: DateTime.now(),
+      // La fecha guardada puede estar en el pasado; initialDate no puede ser
+      // menor que firstDate o showDatePicker lanza un assert.
+      initialDate: fechaPrimerPago != null && fechaPrimerPago!.isAfter(now)
+          ? fechaPrimerPago
+          : now,
+      firstDate: now,
       lastDate: DateTime(2101),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
       // selectableDayPredicate: (day) {
@@ -362,7 +367,7 @@ class _UpdateSolicitudNuevaMenorForm7State
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
                         frecuenciaCodigo: item.valor,
-                        frecuenciaNombre: item.meses,
+                        frecuenciaNombre: item.nombre,
                         // frecuenciaCodigoNombre: item.nombre,
                       ),
                     );

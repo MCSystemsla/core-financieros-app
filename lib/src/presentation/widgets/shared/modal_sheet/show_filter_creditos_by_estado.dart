@@ -1,5 +1,5 @@
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
-import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_nueva_by_estado/solicitud_nueva_by_estado_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/solicitudes_by_estado_ni_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -9,7 +9,7 @@ void showFilterCreditosByEstado(
   BuildContext context,
   EstadoCredito estadoCredito,
   bool isAsignadaToAsesorCredito,
-  SolicitudNuevaByEstadoCubit cubit,
+  SolicitudesByEstadoNiCubit cubit,
 ) {
   showModalBottomSheet(
     context: context,
