@@ -4,7 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/historial_credito/hisorial_credito_options_bottom_sheet.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_plan_inversion/analisis_plan_inversion_hn_cubit.dart';
@@ -13,8 +13,8 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/add_item_card/add_item_custom_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analisis_credit/ni/analisis_card_ventas_day.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,9 +37,7 @@ class PlanInversionScreen extends StatelessWidget {
         AnalisisRepositoryHNImpl(),
       )..serNumeroSolicitud(numeroSolicitud),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Crear Plan de inversion'),
-        ),
+        backgroundColor: RedesignColors.background,
         body: BlocConsumer<AnalisisPlanInversionHnCubit,
             AnalisisPlanInversionHnState>(
           listener: (context, state) {
@@ -74,66 +72,97 @@ class PlanInversionScreen extends StatelessWidget {
           builder: (context, state) {
             final hasData = state.planInversion.isNotEmpty;
             final isLoading = state.status == Status.inProgress;
-            return SingleChildScrollView(
+            final totalInversion = state.planInversion.fold<int>(
+              0,
+              (sum, e) => sum + e.total,
+            );
+            return SafeArea(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Gap(20),
-                  ListView.builder(
-                    itemCount: state.planInversion.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      final e = state.planInversion[index];
-
-                      return AnalisisCardVentasDay(
-                        subtitle: e.total.toCurrencyString(
-                          mantissaLength: 0,
+                  ScreenHeaderWidget(
+                    title: 'Plan de inversión',
+                    subtitle:
+                        'Solicitud #$numeroSolicitud. Detalla en qué se invertirá el crédito.',
+                    onBack: () => Navigator.pop(context),
+                  ),
+                  const Gap(18),
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                      children: [
+                        _ResumenInversionCard(
+                          total: totalInversion,
+                          items: state.planInversion.length,
                         ),
-                        title: e.cantidad.toString(),
-                        description: e.descripcion,
-                        onTap: () => {
-                          showHistorialCreditoOptionsBottomSheet(
-                            context: context,
-                            onEdit: () {
-                              showModalBottomSheet(
+                        const Gap(22),
+                        const Text(
+                          'ARTÍCULOS',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.1,
+                            color: RedesignColors.inkMuted,
+                          ),
+                        ),
+                        const Gap(10),
+                        if (!hasData) const _EmptyPlanInversion(),
+                        for (final e in state.planInversion) ...[
+                          _PlanInversionItemCard(
+                            planInversion: e,
+                            onTap: () => {
+                              showHistorialCreditoOptionsBottomSheet(
                                 context: context,
-                                isScrollControlled: true,
-                                builder: (ctx) => _NivelProduccionSheetrHn(
-                                  cubit: context
-                                      .read<AnalisisPlanInversionHnCubit>(),
-                                  numeroSolicitud: numeroSolicitud,
-                                  isUpdate: true,
-                                  planInversion: e,
-                                ),
-                              );
-                            },
-                            onDelete: () {
-                              context
-                                  .read<AnalisisPlanInversionHnCubit>()
-                                  .deletePlanInversion(uuid: e.uuid);
+                                onEdit: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (ctx) => _NivelProduccionSheetrHn(
+                                      cubit: context
+                                          .read<AnalisisPlanInversionHnCubit>(),
+                                      numeroSolicitud: numeroSolicitud,
+                                      isUpdate: true,
+                                      planInversion: e,
+                                    ),
+                                  );
+                                },
+                                onDelete: () {
+                                  context
+                                      .read<AnalisisPlanInversionHnCubit>()
+                                      .deletePlanInversion(uuid: e.uuid);
+                                },
+                              ),
                             },
                           ),
-                        },
-                      );
-                    },
-                  ),
-                  const Gap(20),
-                  AddItemCustomCard(
-                    title: 'Crear plan de inversion',
-                    onTap: () => {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (ctx) => _NivelProduccionSheetrHn(
-                          cubit: context.read<AnalisisPlanInversionHnCubit>(),
-                          numeroSolicitud: state.numeroSolicitud,
+                          const Gap(8),
+                        ],
+                        const Gap(4),
+                        _AgregarArticuloButton(
+                          onTap: () => {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (ctx) => _NivelProduccionSheetrHn(
+                                cubit: context
+                                    .read<AnalisisPlanInversionHnCubit>(),
+                                numeroSolicitud: state.numeroSolicitud,
+                              ),
+                            ),
+                          },
                         ),
-                      ),
-                    },
+                      ],
+                    ),
                   ),
-                  const Gap(20),
-                  Padding(
-                    padding: const EdgeInsets.all(15),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+                    decoration: const BoxDecoration(
+                      color: RedesignColors.surface,
+                      border: Border(
+                        top: BorderSide(color: RedesignColors.border),
+                      ),
+                    ),
                     child: CustomElevatedButton(
                       enabled: hasData && !isLoading,
                       onPressed: () {
@@ -142,7 +171,7 @@ class PlanInversionScreen extends StatelessWidget {
                             .createAnalisisPlanInversion();
                       },
                       text: isLoading ? 'Enviando...' : 'Enviar',
-                      color: Colors.green,
+                      color: RedesignColors.green,
                     ),
                   ),
                 ],
@@ -202,8 +231,8 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
         builder: (context, scrollController) {
           return Container(
             decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+              color: RedesignColors.surface,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Form(
               key: formKey,
@@ -217,20 +246,48 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     Center(
                       child: Container(
                         width: 40,
-                        height: 5,
+                        height: 4,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(10),
+                          color: RedesignColors.border,
+                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
                     ),
-                    const Gap(20),
+                    const Gap(18),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.isUpdate
+                                ? 'Editar artículo'
+                                : 'Nuevo artículo',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.4,
+                              color: RedesignColors.ink,
+                            ),
+                          ),
+                          const Gap(4),
+                          const Text(
+                            'El total se calcula con cantidad × precio unitario.',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: RedesignColors.inkMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(12),
                     OutlineTextfieldWidget(
                       initialValue: cantidad?.toString().toNullIfEmptyOrZero(),
                       title: 'Cantidad',
-                      icon: Icon(
-                        Icons.comment_bank_sharp,
-                        color: AppColors.getPrimaryColor(),
+                      icon: const Icon(
+                        Icons.numbers_rounded,
+                        color: RedesignColors.inkMuted,
                       ),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
@@ -247,9 +304,9 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                     OutlineTextfieldWidget(
                       initialValue: description,
                       title: 'Descripcion',
-                      icon: Icon(
-                        Icons.wallet,
-                        color: AppColors.getPrimaryColor(),
+                      icon: const Icon(
+                        Icons.inventory_2_outlined,
+                        color: RedesignColors.inkMuted,
                       ),
                       textInputType: TextInputType.text,
                       validator: (value) =>
@@ -270,9 +327,9 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                           .toNullIfEmptyOrZero(),
                       textAlign: TextAlign.end,
                       title: 'Precio Unitario ',
-                      icon: Icon(
-                        Icons.wallet,
-                        color: AppColors.getPrimaryColor(),
+                      icon: const Icon(
+                        Icons.payments_outlined,
+                        color: RedesignColors.inkMuted,
                       ),
                       textInputType: TextInputType.number,
                       validator: (value) =>
@@ -294,8 +351,8 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
                       width: double.infinity,
                       child: CustomElevatedButton(
                         enabled: true,
-                        text: 'Crear',
-                        color: AppColors.greenLatern.withOpacity(0.4),
+                        text: widget.isUpdate ? 'Guardar cambios' : 'Agregar',
+                        color: RedesignColors.ink,
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           if (widget.isUpdate) {
@@ -334,6 +391,243 @@ class _NivelProduccionSheetrHnState extends State<_NivelProduccionSheetrHn> {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _ResumenInversionCard extends StatelessWidget {
+  final int total;
+  final int items;
+  const _ResumenInversionCard({required this.total, required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: RedesignColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: RedesignColors.greenTint,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.trending_up_rounded,
+              color: RedesignColors.green,
+            ),
+          ),
+          const Gap(14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Total a invertir',
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: RedesignColors.inkMuted,
+                  ),
+                ),
+                const Gap(2),
+                Text(
+                  total.toCurrencyString(mantissaLength: 0),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.6,
+                    color: RedesignColors.ink,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          CardTagWidget(
+            label: items == 1 ? '1 artículo' : '$items artículos',
+            color: RedesignColors.green,
+            background: RedesignColors.greenTint,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlanInversionItemCard extends StatelessWidget {
+  final PlanInversion planInversion;
+  final VoidCallback onTap;
+  const _PlanInversionItemCard({
+    required this.planInversion,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: RedesignColors.surface,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: RedesignColors.border),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: RedesignColors.tagBackground,
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Text(
+                  '${planInversion.cantidad}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: RedesignColors.ink,
+                  ),
+                ),
+              ),
+              const Gap(12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      planInversion.descripcion,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w600,
+                        color: RedesignColors.ink,
+                      ),
+                    ),
+                    const Gap(3),
+                    Text(
+                      '${planInversion.cantidad} × ${planInversion.precioUnitario.toCurrencyString(mantissaLength: 0)}',
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        color: RedesignColors.inkMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(8),
+              Text(
+                planInversion.total.toCurrencyString(mantissaLength: 0),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: RedesignColors.green,
+                ),
+              ),
+              const Gap(4),
+              const Icon(
+                Icons.more_vert_rounded,
+                size: 20,
+                color: RedesignColors.chevron,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyPlanInversion extends StatelessWidget {
+  const _EmptyPlanInversion();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 24),
+      child: Column(
+        children: [
+          Icon(
+            Icons.shopping_bag_outlined,
+            size: 40,
+            color: RedesignColors.chevron,
+          ),
+          Gap(10),
+          Text(
+            'Aún no hay artículos',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: RedesignColors.ink,
+            ),
+          ),
+          Gap(4),
+          Text(
+            'Agrega lo que el cliente comprará con el crédito.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: RedesignColors.inkMuted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AgregarArticuloButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const _AgregarArticuloButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          height: 56,
+          decoration: BoxDecoration(
+            color: RedesignColors.surface.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: RedesignColors.chevron,
+              width: 1.2,
+            ),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.add_rounded,
+                color: RedesignColors.ink,
+              ),
+              Gap(6),
+              Text(
+                'Agregar artículo',
+                style: TextStyle(
+                  fontSize: 14.5,
+                  fontWeight: FontWeight.w600,
+                  color: RedesignColors.ink,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
