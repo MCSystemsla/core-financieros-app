@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_search_by_document/analisis_search_by_document_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/solicitudes/cedula/add_cedula_photos_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_actividades.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_datos_de_actividad.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_datos_de_ingresos.dart';
@@ -54,8 +55,24 @@ class FiadoresHnFormScreen extends StatelessWidget {
             ),
             body: SafeArea(
               child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: pageController,
                 children: [
+                  Builder(
+                    builder: (ctx) {
+                      final cubit = ctx.read<AnalisisFiadoresCubit>();
+                      return AddCedulaPhotosScreen(
+                        controller: pageController,
+                        onCedulaFrontTaken: (imagePath) => cubit.onFieldChanged(
+                          () =>
+                              cubit.state.copyWith(cedulaFrontPath: imagePath),
+                        ),
+                        onCedulaBackTaken: (imagePath) => cubit.onFieldChanged(
+                          () => cubit.state.copyWith(cedulaBackPath: imagePath),
+                        ),
+                      );
+                    },
+                  ),
                   FiadorSignatureWidget(
                     pageController: pageController,
                   ),
