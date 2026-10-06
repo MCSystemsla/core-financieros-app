@@ -1,18 +1,26 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/config/services/pdf/images_to_pdf_service.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
+import 'package:core_financiero_app/src/domain/repository/expediente_digital/expediente_digital_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:equatable/equatable.dart';
 
 part 'analisis_fiadores_state.dart';
 
 class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
+  static const String cedulaFiadorFilename = 'CEDULA_FIADOR.pdf';
+
   final AnalisisRepositoryHn _repository;
-  AnalisisFiadoresCubit(this._repository) : super(AnalisisFiadoresInitial());
+  final ExpedienteDigitalRepository _expedienteRepository;
+  AnalisisFiadoresCubit(this._repository, this._expedienteRepository)
+      : super(AnalisisFiadoresInitial());
 
   Future<void> createAnalisisFiador() async {
     final totalIngresosFamiliares =
@@ -226,6 +234,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         ));
         return;
       }
+      await _subirCedulaFiador();
       emit(state.copyWith(status: Status.done, firmaStatus: Status.done));
     } catch (e) {
       emit(state.copyWith(
@@ -233,6 +242,36 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         firmaStatus: Status.error,
         errorMsg: e.toString(),
       ));
+    }
+  }
+
+  /// Junta las fotos de la cédula del fiador en un PDF y lo sube al
+  /// expediente digital. Si algo falla, solo se reporta: el fiador ya quedó
+  /// creado y no se bloquea el flujo.
+  Future<void> _subirCedulaFiador() async {
+    if (state.cedulaFrontPath.isEmpty || state.cedulaBackPath.isEmpty) return;
+
+    File? pdf;
+    try {
+      pdf = await ImagesToPdfService.generate(
+        imagePaths: [state.cedulaFrontPath, state.cedulaBackPath],
+        fileName: 'cedula_fiador_${state.fiadorId}',
+      );
+      await _expedienteRepository.uploadDigitalFile(
+        tipo: DigitalFileTipo.analisis,
+        cedula: state.cedula,
+        numeroSolicitud: state.numeroSolicitud,
+        filename: cedulaFiadorFilename,
+        pdfPath: pdf.path,
+      );
+    } catch (e) {
+      await ErrorReporter.registerError(
+        errorMessage: 'Error generando PDF de cédula del fiador: $e',
+        statusCode: '400',
+        username: LocalStorage().currentUserName,
+      );
+    } finally {
+      if (pdf != null) await ImagesToPdfService.deletePdf(pdf);
     }
   }
 }
