@@ -233,34 +233,63 @@ class _AddPhotoSlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return Material(
+      color: RedesignColors.surface,
       borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 22),
-        decoration: BoxDecoration(
-          color: RedesignColors.tagBackground,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: RedesignColors.border),
-        ),
-        child: Column(
-          children: [
-            const Icon(
-              Icons.photo_camera_outlined,
-              size: 28,
-              color: RedesignColors.indigo,
-            ),
-            const Gap(8),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: RedesignColors.indigo,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: RedesignColors.border),
+          ),
+          child: Row(
+            children: [
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                  color: RedesignColors.indigoTint,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.photo_camera_outlined,
+                  size: 24,
+                  color: RedesignColors.indigo,
+                ),
               ),
-            ),
-          ],
+              const Gap(14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: RedesignColors.ink,
+                      ),
+                    ),
+                    const Gap(2),
+                    const Text(
+                      'Toca para abrir la cámara',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: RedesignColors.inkMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: RedesignColors.chevron,
+              ),
+            ],
+          ),
         ),
       ),
     );

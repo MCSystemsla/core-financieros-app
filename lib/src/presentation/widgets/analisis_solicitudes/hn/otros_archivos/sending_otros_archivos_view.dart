@@ -64,7 +64,7 @@ class SendingOtrosArchivosView extends StatelessWidget {
                               steps: [
                                 const SendingStep(
                                   label:
-                                      'Generando el PDF y subiéndolo al expediente',
+                                      'Generando el Archivo y subiéndolo al expediente',
                                   state: SendingStepState.active,
                                 ),
                                 SendingStep(label: '$documentName registrado'),
@@ -81,12 +81,8 @@ class SendingOtrosArchivosView extends StatelessWidget {
                               message:
                                   'El $documentName se agregó al expediente digital.',
                               steps: [
-                                const SendingStep(
-                                  label: 'PDF subido al expediente',
-                                  state: SendingStepState.done,
-                                ),
                                 SendingStep(
-                                  label: '$documentName registrado',
+                                  label: '$documentName subido al expediente',
                                   state: SendingStepState.done,
                                 ),
                               ],
