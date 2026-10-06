@@ -19,7 +19,7 @@ El expediente digital va a exigir los documentos en formato `.pdf`. Hoy la app s
 - Método `ImagesToPdfService.deletePdf(...)`: borra un PDF generado previamente.
 - Una imagen por página, página A4, imagen escalada para caber dentro del margen, centrada y sin recorte.
 - El orden de las páginas es el orden de la lista recibida.
-- Cada imagen se redimensiona a un lado máximo de 1600 px y se recodifica como JPG calidad 75 antes de entrar al PDF.
+- Cada imagen se redimensiona a un lado máximo de 2400 px y se recodifica como JPG calidad 75 antes de entrar al PDF.
 - El procesamiento pesado (decodificar, redimensionar, construir el PDF) corre fuera del hilo de UI con `Isolate.run`.
 - El PDF se guarda en `getApplicationDocumentsDirectory()/expediente_pdfs/<fileName>.pdf`. Si ya existe un archivo con ese nombre, se sobrescribe.
 - Crear `ImagesToPdfException` en `lib/src/domain/exceptions/images_to_pdf_exception.dart`.
@@ -42,7 +42,7 @@ El expediente digital va a exigir los documentos en formato `.pdf`. Hoy la app s
 ```dart
 // lib/src/config/services/pdf/images_to_pdf_service.dart
 class ImagesToPdfService {
-  static const int maxImageDimension = 1600;
+  static const int maxImageDimension = 2400;
   static const int jpgQuality = 75;
   static const String pdfDirectoryName = 'expediente_pdfs';
 
@@ -72,14 +72,14 @@ Convenciones:
 - Tamaño de página: `PdfPageFormat.a4`, orientación vertical, margen de 20 pt en los cuatro lados.
 - La imagen usa `BoxFit.contain` dentro del área útil de la página.
 - Se aplica `img.bakeOrientation` antes de redimensionar, para respetar el EXIF.
-- Una imagen cuyo lado mayor ya mide 1600 px o menos no se agranda; solo se recodifica.
+- Una imagen cuyo lado mayor ya mide 2400 px o menos no se agranda; solo se recodifica.
 - `fileName` vacío o con `/` o `\` lanza `ImagesToPdfException`.
 
 ## Implementation plan
 
 1. Agregar `pdf` a `dependencies` en `pubspec.yaml` y correr `flutter pub get`. Verificar que `flutter analyze` sigue sin errores nuevos.
 2. Crear `lib/src/domain/exceptions/images_to_pdf_exception.dart` con `ImagesToPdfException`.
-3. Crear `lib/src/config/services/pdf/images_to_pdf_service.dart` con las constantes y un helper privado que, a partir de una ruta, valida que el archivo exista, lo decodifica con el paquete `image`, aplica `bakeOrientation`, redimensiona a 1600 px de lado máximo y devuelve los bytes JPG calidad 75. Si falla, lanza `ImagesToPdfException` con `imagePath`.
+3. Crear `lib/src/config/services/pdf/images_to_pdf_service.dart` con las constantes y un helper privado que, a partir de una ruta, valida que el archivo exista, lo decodifica con el paquete `image`, aplica `bakeOrientation`, redimensiona a 2400 px de lado máximo y devuelve los bytes JPG calidad 75. Si falla, lanza `ImagesToPdfException` con `imagePath`.
 4. Agregar un helper privado que recibe la lista de bytes JPG y construye el documento con `pw.Document`: una `pw.Page` A4 por imagen, margen 20 pt, `pw.Image` centrada con `BoxFit.contain`. Devuelve `Uint8List` con `doc.save()`.
 5. Implementar `generate`: valida la lista y el `fileName`, corre los pasos 3 y 4 dentro de `Isolate.run`, resuelve el directorio de salida (`outputDirectory` o `Documents/expediente_pdfs`, que se crea si no existe) y escribe `<fileName>.pdf` sobrescribiendo.
 6. Implementar `deletePdf`: borra el archivo si existe.
@@ -114,7 +114,7 @@ Convenciones:
 - **No:** `List<XFile>` o `List<File>`. Acoplan el servicio a un paquete o fuerzan conversiones innecesarias.
 - **Sí:** una imagen por página A4 con `BoxFit.contain`. Formato estándar de expediente, sin recortar contenido del documento fotografiado.
 - **No:** página del tamaño de la imagen, ni orientación automática. A4 fijo es más predecible para revisión e impresión.
-- **Sí:** redimensionar a 1600 px y JPG calidad 75. Baja mucho el peso del PDF para subir con mala señal y sigue siendo legible.
+- **Sí:** redimensionar a 2400 px y JPG calidad 75. Da unos 200 DPI en A4 (legible al imprimir y para letra chica de cédulas) y mantiene el PDF liviano para subir con mala señal. Antes era 1600 px (~144 DPI), que se quedaba corto en nitidez.
 - **Sí:** procesar en `Isolate.run`. Decodificar y redimensionar varias fotos en el hilo principal congela la UI.
 - **Sí:** guardar en `Documents/expediente_pdfs/` (persistente). Permite reintentar el envío si falla o si no hay conexión.
 - **No:** directorio temporal o solo bytes en memoria. El sistema puede borrar el temporal, y los bytes en memoria se pierden si la app se cierra.

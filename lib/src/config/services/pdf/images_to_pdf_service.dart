@@ -11,7 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 /// Convierte una lista de imágenes locales en un único PDF para el
 /// expediente digital. Compartido por todos los países.
 class ImagesToPdfService {
-  static const int maxImageDimension = 1600;
+  static const int maxImageDimension = 2400;
   static const int jpgQuality = 75;
   static const String pdfDirectoryName = 'expediente_pdfs';
 

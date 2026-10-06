@@ -62,7 +62,7 @@ void main() {
     expect(imageWidths(pdf), [100, 200, 300]);
   });
 
-  test('reduce las imágenes grandes a 1600 px de lado máximo', () async {
+  test('reduce las imágenes grandes a 2400 px de lado máximo', () async {
     final pdf = await ImagesToPdfService.generate(
       imagePaths: [writeJpg('grande', width: 3200, height: 100)],
       fileName: 'expediente_grande',
