@@ -1,6 +1,6 @@
 # SPEC 01 — Servicio para convertir imágenes de cámara en un PDF
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** —
 > **Date:** 2026-10-06
 > **Objective:** Crear un servicio compartido que recibe una lista de rutas de imágenes tomadas con la cámara y genera un único archivo `.pdf` persistente, listo para enviarse al expediente digital.
@@ -88,20 +88,20 @@ Convenciones:
 
 ## Acceptance criteria
 
-- [ ] `pubspec.yaml` incluye el paquete `pdf` y no incluye `printing` ni `syncfusion_flutter_pdf`.
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados.
-- [ ] `flutter test` pasa todos los casos de `images_to_pdf_service_test.dart`.
-- [ ] Con 3 imágenes, `generate` devuelve un `File` que existe y cuyos primeros bytes son `%PDF`.
-- [ ] El PDF generado con 3 imágenes tiene exactamente 3 páginas (el test cuenta las ocurrencias de `/Type /Page` sin contar `/Pages`).
-- [ ] El orden de las páginas coincide con el orden de `imagePaths`.
-- [ ] Con una lista vacía, `generate` lanza `ImagesToPdfException` y no crea ningún archivo.
-- [ ] Con una ruta que no existe, `generate` lanza `ImagesToPdfException` cuyo `imagePath` es esa ruta, y no crea ningún archivo.
-- [ ] Con un archivo que no es imagen, `generate` lanza `ImagesToPdfException` y no crea ningún archivo.
-- [ ] Llamar `generate` dos veces con el mismo `fileName` deja un solo archivo, con el contenido de la segunda llamada.
-- [ ] Sin `outputDirectory`, el PDF queda en `<Documents>/expediente_pdfs/<fileName>.pdf` (verificado manualmente en un dispositivo Android).
-- [ ] Generar un PDF con 5 fotos reales de la cámara no congela la UI (verificado manualmente en un dispositivo Android).
-- [ ] Después de `deletePdf`, el archivo ya no existe, y llamarlo otra vez no lanza error.
-- [ ] Ningún archivo nuevo vive bajo `hn/` o `ni/`, ni lee `FlavorCubit`.
+- [x] `pubspec.yaml` incluye el paquete `pdf` y no incluye `printing` ni `syncfusion_flutter_pdf`.
+- [x] `flutter analyze` no reporta issues nuevos en los archivos creados.
+- [x] `flutter test` pasa todos los casos de `images_to_pdf_service_test.dart`.
+- [x] Con 3 imágenes, `generate` devuelve un `File` que existe y cuyos primeros bytes son `%PDF`.
+- [x] El PDF generado con 3 imágenes tiene exactamente 3 páginas (el test cuenta las ocurrencias de `/Type /Page` sin contar `/Pages`).
+- [x] El orden de las páginas coincide con el orden de `imagePaths`.
+- [x] Con una lista vacía, `generate` lanza `ImagesToPdfException` y no crea ningún archivo.
+- [x] Con una ruta que no existe, `generate` lanza `ImagesToPdfException` cuyo `imagePath` es esa ruta, y no crea ningún archivo.
+- [x] Con un archivo que no es imagen, `generate` lanza `ImagesToPdfException` y no crea ningún archivo.
+- [x] Llamar `generate` dos veces con el mismo `fileName` deja un solo archivo, con el contenido de la segunda llamada.
+- [x] Sin `outputDirectory`, el PDF queda en `<Documents>/expediente_pdfs/<fileName>.pdf` (verificado manualmente en un dispositivo Android).
+- [x] Generar un PDF con 5 fotos reales de la cámara no congela la UI (verificado manualmente en un dispositivo Android).
+- [x] Después de `deletePdf`, el archivo ya no existe, y llamarlo otra vez no lanza error.
+- [x] Ningún archivo nuevo vive bajo `hn/` o `ni/`, ni lee `FlavorCubit`.
 
 ## Decisions
 
