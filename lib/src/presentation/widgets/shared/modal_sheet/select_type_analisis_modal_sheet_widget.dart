@@ -322,6 +322,16 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                         ),
                       },
                     ),
+                    SelectableCardItem(
+                      userHaveDataAlready: false,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.upload_file_rounded,
+                      color: const Color(0xffD97706),
+                      title: 'Subir otros archivos',
+                      subtitle: 'Adjuntar documentos adicionales al expediente',
+                      // TODO: navegar a la pantalla de carga de otros archivos.
+                      onTap: () {},
+                    ),
                     if (!esGrupal) ...[
                       SelectableCardItem(
                         userHaveDataAlready: state.tieneSupervision,
