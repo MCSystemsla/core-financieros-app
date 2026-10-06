@@ -61,6 +61,13 @@ class ImagesToPdfService {
     return pdf.writeAsBytes(pdfBytes, flush: true);
   }
 
+  /// Borra [pdf] si existe. No falla si ya fue borrado.
+  static Future<void> deletePdf(File pdf) async {
+    if (await pdf.exists()) {
+      await pdf.delete();
+    }
+  }
+
   /// Lee la imagen en [path], corrige su orientación EXIF, la reduce a
   /// [maxImageDimension] px de lado máximo (nunca la agranda) y la devuelve
   /// como JPG con calidad [jpgQuality].
