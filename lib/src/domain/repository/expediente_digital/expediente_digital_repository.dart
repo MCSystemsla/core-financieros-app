@@ -15,15 +15,29 @@ enum DigitalFileTipo {
   const DigitalFileTipo(this.codigo);
 }
 
+/// Nombres de archivo del expediente digital. Todo PDF que se sube al
+/// expediente debe tener su nombre aquí.
+enum DigitalFilename {
+  cedulaFiador('CEDULA_FIADOR'),
+  rucClienteNegocio('RUC_CLIENTE_NEGOCIO');
+
+  final String codigo;
+
+  const DigitalFilename(this.codigo);
+
+  /// Nombre con el que se sube al expediente (ej. `CEDULA_FIADOR.pdf`).
+  String get pdfName => '$codigo.pdf';
+}
+
 /// Sube PDFs al expediente digital. Compartido por todos los países.
 abstract class ExpedienteDigitalRepository {
-  /// Sube el PDF en [pdfPath] como [filename] (ej. `CEDULA_FIADOR.pdf`) al
-  /// expediente de [numeroSolicitud].
+  /// Sube el PDF en [pdfPath] como [filename] al expediente de
+  /// [numeroSolicitud].
   Future<(bool, String)> uploadDigitalFile({
     required DigitalFileTipo tipo,
     required String cedula,
     required int numeroSolicitud,
-    required String filename,
+    required DigitalFilename filename,
     required String pdfPath,
   });
 }
@@ -36,9 +50,10 @@ class ExpedienteDigitalRepositoryImpl implements ExpedienteDigitalRepository {
     required DigitalFileTipo tipo,
     required String cedula,
     required int numeroSolicitud,
-    required String filename,
+    required DigitalFilename filename,
     required String pdfPath,
   }) async {
+    final pdfName = filename.pdfName;
     const apiUrl = String.fromEnvironment('apiUrl');
     const protocol = String.fromEnvironment('protocol');
     const url = '$protocol://$apiUrl/cartera/digital-files/upload';
@@ -47,13 +62,13 @@ class ExpedienteDigitalRepositoryImpl implements ExpedienteDigitalRepository {
       var request = http.MultipartRequest('PUT', Uri.parse(url));
       request.fields['tipo'] = tipo.codigo;
       request.fields['cedula'] = cedula;
-      request.fields['filename'] = filename;
+      request.fields['filename'] = pdfName;
       request.fields['numeroSolicitud'] = numeroSolicitud.toString();
       request.fields['database'] = LocalStorage().database;
       request.files.add(await http.MultipartFile.fromPath(
         'file',
         pdfPath,
-        filename: filename,
+        filename: pdfName,
         contentType: MediaType('application', 'pdf'),
       ));
       request.headers.addAll({
@@ -68,14 +83,14 @@ class ExpedienteDigitalRepositoryImpl implements ExpedienteDigitalRepository {
       var responseBody = await http.Response.fromStream(response);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _logger.i('$filename enviado al expediente: ${responseBody.body}');
-        return (true, '$filename enviado al expediente');
+        _logger.i('$pdfName enviado al expediente: ${responseBody.body}');
+        return (true, '$pdfName enviado al expediente');
       }
 
       final message = _messageFrom(responseBody.body) ??
-          'Error ${response.statusCode} enviando $filename';
+          'Error ${response.statusCode} enviando $pdfName';
       await ErrorReporter.registerError(
-        errorMessage: 'Error enviando $filename al expediente: $message',
+        errorMessage: 'Error enviando $pdfName al expediente: $message',
         statusCode: response.statusCode.toString(),
         username: LocalStorage().currentUserName,
       );
@@ -84,7 +99,7 @@ class ExpedienteDigitalRepositoryImpl implements ExpedienteDigitalRepository {
       return (false, message);
     } catch (e) {
       await ErrorReporter.registerError(
-        errorMessage: 'Error enviando $filename al expediente: $e',
+        errorMessage: 'Error enviando $pdfName al expediente: $e',
         statusCode: '400',
         username: LocalStorage().currentUserName,
       );

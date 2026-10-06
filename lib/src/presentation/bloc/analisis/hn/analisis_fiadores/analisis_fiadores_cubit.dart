@@ -15,8 +15,6 @@ import 'package:equatable/equatable.dart';
 part 'analisis_fiadores_state.dart';
 
 class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
-  static const String cedulaFiadorFilename = 'CEDULA_FIADOR.pdf';
-
   final AnalisisRepositoryHn _repository;
   final ExpedienteDigitalRepository _expedienteRepository;
   AnalisisFiadoresCubit(this._repository, this._expedienteRepository)
@@ -261,7 +259,7 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
         tipo: DigitalFileTipo.analisis,
         cedula: state.cedula,
         numeroSolicitud: state.numeroSolicitud,
-        filename: cedulaFiadorFilename,
+        filename: DigitalFilename.cedulaFiador,
         pdfPath: pdf.path,
       );
     } catch (e) {

@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/garantia/garantia_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/otros_archivos/otros_archivos_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/grupal/supervision_grupal_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
@@ -329,8 +330,17 @@ class SelectTypeAnalisisModalSheetWidget extends StatelessWidget {
                       color: const Color(0xffD97706),
                       title: 'Subir otros archivos',
                       subtitle: 'Adjuntar documentos adicionales al expediente',
-                      // TODO: navegar a la pantalla de carga de otros archivos.
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => OtrosArchivosHnScreen(
+                              numeroSolicitud: numeroSolicitud,
+                              cedulaCliente: cedulaCliente,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     if (!esGrupal) ...[
                       SelectableCardItem(
