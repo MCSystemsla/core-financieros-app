@@ -123,7 +123,6 @@ class __FormContentState extends State<_FormContent> {
                     nombreFamiliarCercano = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        nombreFamiliar: nombreFamiliarCercano,
                         nombreFamiliarCercano: nombreFamiliarCercano,
                       ),
                     );
