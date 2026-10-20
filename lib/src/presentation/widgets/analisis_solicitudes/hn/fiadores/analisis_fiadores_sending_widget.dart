@@ -116,6 +116,10 @@ class _AnalisisFiadoresSendingWidgetState
                     label: 'Firma del fiador registrada',
                     state: SendingStepState.done,
                   ),
+                  SendingStep(
+                    label: 'Fotos de cedula registradas',
+                    state: SendingStepState.done,
+                  ),
                 ],
                 value: numeroSolicitud,
                 actions: [
