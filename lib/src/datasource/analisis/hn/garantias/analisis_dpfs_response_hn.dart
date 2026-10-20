@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
+
 AnalisisDpfsResponseHn analisisDpfsResponseHnFromJson(String str) =>
     AnalisisDpfsResponseHn.fromJson(json.decode(str));
 
@@ -27,9 +29,9 @@ class DPFHN {
   final int dpfId;
   final int cuentaId;
   final String numeroCuenta;
-  final int montoGarantia;
-  final int saldoDisponible;
-  final int saldoDisponibleGarantia;
+  final num montoGarantia;
+  final num saldoDisponible;
+  final num saldoDisponibleGarantia;
 
   DPFHN({
     required this.dpfId,
@@ -44,9 +46,9 @@ class DPFHN {
         dpfId: json['DpfID'],
         cuentaId: json['CuentaID'],
         numeroCuenta: json['NumeroCuenta'],
-        montoGarantia: json['MontoGarantia'],
-        saldoDisponible: json['SaldoDisponible'],
-        saldoDisponibleGarantia: json['SaldoDisponibleGarantia'],
+        montoGarantia: parseNum(json['MontoGarantia']) ?? 0,
+        saldoDisponible: parseNum(json['SaldoDisponible']) ?? 0,
+        saldoDisponibleGarantia: parseNum(json['SaldoDisponibleGarantia']) ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
