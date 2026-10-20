@@ -18,7 +18,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/analis
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_frecuencia_pago_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,10 +50,6 @@ class _NuevaMenorHistorialCrediticioState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MiCreditoProgress(
-            currentStep: 2,
-            steps: 7,
-          ),
           const Gap(20),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),

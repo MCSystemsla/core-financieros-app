@@ -22,7 +22,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_producto_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/sheet_search_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/sending/asalariado_sending_form.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -61,7 +60,10 @@ class _FormContent extends StatefulWidget {
   State<_FormContent> createState() => __FormContentState();
 }
 
-class __FormContentState extends State<_FormContent> {
+// Kept alive so the fields survive going to another step and back: the
+// PageView disposes off-screen pages and these values only live here.
+class __FormContentState extends State<_FormContent>
+    with AutomaticKeepAliveClientMixin {
   Item? moneda;
   String? monto;
   Item? proposito;
@@ -92,6 +94,9 @@ class __FormContentState extends State<_FormContent> {
         h.year == date.year && h.month == date.month && h.day == date.day);
   }
 
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -115,12 +120,12 @@ class __FormContentState extends State<_FormContent> {
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isAtSameMomentAs(fechaDesembolso)) {
+      if (!_dateOnly(picked).isAfter(_dateOnly(fechaDesembolso))) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title:
-              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
+              'La Fecha de primer pago debe ser posterior a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -162,12 +167,13 @@ class __FormContentState extends State<_FormContent> {
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+      if (fechaPrimerPago != null &&
+          !_dateOnly(picked).isBefore(_dateOnly(fechaPrimerPago!))) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title:
-              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+              'La Fecha de desembolso debe ser anterior a la fecha de primer pago',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -200,7 +206,11 @@ class __FormContentState extends State<_FormContent> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final calcularCuotaProvider = context.read<CalculoCuotaCubit>();
     final localDbProvider = global<ObjectBoxService>();
     return BlocBuilder<SolicitudAsalariadoCubit, SolicitudAsalariadoState>(
@@ -212,10 +222,6 @@ class __FormContentState extends State<_FormContent> {
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 7,
-                  steps: 7,
-                ),
                 const Gap(20),
                 SearchDropdownWidget(
                   validator: (value) =>
@@ -424,8 +430,11 @@ class __FormContentState extends State<_FormContent> {
                                 dialogType: DialogType.warning);
                             return;
                           }
-                          if (double.tryParse(monto ?? '0')! <
-                              montoMinimo!.toDouble()) {
+                          // A product without montoMinimo/montoMaximo has no
+                          // limit on that side.
+                          if (montoMinimo != null &&
+                              (double.tryParse(monto ?? '0') ?? 0) <
+                                  montoMinimo!.toDouble()) {
                             CustomAlertDialog(
                               context: context,
                               title:
@@ -435,8 +444,9 @@ class __FormContentState extends State<_FormContent> {
                                 dialogType: DialogType.warning);
                             return;
                           }
-                          if (double.tryParse(monto ?? '0')! >
-                              montoMaximo!.toDouble()) {
+                          if (montoMaximo != null &&
+                              (double.tryParse(monto ?? '0') ?? 0) >
+                                  montoMaximo!.toDouble()) {
                             CustomAlertDialog(
                               context: context,
                               title:
