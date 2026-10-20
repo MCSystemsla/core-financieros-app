@@ -44,6 +44,8 @@ App version scheme: `X.Y.Z` — X for breaking platform changes, Y for new featu
 
 For releases, use the `release-captain` agent (`.claude/agents/release-captain.md`). It bumps the flavor's version, runs `flutter analyze`, flags block issues (missing `dimension "country"`, `signingConfigs.debug` on a production flavor), and gives you the obfuscated build command. It does not build or commit unless asked.
 
+For QA, use the `jarvis` agent (`.claude/agents/jarvis.md`). It looks for real bugs in a screen, module or branch (async/`mounted`, cubit state, nulls and parsing, decimal amounts, HN/NI/CR divergence, offline sync, auth) and returns a report by severity with `file:line`, repro steps, a proposed fix and a suggested test, plus improvement suggestions. It is read-only.
+
 ## Lint / analyze
 
 ```
