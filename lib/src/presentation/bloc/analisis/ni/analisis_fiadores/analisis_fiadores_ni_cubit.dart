@@ -15,14 +15,10 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
       : super(const AnalisisFiadoresNiState());
 
   Future<void> createAnalisisFiador({required int numeroSolicitud}) async {
-    // Sin empresario los montos del negocio se envían en 0.
-    final ventaNegocio = state.esEmpresario ? state.ventaNegocio : 0.0;
-    final costoVenta = state.esEmpresario ? state.costoVenta : 0.0;
-    final gastosOperativos = state.esEmpresario ? state.gastosOperativos : 0.0;
-
     final totalIngresosFamiliares =
         state.salarioNetoCordoba + state.otrosIngresosCordoba;
-    final gananciaNegocio = ventaNegocio - costoVenta - gastosOperativos;
+    final gananciaNegocio =
+        state.ventaNegocio - state.costoVenta - state.gastosOperativos;
     final saldoDisponible = totalIngresosFamiliares +
         gananciaNegocio +
         state.otrosIngresos -
@@ -31,9 +27,6 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
     emit(state.copyWith(
       status: Status.inProgress,
       numeroSolicitud: numeroSolicitud,
-      ventaNegocio: ventaNegocio,
-      costoVenta: costoVenta,
-      gastosOperativos: gastosOperativos,
       totalIngresosFamiliares: totalIngresosFamiliares,
       gananciaNegocio: gananciaNegocio,
       saldoDisponible: saldoDisponible,
@@ -65,6 +58,8 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
           cargo: state.cargo,
           tiempoLaborar: state.tiempoLaborar,
           esEmpresario: state.esEmpresario,
+          actividadCodigo: state.actividadCodigo,
+          tiempoActividad: state.tiempoActividad,
           direccionTrabajo: state.direccionTrabajo,
           barrioTrabajo: state.barrioTrabajo,
           telefonoTrabajo: state.telefonoTrabajo,
@@ -74,6 +69,7 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
           tieneDocumentosDomicilio: state.tieneDocumentosDomicilio,
           tipoDomicilioCodigo: state.tipoDomicilioCodigo,
           duenoVivienda: state.duenoVivienda,
+          pagoAlquiler: state.pagoAlquiler,
           profesion: state.profesion,
           anosVivirDomicilio: state.anosVivirDomicilio,
           nombreFamiliarCercano: state.nombreFamiliarCercano,
@@ -84,31 +80,18 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
           salarioNetoCordoba: state.salarioNetoCordoba,
           otrosIngresosCordoba: state.otrosIngresosCordoba,
           totalIngresosFamiliares: totalIngresosFamiliares,
-          ventaNegocio: ventaNegocio,
-          costoVenta: costoVenta,
-          gastosOperativos: gastosOperativos,
+          ventaNegocio: state.ventaNegocio,
+          costoVenta: state.costoVenta,
+          gastosOperativos: state.gastosOperativos,
           gananciaNegocio: gananciaNegocio,
           otrosIngresos: state.otrosIngresos,
+          fuenteOtrosIngresos: state.fuenteOtrosIngresos,
           consumoFamiliar: state.consumoFamiliar,
           saldoDisponible: saldoDisponible,
           tipoDocumentoCodigo: state.tipoDocumentoCodigo,
           tipoFiadorCodigo: state.tipoFiadorCodigo,
-          escolaridadCodigo: state.escolaridadCodigo,
-          ocupacionCodigo: state.ocupacionCodigo,
-          profesionCodigo: state.profesionCodigo,
-          paisNacimientoCodigo: state.paisNacimientoCodigo,
-          nacionalidad1Codigo: state.nacionalidad1Codigo,
-          cantidadHijos: state.cantidadHijos,
           // "Tipo de propiedad" alimenta ambos códigos, igual que en HN.
           tipoViviendaCodigo: state.tipoDomicilioCodigo,
-          tipoPersonaCNBSCodigo: state.tipoPersonaCNBSCodigo,
-          estatusCodigo: state.estatusCodigo,
-          tipoClienteCodigo: state.tipoClienteCodigo,
-          actividadEconomicaCNBS1Codigo: state.actividadEconomicaCNBS1Codigo,
-          actividadEconomicaDescripcion1: state.actividadEconomicaDescripcion1,
-          paisOcupacionCodigo: state.paisOcupacionCodigo,
-          departamentoOcupacionCodigo: state.departamentoOcupacionCodigo,
-          municipioOcupacionCodigo: state.municipioOcupacionCodigo,
         ),
       );
       emit(state.copyWith(status: Status.done));

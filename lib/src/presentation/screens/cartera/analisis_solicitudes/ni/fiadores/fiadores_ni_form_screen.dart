@@ -1,11 +1,10 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_actividad_economica.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_de_actividad.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_de_ingresos.dart';
-import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_generales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_laborales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_personales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_domicilio.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_ingresos_vivienda.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,13 +22,14 @@ enum FiadoresNiFormType {
   const FiadoresNiFormType(this.codigo);
 }
 
-/// Mismo orden que los hijos del `PageView`.
+/// Mismo orden que los hijos del `PageView`. Los pasos siguen las dos
+/// pestañas ("Datos personales" y "Otros datos") de la pantalla de fiadores
+/// del sistema de escritorio de NI.
 const fiadoresNiSteps = [
-  'Datos generales',
   'Datos personales',
-  'Actividad económica',
-  'Datos de actividad',
-  'Datos de ingresos',
+  'Contacto y domicilio',
+  'Datos laborales',
+  'Ingresos y vivienda',
 ];
 
 class FiadoresNiFormScreen extends StatefulWidget {
@@ -95,19 +95,16 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     controller: pageController,
                     children: [
-                      AnalisisFiadoresNiDatosGenerales(
-                        pageController: pageController,
-                      ),
                       AnalisisFiadoresNiDatosPersonales(
                         pageController: pageController,
                       ),
-                      AnalisisFiadoresNiActividadEconomica(
+                      AnalisisFiadoresNiDomicilio(
                         pageController: pageController,
                       ),
-                      AnalisisFiadoresNiDatosDeActividad(
+                      AnalisisFiadoresNiDatosLaborales(
                         pageController: pageController,
                       ),
-                      AnalisisFiadoresNiDatosDeIngresos(
+                      AnalisisFiadoresNiIngresosVivienda(
                         pageController: pageController,
                         numeroSolicitud: widget.numeroSolicitud,
                       ),

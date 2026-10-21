@@ -3,6 +3,11 @@ import 'dart:convert';
 String analisisFiadorNiToJson(AnalisisFiadorNi data) =>
     json.encode(data.toJson());
 
+/// Body de `POST /cartera/analisis-fiador/create` para Nicaragua.
+///
+/// Lleva solo los campos de la pantalla de fiadores de NI (sistema de
+/// escritorio). `FuenteOtrosIngresos`, `PagoAlquiler`, `ActividadCodigo` y
+/// `TiempoActividad` usan los mismos nombres que HN en ese endpoint.
 class AnalisisFiadorNi {
   final String database;
   final int numeroSolicitud;
@@ -28,6 +33,8 @@ class AnalisisFiadorNi {
   final String cargo;
   final String tiempoLaborar;
   final bool esEmpresario;
+  final String actividadCodigo;
+  final String tiempoActividad;
   final String direccionTrabajo;
   final String barrioTrabajo;
   final String telefonoTrabajo;
@@ -37,6 +44,7 @@ class AnalisisFiadorNi {
   final bool tieneDocumentosDomicilio;
   final String tipoDomicilioCodigo;
   final String duenoVivienda;
+  final double pagoAlquiler;
   final String profesion;
   final int anosVivirDomicilio;
   final String nombreFamiliarCercano;
@@ -51,27 +59,14 @@ class AnalisisFiadorNi {
   final double gastosOperativos;
   final double gananciaNegocio;
   final double otrosIngresos;
+  final String fuenteOtrosIngresos;
   final double consumoFamiliar;
   final double saldoDisponible;
   final bool activo;
   final String tipoDocumentoCodigo;
   final bool esFirmaDigitalFiador;
   final String tipoFiadorCodigo;
-  final String escolaridadCodigo;
-  final String ocupacionCodigo;
-  final String profesionCodigo;
-  final String paisNacimientoCodigo;
-  final String nacionalidad1Codigo;
-  final int cantidadHijos;
   final String tipoViviendaCodigo;
-  final String tipoPersonaCNBSCodigo;
-  final String estatusCodigo;
-  final String tipoClienteCodigo;
-  final String actividadEconomicaCNBS1Codigo;
-  final String actividadEconomicaDescripcion1;
-  final String paisOcupacionCodigo;
-  final String departamentoOcupacionCodigo;
-  final String municipioOcupacionCodigo;
 
   AnalisisFiadorNi({
     required this.database,
@@ -98,6 +93,8 @@ class AnalisisFiadorNi {
     required this.cargo,
     required this.tiempoLaborar,
     required this.esEmpresario,
+    required this.actividadCodigo,
+    required this.tiempoActividad,
     required this.direccionTrabajo,
     required this.barrioTrabajo,
     required this.telefonoTrabajo,
@@ -107,6 +104,7 @@ class AnalisisFiadorNi {
     required this.tieneDocumentosDomicilio,
     required this.tipoDomicilioCodigo,
     required this.duenoVivienda,
+    required this.pagoAlquiler,
     required this.profesion,
     required this.anosVivirDomicilio,
     required this.nombreFamiliarCercano,
@@ -121,27 +119,14 @@ class AnalisisFiadorNi {
     required this.gastosOperativos,
     required this.gananciaNegocio,
     required this.otrosIngresos,
+    required this.fuenteOtrosIngresos,
     required this.consumoFamiliar,
     required this.saldoDisponible,
     this.activo = true,
     required this.tipoDocumentoCodigo,
     this.esFirmaDigitalFiador = false,
     required this.tipoFiadorCodigo,
-    required this.escolaridadCodigo,
-    required this.ocupacionCodigo,
-    required this.profesionCodigo,
-    required this.paisNacimientoCodigo,
-    required this.nacionalidad1Codigo,
-    required this.cantidadHijos,
     required this.tipoViviendaCodigo,
-    required this.tipoPersonaCNBSCodigo,
-    required this.estatusCodigo,
-    required this.tipoClienteCodigo,
-    required this.actividadEconomicaCNBS1Codigo,
-    required this.actividadEconomicaDescripcion1,
-    required this.paisOcupacionCodigo,
-    required this.departamentoOcupacionCodigo,
-    required this.municipioOcupacionCodigo,
   });
 
   Map<String, dynamic> toJson() {
@@ -170,6 +155,8 @@ class AnalisisFiadorNi {
       'Cargo': cargo,
       'TiempoLaborar': tiempoLaborar,
       'EsEmpresario': esEmpresario,
+      'ActividadCodigo': actividadCodigo,
+      'TiempoActividad': tiempoActividad,
       'DireccionTrabajo': direccionTrabajo,
       'BarrioTrabajo': barrioTrabajo,
       'TelefonoTrabajo': telefonoTrabajo,
@@ -179,6 +166,7 @@ class AnalisisFiadorNi {
       'TieneDocumentosDomicilio': tieneDocumentosDomicilio,
       'TipoDomicilioCodigo': tipoDomicilioCodigo,
       'DuenoVivienda': duenoVivienda,
+      'PagoAlquiler': pagoAlquiler,
       'Profesion': profesion,
       'AnosVivirDomicilio': anosVivirDomicilio,
       'NombreFamiliarCercano': nombreFamiliarCercano,
@@ -193,28 +181,14 @@ class AnalisisFiadorNi {
       'GastosOperativos': gastosOperativos,
       'GananciaNegocio': gananciaNegocio,
       'OtrosIngresos': otrosIngresos,
+      'FuenteOtrosIngresos': fuenteOtrosIngresos,
       'ConsumoFamiliar': consumoFamiliar,
       'SaldoDisponible': saldoDisponible,
       'Activo': activo,
       'TipoDocumentoCodigo': tipoDocumentoCodigo,
       'EsFirmaDigitalFiador': esFirmaDigitalFiador,
       'TipoFiadorCodigo': tipoFiadorCodigo,
-      'EscolaridadCodigo': escolaridadCodigo,
-      'OcupacionCodigo': ocupacionCodigo,
-      'ProfesionCodigo': profesionCodigo,
-      'PaisNacimientoCodigo': paisNacimientoCodigo,
-      // El backend espera la "c" minúscula, igual que en HN.
-      'Nacionalidad1codigo': nacionalidad1Codigo,
-      'CantidadHijos': cantidadHijos,
       'TipoViviendaCodigo': tipoViviendaCodigo,
-      'TipoPersonaCNBSCodigo': tipoPersonaCNBSCodigo,
-      'EstatusCodigo': estatusCodigo,
-      'TipoClienteCodigo': tipoClienteCodigo,
-      'ActividadEconomicaCNBS1Codigo': actividadEconomicaCNBS1Codigo,
-      'ActividadEconomicaDescripcion1': actividadEconomicaDescripcion1,
-      'PaisOcupacionCodigo': paisOcupacionCodigo,
-      'DepartamentoOcupacionCodigo': departamentoOcupacionCodigo,
-      'MunicipioOcupacionCodigo': municipioOcupacionCodigo,
     };
     data.removeWhere((key, value) => value == null || value == '');
     return data;

@@ -7,61 +7,48 @@ class AnalisisFiadoresNiState extends Equatable {
   final int numeroSolicitud;
   final String tipoFiadorCodigo;
 
-  // Datos generales
-  final String tipoDocumentoCodigo;
-  final String cedula;
+  // Datos personales
   final String nombre1;
   final String nombre2;
   final String apellido1;
   final String apellido2;
   final DateTime? fechaNacimiento;
-  final String paisNacimientoCodigo;
+  final String tipoDocumentoCodigo;
+  final String cedula;
   final String sexoCodigo;
   final String estadoCivilCodigo;
   final String relacionClienteCodigo;
-  final int personasACargo;
 
-  // Datos personales
-  final String paisCodigo;
-  final String departamentoCodigo;
-  final String municipioCodigo;
-  final String barrioCasa;
-  final String direccion;
-  final String nacionalidad1Codigo;
+  // Contacto y domicilio
   final String telefono;
   final String celular;
   final String email;
-  final String escolaridadCodigo;
-  final String profesionCodigo;
-  final String profesion;
-  final String ocupacionCodigo;
+  final int personasACargo;
   final int cantidadDependientes;
-  final int cantidadHijos;
-  final String tipoPersonaCNBSCodigo;
-  final String estatusCodigo;
-  final String tipoClienteCodigo;
+  final String direccion;
+  final String barrioCasa;
+  final String paisCodigo;
+  final String departamentoCodigo;
+  final String municipioCodigo;
+  final String profesion;
 
-  // Actividad económica
-  final String actividadEconomicaCNBS1Codigo;
-  final String actividadEconomicaDescripcion1;
-
-  // Datos de actividad
+  // Datos laborales
   final bool esAsalariado;
   final String empresa;
   final String cargo;
   final String tiempoLaborar;
+  final bool esEmpresario;
+  final String actividadCodigo;
+  final String tiempoActividad;
   final String direccionTrabajo;
   final String barrioTrabajo;
   final String telefonoTrabajo;
   final String lugarTrabajoAnterior;
-  final bool esEmpresario;
-  final String paisOcupacionCodigo;
-  final String departamentoOcupacionCodigo;
-  final String municipioOcupacionCodigo;
 
-  // Datos de ingresos
+  // Ingresos y vivienda
   final double salarioNetoCordoba;
   final double otrosIngresosCordoba;
+  final String fuenteOtrosIngresos;
   final double totalIngresosFamiliares;
   final double ventaNegocio;
   final double costoVenta;
@@ -74,62 +61,52 @@ class AnalisisFiadoresNiState extends Equatable {
   final int anosVivirDomicilio;
   final bool tieneDocumentosDomicilio;
   final String duenoVivienda;
+  final double pagoAlquiler;
   final String nombreFamiliarCercano;
   final String parentescoFamiliarCercanoCodigo;
-  final String direccionFamiliarCercano;
   final String telefonoFamiliarCercano;
+  final String direccionFamiliarCercano;
 
   const AnalisisFiadoresNiState({
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.numeroSolicitud = 0,
     this.tipoFiadorCodigo = '',
-    this.tipoDocumentoCodigo = 'CEDULAIDENTIDAD',
-    this.cedula = '',
     this.nombre1 = '',
     this.nombre2 = '',
     this.apellido1 = '',
     this.apellido2 = '',
     this.fechaNacimiento,
-    this.paisNacimientoCodigo = '',
+    this.tipoDocumentoCodigo = 'CEDULAIDENTIDAD',
+    this.cedula = '',
     this.sexoCodigo = '',
     this.estadoCivilCodigo = '',
     this.relacionClienteCodigo = '',
-    this.personasACargo = 0,
-    this.paisCodigo = '',
-    this.departamentoCodigo = '',
-    this.municipioCodigo = '',
-    this.barrioCasa = '',
-    this.direccion = '',
-    this.nacionalidad1Codigo = '',
     this.telefono = '',
     this.celular = '',
     this.email = '',
-    this.escolaridadCodigo = '',
-    this.profesionCodigo = '',
-    this.profesion = '',
-    this.ocupacionCodigo = '',
+    this.personasACargo = 0,
     this.cantidadDependientes = 0,
-    this.cantidadHijos = 0,
-    this.tipoPersonaCNBSCodigo = '',
-    this.estatusCodigo = '',
-    this.tipoClienteCodigo = '',
-    this.actividadEconomicaCNBS1Codigo = '',
-    this.actividadEconomicaDescripcion1 = '',
+    this.direccion = '',
+    this.barrioCasa = '',
+    this.paisCodigo = '',
+    this.departamentoCodigo = '',
+    this.municipioCodigo = '',
+    this.profesion = '',
     this.esAsalariado = false,
     this.empresa = '',
     this.cargo = '',
     this.tiempoLaborar = '',
+    this.esEmpresario = false,
+    this.actividadCodigo = '',
+    this.tiempoActividad = '',
     this.direccionTrabajo = '',
     this.barrioTrabajo = '',
     this.telefonoTrabajo = '',
     this.lugarTrabajoAnterior = '',
-    this.esEmpresario = false,
-    this.paisOcupacionCodigo = '',
-    this.departamentoOcupacionCodigo = '',
-    this.municipioOcupacionCodigo = '',
     this.salarioNetoCordoba = 0,
     this.otrosIngresosCordoba = 0,
+    this.fuenteOtrosIngresos = '',
     this.totalIngresosFamiliares = 0,
     this.ventaNegocio = 0,
     this.costoVenta = 0,
@@ -142,10 +119,11 @@ class AnalisisFiadoresNiState extends Equatable {
     this.anosVivirDomicilio = 0,
     this.tieneDocumentosDomicilio = false,
     this.duenoVivienda = '',
+    this.pagoAlquiler = 0,
     this.nombreFamiliarCercano = '',
     this.parentescoFamiliarCercanoCodigo = '',
-    this.direccionFamiliarCercano = '',
     this.telefonoFamiliarCercano = '',
+    this.direccionFamiliarCercano = '',
   });
 
   @override
@@ -154,52 +132,41 @@ class AnalisisFiadoresNiState extends Equatable {
         errorMsg,
         numeroSolicitud,
         tipoFiadorCodigo,
-        tipoDocumentoCodigo,
-        cedula,
         nombre1,
         nombre2,
         apellido1,
         apellido2,
         fechaNacimiento,
-        paisNacimientoCodigo,
+        tipoDocumentoCodigo,
+        cedula,
         sexoCodigo,
         estadoCivilCodigo,
         relacionClienteCodigo,
-        personasACargo,
-        paisCodigo,
-        departamentoCodigo,
-        municipioCodigo,
-        barrioCasa,
-        direccion,
-        nacionalidad1Codigo,
         telefono,
         celular,
         email,
-        escolaridadCodigo,
-        profesionCodigo,
-        profesion,
-        ocupacionCodigo,
+        personasACargo,
         cantidadDependientes,
-        cantidadHijos,
-        tipoPersonaCNBSCodigo,
-        estatusCodigo,
-        tipoClienteCodigo,
-        actividadEconomicaCNBS1Codigo,
-        actividadEconomicaDescripcion1,
+        direccion,
+        barrioCasa,
+        paisCodigo,
+        departamentoCodigo,
+        municipioCodigo,
+        profesion,
         esAsalariado,
         empresa,
         cargo,
         tiempoLaborar,
+        esEmpresario,
+        actividadCodigo,
+        tiempoActividad,
         direccionTrabajo,
         barrioTrabajo,
         telefonoTrabajo,
         lugarTrabajoAnterior,
-        esEmpresario,
-        paisOcupacionCodigo,
-        departamentoOcupacionCodigo,
-        municipioOcupacionCodigo,
         salarioNetoCordoba,
         otrosIngresosCordoba,
+        fuenteOtrosIngresos,
         totalIngresosFamiliares,
         ventaNegocio,
         costoVenta,
@@ -212,10 +179,11 @@ class AnalisisFiadoresNiState extends Equatable {
         anosVivirDomicilio,
         tieneDocumentosDomicilio,
         duenoVivienda,
+        pagoAlquiler,
         nombreFamiliarCercano,
         parentescoFamiliarCercanoCodigo,
-        direccionFamiliarCercano,
         telefonoFamiliarCercano,
+        direccionFamiliarCercano,
       ];
 
   AnalisisFiadoresNiState copyWith({
@@ -223,52 +191,41 @@ class AnalisisFiadoresNiState extends Equatable {
     String? errorMsg,
     int? numeroSolicitud,
     String? tipoFiadorCodigo,
-    String? tipoDocumentoCodigo,
-    String? cedula,
     String? nombre1,
     String? nombre2,
     String? apellido1,
     String? apellido2,
     DateTime? fechaNacimiento,
-    String? paisNacimientoCodigo,
+    String? tipoDocumentoCodigo,
+    String? cedula,
     String? sexoCodigo,
     String? estadoCivilCodigo,
     String? relacionClienteCodigo,
-    int? personasACargo,
-    String? paisCodigo,
-    String? departamentoCodigo,
-    String? municipioCodigo,
-    String? barrioCasa,
-    String? direccion,
-    String? nacionalidad1Codigo,
     String? telefono,
     String? celular,
     String? email,
-    String? escolaridadCodigo,
-    String? profesionCodigo,
-    String? profesion,
-    String? ocupacionCodigo,
+    int? personasACargo,
     int? cantidadDependientes,
-    int? cantidadHijos,
-    String? tipoPersonaCNBSCodigo,
-    String? estatusCodigo,
-    String? tipoClienteCodigo,
-    String? actividadEconomicaCNBS1Codigo,
-    String? actividadEconomicaDescripcion1,
+    String? direccion,
+    String? barrioCasa,
+    String? paisCodigo,
+    String? departamentoCodigo,
+    String? municipioCodigo,
+    String? profesion,
     bool? esAsalariado,
     String? empresa,
     String? cargo,
     String? tiempoLaborar,
+    bool? esEmpresario,
+    String? actividadCodigo,
+    String? tiempoActividad,
     String? direccionTrabajo,
     String? barrioTrabajo,
     String? telefonoTrabajo,
     String? lugarTrabajoAnterior,
-    bool? esEmpresario,
-    String? paisOcupacionCodigo,
-    String? departamentoOcupacionCodigo,
-    String? municipioOcupacionCodigo,
     double? salarioNetoCordoba,
     double? otrosIngresosCordoba,
+    String? fuenteOtrosIngresos,
     double? totalIngresosFamiliares,
     double? ventaNegocio,
     double? costoVenta,
@@ -281,68 +238,53 @@ class AnalisisFiadoresNiState extends Equatable {
     int? anosVivirDomicilio,
     bool? tieneDocumentosDomicilio,
     String? duenoVivienda,
+    double? pagoAlquiler,
     String? nombreFamiliarCercano,
     String? parentescoFamiliarCercanoCodigo,
-    String? direccionFamiliarCercano,
     String? telefonoFamiliarCercano,
+    String? direccionFamiliarCercano,
   }) {
     return AnalisisFiadoresNiState(
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       tipoFiadorCodigo: tipoFiadorCodigo ?? this.tipoFiadorCodigo,
-      tipoDocumentoCodigo: tipoDocumentoCodigo ?? this.tipoDocumentoCodigo,
-      cedula: cedula ?? this.cedula,
       nombre1: nombre1 ?? this.nombre1,
       nombre2: nombre2 ?? this.nombre2,
       apellido1: apellido1 ?? this.apellido1,
       apellido2: apellido2 ?? this.apellido2,
       fechaNacimiento: fechaNacimiento ?? this.fechaNacimiento,
-      paisNacimientoCodigo: paisNacimientoCodigo ?? this.paisNacimientoCodigo,
+      tipoDocumentoCodigo: tipoDocumentoCodigo ?? this.tipoDocumentoCodigo,
+      cedula: cedula ?? this.cedula,
       sexoCodigo: sexoCodigo ?? this.sexoCodigo,
       estadoCivilCodigo: estadoCivilCodigo ?? this.estadoCivilCodigo,
       relacionClienteCodigo:
           relacionClienteCodigo ?? this.relacionClienteCodigo,
-      personasACargo: personasACargo ?? this.personasACargo,
-      paisCodigo: paisCodigo ?? this.paisCodigo,
-      departamentoCodigo: departamentoCodigo ?? this.departamentoCodigo,
-      municipioCodigo: municipioCodigo ?? this.municipioCodigo,
-      barrioCasa: barrioCasa ?? this.barrioCasa,
-      direccion: direccion ?? this.direccion,
-      nacionalidad1Codigo: nacionalidad1Codigo ?? this.nacionalidad1Codigo,
       telefono: telefono ?? this.telefono,
       celular: celular ?? this.celular,
       email: email ?? this.email,
-      escolaridadCodigo: escolaridadCodigo ?? this.escolaridadCodigo,
-      profesionCodigo: profesionCodigo ?? this.profesionCodigo,
-      profesion: profesion ?? this.profesion,
-      ocupacionCodigo: ocupacionCodigo ?? this.ocupacionCodigo,
+      personasACargo: personasACargo ?? this.personasACargo,
       cantidadDependientes: cantidadDependientes ?? this.cantidadDependientes,
-      cantidadHijos: cantidadHijos ?? this.cantidadHijos,
-      tipoPersonaCNBSCodigo:
-          tipoPersonaCNBSCodigo ?? this.tipoPersonaCNBSCodigo,
-      estatusCodigo: estatusCodigo ?? this.estatusCodigo,
-      tipoClienteCodigo: tipoClienteCodigo ?? this.tipoClienteCodigo,
-      actividadEconomicaCNBS1Codigo:
-          actividadEconomicaCNBS1Codigo ?? this.actividadEconomicaCNBS1Codigo,
-      actividadEconomicaDescripcion1: actividadEconomicaDescripcion1 ??
-          this.actividadEconomicaDescripcion1,
+      direccion: direccion ?? this.direccion,
+      barrioCasa: barrioCasa ?? this.barrioCasa,
+      paisCodigo: paisCodigo ?? this.paisCodigo,
+      departamentoCodigo: departamentoCodigo ?? this.departamentoCodigo,
+      municipioCodigo: municipioCodigo ?? this.municipioCodigo,
+      profesion: profesion ?? this.profesion,
       esAsalariado: esAsalariado ?? this.esAsalariado,
       empresa: empresa ?? this.empresa,
       cargo: cargo ?? this.cargo,
       tiempoLaborar: tiempoLaborar ?? this.tiempoLaborar,
+      esEmpresario: esEmpresario ?? this.esEmpresario,
+      actividadCodigo: actividadCodigo ?? this.actividadCodigo,
+      tiempoActividad: tiempoActividad ?? this.tiempoActividad,
       direccionTrabajo: direccionTrabajo ?? this.direccionTrabajo,
       barrioTrabajo: barrioTrabajo ?? this.barrioTrabajo,
       telefonoTrabajo: telefonoTrabajo ?? this.telefonoTrabajo,
       lugarTrabajoAnterior: lugarTrabajoAnterior ?? this.lugarTrabajoAnterior,
-      esEmpresario: esEmpresario ?? this.esEmpresario,
-      paisOcupacionCodigo: paisOcupacionCodigo ?? this.paisOcupacionCodigo,
-      departamentoOcupacionCodigo:
-          departamentoOcupacionCodigo ?? this.departamentoOcupacionCodigo,
-      municipioOcupacionCodigo:
-          municipioOcupacionCodigo ?? this.municipioOcupacionCodigo,
       salarioNetoCordoba: salarioNetoCordoba ?? this.salarioNetoCordoba,
       otrosIngresosCordoba: otrosIngresosCordoba ?? this.otrosIngresosCordoba,
+      fuenteOtrosIngresos: fuenteOtrosIngresos ?? this.fuenteOtrosIngresos,
       totalIngresosFamiliares:
           totalIngresosFamiliares ?? this.totalIngresosFamiliares,
       ventaNegocio: ventaNegocio ?? this.ventaNegocio,
@@ -357,14 +299,15 @@ class AnalisisFiadoresNiState extends Equatable {
       tieneDocumentosDomicilio:
           tieneDocumentosDomicilio ?? this.tieneDocumentosDomicilio,
       duenoVivienda: duenoVivienda ?? this.duenoVivienda,
+      pagoAlquiler: pagoAlquiler ?? this.pagoAlquiler,
       nombreFamiliarCercano:
           nombreFamiliarCercano ?? this.nombreFamiliarCercano,
       parentescoFamiliarCercanoCodigo: parentescoFamiliarCercanoCodigo ??
           this.parentescoFamiliarCercanoCodigo,
-      direccionFamiliarCercano:
-          direccionFamiliarCercano ?? this.direccionFamiliarCercano,
       telefonoFamiliarCercano:
           telefonoFamiliarCercano ?? this.telefonoFamiliarCercano,
+      direccionFamiliarCercano:
+          direccionFamiliarCercano ?? this.direccionFamiliarCercano,
     );
   }
 }
