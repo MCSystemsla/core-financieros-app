@@ -13,8 +13,6 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nuev
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Same order as the PageView children below. The offline screen
-// (CrearSolicitudOfflineScreen) has the same steps.
 const nuevaMenorNiSteps = [
   'Documento de identidad',
   'Datos generales',

@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
@@ -134,6 +135,26 @@ class ClassValidator {
       if (!endsWithLetter.hasMatch(value!)) {
         return 'La cédula nicaragüense debe terminar con una letra';
       }
+    }
+    return null;
+  }
+
+  /// Cédula de un tercero (beneficiario, familiar) en los formularios `ni/`,
+  /// que también usa Costa Rica: NI exige 14 caracteres terminados en letra;
+  /// CR acepta cédula física (9 dígitos) o DIMEX (12 dígitos).
+  static String? validateCedulaByFlavor(String? value, Flavor flavor) {
+    if (flavor != Flavor.costaRica) {
+      return validateMaxIntValueAndMinValue(
+        value,
+        14,
+        isNicaraguaCedula: true,
+      );
+    }
+    if (value == null || value.trim().isEmpty) {
+      return 'input.input_validator'.tr();
+    }
+    if (!RegExp(r'^(\d{9}|\d{12})$').hasMatch(value.trim())) {
+      return 'La cédula debe tener 9 dígitos (o 12 si es DIMEX)';
     }
     return null;
   }
