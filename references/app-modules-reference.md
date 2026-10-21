@@ -19,6 +19,7 @@ Leyenda: ✅ disponible · ❌ no disponible · 🌐 solo en línea · 🔒 requ
 |---|---|---|---|---|---|
 | Solicitudes y análisis | Solicitudes | ✅ | ✅ | ✅ | — |
 | Solicitudes y análisis | Análisis | ✅ (online y offline) | ✅ | ⚠️ placeholder | — |
+| Solicitudes y análisis | Análisis → Fiadores | ✅ 🌐 | ✅ 🌐 | ❌ | — |
 | Solicitudes y análisis | Supervisiones (crédito, riesgo, regional) | ✅ 🌐 | ❌ | ❌ | 🔒 `supervisionDeCredito` |
 | Formularios Kiva | Kiva (online y offline) | ❌ | ✅ | ✅ | 🔒 `llenarKiva` |
 | Formularios Kiva | Kiva Histórico | ❌ | ✅ 🌐 | ✅ 🌐 | 🔒 `llenarKiva` |
@@ -45,3 +46,4 @@ Leyenda: ✅ disponible · ❌ no disponible · 🌐 solo en línea · 🔒 requ
 - **Análisis en Costa Rica**: `AnalisisInterceptorByFlavor` devuelve `Text('This is costa rica')`; el módulo no está implementado.
 - **Análisis offline**: `CarteraScreen` siempre abre `AnalisisSolicitudesHnOfflineScreen` sin conexión, también en NI/CR.
 - **Solicitudes y Análisis** no validan permiso: el chequeo de `llenarSolicitudes` está comentado en `cartera_screen.dart`.
+- **Fiadores en el análisis**: se entra desde el sheet de análisis (`SelectTypeAnalisisModalSheetWidget` en HN, `SelectTypeAnalisisModalSheetNiWidget` en NI) y solo funciona en línea. HN pide fotos de cédula, firma y búsqueda por documento; NI no. En NI los códigos de tipo de fiador (`FiadoresNiFormType`) son provisionales. Costa Rica no llega a ese sheet.

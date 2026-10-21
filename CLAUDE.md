@@ -93,6 +93,18 @@ Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_gar
 
 Valor comercial and related currency fields in the HN garantía crear/actualizar forms (vehículo, maquinaria, derecho, DPF, hipotecario under `widgets/analisis_solicitudes/hn/garantia/v2/`) accept decimals: `TextInputType.numberWithOptions(decimal: true)`, `CurrencyInputFormatter()` with no `mantissaLength: 0`, and `toNumericString(value, allowPeriod: true)` when parsing. The response model (`analisis_garantia_obtener_bien_response.dart`) parses these values as `double`, not `int`. Keep this when adding a new garantía form.
 
+### NI análisis: fiadores
+
+NI has its own fiador flow, separate from HN's: `FiadoresNiScreen` → `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). You reach it from the "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget`.
+
+- The form has 5 steps driven by `AnalisisFiadoresNiCubit`. It has no cédula photos, signature, document search or credit history, and it saves nothing offline.
+- It posts `AnalisisFiadorNi` to `POST /cartera/analisis-fiador/create` through `AnalisisFormsRepositoryNi.createAnalisisFiador` (expects `201`).
+- Step sections use `FiadorNiSectionCard` (`fiador_ni_form_layout.dart`) rather than `SectionBlockWidget`, because the inputs bring their own padding.
+- The `FiadoresNiFormType` codes (`FIA`, `CON`, `COD`) are placeholders. Only `FIA` is confirmed by backend.
+- The fiador catalogs (`RELACIONPERSONAS`, `PROFESION`, `OCUPACION`, `TIPOPERSONACNBS`, `ESTATUSCLIENTE`, `TIPOCLIENTE`) are synced for NI in `SolicitudCatalogoCubit._codigosCatalogo`.
+
+Spec: `specs/02-fiadores-analisis-ni.md`.
+
 ### Solicitudes by estado (paginated lists)
 
 Lists of credit requests filtered by `EstadoCredito` go through one cubit per country: `SolicitudesByEstadoHnCubit` (`bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/`) and `SolicitudesByEstadoNiCubit` (`bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/`, backed by `SolicitudesCreditoRepository.getSolicitudesByEstado` in `domain/repository/solicitudes_credito/ni/`). The NI cubit replaced the old `SolicitudNuevaByEstadoCubit`. Pattern:
