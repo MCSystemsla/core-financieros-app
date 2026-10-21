@@ -699,7 +699,7 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
       final response = await http.Response.fromStream(streamedResponse);
 
       // 5. Manejo de respuesta
-      return _procesarRespuestaServidor(response);
+      return await _procesarRespuestaServidor(response);
     } on SocketException {
       return (false, 'No hay conexión a internet. Verifica tu red.');
     } on TimeoutException {
