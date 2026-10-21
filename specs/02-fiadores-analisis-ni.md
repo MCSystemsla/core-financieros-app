@@ -19,7 +19,7 @@ HN ya tiene el módulo de fiadores (`screens/cartera/analisis_solicitudes/hn/fia
 - Cubit `AnalisisFiadoresNiCubit` + `AnalisisFiadoresNiState`, que tienen el estado del formulario y hacen el envío.
 - Enum `FiadoresNiFormType` con códigos **provisionales** de tipo de fiador (ver Data model).
 - Pantalla de selección de tipo `FiadoresNiScreen`: un `ModuleTileWidget` por tipo, con `ScreenHeaderWidget` y `RedesignColors`.
-- Pantalla de formulario `FiadoresNiFormScreen`: `PageView` de 5 pasos con `FormStepHeaderWidget` y `SectionBlockWidget`, con el estilo del rediseño.
+- Pantalla de formulario `FiadoresNiFormScreen`: `PageView` de 5 pasos con `FormStepHeaderWidget` y secciones en `FiadorNiSectionCard` (`widgets/analisis_solicitudes/ni/fiadores/fiador_ni_form_layout.dart`), con el estilo del rediseño.
   1. Datos generales
   2. Datos personales
   3. Actividad económica
@@ -198,7 +198,9 @@ Convenciones:
 - **Sí:** un solo slot de actividad con `ACTIVIDADECONOMICA`. `CatalogoActividadesCNBSDropdown` solo lee el box de HN, y el curl trae un solo slot.
 - **No:** los 3 slots CNBS ni APNFD.
 - **Sí:** para empresario, solo el switch y los montos del negocio. Las demás llaves del bloque empresario de HN no vienen en el curl de NI.
-- **Sí:** pasos con rediseño (`FormStepHeaderWidget`, `SectionBlockWidget`, `RedesignColors`). `CLAUDE.md` lo pide para pantallas nuevas. Se mantienen los mismos pasos y campos que HN, menos lo excluido.
+- **Sí:** pasos con rediseño (`FormStepHeaderWidget`, `RedesignColors`). `CLAUDE.md` lo pide para pantallas nuevas. Se mantienen los mismos pasos y campos que HN, menos lo excluido.
+- **Sí:** secciones en `FiadorNiSectionCard`, una tarjeta propia de fiadores NI con la etiqueta en el estilo de `SectionBlockWidget`.
+- **No:** `SectionBlockWidget` para los inputs. Agrega 20 px de padding encima del que ya traen `OutlineTextfieldWidget` y `SearchDropdownWidget`, y el del dropdown no se puede cambiar, así que los campos quedan desalineados. Tampoco se modifica el widget compartido.
 - **Sí:** las mismas validaciones obligatorias que HN, y la cédula con `validateCedulaByFlavor`.
 - **Sí:** solo en línea, sin ObjectBox. Es igual que HN, y la persistencia offline sería una spec propia.
 - **Sí:** navegación con `Navigator.push(MaterialPageRoute)`, sin rutas en `go_router`. Es el mismo patrón del sheet de análisis NI y del flujo de fiadores HN.
