@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/modal/open_motivo_rechazo_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -115,6 +116,7 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                   'Plan de inversión': state.tienePlanInversion,
                   'Ubicacion': state.tieneUbicacion,
                   'Imagenes del negocio': state.tieneFotoNegocio,
+                  'Fiadores': state.tieneFiadores,
                 };
                 return ListView(
                   controller: controller,
@@ -237,6 +239,25 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                                         tipoGrupal: tipoSolicitudString,
                                       ) ??
                                       '',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SelectableCardItem(
+                      userHaveDataAlready: state.tieneFiadores,
+                      isLoading: state.status == Status.inProgress,
+                      icon: Icons.swap_horiz_rounded,
+                      color: const Color(0xff0D9488),
+                      title: 'Registrar Fiadores',
+                      subtitle: 'Crear fiadores de la solicitud',
+                      onTap: () {
+                        context.pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => FiadoresNiScreen(
+                              numeroSolicitud: int.parse(numeroSolicitud),
                             ),
                           ),
                         );
