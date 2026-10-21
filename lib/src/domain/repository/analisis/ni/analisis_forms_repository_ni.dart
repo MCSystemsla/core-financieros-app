@@ -6,6 +6,8 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalaria
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/crear_fiadores_response_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/analisis_fiador_ni.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/endpoint/analisis_forms_endpoint_ni.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
@@ -34,6 +36,9 @@ abstract class AnalisisFormsRepositoryNi {
   Future<void> createAnalisisMenorMilByTipoSolicitud({
     required AnalisisMenorMilHN analisis,
     required AnalisisSolicitudesInterceptorType tipoSolicitud,
+  });
+  Future<CrearFiadorResponseHn> createAnalisisFiador({
+    required AnalisisFiadorNi analisisFiadorNi,
   });
 }
 
@@ -109,6 +114,27 @@ class AnalisisFormsRepositoryNiImpl extends AnalisisFormsRepositoryNi {
         ),
       _ => throw Exception('Tipo Solicitud no reconocido: $tipoSolicitud'),
     };
+  }
+
+  @override
+  Future<CrearFiadorResponseHn> createAnalisisFiador({
+    required AnalisisFiadorNi analisisFiadorNi,
+  }) async {
+    final endpoint = CreateAnalisisFiadorEndpointNi(
+      analisisFiadorNi: analisisFiadorNi,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 201) {
+        _logger.i(endpoint.body);
+        final (errorMsg, _) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      return CrearFiadorResponseHn.fromJson(resp);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
   }
 
   Future<void> _post(Endpoint endpoint) async {
