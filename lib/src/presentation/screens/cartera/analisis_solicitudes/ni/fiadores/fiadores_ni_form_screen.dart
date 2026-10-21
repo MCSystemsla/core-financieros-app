@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_f
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_actividad_economica.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_de_actividad.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_de_ingresos.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_generales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_personales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
@@ -106,8 +107,10 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
                       AnalisisFiadoresNiDatosDeActividad(
                         pageController: pageController,
                       ),
-                      for (final step in fiadoresNiSteps.skip(4))
-                        _StepPlaceholder(label: step),
+                      AnalisisFiadoresNiDatosDeIngresos(
+                        pageController: pageController,
+                        numeroSolicitud: widget.numeroSolicitud,
+                      ),
                     ],
                   ),
                 ),
@@ -115,22 +118,6 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-// Se reemplaza paso a paso por los widgets de cada sección (pasos 6 a 10).
-class _StepPlaceholder extends StatelessWidget {
-  final String label;
-  const _StepPlaceholder({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        label,
-        style: const TextStyle(color: RedesignColors.inkMuted),
       ),
     );
   }
