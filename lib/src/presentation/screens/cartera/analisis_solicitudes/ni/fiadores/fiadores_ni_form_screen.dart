@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_actividad_economica.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_generales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_personales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
@@ -98,7 +99,10 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
                       AnalisisFiadoresNiDatosPersonales(
                         pageController: pageController,
                       ),
-                      for (final step in fiadoresNiSteps.skip(2))
+                      AnalisisFiadoresNiActividadEconomica(
+                        pageController: pageController,
+                      ),
+                      for (final step in fiadoresNiSteps.skip(3))
                         _StepPlaceholder(label: step),
                     ],
                   ),

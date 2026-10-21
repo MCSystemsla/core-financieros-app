@@ -27,6 +27,7 @@ HN ya tiene el módulo de fiadores (`screens/cartera/analisis_solicitudes/hn/fia
   5. Datos de ingresos
 - Pantalla de envío `AnalisisFiadoresNiSendingWidget` con `SendingStatusView`. Permite reintentar mientras siga abierta y, al terminar con éxito, vuelve a `AnalisisInterceptorByFlavor`.
 - Catálogos con `SearchDropdownWidget` / `CatalogoValorNacionalidad`, usando los mismos códigos que HN, sin aldea y sin CNBS.
+- Agregar `RELACIONPERSONAS`, `PROFESION`, `OCUPACION`, `TIPOPERSONACNBS`, `ESTATUSCLIENTE` y `TIPOCLIENTE` a `_codigosCatalogo` en `presentation/bloc/solicitud_catalogo/solicitud_catalogo_cubit.dart`. Hasta ahora solo los descargaba la sincronización de HN.
 - Validaciones: las mismas de HN en los campos que comparten. La cédula se valida con `ClassValidator.validateCedulaByFlavor`.
 - Totales calculados con las mismas fórmulas que HN.
 - Nueva `SelectableCardItem` "Registrar Fiadores" en `SelectTypeAnalisisModalSheetNiWidget`:
@@ -145,7 +146,7 @@ Convenciones:
 6. Crear `widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_generales.dart` (paso 1) y conectarlo al `PageView`.
    - El botón "Siguiente" valida el `Form` del paso antes de avanzar.
 7. Crear `analisis_fiadores_ni_datos_personales.dart` (paso 2). Tiene la cascada País → Departamento → Municipio.
-8. Crear `analisis_fiadores_ni_actividad_economica.dart` (paso 3).
+8. Crear `analisis_fiadores_ni_actividad_economica.dart` (paso 3). Agregar los 6 catálogos de fiadores a `_codigosCatalogo` del sync de NI.
 9. Crear `analisis_fiadores_ni_datos_de_actividad.dart` (paso 4). Tiene los switches EsAsalariado y EsEmpresario y la cascada de ocupación.
 10. Crear `analisis_fiadores_ni_datos_de_ingresos.dart` (paso 5):
     - Muestra los totales en solo lectura y los campos de negocio de forma condicional.
@@ -210,7 +211,7 @@ Convenciones:
 
 | Riesgo | Mitigación |
 | --- | --- |
-| Los catálogos `RELACIONPERSONAS`, `PROFESION`, `OCUPACION`, `TIPOPERSONACNBS`, `ESTATUSCLIENTE` o `TIPOCLIENTE` no están sincronizados en el ObjectBox de NI, y el dropdown sale vacío | Verificar en QA NI al implementar el paso 2. Si falta alguno, se reporta a backend. Si ese campo bloquea el envío, se deja temporalmente como opcional y se anota en la spec. |
+| Los catálogos `RELACIONPERSONAS`, `PROFESION`, `OCUPACION`, `TIPOPERSONACNBS`, `ESTATUSCLIENTE` o `TIPOCLIENTE` no están sincronizados en el ObjectBox de NI, y el dropdown sale vacío | Confirmado en código: el sync de NI no los descargaba. Se agregaron a `_codigosCatalogo`. Si backend no los devuelve para la base de NI, el sync los reporta en `unsyncedCatalogos` sin cortar el resto. En ese caso se reporta a backend y, si el campo bloquea el envío, se deja temporalmente opcional y se anota en la spec. |
 | Los códigos provisionales `CON` / `COD` no existen en backend y el create falla | Están centralizados en `FiadoresNiFormType`, así que corregirlos es cambiar una línea. Se prueba primero con `FIA`, que sí está confirmado. |
 | Los límites de edad de la fecha de nacimiento en HN dependen de parámetros que no existan en NI | Al implementar el paso 1, revisar de dónde lee HN esos límites. Si no hay parámetro en NI, se validan solo fecha requerida y mayoría de edad, y se anota. |
 | Backend responde `200` en lugar de `201` en NI | `_post()` centraliza el código esperado. Se confirma con el primer envío real en QA. |
