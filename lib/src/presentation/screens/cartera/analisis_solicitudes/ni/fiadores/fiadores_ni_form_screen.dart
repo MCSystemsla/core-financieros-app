@@ -9,19 +9,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Tipos de fiador de Nicaragua.
-///
-/// Códigos PROVISIONALES: solo `FIA` viene confirmado por backend. Se
-/// reemplazan por los reales de NI cuando backend los defina.
-enum FiadoresNiFormType {
-  fiador('FIA'),
-  conyuge('CON'),
-  codeudor('COD');
-
-  final String codigo;
-  const FiadoresNiFormType(this.codigo);
-}
-
 /// Mismo orden que los hijos del `PageView`. Los pasos siguen las dos
 /// pestañas ("Datos personales" y "Otros datos") de la pantalla de fiadores
 /// del sistema de escritorio de NI.
@@ -33,11 +20,9 @@ const fiadoresNiSteps = [
 ];
 
 class FiadoresNiFormScreen extends StatefulWidget {
-  final FiadoresNiFormType typeForm;
   final int numeroSolicitud;
   const FiadoresNiFormScreen({
     super.key,
-    required this.typeForm,
     required this.numeroSolicitud,
   });
 
@@ -69,8 +54,7 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (ctx) => AnalisisFiadoresNiCubit(AnalisisFormsRepositoryNiImpl())
-        ..setTipoFiador(widget.typeForm),
+      create: (ctx) => AnalisisFiadoresNiCubit(AnalisisFormsRepositoryNiImpl()),
       child: PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, _) {

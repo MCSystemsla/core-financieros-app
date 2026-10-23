@@ -95,13 +95,13 @@ Valor comercial and related currency fields in the HN garantía crear/actualizar
 
 ### NI análisis: fiadores
 
-NI has its own fiador flow, separate from HN's: `FiadoresNiScreen` → `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). You reach it from the "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget`.
+NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` opens the form directly (there is no fiador-type selection screen) after checking the internet connection.
 
 - The fields mirror the fiadores screen of the NI desktop system (tabs "Datos personales" and "Otros datos"), not HN's. That screen is the source of truth: do not add HN-only fields such as escolaridad, ocupación or CNBS.
 - The form has 4 steps driven by `AnalisisFiadoresNiCubit`. It has no cédula photos, signature, document search or credit history, and it saves nothing offline.
 - It posts `AnalisisFiadorNi` to `POST /cartera/analisis-fiador/create` through `AnalisisFormsRepositoryNi.createAnalisisFiador` (expects `201`).
 - Step sections use `FiadorNiSectionCard` (`fiador_ni_form_layout.dart`) rather than `SectionBlockWidget`, because the inputs bring their own padding.
-- The `FiadoresNiFormType` codes (`FIA`, `CON`, `COD`) are placeholders. Only `FIA` is confirmed by backend.
+- NI does not send `TipoFiadorCodigo`; `AnalisisFiadorNi` has no fiador type.
 - `RELACIONPERSONAS` (relación con el cliente) is synced for NI in `SolicitudCatalogoCubit._codigosCatalogo`. Before this change, only the HN sync downloaded it.
 
 Spec: `specs/02-fiadores-analisis-ni.md`.

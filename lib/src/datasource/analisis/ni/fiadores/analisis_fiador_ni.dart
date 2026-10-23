@@ -65,7 +65,6 @@ class AnalisisFiadorNi {
   final bool activo;
   final String tipoDocumentoCodigo;
   final bool esFirmaDigitalFiador;
-  final String tipoFiadorCodigo;
   final String tipoViviendaCodigo;
 
   AnalisisFiadorNi({
@@ -125,7 +124,6 @@ class AnalisisFiadorNi {
     this.activo = true,
     required this.tipoDocumentoCodigo,
     this.esFirmaDigitalFiador = false,
-    required this.tipoFiadorCodigo,
     required this.tipoViviendaCodigo,
   });
 
@@ -187,7 +185,6 @@ class AnalisisFiadorNi {
       'Activo': activo,
       'TipoDocumentoCodigo': tipoDocumentoCodigo,
       'EsFirmaDigitalFiador': esFirmaDigitalFiador,
-      'TipoFiadorCodigo': tipoFiadorCodigo,
       'TipoViviendaCodigo': tipoViviendaCodigo,
     };
     data.removeWhere((key, value) => value == null || value == '');

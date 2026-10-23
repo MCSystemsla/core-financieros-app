@@ -5,7 +5,6 @@ class AnalisisFiadoresNiState extends Equatable {
   final Status status;
   final String errorMsg;
   final int numeroSolicitud;
-  final String tipoFiadorCodigo;
 
   // Datos personales
   final String nombre1;
@@ -71,7 +70,6 @@ class AnalisisFiadoresNiState extends Equatable {
     this.status = Status.notStarted,
     this.errorMsg = '',
     this.numeroSolicitud = 0,
-    this.tipoFiadorCodigo = '',
     this.nombre1 = '',
     this.nombre2 = '',
     this.apellido1 = '',
@@ -131,7 +129,6 @@ class AnalisisFiadoresNiState extends Equatable {
         status,
         errorMsg,
         numeroSolicitud,
-        tipoFiadorCodigo,
         nombre1,
         nombre2,
         apellido1,
@@ -190,7 +187,6 @@ class AnalisisFiadoresNiState extends Equatable {
     Status? status,
     String? errorMsg,
     int? numeroSolicitud,
-    String? tipoFiadorCodigo,
     String? nombre1,
     String? nombre2,
     String? apellido1,
@@ -248,7 +244,6 @@ class AnalisisFiadoresNiState extends Equatable {
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
-      tipoFiadorCodigo: tipoFiadorCodigo ?? this.tipoFiadorCodigo,
       nombre1: nombre1 ?? this.nombre1,
       nombre2: nombre2 ?? this.nombre2,
       apellido1: apellido1 ?? this.apellido1,

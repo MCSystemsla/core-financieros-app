@@ -4,7 +4,6 @@ import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/analisis
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_form_screen.dart';
 import 'package:equatable/equatable.dart';
 
 part 'analisis_fiadores_ni_state.dart';
@@ -89,7 +88,6 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
           consumoFamiliar: state.consumoFamiliar,
           saldoDisponible: saldoDisponible,
           tipoDocumentoCodigo: state.tipoDocumentoCodigo,
-          tipoFiadorCodigo: state.tipoFiadorCodigo,
           // "Tipo de propiedad" alimenta ambos códigos, igual que en HN.
           tipoViviendaCodigo: state.tipoDomicilioCodigo,
         ),
@@ -106,10 +104,6 @@ class AnalisisFiadoresNiCubit extends Cubit<AnalisisFiadoresNiState> {
         errorMsg: e.toString(),
       ));
     }
-  }
-
-  void setTipoFiador(FiadoresNiFormType tipo) {
-    emit(state.copyWith(tipoFiadorCodigo: tipo.codigo));
   }
 
   void onFieldChanged(AnalisisFiadoresNiState Function() copyWithFn) {
