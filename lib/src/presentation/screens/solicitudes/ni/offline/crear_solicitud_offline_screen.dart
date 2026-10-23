@@ -8,7 +8,9 @@ import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/calculo_cuota/calculo_cuota_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/nueva_menor_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_historial_crediticio_offline.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline1_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline2_widget.dart';
@@ -60,82 +62,89 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
       child: PopScope(
         canPop: false,
         child: Scaffold(
-          body: Column(
-            children: [
-              const Navbar(
-                title: 'Crear nueva Solicitud Nueva Menor',
-              ),
-              Expanded(
-                child: PageView(
-                  physics: const NeverScrollableScrollPhysics(),
+          backgroundColor: RedesignColors.background,
+          body: SafeArea(
+            child: Column(
+              children: [
+                FormStepHeaderWidget(
+                  title: 'Solicitud Nueva Menor',
+                  subtitle:
+                      'Revise y complete la solicitud guardada sin conexión',
                   controller: pageController,
-                  children: [
-                    Hero(
-                      transitionOnUserGestures: true,
-                      tag: 'cedulaFrontal',
-                      child: PhotoCedulaClientWidget(
-                        onNextPressed: () {},
-                        controller: pageController,
-                        fotoCedulaFrontal:
-                            XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                        fotoCedulaTrasera:
-                            XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                        onCedulaFrontalPressed: () {
-                          context.pushTransparentRoute(
-                            PhotoCedulaImagePreview(
-                              imagesCedula: File(
-                                imagesCedula?.imageFrontCedula ?? '',
-                              ),
-                            ),
-                          );
-                        },
-                        onCedulaTraseraPressed: () {
-                          context.pushTransparentRoute(
-                            PhotoCedulaImagePreview(
-                              imagesCedula: File(
-                                imagesCedula?.imageBackCedula ?? '',
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    NuevaMenorOffline1(
-                      responseLocalDb: responseLocalDb,
-                      pageController: pageController,
-                    ),
-                    NuevaMenorOffline2Widget(
-                      controller: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                    NuevaMenorOffline3Widget(
-                      controller: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                    NuevaMenorOfflne4Widget(
-                      pageController: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                    NuevaMenorOffline5Widget(
-                      pageController: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                    NuevaMenorOffline6Widget(
-                      pageController: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                    NuevaMenorHistorialCrediticioOffline(
-                      controller: pageController,
-                      uuid: responseLocalDb.uuid ?? '',
-                    ),
-                    NuevaMenorOffline7Widget(
-                      pageController: pageController,
-                      responseLocalDb: responseLocalDb,
-                    ),
-                  ],
+                  steps: nuevaMenorNiSteps,
                 ),
-              ),
-            ],
+                Expanded(
+                  child: PageView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: pageController,
+                    children: [
+                      Hero(
+                        transitionOnUserGestures: true,
+                        tag: 'cedulaFrontal',
+                        child: PhotoCedulaClientWidget(
+                          onNextPressed: () {},
+                          controller: pageController,
+                          fotoCedulaFrontal: XFile(
+                              imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                          fotoCedulaTrasera:
+                              XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                          onCedulaFrontalPressed: () {
+                            context.pushTransparentRoute(
+                              PhotoCedulaImagePreview(
+                                imagesCedula: File(
+                                  imagesCedula?.imageFrontCedula ?? '',
+                                ),
+                              ),
+                            );
+                          },
+                          onCedulaTraseraPressed: () {
+                            context.pushTransparentRoute(
+                              PhotoCedulaImagePreview(
+                                imagesCedula: File(
+                                  imagesCedula?.imageBackCedula ?? '',
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      NuevaMenorOffline1(
+                        responseLocalDb: responseLocalDb,
+                        pageController: pageController,
+                      ),
+                      NuevaMenorOffline2Widget(
+                        controller: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                      NuevaMenorOffline3Widget(
+                        controller: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                      NuevaMenorOfflne4Widget(
+                        pageController: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                      NuevaMenorOffline5Widget(
+                        pageController: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                      NuevaMenorOffline6Widget(
+                        pageController: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                      NuevaMenorHistorialCrediticioOffline(
+                        controller: pageController,
+                        uuid: responseLocalDb.uuid ?? '',
+                      ),
+                      NuevaMenorOffline7Widget(
+                        pageController: pageController,
+                        responseLocalDb: responseLocalDb,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

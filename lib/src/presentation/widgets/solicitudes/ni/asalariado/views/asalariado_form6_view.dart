@@ -15,7 +15,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/catalogo/cat
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -101,10 +100,6 @@ class __FormContentState extends State<_FormContent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const MiCreditoProgress(
-                  currentStep: 6,
-                  steps: 7,
-                ),
                 const Gap(30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -123,7 +118,6 @@ class __FormContentState extends State<_FormContent> {
                     nombreFamiliarCercano = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        nombreFamiliar: nombreFamiliarCercano,
                         nombreFamiliarCercano: nombreFamiliarCercano,
                       ),
                     );

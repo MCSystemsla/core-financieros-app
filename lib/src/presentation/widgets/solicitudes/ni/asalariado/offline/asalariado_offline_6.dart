@@ -87,7 +87,9 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
     nombreFamiliarCercano = solicitud?.nombreFamiliarCercano;
     telefonoFamiliarCercano = solicitud?.telefonoFamiliarCercano;
     parentescoFamiliarCercano = Item(
-      name: solicitud?.objParentescoFamiliarCercanoId ?? '',
+      name: solicitud?.objParentescoFamiliarCercanoIdVer ??
+          solicitud?.objParentescoFamiliarCercanoId ??
+          '',
       value: solicitud?.objParentescoFamiliarCercanoId ?? '',
     );
     direccionDomicilioFamiiiar = solicitud?.direccionFamiliarCercano;
@@ -106,7 +108,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
     telefonoOficinaConyuge = solicitud?.telefonoTrabajoConyugue;
     direccionTrabajoConyugue = solicitud?.direccionTrabajoConyugue;
     tiempoLaborarConyugue = solicitud?.tiempoLaborarConyugue;
-    nombreFamiliarCercano = solicitud?.nombreFamiliar;
     estadoCivil = solicitud?.objEstadoCivilId;
     estadoCivilVer = solicitud?.objEstadoCivilIdVer;
     totalIngresosMesConyuge = solicitud?.totalIngresoMesConyugue.toString();
@@ -135,7 +136,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                 trabajoConyugue: nombreDelaEmpresaConyuge,
                 telefonoTrabajoConyugue: telefonoOficinaConyuge,
                 tiempoLaborarConyugue: tiempoLaborarConyugue,
-                nombreFamiliar: nombreFamiliarCercano,
                 objEstadoCivilId: estadoCivil,
                 objEstadoCivilIdVer: estadoCivilVer,
               ),
@@ -174,7 +174,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                     nombreFamiliarCercano = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        nombreFamiliar: nombreFamiliarCercano,
+                        nombreFamiliarCercano: nombreFamiliarCercano,
                       ),
                     );
                   },

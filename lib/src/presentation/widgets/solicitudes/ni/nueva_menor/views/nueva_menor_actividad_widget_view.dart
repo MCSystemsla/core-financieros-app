@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/formatter/dash_formater.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_nueva_menor/solicitud_nueva_menor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -14,7 +16,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/cust
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/country_input.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/sending/sending_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,10 +93,6 @@ class __FormContentState extends State<_FormContent> {
             key: formKey,
             child: Column(
               children: [
-                const MiCreditoProgress(
-                  currentStep: 6,
-                  steps: 7,
-                ),
                 const Gap(20),
                 OutlineTextfieldWidget(
                   inputFormatters: [
@@ -130,12 +127,9 @@ class __FormContentState extends State<_FormContent> {
                   title: 'Cédula del Beneficiario 1',
                   hintText: 'Ingresa Cedula Beneficiario Seguro 1',
                   isValid: null,
-                  validator: (value) =>
-                      ClassValidator.validateMaxIntValueAndMinValue(
+                  validator: (value) => ClassValidator.validateCedulaByFlavor(
                     value,
-                    14,
-                    isNicaraguaCedula: true,
-                    isRequired: true,
+                    global<FlavorCubit>().state.flavor,
                   ),
                   onChange: (value) {
                     cedulaBeneficiarioSeguro = value;

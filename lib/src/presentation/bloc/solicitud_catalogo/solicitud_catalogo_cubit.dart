@@ -49,6 +49,8 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     'TIPODOCUMENTOPERSONA',
     'ESTADOPRESTAMO',
     'UBICACIONGPS',
+    // "Relación con el cliente" del formulario de fiadores del análisis NI.
+    'RELACIONPERSONAS',
   ];
 
   /// Punto de entrada único: descarga y persiste todos los catálogos.

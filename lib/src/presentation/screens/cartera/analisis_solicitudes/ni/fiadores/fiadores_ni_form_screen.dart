@@ -1,0 +1,105 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_laborales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_personales.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_domicilio.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_ingresos_vivienda.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/form_step_header_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+/// Mismo orden que los hijos del `PageView`. Los pasos siguen las dos
+/// pestañas ("Datos personales" y "Otros datos") de la pantalla de fiadores
+/// del sistema de escritorio de NI.
+const fiadoresNiSteps = [
+  'Datos personales',
+  'Contacto y domicilio',
+  'Datos laborales',
+  'Ingresos y vivienda',
+];
+
+class FiadoresNiFormScreen extends StatefulWidget {
+  final int numeroSolicitud;
+  const FiadoresNiFormScreen({
+    super.key,
+    required this.numeroSolicitud,
+  });
+
+  @override
+  State<FiadoresNiFormScreen> createState() => _FiadoresNiFormScreenState();
+}
+
+class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
+  final pageController = PageController();
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void _onBack() {
+    final page = pageController.page?.round() ?? 0;
+    if (page == 0) {
+      Navigator.pop(context);
+      return;
+    }
+    pageController.previousPage(
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (ctx) => AnalisisFiadoresNiCubit(AnalisisFormsRepositoryNiImpl()),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _onBack();
+        },
+        child: Scaffold(
+          backgroundColor: RedesignColors.background,
+          body: SafeArea(
+            child: Column(
+              children: [
+                FormStepHeaderWidget(
+                  title: 'Crear Fiador',
+                  subtitle:
+                      'Registra los datos del fiador de la solicitud #${widget.numeroSolicitud}',
+                  tag: 'Análisis de crédito',
+                  controller: pageController,
+                  steps: fiadoresNiSteps,
+                  onBack: _onBack,
+                ),
+                Expanded(
+                  child: PageView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: pageController,
+                    children: [
+                      AnalisisFiadoresNiDatosPersonales(
+                        pageController: pageController,
+                      ),
+                      AnalisisFiadoresNiDomicilio(
+                        pageController: pageController,
+                      ),
+                      AnalisisFiadoresNiDatosLaborales(
+                        pageController: pageController,
+                      ),
+                      AnalisisFiadoresNiIngresosVivienda(
+                        pageController: pageController,
+                        numeroSolicitud: widget.numeroSolicitud,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
