@@ -32,6 +32,15 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
   static const _accionKiva = 'LLENARKIVAMOVIL';
 
+  /// Parámetros que leen los cubits de análisis NI desde la BD local:
+  /// incobrables (asalariado, mayor a mil, represtamo) y la razón cuota que
+  /// da el D.P.P. de menor a mil (nueva y represtamo).
+  static const _parametrosAnalisis = [
+    'INCOBRABLESDECXCOBRAR',
+    'RELACIONMAXRAZONCUOTACREDITONUEVO',
+    'RELACIONMAXRAZONCUOTACREDITOREPRESTAMO',
+  ];
+
   static const _codigosCatalogo = [
     'PARENTESCO',
     'TIPOVIVIENDA',
@@ -116,12 +125,14 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     await getAndSaveParametros();
     log('Parámetros guardados');
 
-    try {
-      await getAndSaveIncobrables();
-      log('Parámetro INCOBRABLESDECXCOBRAR guardado');
-    } catch (e) {
-      log('Error sincronizando parámetro INCOBRABLESDECXCOBRAR: $e');
-      unsynced.add('INCOBRABLESDECXCOBRAR');
+    for (final nombre in _parametrosAnalisis) {
+      try {
+        await getAndSaveParametroAnalisis(nombre: nombre);
+        log('Parámetro $nombre guardado');
+      } catch (e) {
+        log('Error sincronizando parámetro $nombre: $e');
+        unsynced.add(nombre);
+      }
     }
 
     await saveCatalogoFrecuenciaPago();
@@ -265,20 +276,19 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     );
   }
 
-  /// Porcentaje de incobrables que usan los análisis (asalariado, mayor a mil,
-  /// represtamo). Va aparte de [getAndSaveParametros] para que, si falla, no
-  /// tumbe la sincronización de las edades.
-  Future<void> getAndSaveIncobrables() async {
-    final incobrables =
-        await _repository.getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+  /// Guarda un parámetro que usan los análisis. Va aparte de
+  /// [getAndSaveParametros] para que, si falla, no tumbe la sincronización de
+  /// las edades.
+  Future<void> getAndSaveParametroAnalisis({required String nombre}) async {
+    final parametro = await _repository.getParametroByName(nombre: nombre);
 
     _replaceCatalogoByType(
-      type: 'INCOBRABLESDECXCOBRAR',
+      type: nombre,
       items: [
         CatalogoLocalDb(
-          valor: incobrables.data.valor,
-          nombre: 'INCOBRABLESDECXCOBRAR',
-          type: 'INCOBRABLESDECXCOBRAR',
+          valor: parametro.data.valor,
+          nombre: nombre,
+          type: nombre,
         ),
       ],
     );

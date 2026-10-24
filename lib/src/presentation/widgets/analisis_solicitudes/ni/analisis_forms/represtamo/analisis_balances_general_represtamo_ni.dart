@@ -55,9 +55,11 @@ class _AnalisisBalanceGeneralReprestamoHNState
         final totalInventario =
             state.inventario.fold(0, (sum, element) => sum + element.total);
 
-        final costoPorcentajeVenta = state.inventario.fold(
-                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-            (state.inventario.length);
+        final costoPorcentajeVenta = state.inventario.isEmpty
+            ? 0.0
+            : state.inventario.fold(0.0,
+                    (sum, element) => sum + (element.costoVentaPorcentaje)) /
+                (state.inventario.length);
 
         final totalActivosFijos =
             state.activos.fold(0, (sum, e) => sum + e.monto);

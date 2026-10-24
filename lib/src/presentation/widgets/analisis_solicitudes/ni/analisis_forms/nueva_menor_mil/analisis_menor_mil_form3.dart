@@ -91,6 +91,16 @@ class _LicenciaFormState extends State<_LicenciaForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
 
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionLicencia)?.toLocal();
+    fechaVencimiento =
+        DateTime.tryParse(state.fechaVencimientoLicencia)?.toLocal();
+  }
+
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
 
@@ -226,6 +236,16 @@ class _MatriculaFormState extends State<_MatriculaForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
 
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionMatricula)?.toLocal();
+    fechaVencimiento =
+        DateTime.tryParse(state.fechaVencimientoMatricula)?.toLocal();
+  }
+
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
 
@@ -360,6 +380,15 @@ class _RucForm extends StatefulWidget {
 class _RucFormState extends State<_RucForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
+
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionRuc)?.toLocal();
+    fechaVencimiento = DateTime.tryParse(state.fechaVencimientoRuc)?.toLocal();
+  }
 
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();

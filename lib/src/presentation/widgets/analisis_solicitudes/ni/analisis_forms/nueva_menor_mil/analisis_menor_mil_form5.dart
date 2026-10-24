@@ -705,6 +705,9 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         OutlineTextfieldWidget(
                           hintText: fechaVerificacion3?.selectorFormat(),
                           title: 'Fecha de verificación 3',
+                          validator: (_) => ClassValidator.validateRequired(
+                            fechaVerificacion3?.toIso8601String(),
+                          ),
                           onTap: () => selectFechaVerificacion3(context),
                           icon: const Icon(Icons.date_range),
                           readOnly: true,

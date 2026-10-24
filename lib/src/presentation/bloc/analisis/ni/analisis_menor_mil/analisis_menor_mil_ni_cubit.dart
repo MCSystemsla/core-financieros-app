@@ -7,7 +7,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_menor_mil/nueva_menor_mil_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -68,7 +68,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
       _ => throw Exception('Tipo de solicitud no soportado $tipoSolicitud'),
     };
 
-    final relacionMinRazonCuota = global<SolicitudesHnBoxService>()
+    final relacionMinRazonCuota = global<ObjectBoxService>()
         .getParametroByName(nombre: relacionMaxRazonCuotaParam);
     emit(state.copyWith(status: Status.inProgress));
 
@@ -83,7 +83,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
         state.gastosUnidadFamiliar;
 
     final relacionMinRazonCuotaPercent =
-        (int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) / 100;
+        (double.tryParse(relacionMinRazonCuota?.valor ?? '') ?? 0) / 100;
     final relacionMinRazonCuotaCalc =
         (relacionMinRazonCuotaPercent * saldoDisponibleUnidadFamiliarCalc);
 
@@ -143,7 +143,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
           parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
           margenBrutoNegocio: margenBrutoNegocioCalc,
           disponidadFamiliar: saldoDisponibleUnidadFamiliarCalc,
-          dppPorcentaje: double.parse(relacionMinRazonCuota?.valor ?? '0'),
+          dppPorcentaje: double.tryParse(relacionMinRazonCuota?.valor ?? '') ?? 0,
           dpp: relacionMinRazonCuotaCalc,
           nombreInstitucionLicencia: state.nombreInstitucionLicencia,
           nombreInstitucionMatricula: state.nombreInstitucionMatricula,
