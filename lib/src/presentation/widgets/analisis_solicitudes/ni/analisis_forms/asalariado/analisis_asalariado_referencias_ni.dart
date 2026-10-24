@@ -31,10 +31,26 @@ class AnalisisAsalariadoReferenciasNi extends StatefulWidget {
 class _AnalisisAsalariadoReferenciasHnState
     extends State<AnalisisAsalariadoReferenciasNi> {
   bool isAddReferenciaAditionalClicked = false;
-  DateTime fechaVerificacion = DateTime.now();
-  DateTime fechaVerificacion2 = DateTime.now();
-  late DateTime? fechaVerificacion3 =
-      isAddReferenciaAditionalClicked ? DateTime.now() : null;
+  late DateTime fechaVerificacion;
+  late DateTime fechaVerificacion2;
+  DateTime? fechaVerificacion3;
+
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas y la referencia 3 guardadas.
+    final state = context.read<AnalisisAsalariadoNiCubit>().state;
+    fechaVerificacion =
+        DateTime.tryParse(state.fechaVerificacion1)?.toLocal() ??
+            DateTime.now();
+    fechaVerificacion2 =
+        DateTime.tryParse(state.fechaVerificacion2)?.toLocal() ??
+            DateTime.now();
+    fechaVerificacion3 = DateTime.tryParse(state.fechaVerificacion3)?.toLocal();
+    isAddReferenciaAditionalClicked =
+        state.nombreReferencia3.isNotEmpty || fechaVerificacion3 != null;
+  }
+
   final formKey = GlobalKey<FormState>();
   Future<void> selectFechaVerificacion(BuildContext context) async {
     final cubit = context.read<AnalisisAsalariadoNiCubit>();
@@ -67,7 +83,7 @@ class _AnalisisAsalariadoReferenciasHnState
       lastDate: DateTime.now(),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
-    if (picked != null && picked != fechaVerificacion) {
+    if (picked != null && picked != fechaVerificacion2) {
       fechaVerificacion2 = picked;
       cubit.onFieldChanged(
         () => cubit.state.copyWith(
@@ -88,7 +104,7 @@ class _AnalisisAsalariadoReferenciasHnState
       lastDate: DateTime.now(),
       locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
     );
-    if (picked != null && picked != fechaVerificacion) {
+    if (picked != null && picked != fechaVerificacion3) {
       fechaVerificacion3 = picked;
       cubit.onFieldChanged(
         () => cubit.state.copyWith(
@@ -97,6 +113,28 @@ class _AnalisisAsalariadoReferenciasHnState
       );
       setState(() {});
     }
+  }
+
+  void toggleReferenciaAdicional() {
+    final cubit = context.read<AnalisisAsalariadoNiCubit>();
+    if (isAddReferenciaAditionalClicked) {
+      cubit.quitarReferencia3();
+      setState(() {
+        isAddReferenciaAditionalClicked = false;
+        fechaVerificacion3 = null;
+      });
+      return;
+    }
+    final hoy = DateTime.now();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        fechaVerificacion3: hoy.toUtc().toIso8601String(),
+      ),
+    );
+    setState(() {
+      isAddReferenciaAditionalClicked = true;
+      fechaVerificacion3 = hoy;
+    });
   }
 
   @override
@@ -473,12 +511,7 @@ class _AnalisisAsalariadoReferenciasHnState
                     title: !isAddReferenciaAditionalClicked
                         ? 'Añadir Referencia Adicional'
                         : 'Quitar referencia adicional',
-                    onTap: () {
-                      setState(() {
-                        isAddReferenciaAditionalClicked =
-                            !isAddReferenciaAditionalClicked;
-                      });
-                    },
+                    onTap: toggleReferenciaAdicional,
                   ),
                   if (isAddReferenciaAditionalClicked) ...[
                     const Gap(20),

@@ -32,10 +32,26 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
   final formKey = GlobalKey<FormState>();
 
   bool isAddReferenciaAditionalClicked = false;
-  DateTime fechaVerificacion = DateTime.now();
-  DateTime fechaVerificacion2 = DateTime.now();
-  late DateTime? fechaVerificacion3 =
-      isAddReferenciaAditionalClicked ? DateTime.now() : null;
+  late DateTime fechaVerificacion;
+  late DateTime fechaVerificacion2;
+  DateTime? fechaVerificacion3;
+
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas y la referencia 3 guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaVerificacion =
+        DateTime.tryParse(state.fechaVerificacion1)?.toLocal() ??
+            DateTime.now();
+    fechaVerificacion2 =
+        DateTime.tryParse(state.fechaVerificacion2)?.toLocal() ??
+            DateTime.now();
+    fechaVerificacion3 = DateTime.tryParse(state.fechaVerificacion3)?.toLocal();
+    isAddReferenciaAditionalClicked =
+        state.nombreReferencia3.isNotEmpty || fechaVerificacion3 != null;
+  }
+
   Future<void> selectFechaVerificacion(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
 
@@ -97,6 +113,28 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
       );
       setState(() {});
     }
+  }
+
+  void toggleReferenciaAdicional() {
+    final cubit = context.read<AnalisisMenorMilNiCubit>();
+    if (isAddReferenciaAditionalClicked) {
+      cubit.quitarReferencia3();
+      setState(() {
+        isAddReferenciaAditionalClicked = false;
+        fechaVerificacion3 = null;
+      });
+      return;
+    }
+    final hoy = DateTime.now();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        fechaVerificacion3: hoy.toUtc().toIso8601String(),
+      ),
+    );
+    setState(() {
+      isAddReferenciaAditionalClicked = true;
+      fechaVerificacion3 = hoy;
+    });
   }
 
   @override
@@ -482,12 +520,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                   title: !isAddReferenciaAditionalClicked
                       ? 'Añadir Referencia Adicional'
                       : 'Quitar referencia adicional',
-                  onTap: () {
-                    setState(() {
-                      isAddReferenciaAditionalClicked =
-                          !isAddReferenciaAditionalClicked;
-                    });
-                  },
+                  onTap: toggleReferenciaAdicional,
                 ),
                 if (isAddReferenciaAditionalClicked) ...[
                   const Gap(20),
@@ -631,7 +664,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                           ],
                           onChange: (value) {
                             cubit.onFieldChanged(() => state.copyWith(
-                                  aniosConocerReferido3: int.tryParse(value) ?? 0,
+                                  aniosConocerReferido3:
+                                      int.tryParse(value) ?? 0,
                                 ));
                           },
                         ),
@@ -669,6 +703,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         ),
                         const Gap(20),
                         OutlineTextfieldWidget(
+                          hintText: fechaVerificacion3?.selectorFormat(),
                           title: 'Fecha de verificación 3',
                           onTap: () => selectFechaVerificacion3(context),
                           icon: const Icon(Icons.date_range),

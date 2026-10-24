@@ -260,21 +260,17 @@ class AnalisisAsalariadoNiCubit extends Cubit<AnalisisAsalariadoNiState> {
       activo: state.activo,
       cuentasXCobrar: state.cuentasXCobrar,
       valoresAcciones: state.valoresAcciones,
-      menajeHogar:
-          state.menajeHogar,
+      menajeHogar: state.menajeHogar,
       vehiculo: state.vehiculo,
-      maquinaria:
-          state.maquinaria,
+      maquinaria: state.maquinaria,
       bienesInmuebles: state.bienesInmuebles,
-      totalActivo:
-          state.totalActivo,
+      totalActivo: state.totalActivo,
       cuentasXPagar: state.cuentasXPagar,
       prestamoBancoCp: state.prestamoBancoCp,
       prestamoBancoLp: state.prestamoBancoLp,
       otrasCuentasXPagar: state.otrasCuentasXPagar,
       alimentacion: state.alimentacion,
-      educacion:
-          state.educacion,
+      educacion: state.educacion,
       serviciosBasicos: state.serviciosBasicos,
       aseoLimpieza: state.aseoLimpieza,
       vestimentaCalzado: state.vestimentaCalzado,
@@ -282,71 +278,67 @@ class AnalisisAsalariadoNiCubit extends Cubit<AnalisisAsalariadoNiState> {
       aniosConocerReferido1: state.aniosConocerReferido1,
       aniosConocerReferido2: state.aniosConocerReferido2,
       aniosConocerReferido3: state.aniosConocerReferido3,
-      cedulaReferencia1:
-          state.cedulaReferencia1,
-      cedulaReferencia2:
-          state.cedulaReferencia2,
-      cedulaReferencia3:
-          state.cedulaReferencia3,
+      cedulaReferencia1: state.cedulaReferencia1,
+      cedulaReferencia2: state.cedulaReferencia2,
+      cedulaReferencia3: state.cedulaReferencia3,
       database: state.database,
-      direccionReferencia1:
-          state.direccionReferencia1,
-      direccionReferencia2:
-          state.direccionReferencia2,
-      direccionReferencia3:
-          state.direccionReferencia3,
-      telefonoReferencia1:
-          state.telefonoReferencia1,
-      telefonoReferencia2:
-          state.telefonoReferencia2,
-      telefonoReferencia3:
-          state.telefonoReferencia3,
-      lugarTrabajoReferencia1:
-          state.lugarTrabajoReferencia1,
-      lugarTrabajoReferencia2:
-          state.lugarTrabajoReferencia2,
-      lugarTrabajoReferencia3:
-          state.lugarTrabajoReferencia3,
-      resultadoVerificacion1:
-          state.resultadoVerificacion1,
-      resultadoVerificacion2:
-          state.resultadoVerificacion2,
-      resultadoVerificacion3:
-          state.resultadoVerificacion3,
-      disponible:
-          state.disponible,
-      nombreReferencia1:
-          state.nombreReferencia1,
-      imprevistos:
-          state.imprevistos,
+      direccionReferencia1: state.direccionReferencia1,
+      direccionReferencia2: state.direccionReferencia2,
+      direccionReferencia3: state.direccionReferencia3,
+      telefonoReferencia1: state.telefonoReferencia1,
+      telefonoReferencia2: state.telefonoReferencia2,
+      telefonoReferencia3: state.telefonoReferencia3,
+      lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+      lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+      lugarTrabajoReferencia3: state.lugarTrabajoReferencia3,
+      resultadoVerificacion1: state.resultadoVerificacion1,
+      resultadoVerificacion2: state.resultadoVerificacion2,
+      resultadoVerificacion3: state.resultadoVerificacion3,
+      disponible: state.disponible,
+      nombreReferencia1: state.nombreReferencia1,
+      imprevistos: state.imprevistos,
       ingresoNetoSalario: state.ingresoNetoSalario,
       otrosIngresos: state.otrosIngresos,
       totalIngresos: state.totalIngresos,
-      nombreReferencia2:
-          state.nombreReferencia2,
-      nombreReferencia3:
-          state.nombreReferencia3,
+      nombreReferencia2: state.nombreReferencia2,
+      nombreReferencia3: state.nombreReferencia3,
       numeroSolicitud: state.numeroSolicitud,
       otrosEgresos: state.otrosEgresos,
       parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
       parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
       parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
       pasivoPatrimonio: state.pasivoPatrimonio,
-      patrimonio:
-          state.patrimonio,
+      patrimonio: state.patrimonio,
       totalEgresos: state.totalEgresos,
-      totalPasivo:
-          state.totalPasivo,
+      totalPasivo: state.totalPasivo,
       transporteCombustibleMtto: state.transporteCombustibleMtto,
       fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
       fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
-      fechaVerificacion3:
-          DateTime.tryParse(state.fechaVerificacion3),
+      fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
     );
   }
 
   void onFieldChanged(AnalisisAsalariadoNiState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();
+  }
+
+  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
+  /// envíe ni quede en el borrador.
+  void quitarReferencia3() {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreReferencia3: '',
+        cedulaReferencia3: '',
+        direccionReferencia3: '',
+        telefonoReferencia3: '',
+        lugarTrabajoReferencia3: '',
+        aniosConocerReferido3: 0,
+        parentescoReferenciaCodigo3: '',
+        resultadoVerificacion3: '',
+        objEmpleadoVerificaReferenciaID3: '',
+        fechaVerificacion3: '',
+      ),
+    );
   }
 }

@@ -354,76 +354,59 @@ class AnalisisNuevaMayorMilNiCubit extends Cubit<AnalisisNuevaMayorMilNiState> {
     return AnalisisNuevaMayorAMilHnLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-      cedulaReferencia1:
-          state.cedulaReferencia1,
-      cedulaReferencia2:
-          state.cedulaReferencia2,
-      cedulaReferencia3:
-          state.cedulaReferencia3,
+      cedulaReferencia1: state.cedulaReferencia1,
+      cedulaReferencia2: state.cedulaReferencia2,
+      cedulaReferencia3: state.cedulaReferencia3,
       cliente1: state.cliente1,
       cliente2: state.cliente2,
       cliente3: state.cliente3,
       database: state.database,
-      direccionReferencia1:
-          state.direccionReferencia1,
-      direccionReferencia2:
-          state.direccionReferencia2,
-      direccionReferencia3:
-          state.direccionReferencia3,
-      lugarTrabajoReferencia1:
-          state.lugarTrabajoReferencia1,
-      lugarTrabajoReferencia2:
-          state.lugarTrabajoReferencia2,
-      lugarTrabajoReferencia3:
-          state.lugarTrabajoReferencia3,
+      direccionReferencia1: state.direccionReferencia1,
+      direccionReferencia2: state.direccionReferencia2,
+      direccionReferencia3: state.direccionReferencia3,
+      lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+      lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+      lugarTrabajoReferencia3: state.lugarTrabajoReferencia3,
       nombreInstitucionLicencia: state.nombreInstitucionLicencia,
-      nombreReferencia1:
-          state.nombreReferencia1,
-      nombreReferencia2:
-          state.nombreReferencia2,
-      nombreReferencia3:
-          state.nombreReferencia3,
+      nombreReferencia1: state.nombreReferencia1,
+      nombreReferencia2: state.nombreReferencia2,
+      nombreReferencia3: state.nombreReferencia3,
       numeroLicencia: state.numeroLicencia,
       parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
       parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
       parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
-      permisoOperacionNombreInstitucion: state.permisoOperacionNombreInstitucion,
-      permisoOperacionNumero:
-          state.permisoOperacionNumero,
+      permisoOperacionNombreInstitucion:
+          state.permisoOperacionNombreInstitucion,
+      permisoOperacionNumero: state.permisoOperacionNumero,
       proveedor1: state.proveedor1,
       proveedor2: state.proveedor2,
       proveedor3: state.proveedor3,
-      resultadoVerificacion1:
-          state.resultadoVerificacion1,
-      resultadoVerificacion2:
-          state.resultadoVerificacion2,
-      resultadoVerificacion3:
-          state.resultadoVerificacion3,
-      telefonoReferencia1:
-          state.telefonoReferencia1,
-      telefonoReferencia2:
-          state.telefonoReferencia2,
-      telefonoReferencia3:
-          state.telefonoReferencia3,
+      resultadoVerificacion1: state.resultadoVerificacion1,
+      resultadoVerificacion2: state.resultadoVerificacion2,
+      resultadoVerificacion3: state.resultadoVerificacion3,
+      telefonoReferencia1: state.telefonoReferencia1,
+      telefonoReferencia2: state.telefonoReferencia2,
+      telefonoReferencia3: state.telefonoReferencia3,
       objEmpleadoVerificaReferenciaID1: state.objEmpleadoVerificaReferenciaID1,
       objEmpleadoVerificaReferenciaID2: state.objEmpleadoVerificaReferenciaID2,
       objEmpleadoVerificaReferenciaID3: state.objEmpleadoVerificaReferenciaID3,
       fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
-      fechaVencimientoLicencia: DateTime.tryParse(state.fechaVencimientoLicencia),
+      fechaVencimientoLicencia:
+          DateTime.tryParse(state.fechaVencimientoLicencia),
       fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
       fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
       fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
-      permisoOperacionFechaEmision: DateTime.tryParse(state.permisoOperacionFechaEmision),
-      permisoOperacionFechaVencimiento: DateTime.tryParse(state.permisoOperacionFechaVencimiento),
+      permisoOperacionFechaEmision:
+          DateTime.tryParse(state.permisoOperacionFechaEmision),
+      permisoOperacionFechaVencimiento:
+          DateTime.tryParse(state.permisoOperacionFechaVencimiento),
       adelantoProveedores: state.adelantoProveedores,
       cuentasAhorro: state.cuentasAhorro,
       agua: state.agua,
-      combustible:
-          state.combustible,
+      combustible: state.combustible,
       gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
       aguaFam: state.aguaFam,
-      alquilerFam:
-          state.alquilerFam,
+      alquilerFam: state.alquilerFam,
       aseoLimpiezaFam: state.aseoLimpiezaFam,
       ventasContado: state.ventasContado,
       recuperaciones: state.recuperaciones,
@@ -445,15 +428,13 @@ class AnalisisNuevaMayorMilNiCubit extends Cubit<AnalisisNuevaMayorMilNiState> {
       diasNormalesVenta: state.diasNormalesVenta,
       diasMalosVenta: state.diasMalosVenta,
       impuesto: state.impuesto,
-      incobrables:
-          state.incobrables,
+      incobrables: state.incobrables,
       ingresoAnual: state.ingresoAnual,
       ingresosFueraNegocio: state.ingresosFueraNegocio,
       otros: state.otros,
       pagoCuotaCredito: state.pagoCuotaCredito,
       pasivosMasPatrimonio: state.pasivosMasPatrimonio,
-      patrimonio:
-          state.patrimonio,
+      patrimonio: state.patrimonio,
       resultadoLiquido: state.resultadoLiquido,
       saldoDisponibleUf: state.saldoDisponibleUf,
       porcentajeProdAltaRotacion: state.porcentajeProdAltaRotacion,
@@ -466,8 +447,7 @@ class AnalisisNuevaMayorMilNiCubit extends Cubit<AnalisisNuevaMayorMilNiState> {
       totalCostosOperativos: state.totalCostosOperativos,
       totalCreditosInstAmigos: state.totalCreditosInstAmigos,
       subContratos: state.subContratos,
-      totalAbono:
-          state.totalAbono,
+      totalAbono: state.totalAbono,
       totalActivos: state.totalActivos,
       totalActivosCorrientes: state.totalActivosCorrientes,
       totalActivosFijos: state.totalActivosFijos,
@@ -487,10 +467,8 @@ class AnalisisNuevaMayorMilNiCubit extends Cubit<AnalisisNuevaMayorMilNiState> {
       totalUltimaCompra: state.totalUltimaCompra,
       totalVentasMensualSegunNumClientes:
           state.totalVentasMensualSegunNumClientes,
-      totalVentasSegunNivelProduccion:
-          state.totalVentasSegunNivelProduccion,
-      transporte:
-          state.transporte,
+      totalVentasSegunNivelProduccion: state.totalVentasSegunNivelProduccion,
+      transporte: state.transporte,
       utilidadBruta: state.utilidadBruta,
       valorAltaRotacion: state.valorAltaRotacion,
       valorBajaRotacion: state.valorBajaRotacion,
@@ -503,6 +481,26 @@ class AnalisisNuevaMayorMilNiCubit extends Cubit<AnalisisNuevaMayorMilNiState> {
     emit(copyWithFn());
     autoSaveHelper.trigger();
   }
+
+  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
+  /// envíe ni quede en el borrador.
+  void quitarReferencia3() {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreReferencia3: '',
+        cedulaReferencia3: '',
+        direccionReferencia3: '',
+        telefonoReferencia3: '',
+        lugarTrabajoReferencia3: '',
+        aniosConocerReferido3: 0,
+        parentescoReferenciaCodigo3: '',
+        resultadoVerificacion3: '',
+        objEmpleadoVerificaReferenciaID3: '',
+        fechaVerificacion3: '',
+      ),
+    );
+  }
+
   void loadFromLocalDb(AnalisisNuevaMayorAMilHnLocalDb? solicitud) {
     onFieldChanged(
       () => state.copyWith(

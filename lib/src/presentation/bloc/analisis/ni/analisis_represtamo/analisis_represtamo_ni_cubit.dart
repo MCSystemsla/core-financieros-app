@@ -473,42 +473,27 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       objEmpleadoVerificaReferenciaID1: state.objEmpleadoVerificaReferenciaID1,
       objEmpleadoVerificaReferenciaID2: state.objEmpleadoVerificaReferenciaID2,
       objEmpleadoVerificaReferenciaID3: state.objEmpleadoVerificaReferenciaID3,
-      cedulaReferencia1:
-          state.cedulaReferencia1,
-      cedulaReferencia2:
-          state.cedulaReferencia2,
-      cedulaReferencia3:
-          state.cedulaReferencia3,
-      direccionReferencia1:
-          state.direccionReferencia1,
-      direccionReferencia2:
-          state.direccionReferencia2,
-      direccionReferencia3:
-          state.direccionReferencia3,
-      telefonoReferencia1:
-          state.telefonoReferencia1,
-      telefonoReferencia2:
-          state.telefonoReferencia2,
-      telefonoReferencia3:
-          state.telefonoReferencia3,
-      lugarTrabajoReferencia1:
-          state.lugarTrabajoReferencia1,
-      lugarTrabajoReferencia2:
-          state.lugarTrabajoReferencia2,
-      lugarTrabajoReferencia3:
-          state.lugarTrabajoReferencia3,
+      cedulaReferencia1: state.cedulaReferencia1,
+      cedulaReferencia2: state.cedulaReferencia2,
+      cedulaReferencia3: state.cedulaReferencia3,
+      direccionReferencia1: state.direccionReferencia1,
+      direccionReferencia2: state.direccionReferencia2,
+      direccionReferencia3: state.direccionReferencia3,
+      telefonoReferencia1: state.telefonoReferencia1,
+      telefonoReferencia2: state.telefonoReferencia2,
+      telefonoReferencia3: state.telefonoReferencia3,
+      lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+      lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+      lugarTrabajoReferencia3: state.lugarTrabajoReferencia3,
       aniosConocerReferido1: state.aniosConocerReferido1,
       aniosConocerReferido2: state.aniosConocerReferido2,
       aniosConocerReferido3: state.aniosConocerReferido3,
       parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
       parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
       parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
-      resultadoVerificacion1:
-          state.resultadoVerificacion1,
-      resultadoVerificacion2:
-          state.resultadoVerificacion2,
-      resultadoVerificacion3:
-          state.resultadoVerificacion3,
+      resultadoVerificacion1: state.resultadoVerificacion1,
+      resultadoVerificacion2: state.resultadoVerificacion2,
+      resultadoVerificacion3: state.resultadoVerificacion3,
       adelantoClientes: state.adelantoClientes,
       adelantoProveedores: state.adelantoProveedores,
       aguaElectricidad: state.aguaElectricidad,
@@ -521,8 +506,7 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       cliente1: state.cliente1,
       cliente2: state.cliente2,
       cliente3: state.cliente3,
-      combustible:
-          state.combustible,
+      combustible: state.combustible,
       cuentasAhorro: state.cuentasAhorro,
       costoVentaProduccion: state.costoVentaProduccion,
       costoVentaProduccionValor: state.costoVentaProduccionValor,
@@ -533,10 +517,8 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
       impuesto: state.impuesto,
       ingresoAnual: state.ingresoAnual,
-      incobrables:
-          state.incobrables,
-      educacion:
-          state.educacion,
+      incobrables: state.incobrables,
+      educacion: state.educacion,
       ingresosFueraNegocio: state.ingresosFueraNegocio,
       prestamosAmigos: state.prestamosAmigos,
       otros: state.otros,
@@ -545,16 +527,14 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       pagoCreditosPrivados: state.pagoCreditosPrivados,
       totalConsumoFamiliar: state.totalConsumoFamiliar,
       pagoCuotaCredito: state.pagoCuotaCredito,
-      proveedores:
-          state.proveedores,
+      proveedores: state.proveedores,
       totalCuentasXCobrar: state.totalCuentasXCobrar,
       totalInventario: state.totalInventario,
       proveedoresAdelantosOtros: state.proveedoresAdelantosOtros,
       resultadoLiquido: state.resultadoLiquido,
       saldoDisponibleUf: state.saldoDisponibleUf,
       pasivosMasPatrimonio: state.pasivosMasPatrimonio,
-      patrimonio:
-          state.patrimonio,
+      patrimonio: state.patrimonio,
       recuperaciones: state.recuperaciones,
       reservas: state.reservas,
       semanasBuenas: state.semanasBuenas,
@@ -564,15 +544,13 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       totalActivosFijos: state.totalActivosFijos,
       totalComprasMensuales: state.totalComprasMensuales,
       subContratos: state.subContratos,
-      transporte:
-          state.transporte,
+      transporte: state.transporte,
       transporteFamiliar: state.transporteFamiliar,
       ventasContado: state.ventasContado,
       totalCostosOperativos: state.totalCostosOperativos,
       totalDisponibleActivo: state.totalDisponibleActivo,
       totalIngresos: state.totalIngresos,
-      totalInstFinancierasAmigosOtros:
-          state.totalInstFinancierasAmigosOtros,
+      totalInstFinancierasAmigosOtros: state.totalInstFinancierasAmigosOtros,
       totalPasivos: state.totalPasivos,
       totalVentasDiarias: state.totalVentasDiarias,
       totalVentasMensuales: state.totalVentasMensuales,
@@ -580,35 +558,30 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       ventasMensualesProduccion: state.ventasMensualesProduccion,
       vestimentaCalzado: state.vestimentaCalzado,
       database: state.database,
-      destinoExcedentes:
-          state.destinoExcedentes,
+      destinoExcedentes: state.destinoExcedentes,
       maquinaCreacion: state.maquinaCreacion,
-      nombreReferencia1:
-          state.nombreReferencia1,
+      nombreReferencia1: state.nombreReferencia1,
       numeroLicencia: state.numeroLicencia,
-      permisoOperacionFechaEmision: DateTime.tryParse(state.permisoOperacionFechaEmision),
-      permisoOperacionFechaVencimiento: DateTime.tryParse(state.permisoOperacionFechaVencimiento),
-      permisoOperacionNumero:
-          state.permisoOperacionNumero,
-      permisoOperacionNombreInstitucion: state.permisoOperacionNombreInstitucion,
+      permisoOperacionFechaEmision:
+          DateTime.tryParse(state.permisoOperacionFechaEmision),
+      permisoOperacionFechaVencimiento:
+          DateTime.tryParse(state.permisoOperacionFechaVencimiento),
+      permisoOperacionNumero: state.permisoOperacionNumero,
+      permisoOperacionNombreInstitucion:
+          state.permisoOperacionNombreInstitucion,
       nombreInstitucionLicencia: state.nombreInstitucionLicencia,
-      nombreReferencia2:
-          state.nombreReferencia2,
-      nombreReferencia3:
-          state.nombreReferencia3,
+      nombreReferencia2: state.nombreReferencia2,
+      nombreReferencia3: state.nombreReferencia3,
       proveedor1: state.proveedor1,
       proveedor2: state.proveedor2,
       proveedor3: state.proveedor3,
       usuarioCreacion: state.usuarioCreacion,
-      fechaEmisionLicencia:
-          DateTime.tryParse(state.fechaEmisionLicencia),
-      fechaVencimientoLicencia: DateTime.tryParse(state.fechaVencimientoLicencia),
-      fechaVerificacion1:
-          DateTime.tryParse(state.fechaVerificacion1),
-      fechaVerificacion2:
-          DateTime.tryParse(state.fechaVerificacion2),
-      fechaVerificacion3:
-          DateTime.tryParse(state.fechaVerificacion3),
+      fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
+      fechaVencimientoLicencia:
+          DateTime.tryParse(state.fechaVencimientoLicencia),
+      fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
+      fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
+      fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
       numeroSolicitud: state.numeroSolicitud,
     );
   }
@@ -616,6 +589,25 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
   void onFieldChanged(AnalisisReprestamoNiState Function() copyWithFn) {
     emit(copyWithFn());
     autoSaveHelper.trigger();
+  }
+
+  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
+  /// envíe ni quede en el borrador.
+  void quitarReferencia3() {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreReferencia3: '',
+        cedulaReferencia3: '',
+        direccionReferencia3: '',
+        telefonoReferencia3: '',
+        lugarTrabajoReferencia3: '',
+        aniosConocerReferido3: 0,
+        parentescoReferenciaCodigo3: '',
+        resultadoVerificacion3: '',
+        objEmpleadoVerificaReferenciaID3: '',
+        fechaVerificacion3: '',
+      ),
+    );
   }
 
   void initCicloVentasMensuales(int numeroSolicitud) {
