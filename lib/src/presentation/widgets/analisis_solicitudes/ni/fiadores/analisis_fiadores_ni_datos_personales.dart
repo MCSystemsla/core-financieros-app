@@ -10,7 +10,6 @@ import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/fiador_ni_form_layout.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
@@ -43,18 +42,10 @@ class _AnalisisFiadoresNiDatosPersonalesState
   @override
   void initState() {
     super.initState();
-    edadMinima = localDbProvider.getParametroByName(nombre: 'EDADMINIMACLIENTE');
-    edadMaxima = localDbProvider.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
-  }
-
-  /// Muestra el nombre del tipo de documento por defecto en vez del código.
-  Item? _tipoDocumentoItem(String codigo) {
-    if (codigo.isEmpty) return null;
-    final catalogo = localDbProvider
-        .findParentescosByNombre(type: 'TIPODOCUMENTOPERSONA')
-        .where((e) => e.valor == codigo)
-        .firstOrNull;
-    return Item(name: catalogo?.nombre ?? codigo, value: codigo);
+    edadMinima =
+        localDbProvider.getParametroByName(nombre: 'EDADMINIMACLIENTE');
+    edadMaxima =
+        localDbProvider.getParametroByName(nombre: 'EDADMAXIMACLIENTE');
   }
 
   String? _edad(DateTime? fechaNacimiento) {
@@ -204,8 +195,6 @@ class _AnalisisFiadoresNiDatosPersonalesState
                     SearchDropdownWidget(
                       codigo: 'TIPODOCUMENTOPERSONA',
                       title: 'Tipo de Documento:',
-                      selectedItem:
-                          _tipoDocumentoItem(state.tipoDocumentoCodigo),
                       validator: (value) =>
                           ClassValidator.validateRequired(value?.value),
                       onChanged: (value) {
