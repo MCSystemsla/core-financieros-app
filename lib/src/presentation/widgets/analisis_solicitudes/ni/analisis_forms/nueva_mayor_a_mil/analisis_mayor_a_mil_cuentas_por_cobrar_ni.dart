@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_a_mil_nivel_produccion_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_cuentas_por_cobrar_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_ventas_nivel_produccion_ni_widget.dart';
@@ -156,7 +157,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                             ?.toCurrencyString(
                               mantissaLength: 0,
                             ),
-                        title: 'Valor en L.',
+                        title: 'Valor en ${CurrencyHelper.currencySymbol()}',
                         textInputType: TextInputType.number,
                         inputFormatters: [
                           CurrencyInputFormatter(
@@ -169,7 +170,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                           cubit.onFieldChanged(
                             () {
                               return state.copyWith(
-                                  valorAltaRotacion: double.tryParse(newValue));
+                                  valorAltaRotacion: double.tryParse(newValue) ?? 0);
                             },
                           );
                         },
@@ -196,7 +197,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                             () {
                               return state.copyWith(
                                   porcentajeProdBajaRotacion:
-                                      double.tryParse(newValue));
+                                      double.tryParse(newValue) ?? 0);
                             },
                           );
                         },
@@ -207,7 +208,7 @@ class _AnalisisMayorAMilCuentasPorCobrarHNState
                         initialValue: state.valorBajaRotacion
                             .toCurrencyString(mantissaLength: 0)
                             .toNullIfEmptyOrZero(),
-                        title: 'Valor en L.',
+                        title: 'Valor en ${CurrencyHelper.currencySymbol()}',
                         icon: const Icon(Icons.wallet),
                         textInputType: TextInputType.number,
                         inputFormatters: [

@@ -207,7 +207,8 @@ class _AnalisisAsalariadoReferenciasHnState
                     // validator: (value) =>
                     // ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
+                    inputFormatters: [UpperCaseTextFormatter()],
                     onChange: (value) {
                       cubit.onFieldChanged(
                         () => state.copyWith(cedulaReferencia1: value),
@@ -376,7 +377,8 @@ class _AnalisisAsalariadoReferenciasHnState
                     // validator: (value) =>
                     // ClassValidator.validateRequired(value),
                     title: 'Número de cédula:',
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
+                    inputFormatters: [UpperCaseTextFormatter()],
                     icon: const Icon(Icons.person),
                     onChange: (value) {
                       cubit.onFieldChanged(
@@ -559,7 +561,8 @@ class _AnalisisAsalariadoReferenciasHnState
                     OutlineTextfieldWidget(
                       initialValue: state.cedulaReferencia3,
                       title: 'Número de cédula:',
-                      textInputType: TextInputType.number,
+                      textInputType: TextInputType.text,
+                      inputFormatters: [UpperCaseTextFormatter()],
                       // validator: (value) =>
                       // ClassValidator.validateRequired(value),
                       icon: const Icon(Icons.person),

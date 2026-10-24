@@ -116,6 +116,14 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     await getAndSaveParametros();
     log('Parámetros guardados');
 
+    try {
+      await getAndSaveIncobrables();
+      log('Parámetro INCOBRABLESDECXCOBRAR guardado');
+    } catch (e) {
+      log('Error sincronizando parámetro INCOBRABLESDECXCOBRAR: $e');
+      unsynced.add('INCOBRABLESDECXCOBRAR');
+    }
+
     await saveCatalogoFrecuenciaPago();
     log('Frecuencia de Pago guardados');
 
@@ -252,6 +260,25 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
           valor: edadMaxima.data.valor,
           nombre: 'EDADMAXIMACLIENTE',
           type: 'EDADMAXIMACLIENTE',
+        ),
+      ],
+    );
+  }
+
+  /// Porcentaje de incobrables que usan los análisis (asalariado, mayor a mil,
+  /// represtamo). Va aparte de [getAndSaveParametros] para que, si falla, no
+  /// tumbe la sincronización de las edades.
+  Future<void> getAndSaveIncobrables() async {
+    final incobrables =
+        await _repository.getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
+
+    _replaceCatalogoByType(
+      type: 'INCOBRABLESDECXCOBRAR',
+      items: [
+        CatalogoLocalDb(
+          valor: incobrables.data.valor,
+          nombre: 'INCOBRABLESDECXCOBRAR',
+          type: 'INCOBRABLESDECXCOBRAR',
         ),
       ],
     );

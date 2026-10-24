@@ -136,7 +136,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        ventasContado: int.tryParse(newValue),
+                        ventasContado: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -157,7 +157,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        recuperaciones: int.tryParse(newValue),
+                        recuperaciones: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -176,7 +176,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalIngresos: int.tryParse(newValue),
+                        totalIngresos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -196,7 +196,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        costoVentaProduccion: int.tryParse(newValue),
+                        costoVentaProduccion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -229,7 +229,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                 //     final newValue = toNumericString(value);
                 //     cubit.onFieldChanged(
                 //       () => state.copyWith(
-                //         costoVentaProduccion: int.tryParse(newValue),
+                //         costoVentaProduccion: int.tryParse(newValue) ?? 0,
                 //       ),
                 //     );
                 //   },
@@ -261,7 +261,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        gastosPersonalAlimentacion: int.tryParse(newValue),
+                        gastosPersonalAlimentacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -282,7 +282,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        subContratos: int.tryParse(newValue),
+                        subContratos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -303,7 +303,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alquilerlocal: int.tryParse(newValue),
+                        alquilerlocal: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -324,7 +324,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aguaElectricidad: int.tryParse(newValue),
+                        aguaElectricidad: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -345,7 +345,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        combustible: int.tryParse(newValue),
+                        combustible: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -365,7 +365,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        transporte: int.tryParse(newValue),
+                        transporte: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -386,7 +386,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        pagoCuotaCredito: int.tryParse(newValue),
+                        pagoCuotaCredito: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -406,7 +406,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        impuesto: int.tryParse(newValue),
+                        impuesto: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -425,7 +425,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        otros: int.tryParse(newValue),
+                        otros: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -444,7 +444,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalCostosOperativos: int.tryParse(newValue),
+                        totalCostosOperativos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -463,7 +463,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        resultadoLiquido: int.tryParse(newValue),
+                        resultadoLiquido: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -495,7 +495,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alimentacion: int.tryParse(newValue),
+                        alimentacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -515,7 +515,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        educacion: int.tryParse(newValue),
+                        educacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -536,7 +536,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aguaElectricidadGas: int.tryParse(newValue),
+                        aguaElectricidadGas: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -557,7 +557,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alquilerFamiliar: int.tryParse(newValue),
+                        alquilerFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -578,7 +578,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aseoLimpieza: int.tryParse(newValue),
+                        aseoLimpieza: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -599,7 +599,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        vestimentaCalzado: int.tryParse(newValue),
+                        vestimentaCalzado: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -620,7 +620,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        transporteFamiliar: int.tryParse(newValue),
+                        transporteFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -641,7 +641,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        otrosGastosImprevistos: int.tryParse(newValue),
+                        otrosGastosImprevistos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -662,7 +662,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        pagoCreditosPrivados: int.tryParse(newValue),
+                        pagoCreditosPrivados: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -681,7 +681,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalConsumoFamiliar: int.tryParse(newValue),
+                        totalConsumoFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -702,7 +702,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        ingresosFueraNegocio: int.tryParse(newValue),
+                        ingresosFueraNegocio: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -722,7 +722,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        saldoDisponibleUf: int.tryParse(newValue),
+                        saldoDisponibleUf: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },

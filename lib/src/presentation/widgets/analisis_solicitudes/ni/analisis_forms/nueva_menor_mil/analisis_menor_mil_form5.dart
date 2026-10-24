@@ -209,7 +209,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         // validator: (value) =>
                         // ClassValidator.validateRequired(value),
                         icon: const Icon(Icons.person),
-                        textInputType: TextInputType.number,
+                        textInputType: TextInputType.text,
+                        inputFormatters: [UpperCaseTextFormatter()],
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
                                 cedulaReferencia1: value,
@@ -261,7 +262,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
-                                aniosConocerReferido1: int.tryParse(value),
+                                aniosConocerReferido1: int.tryParse(value) ?? 0,
                               ));
                         },
                       ),
@@ -391,7 +392,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         // validator: (value) =>
                         //     ClassValidator.validateRequired(value),
                         title: 'Número de cédula:',
-                        textInputType: TextInputType.number,
+                        textInputType: TextInputType.text,
+                        inputFormatters: [UpperCaseTextFormatter()],
                         icon: const Icon(Icons.person),
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
@@ -431,7 +433,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         ],
                         onChange: (value) {
                           cubit.onFieldChanged(() => state.copyWith(
-                                aniosConocerReferido2: int.tryParse(value),
+                                aniosConocerReferido2: int.tryParse(value) ?? 0,
                               ));
                         },
                       ),
@@ -586,7 +588,8 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                         OutlineTextfieldWidget(
                           initialValue: state.cedulaReferencia3,
                           title: 'Número de cédula:',
-                          textInputType: TextInputType.number,
+                          textInputType: TextInputType.text,
+                          inputFormatters: [UpperCaseTextFormatter()],
                           // validator: (value) =>
                           // ClassValidator.validateRequired(value),
                           icon: const Icon(Icons.person),
@@ -628,7 +631,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                           ],
                           onChange: (value) {
                             cubit.onFieldChanged(() => state.copyWith(
-                                  aniosConocerReferido3: int.tryParse(value),
+                                  aniosConocerReferido3: int.tryParse(value) ?? 0,
                                 ));
                           },
                         ),

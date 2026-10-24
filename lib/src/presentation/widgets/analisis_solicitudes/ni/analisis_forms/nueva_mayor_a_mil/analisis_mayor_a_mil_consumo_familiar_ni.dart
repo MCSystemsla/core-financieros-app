@@ -112,7 +112,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              alimentacionFam: double.tryParse(newValue),
+                              alimentacionFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -137,7 +137,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
                           cubit.onFieldChanged(
                             () {
                               return state.copyWith(
-                                  educacionFam: double.tryParse(newValue));
+                                  educacionFam: double.tryParse(newValue) ?? 0);
                             },
                           );
                         },
@@ -162,7 +162,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              aguaFam: double.tryParse(newValue),
+                              aguaFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -187,7 +187,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              alquilerFam: double.tryParse(newValue),
+                              alquilerFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -212,7 +212,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              aseoLimpiezaFam: double.tryParse(newValue),
+                              aseoLimpiezaFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -237,7 +237,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              vestimentaCalzadoFam: double.tryParse(newValue),
+                              vestimentaCalzadoFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -262,7 +262,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              transporteFam: double.tryParse(newValue),
+                              transporteFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -287,7 +287,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              otrosGastosFam: double.tryParse(newValue),
+                              otrosGastosFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -312,7 +312,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              pagoCreditosFam: double.tryParse(newValue),
+                              pagoCreditosFam: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },
@@ -348,7 +348,7 @@ class _AnalisisMayorAMilConsumoFamiliaresState
 
                           cubit.onFieldChanged(() {
                             return state.copyWith(
-                              totalConsumoFamiliar: double.tryParse(newValue),
+                              totalConsumoFamiliar: double.tryParse(newValue) ?? 0,
                             );
                           });
                         },

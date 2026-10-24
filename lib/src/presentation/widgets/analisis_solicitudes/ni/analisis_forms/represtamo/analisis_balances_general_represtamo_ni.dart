@@ -1,7 +1,7 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/analisis_fijos_represtamo_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/represtamo/tables/cuentas_por_cobrar_represtamo_ni.dart';
@@ -47,7 +47,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final incobrablesxCobrar = global<SolicitudesHnBoxService>()
+    final incobrablesxCobrar = global<ObjectBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
     final cubit = context.read<AnalisisReprestamoNiCubit>();
     return BlocBuilder<AnalisisReprestamoNiCubit, AnalisisReprestamoNiState>(
@@ -150,7 +150,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        caja: int.tryParse(newValue),
+                        caja: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -173,7 +173,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        reservas: int.tryParse(newValue),
+                        reservas: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -197,7 +197,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        cuentasAhorro: int.tryParse(newValue),
+                        cuentasAhorro: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -221,7 +221,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalActivos: double.tryParse(newValue),
+                        totalActivos: double.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -270,7 +270,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        adelantoProveedores: int.tryParse(newValue),
+                        adelantoProveedores: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -292,7 +292,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        incobrables: int.tryParse(newValue),
+                        incobrables: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -314,7 +314,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        incobrables: int.tryParse(newValue),
+                        incobrables: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -418,7 +418,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        proveedores: int.tryParse(newValue),
+                        proveedores: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -442,7 +442,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        adelantoClientes: int.tryParse(newValue),
+                        adelantoClientes: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -465,7 +465,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        proveedoresAdelantosOtros: int.tryParse(value),
+                        proveedoresAdelantosOtros: int.tryParse(toNumericString(value)) ?? 0,
                       ),
                     );
                   },
@@ -488,7 +488,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        creditosInstFinancieras: int.tryParse(value),
+                        creditosInstFinancieras: int.tryParse(toNumericString(value)) ?? 0,
                       ),
                     );
                   },
@@ -511,7 +511,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                   onChange: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        prestamosAmigos: int.tryParse(value),
+                        prestamosAmigos: int.tryParse(toNumericString(value)) ?? 0,
                       ),
                     );
                   },
@@ -533,7 +533,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalInstFinancierasAmigosOtros: int.tryParse(newValue),
+                        totalInstFinancierasAmigosOtros: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -555,7 +555,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalPasivos: int.tryParse(newValue),
+                        totalPasivos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -577,7 +577,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        patrimonio: double.tryParse(newValue),
+                        patrimonio: double.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -599,7 +599,7 @@ class _AnalisisBalanceGeneralReprestamoHNState
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        pasivosMasPatrimonio: double.tryParse(newValue),
+                        pasivosMasPatrimonio: double.tryParse(newValue) ?? 0,
                       ),
                     );
                   },

@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_activos_fijos_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/tables/table_inventario_ni_widget.dart';
@@ -57,7 +57,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AnalisisNuevaMayorMilNiCubit>();
-    final incobrablesxCobrar = global<SolicitudesHnBoxService>()
+    final incobrablesxCobrar = global<ObjectBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
 
     return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
@@ -272,7 +272,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                         inputFormatters: [
                           CurrencyInputFormatter(
                             mantissaLength: 0,
-                            leadingSymbol: 'L',
+                            leadingSymbol: CurrencyHelper.currencyPrefix(),
                           )
                         ],
                         onChange: (value) {
@@ -342,7 +342,7 @@ class _AnalisisMayorAMilBalanceGeneralHNState
                         inputFormatters: [
                           CurrencyInputFormatter(
                             mantissaLength: 0,
-                            leadingSymbol: 'L',
+                            leadingSymbol: CurrencyHelper.currencyPrefix(),
                           )
                         ],
                         onChange: (value) {

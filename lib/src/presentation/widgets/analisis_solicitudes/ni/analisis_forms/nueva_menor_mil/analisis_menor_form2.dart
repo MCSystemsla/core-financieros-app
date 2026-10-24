@@ -164,7 +164,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      ventasContado: double.tryParse(newValue),
+                      ventasContado: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -182,7 +182,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      recuperaciones: double.tryParse(newValue),
+                      recuperaciones: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -198,7 +198,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      totalIngresos: double.tryParse(newValue),
+                      totalIngresos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -215,7 +215,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      costoVenta: double.tryParse(newValue),
+                      costoVenta: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -233,7 +233,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      gastosOperativos: double.tryParse(newValue),
+                      gastosOperativos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -250,7 +250,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      margenBrutoNegocio: double.tryParse(newValue),
+                      margenBrutoNegocio: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -268,7 +268,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      otrosIngresos: double.tryParse(newValue),
+                      otrosIngresos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -286,7 +286,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      gastosUnidadFamiliar: double.tryParse(newValue),
+                      gastosUnidadFamiliar: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -303,7 +303,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      disponidadFamiliar: double.tryParse(newValue),
+                      disponidadFamiliar: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -320,7 +320,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      dpp: double.tryParse(newValue),
+                      dpp: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
