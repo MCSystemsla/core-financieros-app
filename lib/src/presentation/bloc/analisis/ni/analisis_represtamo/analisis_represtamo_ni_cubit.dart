@@ -13,7 +13,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/a
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_cuentas_por_cobrar_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_nivel_produccion_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -30,7 +30,7 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       : super(AnalisisReprestamoInitial());
 
   Future<void> createAnalisisReprestamo() async {
-    final incobrablesxCobrar = global<SolicitudesHnBoxService>()
+    final incobrablesxCobrar = global<ObjectBoxService>()
         .getParametroByName(nombre: 'INCOBRABLESDECXCOBRAR');
     final cicloVentaDiario = getCicloVentasDiarios();
     final totalComprasSemanas = getcomprasSemanasMensuales();
@@ -54,9 +54,11 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
     final totalInventario =
         state.inventario.fold(0, (sum, element) => sum + element.total);
 
-    final costoPorcentajeVenta = state.inventario
-            .fold(0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-        (state.inventario.length);
+    final costoPorcentajeVenta = state.inventario.isEmpty
+        ? 0.0
+        : state.inventario.fold(
+                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
+            (state.inventario.length);
 
     final totalActivosFijos = state.activos.fold(0, (sum, e) => sum + e.monto);
 
@@ -110,10 +112,7 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
 
     final totalIngresos = ventasDeContado + state.recuperaciones;
 
-    final porcentajeDeVenta = (state.inventario.fold(
-                0.0, (sum, element) => sum + (element.costoVentaPorcentaje)) /
-            (state.inventario.length))
-        .toStringAsFixed(2);
+    final porcentajeDeVenta = costoPorcentajeVenta.toStringAsFixed(2);
 
     final totalCostosOperativosCal = (state.gastosPersonalAlimentacion +
         state.subContratos +
@@ -471,269 +470,119 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
     return AnalisisReprestamoHnLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-      objEmpleadoVerificaReferenciaID1: _prefer(
-          state.objEmpleadoVerificaReferenciaID1,
-          prev?.objEmpleadoVerificaReferenciaID1),
-      objEmpleadoVerificaReferenciaID2: _prefer(
-          state.objEmpleadoVerificaReferenciaID2,
-          prev?.objEmpleadoVerificaReferenciaID2),
-      objEmpleadoVerificaReferenciaID3: _prefer(
-          state.objEmpleadoVerificaReferenciaID3,
-          prev?.objEmpleadoVerificaReferenciaID3),
-      cedulaReferencia1:
-          _prefer(state.cedulaReferencia1, prev?.cedulaReferencia1),
-      cedulaReferencia2:
-          _prefer(state.cedulaReferencia2, prev?.cedulaReferencia2),
-      cedulaReferencia3:
-          _prefer(state.cedulaReferencia3, prev?.cedulaReferencia3),
-      direccionReferencia1:
-          _prefer(state.direccionReferencia1, prev?.direccionReferencia1),
-      direccionReferencia2:
-          _prefer(state.direccionReferencia2, prev?.direccionReferencia2),
-      direccionReferencia3:
-          _prefer(state.direccionReferencia3, prev?.direccionReferencia3),
-      telefonoReferencia1:
-          _prefer(state.telefonoReferencia1, prev?.telefonoReferencia1),
-      telefonoReferencia2:
-          _prefer(state.telefonoReferencia2, prev?.telefonoReferencia2),
-      telefonoReferencia3:
-          _prefer(state.telefonoReferencia3, prev?.telefonoReferencia3),
-      lugarTrabajoReferencia1:
-          _prefer(state.lugarTrabajoReferencia1, prev?.lugarTrabajoReferencia1),
-      lugarTrabajoReferencia2:
-          _prefer(state.lugarTrabajoReferencia2, prev?.lugarTrabajoReferencia2),
-      lugarTrabajoReferencia3:
-          _prefer(state.lugarTrabajoReferencia3, prev?.lugarTrabajoReferencia3),
-      aniosConocerReferido1: state.aniosConocerReferido1 == 0
-          ? (prev?.aniosConocerReferido1 ?? 0)
-          : state.aniosConocerReferido1,
-      aniosConocerReferido2: state.aniosConocerReferido2 == 0
-          ? (prev?.aniosConocerReferido2 ?? 0)
-          : state.aniosConocerReferido2,
-      aniosConocerReferido3: state.aniosConocerReferido3 == 0
-          ? (prev?.aniosConocerReferido3 ?? 0)
-          : state.aniosConocerReferido3,
-      parentescoReferenciaCodigo1: _prefer(
-          state.parentescoReferenciaCodigo1, prev?.parentescoReferenciaCodigo1),
-      parentescoReferenciaCodigo2: _prefer(
-          state.parentescoReferenciaCodigo2, prev?.parentescoReferenciaCodigo2),
-      parentescoReferenciaCodigo3: _prefer(
-          state.parentescoReferenciaCodigo3, prev?.parentescoReferenciaCodigo3),
-      resultadoVerificacion1:
-          _prefer(state.resultadoVerificacion1, prev?.resultadoVerificacion1),
-      resultadoVerificacion2:
-          _prefer(state.resultadoVerificacion2, prev?.resultadoVerificacion2),
-      resultadoVerificacion3:
-          _prefer(state.resultadoVerificacion3, prev?.resultadoVerificacion3),
-      adelantoClientes: state.adelantoClientes == 0
-          ? (prev?.adelantoClientes ?? 0)
-          : state.adelantoClientes,
-      adelantoProveedores: state.adelantoProveedores == 0
-          ? (prev?.adelantoProveedores ?? 0)
-          : state.adelantoProveedores,
-      aguaElectricidad: state.aguaElectricidad == 0
-          ? (prev?.aguaElectricidad ?? 0)
-          : state.aguaElectricidad,
-      aguaElectricidadGas: state.aguaElectricidadGas == 0
-          ? (prev?.aguaElectricidadGas ?? 0)
-          : state.aguaElectricidadGas,
-      alimentacion: state.alimentacion == 0
-          ? (prev?.alimentacion ?? 0)
-          : state.alimentacion,
-      alquilerlocal: state.alquilerlocal == 0
-          ? (prev?.alquilerlocal ?? 0)
-          : state.alquilerlocal,
-      alquilerFamiliar: state.alquilerFamiliar == 0
-          ? (prev?.alquilerFamiliar ?? 0)
-          : state.alquilerFamiliar,
-      aseoLimpieza: state.aseoLimpieza == 0
-          ? (prev?.aseoLimpieza ?? 0)
-          : state.aseoLimpieza,
-      caja: state.caja == 0 ? (prev?.caja ?? 0) : state.caja,
-      cliente1: _prefer(state.cliente1, prev?.cliente1),
-      cliente2: _prefer(state.cliente2, prev?.cliente2),
-      cliente3: _prefer(state.cliente3, prev?.cliente3),
-      combustible:
-          state.combustible == 0 ? (prev?.combustible ?? 0) : state.combustible,
-      cuentasAhorro: state.cuentasAhorro == 0
-          ? (prev?.cuentasAhorro ?? 0)
-          : state.cuentasAhorro,
-      costoVentaProduccion: state.costoVentaProduccion == 0
-          ? (prev?.costoVentaProduccion ?? 0)
-          : state.costoVentaProduccion,
-      costoVentaProduccionValor: state.costoVentaProduccionValor == 0
-          ? (prev?.costoVentaProduccionValor ?? 0)
-          : state.costoVentaProduccionValor,
-      creditosInstFinancieras: state.creditosInstFinancieras == 0
-          ? (prev?.creditosInstFinancieras ?? 0)
-          : state.creditosInstFinancieras,
-      diasBuenosVenta: state.diasBuenosVenta == 0
-          ? (prev?.diasBuenosVenta ?? 0)
-          : state.diasBuenosVenta,
-      diasMalosVenta: state.diasMalosVenta == 0
-          ? (prev?.diasMalosVenta ?? 0)
-          : state.diasMalosVenta,
-      diasNormalesVenta: state.diasNormalesVenta == 0
-          ? (prev?.diasNormalesVenta ?? 0)
-          : state.diasNormalesVenta,
-      gastosPersonalAlimentacion: state.gastosPersonalAlimentacion == 0
-          ? (prev?.gastosPersonalAlimentacion ?? 0)
-          : state.gastosPersonalAlimentacion,
-      impuesto: state.impuesto == 0 ? (prev?.impuesto ?? 0) : state.impuesto,
-      ingresoAnual: state.ingresoAnual == 0
-          ? (prev?.ingresoAnual ?? 0)
-          : state.ingresoAnual,
-      incobrables:
-          state.incobrables == 0 ? (prev?.incobrables ?? 0) : state.incobrables,
-      educacion:
-          state.educacion == 0 ? (prev?.educacion ?? 0) : state.educacion,
-      ingresosFueraNegocio: state.ingresosFueraNegocio == 0
-          ? (prev?.ingresosFueraNegocio ?? 0)
-          : state.ingresosFueraNegocio,
-      prestamosAmigos: state.prestamosAmigos == 0
-          ? (prev?.prestamosAmigos ?? 0)
-          : state.prestamosAmigos,
-      otros: state.otros == 0 ? (prev?.otros ?? 0) : state.otros,
-      salud: state.salud == 0 ? (prev?.salud ?? 0) : state.salud,
-      otrosGastosImprevistos: state.otrosGastosImprevistos == 0
-          ? (prev?.otrosGastosImprevistos ?? 0)
-          : state.otrosGastosImprevistos,
-      pagoCreditosPrivados: state.pagoCreditosPrivados == 0
-          ? (prev?.pagoCreditosPrivados ?? 0)
-          : state.pagoCreditosPrivados,
-      totalConsumoFamiliar: state.totalConsumoFamiliar == 0
-          ? (prev?.totalConsumoFamiliar ?? 0)
-          : state.totalConsumoFamiliar,
-      pagoCuotaCredito: state.pagoCuotaCredito == 0
-          ? (prev?.pagoCuotaCredito ?? 0)
-          : state.pagoCuotaCredito,
-      proveedores:
-          state.proveedores == 0 ? (prev?.proveedores ?? 0) : state.proveedores,
-      totalCuentasXCobrar: state.totalCuentasXCobrar == 0
-          ? (prev?.totalCuentasXCobrar ?? 0)
-          : state.totalCuentasXCobrar,
-      totalInventario: state.totalInventario == 0
-          ? (prev?.totalInventario ?? 0)
-          : state.totalInventario,
-      proveedoresAdelantosOtros: state.proveedoresAdelantosOtros == 0
-          ? (prev?.proveedoresAdelantosOtros ?? 0)
-          : state.proveedoresAdelantosOtros,
-      resultadoLiquido: state.resultadoLiquido == 0
-          ? (prev?.resultadoLiquido ?? 0)
-          : state.resultadoLiquido,
-      saldoDisponibleUf: state.saldoDisponibleUf == 0
-          ? (prev?.saldoDisponibleUf ?? 0)
-          : state.saldoDisponibleUf,
-      pasivosMasPatrimonio: state.pasivosMasPatrimonio == 0
-          ? (prev?.pasivosMasPatrimonio ?? 0)
-          : state.pasivosMasPatrimonio,
-      patrimonio:
-          state.patrimonio == 0 ? (prev?.patrimonio ?? 0) : state.patrimonio,
-      recuperaciones: state.recuperaciones == 0
-          ? (prev?.recuperaciones ?? 0)
-          : state.recuperaciones,
-      reservas: state.reservas == 0 ? (prev?.reservas ?? 0) : state.reservas,
-      semanasBuenas: state.semanasBuenas == 0
-          ? (prev?.semanasBuenas ?? 0)
-          : state.semanasBuenas,
-      semanasMalas: state.semanasMalas == 0
-          ? (prev?.semanasMalas ?? 0)
-          : state.semanasMalas,
-      semanasNormales: state.semanasNormales == 0
-          ? (prev?.semanasNormales ?? 0)
-          : state.semanasNormales,
-      totalActivos: state.totalActivos == 0
-          ? (prev?.totalActivos ?? 0)
-          : state.totalActivos,
-      totalActivosFijos: state.totalActivosFijos == 0
-          ? (prev?.totalActivosFijos ?? 0)
-          : state.totalActivosFijos,
-      totalComprasMensuales: state.totalComprasMensuales == 0
-          ? (prev?.totalComprasMensuales ?? 0)
-          : state.totalComprasMensuales,
-      subContratos: state.subContratos == 0
-          ? (prev?.subContratos ?? 0)
-          : state.subContratos,
-      transporte:
-          state.transporte == 0 ? (prev?.transporte ?? 0) : state.transporte,
-      transporteFamiliar: state.transporteFamiliar == 0
-          ? (prev?.transporteFamiliar ?? 0)
-          : state.transporteFamiliar,
-      ventasContado: state.ventasContado == 0
-          ? (prev?.ventasContado ?? 0)
-          : state.ventasContado,
-      totalCostosOperativos: state.totalCostosOperativos == 0
-          ? (prev?.totalCostosOperativos ?? 0)
-          : state.totalCostosOperativos,
-      totalDisponibleActivo: state.totalDisponibleActivo == 0
-          ? (prev?.totalDisponibleActivo ?? 0)
-          : state.totalDisponibleActivo,
-      totalIngresos: state.totalIngresos == 0
-          ? (prev?.totalIngresos ?? 0)
-          : state.totalIngresos,
-      totalInstFinancierasAmigosOtros:
-          state.totalInstFinancierasAmigosOtros == 0
-              ? (prev?.totalInstFinancierasAmigosOtros ?? 0)
-              : state.totalInstFinancierasAmigosOtros,
-      totalPasivos: state.totalPasivos == 0
-          ? (prev?.totalPasivos ?? 0)
-          : state.totalPasivos,
-      totalVentasDiarias: state.totalVentasDiarias == 0
-          ? (prev?.totalVentasDiarias ?? 0)
-          : state.totalVentasDiarias,
-      totalVentasMensuales: state.totalVentasMensuales == 0
-          ? (prev?.totalVentasMensuales ?? 0)
-          : state.totalVentasMensuales,
-      ventasMensualesCompras: state.ventasMensualesCompras == 0
-          ? (prev?.ventasMensualesCompras ?? 0)
-          : state.ventasMensualesCompras,
-      ventasMensualesProduccion: state.ventasMensualesProduccion == 0
-          ? (prev?.ventasMensualesProduccion ?? 0)
-          : state.ventasMensualesProduccion,
-      vestimentaCalzado: state.vestimentaCalzado == 0
-          ? (prev?.vestimentaCalzado ?? 0)
-          : state.vestimentaCalzado,
-      database: _prefer(state.database, prev?.database),
-      destinoExcedentes:
-          _prefer(state.destinoExcedentes, prev?.destinoExcedentes),
-      maquinaCreacion: _prefer(state.maquinaCreacion, prev?.maquinaCreacion),
-      nombreReferencia1:
-          _prefer(state.nombreReferencia1, prev?.nombreReferencia1),
-      numeroLicencia: _prefer(state.numeroLicencia, prev?.numeroLicencia),
-      permisoOperacionFechaEmision: _preferDate(
-          state.permisoOperacionFechaEmision,
-          prev?.permisoOperacionFechaEmision),
-      permisoOperacionFechaVencimiento: _preferDate(
-          state.permisoOperacionFechaVencimiento,
-          prev?.permisoOperacionFechaVencimiento),
-      permisoOperacionNumero:
-          _prefer(state.permisoOperacionNumero, prev?.permisoOperacionNumero),
-      permisoOperacionNombreInstitucion: _prefer(
+      objEmpleadoVerificaReferenciaID1: state.objEmpleadoVerificaReferenciaID1,
+      objEmpleadoVerificaReferenciaID2: state.objEmpleadoVerificaReferenciaID2,
+      objEmpleadoVerificaReferenciaID3: state.objEmpleadoVerificaReferenciaID3,
+      cedulaReferencia1: state.cedulaReferencia1,
+      cedulaReferencia2: state.cedulaReferencia2,
+      cedulaReferencia3: state.cedulaReferencia3,
+      direccionReferencia1: state.direccionReferencia1,
+      direccionReferencia2: state.direccionReferencia2,
+      direccionReferencia3: state.direccionReferencia3,
+      telefonoReferencia1: state.telefonoReferencia1,
+      telefonoReferencia2: state.telefonoReferencia2,
+      telefonoReferencia3: state.telefonoReferencia3,
+      lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+      lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+      lugarTrabajoReferencia3: state.lugarTrabajoReferencia3,
+      aniosConocerReferido1: state.aniosConocerReferido1,
+      aniosConocerReferido2: state.aniosConocerReferido2,
+      aniosConocerReferido3: state.aniosConocerReferido3,
+      parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
+      parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
+      parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
+      resultadoVerificacion1: state.resultadoVerificacion1,
+      resultadoVerificacion2: state.resultadoVerificacion2,
+      resultadoVerificacion3: state.resultadoVerificacion3,
+      adelantoClientes: state.adelantoClientes,
+      adelantoProveedores: state.adelantoProveedores,
+      aguaElectricidad: state.aguaElectricidad,
+      aguaElectricidadGas: state.aguaElectricidadGas,
+      alimentacion: state.alimentacion,
+      alquilerlocal: state.alquilerlocal,
+      alquilerFamiliar: state.alquilerFamiliar,
+      aseoLimpieza: state.aseoLimpieza,
+      caja: state.caja,
+      cliente1: state.cliente1,
+      cliente2: state.cliente2,
+      cliente3: state.cliente3,
+      combustible: state.combustible,
+      cuentasAhorro: state.cuentasAhorro,
+      costoVentaProduccion: state.costoVentaProduccion,
+      costoVentaProduccionValor: state.costoVentaProduccionValor,
+      creditosInstFinancieras: state.creditosInstFinancieras,
+      diasBuenosVenta: state.diasBuenosVenta,
+      diasMalosVenta: state.diasMalosVenta,
+      diasNormalesVenta: state.diasNormalesVenta,
+      gastosPersonalAlimentacion: state.gastosPersonalAlimentacion,
+      impuesto: state.impuesto,
+      ingresoAnual: state.ingresoAnual,
+      incobrables: state.incobrables,
+      educacion: state.educacion,
+      ingresosFueraNegocio: state.ingresosFueraNegocio,
+      prestamosAmigos: state.prestamosAmigos,
+      otros: state.otros,
+      salud: state.salud,
+      otrosGastosImprevistos: state.otrosGastosImprevistos,
+      pagoCreditosPrivados: state.pagoCreditosPrivados,
+      totalConsumoFamiliar: state.totalConsumoFamiliar,
+      pagoCuotaCredito: state.pagoCuotaCredito,
+      proveedores: state.proveedores,
+      totalCuentasXCobrar: state.totalCuentasXCobrar,
+      totalInventario: state.totalInventario,
+      proveedoresAdelantosOtros: state.proveedoresAdelantosOtros,
+      resultadoLiquido: state.resultadoLiquido,
+      saldoDisponibleUf: state.saldoDisponibleUf,
+      pasivosMasPatrimonio: state.pasivosMasPatrimonio,
+      patrimonio: state.patrimonio,
+      recuperaciones: state.recuperaciones,
+      reservas: state.reservas,
+      semanasBuenas: state.semanasBuenas,
+      semanasMalas: state.semanasMalas,
+      semanasNormales: state.semanasNormales,
+      totalActivos: state.totalActivos,
+      totalActivosFijos: state.totalActivosFijos,
+      totalComprasMensuales: state.totalComprasMensuales,
+      subContratos: state.subContratos,
+      transporte: state.transporte,
+      transporteFamiliar: state.transporteFamiliar,
+      ventasContado: state.ventasContado,
+      totalCostosOperativos: state.totalCostosOperativos,
+      totalDisponibleActivo: state.totalDisponibleActivo,
+      totalIngresos: state.totalIngresos,
+      totalInstFinancierasAmigosOtros: state.totalInstFinancierasAmigosOtros,
+      totalPasivos: state.totalPasivos,
+      totalVentasDiarias: state.totalVentasDiarias,
+      totalVentasMensuales: state.totalVentasMensuales,
+      ventasMensualesCompras: state.ventasMensualesCompras,
+      ventasMensualesProduccion: state.ventasMensualesProduccion,
+      vestimentaCalzado: state.vestimentaCalzado,
+      database: state.database,
+      destinoExcedentes: state.destinoExcedentes,
+      maquinaCreacion: state.maquinaCreacion,
+      nombreReferencia1: state.nombreReferencia1,
+      numeroLicencia: state.numeroLicencia,
+      permisoOperacionFechaEmision:
+          DateTime.tryParse(state.permisoOperacionFechaEmision),
+      permisoOperacionFechaVencimiento:
+          DateTime.tryParse(state.permisoOperacionFechaVencimiento),
+      permisoOperacionNumero: state.permisoOperacionNumero,
+      permisoOperacionNombreInstitucion:
           state.permisoOperacionNombreInstitucion,
-          prev?.permisoOperacionNombreInstitucion),
-      nombreInstitucionLicencia: _prefer(
-          state.nombreInstitucionLicencia, prev?.nombreInstitucionLicencia),
-      nombreReferencia2:
-          _prefer(state.nombreReferencia2, prev?.nombreReferencia2),
-      nombreReferencia3:
-          _prefer(state.nombreReferencia3, prev?.nombreReferencia3),
-      proveedor1: _prefer(state.proveedor1, prev?.proveedor1),
-      proveedor2: _prefer(state.proveedor2, prev?.proveedor2),
-      proveedor3: _prefer(state.proveedor3, prev?.proveedor3),
-      usuarioCreacion: _prefer(state.usuarioCreacion, prev?.usuarioCreacion),
-      fechaEmisionLicencia:
-          _preferDate(state.fechaEmisionLicencia, prev?.fechaEmisionLicencia),
-      fechaVencimientoLicencia: _preferDate(
-          state.fechaVencimientoLicencia, prev?.fechaVencimientoLicencia),
-      fechaVerificacion1:
-          _preferDate(state.fechaVerificacion1, prev?.fechaVerificacion1),
-      fechaVerificacion2:
-          _preferDate(state.fechaVerificacion2, prev?.fechaVerificacion2),
-      fechaVerificacion3:
-          _preferDate(state.fechaVerificacion3, prev?.fechaVerificacion3),
-      numeroSolicitud: state.numeroSolicitud == 0
-          ? (prev?.numeroSolicitud ?? 0)
-          : state.numeroSolicitud,
+      nombreInstitucionLicencia: state.nombreInstitucionLicencia,
+      nombreReferencia2: state.nombreReferencia2,
+      nombreReferencia3: state.nombreReferencia3,
+      proveedor1: state.proveedor1,
+      proveedor2: state.proveedor2,
+      proveedor3: state.proveedor3,
+      usuarioCreacion: state.usuarioCreacion,
+      fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
+      fechaVencimientoLicencia:
+          DateTime.tryParse(state.fechaVencimientoLicencia),
+      fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
+      fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
+      fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
+      numeroSolicitud: state.numeroSolicitud,
     );
   }
 
@@ -742,13 +591,24 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
     autoSaveHelper.trigger();
   }
 
-  DateTime? _preferDate(String? current, DateTime? previous) {
-    final parsed = DateTime.tryParse(current ?? '');
-    return parsed ?? previous;
+  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
+  /// envíe ni quede en el borrador.
+  void quitarReferencia3() {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreReferencia3: '',
+        cedulaReferencia3: '',
+        direccionReferencia3: '',
+        telefonoReferencia3: '',
+        lugarTrabajoReferencia3: '',
+        aniosConocerReferido3: 0,
+        parentescoReferenciaCodigo3: '',
+        resultadoVerificacion3: '',
+        objEmpleadoVerificaReferenciaID3: '',
+        fechaVerificacion3: '',
+      ),
+    );
   }
-
-  String _prefer(String? current, String? previous) =>
-      current?.isNotEmpty == true ? current! : previous ?? '';
 
   void initCicloVentasMensuales(int numeroSolicitud) {
     final localDbProvider = global<AnalisisBoxServiceHn>();
@@ -1386,7 +1246,8 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
           comprasPorProveedor.frecuenciaCompraCreditoCodigo
       ..montoCompraContado = comprasPorProveedor.montoCompraContado
       ..montoCompraCredito = comprasPorProveedor.montoCompraCredito
-      ..proveedorArticulo = comprasPorProveedor.proveedorArticulo;
+      ..proveedorArticulo = comprasPorProveedor.proveedorArticulo
+      ..totalCompraMensual = comprasPorProveedor.totalCompraMensual;
 
     // 3. Guardar UPDATE en ObjectBox
     box.put(existente);

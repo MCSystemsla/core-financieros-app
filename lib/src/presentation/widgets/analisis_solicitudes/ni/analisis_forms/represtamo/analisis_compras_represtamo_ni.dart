@@ -99,13 +99,6 @@ class _AnalisisComprasReprestamoHNState
                       ).showDialog(context);
                       return;
                     }
-                    if (state.comprasProveedorArticulo.isEmpty) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Las Compras por proveedor son requeridas',
-                      ).showDialog(context);
-                      return;
-                    }
 
                     widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 500),

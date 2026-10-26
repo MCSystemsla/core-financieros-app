@@ -1,6 +1,6 @@
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -107,7 +107,7 @@ class _EstadoResultadoForm extends StatelessWidget {
       _ => throw Exception('Tipo de solicitud no soportado $tipoSolicitud'),
     };
 
-    final relacionMinRazonCuota = global<SolicitudesHnBoxService>()
+    final relacionMinRazonCuota = global<ObjectBoxService>()
         .getParametroByName(nombre: relacionMaxRazonCuotaParam);
 
     return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
@@ -133,7 +133,7 @@ class _EstadoResultadoForm extends StatelessWidget {
             state.otrosIngresos -
             state.gastosUnidadFamiliar;
         final relacionMinRazonCuotaPercent =
-            (int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) / 100;
+            (double.tryParse(relacionMinRazonCuota?.valor ?? '') ?? 0) / 100;
         final relacionMinRazonCuotaCalc =
             (relacionMinRazonCuotaPercent * saldoDisponibleUnidadFamiliarCalc);
 
@@ -164,7 +164,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      ventasContado: double.tryParse(newValue),
+                      ventasContado: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -182,7 +182,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      recuperaciones: double.tryParse(newValue),
+                      recuperaciones: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -198,7 +198,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      totalIngresos: double.tryParse(newValue),
+                      totalIngresos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -215,7 +215,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      costoVenta: double.tryParse(newValue),
+                      costoVenta: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -233,7 +233,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      gastosOperativos: double.tryParse(newValue),
+                      gastosOperativos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -250,7 +250,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      margenBrutoNegocio: double.tryParse(newValue),
+                      margenBrutoNegocio: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -268,7 +268,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      otrosIngresos: double.tryParse(newValue),
+                      otrosIngresos: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -286,7 +286,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      gastosUnidadFamiliar: double.tryParse(newValue),
+                      gastosUnidadFamiliar: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -303,7 +303,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      disponidadFamiliar: double.tryParse(newValue),
+                      disponidadFamiliar: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },
@@ -320,7 +320,7 @@ class _EstadoResultadoForm extends StatelessWidget {
                   final newValue = toNumericString(value, allowPeriod: true);
                   cubit.onFieldChanged(
                     () => state.copyWith(
-                      dpp: double.tryParse(newValue),
+                      dpp: double.tryParse(newValue) ?? 0,
                     ),
                   );
                 },

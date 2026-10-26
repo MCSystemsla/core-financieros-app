@@ -255,8 +255,18 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       title: 'Precio venta',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
+                      validator: (value) {
+                        final requerido =
+                            ClassValidator.validateRequired(value);
+                        if (requerido != null) return requerido;
+                        final precio = double.tryParse(
+                              value?.replaceAll(RegExp(r'[^0-9]'), '') ?? '',
+                            ) ??
+                            0;
+                        return precio <= 0
+                            ? 'El precio de venta debe ser mayor a 0'
+                            : null;
+                      },
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                         CurrencyInputFormatter(
@@ -288,8 +298,9 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                                 articulo: articulo!,
                                 costoCompra: costoCompra!,
                                 precioVenta: precioVenta!.toInt(),
-                                costoVentaPorcentaje:
-                                    (costoCompra ?? 0) / (precioVenta ?? 0),
+                                costoVentaPorcentaje: (precioVenta ?? 0) != 0
+                                    ? (costoCompra ?? 0) / precioVenta!
+                                    : 0.0,
                                 total: ((costoCompra ?? 0) * (cantidad ?? 0))
                                     .toInt(),
                               ),
@@ -305,8 +316,9 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                               articulo: articulo!,
                               costoCompra: costoCompra!,
                               precioVenta: precioVenta?.toInt() ?? 0,
-                              costoVentaPorcentaje:
-                                  (costoCompra ?? 0) / (precioVenta ?? 0),
+                              costoVentaPorcentaje: (precioVenta ?? 0) != 0
+                                  ? (costoCompra ?? 0) / precioVenta!
+                                  : 0.0,
                               total: ((costoCompra ?? 0) * (cantidad ?? 0))
                                   .toInt(),
                             ),

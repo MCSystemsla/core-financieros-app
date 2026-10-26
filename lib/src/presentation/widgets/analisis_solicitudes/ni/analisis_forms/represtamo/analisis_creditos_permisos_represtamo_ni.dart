@@ -58,7 +58,7 @@ class AnalisisCreditosPermisosReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        ingresoAnual: int.tryParse(newValue),
+                        ingresoAnual: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },

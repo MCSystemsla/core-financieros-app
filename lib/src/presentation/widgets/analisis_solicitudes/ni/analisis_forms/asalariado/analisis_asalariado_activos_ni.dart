@@ -89,7 +89,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            activo: double.tryParse(newValue),
+                            activo: double.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
@@ -116,7 +116,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            cuentasXCobrar: double.tryParse(newValue),
+                            cuentasXCobrar: double.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
@@ -141,7 +141,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                              valoresAcciones: int.tryParse(newValue)),
+                              valoresAcciones: int.tryParse(newValue) ?? 0),
                         );
                       },
                     ),
@@ -165,7 +165,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            menajeHogar: double.tryParse(newValue),
+                            menajeHogar: double.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
@@ -190,7 +190,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            vehiculo: int.tryParse(newValue),
+                            vehiculo: int.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
@@ -215,7 +215,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            maquinaria: double.tryParse(newValue),
+                            maquinaria: double.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
@@ -240,7 +240,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                              bienesInmuebles: int.tryParse(newValue)),
+                              bienesInmuebles: int.tryParse(newValue) ?? 0),
                         );
                       },
                     ),
@@ -262,7 +262,7 @@ class AnalisisAsalariadoActivosNI extends StatelessWidget {
                         final newValue = toNumericString(value);
                         cubit.onFieldChanged(
                           () => state.copyWith(
-                            totalActivo: double.tryParse(newValue),
+                            totalActivo: double.tryParse(newValue) ?? 0,
                           ),
                         );
                       },
