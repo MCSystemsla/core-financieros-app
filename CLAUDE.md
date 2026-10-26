@@ -93,6 +93,19 @@ Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_gar
 
 Valor comercial and related currency fields in the HN garantía crear/actualizar forms (vehículo, maquinaria, derecho, DPF, hipotecario under `widgets/analisis_solicitudes/hn/garantia/v2/`) accept decimals: `TextInputType.numberWithOptions(decimal: true)`, `CurrencyInputFormatter()` with no `mantissaLength: 0`, and `toNumericString(value, allowPeriod: true)` when parsing. The response model (`analisis_garantia_obtener_bien_response.dart`) parses these values as `double`, not `int`. Keep this when adding a new garantía form.
 
+### NI análisis: fiadores
+
+NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` opens the form directly (there is no fiador-type selection screen) after checking the internet connection.
+
+- The fields mirror the fiadores screen of the NI desktop system (tabs "Datos personales" and "Otros datos"), not HN's. That screen is the source of truth: do not add HN-only fields such as escolaridad, ocupación or CNBS.
+- The form has 4 steps driven by `AnalisisFiadoresNiCubit`. It has no cédula photos, signature, document search or credit history, and it saves nothing offline.
+- It posts `AnalisisFiadorNi` to `POST /cartera/analisis-fiador/create` through `AnalisisFormsRepositoryNi.createAnalisisFiador` (expects `201`).
+- Step sections use `FiadorNiSectionCard` (`fiador_ni_form_layout.dart`) rather than `SectionBlockWidget`, because the inputs bring their own padding.
+- NI does not send `TipoFiadorCodigo`; `AnalisisFiadorNi` has no fiador type.
+- `RELACIONPERSONAS` (relación con el cliente) is synced for NI in `SolicitudCatalogoCubit._codigosCatalogo`. Before this change, only the HN sync downloaded it.
+
+Spec: `specs/02-fiadores-analisis-ni.md`.
+
 ### Solicitudes by estado (paginated lists)
 
 Lists of credit requests filtered by `EstadoCredito` go through one cubit per country: `SolicitudesByEstadoHnCubit` (`bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/`) and `SolicitudesByEstadoNiCubit` (`bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/`, backed by `SolicitudesCreditoRepository.getSolicitudesByEstado` in `domain/repository/solicitudes_credito/ni/`). The NI cubit replaced the old `SolicitudNuevaByEstadoCubit`. Pattern:

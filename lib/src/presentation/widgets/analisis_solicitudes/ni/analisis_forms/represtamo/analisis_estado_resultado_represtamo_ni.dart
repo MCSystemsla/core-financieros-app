@@ -1,8 +1,10 @@
+import 'package:core_financiero_app/src/config/helpers/analisis/ventas_contado.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,15 +41,22 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
           (sum, e) => sum + e.totalMensualProduccion,
         );
 
-        final ventasDeContado =
-            (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+        final ventasDeContado = calcularVentasDeContado(
+          totalVentasMensuales: totalVentasMensuales,
+          totalVentasDiarias: totalVentasDiarias,
+          nivelProduccion: nivelProduccion,
+        );
 
         final totalIngresos = ventasDeContado + state.recuperaciones;
 
-        final porcentajeDeVenta = (state.inventario.fold(0.0,
-                    (sum, element) => sum + (element.costoVentaPorcentaje)) /
-                (state.inventario.length))
-            .toStringAsFixed(2);
+        final porcentajeDeVenta = state.inventario.isEmpty
+            ? 0.0.toSafeString(2)
+            : (state.inventario.fold<double>(
+                      0.0,
+                      (sum, e) => sum + e.costoVentaPorcentaje,
+                    ) /
+                    state.inventario.length)
+                .toSafeString(2);
 
         final totalCostosOperativosCal = (state.gastosPersonalAlimentacion +
             state.subContratos +
@@ -123,7 +132,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   hintText: ventasDeContado.toCurrencyString(),
                   readOnly: true,
                   textAlign: TextAlign.end,
-                  title: 'Ventas de contado L:',
+                  title: 'Ventas de contado:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -131,7 +140,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        ventasContado: int.tryParse(newValue),
+                        ventasContado: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -143,7 +152,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Recuperaciones L:',
+                  title: 'Recuperaciones:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -152,7 +161,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        recuperaciones: int.tryParse(newValue),
+                        recuperaciones: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -163,7 +172,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   hintText: totalIngresos.toCurrencyString(),
                   readOnly: true,
                   textAlign: TextAlign.end,
-                  title: 'Total ingresos L:',
+                  title: 'Total ingresos:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -171,7 +180,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalIngresos: int.tryParse(newValue),
+                        totalIngresos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -183,7 +192,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   ),
                   textAlign: TextAlign.end,
                   readOnly: true,
-                  title: porcentajeDeVenta,
+                  title: 'Costo de ventas/producción ($porcentajeDeVenta):',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -191,7 +200,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        costoVentaProduccion: int.tryParse(newValue),
+                        costoVentaProduccion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -210,23 +219,13 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   onChange: (value) {},
                 ),
 
-                Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Costo operativos',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
-
                 // const Gap(20),
                 // OutlineTextfieldWidget(
                 //   hintText: porcentajeDeVentaTotalCal.toCurrencyString(
                 //     mantissaLength: 0,
                 //   ),
                 //   textAlign: TextAlign.end,
-                //   title: 'Costo de ventas/producción L:',
+                //   title: 'Costo de ventas/producción:',
                 //   icon: const Icon(Icons.document_scanner),
                 //   textInputType: TextInputType.number,
                 //   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -234,7 +233,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                 //     final newValue = toNumericString(value);
                 //     cubit.onFieldChanged(
                 //       () => state.copyWith(
-                //         costoVentaProduccion: int.tryParse(newValue),
+                //         costoVentaProduccion: int.tryParse(newValue) ?? 0,
                 //       ),
                 //     );
                 //   },
@@ -258,7 +257,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Gastos de alimentación personal L:',
+                  title: 'Gastos de alimentación personal:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -266,7 +265,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        gastosPersonalAlimentacion: int.tryParse(newValue),
+                        gastosPersonalAlimentacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -279,7 +278,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Subcontratos/Otros serv. de personal L:',
+                  title: 'Subcontratos/Otros serv. de personal:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -287,7 +286,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        subContratos: int.tryParse(newValue),
+                        subContratos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -300,7 +299,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Alquiler de local/depósitos L:',
+                  title: 'Alquiler de local/depósitos:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -308,7 +307,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alquilerlocal: int.tryParse(newValue),
+                        alquilerlocal: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -321,7 +320,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Agua/Electricidad/Teléfono L:',
+                  title: 'Agua/Electricidad/Teléfono:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -329,7 +328,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aguaElectricidad: int.tryParse(newValue),
+                        aguaElectricidad: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -341,7 +340,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Combustible/Lubricantes L:',
+                  title: 'Combustible/Lubricantes:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -350,7 +349,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        combustible: int.tryParse(newValue),
+                        combustible: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -361,7 +360,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   initialValue:
                       state.transporte.toCurrencyString().toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Transporte/Carga L:',
+                  title: 'Transporte/Carga:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -370,7 +369,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        transporte: int.tryParse(newValue),
+                        transporte: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -383,7 +382,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Pago de cuotas de créditos L:',
+                  title: 'Pago de cuotas de créditos:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -391,7 +390,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        pagoCuotaCredito: int.tryParse(newValue),
+                        pagoCuotaCredito: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -402,7 +401,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   initialValue:
                       state.impuesto.toCurrencyString().toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Impuestos/tributos/licencia L:',
+                  title: 'Impuestos/tributos/licencia:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -411,7 +410,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        impuesto: int.tryParse(newValue),
+                        impuesto: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -422,7 +421,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   initialValue:
                       state.otros.toCurrencyString().toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Otros L:',
+                  title: 'Otros:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -430,7 +429,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        otros: int.tryParse(newValue),
+                        otros: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -441,7 +440,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   readOnly: true,
                   hintText: totalCostosOperativosCal.toCurrencyString(),
                   textAlign: TextAlign.end,
-                  title: 'Total costos operativos L:',
+                  title: 'Total costos operativos:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -449,7 +448,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalCostosOperativos: int.tryParse(newValue),
+                        totalCostosOperativos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -460,7 +459,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   readOnly: true,
                   hintText: totalResultadoLiquido.toCurrencyString(),
                   textAlign: TextAlign.end,
-                  title: 'Resultado líquido del negocio L:',
+                  title: 'Resultado líquido del negocio:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -468,7 +467,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        resultadoLiquido: int.tryParse(newValue),
+                        resultadoLiquido: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -491,7 +490,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Alimentación L:',
+                  title: 'Alimentación:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -500,7 +499,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alimentacion: int.tryParse(newValue),
+                        alimentacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -511,7 +510,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   initialValue:
                       state.educacion.toCurrencyString().toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Educación L:',
+                  title: 'Educación:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -520,7 +519,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        educacion: int.tryParse(newValue),
+                        educacion: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -533,7 +532,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Agua, Electricidad, Teléfono, Gas y Kerosén L:',
+                  title: 'Agua, Electricidad, Teléfono, Gas y Kerosén:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -541,7 +540,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aguaElectricidadGas: int.tryParse(newValue),
+                        aguaElectricidadGas: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -554,7 +553,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Alquiler L:',
+                  title: 'Alquiler:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -562,7 +561,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        alquilerFamiliar: int.tryParse(newValue),
+                        alquilerFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -575,7 +574,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Aseo y limpieza L:',
+                  title: 'Aseo y limpieza:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -583,7 +582,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        aseoLimpieza: int.tryParse(newValue),
+                        aseoLimpieza: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -596,7 +595,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
                   validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Vestimenta y calzado L:',
+                  title: 'Vestimenta y calzado:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -604,7 +603,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        vestimentaCalzado: int.tryParse(newValue),
+                        vestimentaCalzado: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -616,7 +615,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Transporte L:',
+                  title: 'Transporte:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -625,7 +624,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        transporteFamiliar: int.tryParse(newValue),
+                        transporteFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -637,7 +636,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Otros gastos / imprevistos (reserva) L:',
+                  title: 'Otros gastos / imprevistos (reserva):',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -646,7 +645,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        otrosGastosImprevistos: int.tryParse(newValue),
+                        otrosGastosImprevistos: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -658,7 +657,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Pago de créditos privados L:',
+                  title: 'Pago de créditos privados:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -667,7 +666,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        pagoCreditosPrivados: int.tryParse(newValue),
+                        pagoCreditosPrivados: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -678,7 +677,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                   readOnly: true,
                   hintText: totalConsumoFamiliarCalc.toCurrencyString(),
                   textAlign: TextAlign.end,
-                  title: 'Total consumo familiar L:',
+                  title: 'Total consumo familiar:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -686,7 +685,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        totalConsumoFamiliar: int.tryParse(newValue),
+                        totalConsumoFamiliar: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -698,7 +697,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                       .toCurrencyString()
                       .toNullIfEmptyOrZero(),
                   textAlign: TextAlign.end,
-                  title: 'Ingresos fuera del negocio L:',
+                  title: 'Ingresos fuera del negocio:',
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -707,7 +706,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        ingresosFueraNegocio: int.tryParse(newValue),
+                        ingresosFueraNegocio: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -717,11 +716,9 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                 OutlineTextfieldWidget(
                   readOnly: true,
                   hintText:
-                      totalSaldoDisponibleUnidadFamiliarCal.toCurrencyString(
-                    mantissaLength: 1,
-                  ),
+                      totalSaldoDisponibleUnidadFamiliarCal.toCurrencyString(),
                   textAlign: TextAlign.end,
-                  title: 'Saldo disponible de la unidad familiar L:',
+                  title: 'Saldo disponible de la unidad familiar:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
                   inputFormatters: [CurrencyInputFormatter(mantissaLength: 0)],
@@ -729,7 +726,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                     final newValue = toNumericString(value);
                     cubit.onFieldChanged(
                       () => state.copyWith(
-                        saldoDisponibleUf: int.tryParse(newValue),
+                        saldoDisponibleUf: int.tryParse(newValue) ?? 0,
                       ),
                     );
                   },
@@ -738,8 +735,7 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
                 const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: state.destinoExcedentes,
-                  textAlign: TextAlign.end,
-                  title: 'Destino de los excedentes hasta la fecha L:',
+                  title: 'Destino de los excedentes hasta la fecha:',
                   icon: const Icon(Icons.document_scanner),
                   inputFormatters: [
                     UpperCaseTextFormatter(),

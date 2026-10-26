@@ -133,14 +133,7 @@ class _AnalisisCicloVentasReprestamoHNState
                       ).showDialog(context);
                       return;
                     }
-                    if (state.nivelProduccion.isEmpty) {
-                      CustomAlertDialog(
-                        context: context,
-                        title: 'Nivel de producción es obligatorio.',
-                        onDone: () => context.pop(),
-                      ).showDialog(context);
-                      return;
-                    }
+
                     widget.pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,

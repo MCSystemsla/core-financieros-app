@@ -33,12 +33,16 @@ class _AnalisisConstanciaPermisosReprestamoHNState
   void initState() {
     super.initState();
     final cubit = context.read<AnalisisReprestamoNiCubit>();
-    fechaEmisionPermiso = DateTime.tryParse(cubit.state.fechaEmisionLicencia);
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    fechaEmisionPermiso =
+        DateTime.tryParse(cubit.state.permisoOperacionFechaEmision)?.toLocal();
     fechaVencimientoPermiso =
-        DateTime.tryParse(cubit.state.fechaVencimientoLicencia);
-    fechaEmisionLicencia = DateTime.tryParse(cubit.state.fechaEmisionLicencia);
+        DateTime.tryParse(cubit.state.permisoOperacionFechaVencimiento)
+            ?.toLocal();
+    fechaEmisionLicencia =
+        DateTime.tryParse(cubit.state.fechaEmisionLicencia)?.toLocal();
     fechaVencimientoLicencia =
-        DateTime.tryParse(cubit.state.fechaVencimientoLicencia);
+        DateTime.tryParse(cubit.state.fechaVencimientoLicencia)?.toLocal();
   }
 
   Future<void> selectDateFechaEmision(BuildContext context) async {

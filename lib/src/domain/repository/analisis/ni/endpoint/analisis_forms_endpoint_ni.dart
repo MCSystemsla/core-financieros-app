@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_asalaria
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_menor_mil.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_mayor_a_mil_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/analisis_fiador_ni.dart';
 
 class CreateAnalisisNuevaMayorMilNiEndpoint extends Endpoint {
   final AnalisisNuevaMayorMilHn analisisSolicitudNuevaMenor;
@@ -98,4 +99,23 @@ class CrearAnalisisMenorMilReprestamoNiEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
+}
+
+class CreateAnalisisFiadorEndpointNi extends Endpoint {
+  final AnalisisFiadorNi analisisFiadorNi;
+
+  CreateAnalisisFiadorEndpointNi({
+    required this.analisisFiadorNi,
+  });
+  @override
+  Method get method => Method.post;
+
+  @override
+  String get path => '/cartera/analisis-fiador/create';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => analisisFiadorNi.toJson();
 }

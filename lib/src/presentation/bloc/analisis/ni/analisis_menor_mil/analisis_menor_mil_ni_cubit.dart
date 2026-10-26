@@ -7,7 +7,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_menor_mil/nueva_menor_mil_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_inventario_hn_local_db.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
 import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -68,7 +68,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
       _ => throw Exception('Tipo de solicitud no soportado $tipoSolicitud'),
     };
 
-    final relacionMinRazonCuota = global<SolicitudesHnBoxService>()
+    final relacionMinRazonCuota = global<ObjectBoxService>()
         .getParametroByName(nombre: relacionMaxRazonCuotaParam);
     emit(state.copyWith(status: Status.inProgress));
 
@@ -83,7 +83,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
         state.gastosUnidadFamiliar;
 
     final relacionMinRazonCuotaPercent =
-        (int.tryParse(relacionMinRazonCuota?.valor ?? '0') ?? 0) / 100;
+        (double.tryParse(relacionMinRazonCuota?.valor ?? '') ?? 0) / 100;
     final relacionMinRazonCuotaCalc =
         (relacionMinRazonCuotaPercent * saldoDisponibleUnidadFamiliarCalc);
 
@@ -143,7 +143,7 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
           parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
           margenBrutoNegocio: margenBrutoNegocioCalc,
           disponidadFamiliar: saldoDisponibleUnidadFamiliarCalc,
-          dppPorcentaje: double.parse(relacionMinRazonCuota?.valor ?? '0'),
+          dppPorcentaje: double.tryParse(relacionMinRazonCuota?.valor ?? '') ?? 0,
           dpp: relacionMinRazonCuotaCalc,
           nombreInstitucionLicencia: state.nombreInstitucionLicencia,
           nombreInstitucionMatricula: state.nombreInstitucionMatricula,
@@ -223,178 +223,91 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
     return NuevaMenorMilLocalDb(
       id: prev?.id ?? 0,
       uuid: prev?.uuid ?? state.uuid ?? const Uuid().v4(),
-      cedulaReferencia1:
-          _prefer(state.cedulaReferencia1, prev?.cedulaReferencia1),
-      cedulaReferencia2:
-          _prefer(state.cedulaReferencia2, prev?.cedulaReferencia2),
-      cedulaReferencia3:
-          _prefer(state.cedulaReferencia3, prev?.cedulaReferencia3),
-      cliente1: _prefer(state.cliente1, prev?.cliente1),
-      cliente2: _prefer(state.cliente2, prev?.cliente2),
-      cliente3: _prefer(state.cliente3, prev?.cliente3),
-      proveedor1: _prefer(state.proveedor1, prev?.proveedor1),
-      proveedor2: _prefer(state.proveedor2, prev?.proveedor2),
-      proveedor3: _prefer(state.proveedor3, prev?.proveedor3),
-      fechaVerificacion1:
-          _preferDate(state.fechaVerificacion1, prev?.fechaVerificacion1),
-      nombreReferencia1:
-          _prefer(state.nombreReferencia1, prev?.nombreReferencia1),
-      direccionReferencia1:
-          _prefer(state.direccionReferencia1, prev?.direccionReferencia1),
-      telefonoReferencia1:
-          _prefer(state.telefonoReferencia1, prev?.telefonoReferencia1),
-      lugarTrabajoReferencia1:
-          _prefer(state.lugarTrabajoReferencia1, prev?.lugarTrabajoReferencia1),
-      direccionReferencia2:
-          _prefer(state.direccionReferencia2, prev?.direccionReferencia2),
-      telefonoReferencia2:
-          _prefer(state.telefonoReferencia2, prev?.telefonoReferencia2),
-      lugarTrabajoReferencia2:
-          _prefer(state.lugarTrabajoReferencia2, prev?.lugarTrabajoReferencia2),
-      direccionReferencia3:
-          _prefer(state.direccionReferencia3, prev?.direccionReferencia3),
-      telefonoReferencia3:
-          _prefer(state.telefonoReferencia3, prev?.telefonoReferencia3),
-      lugarTrabajoReferencia3:
-          _prefer(state.lugarTrabajoReferencia3, prev?.lugarTrabajoReferencia3),
-      resultadoVerificacion1:
-          _prefer(state.resultadoVerificacion1, prev?.resultadoVerificacion1),
-      parentescoReferenciaCodigo1: _prefer(
-          state.parentescoReferenciaCodigo1, prev?.parentescoReferenciaCodigo1),
-      nombreInstitucionLicencia: _prefer(
-          state.nombreInstitucionLicencia, prev?.nombreInstitucionLicencia),
-      fechaEmisionLicencia:
-          _preferDate(state.fechaEmisionLicencia, prev?.fechaEmisionLicencia),
-      fechaVencimientoLicencia: _preferDate(
-          state.fechaVencimientoLicencia, prev?.fechaVencimientoLicencia),
-      numeroLicencia: _prefer(state.numeroLicencia, prev?.numeroLicencia),
-      nombreInstitucionMatricula: _prefer(
-          state.nombreInstitucionMatricula, prev?.nombreInstitucionMatricula),
-      fechaEmisionMatricula:
-          _preferDate(state.fechaEmisionMatricula, prev?.fechaEmisionMatricula),
-      fechaVencimientoMatricula: _preferDate(
-          state.fechaVencimientoMatricula, prev?.fechaVencimientoMatricula),
-      numeroMatricula: _prefer(state.numeroMatricula, prev?.numeroMatricula),
-      nombreInstitucionRuc:
-          _prefer(state.nombreInstitucionRuc, prev?.nombreInstitucionRuc),
-      numeroRuc: _prefer(state.numeroRuc, prev?.numeroRuc),
-      fechaEmisionRuc:
-          _preferDate(state.fechaEmisionRuc, prev?.fechaEmisionRuc),
-      fechaVencimientoRuc:
-          _preferDate(state.fechaVencimientoRuc, prev?.fechaVencimientoRuc),
-      permisoOperacionNumero:
-          _prefer(state.permisoOperacionNumero, prev?.permisoOperacionNumero),
-      permisoOperacionNombreInstitucion: _prefer(
+      cedulaReferencia1: state.cedulaReferencia1,
+      cedulaReferencia2: state.cedulaReferencia2,
+      cedulaReferencia3: state.cedulaReferencia3,
+      cliente1: state.cliente1,
+      cliente2: state.cliente2,
+      cliente3: state.cliente3,
+      proveedor1: state.proveedor1,
+      proveedor2: state.proveedor2,
+      proveedor3: state.proveedor3,
+      fechaVerificacion1: DateTime.tryParse(state.fechaVerificacion1),
+      nombreReferencia1: state.nombreReferencia1,
+      direccionReferencia1: state.direccionReferencia1,
+      telefonoReferencia1: state.telefonoReferencia1,
+      lugarTrabajoReferencia1: state.lugarTrabajoReferencia1,
+      direccionReferencia2: state.direccionReferencia2,
+      telefonoReferencia2: state.telefonoReferencia2,
+      lugarTrabajoReferencia2: state.lugarTrabajoReferencia2,
+      direccionReferencia3: state.direccionReferencia3,
+      telefonoReferencia3: state.telefonoReferencia3,
+      lugarTrabajoReferencia3: state.lugarTrabajoReferencia3,
+      resultadoVerificacion1: state.resultadoVerificacion1,
+      parentescoReferenciaCodigo1: state.parentescoReferenciaCodigo1,
+      nombreInstitucionLicencia: state.nombreInstitucionLicencia,
+      fechaEmisionLicencia: DateTime.tryParse(state.fechaEmisionLicencia),
+      fechaVencimientoLicencia:
+          DateTime.tryParse(state.fechaVencimientoLicencia),
+      numeroLicencia: state.numeroLicencia,
+      nombreInstitucionMatricula: state.nombreInstitucionMatricula,
+      fechaEmisionMatricula: DateTime.tryParse(state.fechaEmisionMatricula),
+      fechaVencimientoMatricula:
+          DateTime.tryParse(state.fechaVencimientoMatricula),
+      numeroMatricula: state.numeroMatricula,
+      nombreInstitucionRuc: state.nombreInstitucionRuc,
+      numeroRuc: state.numeroRuc,
+      fechaEmisionRuc: DateTime.tryParse(state.fechaEmisionRuc),
+      fechaVencimientoRuc: DateTime.tryParse(state.fechaVencimientoRuc),
+      permisoOperacionNumero: state.permisoOperacionNumero,
+      permisoOperacionNombreInstitucion:
           state.permisoOperacionNombreInstitucion,
-          prev?.permisoOperacionNombreInstitucion),
-      permisoOperacionFechaEmision: _preferDate(
-          state.permisoOperacionFechaEmision,
-          prev?.permisoOperacionFechaEmision),
-      permisoOperacionFechaVencimiento: _preferDate(
-          state.permisoOperacionFechaVencimiento,
-          prev?.permisoOperacionFechaVencimiento),
-      numeroSolicitud: state.numeroSolicitud == 0
-          ? (prev?.numeroSolicitud ?? 0)
-          : state.numeroSolicitud,
-      caja: state.caja == 0 ? (prev?.caja ?? 0) : state.caja,
-      banco: state.banco == 0 ? (prev?.banco ?? 0) : state.banco,
-      cuentasXCobrar: state.cuentasXCobrar == 0
-          ? (prev?.cuentasXCobrar ?? 0)
-          : state.cuentasXCobrar,
-      inventario:
-          state.inventario == 0 ? (prev?.inventario ?? 0) : state.inventario,
-      otrosActivos: state.otrosActivos == 0
-          ? (prev?.otrosActivos ?? 0)
-          : state.otrosActivos,
-      totalAc: state.totalAc == 0 ? (prev?.totalAc ?? 0) : state.totalAc,
-      activoFijo:
-          state.activoFijo == 0 ? (prev?.activoFijo ?? 0) : state.activoFijo,
-      totalActivo:
-          state.totalActivo == 0 ? (prev?.totalActivo ?? 0) : state.totalActivo,
-      proveedores:
-          state.proveedores == 0 ? (prev?.proveedores ?? 0) : state.proveedores,
-      cuentasXPagar: state.cuentasXPagar == 0
-          ? (prev?.cuentasXPagar ?? 0)
-          : state.cuentasXPagar,
-      otrasDeudas:
-          state.otrasDeudas == 0 ? (prev?.otrasDeudas ?? 0) : state.otrasDeudas,
-      totalPasivo:
-          state.totalPasivo == 0 ? (prev?.totalPasivo ?? 0) : state.totalPasivo,
-      capital: state.capital == 0 ? (prev?.capital ?? 0) : state.capital,
-      pasivoCapital: state.pasivoCapital == 0
-          ? (prev?.pasivoCapital ?? 0)
-          : state.pasivoCapital,
-      ventasContado: state.ventasContado == 0
-          ? (prev?.ventasContado ?? 0)
-          : state.ventasContado,
-      recuperaciones: state.recuperaciones == 0
-          ? (prev?.recuperaciones ?? 0)
-          : state.recuperaciones,
-      otrosIngresos: state.otrosIngresos == 0
-          ? (prev?.otrosIngresos ?? 0)
-          : state.otrosIngresos,
-      gastosUnidadFamiliar: state.gastosUnidadFamiliar == 0
-          ? (prev?.gastosUnidadFamiliar ?? 0)
-          : state.gastosUnidadFamiliar,
-      totalIngresos: state.totalIngresos == 0
-          ? (prev?.totalIngresos ?? 0)
-          : state.totalIngresos,
-      costoVentaPorcentaje: state.costoVentaPorcentaje == 0
-          ? (prev?.costoVentaPorcentaje ?? 0)
-          : state.costoVentaPorcentaje,
-      costoVenta:
-          state.costoVenta == 0 ? (prev?.costoVenta ?? 0) : state.costoVenta,
-      gastosOperativos: state.gastosOperativos == 0
-          ? (prev?.gastosOperativos ?? 0)
-          : state.gastosOperativos,
-      margenBrutoNegocio: state.margenBrutoNegocio == 0
-          ? (prev?.margenBrutoNegocio ?? 0)
-          : state.margenBrutoNegocio,
-      disponidadFamiliar: state.disponidadFamiliar == 0
-          ? (prev?.disponidadFamiliar ?? 0)
-          : state.disponidadFamiliar,
-      dppPorcentaje: state.dppPorcentaje == 0
-          ? (prev?.dppPorcentaje ?? 0)
-          : state.dppPorcentaje,
-      dpp: state.dpp == 0 ? (prev?.dpp ?? 0) : state.dpp,
-      nombreReferencia2:
-          _prefer(state.nombreReferencia2, prev?.nombreReferencia2),
-      nombreReferencia3:
-          _prefer(state.nombreReferencia3, prev?.nombreReferencia3),
-      parentescoReferenciaCodigo2: _prefer(
-          state.parentescoReferenciaCodigo2, prev?.parentescoReferenciaCodigo2),
-      parentescoReferenciaCodigo3: _prefer(
-          state.parentescoReferenciaCodigo3, prev?.parentescoReferenciaCodigo3),
-      aniosConocerReferido2: state.aniosConocerReferido2 == 0
-          ? (prev?.aniosConocerReferido2 ?? 0)
-          : state.aniosConocerReferido2,
-      aniosConocerReferido3: state.aniosConocerReferido3 == 0
-          ? (prev?.aniosConocerReferido3 ?? 0)
-          : state.aniosConocerReferido3,
-      resultadoVerificacion2:
-          _prefer(state.resultadoVerificacion2, prev?.resultadoVerificacion2),
-      resultadoVerificacion3:
-          _prefer(state.resultadoVerificacion3, prev?.resultadoVerificacion3),
-      aniosConocerReferido1: state.aniosConocerReferido1 == 0
-          ? (prev?.aniosConocerReferido1 ?? 0)
-          : state.aniosConocerReferido1,
-      fechaVerificacion2:
-          _preferDate(state.fechaVerificacion2, prev?.fechaVerificacion2),
-      fechaVerificacion3:
-          _preferDate(state.fechaVerificacion3, prev?.fechaVerificacion3),
-      ingresoAnual: state.ingresoAnual == 0
-          ? (prev?.ingresoAnual ?? 0)
-          : state.ingresoAnual,
-      objEmpleadoVerificaReferenciaId1: _prefer(
-          state.objEmpleadoVerificaReferenciaId1,
-          prev?.objEmpleadoVerificaReferenciaId1),
-      objEmpleadoVerificaReferenciaId2: _prefer(
-          state.objEmpleadoVerificaReferenciaId2,
-          prev?.objEmpleadoVerificaReferenciaId2),
-      objEmpleadoVerificaReferenciaId3: _prefer(
-        state.objEmpleadoVerificaReferenciaId3,
-        prev?.objEmpleadoVerificaReferenciaId3,
-      ),
+      permisoOperacionFechaEmision:
+          DateTime.tryParse(state.permisoOperacionFechaEmision),
+      permisoOperacionFechaVencimiento:
+          DateTime.tryParse(state.permisoOperacionFechaVencimiento),
+      numeroSolicitud: state.numeroSolicitud,
+      caja: state.caja,
+      banco: state.banco,
+      cuentasXCobrar: state.cuentasXCobrar,
+      inventario: state.inventario,
+      otrosActivos: state.otrosActivos,
+      totalAc: state.totalAc,
+      activoFijo: state.activoFijo,
+      totalActivo: state.totalActivo,
+      proveedores: state.proveedores,
+      cuentasXPagar: state.cuentasXPagar,
+      otrasDeudas: state.otrasDeudas,
+      totalPasivo: state.totalPasivo,
+      capital: state.capital,
+      pasivoCapital: state.pasivoCapital,
+      ventasContado: state.ventasContado,
+      recuperaciones: state.recuperaciones,
+      otrosIngresos: state.otrosIngresos,
+      gastosUnidadFamiliar: state.gastosUnidadFamiliar,
+      totalIngresos: state.totalIngresos,
+      costoVentaPorcentaje: state.costoVentaPorcentaje,
+      costoVenta: state.costoVenta,
+      gastosOperativos: state.gastosOperativos,
+      margenBrutoNegocio: state.margenBrutoNegocio,
+      disponidadFamiliar: state.disponidadFamiliar,
+      dppPorcentaje: state.dppPorcentaje,
+      dpp: state.dpp,
+      nombreReferencia2: state.nombreReferencia2,
+      nombreReferencia3: state.nombreReferencia3,
+      parentescoReferenciaCodigo2: state.parentescoReferenciaCodigo2,
+      parentescoReferenciaCodigo3: state.parentescoReferenciaCodigo3,
+      aniosConocerReferido2: state.aniosConocerReferido2,
+      aniosConocerReferido3: state.aniosConocerReferido3,
+      resultadoVerificacion2: state.resultadoVerificacion2,
+      resultadoVerificacion3: state.resultadoVerificacion3,
+      aniosConocerReferido1: state.aniosConocerReferido1,
+      fechaVerificacion2: DateTime.tryParse(state.fechaVerificacion2),
+      fechaVerificacion3: DateTime.tryParse(state.fechaVerificacion3),
+      ingresoAnual: state.ingresoAnual,
+      objEmpleadoVerificaReferenciaId1: state.objEmpleadoVerificaReferenciaId1,
+      objEmpleadoVerificaReferenciaId2: state.objEmpleadoVerificaReferenciaId2,
+      objEmpleadoVerificaReferenciaId3: state.objEmpleadoVerificaReferenciaId3,
     );
   }
 
@@ -403,12 +316,23 @@ class AnalisisMenorMilNiCubit extends Cubit<AnalisisMenorMilNiState> {
     autoSaveHelper.trigger();
   }
 
-  String _prefer(String? current, String? previous) =>
-      current?.isNotEmpty == true ? current! : previous ?? '';
-
-  DateTime? _preferDate(String? current, DateTime? previous) {
-    final parsed = DateTime.tryParse(current ?? '');
-    return parsed ?? previous;
+  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
+  /// envíe ni quede en el borrador.
+  void quitarReferencia3() {
+    onFieldChanged(
+      () => state.copyWith(
+        nombreReferencia3: '',
+        cedulaReferencia3: '',
+        direccionReferencia3: '',
+        telefonoReferencia3: '',
+        lugarTrabajoReferencia3: '',
+        aniosConocerReferido3: 0,
+        parentescoReferenciaCodigo3: '',
+        resultadoVerificacion3: '',
+        objEmpleadoVerificaReferenciaId3: '',
+        fechaVerificacion3: '',
+      ),
+    );
   }
 
   void loadFromLocalDb(NuevaMenorMilLocalDb? solicitud) {

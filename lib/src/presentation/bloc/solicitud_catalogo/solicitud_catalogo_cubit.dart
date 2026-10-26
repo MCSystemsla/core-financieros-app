@@ -32,6 +32,15 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
   static const _accionKiva = 'LLENARKIVAMOVIL';
 
+  /// Parámetros que leen los cubits de análisis NI desde la BD local:
+  /// incobrables (asalariado, mayor a mil, represtamo) y la razón cuota que
+  /// da el D.P.P. de menor a mil (nueva y represtamo).
+  static const _parametrosAnalisis = [
+    'INCOBRABLESDECXCOBRAR',
+    'RELACIONMAXRAZONCUOTACREDITONUEVO',
+    'RELACIONMAXRAZONCUOTACREDITOREPRESTAMO',
+  ];
+
   static const _codigosCatalogo = [
     'PARENTESCO',
     'TIPOVIVIENDA',
@@ -49,6 +58,8 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     'TIPODOCUMENTOPERSONA',
     'ESTADOPRESTAMO',
     'UBICACIONGPS',
+    // "Relación con el cliente" del formulario de fiadores del análisis NI.
+    'RELACIONPERSONAS',
   ];
 
   /// Punto de entrada único: descarga y persiste todos los catálogos.
@@ -113,6 +124,16 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
 
     await getAndSaveParametros();
     log('Parámetros guardados');
+
+    for (final nombre in _parametrosAnalisis) {
+      try {
+        await getAndSaveParametroAnalisis(nombre: nombre);
+        log('Parámetro $nombre guardado');
+      } catch (e) {
+        log('Error sincronizando parámetro $nombre: $e');
+        unsynced.add(nombre);
+      }
+    }
 
     await saveCatalogoFrecuenciaPago();
     log('Frecuencia de Pago guardados');
@@ -250,6 +271,24 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
           valor: edadMaxima.data.valor,
           nombre: 'EDADMAXIMACLIENTE',
           type: 'EDADMAXIMACLIENTE',
+        ),
+      ],
+    );
+  }
+
+  /// Guarda un parámetro que usan los análisis. Va aparte de
+  /// [getAndSaveParametros] para que, si falla, no tumbe la sincronización de
+  /// las edades.
+  Future<void> getAndSaveParametroAnalisis({required String nombre}) async {
+    final parametro = await _repository.getParametroByName(nombre: nombre);
+
+    _replaceCatalogoByType(
+      type: nombre,
+      items: [
+        CatalogoLocalDb(
+          valor: parametro.data.valor,
+          nombre: nombre,
+          type: nombre,
         ),
       ],
     );

@@ -91,6 +91,16 @@ class _LicenciaFormState extends State<_LicenciaForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
 
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionLicencia)?.toLocal();
+    fechaVencimiento =
+        DateTime.tryParse(state.fechaVencimientoLicencia)?.toLocal();
+  }
+
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
 
@@ -225,6 +235,16 @@ class _MatriculaForm extends StatefulWidget {
 class _MatriculaFormState extends State<_MatriculaForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
+
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionMatricula)?.toLocal();
+    fechaVencimiento =
+        DateTime.tryParse(state.fechaVencimientoMatricula)?.toLocal();
+  }
 
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
@@ -361,6 +381,15 @@ class _RucFormState extends State<_RucForm> {
   DateTime? fechaEmision;
   DateTime? fechaVencimiento;
 
+  @override
+  void initState() {
+    super.initState();
+    // Al reabrir un borrador, mostrar las fechas guardadas.
+    final state = context.read<AnalisisMenorMilNiCubit>().state;
+    fechaEmision = DateTime.tryParse(state.fechaEmisionRuc)?.toLocal();
+    fechaVencimiento = DateTime.tryParse(state.fechaVencimientoRuc)?.toLocal();
+  }
+
   Future<void> selectDateFechaEmision(BuildContext context) async {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
 
@@ -425,7 +454,7 @@ class _RucFormState extends State<_RucForm> {
               Container(
                 margin: const EdgeInsets.all(18),
                 child: Text(
-                  'RTN',
+                  'RUC',
                   textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
@@ -434,7 +463,7 @@ class _RucFormState extends State<_RucForm> {
               ),
               OutlineTextfieldWidget(
                 initialValue: state.numeroRuc,
-                title: 'Numero de RTN',
+                title: 'Número de RUC',
                 icon: const Icon(Icons.add_box),
                 onChange: (value) {
                   cubit.onFieldChanged(
@@ -464,7 +493,7 @@ class _RucFormState extends State<_RucForm> {
               OutlineTextfieldWidget(
                 hintText: fechaEmision?.selectorFormat(),
                 readOnly: true,
-                title: 'Fecha de emisión de RTN',
+                title: 'Fecha de emisión de RUC',
                 onTap: () => selectDateFechaEmision(context),
                 icon: const Icon(Icons.wallet),
               ),
@@ -472,7 +501,7 @@ class _RucFormState extends State<_RucForm> {
               OutlineTextfieldWidget(
                 hintText: fechaVencimiento?.selectorFormat(),
                 readOnly: true,
-                title: 'Fecha de vencimiento de RTN',
+                title: 'Fecha de vencimiento de RUC',
                 icon: const Icon(Icons.wallet),
                 textInputType: TextInputType.number,
                 onTap: () => selectDateFechaVencimiento(context),
