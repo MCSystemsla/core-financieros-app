@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/analisis/ventas_contado.dart';
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
@@ -107,8 +108,11 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
       (sum, e) => sum + e.totalMensualProduccion,
     );
 
-    final ventasDeContado =
-        (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+    final ventasDeContado = calcularVentasDeContado(
+      totalVentasMensuales: totalVentasMensuales,
+      totalVentasDiarias: totalVentasDiarias,
+      nivelProduccion: nivelProduccion,
+    );
 
     final totalIngresos = ventasDeContado + state.recuperaciones;
 

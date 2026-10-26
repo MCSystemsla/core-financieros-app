@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/analisis/ventas_contado.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_represtamo/analisis_represtamo_ni_cubit.dart';
@@ -40,8 +41,11 @@ class AnalisisEstadoResultadoReprestamoNI extends StatelessWidget {
           (sum, e) => sum + e.totalMensualProduccion,
         );
 
-        final ventasDeContado =
-            (totalVentasMensuales + totalVentasDiarias + nivelProduccion) / 3;
+        final ventasDeContado = calcularVentasDeContado(
+          totalVentasMensuales: totalVentasMensuales,
+          totalVentasDiarias: totalVentasDiarias,
+          nivelProduccion: nivelProduccion,
+        );
 
         final totalIngresos = ventasDeContado + state.recuperaciones;
 
