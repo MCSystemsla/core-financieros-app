@@ -1,6 +1,6 @@
 # SPEC 03 — Fiadores de análisis NI en modo offline
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 02
 > **Date:** 2026-10-28
 > **Objective:** Permitir que el asesor de Nicaragua registre fiadores sin conexión desde la lista offline de análisis, guardándolos en ObjectBox para enviarlos a mano por solicitud cuando vuelva a estar en línea.
@@ -169,28 +169,28 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Después de sincronizar en NI con conexión, al apagar la red, Cartera → Análisis muestra las solicitudes asignadas al asesor (página 1).
-- [ ] Al abrir esa lista offline en NI, no hay excepción por `MENORMIL`.
-- [ ] En NI offline, el sheet de una solicitud muestra "Registrar Analisis", "Registrar Imágenes del negocio", "Registrar Ubicacion" y "Registrar Fiadores".
-- [ ] En NI offline, "Registrar Analisis" abre el formulario de NI que corresponde al tipo y monto de la solicitud (el mismo que abre la lista online).
-- [ ] En HN offline, la lista y el sheet se ven y funcionan igual que antes.
-- [ ] Sin conexión, llenar los 4 pasos y tocar "Enviar" muestra la pantalla ámbar de "Fiador guardado en el teléfono" y no hace ninguna llamada HTTP.
-- [ ] Al cerrar esa pantalla, se abre `FiadoresNiPendientesScreen` con el fiador recién guardado (nombre, cédula, fecha).
-- [ ] Sin conexión, "Enviar" de la fila está deshabilitado y se ve el aviso de envío en línea.
-- [ ] Guardar un segundo fiador con la misma cédula en la misma solicitud muestra el error de duplicado y no crea otro registro.
-- [ ] Se puede guardar un fiador con la misma cédula en otra solicitud.
-- [ ] "Eliminar" pide confirmación y, al aceptar, el fiador desaparece de la lista y de ObjectBox.
-- [ ] Al cerrar y volver a abrir la app, los pendientes siguen ahí.
-- [ ] Con otro usuario en el mismo teléfono, los pendientes del primero no aparecen.
-- [ ] Con conexión, la card "Registrar Fiadores" del sheet NI abre el formulario directo si la solicitud no tiene pendientes, y `FiadoresNiPendientesScreen` si tiene.
-- [ ] Con conexión, "Enviar" de un pendiente manda a `POST /cartera/analisis-fiador/create` el mismo body que se guardó (visible en `BitacoraService`). Con `201`, la fila desaparece, el registro se borra de ObjectBox y se muestra el snackbar de éxito "Fiador enviado exitosamente".
-- [ ] Si el envío de un pendiente falla, la fila se queda y se muestra el mensaje del backend.
-- [ ] Con conexión, si el envío desde el formulario falla por red, la pantalla de envío muestra "Reintentar envío" y "Guardar para enviar después". Al guardar, el fiador aparece en pendientes.
-- [ ] Si el envío desde el formulario falla por un error de backend (por ejemplo, de validación), no aparece "Guardar para enviar después".
-- [ ] El diálogo de cierre del análisis no cambia: solo usa `TieneFiadores`.
-- [ ] En Costa Rica, el sync no descarga la lista de análisis y la pantalla offline no cambia.
-- [ ] Se registró un fiador offline en QA NI, se envió después en línea, y backend lo confirmó (verificación manual).
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] Después de sincronizar en NI con conexión, al apagar la red, Cartera → Análisis muestra las solicitudes asignadas al asesor (página 1).
+- [X] Al abrir esa lista offline en NI, no hay excepción por `MENORMIL`.
+- [X] En NI offline, el sheet de una solicitud muestra "Registrar Analisis", "Registrar Imágenes del negocio", "Registrar Ubicacion" y "Registrar Fiadores".
+- [X] En NI offline, "Registrar Analisis" abre el formulario de NI que corresponde al tipo y monto de la solicitud (el mismo que abre la lista online).
+- [X] En HN offline, la lista y el sheet se ven y funcionan igual que antes.
+- [X] Sin conexión, llenar los 4 pasos y tocar "Enviar" muestra la pantalla ámbar de "Fiador guardado en el teléfono" y no hace ninguna llamada HTTP.
+- [X] Al cerrar esa pantalla, se abre `FiadoresNiPendientesScreen` con el fiador recién guardado (nombre, cédula, fecha).
+- [X] Sin conexión, "Enviar" de la fila está deshabilitado y se ve el aviso de envío en línea.
+- [X] Guardar un segundo fiador con la misma cédula en la misma solicitud muestra el error de duplicado y no crea otro registro.
+- [X] Se puede guardar un fiador con la misma cédula en otra solicitud.
+- [X] "Eliminar" pide confirmación y, al aceptar, el fiador desaparece de la lista y de ObjectBox.
+- [X] Al cerrar y volver a abrir la app, los pendientes siguen ahí.
+- [X] Con otro usuario en el mismo teléfono, los pendientes del primero no aparecen.
+- [X] Con conexión, la card "Registrar Fiadores" del sheet NI abre el formulario directo si la solicitud no tiene pendientes, y `FiadoresNiPendientesScreen` si tiene.
+- [X] Con conexión, "Enviar" de un pendiente manda a `POST /cartera/analisis-fiador/create` el mismo body que se guardó (visible en `BitacoraService`). Con `201`, la fila desaparece, el registro se borra de ObjectBox y se muestra el snackbar de éxito "Fiador enviado exitosamente".
+- [X] Si el envío de un pendiente falla, la fila se queda y se muestra el mensaje del backend.
+- [X] Con conexión, si el envío desde el formulario falla por red, la pantalla de envío muestra "Reintentar envío" y "Guardar para enviar después". Al guardar, el fiador aparece en pendientes.
+- [X] Si el envío desde el formulario falla por un error de backend (por ejemplo, de validación), no aparece "Guardar para enviar después".
+- [X] El diálogo de cierre del análisis no cambia: solo usa `TieneFiadores`.
+- [X] En Costa Rica, el sync no descarga la lista de análisis y la pantalla offline no cambia.
+- [X] Se registró un fiador offline en QA NI, se envió después en línea, y backend lo confirmó (verificación manual).
 
 ## Decisions
 
