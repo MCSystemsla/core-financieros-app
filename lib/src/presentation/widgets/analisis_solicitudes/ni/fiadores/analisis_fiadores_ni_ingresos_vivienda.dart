@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_sending_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/fiador_ni_form_layout.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -314,6 +315,11 @@ class _AnalisisFiadoresNiIngresosViviendaState
                   ),
                   onPrimary: () {
                     if (!formKey.currentState!.validate()) return;
+                    // Sin conexión, el fiador se guarda en el teléfono.
+                    final isConnected = context
+                        .read<InternetConnectionCubit>()
+                        .state
+                        .isConnected;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -321,6 +327,7 @@ class _AnalisisFiadoresNiIngresosViviendaState
                           value: cubit,
                           child: AnalisisFiadoresNiSendingWidget(
                             numeroSolicitud: widget.numeroSolicitud,
+                            guardarLocal: !isConnected,
                           ),
                         ),
                       ),
