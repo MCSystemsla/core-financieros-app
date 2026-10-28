@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/supervisiones/select_tipo_supervision_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_ni_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/comite/hn/comite_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/reportes/hn/reportes_screen_hn.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
@@ -116,8 +117,13 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
                     : Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
+                          builder: (_) => switch (flavor) {
+                            Flavor.nicaragua =>
+                              const AnalisisSolicitudesNiOfflineScreen(),
+                            Flavor.honduras =>
                               const AnalisisSolicitudesHnOfflineScreen(),
+                            _ => const SizedBox(),
+                          },
                         ),
                       );
               },

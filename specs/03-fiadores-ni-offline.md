@@ -45,10 +45,11 @@ El formulario de 4 pasos ya funciona sin red: sus catálogos (`SEXO`, `ESTADOCIV
 - Lista offline NI mínima:
   - `SolicitudCatalogoCubit` (sync de NI) descarga la página 1 de las solicitudes asignadas al asesor (`EstadoCredito.asignada`, `isAsignadaToAsesorCredito: true`, el mismo filtro de `AnalisisSolicitudesScreen`) y la guarda con `saveAnalisisListDataHn`.
   - Solo corre con `Flavor.nicaragua`. Si falla, agrega `'ANALISISASIGNADOS'` a `unsyncedCatalogos` sin cortar el resto del sync.
-- `AnalisisSolicitudesHnOfflineScreen` con `Flavor.nicaragua`:
-  - No llama `getTipoSolicitud()`.
+- Pantalla nueva `AnalisisSolicitudesNiOfflineScreen` (`screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_ni_offline_screen.dart`), separada de la de HN:
+  - Lee `AnalisisListDataHn` y no llama `getTipoSolicitud()`.
   - El subtítulo del encabezado dice que en NI solo se pueden registrar fiadores sin conexión.
   - El sheet de la tarjeta muestra solo "Registrar Fiadores", que abre `FiadoresNiPendientesScreen` (o el formulario directo si no hay pendientes, con la misma regla que en línea).
+  - `CarteraScreen` la abre sin conexión con `Flavor.nicaragua`. HN y Costa Rica siguen abriendo `AnalisisSolicitudesHnOfflineScreen`, que no cambia.
 - Sin conexión, `FiadoresNiPendientesScreen` muestra los pendientes con "Enviar" deshabilitado y un aviso de que se envían en línea.
 - Cada pendiente guarda `LocalStorage().userId`, y cada asesor solo ve y envía los suyos.
 - Un pendiente enviado con éxito (`201`) se borra de ObjectBox.
@@ -149,11 +150,11 @@ Conventions:
 10. En `SolicitudCatalogoCubit`:
     - Agregar `guardarAnalisisAsignadosNi()` con el mapeo de `SolicitudEstado` (NI) a `AnalisisListDataHn`.
     - Llamarlo desde `saveCatalogosSolicitudesCreditoToLocalDb` solo con `Flavor.nicaragua`, dentro de `try/catch`, agregando `'ANALISISASIGNADOS'` a `unsynced` si falla.
-11. En `AnalisisSolicitudesHnOfflineScreen`, con `Flavor.nicaragua`:
-    - No calcular `getTipoSolicitud()`.
-    - Cambiar el subtítulo del encabezado.
-    - Mostrar un sheet que solo tiene "Registrar Fiadores", con la regla de navegación del paso 9.
-    - HN no cambia.
+11. Crear `AnalisisSolicitudesNiOfflineScreen` en `screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_ni_offline_screen.dart`:
+    - Lista de `AnalisisListDataHn` con tarjetas propias de NI, sin `getTipoSolicitud()`.
+    - Subtítulo del encabezado propio de NI.
+    - Sheet que solo tiene "Registrar Fiadores", con la regla de navegación del paso 9.
+    - En `CarteraScreen`, sin conexión, abrirla con `Flavor.nicaragua`. HN y Costa Rica siguen con `AnalisisSolicitudesHnOfflineScreen`, que no cambia.
 12. Actualizar `references/app-modules-reference.md`:
     - Fiadores NI pasa a "online y offline (envío en línea)".
     - Reemplazar la nota de "Análisis offline" por la nueva regla de NI.
@@ -189,7 +190,9 @@ Conventions:
 - **Sí:** lista offline NI mínima, solo con "Registrar Fiadores". Sin ella el asesor no tiene cómo llegar al formulario offline. El análisis offline completo de NI es mucho más grande y va en otra spec.
 - **No:** análisis offline completo de NI en esta spec. Tocaría cuatro formularios y tres módulos más.
 - **No:** permitir fiadores offline solo cuando el sheet ya estaba abierto. Depende de que la red se caiga en el momento justo.
-- **Sí:** reutilizar `AnalisisListDataHn` y `AnalisisSolicitudesHnOfflineScreen` con una rama por flavor. La pantalla ya es la que abre `CarteraScreen` sin conexión en NI, y la entidad tiene todos los campos que hacen falta.
+- **Sí:** reutilizar la entidad `AnalisisListDataHn`. Tiene todos los campos que hacen falta.
+- **Sí:** pantalla offline propia de NI (`AnalisisSolicitudesNiOfflineScreen`), con `CarteraScreen` eligiendo por flavor. Lo pidió el usuario durante la implementación, para no mezclar NI con HN, igual que la regla `hn`/`ni` de `CLAUDE.md`.
+- **No:** meter una rama por flavor dentro de `AnalisisSolicitudesHnOfflineScreen`. Fue la primera versión del paso 11 y se descartó por mezclar los dos países en una pantalla.
 - **Sí:** solo la página 1 de solicitudes asignadas, igual que `guardarAnalisisAsignados` de HN. Lo decidió el usuario. Un asesor con muchas solicitudes no las verá todas offline.
 - **Sí:** envío manual por solicitud desde `FiadoresNiPendientesScreen`. El asesor ve el error de backend en el momento y puede corregir. Es el patrón de la ubicación offline de HN.
 - **No:** envío automático al reconectar. Los errores de backend quedarían ocultos.
@@ -205,7 +208,7 @@ Conventions:
 - **Sí:** los pendientes son del `userId` que los guardó, y no se borran al cerrar sesión. Evita que otro asesor envíe con su JWT un fiador que no capturó, y evita perder datos.
 - **Sí:** la card online abre los pendientes si hay, y si no, el formulario directo. El flujo online de SPEC 02 no suma un toque cuando no hay nada pendiente.
 - **Sí:** distinguir el error de red con el `ErrorNetworkCode` que ya calcula `getErrorMessage`, propagándolo en `AppException.status`. No se inventa un tipo de excepción nuevo.
-- **No:** Costa Rica. El sync y la pantalla offline se guardan con `Flavor.nicaragua`.
+- **No:** Costa Rica. El sync y la elección de la pantalla offline se guardan con `Flavor.nicaragua`.
 
 ## Risks
 
