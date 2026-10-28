@@ -1,7 +1,13 @@
 import 'dart:developer';
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/objectbox.g.dart';
+import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/solicitud_by_estado/solicitud_by_estado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_frecuencia_pago_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/departments_local_db.dart';
@@ -11,6 +17,7 @@ import 'package:core_financiero_app/src/domain/exceptions/app_exception.dart';
 import 'package:core_financiero_app/src/domain/repository/departamentos/departamentos_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes-pendientes/solicitudes_pendientes_repository.dart';
 import 'package:core_financiero_app/src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -138,7 +145,58 @@ class SolicitudCatalogoCubit extends Cubit<SolicitudCatalogoState> {
     await saveCatalogoFrecuenciaPago();
     log('Frecuencia de Pago guardados');
 
+    // Lista offline de análisis: solo NI (Costa Rica también usa este sync).
+    if (global<FlavorCubit>().state.flavor == Flavor.nicaragua) {
+      try {
+        await guardarAnalisisAsignadosNi();
+        log('Análisis asignados guardados');
+      } catch (e) {
+        log('Error sincronizando análisis asignados: $e');
+        unsynced.add('ANALISISASIGNADOS');
+      }
+    }
+
     return unsynced;
+  }
+
+  /// Guarda en `AnalisisListDataHn` la página 1 de las solicitudes asignadas
+  /// al asesor (mismo filtro que `AnalisisSolicitudesScreen`), para que
+  /// `AnalisisSolicitudesHnOfflineScreen` las muestre sin conexión.
+  Future<void> guardarAnalisisAsignadosNi() async {
+    final analisisListData = await _repository.getSolicitudesByEstado(
+      estadoCredito: EstadoCredito.asignada,
+      isAsignadaToAsesorCredito: true,
+      numeroSolicitud: '',
+      cedulaCliente: '',
+      pagina: 1,
+      isCustomEstadoCredito: false,
+    );
+
+    global<AnalisisBoxServiceHn>().saveAnalisisListDataHn(
+      analisisListDataHn:
+          analisisListData.data.map(_mapToAnalisisListDataHn).toList(),
+    );
+  }
+
+  AnalisisListDataHn _mapToAnalisisListDataHn(SolicitudEstado e) {
+    return AnalisisListDataHn(
+      numero: e.numero,
+      objTipoSolicitudId: e.objTipoSolicitudId,
+      objEstadoSolicitudId: e.objEstadoSolicitudId,
+      monto: e.monto,
+      sucursal: e.sucursal,
+      observacion: e.observacion,
+      cuota: e.cuota,
+      nombreCompleto: e.nombreCompleto,
+      estado: e.estado,
+      tipoSolicitud: e.tipoSolicitud,
+      nombrePromotor: e.nombrePromotor,
+      fechaSolicitud: e.fechaSolicitud,
+      cedulaCliente: e.cedulaCliente,
+      tipoPersonaCodigo: e.tipoPersonaCodigo,
+      idAnalisis: e.id,
+      esSolicitudGrupal: e.esSolicitudGrupal,
+    );
   }
 
   Future<void> getCatalogoByCodigo({required String codigo}) async {
