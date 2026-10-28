@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
-import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
@@ -193,8 +192,7 @@ class _AnalisisCreditoOfflineNiCard extends StatelessWidget {
                           runSpacing: 6,
                           children: [
                             CardTagWidget(
-                              label: '${CurrencyHelper.currencyPrefix()} '
-                                  '${monto.toCurrencyString()}',
+                              label: monto.toCurrencyString(),
                               color: RedesignColors.green,
                               background: RedesignColors.greenTint,
                             ),
