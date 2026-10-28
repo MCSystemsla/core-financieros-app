@@ -15,11 +15,23 @@ import 'package:gap/gap.dart';
 /// Fiadores NI guardados sin conexión para una solicitud. Con conexión se
 /// envían uno por uno; sin conexión solo se pueden ver y eliminar.
 class FiadoresNiPendientesScreen extends StatelessWidget {
+  static const routeName = 'fiadores-ni-pendientes';
+
   final int numeroSolicitud;
   const FiadoresNiPendientesScreen({
     super.key,
     required this.numeroSolicitud,
   });
+
+  /// Abrir siempre con esta ruta: el nombre permite que la pantalla de envío
+  /// sepa si debajo del formulario ya hay una lista de pendientes.
+  static MaterialPageRoute<void> route({required int numeroSolicitud}) {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) =>
+          FiadoresNiPendientesScreen(numeroSolicitud: numeroSolicitud),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
