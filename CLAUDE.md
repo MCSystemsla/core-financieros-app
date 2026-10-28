@@ -95,16 +95,28 @@ Valor comercial and related currency fields in the HN garantía crear/actualizar
 
 ### NI análisis: fiadores
 
-NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` opens the form directly (there is no fiador-type selection screen) after checking the internet connection.
+NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). There is no fiador-type selection screen. The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` calls `FiadoresNiPendientesScreen.open`, which opens the form directly unless the request has offline fiadores pending (see below).
 
 - The fields mirror the fiadores screen of the NI desktop system (tabs "Datos personales" and "Otros datos"), not HN's. That screen is the source of truth: do not add HN-only fields such as escolaridad, ocupación or CNBS.
-- The form has 4 steps driven by `AnalisisFiadoresNiCubit`. It has no cédula photos, signature, document search or credit history, and it saves nothing offline.
+- The form has 4 steps driven by `AnalisisFiadoresNiCubit`. It has no cédula photos, signature, document search or credit history.
 - It posts `AnalisisFiadorNi` to `POST /cartera/analisis-fiador/create` through `AnalisisFormsRepositoryNi.createAnalisisFiador` (expects `201`).
 - Step sections use `FiadorNiSectionCard` (`fiador_ni_form_layout.dart`) rather than `SectionBlockWidget`, because the inputs bring their own padding.
 - NI does not send `TipoFiadorCodigo`; `AnalisisFiadorNi` has no fiador type.
 - `RELACIONPERSONAS` (relación con el cliente) is synced for NI in `SolicitudCatalogoCubit._codigosCatalogo`. Before this change, only the HN sync downloaded it.
 
 Spec: `specs/02-fiadores-analisis-ni.md`.
+
+#### Offline fiadores (pending)
+
+NI fiadores can be captured without a connection and sent by hand later. Sending is never automatic.
+
+- When "Enviar" is tapped on step 4 without a connection, `AnalisisFiadoresNiSendingWidget(guardarLocal: true)` calls `AnalisisFiadoresNiCubit.guardarFiadorLocal`. With a connection it sends as before. If that send fails with a network error (`AppException.status` is `noConnection`/`timeOutError`, exposed as `state.isNetworkError`), it also offers "Guardar para enviar después". Backend errors never offer it.
+- Pending fiadores are `AnalisisFiadorNiLocalDb` rows (`datasource/analisis/ni/fiadores/local_db/`), registered in `AnalisisBoxServiceHn`. `payloadJson` is the already-built body (`AnalisisFiadorNi.toJson()`), and sending rebuilds it with `AnalisisFiadorNi.fromJson` without recalculating anything. Rows are scoped to `LocalStorage().userId` and are not deleted on logout. The same cédula cannot be saved twice for the same request.
+- `FiadoresNiPendientesScreen` (`FiadoresNiPendientesCubit`) lists one request's pending fiadores and lets the advisor send ("Enviar", online only) or delete each one. A `201` deletes the row. Always open it through `FiadoresNiPendientesScreen.route()` or `.open()`: the sending screen uses its `routeName` to pop back to an existing list instead of stacking a second one.
+- Offline entry point: without a connection, `CarteraScreen` opens `AnalisisSolicitudesNiOfflineScreen` in NI (HN/CR keep `AnalisisSolicitudesHnOfflineScreen`). Its list is `AnalisisListDataHn`, filled by the NI sync (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`, page 1 only, Nicaragua only). Its sheet offers análisis (NI interceptor), imágenes, ubicación (screens shared with HN) and fiadores. Plan de inversión is not offline.
+- Closing the análisis ignores local pending fiadores: the dialog still uses `TieneFiadores` from the backend.
+
+Spec: `specs/03-fiadores-ni-offline.md`.
 
 ### Solicitudes by estado (paginated lists)
 
