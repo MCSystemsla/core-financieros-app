@@ -7335,10 +7335,63 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "49:684685003167481994",
+      "lastPropertyId": "8:737554264655061709",
+      "name": "AnalisisFiadorNiLocalDb",
+      "properties": [
+        {
+          "id": "1:4390705849835688451",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1512799512824961792",
+          "name": "uuid",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "1:3340672503972592716"
+        },
+        {
+          "id": "3:2694371452562999279",
+          "name": "numeroSolicitud",
+          "type": 6,
+          "flags": 8,
+          "indexId": "2:7855721950218941832"
+        },
+        {
+          "id": "4:2263961299060393559",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "5:6937672763678357454",
+          "name": "nombreCompleto",
+          "type": 9
+        },
+        {
+          "id": "6:7950933383673538249",
+          "name": "cedula",
+          "type": 9
+        },
+        {
+          "id": "7:7637540335199820880",
+          "name": "fechaGuardado",
+          "type": 10
+        },
+        {
+          "id": "8:737554264655061709",
+          "name": "payloadJson",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "48:1794334276034625705",
-  "lastIndexId": "0:0",
+  "lastEntityId": "49:684685003167481994",
+  "lastIndexId": "2:7855721950218941832",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

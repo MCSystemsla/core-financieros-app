@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_pasivo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/ubicacion_cliente/ubicacion_cliente_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/local_db/analisis_fiador_ni_local_db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -53,6 +54,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisGrupalHnLocalDb> analisisGrupalHnLocalDb;
   late final Box<ImagenesNegocioHnLocalDb> imagenesNegocioHnLocalDb;
   late final Box<UbicacionClienteHnLocalDb> ubicacionClienteHnLocalDb;
+  late final Box<AnalisisFiadorNiLocalDb> analisisFiadorNiLocalDbBox;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -81,6 +83,7 @@ class AnalisisBoxServiceHn {
     analisisGrupalHnLocalDb = _store.box<AnalisisGrupalHnLocalDb>();
     imagenesNegocioHnLocalDb = _store.box<ImagenesNegocioHnLocalDb>();
     ubicacionClienteHnLocalDb = _store.box<UbicacionClienteHnLocalDb>();
+    analisisFiadorNiLocalDbBox = _store.box<AnalisisFiadorNiLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
@@ -295,6 +298,49 @@ class AnalisisBoxServiceHn {
     }
 
     query.close();
+  }
+
+  void saveFiadorNiPendiente(AnalisisFiadorNiLocalDb fiador) {
+    analisisFiadorNiLocalDbBox.put(fiador);
+  }
+
+  List<AnalisisFiadorNiLocalDb> getFiadoresNiPendientes({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisFiadorNiLocalDbBox
+        .query(AnalisisFiadorNiLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorNiLocalDb_.userId.equals(userId)))
+        .order(AnalisisFiadorNiLocalDb_.fechaGuardado)
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  bool existsFiadorNiPendiente({
+    required int numeroSolicitud,
+    required String cedula,
+    required String userId,
+  }) {
+    final query = analisisFiadorNiLocalDbBox
+        .query(AnalisisFiadorNiLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorNiLocalDb_.cedula.equals(cedula))
+            .and(AnalisisFiadorNiLocalDb_.userId.equals(userId)))
+        .build();
+
+    final exists = query.count() > 0;
+    query.close();
+
+    return exists;
+  }
+
+  void removeFiadorNiPendiente(int id) {
+    analisisFiadorNiLocalDbBox.remove(id);
   }
 
   void removeAnalisisFormsByDate() {}
