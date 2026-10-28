@@ -4,6 +4,10 @@ import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubicacion_cliente_offline_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_pendientes_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
@@ -16,8 +20,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 /// Análisis offline de Nicaragua. Lista las solicitudes asignadas que guardó
-/// el sync de NI (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`) y, sin
-/// conexión, solo permite registrar fiadores (SPEC 03).
+/// el sync de NI (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`).
 class AnalisisSolicitudesNiOfflineScreen extends StatefulWidget {
   const AnalisisSolicitudesNiOfflineScreen({super.key});
 
@@ -51,7 +54,7 @@ class _AnalisisSolicitudesNiOfflineScreenState
               ScreenHeaderWidget(
                 title: 'Análisis offline',
                 subtitle:
-                    'Las solicitudes descargadas en el teléfono. Sin conexión solo podés registrar fiadores.',
+                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes, la ubicación y los fiadores sin conexión.',
                 onBack: () => context.push('/'),
               ),
               const Gap(20),
@@ -86,7 +89,8 @@ class _ListDataWidget extends StatelessWidget {
             index: index,
             numeroSolicitud: analisis.numero ?? '',
             nombreCompleto: analisis.nombreCompleto ?? 'N/A',
-            monto: analisis.monto?.toCurrencyString() ?? 'N/A',
+            monto: analisis.monto ?? '0',
+            cedulaCliente: analisis.cedulaCliente ?? '',
             tipoSolicitud: analisis.tipoSolicitud ?? '',
           );
         },
@@ -100,12 +104,14 @@ class _AnalisisCreditoOfflineNiCard extends StatelessWidget {
   final String numeroSolicitud;
   final String nombreCompleto;
   final String monto;
+  final String cedulaCliente;
   final String tipoSolicitud;
   const _AnalisisCreditoOfflineNiCard({
     required this.index,
     required this.numeroSolicitud,
     required this.nombreCompleto,
     required this.monto,
+    required this.cedulaCliente,
     required this.tipoSolicitud,
   });
 
@@ -116,7 +122,12 @@ class _AnalisisCreditoOfflineNiCard extends StatelessWidget {
       isScrollControlled: true,
       context: context,
       builder: (_) => _SelectTypeAnalisisOfflineNi(
+        index: index,
         numeroSolicitud: numeroSolicitud,
+        nombreCompleto: nombreCompleto,
+        monto: monto,
+        cedulaCliente: cedulaCliente,
+        tipoSolicitud: tipoSolicitud,
       ),
     );
   }
@@ -182,8 +193,8 @@ class _AnalisisCreditoOfflineNiCard extends StatelessWidget {
                           runSpacing: 6,
                           children: [
                             CardTagWidget(
-                              label:
-                                  '${CurrencyHelper.currencyPrefix()} $monto',
+                              label: '${CurrencyHelper.currencyPrefix()} '
+                                  '${monto.toCurrencyString()}',
                               color: RedesignColors.green,
                               background: RedesignColors.greenTint,
                             ),
@@ -219,11 +230,25 @@ class _AnalisisCreditoOfflineNiCard extends StatelessWidget {
   }
 }
 
-/// Sheet offline de NI: solo "Registrar Fiadores". El fiador se guarda en el
-/// teléfono y se envía después desde `FiadoresNiPendientesScreen`.
+/// Sheet offline de NI: las mismas opciones que el sheet offline de HN
+/// (análisis, imágenes y ubicación, con las pantallas compartidas) más
+/// fiadores, que se guardan en el teléfono y se envían después desde
+/// `FiadoresNiPendientesScreen`.
 class _SelectTypeAnalisisOfflineNi extends StatelessWidget {
+  final int index;
   final String numeroSolicitud;
-  const _SelectTypeAnalisisOfflineNi({required this.numeroSolicitud});
+  final String nombreCompleto;
+  final String monto;
+  final String cedulaCliente;
+  final String tipoSolicitud;
+  const _SelectTypeAnalisisOfflineNi({
+    required this.index,
+    required this.numeroSolicitud,
+    required this.nombreCompleto,
+    required this.monto,
+    required this.cedulaCliente,
+    required this.tipoSolicitud,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -249,6 +274,67 @@ class _SelectTypeAnalisisOfflineNi extends StatelessWidget {
               ),
             ),
             const Gap(18),
+            SelectableCardItem(
+              icon: Icons.dashboard_customize_rounded,
+              color: const Color(0xff1554F6),
+              title: 'Registrar Analisis',
+              subtitle: 'Crear analisis de crédito',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    // Tipo de formulario con el getTipoSolicitud de NI
+                    // (umbral 1000), no el de HN, que lee MENORMIL.
+                    builder: (_) => AnalisisSolicitudesInterceptor(
+                      index: index,
+                      type: getTipoSolicitud(
+                        tipoSolicitud: tipoSolicitud,
+                        monto: monto,
+                      ),
+                      title:
+                          'Número Solicitud: $numeroSolicitud $tipoSolicitud',
+                      subtitle: nombreCompleto,
+                      description: monto.toCurrencyString(),
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                  ),
+                );
+              },
+            ),
+            SelectableCardItem(
+              icon: Icons.photo_library_outlined,
+              color: const Color(0xff455A64),
+              title: 'Registrar Imágenes del negocio',
+              subtitle: 'Ingresa fotografías del negocio',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ImagenesNegocioHnScreen(
+                      numeroSolicitud: numeroSolicitud,
+                      cedulaCliente: cedulaCliente,
+                      isOfflineMode: true,
+                    ),
+                  ),
+                );
+              },
+            ),
+            SelectableCardItem(
+              icon: Icons.location_on_rounded,
+              color: Colors.pink,
+              title: 'Registrar Ubicacion',
+              subtitle: 'Ingresa ubicacion del cliente',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => UbicacionClienteOfflineHnScreen(
+                      numeroSolicitud: numeroSolicitud,
+                    ),
+                  ),
+                );
+              },
+            ),
             SelectableCardItem(
               icon: Icons.swap_horiz_rounded,
               color: const Color(0xff0D9488),
