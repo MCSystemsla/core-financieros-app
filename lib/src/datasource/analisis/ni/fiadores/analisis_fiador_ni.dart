@@ -127,6 +127,79 @@ class AnalisisFiadorNi {
     required this.tipoViviendaCodigo,
   });
 
+  /// Inverso de [toJson]. Se usa para reconstruir un fiador guardado offline
+  /// (`AnalisisFiadorNiLocalDb.payloadJson`). `toJson()` descarta `null` y
+  /// `''`, así que las llaves ausentes toman `''`, `0`, `false` o `null`.
+  factory AnalisisFiadorNi.fromJson(Map<String, dynamic> json) {
+    String str(String key) => json[key] as String? ?? '';
+    int integer(String key) => (json[key] as num?)?.toInt() ?? 0;
+    double dbl(String key) => (json[key] as num?)?.toDouble() ?? 0;
+    bool boolean(String key) => json[key] as bool? ?? false;
+
+    final fechaNacimiento = json['FechaNacimiento'] as String?;
+
+    return AnalisisFiadorNi(
+      database: str('database'),
+      numeroSolicitud: integer('NumeroSolicitud'),
+      nombre1: str('Nombre1'),
+      nombre2: str('Nombre2'),
+      apellido1: str('Apellido1'),
+      apellido2: str('Apellido2'),
+      fechaNacimiento:
+          fechaNacimiento == null ? null : DateTime.parse(fechaNacimiento),
+      cedula: str('Cedula'),
+      telefono: str('Telefono'),
+      celular: str('Celular'),
+      direccion: str('Direccion'),
+      barrioCasa: str('BarrioCasa'),
+      municipioCodigo: str('MunicipioCodigo'),
+      departamentoCodigo: str('DepartamentoCodigo'),
+      paisCodigo: str('PaisCodigo'),
+      email: str('Email'),
+      sexoCodigo: str('SexoCodigo'),
+      estadoCivilCodigo: str('EstadoCivilCodigo'),
+      relacionClienteCodigo: str('RelacionClienteCodigo'),
+      esAsalariado: boolean('EsAsalariado'),
+      empresa: str('Empresa'),
+      cargo: str('Cargo'),
+      tiempoLaborar: str('TiempoLaborar'),
+      esEmpresario: boolean('EsEmpresario'),
+      actividadCodigo: str('ActividadCodigo'),
+      tiempoActividad: str('TiempoActividad'),
+      direccionTrabajo: str('DireccionTrabajo'),
+      barrioTrabajo: str('BarrioTrabajo'),
+      telefonoTrabajo: str('TelefonoTrabajo'),
+      lugarTrabajoAnterior: str('LugarTrabajoAnterior'),
+      personasACargo: integer('PersonasACargo'),
+      cantidadDependientes: integer('CantidadDependientes'),
+      tieneDocumentosDomicilio: boolean('TieneDocumentosDomicilio'),
+      tipoDomicilioCodigo: str('TipoDomicilioCodigo'),
+      duenoVivienda: str('DuenoVivienda'),
+      pagoAlquiler: dbl('PagoAlquiler'),
+      profesion: str('Profesion'),
+      anosVivirDomicilio: integer('AnosVivirDomicilio'),
+      nombreFamiliarCercano: str('NombreFamiliarCercano'),
+      parentescoFamiliarCercanoCodigo: str('ParentescoFamiliarCercanoCodigo'),
+      direccionFamiliarCercano: str('DireccionFamiliarCercano'),
+      telefonoFamiliarCercano: str('TelefonoFamiliarCercano'),
+      salarioNetoCordoba: dbl('SalarioNetoCordoba'),
+      otrosIngresosCordoba: dbl('OtrosIngresosCordoba'),
+      totalIngresosFamiliares: dbl('TotalIngresosFamiliares'),
+      ventaNegocio: dbl('VentaNegocio'),
+      costoVenta: dbl('CostoVenta'),
+      gastosOperativos: dbl('GastosOperativos'),
+      gananciaNegocio: dbl('GananciaNegocio'),
+      otrosIngresos: dbl('OtrosIngresos'),
+      fuenteOtrosIngresos: str('FuenteOtrosIngresos'),
+      consumoFamiliar: dbl('ConsumoFamiliar'),
+      saldoDisponible: dbl('SaldoDisponible'),
+      activo: json['Activo'] as bool? ?? true,
+      tipoDocumentoCodigo: str('TipoDocumentoCodigo'),
+      esFirmaDigitalFiador: boolean('EsFirmaDigitalFiador'),
+      tipoViviendaCodigo: str('TipoViviendaCodigo'),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
       'database': database,
