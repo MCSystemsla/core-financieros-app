@@ -1,5 +1,8 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/local_db/analisis_fiador_ni_local_db.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/fiadores_pendientes/fiadores_ni_pendientes_cubit.dart';
@@ -30,6 +33,31 @@ class FiadoresNiPendientesScreen extends StatelessWidget {
       settings: const RouteSettings(name: routeName),
       builder: (_) =>
           FiadoresNiPendientesScreen(numeroSolicitud: numeroSolicitud),
+    );
+  }
+
+  /// Entrada a fiadores NI desde los sheets de análisis (en línea y offline):
+  /// si el usuario tiene pendientes en esta solicitud abre la lista, si no
+  /// abre el formulario directo.
+  static Future<void> open(
+    BuildContext context, {
+    required int numeroSolicitud,
+  }) {
+    final pendientes = global<AnalisisBoxServiceHn>().getFiadoresNiPendientes(
+      numeroSolicitud: numeroSolicitud,
+      userId: LocalStorage().userId,
+    );
+    if (pendientes.isNotEmpty) {
+      return Navigator.push(
+        context,
+        route(numeroSolicitud: numeroSolicitud),
+      );
+    }
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FiadoresNiFormScreen(numeroSolicitud: numeroSolicitud),
+      ),
     );
   }
 
