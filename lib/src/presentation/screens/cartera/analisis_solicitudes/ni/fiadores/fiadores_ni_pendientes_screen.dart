@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services
 import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/local_db/analisis_fiador_ni_local_db.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/fiadores_pendientes/fiadores_ni_pendientes_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
@@ -107,17 +108,36 @@ class _FiadoresNiPendientesView extends StatelessWidget {
     final isConnected =
         context.watch<InternetConnectionCubit>().state.isConnected;
 
-    return BlocListener<FiadoresNiPendientesCubit, FiadoresNiPendientesState>(
-      listenWhen: (prev, curr) =>
-          curr.errorMsg != null && prev.errorMsg != curr.errorMsg,
-      listener: (context, state) {
-        showV2CustomSnackbar(
-          context,
-          title: 'El fiador no se pudo enviar',
-          message: state.errorMsg,
-          type: SnackbarType.error,
-        );
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<FiadoresNiPendientesCubit, FiadoresNiPendientesState>(
+          listenWhen: (prev, curr) =>
+              prev.envioStatus != curr.envioStatus &&
+              curr.envioStatus == Status.error,
+          listener: (context, state) {
+            showV2CustomSnackbar(
+              context,
+              title: 'El fiador no se pudo enviar',
+              message: state.errorMsg,
+              type: SnackbarType.error,
+            );
+          },
+        ),
+        BlocListener<FiadoresNiPendientesCubit, FiadoresNiPendientesState>(
+          listenWhen: (prev, curr) =>
+              prev.envioStatus != curr.envioStatus &&
+              curr.envioStatus == Status.done,
+          listener: (context, state) {
+            showV2CustomSnackbar(
+              context,
+              title: 'Fiador enviado exitosamente',
+              message:
+                  'El fiador quedó registrado en la solicitud $numeroSolicitud.',
+              type: SnackbarType.success,
+            );
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: RedesignColors.background,
         body: SafeArea(
@@ -158,7 +178,8 @@ class _FiadoresNiPendientesView extends StatelessWidget {
                                     isConnected: isConnected,
                                     isSending:
                                         state.enviandoUuid == pendiente.uuid,
-                                    isBusy: state.enviandoUuid != null,
+                                    isBusy:
+                                        state.envioStatus == Status.inProgress,
                                     onSend: () => context
                                         .read<FiadoresNiPendientesCubit>()
                                         .enviar(pendiente),

@@ -116,6 +116,7 @@ void removeFiadorNiPendiente(int id);
 class FiadoresNiPendientesState {
   final List<AnalisisFiadorNiLocalDb> pendientes;
   final Status status;          // carga de la lista
+  final Status envioStatus;     // envío de un pendiente; dispara los snackbars de éxito y error
   final String? enviandoUuid;   // fila con envío en curso
   final String? errorMsg;       // último error de envío
 }
@@ -183,7 +184,7 @@ Conventions:
 - [ ] Al cerrar y volver a abrir la app, los pendientes siguen ahí.
 - [ ] Con otro usuario en el mismo teléfono, los pendientes del primero no aparecen.
 - [ ] Con conexión, la card "Registrar Fiadores" del sheet NI abre el formulario directo si la solicitud no tiene pendientes, y `FiadoresNiPendientesScreen` si tiene.
-- [ ] Con conexión, "Enviar" de un pendiente manda a `POST /cartera/analisis-fiador/create` el mismo body que se guardó (visible en `BitacoraService`). Con `201`, la fila desaparece y el registro se borra de ObjectBox.
+- [ ] Con conexión, "Enviar" de un pendiente manda a `POST /cartera/analisis-fiador/create` el mismo body que se guardó (visible en `BitacoraService`). Con `201`, la fila desaparece, el registro se borra de ObjectBox y se muestra el snackbar de éxito "Fiador enviado exitosamente".
 - [ ] Si el envío de un pendiente falla, la fila se queda y se muestra el mensaje del backend.
 - [ ] Con conexión, si el envío desde el formulario falla por red, la pantalla de envío muestra "Reintentar envío" y "Guardar para enviar después". Al guardar, el fiador aparece en pendientes.
 - [ ] Si el envío desde el formulario falla por un error de backend (por ejemplo, de validación), no aparece "Guardar para enviar después".

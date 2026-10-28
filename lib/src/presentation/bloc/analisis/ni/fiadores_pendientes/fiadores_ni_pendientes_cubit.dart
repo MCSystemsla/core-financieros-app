@@ -26,20 +26,25 @@ class FiadoresNiPendientesCubit extends Cubit<FiadoresNiPendientesState> {
   void load({required int numeroSolicitud}) {
     _numeroSolicitud = numeroSolicitud;
     emit(FiadoresNiPendientesState(
-      pendientes: _localDb.getFiadoresNiPendientes(
-        numeroSolicitud: numeroSolicitud,
-        userId: LocalStorage().userId,
-      ),
+      pendientes: _getPendientes(),
       status: Status.done,
     ));
   }
 
+  List<AnalisisFiadorNiLocalDb> _getPendientes() {
+    return _localDb.getFiadoresNiPendientes(
+      numeroSolicitud: _numeroSolicitud,
+      userId: LocalStorage().userId,
+    );
+  }
+
   Future<void> enviar(AnalisisFiadorNiLocalDb pendiente) async {
-    if (state.enviandoUuid != null) return;
+    if (state.envioStatus == Status.inProgress) return;
 
     emit(FiadoresNiPendientesState(
       pendientes: state.pendientes,
       status: state.status,
+      envioStatus: Status.inProgress,
       enviandoUuid: pendiente.uuid,
     ));
     try {
@@ -48,7 +53,11 @@ class FiadoresNiPendientesCubit extends Cubit<FiadoresNiPendientesState> {
       );
       await _repository.createAnalisisFiador(analisisFiadorNi: fiador);
       _localDb.removeFiadorNiPendiente(pendiente.id);
-      load(numeroSolicitud: _numeroSolicitud);
+      emit(FiadoresNiPendientesState(
+        pendientes: _getPendientes(),
+        status: Status.done,
+        envioStatus: Status.done,
+      ));
     } on AppException catch (e) {
       _emitError(e.optionalMsg);
     } catch (e) {
@@ -65,6 +74,7 @@ class FiadoresNiPendientesCubit extends Cubit<FiadoresNiPendientesState> {
     emit(FiadoresNiPendientesState(
       pendientes: state.pendientes,
       status: state.status,
+      envioStatus: Status.error,
       errorMsg: errorMsg,
     ));
   }
