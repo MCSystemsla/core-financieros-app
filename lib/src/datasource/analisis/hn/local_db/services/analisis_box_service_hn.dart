@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -23,6 +24,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_pasivo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/ubicacion_cliente/ubicacion_cliente_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/analisis_plan_inversion.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/local_db/analisis_plan_inversion_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/local_db/analisis_fiador_ni_local_db.dart';
 import 'package:path_provider/path_provider.dart';
@@ -346,6 +348,67 @@ class AnalisisBoxServiceHn {
 
   void removeFiadorNiPendiente(int id) {
     analisisFiadorNiLocalDbBox.remove(id);
+  }
+
+  AnalisisPlanInversionHnLocalDb? getPlanInversionBorrador({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisPlanInversionHnLocalDbBox
+        .query(AnalisisPlanInversionHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisPlanInversionHnLocalDb_.userId.equals(userId)))
+        .build();
+
+    final borrador = query.findFirst();
+    query.close();
+
+    return borrador;
+  }
+
+  /// Crea o actualiza el borrador de la solicitud. Con [items] vacío lo borra.
+  void savePlanInversionBorrador({
+    required int numeroSolicitud,
+    required String userId,
+    required List<PlanInversion> items,
+  }) {
+    if (items.isEmpty) {
+      removePlanInversionBorrador(
+        numeroSolicitud: numeroSolicitud,
+        userId: userId,
+      );
+      return;
+    }
+
+    final borrador = getPlanInversionBorrador(
+          numeroSolicitud: numeroSolicitud,
+          userId: userId,
+        ) ??
+        AnalisisPlanInversionHnLocalDb(
+          numeroSolicitud: numeroSolicitud,
+          userId: userId,
+          fechaActualizacion: DateTime.now(),
+          itemsJson: '[]',
+        );
+
+    borrador
+      ..fechaActualizacion = DateTime.now()
+      ..itemsJson = json.encode(items.map((e) => e.toLocalJson()).toList());
+
+    analisisPlanInversionHnLocalDbBox.put(borrador);
+  }
+
+  void removePlanInversionBorrador({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final borrador = getPlanInversionBorrador(
+      numeroSolicitud: numeroSolicitud,
+      userId: userId,
+    );
+    if (borrador != null) {
+      analisisPlanInversionHnLocalDbBox.remove(borrador.id);
+    }
   }
 
   void removeAnalisisFormsByDate() {}
