@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 class HistorialCredito {
   final int? id;
   final String uuid;
@@ -28,6 +30,27 @@ class HistorialCredito {
     required this.uuid,
     required this.fechaDesembolso,
   });
+
+  /// Inverso de [toJson]. Genera un `uuid` nuevo porque [toJson] no lo manda.
+  factory HistorialCredito.fromJson(Map<String, dynamic> json) {
+    int integer(String key) => (json[key] as num?)?.toInt() ?? 0;
+    final fechaDesembolso = json['FechaDesembolso'] as String?;
+
+    return HistorialCredito(
+      id: (json['ID'] as num?)?.toInt(),
+      uuid: const Uuid().v4(),
+      entidad: json['Entidad'] as String? ?? '',
+      monto: integer('Monto'),
+      tipoMonedaCodigo: json['TipoMonedaCodigo'] as String? ?? '',
+      tipoFrecuenciaCodigo: json['TipoFrecuenciaCodigo'] as String? ?? '',
+      cuota: integer('Cuota'),
+      saldo: integer('Saldo'),
+      estadoCodigo: json['EstadoCodigo'] as String? ?? '',
+      fechaDesembolso: fechaDesembolso == null
+          ? DateTime.now()
+          : DateTime.parse(fechaDesembolso),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         if (id != null) 'ID': id,

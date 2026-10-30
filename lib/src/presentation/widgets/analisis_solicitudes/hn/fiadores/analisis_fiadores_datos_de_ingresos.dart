@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/analisis_fiadores_sending_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/table/fiadores_historial_credito.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
@@ -417,12 +418,19 @@ class _AnalisisFiadoresDatosDeIngresosState
                   child: CustomElevatedButton(
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
+                      // Sin conexión, el fiador se guarda en el teléfono.
+                      final isConnected = context
+                          .read<InternetConnectionCubit>()
+                          .state
+                          .isConnected;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<AnalisisFiadoresCubit>(),
-                            child: const AnalisisFiadoresSendingWidget(),
+                            child: AnalisisFiadoresSendingWidget(
+                              guardarLocal: !isConnected,
+                            ),
                           ),
                         ),
                       );

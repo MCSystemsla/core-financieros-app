@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/local_db/analisis_fiador_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/grupal/analisis_grupal_hn_local_db.dart';
@@ -60,6 +61,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisFiadorNiLocalDb> analisisFiadorNiLocalDbBox;
   late final Box<AnalisisPlanInversionHnLocalDb>
       analisisPlanInversionHnLocalDbBox;
+  late final Box<AnalisisFiadorHnLocalDb> analisisFiadorHnLocalDbBox;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -91,6 +93,7 @@ class AnalisisBoxServiceHn {
     analisisFiadorNiLocalDbBox = _store.box<AnalisisFiadorNiLocalDb>();
     analisisPlanInversionHnLocalDbBox =
         _store.box<AnalisisPlanInversionHnLocalDb>();
+    analisisFiadorHnLocalDbBox = _store.box<AnalisisFiadorHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
@@ -348,6 +351,83 @@ class AnalisisBoxServiceHn {
 
   void removeFiadorNiPendiente(int id) {
     analisisFiadorNiLocalDbBox.remove(id);
+  }
+
+  void saveFiadorHnPendiente(AnalisisFiadorHnLocalDb fiador) {
+    analisisFiadorHnLocalDbBox.put(fiador);
+  }
+
+  List<AnalisisFiadorHnLocalDb> getFiadoresHnPendientes({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId)))
+        .order(AnalisisFiadorHnLocalDb_.fechaGuardado)
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  bool existsFiadorHnPendiente({
+    required int numeroSolicitud,
+    required String cedula,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.cedula.equals(cedula))
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId)))
+        .build();
+
+    final exists = query.count() > 0;
+    query.close();
+
+    return exists;
+  }
+
+  /// `TFD2` es el código de fiador cónyuge (`FiadoresHnFormType.conyugue`).
+  bool existsConyugeHnPendiente({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId))
+            .and(AnalisisFiadorHnLocalDb_.tipoFiadorCodigo.equals('TFD2')))
+        .build();
+
+    final exists = query.count() > 0;
+    query.close();
+
+    return exists;
+  }
+
+  void updateFiadorHnPendienteFiadorId({
+    required int id,
+    required String fiadorId,
+  }) {
+    final fiador = analisisFiadorHnLocalDbBox.get(id);
+    if (fiador == null) return;
+    analisisFiadorHnLocalDbBox.put(fiador..fiadorId = fiadorId);
+  }
+
+  /// Borra la carpeta `fiadores_hn/<uuid>/` con las fotos de la cédula y la
+  /// firma, y después la fila.
+  Future<void> removeFiadorHnPendiente(AnalisisFiadorHnLocalDb fiador) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final filesDir = Directory('${dir.path}/fiadores_hn/${fiador.uuid}');
+    if (await filesDir.exists()) {
+      await filesDir.delete(recursive: true);
+    }
+    analisisFiadorHnLocalDbBox.remove(fiador.id);
   }
 
   AnalisisPlanInversionHnLocalDb? getPlanInversionBorrador({

@@ -105,6 +105,19 @@ Valor comercial and related currency fields in the HN garantía crear/actualizar
 
 Spec: `specs/04-plan-inversion-hn-offline.md`.
 
+### HN análisis: fiadores offline
+
+HN fiadores (`FiadoresHnScreen` → `FiadoresSearchByDocumentScreen` → `FiadoresHnFormScreen` → `AnalisisFiadoresSendingWidget`) can be captured without a connection and sent by hand later. Sending is never automatic.
+
+- Entry: the HN offline sheet (`_SelectTypeAnalisis` in `analisis_solicitudes_hn_offline_screen.dart`) shows "Registrar Fiadores" only with `Flavor.honduras` (Costa Rica shares that screen) and never for grupal requests, like the online sheet.
+- Offline, `FiadoresHnScreen` skips `checkFiadorAval` and hides the "Registrado" tags; `FiadoresSearchByDocumentScreen` skips the backend lookup and calls `AnalisisSearchByDocumentCubit.setUserOffline` (same as `isNewUser`). Cónyuge is blocked if the backend says so (online) or the request already has a local `TFD2` pending.
+- On the last step, "Enviar" opens `AnalisisFiadoresSendingWidget(guardarLocal: !isConnected)`. With `guardarLocal`, `AnalisisFiadoresCubit.guardarFiadorLocal` copies the cédula photos and the signature to `getApplicationDocumentsDirectory()/fiadores_hn/<uuid>/` (`cedula_frente.jpg`, `cedula_reverso.jpg`, `firma.png`) and saves an `AnalisisFiadorHnLocalDb` row (`datasource/analisis/hn/fiadores/local_db/`, in `AnalisisBoxServiceHn`). `payloadJson` is `AnalisisFiadoresHn.toJson()`; sending rebuilds it with `AnalisisFiadoresHn.fromJson`. Online sending is unchanged; there is no "save for later" on a network error.
+- Rows are scoped to `LocalStorage().userId`, are not deleted on logout, and the same cédula cannot be saved twice for the same request.
+- `FiadoresHnPendientesScreen` (`FiadoresHnPendientesCubit`) is reached from the "Pendientes en el teléfono (N)" row of `FiadoresHnScreen` (its count watches the ObjectBox box) or after saving. Sending a pending is three steps: create the fiador if `fiadorId` is empty and store the returned `fiadorId` on the row, send the signature, then upload the cédula PDF with `subirCedulaFiadorHn` (failures there are only reported, as online). Once the signature is sent, `removeFiadorHnPendiente` deletes the row and its folder. If the signature fails, the row keeps its `fiadorId` ("Falta la firma" tag) and the next send starts at the signature, so the fiador is never created twice.
+- Closing the análisis ignores local pending fiadores.
+
+Spec: `specs/05-fiadores-hn-offline.md`.
+
 ### NI análisis: fiadores
 
 NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). There is no fiador-type selection screen. The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` calls `FiadoresNiPendientesScreen.open`, which opens the form directly unless the request has offline fiadores pending (see below).

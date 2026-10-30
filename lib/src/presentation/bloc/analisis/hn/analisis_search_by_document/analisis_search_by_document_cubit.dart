@@ -71,4 +71,28 @@ class AnalisisSearchByDocumentCubit
       );
     }
   }
+
+  /// Sin conexión no se busca en el backend: se sigue con los datos
+  /// tecleados, igual que una persona nueva.
+  void setUserOffline({
+    required String primerNombre,
+    required String segundoNombre,
+    required String primerApellido,
+    required String segundoApellido,
+    required String cedula,
+    required String tipoDocumentoCodigo,
+  }) {
+    // Pasa por inProgress para que el listener vuelva a disparar si el
+    // asesor regresa del formulario y continúa otra vez con los mismos datos.
+    emit(state.copyWith(status: UserByDocumentStatus.inProgress));
+    emit(state.copyWith(
+      status: UserByDocumentStatus.isNewUser,
+      primerNombre: primerNombre,
+      segundoNombre: segundoNombre,
+      primerApellido: primerApellido,
+      segundoApellido: segundoApellido,
+      tipoDocumento: tipoDocumentoCodigo,
+      cedula: cedula,
+    ));
+  }
 }

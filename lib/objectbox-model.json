@@ -7424,10 +7424,88 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "51:4268064363871829393",
+      "lastPropertyId": "13:2167606850088370174",
+      "name": "AnalisisFiadorHnLocalDb",
+      "properties": [
+        {
+          "id": "1:7791500270806921784",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6960792108055965399",
+          "name": "uuid",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "4:3395793110388285036"
+        },
+        {
+          "id": "3:1460911059864069168",
+          "name": "numeroSolicitud",
+          "type": 6,
+          "flags": 8,
+          "indexId": "5:3233841652116926566"
+        },
+        {
+          "id": "4:1237074592088223128",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "5:502865916931932171",
+          "name": "tipoFiadorCodigo",
+          "type": 9
+        },
+        {
+          "id": "6:6046708414069227420",
+          "name": "nombreCompleto",
+          "type": 9
+        },
+        {
+          "id": "7:8349123020956623145",
+          "name": "cedula",
+          "type": 9
+        },
+        {
+          "id": "8:4196616280930282352",
+          "name": "fechaGuardado",
+          "type": 10
+        },
+        {
+          "id": "9:3944101523909748905",
+          "name": "payloadJson",
+          "type": 9
+        },
+        {
+          "id": "10:7212233490298703162",
+          "name": "cedulaFrontPath",
+          "type": 9
+        },
+        {
+          "id": "11:988745367693882226",
+          "name": "cedulaBackPath",
+          "type": 9
+        },
+        {
+          "id": "12:8561491692857515762",
+          "name": "firmaPath",
+          "type": 9
+        },
+        {
+          "id": "13:2167606850088370174",
+          "name": "fiadorId",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "50:5411883126252285402",
-  "lastIndexId": "3:2847205598457543154",
+  "lastEntityId": "51:4268064363871829393",
+  "lastIndexId": "5:3233841652116926566",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
