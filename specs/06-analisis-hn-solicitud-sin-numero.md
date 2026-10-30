@@ -1,6 +1,6 @@
 # SPEC 06 — Análisis HN offline para solicitudes sin número
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 04, SPEC 05
 > **Date:** 2026-10-30
 > **Objective:** Permitir que el asesor de Honduras haga sin conexión el análisis, el plan de inversión, los fiadores, las imágenes y la ubicación de una solicitud que creó offline y todavía no tiene número, y que al abrir después la solicitud AUT con la misma cédula y tipo la app ofrezca pasarle esos datos.
@@ -156,29 +156,29 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] En HN, sin conexión, una solicitud nueva creada offline y terminada aparece en "Análisis offline" con el tag "Sin número".
-- [ ] Una solicitud local a medio llenar (`isDone == false`) no aparece.
-- [ ] Una solicitud grupal no aparece como local.
-- [ ] Tocar la card abre el sheet con análisis, plan de inversión, fiadores, imágenes y ubicación.
-- [ ] El análisis abre el formulario que corresponde al monto local (menor o mayor de mil).
-- [ ] Con número provisional, guardar datos en los cinco módulos no hace ninguna llamada HTTP, aunque haya conexión (visible en `BitacoraService`).
-- [ ] Con número provisional, todos los botones de envío están deshabilitados y se ve el aviso "Esta solicitud aún no tiene número".
-- [ ] Al cerrar y abrir la app, el borrador y sus datos siguen ahí.
-- [ ] Con otro usuario en el mismo teléfono, los borradores del primero no aparecen ni se ofrecen.
-- [ ] Después de la limpieza de 30 días de la solicitud local, el borrador sigue en la lista.
-- [ ] Cuando el sync trae la AUT con la misma cédula y tipo, la solicitud local desaparece de la lista y queda solo la AUT.
-- [ ] Tocar la AUT (online u offline) muestra el diálogo "¿Usar datos guardados?".
-- [ ] Una AUT con la misma cédula y otro tipo no muestra el diálogo.
-- [ ] Una AUT grupal no muestra el diálogo.
-- [ ] "Usar" pasa los datos al número real. Al entrar a cada módulo desde la AUT se ven los datos capturados offline. El borrador desaparece.
-- [ ] Si el número real ya tenía datos en un módulo, se quedan esos y el resumen lo dice.
-- [ ] Si el monto de la AUT cambia el formulario, el análisis no se pasa, el resumen muestra "el monto cambió, el análisis debe hacerse de nuevo", y los demás módulos sí se pasan.
-- [ ] "Ahora no" abre el sheet sin cambiar nada, y la próxima vez el diálogo vuelve a salir.
-- [ ] "Descartar" pide confirmación y borra el borrador, sus datos y las carpetas de fiadores.
-- [ ] Después de vincular, cada módulo se envía con su flujo de hoy y backend recibe el número real.
-- [ ] En NI y Costa Rica no aparecen solicitudes locales en la lista ni el diálogo.
-- [ ] Se creó una solicitud offline en QA HN, se hizo el análisis offline, el jefe la autorizó, se vinculó con "Usar", y backend confirmó el análisis, el plan, los fiadores, las imágenes y la ubicación con el número real (verificación manual).
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] En HN, sin conexión, una solicitud nueva creada offline y terminada aparece en "Análisis offline" con el tag "Sin número".
+- [X] Una solicitud local a medio llenar (`isDone == false`) no aparece.
+- [X] Una solicitud grupal no aparece como local.
+- [X] Tocar la card abre el sheet con análisis, plan de inversión, fiadores, imágenes y ubicación.
+- [X] El análisis abre el formulario que corresponde al monto local (menor o mayor de mil).
+- [X] Con número provisional, guardar datos en los cinco módulos no hace ninguna llamada HTTP, aunque haya conexión (visible en `BitacoraService`).
+- [X] Con número provisional, todos los botones de envío están deshabilitados y se ve el aviso "Esta solicitud aún no tiene número".
+- [X] Al cerrar y abrir la app, el borrador y sus datos siguen ahí.
+- [X] Con otro usuario en el mismo teléfono, los borradores del primero no aparecen ni se ofrecen.
+- [X] Después de la limpieza de 30 días de la solicitud local, el borrador sigue en la lista.
+- [X] Cuando el sync trae la AUT con la misma cédula y tipo, la solicitud local desaparece de la lista y queda solo la AUT.
+- [X] Tocar la AUT (online u offline) muestra el diálogo "¿Usar datos guardados?".
+- [X] Una AUT con la misma cédula y otro tipo no muestra el diálogo.
+- [X] Una AUT grupal no muestra el diálogo.
+- [X] "Usar" pasa los datos al número real. Al entrar a cada módulo desde la AUT se ven los datos capturados offline. El borrador desaparece.
+- [X] Si el número real ya tenía datos en un módulo, se quedan esos y el resumen lo dice.
+- [X] Si el monto de la AUT cambia el formulario, el análisis no se pasa, el resumen muestra "el monto cambió, el análisis debe hacerse de nuevo", y los demás módulos sí se pasan.
+- [X] "Ahora no" abre el sheet sin cambiar nada, y la próxima vez el diálogo vuelve a salir.
+- [X] "Descartar" pide confirmación y borra el borrador, sus datos y las carpetas de fiadores.
+- [X] Después de vincular, cada módulo se envía con su flujo de hoy y backend recibe el número real.
+- [X] En NI y Costa Rica no aparecen solicitudes locales en la lista ni el diálogo.
+- [X] Se creó una solicitud offline en QA HN, se hizo el análisis offline, el jefe la autorizó, se vinculó con "Usar", y backend confirmó el análisis, el plan, los fiadores, las imágenes y la ubicación con el número real (verificación manual).
 
 ## Decisions
 
