@@ -7,21 +7,26 @@ class AnalisisPlanInversionHnState extends Equatable {
   final int numeroSolicitud;
   final String database;
   final List<PlanInversion> planInversion;
+
+  /// Fecha del último cambio del borrador local; `null` si no hay borrador.
+  final DateTime? fechaBorrador;
   const AnalisisPlanInversionHnState({
     this.errorMsg = '',
     this.numeroSolicitud = 0,
     this.database = '',
     this.planInversion = const [],
     this.status = Status.notStarted,
+    this.fechaBorrador,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         numeroSolicitud,
         database,
         planInversion,
         errorMsg,
+        fechaBorrador,
       ];
 
   AnalisisPlanInversionHnState copyWith({
@@ -30,6 +35,7 @@ class AnalisisPlanInversionHnState extends Equatable {
     int? numeroSolicitud,
     String? database,
     List<PlanInversion>? planInversion,
+    DateTime? Function()? fechaBorrador,
   }) {
     return AnalisisPlanInversionHnState(
       errorMsg: errorMsg ?? this.errorMsg,
@@ -37,6 +43,8 @@ class AnalisisPlanInversionHnState extends Equatable {
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       database: database ?? this.database,
       planInversion: planInversion ?? this.planInversion,
+      fechaBorrador:
+          fechaBorrador != null ? fechaBorrador() : this.fechaBorrador,
     );
   }
 }
