@@ -8,6 +8,7 @@ import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubicacion_cliente_offline_hn_screen.dart';
@@ -17,6 +18,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empt
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/type_form/type_form_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
@@ -56,7 +58,7 @@ class _AnalisisSolicitudesHnOfflineScreenState
               ScreenHeaderWidget(
                 title: 'Análisis offline',
                 subtitle:
-                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes, plan de inversion y la ubicación sin conexión.',
+                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes, plan de inversion, la ubicación y los fiadores sin conexión.',
                 onBack: () => context.push('/'),
               ),
               const Gap(20),
@@ -398,6 +400,30 @@ class _SelectTypeAnalisis extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (ctx) => PlanInversionScreen(
                                 numeroSolicitud: int.parse(numeroSolicitud),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    // Como en el sheet online: las solicitudes grupales no
+                    // llevan fiadores.
+                    if (_isHonduras &&
+                        tipoSolicitud != null &&
+                        tipoSolicitud !=
+                            AnalisisSolicitudesInterceptorType.grupal)
+                      SelectableCardItem(
+                        icon: Icons.swap_horiz_rounded,
+                        color: const Color(0xff0D9488),
+                        title: 'Registrar Fiadores',
+                        subtitle: 'Crear Terceros',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => FiadoresHnScreen(
+                                numeroSolicitud: int.parse(numeroSolicitud),
+                                tipoSolicitud: tipoSolicitud!
+                                    .toTypeForInterceptorString(),
                               ),
                             ),
                           );
