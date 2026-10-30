@@ -1,6 +1,6 @@
 # SPEC 05 — Fiadores de análisis HN en modo offline
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 01, SPEC 03
 > **Date:** 2026-10-30
 > **Objective:** Permitir que el asesor de Honduras registre fiadores sin conexión desde la lista offline de análisis, guardando el formulario, las fotos de la cédula y la firma en el teléfono para enviarlos a mano por solicitud cuando vuelva a estar en línea.
@@ -167,28 +167,28 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] En HN offline, el sheet de una solicitud muestra "Registrar Fiadores" y abre `FiadoresHnScreen` sin diálogo de error.
-- [ ] En Costa Rica offline, el sheet de `AnalisisSolicitudesHnOfflineScreen` no muestra la card de fiadores.
-- [ ] En NI, el flujo de fiadores (online y offline) no cambia.
-- [ ] Sin conexión, en `FiadoresSearchByDocumentScreen`, tocar continuar abre el formulario con los nombres y la cédula tecleados, sin llamada HTTP.
-- [ ] Sin conexión, tomar las fotos, firmar, llenar los pasos y tocar "Enviar" muestra la pantalla ámbar de "Fiador guardado en el teléfono" y no hace ninguna llamada HTTP.
-- [ ] Al cerrar esa pantalla, se abre `FiadoresHnPendientesScreen` con el fiador recién guardado (nombre, cédula, tipo, fecha).
-- [ ] La carpeta `fiadores_hn/<uuid>/` existe y tiene `cedula_frente.jpg`, `cedula_reverso.jpg` y `firma.png`.
-- [ ] Sin conexión, "Enviar" de la fila está deshabilitado y se ve el aviso de envío en línea.
-- [ ] Guardar un segundo fiador con la misma cédula en la misma solicitud muestra el error de duplicado y no crea otro registro ni otra carpeta.
-- [ ] Con un cónyuge pendiente en la solicitud, tocar "Cónyuge" muestra el diálogo "No se puede crear mas de un fiador cónyuge", en línea y sin conexión.
-- [ ] `FiadoresHnScreen` muestra "Pendientes en el teléfono (N)" cuando la solicitud tiene pendientes del usuario, en línea y sin conexión.
-- [ ] Al cerrar y volver a abrir la app, los pendientes y sus archivos siguen ahí.
-- [ ] Con otro usuario en el mismo teléfono, los pendientes del primero no aparecen.
-- [ ] Con conexión, "Enviar" de un pendiente manda a `createAnalisisFiador` el mismo body que se guardó (visible en `BitacoraService`), después la firma, después el PDF de la cédula. Al terminar, la fila desaparece, se borran el registro y la carpeta, y se muestra el snackbar "Fiador enviado exitosamente".
-- [ ] Si falla la creación, la fila se queda sin `fiadorId` y se muestra el mensaje del backend.
-- [ ] Si la creación sale bien y falla la firma, la fila se queda con la etiqueta "Falta la firma". El siguiente "Enviar" no vuelve a crear el fiador (no hay segundo `POST` de creación en `BitacoraService`) y solo manda la firma y la cédula.
-- [ ] Si falla solo la subida del PDF de la cédula, el pendiente se borra igual y el error queda en `ErrorReporter`.
-- [ ] "Eliminar" pide confirmación y, al aceptar, el fiador desaparece de la lista, de ObjectBox y del disco.
-- [ ] En línea, crear un fiador desde el sheet online funciona igual que hoy y no guarda nada en ObjectBox.
-- [ ] El diálogo de cierre del análisis no cambia.
-- [ ] Se registró un fiador offline en QA HN, se envió después en línea, y backend confirmó el fiador, la firma y la cédula en el expediente (verificación manual).
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] En HN offline, el sheet de una solicitud muestra "Registrar Fiadores" y abre `FiadoresHnScreen` sin diálogo de error.
+- [X] En Costa Rica offline, el sheet de `AnalisisSolicitudesHnOfflineScreen` no muestra la card de fiadores.
+- [X] En NI, el flujo de fiadores (online y offline) no cambia.
+- [X] Sin conexión, en `FiadoresSearchByDocumentScreen`, tocar continuar abre el formulario con los nombres y la cédula tecleados, sin llamada HTTP.
+- [X] Sin conexión, tomar las fotos, firmar, llenar los pasos y tocar "Enviar" muestra la pantalla ámbar de "Fiador guardado en el teléfono" y no hace ninguna llamada HTTP.
+- [X] Al cerrar esa pantalla, se abre `FiadoresHnPendientesScreen` con el fiador recién guardado (nombre, cédula, tipo, fecha).
+- [X] La carpeta `fiadores_hn/<uuid>/` existe y tiene `cedula_frente.jpg`, `cedula_reverso.jpg` y `firma.png`.
+- [X] Sin conexión, "Enviar" de la fila está deshabilitado y se ve el aviso de envío en línea.
+- [X] Guardar un segundo fiador con la misma cédula en la misma solicitud muestra el error de duplicado y no crea otro registro ni otra carpeta.
+- [X] Con un cónyuge pendiente en la solicitud, tocar "Cónyuge" muestra el diálogo "No se puede crear mas de un fiador cónyuge", en línea y sin conexión.
+- [X] `FiadoresHnScreen` muestra "Pendientes en el teléfono (N)" cuando la solicitud tiene pendientes del usuario, en línea y sin conexión.
+- [X] Al cerrar y volver a abrir la app, los pendientes y sus archivos siguen ahí.
+- [X] Con otro usuario en el mismo teléfono, los pendientes del primero no aparecen.
+- [X] Con conexión, "Enviar" de un pendiente manda a `createAnalisisFiador` el mismo body que se guardó (visible en `BitacoraService`), después la firma, después el PDF de la cédula. Al terminar, la fila desaparece, se borran el registro y la carpeta, y se muestra el snackbar "Fiador enviado exitosamente".
+- [X] Si falla la creación, la fila se queda sin `fiadorId` y se muestra el mensaje del backend.
+- [X] Si la creación sale bien y falla la firma, la fila se queda con la etiqueta "Falta la firma". El siguiente "Enviar" no vuelve a crear el fiador (no hay segundo `POST` de creación en `BitacoraService`) y solo manda la firma y la cédula.
+- [X] Si falla solo la subida del PDF de la cédula, el pendiente se borra igual y el error queda en `ErrorReporter`.
+- [X] "Eliminar" pide confirmación y, al aceptar, el fiador desaparece de la lista, de ObjectBox y del disco.
+- [X] En línea, crear un fiador desde el sheet online funciona igual que hoy y no guarda nada en ObjectBox.
+- [X] El diálogo de cierre del análisis no cambia.
+- [X] Se registró un fiador offline en QA HN, se envió después en línea, y backend confirmó el fiador, la firma y la cédula en el expediente (verificación manual).
 
 ## Decisions
 
