@@ -1,6 +1,6 @@
 # SPEC 04 — Plan de inversión de análisis HN en modo offline
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** —
 > **Date:** 2026-10-30
 > **Objective:** Permitir que el asesor de Honduras capture el plan de inversión sin conexión desde la lista offline de análisis, con un borrador automático en ObjectBox por solicitud que se precarga en `PlanInversionScreen` y se envía a mano cuando vuelve a estar en línea.
@@ -32,7 +32,6 @@ El plan es una lista de artículos que se envía completa en un solo `POST` (`cr
   - Si hay borrador, muestra la etiqueta "Borrador en el teléfono" con la fecha del último cambio.
   - Sin conexión (`InternetConnectionCubit.state.isConnected == false`), "Enviar" está deshabilitado y se ve un aviso ámbar: "Guardado en el teléfono. Envíalo cuando tengas conexión".
 - Card "Registrar Plan de inversión" en el sheet offline de HN (`_SelectTypeAnalisis`), visible solo con `Flavor.honduras`. Abre `PlanInversionScreen`.
-- Actualizar el subtítulo de `AnalisisSolicitudesHnOfflineScreen` para incluir el plan de inversión, solo con `Flavor.honduras`.
 - Actualizar `references/app-modules-reference.md` y `CLAUDE.md`.
 
 **Out of scope (para futuras specs):**
@@ -100,7 +99,7 @@ Conventions:
 ## Implementation plan
 
 1. Crear `AnalisisPlanInversionHnLocalDb` en `lib/src/datasource/analisis/hn/plan_inversion/local_db/analisis_plan_inversion_hn_local_db.dart`. Registrar su box en `AnalisisBoxServiceHn`. Correr `dart run tool/build_script.dart` para regenerar `objectbox.g.dart` y `objectbox-model.json`. Verificar con `flutter analyze`.
-2. Agregar `PlanInversion.toLocalJson()` y `PlanInversion.fromJson`. Agregar un test en `test/datasource/analisis/hn/plan_inversion/` que verifique que `fromJson(toLocalJson(x))` conserva los cinco campos.
+2. Agregar `PlanInversion.toLocalJson()` y `PlanInversion.fromJson`. Sin test unitario, por decisión del usuario.
 3. Agregar a `AnalisisBoxServiceHn` los métodos `getPlanInversionBorrador`, `savePlanInversionBorrador` y `removePlanInversionBorrador`.
 4. En `AnalisisPlanInversionHnCubit`, solo con `Flavor.honduras`:
    - Agregar `fechaBorrador` al state.
@@ -110,7 +109,7 @@ Conventions:
 5. En `PlanInversionScreen`:
    - Si `fechaBorrador != null`, mostrar en `_ResumenInversionCard` (o debajo) un `CardTagWidget` ámbar "Borrador en el teléfono · dd/MM/yyyy HH:mm".
    - Leer `context.watch<InternetConnectionCubit>().state.isConnected`. Sin conexión, deshabilitar "Enviar" y mostrar el aviso ámbar sobre la barra inferior.
-6. En `_SelectTypeAnalisis` de `analisis_solicitudes_hn_offline_screen.dart`, agregar con `Flavor.honduras` la card "Registrar Plan de inversión" (mismo ícono y color que el sheet online), que abre `PlanInversionScreen(numeroSolicitud: int.parse(numeroSolicitud))`. Con `Flavor.honduras`, el subtítulo del encabezado menciona el plan de inversión.
+6. En `_SelectTypeAnalisis` de `analisis_solicitudes_hn_offline_screen.dart`, agregar con `Flavor.honduras` la card "Registrar Plan de inversión" (mismo ícono y color que el sheet online), que abre `PlanInversionScreen(numeroSolicitud: int.parse(numeroSolicitud))`. El subtítulo del encabezado no cambia.
 7. Actualizar `references/app-modules-reference.md`:
    - Agregar la fila o nota "Análisis → Plan de inversión": HN online y offline (envío en línea), NI solo online.
    - Cambiar la nota de "Análisis offline", que hoy dice que el plan de inversión no está offline en ningún país.
@@ -119,20 +118,19 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] `flutter test` pasa, incluido el test de ida y vuelta de `PlanInversion`.
-- [ ] En HN offline, el sheet de una solicitud muestra "Registrar Plan de inversión" y abre `PlanInversionScreen`.
-- [ ] En Costa Rica offline, el sheet de `AnalisisSolicitudesHnOfflineScreen` no muestra la card del plan de inversión.
-- [ ] En NI offline, `AnalisisSolicitudesNiOfflineScreen` no cambia.
-- [ ] Sin conexión, en HN, agregar artículos no hace ninguna llamada HTTP, "Enviar" está deshabilitado y se ve el aviso ámbar.
-- [ ] Al salir de la pantalla y volver a entrar (o cerrar y abrir la app), los artículos siguen ahí y se ve la etiqueta "Borrador en el teléfono" con la fecha del último cambio.
-- [ ] Editar o eliminar un artículo actualiza el borrador. Al eliminar todos, la etiqueta desaparece y el registro se borra de ObjectBox.
-- [ ] Con conexión, en HN, entrar desde el sheet online a una solicitud con borrador precarga los artículos.
-- [ ] Con conexión, "Enviar" manda a `POST` del plan de inversión el mismo body que hoy (sin `uuid`, visible en `BitacoraService`). Con `201`, se borra el borrador y se muestra el diálogo de éxito actual.
-- [ ] Si el envío falla (red o backend), el borrador se queda y al volver a entrar los artículos siguen ahí.
-- [ ] Con otro usuario en el mismo teléfono, el borrador del primero no se precarga.
-- [ ] En NI online, `PlanInversionScreen` no guarda nada en ObjectBox y al salir y volver a entrar la lista está vacía, como hoy.
-- [ ] Se capturó un plan de inversión offline en QA HN, se envió después en línea, y backend lo confirmó (verificación manual).
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] En HN offline, el sheet de una solicitud muestra "Registrar Plan de inversión" y abre `PlanInversionScreen`.
+- [X] En Costa Rica offline, el sheet de `AnalisisSolicitudesHnOfflineScreen` no muestra la card del plan de inversión.
+- [X] En NI offline, `AnalisisSolicitudesNiOfflineScreen` no cambia.
+- [X] Sin conexión, en HN, agregar artículos no hace ninguna llamada HTTP, "Enviar" está deshabilitado y se ve el aviso ámbar.
+- [X] Al salir de la pantalla y volver a entrar (o cerrar y abrir la app), los artículos siguen ahí y se ve la etiqueta "Borrador en el teléfono" con la fecha del último cambio.
+- [X] Editar o eliminar un artículo actualiza el borrador. Al eliminar todos, la etiqueta desaparece y el registro se borra de ObjectBox.
+- [X] Con conexión, en HN, entrar desde el sheet online a una solicitud con borrador precarga los artículos.
+- [X] Con conexión, "Enviar" manda a `POST` del plan de inversión el mismo body que hoy (sin `uuid`, visible en `BitacoraService`). Con `201`, se borra el borrador y se muestra el diálogo de éxito actual.
+- [X] Si el envío falla (red o backend), el borrador se queda y al volver a entrar los artículos siguen ahí.
+- [X] Con otro usuario en el mismo teléfono, el borrador del primero no se precarga.
+- [X] En NI online, `PlanInversionScreen` no guarda nada en ObjectBox y al salir y volver a entrar la lista está vacía, como hoy.
+- [X] Se capturó un plan de inversión offline en QA HN, se envió después en línea, y backend lo confirmó (verificación manual).
 
 ## Decisions
 

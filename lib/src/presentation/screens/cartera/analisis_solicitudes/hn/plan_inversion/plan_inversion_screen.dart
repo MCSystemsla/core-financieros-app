@@ -9,12 +9,14 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/an
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_plan_inversion/analisis_plan_inversion_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,6 +74,10 @@ class PlanInversionScreen extends StatelessWidget {
           builder: (context, state) {
             final hasData = state.planInversion.isNotEmpty;
             final isLoading = state.status == Status.inProgress;
+            final usaBorrador =
+                context.read<AnalisisPlanInversionHnCubit>().usaBorrador;
+            final isOffline = usaBorrador &&
+                !context.watch<InternetConnectionCubit>().state.isConnected;
             final totalInversion = state.planInversion.fold<int>(
               0,
               (sum, e) => sum + e.total,
@@ -95,6 +101,18 @@ class PlanInversionScreen extends StatelessWidget {
                           total: totalInversion,
                           items: state.planInversion.length,
                         ),
+                        if (state.fechaBorrador != null) ...[
+                          const Gap(10),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: CardTagWidget(
+                              label:
+                                  'Borrador en el teléfono · ${state.fechaBorrador!.formatDate()}',
+                              color: RedesignColors.amber,
+                              background: RedesignColors.amberTint,
+                            ),
+                          ),
+                        ],
                         const Gap(22),
                         const Text(
                           'ARTÍCULOS',
@@ -163,15 +181,25 @@ class PlanInversionScreen extends StatelessWidget {
                         top: BorderSide(color: RedesignColors.border),
                       ),
                     ),
-                    child: CustomElevatedButton(
-                      enabled: hasData && !isLoading,
-                      onPressed: () {
-                        context
-                            .read<AnalisisPlanInversionHnCubit>()
-                            .createAnalisisPlanInversion();
-                      },
-                      text: isLoading ? 'Enviando...' : 'Enviar',
-                      color: RedesignColors.green,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (isOffline) ...[
+                          const _OfflineNoticeWidget(),
+                          const Gap(12),
+                        ],
+                        CustomElevatedButton(
+                          enabled: hasData && !isLoading && !isOffline,
+                          onPressed: () {
+                            context
+                                .read<AnalisisPlanInversionHnCubit>()
+                                .createAnalisisPlanInversion();
+                          },
+                          text: isLoading ? 'Enviando...' : 'Enviar',
+                          color: RedesignColors.green,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -179,6 +207,42 @@ class PlanInversionScreen extends StatelessWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _OfflineNoticeWidget extends StatelessWidget {
+  const _OfflineNoticeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: RedesignColors.amberTint,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.cloud_off_rounded,
+            size: 20,
+            color: RedesignColors.amber,
+          ),
+          Gap(10),
+          Expanded(
+            child: Text(
+              'Guardado en el teléfono. Envíalo cuando tengas conexión.',
+              style: TextStyle(
+                fontSize: 12.5,
+                height: 1.4,
+                color: RedesignColors.amber,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
