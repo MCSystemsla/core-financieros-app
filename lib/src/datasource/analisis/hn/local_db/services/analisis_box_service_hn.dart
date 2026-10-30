@@ -353,6 +353,83 @@ class AnalisisBoxServiceHn {
     analisisFiadorNiLocalDbBox.remove(id);
   }
 
+  void saveFiadorHnPendiente(AnalisisFiadorHnLocalDb fiador) {
+    analisisFiadorHnLocalDbBox.put(fiador);
+  }
+
+  List<AnalisisFiadorHnLocalDb> getFiadoresHnPendientes({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId)))
+        .order(AnalisisFiadorHnLocalDb_.fechaGuardado)
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  bool existsFiadorHnPendiente({
+    required int numeroSolicitud,
+    required String cedula,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.cedula.equals(cedula))
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId)))
+        .build();
+
+    final exists = query.count() > 0;
+    query.close();
+
+    return exists;
+  }
+
+  /// `TFD2` es el código de fiador cónyuge (`FiadoresHnFormType.conyugue`).
+  bool existsConyugeHnPendiente({
+    required int numeroSolicitud,
+    required String userId,
+  }) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud
+            .equals(numeroSolicitud)
+            .and(AnalisisFiadorHnLocalDb_.userId.equals(userId))
+            .and(AnalisisFiadorHnLocalDb_.tipoFiadorCodigo.equals('TFD2')))
+        .build();
+
+    final exists = query.count() > 0;
+    query.close();
+
+    return exists;
+  }
+
+  void updateFiadorHnPendienteFiadorId({
+    required int id,
+    required String fiadorId,
+  }) {
+    final fiador = analisisFiadorHnLocalDbBox.get(id);
+    if (fiador == null) return;
+    analisisFiadorHnLocalDbBox.put(fiador..fiadorId = fiadorId);
+  }
+
+  /// Borra la carpeta `fiadores_hn/<uuid>/` con las fotos de la cédula y la
+  /// firma, y después la fila.
+  Future<void> removeFiadorHnPendiente(AnalisisFiadorHnLocalDb fiador) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final filesDir = Directory('${dir.path}/fiadores_hn/${fiador.uuid}');
+    if (await filesDir.exists()) {
+      await filesDir.delete(recursive: true);
+    }
+    analisisFiadorHnLocalDbBox.remove(fiador.id);
+  }
+
   AnalisisPlanInversionHnLocalDb? getPlanInversionBorrador({
     required int numeroSolicitud,
     required String userId,
