@@ -701,6 +701,186 @@ class AnalisisBoxServiceHn {
     analisisBorradorSinNumeroHnBox.remove(borrador.id);
   }
 
+  /// Pasa los datos del borrador a [numeroReal], módulo por módulo, en una sola
+  /// transacción. Si el número real ya tiene datos en un módulo, gana el real y
+  /// los del borrador se descartan. Con [descartarAnalisis] (el monto de la AUT
+  /// cambió el formulario) el análisis del borrador se descarta. Al final borra
+  /// la fila del borrador y las carpetas de los fiadores descartados.
+  Future<VinculoBorradorResultado> vincularBorradorSinNumero({
+    required AnalisisBorradorSinNumeroHnLocalDb borrador,
+    required int numeroReal,
+    required bool descartarAnalisis,
+  }) async {
+    final numeroProvisional = borrador.numeroProvisional;
+    final vinculados = <ModuloBorradorHn>{};
+    final conDatosPrevios = <ModuloBorradorHn>{};
+    var analisisDescartadoPorMonto = false;
+    var fiadoresDescartados = <AnalisisFiadorHnLocalDb>[];
+
+    _store.runInTransaction(TxMode.write, () {
+      final enBorrador = modulosConDatos(numeroSolicitud: numeroProvisional);
+      final enReal = modulosConDatos(numeroSolicitud: numeroReal);
+
+      for (final modulo in enBorrador) {
+        final porMonto =
+            modulo == ModuloBorradorHn.analisis && descartarAnalisis;
+        final realConDatos = enReal.contains(modulo);
+
+        if (porMonto || realConDatos) {
+          if (modulo == ModuloBorradorHn.fiadores) {
+            fiadoresDescartados = _getFiadoresHn(numeroProvisional);
+          }
+          _borrarModulo(modulo, numeroProvisional);
+          if (porMonto) {
+            analisisDescartadoPorMonto = true;
+          } else {
+            conDatosPrevios.add(modulo);
+          }
+        } else {
+          _moverModulo(modulo, numeroProvisional, numeroReal);
+          vinculados.add(modulo);
+        }
+      }
+
+      analisisBorradorSinNumeroHnBox.remove(borrador.id);
+    });
+
+    for (final fiador in fiadoresDescartados) {
+      final dir = await getApplicationDocumentsDirectory();
+      final filesDir = Directory('${dir.path}/fiadores_hn/${fiador.uuid}');
+      if (await filesDir.exists()) {
+        await filesDir.delete(recursive: true);
+      }
+    }
+
+    return VinculoBorradorResultado(
+      vinculados: vinculados,
+      conDatosPrevios: conDatosPrevios,
+      analisisDescartadoPorMonto: analisisDescartadoPorMonto,
+    );
+  }
+
+  /// Cambia `numeroSolicitud` de [desde] a [hasta] en las filas de [modulo].
+  void _moverModulo(ModuloBorradorHn modulo, int desde, int hasta) {
+    switch (modulo) {
+      case ModuloBorradorHn.analisis:
+        _mover(
+          analisisNuevaMenorMilHnLocalDb,
+          NuevaMenorMilLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisNuevaMayorAMilHnLocalDb,
+          AnalisisNuevaMayorAMilHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisAsalariadoHnLocalDb,
+          AnalisisAsalariadoHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisReprestamoHnLocalDb,
+          AnalisisReprestamoHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisCicloVentasMensualesHnBox,
+          AnalisisCicloVentaHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          cicloComprasSemanalesHnBox,
+          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          nivelProduccionHnBox,
+          AnalisisNivelProduccionLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          cuentasPorCobrarHnBox,
+          AnalisisCuentasPorCobrarHn_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisComprasProveedorArticuloHnLocalDb,
+          AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+              .equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisCostoDePersonalHnLocalDb,
+          AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisIngresosFamiliaresFueraNegocioHnLocalDb,
+          AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+              .equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisOtrosCreditoHnLocalDb,
+          AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisPasivoHnLocalDb,
+          AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisActivoHnLocalDb,
+          AnalisisActivoHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+        _mover(
+          analisisInventarioHnLocalDb,
+          AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+      case ModuloBorradorHn.planInversion:
+        _mover(
+          analisisPlanInversionHnLocalDbBox,
+          AnalisisPlanInversionHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+      case ModuloBorradorHn.fiadores:
+        _mover(
+          analisisFiadorHnLocalDbBox,
+          AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
+      case ModuloBorradorHn.imagenes:
+        _mover(
+          imagenesNegocioHnLocalDb,
+          ImagenesNegocioHnLocalDb_.numeroSolicitud.equals(desde.toString()),
+          (e) => e.numeroSolicitud = hasta.toString(),
+        );
+      case ModuloBorradorHn.ubicacion:
+        _mover(
+          ubicacionClienteHnLocalDb,
+          UbicacionClienteHnLocalDb_.numeroSolicitud.equals(desde.toString()),
+          (e) => e.numeroSolicitud = hasta.toString(),
+        );
+    }
+  }
+
+  void _mover<T>(
+    Box<T> box,
+    Condition<T> condition,
+    void Function(T entity) setNumero,
+  ) {
+    final query = box.query(condition).build();
+    final rows = query.find();
+    query.close();
+    if (rows.isEmpty) return;
+    rows.forEach(setNumero);
+    box.putMany(rows);
+  }
+
   List<AnalisisFiadorHnLocalDb> _getFiadoresHn(int numeroSolicitud) {
     final query = analisisFiadorHnLocalDbBox
         .query(AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud))
