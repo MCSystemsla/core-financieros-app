@@ -15,8 +15,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubiacacion_cliente_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_form_screen.dart';
-import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_pendientes_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/comite/hn/modal/open_motivo_rechazo_sheet.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/close_analisis_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -253,26 +252,12 @@ class SelectTypeAnalisisModalSheetNiWidget extends StatelessWidget {
                       title: 'Registrar Fiadores',
                       subtitle: 'Crear fiadores de la solicitud',
                       onTap: () {
-                        if (!context
-                            .read<InternetConnectionCubit>()
-                            .state
-                            .isConnected) {
-                          showV2CustomSnackbar(
-                            context,
-                            title:
-                                'Necesitas conexión a internet para crear fiadores',
-                            type: SnackbarType.warning,
-                          );
-                          return;
-                        }
+                        // Sin conexión se llega por la lista offline; aquí
+                        // ya no se bloquea. Abre pendientes si los hay.
                         context.pop();
-                        Navigator.push(
+                        FiadoresNiPendientesScreen.open(
                           context,
-                          MaterialPageRoute(
-                            builder: (ctx) => FiadoresNiFormScreen(
-                              numeroSolicitud: int.parse(numeroSolicitud),
-                            ),
-                          ),
+                          numeroSolicitud: int.parse(numeroSolicitud),
                         );
                       },
                     ),

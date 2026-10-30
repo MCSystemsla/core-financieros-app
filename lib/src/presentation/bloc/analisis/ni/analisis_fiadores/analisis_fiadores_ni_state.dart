@@ -4,6 +4,9 @@ part of 'analisis_fiadores_ni_cubit.dart';
 class AnalisisFiadoresNiState extends Equatable {
   final Status status;
   final String errorMsg;
+  // true si el último envío falló por red (sin conexión o timeout): solo
+  // entonces se ofrece guardar el fiador en el teléfono.
+  final bool isNetworkError;
   final int numeroSolicitud;
 
   // Datos personales
@@ -69,6 +72,7 @@ class AnalisisFiadoresNiState extends Equatable {
   const AnalisisFiadoresNiState({
     this.status = Status.notStarted,
     this.errorMsg = '',
+    this.isNetworkError = false,
     this.numeroSolicitud = 0,
     this.nombre1 = '',
     this.nombre2 = '',
@@ -128,6 +132,7 @@ class AnalisisFiadoresNiState extends Equatable {
   List<Object?> get props => [
         status,
         errorMsg,
+        isNetworkError,
         numeroSolicitud,
         nombre1,
         nombre2,
@@ -186,6 +191,7 @@ class AnalisisFiadoresNiState extends Equatable {
   AnalisisFiadoresNiState copyWith({
     Status? status,
     String? errorMsg,
+    bool? isNetworkError,
     int? numeroSolicitud,
     String? nombre1,
     String? nombre2,
@@ -243,6 +249,7 @@ class AnalisisFiadoresNiState extends Equatable {
     return AnalisisFiadoresNiState(
       status: status ?? this.status,
       errorMsg: errorMsg ?? this.errorMsg,
+      isNetworkError: isNetworkError ?? this.isNetworkError,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       nombre1: nombre1 ?? this.nombre1,
       nombre2: nombre2 ?? this.nombre2,

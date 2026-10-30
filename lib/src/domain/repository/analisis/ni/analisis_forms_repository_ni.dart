@@ -127,8 +127,13 @@ class AnalisisFormsRepositoryNiImpl extends AnalisisFormsRepositoryNi {
       final resp = await _api.request(endpoint: endpoint);
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        final (errorMsg, _) = getErrorMessage(resp);
-        throw AppException(optionalMsg: errorMsg.toString());
+        // El status distingue un error de red (noConnection / timeOutError)
+        // de uno de backend, para ofrecer guardar el fiador en el teléfono.
+        final (errorMsg, status) = getErrorMessage(
+          resp,
+          errorMsg: 'el fiador no se envió.',
+        );
+        throw AppException(optionalMsg: errorMsg.toString(), status: status);
       }
       return CrearFiadorResponseHn.fromJson(resp);
     } catch (e) {

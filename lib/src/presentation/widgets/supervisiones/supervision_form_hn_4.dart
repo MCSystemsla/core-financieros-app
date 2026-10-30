@@ -98,7 +98,7 @@ class _SupervisionFormHN4State extends State<SupervisionFormHN4>
                 textInputType: TextInputType.number,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(2),
+                  LengthLimitingTextInputFormatter(3),
                 ],
                 onChange: (value) {
                   cubit.onFieldChanged(
