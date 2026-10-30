@@ -30,7 +30,7 @@ El modelo es el de SPEC 03 (fiadores NI): una lista de pendientes por solicitud 
   - Extrae el armado del DTO de `createAnalisisFiador` a un método reutilizable.
   - Agrega `guardarFiadorLocal()`.
   - Extrae la subida del PDF de la cédula a una función que también use el envío de pendientes.
-- Card "Registrar Fiadores" en el sheet offline de HN, visible solo con `Flavor.honduras` (Costa Rica comparte la pantalla). Abre `FiadoresHnScreen`.
+- Card "Registrar Fiadores" en el sheet offline de HN, visible solo con `Flavor.honduras` (Costa Rica comparte la pantalla) y nunca en solicitudes grupales. Abre `FiadoresHnScreen`.
 - `FiadoresHnScreen`:
   - Sin conexión, no llama `checkFiadorAval`, no muestra error y no muestra las etiquetas "Registrado".
   - Cónyuge se bloquea si el backend dice `tieneConyugue` (solo en línea) o si la solicitud ya tiene un cónyuge (`TFD2`) pendiente local del usuario.
@@ -211,6 +211,10 @@ Conventions:
 - **Sí:** registrar la entidad en `AnalisisBoxServiceHn`. Los borradores de análisis HN, el plan de inversión offline y los fiadores NI ya viven ahí.
 - **No:** reusar `AnalisisFiadorNiLocalDb`. El DTO de HN es otro, y HN necesita rutas de archivos y `fiadorId`.
 - **No:** Costa Rica. La card offline se guarda con `Flavor.honduras`.
+- **Sí:** la card offline no aparece en solicitudes grupales. Lo decidió el usuario durante la implementación: el sheet online la oculta con `if (!esGrupal)`.
+- **Sí:** el conteo de "Pendientes en el teléfono (N)" escucha el box de ObjectBox (`query().watch()`), en vez de recargar solo al volver. Se decidió durante la implementación: la lista de pendientes también se abre desde la pantalla de envío, y un envío o eliminación desde ahí no pasaba por `FiadoresHnScreen`.
+- **Sí:** `subirCedulaFiadorHn` es una función top-level que también recibe el `ExpedienteDigitalRepository`, porque fuera del cubit no hay otro acceso a él.
+- **Sí:** en modo guardar local, cerrar la pantalla de envío con error vuelve al formulario, que conserva los datos, en vez de ir a análisis.
 
 ## Risks
 
