@@ -207,6 +207,123 @@ class AnalisisFiadoresHn {
     required this.historialCredito,
   });
 
+  /// Inverso de [toJson], para reconstruir un fiador pendiente guardado en
+  /// local. [toJson] descarta `null` y `''`, así que las llaves ausentes toman
+  /// `''`/`0`/`false`/`null`/`[]`.
+  factory AnalisisFiadoresHn.fromJson(Map<String, dynamic> json) {
+    String str(String key) => json[key] as String? ?? '';
+    int integer(String key) => (json[key] as num?)?.toInt() ?? 0;
+    double dbl(String key) => (json[key] as num?)?.toDouble() ?? 0;
+    bool boolean(String key) => json[key] as bool? ?? false;
+    DateTime? date(String key) {
+      final value = json[key] as String?;
+      return value == null ? null : DateTime.parse(value);
+    }
+
+    return AnalisisFiadoresHn(
+      database: str('database'),
+      numeroSolicitud: integer('NumeroSolicitud'),
+      nombre1: str('Nombre1'),
+      nombre2: str('Nombre2'),
+      apellido1: str('Apellido1'),
+      apellido2: str('Apellido2'),
+      fechaNacimiento: date('FechaNacimiento'),
+      cedula: str('Cedula'),
+      telefono: str('Telefono'),
+      celular: str('Celular'),
+      direccion: str('Direccion'),
+      barrioCasa: str('BarrioCasa'),
+      municipioCodigo: str('MunicipioCodigo'),
+      departamentoCodigo: str('DepartamentoCodigo'),
+      paisCodigo: str('PaisCodigo'),
+      email: str('Email'),
+      sexoCodigo: str('SexoCodigo'),
+      estadoCivilCodigo: str('EstadoCivilCodigo'),
+      relacionClienteCodigo: str('RelacionClienteCodigo'),
+      esAsalariado: boolean('EsAsalariado'),
+      empresa: str('Empresa'),
+      cargo: str('Cargo'),
+      tiempoLaborar: str('TiempoLaborar'),
+      esEmpresario: boolean('EsEmpresario'),
+      actividadCodigo: str('ActividadCodigo'),
+      tiempoActividad: str('TiempoActividad'),
+      direccionTrabajo: str('DireccionTrabajo'),
+      barrioTrabajo: str('BarrioTrabajo'),
+      telefonoTrabajo: str('TelefonoTrabajo'),
+      lugarTrabajoAnterior: str('LugarTrabajoAnterior'),
+      personasACargo: integer('PersonasACargo'),
+      cantidadDependientes: integer('CantidadDependientes'),
+      tieneDocumentosDomicilio: boolean('TieneDocumentosDomicilio'),
+      tipoDomicilioCodigo: str('TipoDomicilioCodigo'),
+      duenoVivienda: str('DuenoVivienda'),
+      pagoAlquiler: integer('PagoAlquiler'),
+      profesion: integer('Profesion'),
+      anosVivirDomicilio: integer('AnosVivirDomicilio'),
+      nombreFamiliarCercano: str('NombreFamiliarCercano'),
+      parentescoFamiliarCercanoCodigo: str('ParentescoFamiliarCercanoCodigo'),
+      direccionFamiliarCercano: str('DireccionFamiliarCercano'),
+      telefonoFamiliarCercano: str('TelefonoFamiliarCercano'),
+      salarioNetoCordoba: dbl('SalarioNetoCordoba'),
+      otrosIngresosCordoba: dbl('OtrosIngresosCordoba'),
+      totalIngresosFamiliares: dbl('TotalIngresosFamiliares'),
+      ventaNegocio: integer('VentaNegocio'),
+      costoVenta: integer('CostoVenta'),
+      gastosOperativos: integer('GastosOperativos'),
+      gananciaNegocio: integer('GananciaNegocio'),
+      otrosIngresos: integer('OtrosIngresos'),
+      fuenteOtrosIngresos: str('FuenteOtrosIngresos'),
+      consumoFamiliar: dbl('ConsumoFamiliar'),
+      saldoDisponible: integer('SaldoDisponible'),
+      activo: boolean('Activo'),
+      sucursal: str('Sucursal'),
+      usuarioCreacion: str('UsuarioCreacion'),
+      maquinaCreacion: str('MaquinaCreacion'),
+      tipoDocumentoCodigo: str('TipoDocumentoCodigo'),
+      esFirmaDigitalFiador: boolean('EsFirmaDigitalFiador'),
+      rtn: str('RTN'),
+      aldeaCodigo: str('AldeaCodigo'),
+      caserioCasa: str('CaserioCasa'),
+      tipoFiadorCodigo: str('TipoFiadorCodigo'),
+      escolaridadCodigo: str('EscolaridadCodigo'),
+      ocupacionCodigo: str('OcupacionCodigo'),
+      profesionCodigo: str('ProfesionCodigo'),
+      paisNacimientoCodigo: str('PaisNacimientoCodigo'),
+      fechaEmisionCedula: date('FechaEmisionCedula'),
+      fechaVencimientoCedula: date('FechaVencimientoCedula'),
+      nacionalidad1Codigo: str('Nacionalidad1codigo'),
+      nacionalidad2Codigo: str('Nacionalidad2Codigo'),
+      nacionalidad3Codigo: str('Nacionalidad3Codigo'),
+      cantidadHijos: integer('CantidadHijos'),
+      tipoViviendaCodigo: str('TipoViviendaCodigo'),
+      tipoPersonaCnbsCodigo: str('TipoPersonaCNBSCodigo'),
+      estatusCodigo: str('EstatusCodigo'),
+      tipoClienteCodigo: str('TipoClienteCodigo'),
+      actividadEconomicaCnbs1Codigo: str('ActividadEconomicaCNBS1Codigo'),
+      actividadEconomicaDescripcion1: str('ActividadEconomicaDescripcion1'),
+      actividadEconomicaCnbs2Codigo: str('ActividadEconomicaCNBS2Codigo'),
+      actividadEconomicaDescripcion2: str('ActividadEconomicaDescripcion2'),
+      actividadEconomicaCnbs3Codigo: str('ActividadEconomicaCNBS3Codigo'),
+      actividadEconomicaDescripcion3: str('ActividadEconomicaDescripcion3'),
+      ejerceApnfd: boolean('EjerceAPNFD'),
+      nombreNegocio: str('NombreNegocio'),
+      tiempoNegocio: integer('TiempoNegocio'),
+      nivelAproximadoIngresosCodigo: str('NivelAproximadoIngresosCodigo'),
+      puesto: str('Puesto'),
+      condicionLocalCodigo: str('CondicionLocalCodigo'),
+      horarioVisita: str('HorarioVisita'),
+      horarioTrabajo: str('HorarioTrabajo'),
+      paisOcupacionCodigo: str('PaisOcupacionCodigo'),
+      departamentoOcupacionCodigo: str('DepartamentoOcupacionCodigo'),
+      municipioOcupacionCodigo: str('MunicipioOcupacionCodigo'),
+      aldeaOcupacionCodigo: str('AldeaOcupacionCodigo'),
+      caserioOcupacion: str('CaserioOcupacion'),
+      celularOcupacion: str('CelularOcupacion'),
+      historialCredito: (json['HistorialCredito'] as List<dynamic>? ?? [])
+          .map((e) => HistorialCredito.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = {
       'database': LocalStorage().database,
