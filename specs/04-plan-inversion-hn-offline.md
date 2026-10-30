@@ -32,7 +32,6 @@ El plan es una lista de artículos que se envía completa en un solo `POST` (`cr
   - Si hay borrador, muestra la etiqueta "Borrador en el teléfono" con la fecha del último cambio.
   - Sin conexión (`InternetConnectionCubit.state.isConnected == false`), "Enviar" está deshabilitado y se ve un aviso ámbar: "Guardado en el teléfono. Envíalo cuando tengas conexión".
 - Card "Registrar Plan de inversión" en el sheet offline de HN (`_SelectTypeAnalisis`), visible solo con `Flavor.honduras`. Abre `PlanInversionScreen`.
-- Actualizar el subtítulo de `AnalisisSolicitudesHnOfflineScreen` para incluir el plan de inversión, solo con `Flavor.honduras`.
 - Actualizar `references/app-modules-reference.md` y `CLAUDE.md`.
 
 **Out of scope (para futuras specs):**
@@ -110,7 +109,7 @@ Conventions:
 5. En `PlanInversionScreen`:
    - Si `fechaBorrador != null`, mostrar en `_ResumenInversionCard` (o debajo) un `CardTagWidget` ámbar "Borrador en el teléfono · dd/MM/yyyy HH:mm".
    - Leer `context.watch<InternetConnectionCubit>().state.isConnected`. Sin conexión, deshabilitar "Enviar" y mostrar el aviso ámbar sobre la barra inferior.
-6. En `_SelectTypeAnalisis` de `analisis_solicitudes_hn_offline_screen.dart`, agregar con `Flavor.honduras` la card "Registrar Plan de inversión" (mismo ícono y color que el sheet online), que abre `PlanInversionScreen(numeroSolicitud: int.parse(numeroSolicitud))`. Con `Flavor.honduras`, el subtítulo del encabezado menciona el plan de inversión.
+6. En `_SelectTypeAnalisis` de `analisis_solicitudes_hn_offline_screen.dart`, agregar con `Flavor.honduras` la card "Registrar Plan de inversión" (mismo ícono y color que el sheet online), que abre `PlanInversionScreen(numeroSolicitud: int.parse(numeroSolicitud))`. El subtítulo del encabezado no cambia.
 7. Actualizar `references/app-modules-reference.md`:
    - Agregar la fila o nota "Análisis → Plan de inversión": HN online y offline (envío en línea), NI solo online.
    - Cambiar la nota de "Análisis offline", que hoy dice que el plan de inversión no está offline en ningún país.

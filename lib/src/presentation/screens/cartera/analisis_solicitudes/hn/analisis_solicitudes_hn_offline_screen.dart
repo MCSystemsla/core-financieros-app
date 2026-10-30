@@ -4,9 +4,12 @@ import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
+import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/imagenes_negocio/imagenes_negocio_hn_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubicacion_cliente_offline_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
@@ -53,7 +56,7 @@ class _AnalisisSolicitudesHnOfflineScreenState
               ScreenHeaderWidget(
                 title: 'Análisis offline',
                 subtitle:
-                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes y la ubicación sin conexión.',
+                    'Las solicitudes descargadas en el teléfono. Podés registrar el análisis, las imágenes, plan de inversion y la ubicación sin conexión.',
                 onBack: () => context.push('/'),
               ),
               const Gap(20),
@@ -65,6 +68,10 @@ class _AnalisisSolicitudesHnOfflineScreenState
     );
   }
 }
+
+/// Costa Rica también abre esta pantalla; el plan de inversión offline es solo
+/// de Honduras.
+bool get _isHonduras => global<FlavorCubit>().state.flavor == Flavor.honduras;
 
 AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String tipoSolicitud,
@@ -379,6 +386,23 @@ class _SelectTypeAnalisis extends StatelessWidget {
                         );
                       },
                     ),
+                    if (_isHonduras)
+                      SelectableCardItem(
+                        icon: Icons.business_center_outlined,
+                        color: const Color(0xffF6153F),
+                        title: 'Registrar Plan de inversión',
+                        subtitle: 'Crear plan de inversion',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => PlanInversionScreen(
+                                numeroSolicitud: int.parse(numeroSolicitud),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     SelectableCardItem(
                       icon: Icons.photo_library_outlined,
                       color: const Color(0xff455A64),
