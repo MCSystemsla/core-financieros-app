@@ -36,8 +36,7 @@ class FiadoresHnPendientesScreen extends StatelessWidget {
     );
   }
 
-  /// Abre la lista de pendientes. El `Future` termina al volver, para que
-  /// `FiadoresHnScreen` recargue el conteo.
+  /// Abre la lista de pendientes. El `Future` termina al volver.
   static Future<void> open(
     BuildContext context, {
     required int numeroSolicitud,
