@@ -115,6 +115,10 @@ class _SolicitudSinNumero {
   }
 }
 
+/// Las solicitudes no grupales guardan `grupoCodigo` vacío.
+bool _noEsGrupal(String? grupoCodigo) =>
+    grupoCodigo == null || grupoCodigo.trim().isEmpty;
+
 String _unirNombre(List<String?> partes) {
   final nombre =
       partes.where((e) => e != null && e.trim().isNotEmpty).join(' ').trim();
@@ -134,7 +138,11 @@ List<_SolicitudSinNumero> _getSolicitudesSinNumero(
       .toSet();
 
   final locales = <_SolicitudSinNumero>[
-    ...solicitudesDb.getSolicitudesNueva().where((e) => e.isDone).map(
+    // Las grupales (con `grupoCodigo`) no entran: su análisis es otro.
+    ...solicitudesDb
+        .getSolicitudesNueva()
+        .where((e) => e.isDone && _noEsGrupal(e.grupoCodigo))
+        .map(
           (e) => _SolicitudSinNumero(
             uuid: e.uuid ?? '',
             cedula: e.cedula ?? '',
@@ -144,7 +152,10 @@ List<_SolicitudSinNumero> _getSolicitudesSinNumero(
                 _unirNombre([e.nombre1, e.nombre2, e.apellido1, e.apellido2]),
           ),
         ),
-    ...solicitudesDb.getSolicitudesAsalariado().where((e) => e.isDone).map(
+    ...solicitudesDb
+        .getSolicitudesAsalariado()
+        .where((e) => e.isDone && _noEsGrupal(e.grupoCodigo))
+        .map(
           (e) => _SolicitudSinNumero(
             uuid: e.uuid ?? '',
             cedula: e.cedula ?? '',
