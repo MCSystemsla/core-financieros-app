@@ -497,4 +497,93 @@ class AnalisisBoxServiceHn {
   }
 
   void removeAnalisisFormsByDate() {}
+
+  /// Cédula sin guiones ni espacios, para comparar la solicitud local con la AUT.
+  static String normalizarCedula(String cedula) =>
+      cedula.replaceAll(RegExp(r'[\s-]'), '');
+
+  /// Busca el borrador de la solicitud local por [solicitudLocalUuid] y, si no
+  /// está, por usuario + cédula + tipo. Si no existe, lo crea.
+  AnalisisBorradorSinNumeroHnLocalDb getOrCreateBorradorSinNumero({
+    required String solicitudLocalUuid,
+    required String userId,
+    required String cedula,
+    required String tipoSolicitud,
+    required double monto,
+    required String nombreCompleto,
+  }) {
+    AnalisisBorradorSinNumeroHnLocalDb? borrador;
+
+    if (solicitudLocalUuid.isNotEmpty) {
+      final query = analisisBorradorSinNumeroHnBox
+          .query(AnalisisBorradorSinNumeroHnLocalDb_.solicitudLocalUuid
+              .equals(solicitudLocalUuid)
+              .and(AnalisisBorradorSinNumeroHnLocalDb_.userId.equals(userId)))
+          .build();
+      borrador = query.findFirst();
+      query.close();
+    }
+
+    borrador ??= findBorradorSinNumero(
+      userId: userId,
+      cedula: cedula,
+      tipoSolicitud: tipoSolicitud,
+    );
+
+    if (borrador != null) {
+      if (borrador.solicitudLocalUuid.isEmpty &&
+          solicitudLocalUuid.isNotEmpty) {
+        borrador.solicitudLocalUuid = solicitudLocalUuid;
+        analisisBorradorSinNumeroHnBox.put(borrador);
+      }
+      return borrador;
+    }
+
+    final nuevo = AnalisisBorradorSinNumeroHnLocalDb(
+      solicitudLocalUuid: solicitudLocalUuid,
+      userId: userId,
+      cedula: normalizarCedula(cedula),
+      tipoSolicitud: tipoSolicitud,
+      monto: monto,
+      nombreCompleto: nombreCompleto,
+      fechaCreacion: DateTime.now(),
+    );
+    analisisBorradorSinNumeroHnBox.put(nuevo);
+
+    return nuevo;
+  }
+
+  List<AnalisisBorradorSinNumeroHnLocalDb> getBorradoresSinNumero({
+    required String userId,
+  }) {
+    final query = analisisBorradorSinNumeroHnBox
+        .query(AnalisisBorradorSinNumeroHnLocalDb_.userId.equals(userId))
+        .order(AnalisisBorradorSinNumeroHnLocalDb_.fechaCreacion)
+        .build();
+
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  AnalisisBorradorSinNumeroHnLocalDb? findBorradorSinNumero({
+    required String userId,
+    required String cedula,
+    required String tipoSolicitud,
+  }) {
+    final query = analisisBorradorSinNumeroHnBox
+        .query(AnalisisBorradorSinNumeroHnLocalDb_.userId
+            .equals(userId)
+            .and(AnalisisBorradorSinNumeroHnLocalDb_.cedula
+                .equals(normalizarCedula(cedula)))
+            .and(AnalisisBorradorSinNumeroHnLocalDb_.tipoSolicitud
+                .equals(tipoSolicitud)))
+        .build();
+
+    final borrador = query.findFirst();
+    query.close();
+
+    return borrador;
+  }
 }
