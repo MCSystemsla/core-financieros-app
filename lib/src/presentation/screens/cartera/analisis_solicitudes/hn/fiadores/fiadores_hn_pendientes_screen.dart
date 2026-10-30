@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirm
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
+import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -231,12 +232,6 @@ class _FiadorPendienteTile extends StatelessWidget {
     required this.onDelete,
   });
 
-  String _formatFecha(DateTime date) {
-    String two(int v) => v.toString().padLeft(2, '0');
-    return '${two(date.day)}/${two(date.month)}/${date.year} '
-        '${two(date.hour)}:${two(date.minute)}';
-  }
-
   String _tipoFiador(String codigo) {
     final tipo = FiadoresHnFormType.values
         .where((t) => t.codigo == codigo)
@@ -302,7 +297,7 @@ class _FiadorPendienteTile extends StatelessWidget {
                 ),
                 const Gap(4),
                 Text(
-                  'Guardado ${_formatFecha(pendiente.fechaGuardado)}',
+                  'Guardado ${pendiente.fechaGuardado.formatDate()}',
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,

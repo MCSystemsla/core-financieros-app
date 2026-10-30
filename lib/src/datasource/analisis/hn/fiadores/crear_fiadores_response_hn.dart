@@ -32,7 +32,7 @@ class CrearFiadorDataHN {
     final rawNumeroSolicitud = json['FiadorSolicitude'];
 
     return CrearFiadorDataHN(
-      id: json['FiadorID'] ?? '',
+      id: json['FiadorID'] ?? json['ID'] ?? '',
       numeroSolicitud: rawNumeroSolicitud is num
           ? rawNumeroSolicitud.toInt()
           : int.tryParse(rawNumeroSolicitud?.toString() ?? '') ?? 0,
