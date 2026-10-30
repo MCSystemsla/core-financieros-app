@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_search_by_document/analisis_search_by_document_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
@@ -119,14 +120,29 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
           onSubmit: () {
             FocusScope.of(context).unfocus();
             if (!formKey.currentState!.validate()) return;
-            context.read<AnalisisSearchByDocumentCubit>().getUserByDocument(
-                  primerNombre: controllers.primerNombre.text.trim(),
-                  segundoNombre: controllers.segundoNombre.text.trim(),
-                  primerApellido: controllers.primerApellido.text.trim(),
-                  segundoApellido: controllers.segundoApellido.text.trim(),
-                  cedula: controllers.documento.text.trim(),
-                  tipoDocumentoCodigo: tipoDocumento?.value,
-                );
+            final cubit = context.read<AnalisisSearchByDocumentCubit>();
+            final isConnected =
+                context.read<InternetConnectionCubit>().state.isConnected;
+            if (!isConnected) {
+              // Sin conexión no se busca: se sigue con lo tecleado.
+              cubit.setUserOffline(
+                primerNombre: controllers.primerNombre.text.trim(),
+                segundoNombre: controllers.segundoNombre.text.trim(),
+                primerApellido: controllers.primerApellido.text.trim(),
+                segundoApellido: controllers.segundoApellido.text.trim(),
+                cedula: controllers.documento.text.trim(),
+                tipoDocumentoCodigo: tipoDocumento?.value,
+              );
+              return;
+            }
+            cubit.getUserByDocument(
+              primerNombre: controllers.primerNombre.text.trim(),
+              segundoNombre: controllers.segundoNombre.text.trim(),
+              primerApellido: controllers.primerApellido.text.trim(),
+              segundoApellido: controllers.segundoApellido.text.trim(),
+              cedula: controllers.documento.text.trim(),
+              tipoDocumentoCodigo: tipoDocumento?.value,
+            );
           },
         );
       },
