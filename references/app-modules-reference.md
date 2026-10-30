@@ -20,6 +20,7 @@ Leyenda: ✅ disponible · ❌ no disponible · 🌐 solo en línea · 🔒 requ
 | Solicitudes y análisis | Solicitudes | ✅ | ✅ | ✅ | — |
 | Solicitudes y análisis | Análisis | ✅ (online y offline) | ✅ (online y offline) | ⚠️ placeholder | — |
 | Solicitudes y análisis | Análisis → Fiadores | ✅ 🌐 | ✅ (online y offline, envío en línea) | ❌ | — |
+| Solicitudes y análisis | Análisis → Plan de inversión | ✅ (online y offline, envío en línea) | ✅ 🌐 | ❌ | — |
 | Solicitudes y análisis | Supervisiones (crédito, riesgo, regional) | ✅ 🌐 | ❌ | ❌ | 🔒 `supervisionDeCredito` |
 | Formularios Kiva | Kiva (online y offline) | ❌ | ✅ | ✅ | 🔒 `llenarKiva` |
 | Formularios Kiva | Kiva Histórico | ❌ | ✅ 🌐 | ✅ 🌐 | 🔒 `llenarKiva` |
@@ -44,6 +45,6 @@ Leyenda: ✅ disponible · ❌ no disponible · 🌐 solo en línea · 🔒 requ
 ## Observaciones
 
 - **Análisis en Costa Rica**: `AnalisisInterceptorByFlavor` devuelve `Text('This is costa rica')`; el módulo no está implementado.
-- **Análisis offline**: sin conexión, `CarteraScreen` abre `AnalisisSolicitudesNiOfflineScreen` en NI y `AnalisisSolicitudesHnOfflineScreen` en HN/CR. La lista NI sale de `AnalisisListDataHn`, que llena el sync de NI (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`, solo página 1). Su sheet ofrece análisis, imágenes del negocio, ubicación y fiadores; el plan de inversión no está offline en ningún país.
+- **Análisis offline**: sin conexión, `CarteraScreen` abre `AnalisisSolicitudesNiOfflineScreen` en NI y `AnalisisSolicitudesHnOfflineScreen` en HN/CR. La lista NI sale de `AnalisisListDataHn`, que llena el sync de NI (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`, solo página 1). Su sheet ofrece análisis, imágenes del negocio, ubicación y fiadores. El sheet offline de HN ofrece análisis, imágenes del negocio y ubicación, más el plan de inversión solo con `Flavor.honduras` (CR no lo ve). El plan de inversión no está offline en NI.
 - **Solicitudes y Análisis** no validan permiso: el chequeo de `llenarSolicitudes` está comentado en `cartera_screen.dart`.
 - **Fiadores en el análisis**: se entra desde el sheet de análisis (`SelectTypeAnalisisModalSheetWidget` en HN, `SelectTypeAnalisisModalSheetNiWidget` en NI). HN solo funciona en línea y pide fotos de cédula, firma y búsqueda por documento; NI no. En NI no hay selección de tipo de fiador y no se envía `TipoFiadorCodigo`. En NI también se puede registrar sin conexión desde el sheet offline: el fiador queda pendiente en el teléfono y se envía a mano desde `FiadoresNiPendientesScreen` al volver a estar en línea. Costa Rica no llega a ninguno de los dos sheets.
