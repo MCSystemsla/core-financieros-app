@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/local_db/analisis_fiador_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/grupal/analisis_grupal_hn_local_db.dart';
@@ -60,6 +61,7 @@ class AnalisisBoxServiceHn {
   late final Box<AnalisisFiadorNiLocalDb> analisisFiadorNiLocalDbBox;
   late final Box<AnalisisPlanInversionHnLocalDb>
       analisisPlanInversionHnLocalDbBox;
+  late final Box<AnalisisFiadorHnLocalDb> analisisFiadorHnLocalDbBox;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -91,6 +93,7 @@ class AnalisisBoxServiceHn {
     analisisFiadorNiLocalDbBox = _store.box<AnalisisFiadorNiLocalDb>();
     analisisPlanInversionHnLocalDbBox =
         _store.box<AnalisisPlanInversionHnLocalDb>();
+    analisisFiadorHnLocalDbBox = _store.box<AnalisisFiadorHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
