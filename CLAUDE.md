@@ -118,6 +118,19 @@ HN fiadores (`FiadoresHnScreen` → `FiadoresSearchByDocumentScreen` → `Fiador
 
 Spec: `specs/05-fiadores-hn-offline.md`.
 
+### HN análisis: solicitudes sin número
+
+In Honduras, the advisor can fill in the análisis, plan de inversión, fiadores, imágenes and ubicación of a solicitud created offline that has no number yet (not sent, or not authorized). When the AUT solicitud arrives, the data can be moved to it. Sending is never automatic.
+
+- `AnalisisSolicitudesHnOfflineScreen` (only `Flavor.honduras`) also lists the finished local solicitudes (`isDone`) from `SolicitudesHnBoxService` (nueva, asalariado, represtamo; never grupal), plus orphan drafts whose local solicitud was already deleted by the 30-day cleanup. Those whose AUT is already in `AnalisisListDataHn` (same normalized cédula + base type) are hidden. They show a "Sin número" tag.
+- Tapping one calls `getOrCreateBorradorSinNumero` and opens the usual sheet with a provisional number. The draft is one `AnalisisBorradorSinNumeroHnLocalDb` row (`datasource/analisis/hn/borrador_sin_numero/`, in `AnalisisBoxServiceHn`) per `userId` + cédula + base type; the provisional number is `-id`. All existing tables store their data under that negative `numeroSolicitud` (as `'-<id>'` in imágenes and ubicación), so no query changed.
+- With `numeroSolicitud < 0` nothing calls the backend, even with a connection: the send buttons of the four análisis forms, plan and fiadores pendientes are disabled, the fiador form always saves locally, `FiadoresHnScreen`/`FiadoresSearchByDocumentScreen` behave as offline, and imágenes only saves locally. `SinNumeroNoticeWidget` shows the amber notice, and `numeroSolicitudLabel` renders "sin número" in subtitles (`widgets/analisis_solicitudes/hn/borrador_sin_numero/`).
+- Before opening the sheet of an AUT solicitud (`AnalisisCreditCardHn` online, sync rows of `AnalisisCreditoOfflineCard` offline), `ofrecerBorradorSinNumeroHn` looks for a draft of the user with the same cédula and base type and shows `UsarBorradorSinNumeroDialog`: "Usar", "Ahora no" (asks again next time) or "Descartar" (confirmed, deletes the draft data and fiador folders).
+- "Usar" calls `vincularBorradorSinNumero` in one ObjectBox transaction, per module (`ModuloBorradorHn`): if the real number already has local data in that module, the real one wins and the draft's is discarded; otherwise the draft's rows get the real number. If the AUT monto changes the análisis form (`getTipoSolicitud`, menor ↔ mayor de mil), the draft's análisis is discarded and the other modules are still linked. `ResumenVinculoBorradorDialog` shows the result.
+- Drafts are scoped to `LocalStorage().userId` and are not deleted on logout or by age. Represtamo local rows have no `userId`, so they are listed for any user.
+
+Spec: `specs/06-analisis-hn-solicitud-sin-numero.md`.
+
 ### NI análisis: fiadores
 
 NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). There is no fiador-type selection screen. The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` calls `FiadoresNiPendientesScreen.open`, which opens the form directly unless the request has offline fiadores pending (see below).
