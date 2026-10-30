@@ -23,6 +23,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_otros_credito_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/shared/analisis_pasivo_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/ubicacion_cliente/ubicacion_cliente_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/plan_inversion/local_db/analisis_plan_inversion_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/local_db/analisis_fiador_ni_local_db.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -55,6 +56,8 @@ class AnalisisBoxServiceHn {
   late final Box<ImagenesNegocioHnLocalDb> imagenesNegocioHnLocalDb;
   late final Box<UbicacionClienteHnLocalDb> ubicacionClienteHnLocalDb;
   late final Box<AnalisisFiadorNiLocalDb> analisisFiadorNiLocalDbBox;
+  late final Box<AnalisisPlanInversionHnLocalDb>
+      analisisPlanInversionHnLocalDbBox;
 
   AnalisisBoxServiceHn._create(this._store) {
     analisisNuevaMayorAMilHnLocalDb =
@@ -84,6 +87,8 @@ class AnalisisBoxServiceHn {
     imagenesNegocioHnLocalDb = _store.box<ImagenesNegocioHnLocalDb>();
     ubicacionClienteHnLocalDb = _store.box<UbicacionClienteHnLocalDb>();
     analisisFiadorNiLocalDbBox = _store.box<AnalisisFiadorNiLocalDb>();
+    analisisPlanInversionHnLocalDbBox =
+        _store.box<AnalisisPlanInversionHnLocalDb>();
   }
 
   static Future<AnalisisBoxServiceHn> init() async {
