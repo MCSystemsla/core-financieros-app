@@ -684,6 +684,136 @@ class AnalisisBoxServiceHn {
     };
   }
 
+  /// Borra todos los datos del borrador (incluidas las carpetas de sus
+  /// fiadores) y la fila del borrador.
+  Future<void> descartarBorradorSinNumero(
+    AnalisisBorradorSinNumeroHnLocalDb borrador,
+  ) async {
+    final numero = borrador.numeroProvisional;
+    for (final modulo in ModuloBorradorHn.values) {
+      if (modulo != ModuloBorradorHn.fiadores) {
+        _borrarModulo(modulo, numero);
+      }
+    }
+    for (final fiador in _getFiadoresHn(numero)) {
+      await removeFiadorHnPendiente(fiador);
+    }
+    analisisBorradorSinNumeroHnBox.remove(borrador.id);
+  }
+
+  List<AnalisisFiadorHnLocalDb> _getFiadoresHn(int numeroSolicitud) {
+    final query = analisisFiadorHnLocalDbBox
+        .query(AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud))
+        .build();
+    final results = query.find();
+    query.close();
+
+    return results;
+  }
+
+  /// Borra las filas de [modulo] con [numeroSolicitud]. Los fiadores solo
+  /// pierden la fila: sus carpetas se borran con [removeFiadorHnPendiente].
+  void _borrarModulo(ModuloBorradorHn modulo, int numeroSolicitud) {
+    final numero = numeroSolicitud.toString();
+    switch (modulo) {
+      case ModuloBorradorHn.analisis:
+        _borrar(
+          analisisNuevaMenorMilHnLocalDb,
+          NuevaMenorMilLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisNuevaMayorAMilHnLocalDb,
+          AnalisisNuevaMayorAMilHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisAsalariadoHnLocalDb,
+          AnalisisAsalariadoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisReprestamoHnLocalDb,
+          AnalisisReprestamoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisCicloVentasMensualesHnBox,
+          AnalisisCicloVentaHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          cicloComprasSemanalesHnBox,
+          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          nivelProduccionHnBox,
+          AnalisisNivelProduccionLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          cuentasPorCobrarHnBox,
+          AnalisisCuentasPorCobrarHn_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisComprasProveedorArticuloHnLocalDb,
+          AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisCostoDePersonalHnLocalDb,
+          AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisIngresosFamiliaresFueraNegocioHnLocalDb,
+          AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisOtrosCreditoHnLocalDb,
+          AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisPasivoHnLocalDb,
+          AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisActivoHnLocalDb,
+          AnalisisActivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisInventarioHnLocalDb,
+          AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+      case ModuloBorradorHn.planInversion:
+        _borrar(
+          analisisPlanInversionHnLocalDbBox,
+          AnalisisPlanInversionHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        );
+      case ModuloBorradorHn.fiadores:
+        _borrar(
+          analisisFiadorHnLocalDbBox,
+          AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+      case ModuloBorradorHn.imagenes:
+        _borrar(
+          imagenesNegocioHnLocalDb,
+          ImagenesNegocioHnLocalDb_.numeroSolicitud.equals(numero),
+        );
+      case ModuloBorradorHn.ubicacion:
+        _borrar(
+          ubicacionClienteHnLocalDb,
+          UbicacionClienteHnLocalDb_.numeroSolicitud.equals(numero),
+        );
+    }
+  }
+
+  void _borrar<T>(Box<T> box, Condition<T> condition) {
+    final query = box.query(condition).build();
+    query.remove();
+    query.close();
+  }
+
   bool _hayDatos<T>(Box<T> box, Condition<T> condition) {
     final query = box.query(condition).build();
     final count = query.count();
