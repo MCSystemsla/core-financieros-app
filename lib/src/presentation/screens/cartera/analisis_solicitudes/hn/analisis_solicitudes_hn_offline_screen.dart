@@ -14,6 +14,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/plan_inversion/plan_inversion_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/ubicacion_cliente/ubicacion_cliente_offline_hn_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/ofrecer_borrador_sin_numero_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/selectable_card/selectable_card_item.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
@@ -321,7 +322,19 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
 
   bool get _sinNumero => crearBorrador != null;
 
-  void _openAnalisisSheet(BuildContext context) {
+  Future<void> _openAnalisisSheet(BuildContext context) async {
+    // Filas del sync: datos capturados offline sin número para este cliente.
+    if (!_sinNumero) {
+      await ofrecerBorradorSinNumeroHn(
+        context,
+        cedula: cedulaCliente,
+        tipoSolicitud: tipoSolicitudString,
+        monto: monto,
+        numeroSolicitud: numeroSolicitud,
+        esGrupal: tipoSolicitud == AnalisisSolicitudesInterceptorType.grupal,
+      );
+      if (!context.mounted) return;
+    }
     final numero = crearBorrador?.call() ?? numeroSolicitud;
     showModalBottomSheet(
       isScrollControlled: true,

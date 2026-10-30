@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/cerrar_analisis/cerrar_analisis_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/ofrecer_borrador_sin_numero_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/select_type_analisis_modal_sheet_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
@@ -47,7 +48,17 @@ class AnalisisCreditCardHn extends StatelessWidget {
 
   static const _staggerGroupSize = 8;
 
-  void _openAnalisisSheet(BuildContext context) {
+  Future<void> _openAnalisisSheet(BuildContext context) async {
+    // Datos capturados offline sin número para este cliente (SPEC 06).
+    await ofrecerBorradorSinNumeroHn(
+      context,
+      cedula: cedulaCliente,
+      tipoSolicitud: tipoSolicitudString,
+      monto: monto,
+      numeroSolicitud: numeroSolicitud,
+      esGrupal: esGrupal,
+    );
+    if (!context.mounted) return;
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
