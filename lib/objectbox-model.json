@@ -7388,10 +7388,46 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "50:5411883126252285402",
+      "lastPropertyId": "5:1631717429215694295",
+      "name": "AnalisisPlanInversionHnLocalDb",
+      "properties": [
+        {
+          "id": "1:3585694644054337059",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8842295937793914219",
+          "name": "numeroSolicitud",
+          "type": 6,
+          "flags": 8,
+          "indexId": "3:2847205598457543154"
+        },
+        {
+          "id": "3:9085579245992917703",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "4:1720228329906263208",
+          "name": "fechaActualizacion",
+          "type": 10
+        },
+        {
+          "id": "5:1631717429215694295",
+          "name": "itemsJson",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "49:684685003167481994",
-  "lastIndexId": "2:7855721950218941832",
+  "lastEntityId": "50:5411883126252285402",
+  "lastIndexId": "3:2847205598457543154",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

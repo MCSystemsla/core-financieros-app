@@ -100,7 +100,7 @@ Conventions:
 ## Implementation plan
 
 1. Crear `AnalisisPlanInversionHnLocalDb` en `lib/src/datasource/analisis/hn/plan_inversion/local_db/analisis_plan_inversion_hn_local_db.dart`. Registrar su box en `AnalisisBoxServiceHn`. Correr `dart run tool/build_script.dart` para regenerar `objectbox.g.dart` y `objectbox-model.json`. Verificar con `flutter analyze`.
-2. Agregar `PlanInversion.toLocalJson()` y `PlanInversion.fromJson`. Agregar un test en `test/datasource/analisis/hn/plan_inversion/` que verifique que `fromJson(toLocalJson(x))` conserva los cinco campos.
+2. Agregar `PlanInversion.toLocalJson()` y `PlanInversion.fromJson`. Sin test unitario, por decisión del usuario.
 3. Agregar a `AnalisisBoxServiceHn` los métodos `getPlanInversionBorrador`, `savePlanInversionBorrador` y `removePlanInversionBorrador`.
 4. En `AnalisisPlanInversionHnCubit`, solo con `Flavor.honduras`:
    - Agregar `fechaBorrador` al state.
@@ -120,7 +120,6 @@ Conventions:
 ## Acceptance criteria
 
 - [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] `flutter test` pasa, incluido el test de ida y vuelta de `PlanInversion`.
 - [ ] En HN offline, el sheet de una solicitud muestra "Registrar Plan de inversión" y abre `PlanInversionScreen`.
 - [ ] En Costa Rica offline, el sheet de `AnalisisSolicitudesHnOfflineScreen` no muestra la card del plan de inversión.
 - [ ] En NI offline, `AnalisisSolicitudesNiOfflineScreen` no cambia.
