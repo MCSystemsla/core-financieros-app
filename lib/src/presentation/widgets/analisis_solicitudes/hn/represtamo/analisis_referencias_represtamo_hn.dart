@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_r
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/represtamo/sending_analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/add_item_card/add_item_custom_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -103,6 +104,7 @@ class _AnalisisReferenciasReprestamoHNState
     final cubit = context.read<AnalisisReprestamoCubit>();
     return BlocBuilder<AnalisisReprestamoCubit, AnalisisReprestamoState>(
       builder: (context, state) {
+        final sinNumero = state.numeroSolicitud < 0;
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -666,7 +668,13 @@ class _AnalisisReferenciasReprestamoHNState
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
+                      // Sin número de solicitud (SPEC 06) no se envía.
+                      if (sinNumero) ...[
+                        const SinNumeroNoticeWidget(),
+                        const Gap(12),
+                      ],
                       CustomElevatedButton(
+                        enabled: !sinNumero,
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           Navigator.push(

@@ -418,18 +418,24 @@ class _AnalisisFiadoresDatosDeIngresosState
                   child: CustomElevatedButton(
                     onPressed: () {
                       if (!formKey.currentState!.validate()) return;
-                      // Sin conexión, el fiador se guarda en el teléfono.
+                      // Sin conexión, o sin número de solicitud (SPEC 06), el
+                      // fiador se guarda en el teléfono.
                       final isConnected = context
                           .read<InternetConnectionCubit>()
                           .state
                           .isConnected;
+                      final sinNumero = context
+                              .read<AnalisisFiadoresCubit>()
+                              .state
+                              .numeroSolicitud <
+                          0;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<AnalisisFiadoresCubit>(),
                             child: AnalisisFiadoresSendingWidget(
-                              guardarLocal: !isConnected,
+                              guardarLocal: !isConnected || sinNumero,
                             ),
                           ),
                         ),

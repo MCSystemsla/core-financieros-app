@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/imagenes_negocio/imagenes_negocio_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/imagenes_negocio/sending_imagenes_negocio_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
@@ -99,6 +101,9 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
     );
   }
 
+  /// Solicitud creada offline sin número (SPEC 06): solo se guarda local.
+  bool get _sinNumero => (int.tryParse(widget.numeroSolicitud) ?? 0) < 0;
+
   Widget _buildForm(AnalisisBoxServiceHn localDbProvider) {
     return Scaffold(
       appBar: AppBar(
@@ -118,7 +123,9 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                 ),
                 const Gap(20),
                 Text(
-                  'Numero Solicitud: ${widget.numeroSolicitud}',
+                  _sinNumero
+                      ? 'Solicitud sin número'
+                      : 'Numero Solicitud: ${widget.numeroSolicitud}',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -188,6 +195,10 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                   ),
                 ),
                 const Gap(20),
+                if (_sinNumero) ...[
+                  const SinNumeroNoticeWidget(),
+                  const Gap(16),
+                ],
                 BlocBuilder<AnalisisImagenesNegocioCubit,
                     AnalisisImagenesNegocioState>(
                   buildWhen: (previous, current) =>
@@ -216,6 +227,17 @@ class _ImagenesNegocioHnScreenState extends State<ImagenesNegocioHnScreen> {
                           localDbProvider.saveImagenesNegocioOnLocalDb(
                             imagenNegocioSchema: imagenNegocio,
                           );
+
+                          if (_sinNumero) {
+                            showV2CustomSnackbar(
+                              context,
+                              title: 'Imágenes guardadas en el teléfono',
+                              message:
+                                  'Se envían cuando la solicitud esté autorizada.',
+                              type: SnackbarType.success,
+                            );
+                            return;
+                          }
 
                           context
                               .read<AnalisisImagenesNegocioCubit>()

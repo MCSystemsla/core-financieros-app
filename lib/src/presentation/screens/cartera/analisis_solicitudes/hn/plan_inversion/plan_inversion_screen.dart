@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_p
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_interceptor_by_flavor.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -78,6 +79,7 @@ class PlanInversionScreen extends StatelessWidget {
                 context.read<AnalisisPlanInversionHnCubit>().usaBorrador;
             final isOffline = usaBorrador &&
                 !context.watch<InternetConnectionCubit>().state.isConnected;
+            final sinNumero = numeroSolicitud < 0;
             final totalInversion = state.planInversion.fold<int>(
               0,
               (sum, e) => sum + e.total,
@@ -89,7 +91,7 @@ class PlanInversionScreen extends StatelessWidget {
                   ScreenHeaderWidget(
                     title: 'Plan de inversión',
                     subtitle:
-                        'Solicitud #$numeroSolicitud. Detalla en qué se invertirá el crédito.',
+                        'Solicitud ${numeroSolicitudLabel(numeroSolicitud)}. Detalla en qué se invertirá el crédito.',
                     onBack: () => Navigator.pop(context),
                   ),
                   const Gap(18),
@@ -185,12 +187,16 @@ class PlanInversionScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (isOffline) ...[
+                        if (sinNumero) ...[
+                          const SinNumeroNoticeWidget(),
+                          const Gap(12),
+                        ] else if (isOffline) ...[
                           const _OfflineNoticeWidget(),
                           const Gap(12),
                         ],
                         CustomElevatedButton(
-                          enabled: hasData && !isLoading && !isOffline,
+                          enabled:
+                              hasData && !isLoading && !isOffline && !sinNumero,
                           onPressed: () {
                             context
                                 .read<AnalisisPlanInversionHnCubit>()

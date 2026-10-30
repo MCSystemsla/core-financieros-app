@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/ubicacion_cliente/ubicacion_cliente_hn_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/geolocation/geolocation_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
@@ -42,7 +43,8 @@ class UbicacionClienteOfflineHnScreen extends StatelessWidget {
             children: [
               ScreenHeaderWidget(
                 title: 'Ubicación del cliente',
-                subtitle: 'Solicitud #$numeroSolicitud',
+                subtitle:
+                    'Solicitud ${numeroSolicitudLabel(int.tryParse(numeroSolicitud) ?? 0)}',
                 onBack: () => Navigator.of(context).pop(),
               ),
               const Gap(18),
@@ -201,9 +203,13 @@ class _UbicacionGpsFormCardState extends State<UbicacionGpsFormCard> {
               controller: _scrollController,
               padding: EdgeInsets.zero,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 22),
-                  child: _OfflineNoticeWidget(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 22),
+                  // Sin número de solicitud (SPEC 06) no se envía aunque
+                  // haya conexión.
+                  child: (int.tryParse(widget.numeroSolicitud) ?? 0) < 0
+                      ? const SinNumeroNoticeWidget()
+                      : const _OfflineNoticeWidget(),
                 ),
                 SectionBlockWidget(
                   label: 'UBICACIÓN ACTUAL',
