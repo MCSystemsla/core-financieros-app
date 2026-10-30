@@ -7502,10 +7502,61 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "52:5884249879008927675",
+      "lastPropertyId": "8:7855341168978016454",
+      "name": "AnalisisBorradorSinNumeroHnLocalDb",
+      "properties": [
+        {
+          "id": "1:3794591041457460426",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1630378619037780776",
+          "name": "solicitudLocalUuid",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "6:7876081048722667543"
+        },
+        {
+          "id": "3:1709107100322928945",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "4:3094527102470876635",
+          "name": "cedula",
+          "type": 9
+        },
+        {
+          "id": "5:7791683957159604526",
+          "name": "tipoSolicitud",
+          "type": 9
+        },
+        {
+          "id": "6:3144548345845017384",
+          "name": "monto",
+          "type": 8
+        },
+        {
+          "id": "7:6475010794326789329",
+          "name": "nombreCompleto",
+          "type": 9
+        },
+        {
+          "id": "8:7855341168978016454",
+          "name": "fechaCreacion",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "51:4268064363871829393",
-  "lastIndexId": "5:3233841652116926566",
+  "lastEntityId": "52:5884249879008927675",
+  "lastIndexId": "6:7876081048722667543",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

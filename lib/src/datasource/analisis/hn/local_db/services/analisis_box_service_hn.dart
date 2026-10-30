@@ -614,7 +614,7 @@ class AnalisisBoxServiceHn {
         ) ||
         _hayDatos(
           cicloComprasSemanalesHnBox,
-          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud
+          AnalisisCicloComprasSemanalesHnLocalDb_.numerSolicitud
               .equals(numeroSolicitud),
         ) ||
         _hayDatos(
@@ -791,8 +791,8 @@ class AnalisisBoxServiceHn {
         );
         _mover(
           cicloComprasSemanalesHnBox,
-          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud.equals(desde),
-          (e) => e.numeroSolicitud = hasta,
+          AnalisisCicloComprasSemanalesHnLocalDb_.numerSolicitud.equals(desde),
+          (e) => e.numerSolicitud = hasta,
         );
         _mover(
           nivelProduccionHnBox,
@@ -920,7 +920,7 @@ class AnalisisBoxServiceHn {
         );
         _borrar(
           cicloComprasSemanalesHnBox,
-          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud
+          AnalisisCicloComprasSemanalesHnLocalDb_.numerSolicitud
               .equals(numeroSolicitud),
         );
         _borrar(
