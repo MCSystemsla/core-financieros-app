@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/currency/currency_helper.dart';
+import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
@@ -35,10 +36,12 @@ class AnalisisSolicitudesHnOfflineScreen extends StatefulWidget {
 class _AnalisisSolicitudesHnOfflineScreenState
     extends State<AnalisisSolicitudesHnOfflineScreen> {
   List<AnalisisListDataHn> data = [];
+  List<_SolicitudSinNumero> sinNumero = [];
   @override
   void initState() {
     final localDbProvider = global<AnalisisBoxServiceHn>();
     data = localDbProvider.analisisListDataHnBox.getAll();
+    if (_isHonduras) sinNumero = _getSolicitudesSinNumero(data);
     super.initState();
   }
 
@@ -62,7 +65,7 @@ class _AnalisisSolicitudesHnOfflineScreenState
                 onBack: () => context.push('/'),
               ),
               const Gap(20),
-              _ListDataWidget(data: data),
+              _ListDataWidget(data: data, sinNumero: sinNumero),
             ],
           ),
         ),
@@ -74,6 +77,115 @@ class _AnalisisSolicitudesHnOfflineScreenState
 /// Costa Rica también abre esta pantalla; el plan de inversión offline es solo
 /// de Honduras.
 bool get _isHonduras => global<FlavorCubit>().state.flavor == Flavor.honduras;
+
+/// Solicitud creada offline que todavía no tiene número (SPEC 06).
+class _SolicitudSinNumero {
+  final String uuid;
+  final String cedula;
+  final String tipoSolicitud;
+  final double monto;
+  final String nombreCompleto;
+
+  const _SolicitudSinNumero({
+    required this.uuid,
+    required this.cedula,
+    required this.tipoSolicitud,
+    required this.monto,
+    required this.nombreCompleto,
+  });
+
+  String get llave =>
+      '${AnalisisBoxServiceHn.normalizarCedula(cedula)}|$tipoSolicitud';
+
+  String get nombreVisible => nombreCompleto.isEmpty ? cedula : nombreCompleto;
+
+  /// Busca o crea el borrador y devuelve su número provisional.
+  String crearBorrador() {
+    final borrador =
+        global<AnalisisBoxServiceHn>().getOrCreateBorradorSinNumero(
+      solicitudLocalUuid: uuid,
+      userId: LocalStorage().userId,
+      cedula: cedula,
+      tipoSolicitud: tipoSolicitud,
+      monto: monto,
+      nombreCompleto: nombreVisible,
+    );
+    return '${borrador.numeroProvisional}';
+  }
+}
+
+String _unirNombre(List<String?> partes) {
+  final nombre =
+      partes.where((e) => e != null && e.trim().isNotEmpty).join(' ').trim();
+  return nombre;
+}
+
+/// Solicitudes locales terminadas (nueva, asalariado, represtamo) y borradores
+/// sin número cuya solicitud local ya se borró. Se ocultan las que ya tienen
+/// una AUT con la misma cédula y tipo en [aut].
+List<_SolicitudSinNumero> _getSolicitudesSinNumero(
+  List<AnalisisListDataHn> aut,
+) {
+  final solicitudesDb = global<SolicitudesHnBoxService>();
+  final llavesAut = aut
+      .map((e) =>
+          '${AnalisisBoxServiceHn.normalizarCedula(e.cedulaCliente ?? '')}|${e.tipoSolicitud}')
+      .toSet();
+
+  final locales = <_SolicitudSinNumero>[
+    ...solicitudesDb.getSolicitudesNueva().where((e) => e.isDone).map(
+          (e) => _SolicitudSinNumero(
+            uuid: e.uuid ?? '',
+            cedula: e.cedula ?? '',
+            tipoSolicitud: 'NUEVAMENOR',
+            monto: (e.monto ?? 0).toDouble(),
+            nombreCompleto:
+                _unirNombre([e.nombre1, e.nombre2, e.apellido1, e.apellido2]),
+          ),
+        ),
+    ...solicitudesDb.getSolicitudesAsalariado().where((e) => e.isDone).map(
+          (e) => _SolicitudSinNumero(
+            uuid: e.uuid ?? '',
+            cedula: e.cedula ?? '',
+            tipoSolicitud: 'ASALARIADO',
+            monto: (e.monto ?? 0).toDouble(),
+            nombreCompleto:
+                _unirNombre([e.nombre1, e.nombre2, e.apellido1, e.apellido2]),
+          ),
+        ),
+    ...solicitudesDb.getSolicitudesReprestamo().where((e) => e.isDone).map(
+          (e) => _SolicitudSinNumero(
+            uuid: e.uuid ?? '',
+            cedula: e.cedula ?? '',
+            tipoSolicitud: 'REPRESTAMO',
+            monto: e.monto ?? 0,
+            nombreCompleto:
+                _unirNombre([e.nombreCompletoCliente ?? e.nombreCompleto]),
+          ),
+        ),
+  ];
+
+  final porLlave = <String, _SolicitudSinNumero>{};
+  for (final solicitud in locales) {
+    if (solicitud.cedula.isEmpty) continue;
+    porLlave.putIfAbsent(solicitud.llave, () => solicitud);
+  }
+
+  final borradores = global<AnalisisBoxServiceHn>()
+      .getBorradoresSinNumero(userId: LocalStorage().userId);
+  for (final borrador in borradores) {
+    final huerfano = _SolicitudSinNumero(
+      uuid: borrador.solicitudLocalUuid,
+      cedula: borrador.cedula,
+      tipoSolicitud: borrador.tipoSolicitud,
+      monto: borrador.monto,
+      nombreCompleto: borrador.nombreCompleto,
+    );
+    porLlave.putIfAbsent(huerfano.llave, () => huerfano);
+  }
+
+  return porLlave.values.where((e) => !llavesAut.contains(e.llave)).toList();
+}
 
 AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String tipoSolicitud,
@@ -108,13 +220,15 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
 
 class _ListDataWidget extends StatelessWidget {
   final List<AnalisisListDataHn> data;
+  final List<_SolicitudSinNumero> sinNumero;
   const _ListDataWidget({
     required this.data,
+    this.sinNumero = const [],
   });
 
   @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
+    if (data.isEmpty && sinNumero.isEmpty) {
       return const Expanded(
         child: EmptyListWidget(message: 'No hay solicitudes por analizar'),
       );
@@ -122,9 +236,29 @@ class _ListDataWidget extends StatelessWidget {
 
     return Expanded(
       child: ListView.builder(
-        itemCount: data.length,
+        itemCount: data.length + sinNumero.length,
         padding: const EdgeInsets.only(bottom: 24),
         itemBuilder: (BuildContext context, int index) {
+          if (index >= data.length) {
+            final solicitud = sinNumero[index - data.length];
+            final monto = solicitud.monto.toString();
+            return AnalisisCreditoOfflineCard(
+              monto: monto,
+              cedulaCliente: solicitud.cedula,
+              numeroSolicitud: '',
+              crearBorrador: solicitud.crearBorrador,
+              tipoSolicitud: getTipoSolicitud(
+                tipoSolicitud: solicitud.tipoSolicitud,
+                monto: monto,
+                esGrupal: false,
+              ),
+              tipoSolicitudString: solicitud.tipoSolicitud,
+              index: index,
+              title: 'Sin número ${solicitud.tipoSolicitud}',
+              subtitle: solicitud.nombreVisible,
+              description: monto.toCurrencyString(),
+            );
+          }
           final analisis = data[index];
           return AnalisisCreditoOfflineCard(
             monto: analisis.monto!,
@@ -162,6 +296,10 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
   final String tipoPersonaCodigo;
   final String monto;
   final String tipoSolicitudString;
+
+  /// Solo para solicitudes sin número: busca o crea el borrador y devuelve el
+  /// número provisional con el que se abre el sheet.
+  final String Function()? crearBorrador;
   const AnalisisCreditoOfflineCard({
     super.key,
     required this.index,
@@ -176,11 +314,15 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
     this.tipoPersonaCodigo = '',
     this.monto = '0',
     this.tipoSolicitudString = '',
+    this.crearBorrador,
   });
 
   static const _staggerGroupSize = 8;
 
+  bool get _sinNumero => crearBorrador != null;
+
   void _openAnalisisSheet(BuildContext context) {
+    final numero = crearBorrador?.call() ?? numeroSolicitud;
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -189,7 +331,7 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
         title: title,
         subtitle: subtitle,
         description: description,
-        numeroSolicitud: numeroSolicitud,
+        numeroSolicitud: numero,
         cedulaCliente: cedulaCliente,
         tipoPersonaCodigo: tipoPersonaCodigo,
         monto: monto,
@@ -247,22 +389,30 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
                               color: RedesignColors.ink,
                             ),
                           ),
-                          const Gap(3),
-                          Text(
-                            'Solicitud N. $numeroSolicitud',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              height: 1.35,
-                              color: RedesignColors.inkMuted,
+                          if (!_sinNumero) ...[
+                            const Gap(3),
+                            Text(
+                              'Solicitud N. $numeroSolicitud',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                height: 1.35,
+                                color: RedesignColors.inkMuted,
+                              ),
                             ),
-                          ),
+                          ],
                           const Gap(8),
                           Wrap(
                             spacing: 6,
                             runSpacing: 6,
                             children: [
+                              if (_sinNumero)
+                                const CardTagWidget(
+                                  label: 'Sin número',
+                                  color: RedesignColors.indigo,
+                                  background: RedesignColors.indigoTint,
+                                ),
                               CardTagWidget(
                                 label:
                                     '${CurrencyHelper.currencyPrefix()} $description',
