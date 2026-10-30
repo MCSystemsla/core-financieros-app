@@ -21,7 +21,7 @@ class AnalisisPlanInversionHnCubit extends Cubit<AnalisisPlanInversionHnState> {
 
   /// El borrador local solo existe en Honduras. NI también abre esta pantalla
   /// y debe seguir trabajando solo en memoria.
-  bool get _usaBorrador =>
+  bool get usaBorrador =>
       global<FlavorCubit>().state.flavor == Flavor.honduras;
 
   Future<void> createAnalisisPlanInversion() async {
@@ -34,7 +34,7 @@ class AnalisisPlanInversionHnCubit extends Cubit<AnalisisPlanInversionHnState> {
           planInversion: state.planInversion,
         ),
       );
-      if (_usaBorrador) {
+      if (usaBorrador) {
         global<AnalisisBoxServiceHn>().removePlanInversionBorrador(
           numeroSolicitud: state.numeroSolicitud,
           userId: LocalStorage().userId,
@@ -70,7 +70,7 @@ class AnalisisPlanInversionHnCubit extends Cubit<AnalisisPlanInversionHnState> {
   }
 
   void serNumeroSolicitud(int numeroSolicitud) {
-    if (!_usaBorrador) {
+    if (!usaBorrador) {
       emit(state.copyWith(numeroSolicitud: numeroSolicitud));
       return;
     }
@@ -93,7 +93,7 @@ class AnalisisPlanInversionHnCubit extends Cubit<AnalisisPlanInversionHnState> {
   }
 
   void _updatePlanInversion(List<PlanInversion> planInversion) {
-    if (!_usaBorrador) {
+    if (!usaBorrador) {
       emit(state.copyWith(planInversion: planInversion));
       return;
     }
