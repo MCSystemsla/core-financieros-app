@@ -6,6 +6,7 @@ import 'package:core_financiero_app/objectbox.g.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/borrador_sin_numero/local_db/analisis_borrador_sin_numero_hn_local_db.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/borrador_sin_numero/modulo_borrador_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/local_db/analisis_fiador_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/analisis_list_data_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/asalariado/analisis_asalariado_hn_local_db.dart';
@@ -585,5 +586,109 @@ class AnalisisBoxServiceHn {
     query.close();
 
     return borrador;
+  }
+
+  /// Módulos que tienen datos locales guardados con [numeroSolicitud].
+  Set<ModuloBorradorHn> modulosConDatos({required int numeroSolicitud}) {
+    final numero = numeroSolicitud.toString();
+    final hayAnalisis = _hayDatos(
+          analisisNuevaMenorMilHnLocalDb,
+          NuevaMenorMilLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisNuevaMayorAMilHnLocalDb,
+          AnalisisNuevaMayorAMilHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisAsalariadoHnLocalDb,
+          AnalisisAsalariadoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisReprestamoHnLocalDb,
+          AnalisisReprestamoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisCicloVentasMensualesHnBox,
+          AnalisisCicloVentaHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          cicloComprasSemanalesHnBox,
+          AnalisisCicloComprasSemanalesHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          nivelProduccionHnBox,
+          AnalisisNivelProduccionLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          cuentasPorCobrarHnBox,
+          AnalisisCuentasPorCobrarHn_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisComprasProveedorArticuloHnLocalDb,
+          AnalisisComprasProveedorArticuloHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisCostoDePersonalHnLocalDb,
+          AnalisisCostoDePersonalHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisIngresosFamiliaresFueraNegocioHnLocalDb,
+          AnalisisIngresosFamiliaresFueraNegocioHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisOtrosCreditoHnLocalDb,
+          AnalisisOtrosCreditoHnLocalDb_.numeroSolicitud
+              .equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisPasivoHnLocalDb,
+          AnalisisPasivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisActivoHnLocalDb,
+          AnalisisActivoHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisInventarioHnLocalDb,
+          AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+
+    return {
+      if (hayAnalisis) ModuloBorradorHn.analisis,
+      if (_hayDatos(
+        analisisPlanInversionHnLocalDbBox,
+        AnalisisPlanInversionHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+      ))
+        ModuloBorradorHn.planInversion,
+      if (_hayDatos(
+        analisisFiadorHnLocalDbBox,
+        AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+      ))
+        ModuloBorradorHn.fiadores,
+      if (_hayDatos(
+        imagenesNegocioHnLocalDb,
+        ImagenesNegocioHnLocalDb_.numeroSolicitud.equals(numero),
+      ))
+        ModuloBorradorHn.imagenes,
+      if (_hayDatos(
+        ubicacionClienteHnLocalDb,
+        UbicacionClienteHnLocalDb_.numeroSolicitud.equals(numero),
+      ))
+        ModuloBorradorHn.ubicacion,
+    };
+  }
+
+  bool _hayDatos<T>(Box<T> box, Condition<T> condition) {
+    final query = box.query(condition).build();
+    final count = query.count();
+    query.close();
+
+    return count > 0;
   }
 }
