@@ -8,15 +8,16 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:flutter/material.dart';
 
 /// Antes de abrir el sheet de una solicitud AUT (SPEC 06): si el usuario tiene
-/// un borrador sin número con la misma cédula y tipo, pregunta si lo usa.
+/// un borrador sin número con la misma llave, pregunta si lo usa. La llave es
+/// cédula + tipo en individuales y cédula en grupales (SPEC 07).
 ///
 /// - "Usar" pasa los datos del borrador a [numeroSolicitud] y muestra el
 ///   resumen.
 /// - "Ahora no" no toca nada.
 /// - "Descartar" borra el borrador y sus datos.
 ///
-/// Solo Honduras y nunca en solicitudes grupales. El `Future` termina cuando
-/// el asesor ya decidió, para que el llamador abra el sheet.
+/// Solo Honduras. El `Future` termina cuando el asesor ya decidió, para que el
+/// llamador abra el sheet.
 Future<void> ofrecerBorradorSinNumeroHn(
   BuildContext context, {
   required String cedula,
@@ -25,9 +26,7 @@ Future<void> ofrecerBorradorSinNumeroHn(
   required String numeroSolicitud,
   required bool esGrupal,
 }) async {
-  if (global<FlavorCubit>().state.flavor != Flavor.honduras || esGrupal) {
-    return;
-  }
+  if (global<FlavorCubit>().state.flavor != Flavor.honduras) return;
   final numeroReal = int.tryParse(numeroSolicitud) ?? 0;
   if (numeroReal <= 0 || cedula.isEmpty) return;
 
@@ -36,7 +35,7 @@ Future<void> ofrecerBorradorSinNumeroHn(
     userId: LocalStorage().userId,
     cedula: cedula,
     tipoSolicitud: tipoSolicitud,
-    esGrupal: false,
+    esGrupal: esGrupal,
   );
   if (borrador == null) return;
 
@@ -54,21 +53,23 @@ Future<void> ofrecerBorradorSinNumeroHn(
       return;
     case AccionBorradorSinNumero.usar:
       // Si el monto de la AUT cambia el formulario (menor ↔ mayor de mil), el
-      // análisis del borrador ya no sirve.
-      final formularioBorrador = getTipoSolicitud(
-        tipoSolicitud: borrador.tipoSolicitud,
-        monto: borrador.monto.toString(),
-        esGrupal: false,
-      );
-      final formularioAut = getTipoSolicitud(
-        tipoSolicitud: tipoSolicitud,
-        monto: monto,
-        esGrupal: false,
-      );
+      // análisis del borrador ya no sirve. En grupales el formulario es
+      // siempre el grupal, así que nunca se descarta por monto.
+      final cambioFormulario = !esGrupal &&
+          getTipoSolicitud(
+                tipoSolicitud: borrador.tipoSolicitud,
+                monto: borrador.monto.toString(),
+                esGrupal: false,
+              ) !=
+              getTipoSolicitud(
+                tipoSolicitud: tipoSolicitud,
+                monto: monto,
+                esGrupal: false,
+              );
       final resultado = await localDb.vincularBorradorSinNumero(
         borrador: borrador,
         numeroReal: numeroReal,
-        descartarAnalisis: formularioBorrador != formularioAut,
+        descartarAnalisis: cambioFormulario,
         tipoSolicitudReal: tipoSolicitud,
       );
       if (!context.mounted) return;
