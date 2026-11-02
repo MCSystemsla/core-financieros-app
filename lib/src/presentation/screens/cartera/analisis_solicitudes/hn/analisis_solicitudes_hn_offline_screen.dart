@@ -87,16 +87,23 @@ class _SolicitudSinNumero {
   final double monto;
   final String nombreCompleto;
 
+  /// Grupal (`grupoCodigo` no vacío, SPEC 07): abre el análisis grupal.
+  final bool esGrupal;
+
   const _SolicitudSinNumero({
     required this.uuid,
     required this.cedula,
     required this.tipoSolicitud,
     required this.monto,
     required this.nombreCompleto,
+    this.esGrupal = false,
   });
 
-  String get llave =>
-      '${AnalisisBoxServiceHn.normalizarCedula(cedula)}|$tipoSolicitud';
+  String get llave => _llave(
+        cedula: cedula,
+        tipoSolicitud: tipoSolicitud,
+        esGrupal: esGrupal,
+      );
 
   String get nombreVisible => nombreCompleto.isEmpty ? cedula : nombreCompleto;
 
@@ -110,15 +117,26 @@ class _SolicitudSinNumero {
       tipoSolicitud: tipoSolicitud,
       monto: monto,
       nombreCompleto: nombreVisible,
-      esGrupal: false,
+      esGrupal: esGrupal,
     );
     return '${borrador.numeroProvisional}';
   }
 }
 
+/// Misma llave que el borrador: individual = cédula + tipo; grupal = cédula,
+/// sin el tipo (SPEC 07).
+String _llave({
+  required String cedula,
+  required String? tipoSolicitud,
+  required bool esGrupal,
+}) {
+  final cedulaNormalizada = AnalisisBoxServiceHn.normalizarCedula(cedula);
+  return esGrupal ? '$cedulaNormalizada|G' : '$cedulaNormalizada|$tipoSolicitud';
+}
+
 /// Las solicitudes no grupales guardan `grupoCodigo` vacío.
-bool _noEsGrupal(String? grupoCodigo) =>
-    grupoCodigo == null || grupoCodigo.trim().isEmpty;
+bool _esGrupal(String? grupoCodigo) =>
+    grupoCodigo != null && grupoCodigo.trim().isNotEmpty;
 
 String _unirNombre(List<String?> partes) {
   final nombre =
@@ -128,22 +146,22 @@ String _unirNombre(List<String?> partes) {
 
 /// Solicitudes locales terminadas (nueva, asalariado, represtamo) y borradores
 /// sin número cuya solicitud local ya se borró. Se ocultan las que ya tienen
-/// una AUT con la misma cédula y tipo en [aut].
+/// su AUT en [aut]: las individuales contra AUT individuales con la misma
+/// cédula y tipo, las grupales contra AUT grupales con la misma cédula.
 List<_SolicitudSinNumero> _getSolicitudesSinNumero(
   List<AnalisisListDataHn> aut,
 ) {
   final solicitudesDb = global<SolicitudesHnBoxService>();
   final llavesAut = aut
-      .map((e) =>
-          '${AnalisisBoxServiceHn.normalizarCedula(e.cedulaCliente ?? '')}|${e.tipoSolicitud}')
+      .map((e) => _llave(
+            cedula: e.cedulaCliente ?? '',
+            tipoSolicitud: e.tipoSolicitud,
+            esGrupal: e.esSolicitudGrupal,
+          ))
       .toSet();
 
   final locales = <_SolicitudSinNumero>[
-    // Las grupales (con `grupoCodigo`) no entran: su análisis es otro.
-    ...solicitudesDb
-        .getSolicitudesNueva()
-        .where((e) => e.isDone && _noEsGrupal(e.grupoCodigo))
-        .map(
+    ...solicitudesDb.getSolicitudesNueva().where((e) => e.isDone).map(
           (e) => _SolicitudSinNumero(
             uuid: e.uuid ?? '',
             cedula: e.cedula ?? '',
@@ -151,12 +169,10 @@ List<_SolicitudSinNumero> _getSolicitudesSinNumero(
             monto: (e.monto ?? 0).toDouble(),
             nombreCompleto:
                 _unirNombre([e.nombre1, e.nombre2, e.apellido1, e.apellido2]),
+            esGrupal: _esGrupal(e.grupoCodigo),
           ),
         ),
-    ...solicitudesDb
-        .getSolicitudesAsalariado()
-        .where((e) => e.isDone && _noEsGrupal(e.grupoCodigo))
-        .map(
+    ...solicitudesDb.getSolicitudesAsalariado().where((e) => e.isDone).map(
           (e) => _SolicitudSinNumero(
             uuid: e.uuid ?? '',
             cedula: e.cedula ?? '',
@@ -164,6 +180,7 @@ List<_SolicitudSinNumero> _getSolicitudesSinNumero(
             monto: (e.monto ?? 0).toDouble(),
             nombreCompleto:
                 _unirNombre([e.nombre1, e.nombre2, e.apellido1, e.apellido2]),
+            esGrupal: _esGrupal(e.grupoCodigo),
           ),
         ),
     ...solicitudesDb.getSolicitudesReprestamo().where((e) => e.isDone).map(
@@ -193,6 +210,7 @@ List<_SolicitudSinNumero> _getSolicitudesSinNumero(
       tipoSolicitud: borrador.tipoSolicitud,
       monto: borrador.monto,
       nombreCompleto: borrador.nombreCompleto,
+      esGrupal: borrador.esGrupal,
     );
     porLlave.putIfAbsent(huerfano.llave, () => huerfano);
   }
@@ -260,10 +278,11 @@ class _ListDataWidget extends StatelessWidget {
               cedulaCliente: solicitud.cedula,
               numeroSolicitud: '',
               crearBorrador: solicitud.crearBorrador,
+              esGrupal: solicitud.esGrupal,
               tipoSolicitud: getTipoSolicitud(
                 tipoSolicitud: solicitud.tipoSolicitud,
                 monto: monto,
-                esGrupal: false,
+                esGrupal: solicitud.esGrupal,
               ),
               tipoSolicitudString: solicitud.tipoSolicitud,
               index: index,
@@ -313,6 +332,9 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
   /// Solo para solicitudes sin número: busca o crea el borrador y devuelve el
   /// número provisional con el que se abre el sheet.
   final String Function()? crearBorrador;
+
+  /// Solo en solicitudes sin número: muestra el tag "Grupal" (SPEC 07).
+  final bool esGrupal;
   const AnalisisCreditoOfflineCard({
     super.key,
     required this.index,
@@ -328,6 +350,7 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
     this.monto = '0',
     this.tipoSolicitudString = '',
     this.crearBorrador,
+    this.esGrupal = false,
   });
 
   static const _staggerGroupSize = 8;
@@ -437,6 +460,12 @@ class AnalisisCreditoOfflineCard extends StatelessWidget {
                                   label: 'Sin número',
                                   color: RedesignColors.indigo,
                                   background: RedesignColors.indigoTint,
+                                ),
+                              if (_sinNumero && esGrupal)
+                                const CardTagWidget(
+                                  label: 'Grupal',
+                                  color: RedesignColors.purple,
+                                  background: RedesignColors.purpleTint,
                                 ),
                               CardTagWidget(
                                 label:
