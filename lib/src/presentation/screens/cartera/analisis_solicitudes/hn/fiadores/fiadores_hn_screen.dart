@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_pendientes_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_search_by_document_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
@@ -93,10 +94,12 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Sin conexión no se revisa qué fiadores tiene la solicitud en el backend.
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
+    // Sin conexión, o sin número de solicitud (SPEC 06), no se revisa qué
+    // fiadores tiene la solicitud en el backend.
     final numeroSolicitud = widget.numeroSolicitud;
+    final isConnected =
+        context.read<InternetConnectionCubit>().state.isConnected &&
+            numeroSolicitud >= 0;
 
     return BlocProvider(
       create: (ctx) {
@@ -127,7 +130,7 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
                   ScreenHeaderWidget(
                     title: 'Fiadores',
                     subtitle:
-                        'Elige el tipo de fiador para la solicitud #$numeroSolicitud. Luego buscarás a la persona por su documento.',
+                        'Elige el tipo de fiador para la solicitud ${numeroSolicitudLabel(numeroSolicitud)}. Luego buscarás a la persona por su documento.',
                     onBack: () => Navigator.pop(context),
                   ),
                   const Gap(24),

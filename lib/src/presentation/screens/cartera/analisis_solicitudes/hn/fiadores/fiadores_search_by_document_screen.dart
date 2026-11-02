@@ -5,6 +5,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_s
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes/hn/cubit/user_by_document_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_form_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/hn/cliente_documento_form_view.dart';
@@ -109,7 +110,7 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
         return ClienteDocumentoFormView(
           tipoCredito: '',
           title: 'Datos del fiador',
-          subtitle: 'Solicitud #${widget.numeroSolicitud}. '
+          subtitle: 'Solicitud ${numeroSolicitudLabel(widget.numeroSolicitud)}. '
               'Ingresa los datos del fiador.',
           formKey: formKey,
           controllers: controllers,
@@ -123,8 +124,9 @@ class _UserCedulaFormState extends State<_UserCedulaForm> {
             final cubit = context.read<AnalisisSearchByDocumentCubit>();
             final isConnected =
                 context.read<InternetConnectionCubit>().state.isConnected;
-            if (!isConnected) {
-              // Sin conexión no se busca: se sigue con lo tecleado.
+            if (!isConnected || widget.numeroSolicitud < 0) {
+              // Sin conexión, o sin número de solicitud (SPEC 06), no se
+              // busca: se sigue con lo tecleado.
               cubit.setUserOffline(
                 primerNombre: controllers.primerNombre.text.trim(),
                 segundoNombre: controllers.segundoNombre.text.trim(),

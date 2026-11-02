@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_a
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/asalariado/sending_analisis_asalariado_form_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/add_item_card/add_item_custom_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
@@ -104,6 +105,7 @@ class _AnalisisAsalariadoReferenciasHnState
     final cubit = context.read<AnalisisAsalariadoHnCubit>();
     return BlocBuilder<AnalisisAsalariadoHnCubit, AnalisisAsalariadoHnState>(
       builder: (context, state) {
+        final sinNumero = state.numeroSolicitud < 0;
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
           decoration: BoxDecoration(
@@ -665,7 +667,13 @@ class _AnalisisAsalariadoReferenciasHnState
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
+                        // Sin número de solicitud (SPEC 06) no se envía.
+                        if (sinNumero) ...[
+                          const SinNumeroNoticeWidget(),
+                          const Gap(12),
+                        ],
                         CustomElevatedButton(
+                          enabled: !sinNumero,
                           onPressed: () {
                             if (!formKey.currentState!.validate()) return;
                             Navigator.push(

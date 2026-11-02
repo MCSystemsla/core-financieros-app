@@ -3,6 +3,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/grupal/grupal_sending_analisis_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -453,7 +454,13 @@ class AnalisisGrupalForm1 extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
+                          // Sin número de solicitud (SPEC 07) no se envía.
+                          if (state.numeroSolicitud < 0) ...[
+                            const SinNumeroNoticeWidget(),
+                            const Gap(12),
+                          ],
                           CustomElevatedButton(
+                            enabled: state.numeroSolicitud >= 0,
                             onPressed: () {
                               if (!formKey.currentState!.validate()) {
                                 return;
