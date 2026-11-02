@@ -666,6 +666,10 @@ class AnalisisBoxServiceHn {
         _hayDatos(
           analisisInventarioHnLocalDb,
           AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        ) ||
+        _hayDatos(
+          analisisGrupalHnLocalDb,
+          AnalisisGrupalHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
         );
 
     return {
@@ -850,6 +854,11 @@ class AnalisisBoxServiceHn {
           AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(desde),
           (e) => e.numeroSolicitud = hasta,
         );
+        _mover(
+          analisisGrupalHnLocalDb,
+          AnalisisGrupalHnLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
       case ModuloBorradorHn.planInversion:
         _mover(
           analisisPlanInversionHnLocalDbBox,
@@ -972,6 +981,10 @@ class AnalisisBoxServiceHn {
         _borrar(
           analisisInventarioHnLocalDb,
           AnalisisInventarioHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisGrupalHnLocalDb,
+          AnalisisGrupalHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
         );
       case ModuloBorradorHn.planInversion:
         _borrar(
