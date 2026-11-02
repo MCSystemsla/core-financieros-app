@@ -504,7 +504,7 @@ class AnalisisBoxServiceHn {
       cedula.replaceAll(RegExp(r'[\s-]'), '');
 
   /// Busca el borrador de la solicitud local por [solicitudLocalUuid] y, si no
-  /// está, por usuario + cédula + tipo. Si no existe, lo crea.
+  /// está, por su llave (ver [findBorradorSinNumero]). Si no existe, lo crea.
   AnalisisBorradorSinNumeroHnLocalDb getOrCreateBorradorSinNumero({
     required String solicitudLocalUuid,
     required String userId,
@@ -512,6 +512,7 @@ class AnalisisBoxServiceHn {
     required String tipoSolicitud,
     required double monto,
     required String nombreCompleto,
+    required bool esGrupal,
   }) {
     AnalisisBorradorSinNumeroHnLocalDb? borrador;
 
@@ -529,6 +530,7 @@ class AnalisisBoxServiceHn {
       userId: userId,
       cedula: cedula,
       tipoSolicitud: tipoSolicitud,
+      esGrupal: esGrupal,
     );
 
     if (borrador != null) {
@@ -548,6 +550,7 @@ class AnalisisBoxServiceHn {
       monto: monto,
       nombreCompleto: nombreCompleto,
       fechaCreacion: DateTime.now(),
+      esGrupal: esGrupal,
     );
     analisisBorradorSinNumeroHnBox.put(nuevo);
 
@@ -568,19 +571,25 @@ class AnalisisBoxServiceHn {
     return results;
   }
 
+  /// Llave del borrador: individual = usuario + cédula + tipo + no grupal;
+  /// grupal = usuario + cédula + grupal, sin el tipo (SPEC 07).
   AnalisisBorradorSinNumeroHnLocalDb? findBorradorSinNumero({
     required String userId,
     required String cedula,
     required String tipoSolicitud,
+    required bool esGrupal,
   }) {
-    final query = analisisBorradorSinNumeroHnBox
-        .query(AnalisisBorradorSinNumeroHnLocalDb_.userId
-            .equals(userId)
-            .and(AnalisisBorradorSinNumeroHnLocalDb_.cedula
-                .equals(normalizarCedula(cedula)))
-            .and(AnalisisBorradorSinNumeroHnLocalDb_.tipoSolicitud
-                .equals(tipoSolicitud)))
-        .build();
+    var condition = AnalisisBorradorSinNumeroHnLocalDb_.userId
+        .equals(userId)
+        .and(AnalisisBorradorSinNumeroHnLocalDb_.cedula
+            .equals(normalizarCedula(cedula)))
+        .and(AnalisisBorradorSinNumeroHnLocalDb_.esGrupal.equals(esGrupal));
+    if (!esGrupal) {
+      condition = condition.and(
+        AnalisisBorradorSinNumeroHnLocalDb_.tipoSolicitud.equals(tipoSolicitud),
+      );
+    }
+    final query = analisisBorradorSinNumeroHnBox.query(condition).build();
 
     final borrador = query.findFirst();
     query.close();

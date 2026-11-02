@@ -110,6 +110,7 @@ class _SolicitudSinNumero {
       tipoSolicitud: tipoSolicitud,
       monto: monto,
       nombreCompleto: nombreVisible,
+      esGrupal: false,
     );
     return '${borrador.numeroProvisional}';
   }

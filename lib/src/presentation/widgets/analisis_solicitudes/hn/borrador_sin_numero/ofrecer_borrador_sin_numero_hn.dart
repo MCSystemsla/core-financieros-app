@@ -36,6 +36,7 @@ Future<void> ofrecerBorradorSinNumeroHn(
     userId: LocalStorage().userId,
     cedula: cedula,
     tipoSolicitud: tipoSolicitud,
+    esGrupal: false,
   );
   if (borrador == null) return;
 
