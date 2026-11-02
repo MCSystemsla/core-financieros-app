@@ -1,6 +1,6 @@
 # SPEC 07 — Análisis grupal HN offline para solicitudes sin número
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 06
 > **Date:** 2026-10-30
 > **Objective:** Extender SPEC 06 a las solicitudes grupales creadas offline sin número, para que abran el análisis grupal con el número provisional y al abrir la solicitud grupal AUT del mismo cliente la app ofrezca pasarle los datos.
