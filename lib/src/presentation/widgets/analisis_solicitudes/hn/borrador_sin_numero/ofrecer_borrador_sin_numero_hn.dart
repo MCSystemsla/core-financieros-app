@@ -69,6 +69,7 @@ Future<void> ofrecerBorradorSinNumeroHn(
         borrador: borrador,
         numeroReal: numeroReal,
         descartarAnalisis: formularioBorrador != formularioAut,
+        tipoSolicitudReal: tipoSolicitud,
       );
       if (!context.mounted) return;
       await ResumenVinculoBorradorDialog.show(context, resultado: resultado);

@@ -719,10 +719,14 @@ class AnalisisBoxServiceHn {
   /// los del borrador se descartan. Con [descartarAnalisis] (el monto de la AUT
   /// cambió el formulario) el análisis del borrador se descarta. Al final borra
   /// la fila del borrador y las carpetas de los fiadores descartados.
+  ///
+  /// [tipoSolicitudReal] es el de la AUT: el análisis grupal lo guarda y lo
+  /// envía, y el borrador tenía el de la solicitud local (SPEC 07).
   Future<VinculoBorradorResultado> vincularBorradorSinNumero({
     required AnalisisBorradorSinNumeroHnLocalDb borrador,
     required int numeroReal,
     required bool descartarAnalisis,
+    required String tipoSolicitudReal,
   }) async {
     final numeroProvisional = borrador.numeroProvisional;
     final vinculados = <ModuloBorradorHn>{};
@@ -750,7 +754,12 @@ class AnalisisBoxServiceHn {
             conDatosPrevios.add(modulo);
           }
         } else {
-          _moverModulo(modulo, numeroProvisional, numeroReal);
+          _moverModulo(
+            modulo,
+            numeroProvisional,
+            numeroReal,
+            tipoSolicitud: tipoSolicitudReal,
+          );
           vinculados.add(modulo);
         }
       }
@@ -774,7 +783,13 @@ class AnalisisBoxServiceHn {
   }
 
   /// Cambia `numeroSolicitud` de [desde] a [hasta] en las filas de [modulo].
-  void _moverModulo(ModuloBorradorHn modulo, int desde, int hasta) {
+  /// Con [tipoSolicitud], la fila del análisis grupal también lo toma.
+  void _moverModulo(
+    ModuloBorradorHn modulo,
+    int desde,
+    int hasta, {
+    String? tipoSolicitud,
+  }) {
     switch (modulo) {
       case ModuloBorradorHn.analisis:
         _mover(
@@ -857,7 +872,10 @@ class AnalisisBoxServiceHn {
         _mover(
           analisisGrupalHnLocalDb,
           AnalisisGrupalHnLocalDb_.numeroSolicitud.equals(desde),
-          (e) => e.numeroSolicitud = hasta,
+          (e) {
+            e.numeroSolicitud = hasta;
+            if (tipoSolicitud != null) e.tipoSolicitud = tipoSolicitud;
+          },
         );
       case ModuloBorradorHn.planInversion:
         _mover(
