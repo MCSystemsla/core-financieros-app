@@ -116,24 +116,24 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Una solicitud nueva grupal creada offline y terminada aparece en "Análisis offline" con los tags "Sin número" y "Grupal".
-- [ ] Lo mismo con una asalariado grupal.
-- [ ] Una solicitud individual sigue apareciendo sin el tag "Grupal" y abre su formulario de siempre.
-- [ ] Tocar la grupal abre el sheet con análisis, plan de inversión, imágenes y ubicación, y sin fiadores.
-- [ ] "Registrar Analisis" abre `AnalisisGrupaHnForm`.
-- [ ] Con número provisional, el envío del análisis grupal está deshabilitado y se ve el aviso "Esta solicitud aún no tiene número", aunque haya conexión.
-- [ ] Al salir y volver a entrar, el análisis grupal conserva lo capturado (autosave con el número provisional).
-- [ ] Cuando el sync trae una AUT grupal con la misma cédula, la grupal local desaparece de la lista.
-- [ ] Una AUT individual con la misma cédula no oculta la grupal local, y al revés.
-- [ ] Tocar la AUT grupal (online u offline) muestra el diálogo "¿Usar datos guardados?".
-- [ ] Una AUT individual con la misma cédula no ofrece el borrador grupal, y una AUT grupal no ofrece el borrador individual.
-- [ ] "Usar" pasa el análisis grupal, el plan, las imágenes y la ubicación al número real. El resumen no muestra "el monto cambió".
-- [ ] Después de vincular, la fila de `AnalisisGrupalHnLocalDb` tiene el número real y el `tipoSolicitud` de la AUT.
-- [ ] "Descartar" borra también la fila de `AnalisisGrupalHnLocalDb` del borrador.
-- [ ] Los borradores individuales creados con SPEC 06 siguen funcionando después de la actualización.
-- [ ] En NI y Costa Rica no cambia nada.
-- [ ] Se creó una solicitud grupal offline en QA HN, se hizo el análisis grupal offline, el jefe la autorizó, se vinculó con "Usar", y backend confirmó el análisis grupal con el número real (verificación manual).
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] Una solicitud nueva grupal creada offline y terminada aparece en "Análisis offline" con los tags "Sin número" y "Grupal".
+- [X] Lo mismo con una asalariado grupal.
+- [X] Una solicitud individual sigue apareciendo sin el tag "Grupal" y abre su formulario de siempre.
+- [X] Tocar la grupal abre el sheet con análisis, plan de inversión, imágenes y ubicación, y sin fiadores.
+- [X] "Registrar Analisis" abre `AnalisisGrupaHnForm`.
+- [X] Con número provisional, el envío del análisis grupal está deshabilitado y se ve el aviso "Esta solicitud aún no tiene número", aunque haya conexión.
+- [X] Al salir y volver a entrar, el análisis grupal conserva lo capturado (autosave con el número provisional).
+- [X] Cuando el sync trae una AUT grupal con la misma cédula, la grupal local desaparece de la lista.
+- [X] Una AUT individual con la misma cédula no oculta la grupal local, y al revés.
+- [X] Tocar la AUT grupal (online u offline) muestra el diálogo "¿Usar datos guardados?".
+- [X] Una AUT individual con la misma cédula no ofrece el borrador grupal, y una AUT grupal no ofrece el borrador individual.
+- [X] "Usar" pasa el análisis grupal, el plan, las imágenes y la ubicación al número real. El resumen no muestra "el monto cambió".
+- [X] Después de vincular, la fila de `AnalisisGrupalHnLocalDb` tiene el número real y el `tipoSolicitud` de la AUT.
+- [X] "Descartar" borra también la fila de `AnalisisGrupalHnLocalDb` del borrador.
+- [X] Los borradores individuales creados con SPEC 06 siguen funcionando después de la actualización.
+- [X] En NI y Costa Rica no cambia nada.
+- [X] Se creó una solicitud grupal offline en QA HN, se hizo el análisis grupal offline, el jefe la autorizó, se vinculó con "Usar", y backend confirmó el análisis grupal con el número real (verificación manual).
 
 ## Decisions
 
