@@ -7505,7 +7505,7 @@
     },
     {
       "id": "52:5884249879008927675",
-      "lastPropertyId": "8:7855341168978016454",
+      "lastPropertyId": "9:2461698891199204101",
       "name": "AnalisisBorradorSinNumeroHnLocalDb",
       "properties": [
         {
@@ -7550,6 +7550,11 @@
           "id": "8:7855341168978016454",
           "name": "fechaCreacion",
           "type": 10
+        },
+        {
+          "id": "9:2461698891199204101",
+          "name": "esGrupal",
+          "type": 1
         }
       ],
       "relations": []

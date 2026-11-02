@@ -5,8 +5,9 @@ import 'package:objectbox/objectbox.dart';
 ///
 /// Sus datos (análisis, plan de inversión, fiadores, imágenes y ubicación) se
 /// guardan en las tablas de siempre con `numeroSolicitud` = [numeroProvisional].
-/// Hay como máximo uno por `userId` + `cedula` + `tipoSolicitud`. Al vincularlo
-/// con la solicitud AUT, sus datos pasan al número real y la fila se borra.
+/// Hay como máximo uno por `userId` + `cedula` + `tipoSolicitud` (individual) o
+/// por `userId` + `cedula` (grupal, SPEC 07). Al vincularlo con la solicitud
+/// AUT, sus datos pasan al número real y la fila se borra.
 @Entity()
 class AnalisisBorradorSinNumeroHnLocalDb {
   @Id()
@@ -20,6 +21,7 @@ class AnalisisBorradorSinNumeroHnLocalDb {
   String nombreCompleto;
   @Property(type: PropertyType.date)
   DateTime fechaCreacion;
+  bool esGrupal = false;
 
   AnalisisBorradorSinNumeroHnLocalDb({
     required this.solicitudLocalUuid,
@@ -29,6 +31,7 @@ class AnalisisBorradorSinNumeroHnLocalDb {
     required this.monto,
     required this.nombreCompleto,
     required this.fechaCreacion,
+    this.esGrupal = false,
   });
 
   /// Número que usan los datos del borrador mientras no hay número real.
