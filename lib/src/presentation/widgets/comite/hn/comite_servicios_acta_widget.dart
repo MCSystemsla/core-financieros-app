@@ -27,7 +27,7 @@ import 'package:go_router/go_router.dart';
 import '../../../bloc/comite/comite_aprobacion/comite_aprobacion_cubit.dart';
 import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
 
-class ComiteServiciosActaWidget extends StatelessWidget {
+class ComiteServiciosActaWidget extends StatefulWidget {
   final int comiteId;
   final int numeroSolicitud;
   final int plazoCredito;
@@ -70,26 +70,46 @@ class ComiteServiciosActaWidget extends StatelessWidget {
   });
 
   @override
+  State<ComiteServiciosActaWidget> createState() =>
+      _ComiteServiciosActaWidgetState();
+}
+
+class _ComiteServiciosActaWidgetState extends State<ComiteServiciosActaWidget> {
+  final _repository = ComiteRepositoryHNImpl();
+  late final _serviciosCubit = ComiteServiciosCubit(_repository);
+
+  @override
+  void initState() {
+    super.initState();
+    _cargarServicios();
+  }
+
+  @override
+  void dispose() {
+    _serviciosCubit.close();
+    super.dispose();
+  }
+
+  void _cargarServicios() {
+    _serviciosCubit.getComiteServicios(
+      comiteId: widget.comiteId,
+      numeroSolicitud: widget.numeroSolicitud,
+      plazoCredito: widget.plazoCredito,
+      montoCredito: widget.montoCredito,
+      capitalAdeudado: widget.capitalAdeudado,
+      primaSegurosDanios: widget.primaSegurosDanios,
+      tipoSolicitud: widget.tipoSolicitud,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final repository = ComiteRepositoryHNImpl();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (ctx) => ComiteServiciosCubit(
-            repository,
-          )..getComiteServicios(
-              numeroSolicitud: numeroSolicitud,
-              plazoCredito: plazoCredito,
-              montoCredito: montoCredito,
-              capitalAdeudado: capitalAdeudado,
-              primaSegurosDanios: primaSegurosDanios,
-              comiteId: comiteId,
-              tipoSolicitud: tipoSolicitud,
-            ),
-        ),
+        BlocProvider.value(value: _serviciosCubit),
         BlocProvider(
           create: (ctx) => ComiteCreateServiciosCubit(
-            repository,
+            _repository,
           ),
         ),
       ],
@@ -98,20 +118,20 @@ class ComiteServiciosActaWidget extends StatelessWidget {
           title: const Text('Servicios Acta'),
         ),
         bottomNavigationBar: _BottomButton(
-          actaId: actaId,
-          comiteId: comiteId,
-          monto: montoCredito.toString(),
-          porcentajeComision: porcentajeComision,
-          montoSeguro: montoSeguro,
-          tasaInteresCorriente: tasaInteresCorriente,
-          tasaInteresMoratorio: tasaInteresMoratorio,
-          montoSinComision: montoSinComision,
-          seguoMemorialMensual: seguoMemorialMensual,
-          porcentajeSaldoDeudorAprobado: porcentajeSaldoDeudorAprobado,
-          montoTelemedicinaAprobada: montoTelemedicinaAprobada,
-          seguroMapfre: seguroMapfre,
-          plazoCredito: plazoCredito,
-          fechaPrimerPago: fechaPrimerPago,
+          actaId: widget.actaId,
+          comiteId: widget.comiteId,
+          monto: widget.montoCredito.toString(),
+          porcentajeComision: widget.porcentajeComision,
+          montoSeguro: widget.montoSeguro,
+          tasaInteresCorriente: widget.tasaInteresCorriente,
+          tasaInteresMoratorio: widget.tasaInteresMoratorio,
+          montoSinComision: widget.montoSinComision,
+          seguoMemorialMensual: widget.seguoMemorialMensual,
+          porcentajeSaldoDeudorAprobado: widget.porcentajeSaldoDeudorAprobado,
+          montoTelemedicinaAprobada: widget.montoTelemedicinaAprobada,
+          seguroMapfre: widget.seguroMapfre,
+          plazoCredito: widget.plazoCredito,
+          fechaPrimerPago: widget.fechaPrimerPago,
         ),
         body: BlocBuilder<ComiteServiciosCubit, ComiteServiciosState>(
           builder: (context, state) {
@@ -122,17 +142,7 @@ class ComiteServiciosActaWidget extends StatelessWidget {
                 ),
               Status.error => OnErrorWidget(
                   errorMsg: state.errorMsg,
-                  onPressed: () {
-                    context.read<ComiteServiciosCubit>().getComiteServicios(
-                          comiteId: comiteId,
-                          numeroSolicitud: numeroSolicitud,
-                          plazoCredito: plazoCredito,
-                          montoCredito: montoCredito,
-                          capitalAdeudado: capitalAdeudado,
-                          primaSegurosDanios: primaSegurosDanios,
-                          tipoSolicitud: tipoSolicitud,
-                        );
-                  },
+                  onPressed: _cargarServicios,
                 ),
               _ => const SizedBox.shrink(),
             };
@@ -393,34 +403,92 @@ class _BottomButton extends StatelessWidget {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: CustomElevatedButton(
-              color: Colors.green,
-              enabled: state.status != Status.inProgress &&
-                  state.servicios.isNotEmpty,
-              icon: state.status == Status.inProgress
-                  ? Container(
-                      width: 15,
-                      height: 15,
-                      margin: const EdgeInsets.all(5),
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Icon(Icons.add, color: Colors.white),
-              text: state.status == Status.inProgress
-                  ? 'Creando...'
-                  : 'Crear Servicios',
-              onPressed: () =>
-                  context.read<ComiteCreateServiciosCubit>().crearServicios(
-                        comiteId: comiteId,
-                        montoCredito: double.parse(monto),
-                        plazoCredito: plazoCredito,
-                        comisionFinanciada: context
-                            .read<ComiteAprobacionCubit>()
-                            .state
-                            .comisionFinanciada,
-                      ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Locked while services load or are being created.
+                _FinanciarGastosSwitch(
+                  enabled: context.select(
+                            (ComiteServiciosCubit c) => c.state.status,
+                          ) !=
+                          Status.inProgress &&
+                      state.status != Status.inProgress,
+                ),
+                const Gap(12),
+                CustomElevatedButton(
+                  color: Colors.green,
+                  enabled: state.status != Status.inProgress &&
+                      state.servicios.isNotEmpty,
+                  icon: state.status == Status.inProgress
+                      ? Container(
+                          width: 15,
+                          height: 15,
+                          margin: const EdgeInsets.all(5),
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.add, color: Colors.white),
+                  text: state.status == Status.inProgress
+                      ? 'Creando...'
+                      : 'Crear Servicios',
+                  onPressed: () =>
+                      context.read<ComiteCreateServiciosCubit>().crearServicios(
+                            comiteId: comiteId,
+                            montoCredito: double.parse(monto),
+                            plazoCredito: plazoCredito,
+                            comisionFinanciada: context
+                                .read<ComiteAprobacionCubit>()
+                                .state
+                                .comisionFinanciada,
+                          ),
+                ),
+              ],
             ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _FinanciarGastosSwitch extends StatelessWidget {
+  final bool enabled;
+  const _FinanciarGastosSwitch({required this.enabled});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ComiteAprobacionCubit, ComiteAprobacionState>(
+      buildWhen: (previous, current) =>
+          previous.comisionFinanciada != current.comisionFinanciada,
+      builder: (context, state) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 25,
+                offset: Offset(0, 2),
+              )
+            ],
+          ),
+          child: CustomSwitch(
+            title: 'Financiar gastos y seguros',
+            subtitle: '¿Se financiará la comisión y los seguros?',
+            value: state.comisionFinanciada,
+            enabled: enabled,
+            onChanged: (v) {
+              final aprobacionCubit = context.read<ComiteAprobacionCubit>();
+              final calculosCubit = context.read<ComiteCalculoDatosCubit>();
+              aprobacionCubit.onFieldChanged(
+                () => aprobacionCubit.state.copyWith(comisionFinanciada: v),
+              );
+              calculosCubit.onFieldChanged(
+                () => calculosCubit.state.copyWith(finaciaComisionYSeguros: v),
+              );
+            },
           ),
         );
       },
