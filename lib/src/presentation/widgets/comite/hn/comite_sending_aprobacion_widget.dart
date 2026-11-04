@@ -8,13 +8,10 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/cards/receip
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/loading/modern_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../bloc/comite/comite_calculo_datos/comite_calculo_datos_cubit.dart';
 
 class ComiteResumeReceiptAprobacionWidget extends StatefulWidget {
   final List<Item> servicios;
@@ -59,80 +56,55 @@ class ComiteResumeReceiptAprobacionWidget extends StatefulWidget {
 
 class _ComiteResumeReceiptAprobacionWidgetState
     extends State<ComiteResumeReceiptAprobacionWidget> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<ComiteCalculoDatosCubit>().calcularDatos(
-          actaID: widget.actaId,
-          comisionSegurosFinanciado: widget.totalServicios,
-        );
-  }
+  /// Monto aprobado por el comité +/- servicios, según `ComisionFinanciada`.
+  double _montoFinal(ComiteAprobacionState aprobacion) =>
+      aprobacion.comisionFinanciada
+          ? aprobacion.monto + widget.totalServicios
+          : aprobacion.monto - widget.totalServicios;
 
   @override
   Widget build(BuildContext context) {
     final aprobacion = context.read<ComiteAprobacionCubit>().state;
-    final calculo = context.watch<ComiteCalculoDatosCubit>().state;
 
     return PopScope(
       canPop: false,
-      child: BlocBuilder<ComiteCalculoDatosCubit, ComiteCalculoDatosState>(
-        builder: (context, state) {
-          return switch (state.status) {
-            Status.inProgress => const ModernLoadingWidget(
-                message: 'Calculando datos para aprobación...',
-              ),
-            Status.error => OnErrorWidget(
-                needToGoBack: true,
-                errorMsg: state.errorMsg,
-                onPressed: () {
-                  context.read<ComiteCalculoDatosCubit>().calcularDatos(
-                        actaID: widget.actaId,
-                        comisionSegurosFinanciado: widget.totalServicios,
-                      );
-                }),
-            Status.done => SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Gap(25),
-                      _buildTransactionCard(aprobacion, calculo),
-                      const Gap(20),
-                      _buildApproveButton(context, calculo, aprobacion),
-                      const Gap(20),
-                      _buildCancelButton(context),
-                    ],
-                  ),
-                ),
-              ),
-            _ => const SizedBox.shrink(),
-          };
-        },
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(25),
+              _buildTransactionCard(aprobacion),
+              const Gap(20),
+              _buildApproveButton(context, aprobacion),
+              const Gap(20),
+              _buildCancelButton(context),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildTransactionCard(
-      ComiteAprobacionState aprobacion, ComiteCalculoDatosState calculo) {
+  Widget _buildTransactionCard(ComiteAprobacionState aprobacion) {
     return TransactionReviewCard(
       servicios: widget.servicios,
       producto: aprobacion.productoCodigo,
-      monto: calculo.data!.data.montoTotal,
+      monto: _montoFinal(aprobacion),
       plazo: aprobacion.plazo,
       primerPago: widget.fechaPrimerPago,
-      montoConServicios: aprobacion.monto + widget.totalServicios,
+      montoConServicios: _montoFinal(aprobacion),
       observaciones: aprobacion.observacion,
       tipoCredito: aprobacion.tipoCreditoNombre,
-      montoSinComision: calculo.data!.data.montoSolicitado,
-      mostrarMontoSinComision: calculo.finaciaComisionYSeguros,
-      tasaInteresCorriente: calculo.data!.data.interes.tasaInteresCorriente,
-      tasaInteresMoratorio: calculo.data!.data.interes.tasaInteresMoratorio,
+      montoSinComision: aprobacion.monto,
+      mostrarMontoSinComision: aprobacion.comisionFinanciada,
+      tasaInteresCorriente: widget.tasaInteresCorriente,
+      tasaInteresMoratorio: widget.tasaInteresMoratorio,
     );
   }
 
   Widget _buildApproveButton(
     BuildContext context,
-    ComiteCalculoDatosState stateCalculo,
     ComiteAprobacionState stateAprobacion,
   ) {
     return Padding(
@@ -143,11 +115,7 @@ class _ComiteResumeReceiptAprobacionWidgetState
           icon: const Icon(Icons.check_circle_outline, color: Colors.white),
           text: 'Aprobar Acta',
           color: Colors.indigo,
-          onPressed: () => _navigateToSending(
-            context,
-            stateCalculo,
-            stateAprobacion,
-          ),
+          onPressed: () => _navigateToSending(context, stateAprobacion),
         ),
       ),
     );
@@ -172,7 +140,6 @@ class _ComiteResumeReceiptAprobacionWidgetState
 
   void _navigateToSending(
     BuildContext context,
-    ComiteCalculoDatosState stateCalculo,
     ComiteAprobacionState stateAprobacion,
   ) {
     Navigator.push(
@@ -181,16 +148,14 @@ class _ComiteResumeReceiptAprobacionWidgetState
         builder: (_) => BlocProvider.value(
           value: context.read<ComiteAprobacionCubit>(),
           child: ComiteSendingAprobacionWidget(
-            monto: stateCalculo.data?.data.montoTotal.toString() ?? '',
-            montoSinComision: stateCalculo.data?.data.montoSolicitado ?? 0,
+            monto: _montoFinal(stateAprobacion).toString(),
+            montoSinComision: stateAprobacion.monto,
             montoTelemedicinaAprobada:
                 stateAprobacion.montoTelemedicinaAprobada.toDouble(),
-            seguroMapfre: stateCalculo.data?.data.seguros.mapfre ?? 0,
-            tasaInteresCorriente:
-                stateCalculo.data?.data.interes.tasaInteresCorriente ?? 0,
-            tasaInteresMoratorio:
-                stateCalculo.data?.data.interes.tasaInteresMoratorio ?? 0,
-            montoSeguro: stateCalculo.data?.data.seguros.montoTotalSeguros ?? 0,
+            seguroMapfre: widget.seguroMapfre,
+            tasaInteresCorriente: widget.tasaInteresCorriente,
+            tasaInteresMoratorio: widget.tasaInteresMoratorio,
+            montoSeguro: widget.montoSeguro,
             porcentajeComision: widget.porcentajeComision,
             porcentajeSaldoDeudorAprobado: widget.porcentajeSaldoDeudorAprobado,
             seguoMemorialMensual: widget.seguoMemorialMensual,

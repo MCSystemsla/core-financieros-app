@@ -35,6 +35,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
         // cuotaNivelada: widget.data.cuotaNivelada ?? true,
         cuotaNivelada: true,
         promotorId: widget.data.oficialCreditoID ?? 0,
+        comisionFinanciada: cubitCalculos.state.finaciaComisionYSeguros,
       ),
     );
     cubitCalculos.onFieldChanged(
@@ -154,6 +155,11 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                         calculosCubit.onFieldChanged(
                           () => state.copyWith(
                             finaciaComisionYSeguros: v,
+                          ),
+                        );
+                        cubit.onFieldChanged(
+                          () => cubit.state.copyWith(
+                            comisionFinanciada: v,
                           ),
                         );
                       },

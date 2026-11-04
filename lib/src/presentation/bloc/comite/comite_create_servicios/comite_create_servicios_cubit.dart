@@ -17,6 +17,7 @@ class ComiteCreateServiciosCubit extends Cubit<ComiteCreateServiciosState> {
     required int comiteId,
     required double montoCredito,
     required int plazoCredito,
+    bool? comisionFinanciada,
   }) async {
     emit(state.copyWith(status: Status.inProgress));
     try {
@@ -26,6 +27,7 @@ class ComiteCreateServiciosCubit extends Cubit<ComiteCreateServiciosState> {
           plazoCredito: plazoCredito,
           comiteId: comiteId,
           servicios: state.servicios,
+          comisionFinanciada: comisionFinanciada,
         ),
       );
       emit(state.copyWith(status: Status.done, data: resp.data));

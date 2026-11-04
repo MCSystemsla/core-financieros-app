@@ -220,20 +220,18 @@ class _ComiteGeneralFormState extends State<ComiteGeneralForm>
         plazoCredito: state.plazo,
         primaSegurosDanios: 0,
         tipoSolicitud: state.tipoSolicitudCodigo,
-        porcentajeComision: cubitCalculos.state.data?.data.comision.monto ?? 0,
-        montoSeguro:
-            cubitCalculos.state.data?.data.seguros.montoTotalSeguros ?? 0,
-        montoSinComision: cubitCalculos.state.monto.toDouble(),
-        montoTelemedicinaAprobada:
-            cubitCalculos.state.data?.data.seguros.telemedicina ?? 0,
-        seguroMapfre: cubitCalculos.state.data?.data.seguros.mapfre ?? 0,
-        porcentajeSaldoDeudorAprobado:
-            cubitCalculos.state.data?.data.comision.tasa ?? 0,
-        tasaInteresCorriente:
-            cubitCalculos.state.data?.data.interes.tasaInteresCorriente ?? 0,
+        // Values come from the acta; the calcular-datos step was removed.
+        porcentajeComision: widget.data.tasaComision?.toDouble() ?? 0,
+        montoSeguro: widget.data.montoSeguroVida?.toDouble() ?? 0,
+        montoSinComision: state.monto,
+        // Not available in the acta.
+        montoTelemedicinaAprobada: 0,
+        seguroMapfre: 0,
+        porcentajeSaldoDeudorAprobado: widget.data.tasaSaldoDeudor ?? 0,
+        tasaInteresCorriente: state.tasaInteresCorriente,
         tasaInteresMoratorio:
-            cubitCalculos.state.data?.data.interes.tasaInteresMoratorio ?? 0,
-        seguoMemorialMensual: cubitCalculos.state.data?.data.seguros.vida ?? 0,
+            widget.data.tasaInteresMoratorio?.toDouble() ?? 0,
+        seguoMemorialMensual: 0,
       ),
     ));
     setState(() {

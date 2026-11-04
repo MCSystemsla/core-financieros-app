@@ -12,12 +12,14 @@ class ComiteCreateServiceSchema {
   final int plazoCredito;
   final double montoCredito;
   final List<ServicioData> servicios;
+  final bool? comisionFinanciada;
 
   ComiteCreateServiceSchema({
     required this.comiteId,
     required this.servicios,
     required this.montoCredito,
     required this.plazoCredito,
+    this.comisionFinanciada,
   });
 
   Map<String, dynamic> toJson() => {
@@ -26,6 +28,8 @@ class ComiteCreateServiceSchema {
         'PlazoCredito': plazoCredito,
         'MontoCredito': double.tryParse(montoCredito.toSafeString(2)),
         'Servicios': List<dynamic>.from(servicios.map((x) => x.toJson())),
+        if (comisionFinanciada != null)
+          'ComisionFinanciada': comisionFinanciada,
       };
 }
 

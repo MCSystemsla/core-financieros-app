@@ -409,6 +409,10 @@ class _BottomButton extends StatelessWidget {
                         comiteId: comiteId,
                         montoCredito: double.parse(monto),
                         plazoCredito: plazoCredito,
+                        comisionFinanciada: context
+                            .read<ComiteAprobacionCubit>()
+                            .state
+                            .comisionFinanciada,
                       ),
             ),
           ),
