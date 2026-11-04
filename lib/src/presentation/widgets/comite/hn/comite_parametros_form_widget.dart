@@ -153,6 +153,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
                       title: 'Financiar comision y seguros',
                       subtitle: 'Financiara la comision y seguros?',
                       value: state.finaciaComisionYSeguros,
+                      enabled: false,
                       onChanged: (v) {
                         calculosCubit.onFieldChanged(
                           () => state.copyWith(

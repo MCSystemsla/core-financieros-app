@@ -102,8 +102,6 @@ class _ComiteResumeReceiptAprobacionWidgetState
       tipoCredito: aprobacion.tipoCreditoNombre,
       montoSinComision: aprobacion.monto,
       mostrarMontoSinComision: aprobacion.comisionFinanciada,
-      tasaInteresCorriente: widget.tasaInteresCorriente,
-      tasaInteresMoratorio: widget.tasaInteresMoratorio,
     );
   }
 

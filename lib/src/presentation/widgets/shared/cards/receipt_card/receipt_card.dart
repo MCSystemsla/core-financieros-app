@@ -14,8 +14,6 @@ class TransactionReviewCard extends StatelessWidget {
   final String observaciones;
   final double montoSinComision;
   final bool mostrarMontoSinComision;
-  final double tasaInteresCorriente;
-  final double tasaInteresMoratorio;
 
   const TransactionReviewCard({
     super.key,
@@ -29,8 +27,6 @@ class TransactionReviewCard extends StatelessWidget {
     required this.observaciones,
     required this.montoSinComision,
     this.mostrarMontoSinComision = false,
-    required this.tasaInteresCorriente,
-    required this.tasaInteresMoratorio,
   });
 
   @override
@@ -87,16 +83,6 @@ class TransactionReviewCard extends StatelessWidget {
               Icons.account_balance_wallet_outlined,
               'Producto del crédito',
               producto,
-            ),
-            _row(
-              Icons.percent,
-              'Interes corriente',
-              tasaInteresCorriente.toString(),
-            ),
-            _row(
-              Icons.percent,
-              'Interes moratorio',
-              tasaInteresMoratorio.toString(),
             ),
             _row(Icons.schedule_outlined, 'Plazo', '$plazo meses'),
             _row(
