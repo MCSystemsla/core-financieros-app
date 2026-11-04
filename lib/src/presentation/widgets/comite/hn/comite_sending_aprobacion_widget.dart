@@ -56,6 +56,9 @@ class ComiteResumeReceiptAprobacionWidget extends StatefulWidget {
 
 class _ComiteResumeReceiptAprobacionWidgetState
     extends State<ComiteResumeReceiptAprobacionWidget> {
+  /// Evita abrir dos pantallas de envío (y mandar dos POST) con toques rápidos.
+  bool _navegando = false;
+
   /// Monto aprobado por el comité +/- servicios, según `ComisionFinanciada`.
   double _montoFinal(ComiteAprobacionState aprobacion) =>
       aprobacion.comisionFinanciada
@@ -138,11 +141,13 @@ class _ComiteResumeReceiptAprobacionWidgetState
     );
   }
 
-  void _navigateToSending(
+  Future<void> _navigateToSending(
     BuildContext context,
     ComiteAprobacionState stateAprobacion,
-  ) {
-    Navigator.push(
+  ) async {
+    if (_navegando) return;
+    _navegando = true;
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => BlocProvider.value(
@@ -163,6 +168,8 @@ class _ComiteResumeReceiptAprobacionWidgetState
         ),
       ),
     );
+    // Si el envío falló y el usuario volvió al resumen, puede reintentar.
+    if (mounted) _navegando = false;
   }
 }
 

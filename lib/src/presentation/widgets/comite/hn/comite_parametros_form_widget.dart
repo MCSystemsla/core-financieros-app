@@ -25,6 +25,7 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
   initState() {
     super.initState();
     alVencimiento = (widget.data.alVencimiento ?? false);
+    final comisionFinanciada = widget.data.comisionFinanciada ?? false;
 
     final cubit = context.read<ComiteAprobacionCubit>();
     final cubitCalculos = context.read<ComiteCalculoDatosCubit>();
@@ -35,12 +36,13 @@ class _ComiteParametrosFormState extends State<ComiteParametrosForm> {
         // cuotaNivelada: widget.data.cuotaNivelada ?? true,
         cuotaNivelada: true,
         promotorId: widget.data.oficialCreditoID ?? 0,
-        comisionFinanciada: cubitCalculos.state.finaciaComisionYSeguros,
+        comisionFinanciada: comisionFinanciada,
       ),
     );
     cubitCalculos.onFieldChanged(
       () => cubitCalculos.state.copyWith(
         esRestructuracion: widget.data.esReestructuracion ?? false,
+        finaciaComisionYSeguros: comisionFinanciada,
       ),
     );
   }
