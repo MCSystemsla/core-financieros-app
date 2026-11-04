@@ -326,7 +326,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     const Gap(30),
                     OutlineTextfieldWidget(
                       isRequired: true,
-                      readOnly: true,
                       initialValue: state.nombre1,
                       hintText: 'Ingresa Nombre 1',
                       icon: Icon(Icons.person,
@@ -350,7 +349,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      readOnly: true,
                       initialValue: state.nombre2,
                       hintText: 'Ingresa Nombre 2',
                       // validator: (value) => ClassValidator.validateRequired(value),
@@ -373,7 +371,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      readOnly: true,
                       initialValue: state.nombre3,
                       hintText: 'Ingresa Nombre 3',
                       icon: Icon(Icons.person,
@@ -396,7 +393,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      readOnly: true,
                       initialValue: state.apellido1,
                       isRequired: true,
                       hintText: 'Ingresa Apellido 1',
@@ -421,7 +417,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      readOnly: true,
                       initialValue: state.apellido2,
                       hintText: 'Ingresa Apellido 2',
                       icon: Icon(Icons.person,
@@ -443,7 +438,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
-                      readOnly: true,
                       initialValue: state.apellido3,
                       hintText: 'Ingresa Apellido 3',
                       icon: Icon(Icons.person,
@@ -540,7 +534,6 @@ class _UpdateSolicitudNuevaMenorForm1State
                     OutlineTextfieldWidget(
                       initialValue: state.cedula,
                       isRequired: true,
-                      readOnly: true,
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Ingresa Documento',
@@ -553,13 +546,13 @@ class _UpdateSolicitudNuevaMenorForm1State
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.none,
                       title: 'Número de Documento',
-                      // onChange: (value) {
-                      //   cubit.onFieldChanged(
-                      //     () => cubit.state.copyWith(
-                      //       cedula: value,
-                      //     ),
-                      //   );
-                      // },
+                      onChange: (value) {
+                        cubit.onFieldChanged(
+                          () => state.copyWith(
+                            cedula: value,
+                          ),
+                        );
+                      },
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
