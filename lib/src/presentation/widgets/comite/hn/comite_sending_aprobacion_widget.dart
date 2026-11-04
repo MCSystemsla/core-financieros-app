@@ -59,11 +59,12 @@ class _ComiteResumeReceiptAprobacionWidgetState
   /// Evita abrir dos pantallas de envío (y mandar dos POST) con toques rápidos.
   bool _navegando = false;
 
-  /// Monto aprobado por el comité +/- servicios, según `ComisionFinanciada`.
+  /// Monto aprobado por el comité; suma los servicios solo si
+  /// `ComisionFinanciada` es true.
   double _montoFinal(ComiteAprobacionState aprobacion) =>
       aprobacion.comisionFinanciada
           ? aprobacion.monto + widget.totalServicios
-          : aprobacion.monto - widget.totalServicios;
+          : aprobacion.monto;
 
   @override
   Widget build(BuildContext context) {

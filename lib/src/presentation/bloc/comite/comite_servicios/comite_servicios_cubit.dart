@@ -11,6 +11,9 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
   final ComiteRepositoryHN _repository;
   ComiteServiciosCubit(this._repository) : super(ComiteServiciosInitial());
 
+  /// Last query, so the list can be fetched again after an upsert.
+  Future<void> Function()? _ultimaConsulta;
+
   Future<void> getComiteServicios({
     required int comiteId,
     required int numeroSolicitud,
@@ -20,6 +23,15 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
     required int primaSegurosDanios,
     required String tipoSolicitud,
   }) async {
+    _ultimaConsulta = () => getComiteServicios(
+          comiteId: comiteId,
+          numeroSolicitud: numeroSolicitud,
+          plazoCredito: plazoCredito,
+          montoCredito: montoCredito,
+          capitalAdeudado: capitalAdeudado,
+          primaSegurosDanios: primaSegurosDanios,
+          tipoSolicitud: tipoSolicitud,
+        );
     emit(state.copyWith(status: Status.inProgress));
     try {
       final data = await _repository.obtenerServicios(
@@ -46,5 +58,14 @@ class ComiteServiciosCubit extends Cubit<ComiteServiciosState> {
         errorMsg: e.toString(),
       ));
     }
+  }
+
+  /// Fetches the services again with the last query (e.g. after
+  /// `upsert-servicios`). Returns `true` only if the GET succeeded.
+  Future<bool> recargar() async {
+    final consulta = _ultimaConsulta;
+    if (consulta == null) return false;
+    await consulta();
+    return state.status == Status.done;
   }
 }

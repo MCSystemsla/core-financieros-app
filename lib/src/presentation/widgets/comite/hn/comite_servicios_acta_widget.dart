@@ -326,8 +326,15 @@ class _BottomButton extends StatelessWidget {
           CustomAlertDialog(
             context: context,
             title: 'Servicios creados exitosamente',
-            onDone: () => {
-              context.pop(),
+            onDone: () async {
+              context.pop();
+              // Al dar OK se vuelven a pedir los servicios y se calcula con
+              // lo que devuelva el GET.
+              final serviciosCubit = context.read<ComiteServiciosCubit>();
+              if (!await serviciosCubit.recargar() || !context.mounted) return;
+              final totalServicios = serviciosCubit.state.data
+                  .where((e) => e.isSelected)
+                  .fold(0.0, (sum, e) => sum + e.monto);
               context.pushTransparentRoute(
                 MultiBlocProvider(
                   providers: [
@@ -340,8 +347,7 @@ class _BottomButton extends StatelessWidget {
                   ],
                   child: ComiteResumeReceiptAprobacionWidget(
                     actaId: actaId,
-                    totalServicios: state.servicios.fold(
-                        0.0, (sum, element) => sum + element.montoServicio),
+                    totalServicios: totalServicios,
                     plazoCredito: plazoCredito,
                     fechaPrimerPago: fechaPrimerPago,
                     monto: monto,
@@ -365,7 +371,7 @@ class _BottomButton extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: const Color(0xffF1F1F1),
-              ),
+              );
             },
           ).showDialog(
             context,
