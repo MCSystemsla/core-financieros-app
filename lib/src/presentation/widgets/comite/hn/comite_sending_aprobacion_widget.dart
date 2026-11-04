@@ -101,7 +101,8 @@ class _ComiteResumeReceiptAprobacionWidgetState
       observaciones: aprobacion.observacion,
       tipoCredito: aprobacion.tipoCreditoNombre,
       montoSinComision: aprobacion.monto,
-      mostrarMontoSinComision: aprobacion.comisionFinanciada,
+      comisionFinanciada: aprobacion.comisionFinanciada,
+      totalServicios: widget.totalServicios,
     );
   }
 

@@ -13,7 +13,8 @@ class TransactionReviewCard extends StatelessWidget {
   final String tipoCredito;
   final String observaciones;
   final double montoSinComision;
-  final bool mostrarMontoSinComision;
+  final bool comisionFinanciada;
+  final double totalServicios;
 
   const TransactionReviewCard({
     super.key,
@@ -26,7 +27,8 @@ class TransactionReviewCard extends StatelessWidget {
     required this.tipoCredito,
     required this.observaciones,
     required this.montoSinComision,
-    this.mostrarMontoSinComision = false,
+    this.comisionFinanciada = false,
+    this.totalServicios = 0,
   });
 
   @override
@@ -71,13 +73,30 @@ class TransactionReviewCard extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-            if (mostrarMontoSinComision) ...[
-              _row(
-                Icons.wallet,
-                'Monto total sin comision y seguros',
-                montoSinComision.toCurrencyString(),
-              ),
-            ],
+
+            /// DESGLOSE DEL MONTO: services are only added when financed.
+            _row(
+              Icons.request_quote_outlined,
+              'Financia gastos y seguros',
+              comisionFinanciada ? 'Sí' : 'No',
+            ),
+            _row(
+              Icons.payments_outlined,
+              'Monto solicitado',
+              'L. ${montoSinComision.toCurrencyString()}',
+            ),
+            _row(
+              Icons.add_circle_outline,
+              comisionFinanciada
+                  ? 'Servicios financiados'
+                  : 'Servicios (no financiados)',
+              'L. ${totalServicios.toCurrencyString()}',
+            ),
+            _row(
+              Icons.check_circle_outline,
+              'Monto aprobado',
+              'L. ${monto.toCurrencyString()}',
+            ),
 
             _row(
               Icons.account_balance_wallet_outlined,
@@ -119,6 +138,11 @@ class TransactionReviewCard extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+              _row(
+                Icons.functions,
+                'Total de servicios',
+                'L. ${totalServicios.toCurrencyString()}',
               ),
             ],
           ],
