@@ -187,11 +187,13 @@ class ClassValidator {
     return null;
   }
 
-  static String? validateCantidadHijos(String? value) {
+  /// Entero opcional que acepta 0 (p. ej. cantidad de hijos): vacío es válido
+  /// y el backend recibe 0.
+  static String? validateIntOpcionalNoNegativo(String? value) {
     if (value == null || value.trim().isEmpty) return null;
-    final numValue = num.tryParse(value.trim());
-    if (numValue == null || numValue <= 0) {
-      return 'Ingresa un número mayor que 0';
+    final numValue = int.tryParse(value.trim());
+    if (numValue == null || numValue < 0) {
+      return 'Ingresa un número válido (0 o más)';
     }
 
     return null;

@@ -592,7 +592,7 @@ class __FormContentState extends State<_FormContent> {
                 const Gap(30),
                 OutlineTextfieldWidget(
                   validator: (value) =>
-                      ClassValidator.validateCantidadHijos(value),
+                      ClassValidator.validateIntOpcionalNoNegativo(value),
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -602,7 +602,7 @@ class __FormContentState extends State<_FormContent> {
                     cantidadHijos = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                        cantidadHijos: int.tryParse(value) ?? 0,
                       ),
                     );
                   },

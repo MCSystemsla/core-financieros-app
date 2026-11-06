@@ -207,7 +207,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
     paisEmisorVer = widget.responseLocalDb.objPaisEmisorCedulaVer;
     paisNacimientoVer = widget.responseLocalDb.objPaisNacimientoIdVer;
     escolaridadVer = widget.responseLocalDb.objEscolaridadIdVer;
-    cantidadHijos = widget.responseLocalDb.cantidadHijos.toString();
+    cantidadHijos = widget.responseLocalDb.cantidadHijos?.toString();
     edadMinima = global<ObjectBoxService>()
         .getParametroByName(nombre: 'EDADMINIMACLIENTE');
     edadMaxima = global<ObjectBoxService>()
@@ -724,7 +724,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                     cantidadHijos = value;
                     cubit.onFieldChanged(
                       () => cubit.state.copyWith(
-                        cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                        cantidadHijos: int.tryParse(value) ?? 0,
                       ),
                     );
                   },

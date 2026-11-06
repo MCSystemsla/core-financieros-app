@@ -679,7 +679,7 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                         cantidadHijos = value;
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(
-                            cantidadHijos: int.tryParse(cantidadHijos ?? '0'),
+                            cantidadHijos: int.tryParse(value) ?? 0,
                           ),
                         );
                       },

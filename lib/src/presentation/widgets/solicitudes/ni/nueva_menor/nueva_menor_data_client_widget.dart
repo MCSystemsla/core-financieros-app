@@ -687,7 +687,7 @@ class _NuevaMenorFormContentState extends State<_NuevaMenorFormContent>
                 cantidadHijos = value;
                 cubit.onFieldChanged(
                   () =>
-                      cubit.state.copyWith(cantidadHijos: int.tryParse(value)),
+                      cubit.state.copyWith(cantidadHijos: int.tryParse(value) ?? 0),
                 );
               },
             ),
