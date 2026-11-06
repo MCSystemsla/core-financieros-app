@@ -81,6 +81,9 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
         h.year == date.year && h.month == date.month && h.day == date.day);
   }
 
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -104,12 +107,13 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isAtSameMomentAs(fechaDesembolso ?? DateTime.now())) {
+      if (!_dateOnly(picked)
+          .isAfter(_dateOnly(fechaDesembolso ?? DateTime.now()))) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title:
-              'La Fecha de primer pago no puede ser igual a la fecha de desembolso',
+              'La Fecha de primer pago debe ser posterior a la fecha de desembolso',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
@@ -150,12 +154,13 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
-      if (picked.isAtSameMomentAs(fechaPrimerPago ?? DateTime.now())) {
+      if (fechaPrimerPago != null &&
+          !_dateOnly(picked).isBefore(_dateOnly(fechaPrimerPago!))) {
         CustomAlertDialog(
           onDone: () => context.pop(),
           context: context,
           title:
-              'La Fecha de desembolso no puede ser igual a la fecha de primer pago',
+              'La Fecha de desembolso debe ser anterior a la fecha de primer pago',
         ).showDialog(context, dialogType: DialogType.warning);
         return;
       }
