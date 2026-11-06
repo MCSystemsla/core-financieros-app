@@ -1,4 +1,5 @@
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_nueva_mayor_mil/analisis_nueva_mayor_mil_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_mayor_a_mil/analisis_mayor_mil_sending_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -28,6 +29,7 @@ class AnalisisMayorAMilEstadoResultadoNI extends StatelessWidget {
     return BlocBuilder<AnalisisNuevaMayorMilNiCubit,
         AnalisisNuevaMayorMilNiState>(
       builder: (context, state) {
+        final sinNumero = state.numeroSolicitud < 0;
         final totalVentasMensuales = (state.cicloVentaMensual.ciclo.fold(
               0,
               (sum, e) => sum + e.venta,
@@ -554,7 +556,13 @@ class AnalisisMayorAMilEstadoResultadoNI extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
+                        // Sin número de solicitud (SPEC 08) no se envía.
+                        if (sinNumero) ...[
+                          const SinNumeroNoticeWidget(),
+                          const Gap(12),
+                        ],
                         CustomElevatedButton(
+                          enabled: !sinNumero,
                           onPressed: () {
                             if (!formKey.currentState!.validate()) return;
 

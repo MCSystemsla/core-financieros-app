@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/ni/analisis_forms_repository_ni.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_fiadores/analisis_fiadores_ni_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_laborales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_datos_personales.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/fiadores/analisis_fiadores_ni_domicilio.dart';
@@ -68,7 +69,7 @@ class _FiadoresNiFormScreenState extends State<FiadoresNiFormScreen> {
                 FormStepHeaderWidget(
                   title: 'Crear Fiador',
                   subtitle:
-                      'Registra los datos del fiador de la solicitud #${widget.numeroSolicitud}',
+                      'Registra los datos del fiador de la solicitud ${numeroSolicitudLabel(widget.numeroSolicitud)}',
                   tag: 'Análisis de crédito',
                   controller: pageController,
                   steps: fiadoresNiSteps,

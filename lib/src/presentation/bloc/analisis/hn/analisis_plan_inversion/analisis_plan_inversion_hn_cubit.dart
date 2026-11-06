@@ -19,10 +19,12 @@ class AnalisisPlanInversionHnCubit extends Cubit<AnalisisPlanInversionHnState> {
   AnalisisPlanInversionHnCubit(this._repository)
       : super(AnalisisPlanInversionHnInitial());
 
-  /// El borrador local solo existe en Honduras. NI también abre esta pantalla
-  /// y debe seguir trabajando solo en memoria.
-  bool get usaBorrador =>
-      global<FlavorCubit>().state.flavor == Flavor.honduras;
+  /// El borrador local existe en Honduras y Nicaragua. Costa Rica también abre
+  /// esta pantalla (sheet online de NI) y sigue trabajando solo en memoria.
+  bool get usaBorrador => switch (global<FlavorCubit>().state.flavor) {
+        Flavor.honduras || Flavor.nicaragua => true,
+        _ => false,
+      };
 
   Future<void> createAnalisisPlanInversion() async {
     emit(state.copyWith(status: Status.inProgress));

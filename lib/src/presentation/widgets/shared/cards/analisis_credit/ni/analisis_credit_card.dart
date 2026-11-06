@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/ofrecer_borrador_sin_numero_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/modal_sheet/ni/select_type_analisis_modal_sheet_ni_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
@@ -22,6 +23,10 @@ class AnalisisCreditCard extends StatelessWidget {
   final String tipoPersonaCodigo;
   final bool esGrupal;
   final AnalisisSolicitudesInterceptorType? tipoSolicitud;
+
+  /// Monto de la AUT: decide si el análisis de un borrador sin número sigue
+  /// sirviendo al vincularlo (SPEC 08).
+  final String monto;
   const AnalisisCreditCard({
     super.key,
     required this.index,
@@ -36,11 +41,22 @@ class AnalisisCreditCard extends StatelessWidget {
     this.cedulaCliente = '',
     this.tipoPersonaCodigo = '',
     this.esGrupal = false,
+    this.monto = '0',
   });
 
   static const _staggerGroupSize = 8;
 
-  void _openAnalisisSheet(BuildContext context) {
+  Future<void> _openAnalisisSheet(BuildContext context) async {
+    // Datos capturados offline sin número para este cliente (SPEC 08).
+    await ofrecerBorradorSinNumeroHn(
+      context,
+      cedula: cedulaCliente,
+      tipoSolicitud: tipoSolicitudString,
+      monto: monto,
+      numeroSolicitud: numeroSolicitud,
+      esGrupal: esGrupal,
+    );
+    if (!context.mounted) return;
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,

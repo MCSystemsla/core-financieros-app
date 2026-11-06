@@ -315,11 +315,13 @@ class _AnalisisFiadoresNiIngresosViviendaState
                   ),
                   onPrimary: () {
                     if (!formKey.currentState!.validate()) return;
-                    // Sin conexión, el fiador se guarda en el teléfono.
+                    // Sin conexión o sin número de solicitud (SPEC 08), el
+                    // fiador se guarda en el teléfono.
                     final isConnected = context
                         .read<InternetConnectionCubit>()
                         .state
                         .isConnected;
+                    final sinNumero = widget.numeroSolicitud < 0;
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -327,7 +329,7 @@ class _AnalisisFiadoresNiIngresosViviendaState
                           value: cubit,
                           child: AnalisisFiadoresNiSendingWidget(
                             numeroSolicitud: widget.numeroSolicitud,
-                            guardarLocal: !isConnected,
+                            guardarLocal: !isConnected || sinNumero,
                           ),
                         ),
                       ),

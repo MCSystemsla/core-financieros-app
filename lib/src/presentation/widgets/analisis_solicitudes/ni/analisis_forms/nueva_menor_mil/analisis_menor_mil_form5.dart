@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_
 import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/analisis_menor_mil/analisis_menor_mil_ni_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/nueva_menor_mil/sending_analisis_menor_mil_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -142,6 +143,7 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
     final cubit = context.read<AnalisisMenorMilNiCubit>();
     return BlocBuilder<AnalisisMenorMilNiCubit, AnalisisMenorMilNiState>(
       builder: (context, state) {
+        final sinNumero = state.numeroSolicitud < 0;
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -722,7 +724,13 @@ class _AnalisisMenorMilForm5State extends State<AnalisisMenorMilForm5Ni> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
+                      // Sin número de solicitud (SPEC 08) no se envía.
+                      if (sinNumero) ...[
+                        const SinNumeroNoticeWidget(),
+                        const Gap(12),
+                      ],
                       CustomElevatedButton(
+                        enabled: !sinNumero,
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           Navigator.push(

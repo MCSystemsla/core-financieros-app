@@ -679,10 +679,15 @@ class AnalisisBoxServiceHn {
         AnalisisPlanInversionHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
       ))
         ModuloBorradorHn.planInversion,
+      // Fiadores HN o NI (SPEC 08): un número solo existe en un país.
       if (_hayDatos(
-        analisisFiadorHnLocalDbBox,
-        AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
-      ))
+            analisisFiadorHnLocalDbBox,
+            AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+          ) ||
+          _hayDatos(
+            analisisFiadorNiLocalDbBox,
+            AnalisisFiadorNiLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+          ))
         ModuloBorradorHn.fiadores,
       if (_hayDatos(
         imagenesNegocioHnLocalDb,
@@ -711,6 +716,11 @@ class AnalisisBoxServiceHn {
     for (final fiador in _getFiadoresHn(numero)) {
       await removeFiadorHnPendiente(fiador);
     }
+    // Los fiadores NI no tienen archivos: basta con borrar las filas.
+    _borrar(
+      analisisFiadorNiLocalDbBox,
+      AnalisisFiadorNiLocalDb_.numeroSolicitud.equals(numero),
+    );
     analisisBorradorSinNumeroHnBox.remove(borrador.id);
   }
 
@@ -889,6 +899,11 @@ class AnalisisBoxServiceHn {
           AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(desde),
           (e) => e.numeroSolicitud = hasta,
         );
+        _mover(
+          analisisFiadorNiLocalDbBox,
+          AnalisisFiadorNiLocalDb_.numeroSolicitud.equals(desde),
+          (e) => e.numeroSolicitud = hasta,
+        );
       case ModuloBorradorHn.imagenes:
         _mover(
           imagenesNegocioHnLocalDb,
@@ -1014,6 +1029,10 @@ class AnalisisBoxServiceHn {
         _borrar(
           analisisFiadorHnLocalDbBox,
           AnalisisFiadorHnLocalDb_.numeroSolicitud.equals(numeroSolicitud),
+        );
+        _borrar(
+          analisisFiadorNiLocalDbBox,
+          AnalisisFiadorNiLocalDb_.numeroSolicitud.equals(numeroSolicitud),
         );
       case ModuloBorradorHn.imagenes:
         _borrar(

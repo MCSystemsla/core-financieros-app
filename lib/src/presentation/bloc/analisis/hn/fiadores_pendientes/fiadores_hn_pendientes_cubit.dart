@@ -54,9 +54,12 @@ class FiadoresHnPendientesCubit extends Cubit<FiadoresHnPendientesState> {
       enviandoUuid: pendiente.uuid,
     ));
     try {
-      final fiador = AnalisisFiadoresHn.fromJson(
-        json.decode(pendiente.payloadJson) as Map<String, dynamic>,
-      );
+      final payload =
+          json.decode(pendiente.payloadJson) as Map<String, dynamic>;
+      // El número de la fila manda: un borrador sin número vinculado a su AUT
+      // (SPEC 06) guardó el payload con el número provisional.
+      payload['NumeroSolicitud'] = pendiente.numeroSolicitud;
+      final fiador = AnalisisFiadoresHn.fromJson(payload);
 
       var fiadorId = pendiente.fiadorId;
       if (fiadorId.isEmpty) {

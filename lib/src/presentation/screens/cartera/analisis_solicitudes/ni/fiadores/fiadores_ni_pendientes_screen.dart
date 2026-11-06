@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/analisis/ni/fiadores_p
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/fiadores/fiadores_ni_form_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/exit_confirmation_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
@@ -107,6 +108,8 @@ class _FiadoresNiPendientesView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isConnected =
         context.watch<InternetConnectionCubit>().state.isConnected;
+    // Sin número de solicitud (SPEC 08) no se envía, aunque haya conexión.
+    final sinNumero = numeroSolicitud < 0;
 
     return MultiBlocListener(
       listeners: [
@@ -148,7 +151,7 @@ class _FiadoresNiPendientesView extends StatelessWidget {
               ScreenHeaderWidget(
                 title: 'Fiadores pendientes',
                 subtitle:
-                    'Solicitud $numeroSolicitud. Fiadores guardados en el teléfono que aún no se envían.',
+                    'Solicitud ${numeroSolicitudLabel(numeroSolicitud, prefijo: '')}. Fiadores guardados en el teléfono que aún no se envían.',
               ),
               const Gap(20),
               Expanded(
@@ -158,7 +161,12 @@ class _FiadoresNiPendientesView extends StatelessWidget {
                     return ListView(
                       padding: EdgeInsets.zero,
                       children: [
-                        if (!isConnected)
+                        if (sinNumero)
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 22),
+                            child: SinNumeroNoticeWidget(),
+                          )
+                        else if (!isConnected)
                           const Padding(
                             padding: EdgeInsets.fromLTRB(20, 0, 20, 22),
                             child: _OfflineNoticeWidget(),
@@ -175,7 +183,7 @@ class _FiadoresNiPendientesView extends StatelessWidget {
                                   padding: const EdgeInsets.only(bottom: 8),
                                   child: _FiadorPendienteTile(
                                     pendiente: pendiente,
-                                    isConnected: isConnected,
+                                    isConnected: isConnected && !sinNumero,
                                     isSending:
                                         state.enviandoUuid == pendiente.uuid,
                                     isBusy:

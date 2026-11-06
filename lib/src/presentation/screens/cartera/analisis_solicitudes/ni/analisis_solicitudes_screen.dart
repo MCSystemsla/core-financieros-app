@@ -191,6 +191,7 @@ class _AnalisisListDataWidgetState extends State<_AnalisisListDataWidget> {
           cedulaCliente: solicitud.cedulaCliente,
           tipoPersonaCodigo: solicitud.tipoPersonaCodigo,
           esGrupal: solicitud.esSolicitudGrupal,
+          monto: solicitud.monto ?? '0',
           subtitle: solicitud.nombreCompleto ?? 'N/A',
           description: solicitud.monto?.toCurrencyString() ?? 'N/A',
         );

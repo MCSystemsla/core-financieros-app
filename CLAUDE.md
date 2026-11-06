@@ -93,14 +93,14 @@ Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_gar
 
 Valor comercial and related currency fields in the HN garantía crear/actualizar forms (vehículo, maquinaria, derecho, DPF, hipotecario under `widgets/analisis_solicitudes/hn/garantia/v2/`) accept decimals: `TextInputType.numberWithOptions(decimal: true)`, `CurrencyInputFormatter()` with no `mantissaLength: 0`, and `toNumericString(value, allowPeriod: true)` when parsing. The response model (`analisis_garantia_obtener_bien_response.dart`) parses these values as `double`, not `int`. Keep this when adding a new garantía form.
 
-### HN análisis: plan de inversión offline
+### HN/NI análisis: plan de inversión offline
 
-`PlanInversionScreen` keeps an automatic local draft in Honduras, with or without a connection. Sending is never automatic.
+`PlanInversionScreen` keeps an automatic local draft in Honduras and Nicaragua, with or without a connection. Sending is never automatic. NI reuses the same HN cubit, entity and endpoint; only Costa Rica stays in memory.
 
 - The draft is one `AnalisisPlanInversionHnLocalDb` row per `numeroSolicitud` + `LocalStorage().userId` (`datasource/analisis/hn/plan_inversion/local_db/`), registered in `AnalisisBoxServiceHn` (`get`/`save`/`removePlanInversionBorrador`). `itemsJson` holds the articles via `PlanInversion.toLocalJson()` (includes `uuid`); `toJson()`, the backend body, does not send `uuid`.
 - `AnalisisPlanInversionHnCubit` loads the draft in `serNumeroSolicitud` and saves it on every create/edit/delete. An empty list deletes the row. A `201` deletes it. A failed send keeps it. `state.fechaBorrador` drives the "Borrador en el teléfono" tag.
-- Everything is gated by `AnalisisPlanInversionHnCubit.usaBorrador` (`Flavor.honduras`). NI also opens this screen from its online sheet and keeps the old in-memory behavior.
-- Offline (HN only), "Enviar" is disabled and an amber notice is shown. The HN offline sheet (`_SelectTypeAnalisis` in `analisis_solicitudes_hn_offline_screen.dart`) shows "Registrar Plan de inversión" only with `Flavor.honduras`, because Costa Rica opens that screen too.
+- Everything is gated by `AnalisisPlanInversionHnCubit.usaBorrador` (`Flavor.honduras` or `Flavor.nicaragua`). Costa Rica also opens this screen from the NI online sheet and keeps the old in-memory behavior.
+- Offline (HN/NI), "Enviar" is disabled and an amber notice is shown. The HN offline sheet (`_SelectTypeAnalisis` in `analisis_solicitudes_hn_offline_screen.dart`) shows "Registrar Plan de inversión" only with `Flavor.honduras`, because Costa Rica opens that screen too. The NI offline sheet (`AnalisisSolicitudesNiOfflineScreen`) always shows it.
 - Drafts are not deleted on logout. Closing the análisis still uses `TienePlanInversion` from the backend.
 
 Spec: `specs/04-plan-inversion-hn-offline.md`.
@@ -131,6 +131,8 @@ In Honduras, the advisor can fill in the análisis, plan de inversión, fiadores
 
 Specs: `specs/06-analisis-hn-solicitud-sin-numero.md`, `specs/07-analisis-grupal-hn-solicitud-sin-numero.md` (grupal).
 
+**Nicaragua (SPEC 08)** has the same flow, reusing the same entity, service methods and dialogs (gated by `usaBorradorSinNumero` in `ofrecer_borrador_sin_numero_hn.dart`: HN or NI, never CR). Differences: `AnalisisSolicitudesNiOfflineScreen` lists the finished NI local solicitudes from `ObjectBoxService` (`ResponseLocalDb` → `NUEVAMENOR`, `AsalariadoResponsesLocalDb` → `ASALARIADO`, `ReprestamoResponsesLocalDb` → `REPRESTAMO`, no user filter); there are no grupales; the monto check uses NI's `getTipoSolicitud` (threshold 1000); the dialog is offered from `AnalisisCreditCard` (NI online, takes `monto`) and the sync rows of the NI offline list; the `fiadores` module also covers `AnalisisFiadorNiLocalDb`. The 4 NI análisis forms and `FiadoresNiPendientesScreen` disable sending with `numeroSolicitud < 0`, and the NI fiador form always saves locally. Pending fiadores (HN and NI) are sent with `NumeroSolicitud` taken from the row, not from `payloadJson`, so a linked fiador uses the real number.
+
 ### NI análisis: fiadores
 
 NI has its own fiador flow, separate from HN's: `FiadoresNiFormScreen` → `AnalisisFiadoresNiSendingWidget` (`screens/cartera/analisis_solicitudes/ni/fiadores/`, `widgets/analisis_solicitudes/ni/fiadores/`). There is no fiador-type selection screen. The "Registrar Fiadores" card in `SelectTypeAnalisisModalSheetNiWidget` calls `FiadoresNiPendientesScreen.open`, which opens the form directly unless the request has offline fiadores pending (see below).
@@ -151,7 +153,7 @@ NI fiadores can be captured without a connection and sent by hand later. Sending
 - When "Enviar" is tapped on step 4 without a connection, `AnalisisFiadoresNiSendingWidget(guardarLocal: true)` calls `AnalisisFiadoresNiCubit.guardarFiadorLocal`. With a connection it sends as before. If that send fails with a network error (`AppException.status` is `noConnection`/`timeOutError`, exposed as `state.isNetworkError`), it also offers "Guardar para enviar después". Backend errors never offer it.
 - Pending fiadores are `AnalisisFiadorNiLocalDb` rows (`datasource/analisis/ni/fiadores/local_db/`), registered in `AnalisisBoxServiceHn`. `payloadJson` is the already-built body (`AnalisisFiadorNi.toJson()`), and sending rebuilds it with `AnalisisFiadorNi.fromJson` without recalculating anything. Rows are scoped to `LocalStorage().userId` and are not deleted on logout. The same cédula cannot be saved twice for the same request.
 - `FiadoresNiPendientesScreen` (`FiadoresNiPendientesCubit`) lists one request's pending fiadores and lets the advisor send ("Enviar", online only) or delete each one. A `201` deletes the row. Always open it through `FiadoresNiPendientesScreen.route()` or `.open()`: the sending screen uses its `routeName` to pop back to an existing list instead of stacking a second one.
-- Offline entry point: without a connection, `CarteraScreen` opens `AnalisisSolicitudesNiOfflineScreen` in NI (HN/CR keep `AnalisisSolicitudesHnOfflineScreen`). Its list is `AnalisisListDataHn`, filled by the NI sync (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`, page 1 only, Nicaragua only). Its sheet offers análisis (NI interceptor), imágenes, ubicación (screens shared with HN) and fiadores. Plan de inversión is not offline in NI (it is in HN, see above).
+- Offline entry point: without a connection, `CarteraScreen` opens `AnalisisSolicitudesNiOfflineScreen` in NI (HN/CR keep `AnalisisSolicitudesHnOfflineScreen`). Its list is `AnalisisListDataHn`, filled by the NI sync (`SolicitudCatalogoCubit.guardarAnalisisAsignadosNi`, page 1 only, Nicaragua only). Its sheet offers análisis (NI interceptor), imágenes, ubicación, plan de inversión (screens shared with HN, see "HN/NI análisis: plan de inversión offline") and fiadores. It also lists NI solicitudes created offline without a number (see "HN análisis: solicitudes sin número", SPEC 08).
 - Closing the análisis ignores local pending fiadores: the dialog still uses `TieneFiadores` from the backend.
 
 Spec: `specs/03-fiadores-ni-offline.md`.

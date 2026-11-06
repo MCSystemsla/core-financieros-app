@@ -48,9 +48,12 @@ class FiadoresNiPendientesCubit extends Cubit<FiadoresNiPendientesState> {
       enviandoUuid: pendiente.uuid,
     ));
     try {
-      final fiador = AnalisisFiadorNi.fromJson(
-        json.decode(pendiente.payloadJson) as Map<String, dynamic>,
-      );
+      final payload =
+          json.decode(pendiente.payloadJson) as Map<String, dynamic>;
+      // El número de la fila manda: un borrador sin número vinculado a su AUT
+      // (SPEC 08) guardó el payload con el número provisional.
+      payload['NumeroSolicitud'] = pendiente.numeroSolicitud;
+      final fiador = AnalisisFiadorNi.fromJson(payload);
       await _repository.createAnalisisFiador(analisisFiadorNi: fiador);
       _localDb.removeFiadorNiPendiente(pendiente.id);
       emit(FiadoresNiPendientesState(

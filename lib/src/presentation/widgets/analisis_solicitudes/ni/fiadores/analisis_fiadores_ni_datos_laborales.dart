@@ -35,11 +35,6 @@ class _AnalisisFiadoresNiDatosLaboralesState
     final cubit = context.read<AnalisisFiadoresNiCubit>();
     return BlocBuilder<AnalisisFiadoresNiCubit, AnalisisFiadoresNiState>(
       builder: (context, state) {
-        // El lugar de trabajo solo es obligatorio si el fiador trabaja.
-        final trabaja = state.esAsalariado || state.esEmpresario;
-        String? requiredSiTrabaja(dynamic value) =>
-            trabaja ? ClassValidator.validateRequired(value) : null;
-
         return SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Form(
@@ -176,7 +171,8 @@ class _AnalisisFiadoresNiDatosLaboralesState
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
-                      validator: requiredSiTrabaja,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(direccionTrabajo: value),
@@ -190,7 +186,8 @@ class _AnalisisFiadoresNiDatosLaboralesState
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],
-                      validator: requiredSiTrabaja,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(barrioTrabajo: value),
@@ -205,7 +202,8 @@ class _AnalisisFiadoresNiDatosLaboralesState
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
-                      validator: requiredSiTrabaja,
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       onChange: (value) {
                         cubit.onFieldChanged(
                           () => cubit.state.copyWith(telefonoTrabajo: value),

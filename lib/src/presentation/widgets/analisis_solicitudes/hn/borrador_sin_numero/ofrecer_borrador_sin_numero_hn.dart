@@ -3,7 +3,10 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/analisis_solicitudes_interceptor_type.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/analisis_solicitudes_hn_offline_screen.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/ni/analisis_solicitudes_screen.dart'
+    as ni show getTipoSolicitud;
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/usar_borrador_sin_numero_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +19,8 @@ import 'package:flutter/material.dart';
 /// - "Ahora no" no toca nada.
 /// - "Descartar" borra el borrador y sus datos.
 ///
-/// Solo Honduras. El `Future` termina cuando el asesor ya decidió, para que el
-/// llamador abra el sheet.
+/// Honduras y Nicaragua (SPEC 08; NI no tiene grupales). El `Future` termina
+/// cuando el asesor ya decidió, para que el llamador abra el sheet.
 Future<void> ofrecerBorradorSinNumeroHn(
   BuildContext context, {
   required String cedula,
@@ -26,7 +29,7 @@ Future<void> ofrecerBorradorSinNumeroHn(
   required String numeroSolicitud,
   required bool esGrupal,
 }) async {
-  if (global<FlavorCubit>().state.flavor != Flavor.honduras) return;
+  if (!usaBorradorSinNumero) return;
   final numeroReal = int.tryParse(numeroSolicitud) ?? 0;
   if (numeroReal <= 0 || cedula.isEmpty) return;
 
@@ -56,16 +59,11 @@ Future<void> ofrecerBorradorSinNumeroHn(
       // análisis del borrador ya no sirve. En grupales el formulario es
       // siempre el grupal, así que nunca se descarta por monto.
       final cambioFormulario = !esGrupal &&
-          getTipoSolicitud(
+          _formularioAnalisis(
                 tipoSolicitud: borrador.tipoSolicitud,
                 monto: borrador.monto.toString(),
-                esGrupal: false,
               ) !=
-              getTipoSolicitud(
-                tipoSolicitud: tipoSolicitud,
-                monto: monto,
-                esGrupal: false,
-              );
+              _formularioAnalisis(tipoSolicitud: tipoSolicitud, monto: monto);
       final resultado = await localDb.vincularBorradorSinNumero(
         borrador: borrador,
         numeroReal: numeroReal,
@@ -75,4 +73,27 @@ Future<void> ofrecerBorradorSinNumeroHn(
       if (!context.mounted) return;
       await ResumenVinculoBorradorDialog.show(context, resultado: resultado);
   }
+}
+
+/// Países con análisis de solicitudes sin número: HN (SPEC 06/07) y NI
+/// (SPEC 08). Costa Rica no.
+bool get usaBorradorSinNumero => switch (global<FlavorCubit>().state.flavor) {
+      Flavor.honduras || Flavor.nicaragua => true,
+      _ => false,
+    };
+
+/// Formulario de análisis individual según el país: HN lee el umbral del
+/// parámetro `MENORMIL`; NI usa 1000 fijo.
+AnalisisSolicitudesInterceptorType _formularioAnalisis({
+  required String tipoSolicitud,
+  required String monto,
+}) {
+  if (global<FlavorCubit>().state.flavor == Flavor.nicaragua) {
+    return ni.getTipoSolicitud(tipoSolicitud: tipoSolicitud, monto: monto);
+  }
+  return getTipoSolicitud(
+    tipoSolicitud: tipoSolicitud,
+    monto: monto,
+    esGrupal: false,
+  );
 }
