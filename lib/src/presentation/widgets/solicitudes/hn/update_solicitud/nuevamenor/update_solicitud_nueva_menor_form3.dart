@@ -346,7 +346,7 @@ class _UpdateSolicitudNuevaMenorForm3State
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Puesto Negocio',
-                  icon: Icon(Icons.storefront,
+                  icon: Icon(Icons.work,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
@@ -370,7 +370,7 @@ class _UpdateSolicitudNuevaMenorForm3State
                     return OutlineTextfieldWidget(
                       hintText: state.horarioTrabajo,
                       icon:
-                          Icon(Icons.work, color: AppColors.getPrimaryColor()),
+                          Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
                       title: 'Horario de Atención',

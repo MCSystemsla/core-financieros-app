@@ -370,7 +370,7 @@ class _NuevaMenorOfflineHn4State extends State<NuevaMenorOfflineHn4>
                           validator: (value) =>
                               ClassValidator.validateRequired(value),
                           hintText: 'Años del Lugar de Trabajo del Cónyuge',
-                          icon: Icon(Icons.location_on,
+                          icon: Icon(Icons.access_time,
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.number,
                           title: 'Años del Lugar de Trabajo del Cónyuge',

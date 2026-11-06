@@ -257,7 +257,7 @@ class _NuevaMenorOffline2WidgetState extends State<NuevaMenorOffline2Widget>
                       ],
                       initialValue: barrioCasa,
                       icon: Icon(
-                        Icons.calendar_today,
+                        Icons.location_city,
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Barrio Casa',

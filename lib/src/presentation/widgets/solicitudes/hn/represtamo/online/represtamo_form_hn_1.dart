@@ -160,7 +160,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   initialValue: widget.userByDocumentReprestamoData?.cedula,
                   key: const ValueKey('cedula'),
                   hintText: 'Documento',
-                  icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.credit_card, color: AppColors.getPrimaryColor()),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   textInputType: TextInputType.number,
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -181,7 +181,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                   isRequired: true,
                   key: const ValueKey('celular'),
                   hintText: 'Celular Represtamo',
-                  icon: Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.smartphone, color: AppColors.getPrimaryColor()),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     DashFormatter(),
@@ -256,7 +256,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     key: const ValueKey('vinculo'),
                     hintText: 'Vinculo Descripcion',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.description_outlined, color: AppColors.getPrimaryColor()),
                     inputFormatters: [UpperCaseTextFormatter()],
                     textInputType: TextInputType.name,
                     textCapitalization: TextCapitalization.characters,
@@ -277,7 +277,7 @@ class _ReprestamoFormHn1State extends State<ReprestamoFormHn1>
                     key: const ValueKey('codigoUSA'),
                     hintText: 'Código USA',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.badge, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                       LengthLimitingTextInputFormatter(25),

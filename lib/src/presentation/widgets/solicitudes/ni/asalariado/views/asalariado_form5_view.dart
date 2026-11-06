@@ -217,7 +217,7 @@ class __FormContentState extends State<_FormContent> {
                     );
                   },
                   title: 'Fuente otros ingresos',
-                  icon: const Icon(Icons.money_off),
+                  icon: const Icon(Icons.source),
                 ),
                 const Gap(30),
                 CountryInput(

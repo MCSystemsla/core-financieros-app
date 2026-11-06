@@ -157,7 +157,7 @@ class _UpdateSolicitudAsalariadoForm4State
                             ClassValidator.validateRequired(value),
                         hintText: 'Documento Cónyuge',
                         icon: Icon(
-                          Icons.person,
+                          Icons.credit_card,
                           color: AppColors.getPrimaryColor(),
                         ),
                         textInputType: TextInputType.name,

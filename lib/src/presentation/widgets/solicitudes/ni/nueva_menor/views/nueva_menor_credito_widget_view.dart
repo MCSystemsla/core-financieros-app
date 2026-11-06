@@ -252,7 +252,7 @@ class __FormContentState extends State<_FormContent>
                 OutlineTextfieldWidget(
                   readOnly: true,
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha de Desembolso',
@@ -321,7 +321,7 @@ class __FormContentState extends State<_FormContent>
                     LengthLimitingTextInputFormatter(3),
                   ],
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.schedule,
                     color: AppColors.getPrimaryColor(),
                   ),
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -344,7 +344,7 @@ class __FormContentState extends State<_FormContent>
                   readOnly: true,
                   onTap: () => selectDate(context),
                   icon: Icon(
-                    Icons.payment,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha del Primer Pago de la Solicitud',
@@ -359,7 +359,7 @@ class __FormContentState extends State<_FormContent>
                     UpperCaseTextFormatter(),
                   ],
                   icon: Icon(
-                    Icons.remove_red_eye,
+                    Icons.note,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Observación',

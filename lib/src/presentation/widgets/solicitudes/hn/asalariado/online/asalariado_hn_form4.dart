@@ -181,7 +181,7 @@ class _AsalariadoHnForm4State extends State<AsalariadoHnForm4>
                             ClassValidator.validateRequired(value),
                         hintText: 'Documento Cónyuge',
                         icon: Icon(
-                          Icons.person,
+                          Icons.credit_card,
                           color: AppColors.getPrimaryColor(),
                         ),
                         textInputType: TextInputType.text,

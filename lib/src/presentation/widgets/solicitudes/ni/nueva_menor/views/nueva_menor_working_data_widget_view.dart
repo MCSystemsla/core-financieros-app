@@ -169,7 +169,7 @@ class __FormContentState extends State<_FormContent> {
                     UpperCaseTextFormatter(),
                   ],
                   icon: Icon(
-                    Icons.calendar_today,
+                    Icons.location_city,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Barrio Casa',

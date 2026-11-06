@@ -212,7 +212,7 @@ class __FormContentState extends State<_FormContent> {
                   ],
                   maxLength: 50,
                   icon: Icon(
-                    Icons.person_sharp,
+                    Icons.work_outline,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Ocupación',
@@ -589,7 +589,7 @@ class __FormContentState extends State<_FormContent> {
                   maxLength: 50,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(
-                    Icons.business,
+                    Icons.location_city,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Barrio de Negocio',

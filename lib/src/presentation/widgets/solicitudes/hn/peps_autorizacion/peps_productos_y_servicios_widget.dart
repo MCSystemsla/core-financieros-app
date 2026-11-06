@@ -104,7 +104,7 @@ class PepsProductosYServiciosUtilizaWidget extends StatelessWidget {
                 const Gap(10),
                 OutlineTextfieldWidget(
                   title: 'Especifique',
-                  icon: const Icon(Icons.account_balance_outlined),
+                  icon: const Icon(Icons.edit_note),
                   textCapitalization: TextCapitalization.none,
                   inputFormatters: [
                     UpperCaseTextFormatter(),

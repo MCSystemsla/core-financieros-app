@@ -227,7 +227,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   UpperCaseTextFormatter(),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.account_balance,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre de la entidad',
@@ -277,7 +277,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   LengthLimitingTextInputFormatter(2),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.date_range,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',
@@ -299,7 +299,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   UpperCaseTextFormatter(),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo oficial',
@@ -352,7 +352,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                 validator: (value) => ClassValidator.validateRequired(value),
                 initialValue: nombreFamiliarPeps2,
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.person,
                   color: AppColors.getPrimaryColor(),
                 ),
                 inputFormatters: [
@@ -378,7 +378,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   UpperCaseTextFormatter(),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo Familiar',
@@ -401,7 +401,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   UpperCaseTextFormatter(),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.account_balance,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre de la entidad',
@@ -448,7 +448,7 @@ class _ReprestamoOfflineForm2State extends State<ReprestamoOfflineForm2>
                   LengthLimitingTextInputFormatter(2),
                 ],
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.date_range,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',

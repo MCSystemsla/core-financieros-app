@@ -338,7 +338,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                   initialValue: ocupacion,
                   maxLength: 40,
                   icon: Icon(
-                    Icons.person_sharp,
+                    Icons.work_outline,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Ocupacion',
@@ -784,7 +784,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                   maxLength: 40,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: Icon(
-                    Icons.business,
+                    Icons.location_city,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Barrio de Negocio',

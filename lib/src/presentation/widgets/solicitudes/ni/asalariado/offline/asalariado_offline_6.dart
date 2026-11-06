@@ -305,7 +305,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                       );
                     },
                     title: 'Nombre y Apellido del Cónyuge',
-                    icon: const Icon(Icons.badge_outlined),
+                    icon: const Icon(Icons.person),
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
@@ -414,7 +414,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         );
                       },
                       title: 'Dirección de la Empresa donde trabaja su Cónyuge',
-                      icon: const Icon(Icons.badge_outlined),
+                      icon: const Icon(Icons.location_on),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -435,7 +435,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         );
                       },
                       title: 'Tiempo de laborar su Cónyuge',
-                      icon: const Icon(Icons.badge_outlined),
+                      icon: const Icon(Icons.access_time),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -481,7 +481,7 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                         getTotalIngresoMes();
                       },
                       title: 'Otros ingresos Cónyuge (C\$)',
-                      icon: const Icon(Icons.money_off_csred_outlined),
+                      icon: const Icon(Icons.payments),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(

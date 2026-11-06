@@ -125,7 +125,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
                                 ClassValidator.validateRequired(value),
                             title: 'Ingresa cedula del Cliente',
                             hintText: 'Ej: 0809199901218T',
-                            icon: const Icon(Icons.person),
+                            icon: const Icon(Icons.credit_card),
                             onChange: (value) {
                               cedulaCliente = value;
                             },

@@ -331,7 +331,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                   isRequired: true,
                   validator: (value) => ClassValidator.validateRequired(value),
                   hintText: 'Ingresa Puesto Negocio',
-                  icon: Icon(Icons.storefront,
+                  icon: Icon(Icons.work,
                       color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
@@ -351,7 +351,7 @@ class _NuevaMenorOfflineHn3State extends State<NuevaMenorOfflineHn3>
                 const Gap(30),
                 OutlineTextfieldWidget(
                   hintText: cubit.state.horarioTrabajo,
-                  icon: Icon(Icons.work, color: AppColors.getPrimaryColor()),
+                  icon: Icon(Icons.schedule, color: AppColors.getPrimaryColor()),
                   textInputType: TextInputType.text,
                   textCapitalization: TextCapitalization.words,
                   title: 'Horario de Atención',

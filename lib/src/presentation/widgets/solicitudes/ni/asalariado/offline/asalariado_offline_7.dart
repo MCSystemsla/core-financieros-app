@@ -294,7 +294,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                   initialValue: fechaDesembolso.selectorFormat(),
                   readOnly: true,
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Desembolso',
@@ -372,7 +372,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                   ],
                   initialValue: plazoSolicitud,
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.schedule,
                     color: AppColors.getPrimaryColor(),
                   ),
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -397,7 +397,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                   readOnly: true,
                   onTap: () => selectDate(context),
                   icon: Icon(
-                    Icons.payment,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha de Primer Pago Solicitud',
@@ -409,7 +409,7 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                 OutlineTextfieldWidget(
                   initialValue: observacion,
                   icon: Icon(
-                    Icons.remove_red_eye,
+                    Icons.note,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Observacion',

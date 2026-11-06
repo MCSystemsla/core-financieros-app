@@ -247,7 +247,7 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                     );
                   },
                   title: 'Fuente otros ingresos',
-                  icon: const Icon(Icons.money_off),
+                  icon: const Icon(Icons.source),
                 ),
                 const Gap(30),
                 CountryInput(

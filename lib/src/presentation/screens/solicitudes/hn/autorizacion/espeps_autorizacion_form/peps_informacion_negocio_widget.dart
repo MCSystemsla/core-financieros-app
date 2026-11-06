@@ -48,7 +48,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
               const Gap(5),
               OutlineTextfieldWidget(
                 title: 'Porcentaje Accionario que posee en el negocio?',
-                icon: const Icon(Icons.account_balance_outlined),
+                icon: const Icon(Icons.percent),
                 textInputType: TextInputType.number,
                 textCapitalization: TextCapitalization.none,
                 inputFormatters: [
@@ -68,7 +68,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
               const Gap(5),
               OutlineTextfieldWidget(
                 title: 'Cuantas sucursales tiene el negocio?',
-                icon: const Icon(Icons.account_balance_outlined),
+                icon: const Icon(Icons.storefront),
                 textInputType: TextInputType.number,
                 textCapitalization: TextCapitalization.none,
                 inputFormatters: [
@@ -87,7 +87,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
               const Gap(5),
               OutlineTextfieldWidget(
                 title: 'Ciudad (es) de la (s) Sucursal (es)',
-                icon: const Icon(Icons.location_on),
+                icon: const Icon(Icons.location_city),
                 textCapitalization: TextCapitalization.none,
                 inputFormatters: [
                   UpperCaseTextFormatter(),
@@ -167,7 +167,7 @@ class PepsInformacionNegocioWidget extends StatelessWidget {
                   const Gap(5),
                   OutlineTextfieldWidget(
                     title: 'Descripción de recursos',
-                    icon: const Icon(Icons.account_balance_outlined),
+                    icon: const Icon(Icons.description_outlined),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                     ],

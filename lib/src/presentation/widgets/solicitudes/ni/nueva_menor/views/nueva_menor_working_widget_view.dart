@@ -119,7 +119,7 @@ class __FormContentState extends State<_FormContent> {
                     key: const ValueKey('nombreConyuge'),
                     maxLength: 50,
                     icon: Icon(
-                      Icons.woman,
+                      Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
                     title: 'Nombre Cónyuge',
@@ -169,7 +169,7 @@ class __FormContentState extends State<_FormContent> {
                       key: const ValueKey('trabajoConyuge'),
                       maxLength: 50,
                       icon: Icon(
-                        Icons.woman_2,
+                        Icons.work_outline,
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Trabajo de Cónyuge',
@@ -193,7 +193,7 @@ class __FormContentState extends State<_FormContent> {
                       key: const ValueKey('direccionTrabajoConyuge'),
                       maxLength: 50,
                       icon: Icon(
-                        Icons.woman_2,
+                        Icons.location_on,
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Dirección Trabajo Cónyuge',
@@ -299,7 +299,7 @@ class __FormContentState extends State<_FormContent> {
                     ],
                     key: const ValueKey('cedulaFamiliarEmpleado'),
                     icon: Icon(
-                      Icons.add_card_sharp,
+                      Icons.credit_card,
                       color: AppColors.getPrimaryColor(),
                     ),
                     title: 'Cedula familiar de empleado',
@@ -326,7 +326,7 @@ class __FormContentState extends State<_FormContent> {
                   ],
                   key: const ValueKey('personasACargo'),
                   icon: Icon(
-                    Icons.add_card_sharp,
+                    Icons.group,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Persona a cargo',

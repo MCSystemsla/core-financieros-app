@@ -713,7 +713,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
                   ],
                   initialValue: cantidadHijos,
                   icon: Icon(
-                    Icons.phone,
+                    Icons.child_care,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Cantidad Hijos',

@@ -181,7 +181,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     OutlineTextfieldWidget(
                       initialValue: cargo,
                       title: 'Cargo Desempeñado',
-                      icon: const Icon(Icons.wallet),
+                      icon: const Icon(Icons.work),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [
@@ -195,7 +195,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     OutlineTextfieldWidget(
                       initialValue: periodo?.toString(),
                       title: 'Periodo',
-                      icon: const Icon(Icons.wallet),
+                      icon: const Icon(Icons.date_range),
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -210,7 +210,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     OutlineTextfieldWidget(
                       initialValue: nombreInstitucion,
                       title: 'Nombre Institucion',
-                      icon: const Icon(Icons.wallet),
+                      icon: const Icon(Icons.account_balance),
                       inputFormatters: [
                         UpperCaseTextFormatter(),
                       ],

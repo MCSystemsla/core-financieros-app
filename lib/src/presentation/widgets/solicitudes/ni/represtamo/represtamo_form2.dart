@@ -166,7 +166,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.account_balance,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre de la entidad',
@@ -209,7 +209,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.perm_identity_outlined,
+                  Icons.date_range,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',
@@ -231,7 +231,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo oficial',
@@ -280,7 +280,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.person,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre del familiar',
@@ -302,7 +302,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.work,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Cargo Familiar',
@@ -324,7 +324,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.account_balance,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Nombre de la entidad',
@@ -368,7 +368,7 @@ class _ReprestamoForm2State extends State<ReprestamoForm2>
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
                 icon: Icon(
-                  Icons.credit_card,
+                  Icons.date_range,
                   color: AppColors.getPrimaryColor(),
                 ),
                 title: 'Periodo',

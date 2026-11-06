@@ -72,7 +72,7 @@ class _ReprestamoFormHn4State extends State<ReprestamoFormHn4>
                 OutlineTextfieldWidget(
                   title: 'Cedula Beneficiario Seguro',
                   icon: Icon(
-                    Icons.person,
+                    Icons.credit_card,
                     color: AppColors.getPrimaryColor(),
                   ),
                   hintText: 'Cedula Beneficiario Seguro',

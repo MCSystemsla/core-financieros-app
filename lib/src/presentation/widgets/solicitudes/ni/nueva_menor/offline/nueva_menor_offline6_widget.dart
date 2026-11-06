@@ -262,7 +262,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                 OutlineTextfieldWidget(
                   readOnly: true,
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha Desembolso',
@@ -369,7 +369,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   ],
                   initialValue: plazoSolicitud == '0' ? null : plazoSolicitud,
                   icon: Icon(
-                    Icons.price_change,
+                    Icons.schedule,
                     color: AppColors.getPrimaryColor(),
                   ),
                   validator: (value) => ClassValidator.validateRequired(value),
@@ -394,7 +394,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   readOnly: true,
                   onTap: () => selectDate(context),
                   icon: Icon(
-                    Icons.payment,
+                    Icons.calendar_today,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Fecha de Primer Pago Solicitud',
@@ -409,7 +409,7 @@ class _NuevaMenorOffline6WidgetState extends State<NuevaMenorOffline6Widget>
                   ],
                   initialValue: observacion,
                   icon: Icon(
-                    Icons.remove_red_eye,
+                    Icons.note,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Observacion',

@@ -319,7 +319,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       hintText: 'Ingresa Puesto Negocio',
-                      icon: Icon(Icons.storefront,
+                      icon: Icon(Icons.work,
                           color: AppColors.getPrimaryColor()),
                       textInputType: TextInputType.text,
                       textCapitalization: TextCapitalization.words,
@@ -343,7 +343,7 @@ class _NuevaMenorForm3State extends State<NuevaMenorForm3>
                         return OutlineTextfieldWidget(
                           key: const ValueKey('horarioTrabajo'),
                           hintText: state.horarioTrabajo,
-                          icon: Icon(Icons.work,
+                          icon: Icon(Icons.schedule,
                               color: AppColors.getPrimaryColor()),
                           textInputType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,

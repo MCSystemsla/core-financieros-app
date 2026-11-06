@@ -169,7 +169,7 @@ class __FormContentState extends State<_FormContent> {
                   hintText: 'Ingresa Teléfono',
                   maxLength: 9,
                   title: 'Teléfono Beneficiario del Seguro',
-                  icon: const Icon(Icons.badge),
+                  icon: const Icon(Icons.phone),
                 ),
                 const Gap(30),
                 Padding(
@@ -471,7 +471,7 @@ class __FormContentState extends State<_FormContent> {
                       );
                     },
                     title: 'Nombre familiar',
-                    icon: const Icon(Icons.date_range),
+                    icon: const Icon(Icons.person),
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
@@ -489,7 +489,7 @@ class __FormContentState extends State<_FormContent> {
                       );
                     },
                     title: 'Cedula familiar',
-                    icon: const Icon(Icons.card_travel_sharp),
+                    icon: const Icon(Icons.credit_card),
                   ),
                 ],
                 const Gap(20),

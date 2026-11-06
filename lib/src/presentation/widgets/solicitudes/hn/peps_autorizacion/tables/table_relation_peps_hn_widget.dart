@@ -177,7 +177,7 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                     OutlineTextfieldWidget(
                       initialValue: nombre,
                       title: 'Nombre',
-                      icon: const Icon(Icons.wallet),
+                      icon: const Icon(Icons.person),
                       validator: (value) =>
                           ClassValidator.validateRequired(value),
                       inputFormatters: [

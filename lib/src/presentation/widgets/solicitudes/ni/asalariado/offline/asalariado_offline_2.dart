@@ -217,7 +217,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                   hintText: 'Ingresa Telefono',
                   maxLength: 15,
                   title: 'Telefono',
-                  icon: const Icon(Icons.badge),
+                  icon: const Icon(Icons.phone),
                 ),
                 const Gap(30),
                 Padding(
@@ -521,7 +521,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       );
                     },
                     title: 'Nombre familiar',
-                    icon: const Icon(Icons.date_range),
+                    icon: const Icon(Icons.person),
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
@@ -540,7 +540,7 @@ class _AsalariadoOffline2State extends State<AsalariadoOffline2>
                       );
                     },
                     title: 'Cedula familiar',
-                    icon: const Icon(Icons.card_travel_sharp),
+                    icon: const Icon(Icons.credit_card),
                   ),
                 ],
                 const Gap(20),

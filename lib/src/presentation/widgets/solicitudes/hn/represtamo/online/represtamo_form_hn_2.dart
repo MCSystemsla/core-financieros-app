@@ -106,7 +106,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Cédula Familiar Empleado',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.credit_card, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(50),
@@ -158,7 +158,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Nombre de Entidad PEPS',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.account_balance, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                       LengthLimitingTextInputFormatter(100),
@@ -199,7 +199,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Periodo PEPS',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.date_range, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(100),
@@ -222,7 +222,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Cargo Oficial PEPS',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.work, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                       LengthLimitingTextInputFormatter(100),
@@ -295,7 +295,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Nombre Entidad Familiar PEPS 2',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.account_balance, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                       LengthLimitingTextInputFormatter(100),
@@ -337,7 +337,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Cargo Familiar PEPS 2',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.work, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
                       LengthLimitingTextInputFormatter(100),
@@ -361,7 +361,7 @@ class _ReprestamoFormHn2State extends State<ReprestamoFormHn2>
                     isRequired: true,
                     hintText: 'Periodo de vinculación del familiar PEPS',
                     icon:
-                        Icon(Icons.person, color: AppColors.getPrimaryColor()),
+                        Icon(Icons.date_range, color: AppColors.getPrimaryColor()),
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(100),

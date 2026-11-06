@@ -235,7 +235,7 @@ class __FormContentState extends State<_FormContent> {
                       );
                     },
                     title: 'Nombre y Apellido del Cónyuge',
-                    icon: const Icon(Icons.badge_outlined),
+                    icon: const Icon(Icons.person),
                   ),
                   const Gap(30),
                   CatalogoValorNacionalidad(
@@ -334,7 +334,7 @@ class __FormContentState extends State<_FormContent> {
                         );
                       },
                       title: 'Dirección de la Empresa donde trabaja su Cónyuge',
-                      icon: const Icon(Icons.badge_outlined),
+                      icon: const Icon(Icons.location_on),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -354,7 +354,7 @@ class __FormContentState extends State<_FormContent> {
                         );
                       },
                       title: 'Tiempo de laborar su Cónyuge',
-                      icon: const Icon(Icons.badge_outlined),
+                      icon: const Icon(Icons.access_time),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(
@@ -397,7 +397,7 @@ class __FormContentState extends State<_FormContent> {
                         getTotalIngresoMes();
                       },
                       title: 'Otros ingresos Cónyuge (C\$)',
-                      icon: const Icon(Icons.money_off_csred_outlined),
+                      icon: const Icon(Icons.payments),
                     ),
                     const Gap(30),
                     OutlineTextfieldWidget(

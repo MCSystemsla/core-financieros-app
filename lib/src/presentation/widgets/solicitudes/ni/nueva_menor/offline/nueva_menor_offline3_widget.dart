@@ -166,7 +166,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                     initialValue: nombreConyuge,
                     maxLength: 50,
                     icon: Icon(
-                      Icons.woman,
+                      Icons.person,
                       color: AppColors.getPrimaryColor(),
                     ),
                     title: 'Nombre Conyuge',
@@ -222,7 +222,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                       initialValue: trabajoConyuge,
                       maxLength: 50,
                       icon: Icon(
-                        Icons.woman_2,
+                        Icons.work_outline,
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Trabajo de Conyuge',
@@ -249,7 +249,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                       initialValue: direccionTrabajoConyuge,
                       maxLength: 50,
                       icon: Icon(
-                        Icons.woman_2,
+                        Icons.location_on,
                         color: AppColors.getPrimaryColor(),
                       ),
                       title: 'Direccion Trabajo Conyuge',
@@ -362,7 +362,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                     ],
                     initialValue: cedulaFamiliarEmpleado,
                     icon: Icon(
-                      Icons.add_card_sharp,
+                      Icons.credit_card,
                       color: AppColors.getPrimaryColor(),
                     ),
                     title: 'Cedula familiar de empleado',
@@ -391,7 +391,7 @@ class _NuevaMenorOffline3WidgetState extends State<NuevaMenorOffline3Widget>
                   ],
                   initialValue: personasACargo,
                   icon: Icon(
-                    Icons.add_card_sharp,
+                    Icons.group,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Persona a cargo',

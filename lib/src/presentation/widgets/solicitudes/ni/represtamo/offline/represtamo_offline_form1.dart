@@ -255,7 +255,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                     UpperCaseTextFormatter(),
                   ],
                   icon: Icon(
-                    Icons.edit_document,
+                    Icons.credit_card,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Cedula',
@@ -277,7 +277,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
                   validator: (value) => ClassValidator.validateRequired(value),
                   initialValue: celularReprestamo!,
                   icon: Icon(
-                    Icons.person,
+                    Icons.smartphone,
                     color: AppColors.getPrimaryColor(),
                   ),
                   title: 'Celular',

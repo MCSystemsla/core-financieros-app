@@ -110,7 +110,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.cedulaFamiliar,
                         isRequired: true,
                         hintText: 'Cedula Familiar Empleado',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.credit_card,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -166,7 +166,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.nombreDeEntidadPeps,
                         isRequired: true,
                         hintText: 'Nombre de Entidad PEPS',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.account_balance,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -214,7 +214,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.periodoPeps,
                         isRequired: true,
                         hintText: 'Periodo PEPS',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.date_range,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
@@ -238,7 +238,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.cargoOficialPeps,
                         isRequired: true,
                         hintText: 'Cargo Oficial PEPS',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.work,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -315,7 +315,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.nombreEntidadPeps2,
                         isRequired: true,
                         hintText: 'Nombre Entidad Familiar PEPS 2',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.account_balance,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -362,7 +362,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.cargoFamiliarPeps2,
                         isRequired: true,
                         hintText: 'Cargo Familiar PEPS 2',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.work,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           UpperCaseTextFormatter(),
@@ -387,7 +387,7 @@ class _ReprestamoFormHnOffline2State extends State<ReprestamoFormHnOffline2>
                         initialValue: state.periodoPeps2,
                         isRequired: true,
                         hintText: 'Periodo PEPS 2',
-                        icon: Icon(Icons.person,
+                        icon: Icon(Icons.date_range,
                             color: AppColors.getPrimaryColor()),
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
