@@ -211,6 +211,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
       rubroActividad3
     ].where((e) => e != null && e.isNotEmpty).forEach(
         (e) => rubrosActividadesPredominanteList.add(Item(name: e!, value: e)));
+    _asignarActividadPredominanteUnica(notificar: false);
 
     context.read<SolicitudNuevaMenorCubit>().onFieldChanged(
           () => context.read<SolicitudNuevaMenorCubit>().state.copyWith(
@@ -249,6 +250,41 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                 departamentoNegocioVer: departamentoNegocio?.name,
               ),
         );
+  }
+
+  /// Actividades 1, 2 y 3 registradas actualmente, sin repetir.
+  List<Item> get _actividadesRegistradas {
+    final valores = [actividad, actividad1, actividadEconomica2];
+    final nombres = [actividadVer, actividad1Ver, actividadEconomica2Ver];
+    final registradas = <String, Item>{};
+    for (var i = 0; i < valores.length; i++) {
+      final valor = valores[i];
+      if (valor == null || valor.trim().isEmpty) continue;
+      registradas.putIfAbsent(
+        valor,
+        () => Item(name: nombres[i] ?? valor, value: valor),
+      );
+    }
+    return registradas.values.toList();
+  }
+
+  /// Con una sola actividad registrada el campo "Actividad Predominante"
+  /// no se muestra, así que se asigna esa actividad automáticamente.
+  void _asignarActividadPredominanteUnica({bool notificar = true}) {
+    final registradas = _actividadesRegistradas;
+    if (registradas.length != 1) return;
+    final unica = registradas.first;
+    if (actividadPredominante == unica.value) return;
+    actividadPredominante = unica.value;
+    actividadPredominanteVer = unica.name;
+    if (!notificar) return;
+    final cubit = context.read<SolicitudNuevaMenorCubit>();
+    cubit.onFieldChanged(
+      () => cubit.state.copyWith(
+        objActividadPredominante: actividadPredominante,
+        objActividadPredominanteVer: actividadPredominanteVer,
+      ),
+    );
   }
 
   @override
@@ -440,6 +476,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                         objActividadIdVer: actividadVer,
                       ),
                     );
+                    _asignarActividadPredominanteUnica();
                     setState(() {});
                   },
                 ),
@@ -465,6 +502,7 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                         objActividadId1Ver: actividad1Ver,
                       ),
                     );
+                    _asignarActividadPredominanteUnica();
                     setState(() {});
                   },
                 ),
@@ -490,11 +528,12 @@ class _NuevaMenorOfflne4WidgetState extends State<NuevaMenorOfflne4Widget>
                         objActividadId2Ver: actividadEconomica2Ver,
                       ),
                     );
+                    _asignarActividadPredominanteUnica();
                     setState(() {});
                   },
                 ),
                 const Gap(20),
-                if (actividadesPredominantesList.isNotEmpty) ...[
+                if (_actividadesRegistradas.length > 1) ...[
                   const Gap(20),
                   SheetSearchDropdown(
                     selectedItem: Item(
