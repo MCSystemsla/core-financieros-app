@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/responses_local_db.dart';
@@ -273,6 +274,27 @@ class EnviarSolicitudWhenIsdoneCubit
     };
   }
 
+  /// Historial crediticio guardado en ObjectBox para la solicitud [uuid].
+  List<HistorialCredito> _historialCredito(String? uuid) {
+    if (uuid == null || uuid.isEmpty) return [];
+    return objectBoxService
+        .getHistorialCredito(uuid: uuid)
+        .map(
+          (e) => HistorialCredito(
+            uuid: e.id.toString(),
+            entidad: e.entidad ?? '',
+            monto: e.monto ?? 0,
+            tipoMonedaCodigo: e.tipoMonedaCodigo ?? '',
+            tipoFrecuenciaCodigo: e.tipoFrecuenciaCodigo ?? '',
+            cuota: e.cuota ?? 0,
+            saldo: e.saldo ?? 0,
+            estadoCodigo: e.estadoCodigo ?? '',
+            fechaDesembolso: e.fechaDesembolso ?? DateTime.now(),
+          ),
+        )
+        .toList();
+  }
+
   SolicitudNuevaMenor _mapToSolicitudNuevaMenor(ResponseLocalDb solicitud) {
     return SolicitudNuevaMenor(
       isOffline: solicitud.isDone,
@@ -376,7 +398,7 @@ class EnviarSolicitudWhenIsdoneCubit
       telefonoBeneficiarioSeguro1: solicitud.telefonoBeneficiarioSeguro1 ?? '',
       plazoSolicitud: solicitud.plazoSolicitud ?? 0,
       fechaPrimerPagoSolicitud: solicitud.fechaPrimerPagoSolicitud ?? '',
-      historialCredito: [],
+      historialCredito: _historialCredito(solicitud.uuid),
     );
   }
 
@@ -437,7 +459,7 @@ class EnviarSolicitudWhenIsdoneCubit
       celularReprestamo: solicitud.celularReprestamo ?? '',
       fechaPrimerPagoSolicitud:
           DateTime.tryParse(solicitud.fechaPrimerPagoSolicitud.toString()),
-      historialCredito: [],
+      historialCredito: _historialCredito(solicitud.uuid),
     );
   }
 
@@ -559,7 +581,7 @@ class EnviarSolicitudWhenIsdoneCubit
       tiempoLaborarConyugue: solicitud.tiempoLaborarConyugue ?? '',
       totalIngresoMes: solicitud.totalIngresoMes ?? 0,
       totalIngresoMesConyugue: solicitud.totalIngresoMesConyugue ?? 0,
-      historialCredito: [],
+      historialCredito: _historialCredito(solicitud.uuid),
     );
   }
 }

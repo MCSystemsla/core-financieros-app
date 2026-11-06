@@ -27,7 +27,6 @@ import 'package:flutter_multi_formatter/formatters/currency_input_formatter.dart
 import 'package:flutter_multi_formatter/formatters/formatter_extension_methods.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:uuid/uuid.dart';
 
 class ReprestamoHistorialCreditoOffline extends StatefulWidget {
   final PageController controller;
@@ -56,7 +55,7 @@ class _ReprestamoHistorialCreditoOfflineState
     cubit.saveHistorialesCreditoOnState(
       historialCredito: historialesCreditos.map((e) {
         return HistorialCredito(
-          uuid: const Uuid().v4(),
+          uuid: e.id.toString(),
           entidad: e.entidad ?? '',
           monto: e.monto ?? 0,
           tipoMonedaCodigo: e.tipoMonedaCodigo ?? '',
@@ -121,7 +120,7 @@ class _ReprestamoHistorialCreditoOfflineState
                   context
                       .read<SolicitudReprestamoCubit>()
                       .deleteHistorialCredito(uuid: e.uuid);
-                  localDbProvider.deleteHistorialByUuid(e.uuid);
+                  localDbProvider.deleteHistorialCreditoById(e.uuid);
                 },
               ),
             ),
@@ -497,10 +496,20 @@ class _CreateCreditoContainerFormState
                       color: AppColors.greenLatern.withOpacity(0.4),
                       onPressed: () {
                         if (!formKey.currentState!.validate()) return;
-                        if (widget.isUpdate) {
-                          widget.cubit.updateHistorialCredito(
-                            updated: HistorialCredito(
-                              uuid: widget.uuid,
+                        final localDb = HistorialCrediticioLocalDb(
+                          uuid: widget.cubit.state.uuid,
+                          entidad: entidad,
+                          monto: monto,
+                          tipoMonedaCodigo: tipoMonedaCodigo,
+                          tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
+                          cuota: cuota,
+                          saldo: saldo,
+                          estadoCodigo: estadoCodigo,
+                          fechaDesembolso: fechaDesembolso,
+                        );
+                        HistorialCredito historial(String localId) =>
+                            HistorialCredito(
+                              uuid: localId,
                               entidad: entidad,
                               monto: monto,
                               tipoMonedaCodigo: tipoMonedaCodigo,
@@ -509,36 +518,25 @@ class _CreateCreditoContainerFormState
                               saldo: saldo,
                               estadoCodigo: estadoCodigo,
                               fechaDesembolso: fechaDesembolso!,
-                            ),
+                            );
+                        // El uuid en memoria es el id de la fila en ObjectBox.
+                        if (widget.isUpdate) {
+                          final localId = widget.uuid;
+                          localDbProvider.updateHistorialCreditoById(
+                            localId: localId,
+                            data: localDb,
                           );
+                          widget.cubit.updateHistorialCredito(
+                              updated: historial(localId));
                           context.pop();
                           return;
                         }
-                        widget.cubit.saveHistorialCredito(
-                          historialCredito: HistorialCredito(
-                            uuid: const Uuid().v4(),
-                            entidad: entidad,
-                            monto: monto,
-                            tipoMonedaCodigo: tipoMonedaCodigo,
-                            tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
-                            cuota: cuota,
-                            saldo: saldo,
-                            estadoCodigo: estadoCodigo,
-                            fechaDesembolso: fechaDesembolso!,
-                          ),
+                        final localId = localDbProvider.saveHistorialCredito(
+                          historialCreditoLocalDb: localDb,
                         );
-                        localDbProvider.saveHistorialCredito(
-                            historialCreditoLocalDb: HistorialCrediticioLocalDb(
-                          uuid: widget.cubit.state.uuid!,
-                          cuota: cuota,
-                          entidad: entidad,
-                          estadoCodigo: estadoCodigo,
-                          monto: monto,
-                          saldo: saldo,
-                          tipoFrecuenciaCodigo: tipoFrecuenciaCodigo,
-                          tipoMonedaCodigo: tipoMonedaCodigo,
-                          fechaDesembolso: fechaDesembolso,
-                        ));
+                        widget.cubit.saveHistorialCredito(
+                          historialCredito: historial(localId.toString()),
+                        );
 
                         context.pop();
                       },

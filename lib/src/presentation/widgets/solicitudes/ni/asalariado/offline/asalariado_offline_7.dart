@@ -463,8 +463,9 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      if (double.tryParse(montoController ?? '0')! <
-                          montoMinimo!.toDouble()) {
+                      if (montoMinimo != null &&
+                          (double.tryParse(montoController ?? '0') ?? 0) <
+                              montoMinimo!.toDouble()) {
                         CustomAlertDialog(
                           context: context,
                           title:
@@ -473,8 +474,9 @@ class _AsalariadoOffline7State extends State<AsalariadoOffline7>
                         ).showDialog(context, dialogType: DialogType.warning);
                         return;
                       }
-                      if (double.tryParse(montoController ?? '0')! >
-                          montoMaximo!.toDouble()) {
+                      if (montoMaximo != null &&
+                          (double.tryParse(montoController ?? '0') ?? 0) >
+                              montoMaximo!.toDouble()) {
                         CustomAlertDialog(
                           context: context,
                           title:

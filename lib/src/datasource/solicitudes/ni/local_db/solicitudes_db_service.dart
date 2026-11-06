@@ -669,15 +669,40 @@ class ObjectBoxService {
     return results;
   }
 
-  void saveHistorialCredito({
+  /// Guarda el ítem y devuelve su `id` de ObjectBox. En NI ese id (como
+  /// texto) es el `uuid` del [HistorialCredito] en memoria, para poder
+  /// borrarlo o editarlo después con [deleteHistorialCreditoById] y
+  /// [updateHistorialCreditoById].
+  int saveHistorialCredito({
     required HistorialCrediticioLocalDb historialCreditoLocalDb,
   }) {
     try {
-      historialCrediticioBox.put(historialCreditoLocalDb);
+      return historialCrediticioBox.put(historialCreditoLocalDb);
     } catch (e) {
       _logger.e(e.toString());
       rethrow;
     }
+  }
+
+  void deleteHistorialCreditoById(String localId) {
+    final id = int.tryParse(localId);
+    if (id == null) return;
+    historialCrediticioBox.remove(id);
+  }
+
+  /// Sobrescribe la fila [localId] conservando el `uuid` de la solicitud.
+  void updateHistorialCreditoById({
+    required String localId,
+    required HistorialCrediticioLocalDb data,
+  }) {
+    final id = int.tryParse(localId);
+    if (id == null) return;
+    final current = historialCrediticioBox.get(id);
+    if (current == null) return;
+    data
+      ..id = id
+      ..uuid = current.uuid;
+    historialCrediticioBox.put(data);
   }
 
   void deleteHistorialByUuid(String uuid) {

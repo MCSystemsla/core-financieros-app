@@ -367,8 +367,9 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  if ((double.tryParse(monto ?? '0') ?? 0) <
-                      montoMinimo!.toDouble()) {
+                  if (montoMinimo != null &&
+                      (double.tryParse(monto ?? '0') ?? 0) <
+                          montoMinimo!.toDouble()) {
                     CustomAlertDialog(
                       context: context,
                       title:
@@ -377,8 +378,9 @@ class _ReprestamoForm3State extends State<ReprestamoForm3>
                     ).showDialog(context, dialogType: DialogType.warning);
                     return;
                   }
-                  if ((double.tryParse(monto ?? '0') ?? 0) >
-                      montoMaximo!.toDouble()) {
+                  if (montoMaximo != null &&
+                      (double.tryParse(monto ?? '0') ?? 0) >
+                          montoMaximo!.toDouble()) {
                     CustomAlertDialog(
                       context: context,
                       title:
