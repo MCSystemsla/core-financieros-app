@@ -363,7 +363,6 @@ class __FormContentState extends State<_FormContent> {
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         salarioNetoMensualConyuge = value.replaceAll(',', '');
@@ -384,7 +383,6 @@ class __FormContentState extends State<_FormContent> {
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         otrosIngresosConyuge = value.replaceAll(',', '');
@@ -423,7 +421,6 @@ class __FormContentState extends State<_FormContent> {
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         totalIngresosMesConyuge = value.replaceAll(',', '');

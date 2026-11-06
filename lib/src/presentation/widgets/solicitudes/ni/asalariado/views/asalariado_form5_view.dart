@@ -162,7 +162,6 @@ class __FormContentState extends State<_FormContent> {
                   },
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   textInputType: TextInputType.number,
                   title: 'Otros ingresos (C\$)',
@@ -259,7 +258,6 @@ class __FormContentState extends State<_FormContent> {
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   title: 'Salario Neto Mensual (C\$)',
                   icon: const Icon(Icons.money),
@@ -270,7 +268,6 @@ class __FormContentState extends State<_FormContent> {
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   hintText: totalIngresoMes?.toCurrencyString(),
                   title: 'Total ingresos mes (C\$)',

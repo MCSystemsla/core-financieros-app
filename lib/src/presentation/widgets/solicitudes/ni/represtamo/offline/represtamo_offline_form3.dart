@@ -14,7 +14,6 @@ import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dar
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
-import 'package:core_financiero_app/src/config/helpers/format/format_field.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/represtamo_responses_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
@@ -30,6 +29,8 @@ import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dar
 import 'package:core_financiero_app/src/utils/extensions/double/double_extension.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
+import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -249,8 +250,11 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
             OutlineTextfieldWidget(
               initialValue: monto,
               inputFormatters: [
-                CurrencyInputFormatter(),
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
+                MoneyInputFormatter(
+                  leadingSymbol: '',
+                  thousandSeparator: ThousandSeparator.Comma,
+                  mantissaLength: 0,
+                ),
                 LengthLimitingTextInputFormatter(9),
               ],
               icon: Icon(
@@ -263,7 +267,7 @@ class _ReprestamoOfflineForm3State extends State<ReprestamoOfflineForm3>
               validator: (value) => ClassValidator.validateRequired(value),
               isValid: null,
               onChange: (value) {
-                monto = value.replaceAll(',', '.');
+                monto = value.replaceAll(',', '');
                 cubit.onFieldChanged(
                   () => cubit.state.copyWith(
                     monto: int.tryParse(monto ?? '0'),

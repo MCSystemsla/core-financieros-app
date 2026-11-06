@@ -189,7 +189,6 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                   },
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   textInputType: TextInputType.number,
                   title: 'Otros ingresos (C\$)',
@@ -294,7 +293,6 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   title: 'Salario Neto Mensual (C\$)',
                   icon: const Icon(Icons.money),
@@ -306,7 +304,6 @@ class _AsalariadoOffline5State extends State<AsalariadoOffline5>
                   textInputType: TextInputType.number,
                   inputFormatters: [
                     CurrencyInputFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                   ],
                   hintText: totalIngresoMes,
                   title: 'Total ingresos mes (C\$)',

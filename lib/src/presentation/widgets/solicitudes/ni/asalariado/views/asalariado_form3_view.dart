@@ -162,14 +162,14 @@ class __FormContentState extends State<_FormContent> {
                     textInputType: TextInputType.number,
                     inputFormatters: [
                       CurrencyInputFormatter(),
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                     ],
                     onChange: (value) {
                       pagoAlquiler = value.replaceAll(',', '');
 
                       cubit.onFieldChanged(
                         () => cubit.state.copyWith(
-                          pagoAlquiler: int.tryParse(pagoAlquiler ?? '0'),
+                          pagoAlquiler:
+                              double.tryParse(pagoAlquiler ?? '0')?.round(),
                         ),
                       );
                     },

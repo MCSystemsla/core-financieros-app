@@ -445,7 +445,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         salarioNetoMensualConyuge = value.replaceAll(',', '');
@@ -467,7 +466,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         otrosIngresosConyuge = value.replaceAll(',', '');
@@ -508,7 +506,6 @@ class _AsalariadoOffline6State extends State<AsalariadoOffline6>
                       textInputType: TextInputType.number,
                       inputFormatters: [
                         CurrencyInputFormatter(),
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9,]')),
                       ],
                       onChange: (value) {
                         totalIngresosMesConyuge = value.replaceAll(',', '');
