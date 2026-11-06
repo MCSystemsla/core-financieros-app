@@ -83,16 +83,18 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   required String tipoSolicitud,
   required String monto,
 }) {
-  final montoInt = int.tryParse(monto) ?? 0;
+  // El monto puede venir con decimales ("1500.5") o separador de miles;
+  // int.tryParse devolvía null y mandaba montos >= 1000 al formulario menor.
+  final montoNum = double.tryParse(monto.replaceAll(',', '').trim()) ?? 0;
 
   switch (tipoSolicitud) {
     case 'NUEVAMENOR':
-      return montoInt >= 1000
+      return montoNum >= 1000
           ? AnalisisSolicitudesInterceptorType.nuevaMayorAMil
           : AnalisisSolicitudesInterceptorType.nueva;
 
     case 'REPRESTAMO':
-      return montoInt >= 1000
+      return montoNum >= 1000
           ? AnalisisSolicitudesInterceptorType.represtamoMayorAMil
           : AnalisisSolicitudesInterceptorType.represtamo;
 
