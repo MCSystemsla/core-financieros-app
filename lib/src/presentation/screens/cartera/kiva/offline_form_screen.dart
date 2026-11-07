@@ -6,6 +6,7 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
+import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/solicitudes_kiva_offline/solicitudes_credito_kiva_offline/solicitudes_credito_kiva_offline_interceptor.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/kiva/kiva_solicitud_model.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
@@ -56,6 +57,39 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
     );
   }
 
+  void _onSinNumeroTap(KivaSolicitudModel solicitud) {
+    // "Kiva llenado" se maneja en el paso 6 (diálogo).
+    if (solicitud.kivaLlenado) return;
+    _abrirKivaSinNumero(solicitud);
+  }
+
+  /// SPEC 09: abre el formulario Kiva de una solicitud sin número con sus
+  /// datos reales y recarga la lista al volver.
+  Future<void> _abrirKivaSinNumero(KivaSolicitudModel solicitud) async {
+    context.read<KivaRouteCubit>().setCurrentRouteProduct(
+          nombreFormularioKiva: solicitud.nombreFormularioKiva,
+          cantidadHijos: solicitud.cantidadHijos,
+          cedula: solicitud.cedula,
+          tipoSolicitud: solicitud.tipoSolicitud,
+          route: 'N/A',
+          solicitudId: solicitud.uuid,
+          nombre: solicitud.nombre,
+          numero: '',
+          motivoAnterior: 'Motivo Anterior no registrado',
+          solicitudCreditoId: solicitud.uuid,
+        );
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SolicitudesCreditoKivaOfflineInterceptor(
+          nombreFormularioKiva: solicitud.nombreFormularioKiva,
+        ),
+      ),
+    );
+    if (!mounted) return;
+    await _cargarSinNumero();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
@@ -87,6 +121,7 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
                   return KivaOfflineContent(
                     solicitudesPendienteResponse: state.solicitudes,
                     solicitudesSinNumero: sinNumero,
+                    onSinNumeroTap: _onSinNumeroTap,
                   );
                 },
               ),
