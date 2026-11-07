@@ -1,4 +1,7 @@
+import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
+import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitudes_offline/solicitudes_offline_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -24,14 +27,42 @@ class OfflineFormKivaScreen extends StatefulWidget {
 }
 
 class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
+  /// SPEC 09: solicitudes creadas offline con producto Kiva y sin número.
+  late final SolicitudesOfflineCubit _sinNumeroCubit =
+      SolicitudesOfflineCubit(global<ObjectBoxService>());
+
   @override
   void initState() {
     super.initState();
     context.read<SolicitudesPendientesLocalDbCubit>().getSolicitudes();
+    _cargarSinNumero();
+  }
+
+  @override
+  void dispose() {
+    _sinNumeroCubit.close();
+    super.dispose();
+  }
+
+  Future<void> _cargarSinNumero() {
+    final kivaDb = context.read<SolicitudesPendientesLocalDbCubit>();
+    return _sinNumeroCubit.getSolicitudesKivaSinNumero(
+      tieneKiva: (solicitud) => kivaDb.tieneKivaSinNumero(
+        uuid: solicitud.uuid,
+        nombreFormularioKiva: solicitud.nombreFormularioKiva,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: _sinNumeroCubit,
+      child: _buildScaffold(context),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(

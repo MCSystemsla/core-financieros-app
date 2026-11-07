@@ -40,6 +40,16 @@ final class OnSolicitudesOfflineSuccess extends SolicitudesOfflineState {
       ];
 }
 
+/// SPEC 09: solicitudes sin número con producto Kiva, con `kivaLlenado` ya
+/// calculado. Lo usa `OfflineFormKivaScreen`.
+final class OnSolicitudesKivaSinNumeroSuccess extends SolicitudesOfflineState {
+  final List<KivaSolicitudModel> solicitudes;
+
+  const OnSolicitudesKivaSinNumeroSuccess({required this.solicitudes});
+  @override
+  List<Object> get props => [solicitudes];
+}
+
 final class OnSolicitudesOfflineError extends SolicitudesOfflineState {
   final String errorMsg;
 

@@ -47,6 +47,30 @@ class SolicitudesOfflineCubit extends Cubit<SolicitudesOfflineState> {
     return solicitudes;
   }
 
+  /// SPEC 09: carga las solicitudes sin número con producto Kiva, sin el
+  /// delay de [getSolicitudesOffline]. [tieneKiva] se llama una por una
+  /// (Isar serializa las transacciones).
+  Future<void> getSolicitudesKivaSinNumero({
+    required Future<bool> Function(KivaSolicitudModel solicitud) tieneKiva,
+  }) async {
+    if (state is! OnSolicitudesKivaSinNumeroSuccess) {
+      emit(OnSolicitudesOfflineLoading());
+    }
+    try {
+      final solicitudes = getSolicitudesCreditoOfflineKiva();
+      final conEstado = <KivaSolicitudModel>[];
+      for (final solicitud in solicitudes) {
+        final llenado = await tieneKiva(solicitud);
+        conEstado.add(solicitud.copyWith(kivaLlenado: llenado));
+      }
+      if (isClosed) return;
+      emit(OnSolicitudesKivaSinNumeroSuccess(solicitudes: conEstado));
+    } catch (e) {
+      if (isClosed) return;
+      emit(OnSolicitudesOfflineError(errorMsg: e.toString()));
+    }
+  }
+
   void deleteItemByDeterminateDay() {
     objectBoxService.deleteRowsByDeterminateTime();
   }
