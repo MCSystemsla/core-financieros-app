@@ -1,6 +1,6 @@
 # SPEC 09 — Kiva offline para solicitudes sin número
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** —
 > **Date:** 2026-11-07
 > **Objective:** Mostrar las solicitudes creadas offline con producto Kiva, todavía sin sincronizar, dentro de la lista Kiva offline con los tags "Sin número" y "Kiva pendiente"/"Kiva llenado", en lugar del botón flotante actual, y corregir los bugs de datos vacíos y crashes de ese flujo.
