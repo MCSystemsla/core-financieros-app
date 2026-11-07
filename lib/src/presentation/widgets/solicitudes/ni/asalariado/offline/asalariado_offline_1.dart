@@ -300,8 +300,8 @@ class _AsalariadoOffline1State extends State<AsalariadoOffline1>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (widget
-                        .asalariadoResponsesLocalDb!.errorMsg!.isNotEmpty) ...[
+                    if ((widget.asalariadoResponsesLocalDb?.errorMsg ?? '')
+                        .isNotEmpty) ...[
                       const Gap(30),
                       Padding(
                         padding: const EdgeInsets.symmetric(

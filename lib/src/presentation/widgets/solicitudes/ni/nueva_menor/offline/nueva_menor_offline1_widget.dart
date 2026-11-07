@@ -259,7 +259,7 @@ class _NuevaMenorOffline1State extends State<NuevaMenorOffline1>
             key: formKey,
             child: Column(
               children: [
-                if (widget.responseLocalDb.errorMsg!.isNotEmpty) ...[
+                if ((widget.responseLocalDb.errorMsg ?? '').isNotEmpty) ...[
                   const Gap(30),
                   Padding(
                     padding:

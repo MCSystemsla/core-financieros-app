@@ -158,7 +158,7 @@ class _ReprestamoOfflineForm1State extends State<ReprestamoOfflineForm1>
             key: formKey,
             child: Column(
               children: [
-                if (widget.solicitud.errorMsg!.isNotEmpty) ...[
+                if ((widget.solicitud.errorMsg ?? '').isNotEmpty) ...[
                   const Gap(30),
                   Padding(
                     padding:
