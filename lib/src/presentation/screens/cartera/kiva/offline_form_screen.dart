@@ -58,9 +58,77 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
   }
 
   void _onSinNumeroTap(KivaSolicitudModel solicitud) {
-    // "Kiva llenado" se maneja en el paso 6 (diálogo).
-    if (solicitud.kivaLlenado) return;
+    if (solicitud.kivaLlenado) {
+      _ofrecerRellenarKiva(solicitud);
+      return;
+    }
     _abrirKivaSinNumero(solicitud);
+  }
+
+  /// SPEC 09: el Kiva ya está llenado. Ofrece borrarlo (con confirmación) y
+  /// llenarlo de nuevo.
+  Future<void> _ofrecerRellenarKiva(KivaSolicitudModel solicitud) async {
+    final rellenar = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Este Kiva ya fue llenado'),
+        content: Text(
+          'El formulario Kiva de ${solicitud.nombre.capitalizeAll} se enviará '
+          'cuando se sincronice la solicitud.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cerrar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Eliminar y llenar de nuevo'),
+          ),
+        ],
+      ),
+    );
+    if (rellenar != true || !mounted) return;
+
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('¿Eliminar el Kiva llenado?'),
+        content: const Text(
+          'Se borrarán las respuestas y las imágenes guardadas en el teléfono. '
+          'Esta acción no se puede deshacer.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(foregroundColor: RedesignColors.red),
+            child: const Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+    if (confirmado != true || !mounted) return;
+
+    try {
+      await context
+          .read<SolicitudesPendientesLocalDbCubit>()
+          .eliminarKivaSinNumero(
+            uuid: solicitud.uuid,
+            nombreFormularioKiva: solicitud.nombreFormularioKiva,
+          );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo eliminar el Kiva llenado.')),
+      );
+      return;
+    }
+    if (!mounted) return;
+    await _abrirKivaSinNumero(solicitud.copyWith(kivaLlenado: false));
   }
 
   /// SPEC 09: abre el formulario Kiva de una solicitud sin número con sus
