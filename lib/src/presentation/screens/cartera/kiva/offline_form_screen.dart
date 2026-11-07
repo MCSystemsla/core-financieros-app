@@ -389,6 +389,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
     final result = await context
         .read<SolicitudesPendientesLocalDbCubit>()
         .getItemsRecurrents(typeProduct: widget.solicitud.producto ?? '');
+    if (!mounted) return;
     setState(() {
       isMatching = result
           .contains(int.tryParse(widget.solicitud.solicitudId ?? '') ?? 0);
@@ -399,8 +400,18 @@ class _RequestWidgetState extends State<_RequestWidget> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-          '${widget.solicitud.numero} - ${widget.solicitud.nombre!.capitalizeAll}'),
+          '${widget.solicitud.numero} - ${(widget.solicitud.nombre ?? 'N/A').capitalizeAll}'),
       onTap: () async {
+        final formularioKiva =
+            (widget.solicitud.nombreFormulario ?? '').toFormularioKival();
+        if (formularioKiva == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No se reconoce el formulario Kiva de esta solicitud.'),
+            ),
+          );
+          return;
+        }
         context.read<KivaRouteCubit>().setCurrentRouteProduct(
               nombreFormularioKiva: widget.solicitud.nombreFormulario ?? '',
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,
@@ -433,8 +444,7 @@ class _RequestWidgetState extends State<_RequestWidget> {
               tipoSolicitud: widget.solicitud.tipoSolicitud ?? '',
               numero: widget.solicitud.numero ?? '',
               cedula: widget.solicitud.cedula ?? '',
-              nombreFormularioKiva:
-                  widget.solicitud.nombreFormulario!.toFormularioKival()!,
+              nombreFormularioKiva: formularioKiva,
               solicitudCreditoId: widget.solicitud.solicitudId ?? '',
               motivoAnterior: widget.solicitud.motivoAnterior ?? '',
               cantidadHijos: widget.solicitud.cantidadHijos ?? 0,

@@ -1245,7 +1245,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1270,7 +1270,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1293,7 +1293,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1315,7 +1315,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1337,7 +1337,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1359,7 +1359,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1381,7 +1381,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1403,7 +1403,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1425,7 +1425,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1448,7 +1448,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1470,7 +1470,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1492,7 +1492,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
