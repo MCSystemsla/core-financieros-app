@@ -506,47 +506,76 @@ class ObjectBoxService {
       'ScrKivaEnergiaLimpia',
       'ScrKivaEnergiaLimpiaRecurrente',
     ];
+    // Solo las terminadas que aún no se sincronizaron (SPEC 09): una vez
+    // sincronizada, un Kiva nuevo con su uuid ya no se enlazaría.
+    bool esKivaSinNumero(
+      bool? isDone,
+      bool hasVerified,
+      String? uuid,
+      String? nombreFormularioKiva,
+    ) =>
+        isDone == true &&
+        !hasVerified &&
+        (uuid ?? '').isNotEmpty &&
+        kivaListProducts.contains(nombreFormularioKiva);
+
     try {
       final solicitudesNuevas = solicitudesResponsesBox.getAll().where(
-            (e) =>
-                e.isDone == true &&
-                kivaListProducts.contains(e.nombreFormularioKiva),
+            (e) => esKivaSinNumero(
+              e.isDone,
+              e.hasVerified,
+              e.uuid,
+              e.nombreFormularioKiva,
+            ),
           );
       final solicitudesReprestamo =
           solicitudesReprestamoResponsesBox.getAll().where(
-                (e) =>
-                    e.isDone == true &&
-                    kivaListProducts.contains(e.nombreFormularioKiva),
+                (e) => esKivaSinNumero(
+                  e.isDone,
+                  e.hasVerified,
+                  e.uuid,
+                  e.nombreFormularioKiva,
+                ),
               );
 
       final solicitudesAsalariado =
           solicitudesAsalariadoResponsesBox.getAll().where(
-                (e) =>
-                    e.isDone == true &&
-                    kivaListProducts.contains(e.nombreFormularioKiva),
+                (e) => esKivaSinNumero(
+                  e.isDone,
+                  e.hasVerified,
+                  e.uuid,
+                  e.nombreFormularioKiva,
+                ),
               );
       final listNuevas = solicitudesNuevas
           .map((e) => KivaSolicitudModel(
-                uuid: e.uuid!,
+                uuid: e.uuid ?? '',
                 nombre: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
                 nombreFormularioKiva: e.nombreFormularioKiva ?? '',
                 cantidadHijos: e.cantidadHijos ?? 0,
+                cedula: e.cedula ?? '',
+                tipoSolicitud: 'NUEVAMENOR',
               ))
           .toList();
       final listAsalariado = solicitudesAsalariado
           .map((e) => KivaSolicitudModel(
-                uuid: e.uuid!,
+                uuid: e.uuid ?? '',
                 nombre: '${e.nombre1 ?? 'N/A'} - ${e.apellido1 ?? 'N/A'}',
                 nombreFormularioKiva: e.nombreFormularioKiva ?? '',
                 cantidadHijos: e.cantidadHijos ?? 0,
+                cedula: e.cedula ?? '',
+                tipoSolicitud: 'ASAL',
               ))
           .toList();
+      // ReprestamoResponsesLocalDb no guarda cantidadHijos: queda en 0.
       final listReprestamo = solicitudesReprestamo
           .map((e) => KivaSolicitudModel(
-                uuid: e.uuid!,
+                uuid: e.uuid ?? '',
                 nombre: e.nombreCompletoCliente ?? 'N/A',
                 nombreFormularioKiva: e.nombreFormularioKiva ?? '',
                 cantidadHijos: 0,
+                cedula: e.cedula ?? '',
+                tipoSolicitud: 'REPRESTAMO',
               ))
           .toList();
 

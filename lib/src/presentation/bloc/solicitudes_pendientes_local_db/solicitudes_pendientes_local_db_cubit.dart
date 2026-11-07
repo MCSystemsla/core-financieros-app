@@ -1245,7 +1245,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1270,7 +1270,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1293,7 +1293,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1315,7 +1315,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1337,7 +1337,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1359,7 +1359,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1381,7 +1381,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1403,7 +1403,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1425,7 +1425,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1448,7 +1448,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1470,7 +1470,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1492,7 +1492,7 @@ class SolicitudesPendientesLocalDbCubit
               .findFirst();
           if (images != null) {
             images.solicitudUuid = solcitudId;
-            images.solicitudId = int.parse(solcitudId);
+            images.solicitudId = int.tryParse(solcitudId) ?? 0;
             await state.isar?.imageModels.put(images);
           }
         }),
@@ -1604,5 +1604,92 @@ class SolicitudesPendientesLocalDbCubit
         .filter()
         .solicitudUuidEqualTo(solicitudRecurrenteId)
         .findFirst();
+  }
+
+  /// SPEC 09: `true` si la solicitud sin número ya tiene su formulario Kiva
+  /// local (`solicitudCreditoId == uuid`).
+  Future<bool> tieneKivaSinNumero({
+    required String uuid,
+    required String nombreFormularioKiva,
+  }) async {
+    try {
+      final kiva = await getKivaByNumeroSolicitud(
+        uuid: uuid,
+        tipoProducto: nombreFormularioKiva,
+        solicitudId: uuid,
+      );
+      return kiva != null;
+    } catch (e) {
+      _logger.e(e);
+      return false;
+    }
+  }
+
+  /// SPEC 09: borra el formulario Kiva local de una solicitud sin número y
+  /// sus imágenes (`ImageModel.solicitudUuid == uuid`).
+  Future<void> eliminarKivaSinNumero({
+    required String uuid,
+    required String nombreFormularioKiva,
+  }) async {
+    final isar = state.isar;
+    if (isar == null) return;
+    await isar.writeTxn(() async {
+      await switch (nombreFormularioKiva) {
+        'ScrKivaCreditoEstandar' => isar.estandarDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaCreditoEstandarRecurrente' => isar.recurrenteEstandarDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMejoraVivienda' => isar.mejoraViviendaDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMejoraViviendaRecurrente' => isar
+            .recurrenteMejoraViviendaDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMiCrediEstudio' => isar.miCrediEstudioDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMiCrediEstudioRecurrente' => isar
+            .recurrenteMiCrediEstudioDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMujerEmprende' => isar.mujerEmprendeDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaMujerEmprendeRecurrente' => isar
+            .recurrenteMujerEmprendeDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaAguaSaneamiento' => isar.saneamientoDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaAguaSaneamientoRecurrente' => isar.recurrenteSaneamientoDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaEnergiaLimpia' => isar.energiaLimpiaDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        'ScrKivaEnergiaLimpiaRecurrente' => isar
+            .recurrenteEnergiaLimpiaDbLocals
+            .filter()
+            .solicitudCreditoIdEqualTo(uuid)
+            .deleteAll(),
+        _ => Future.value(0),
+      };
+      await isar.imageModels.filter().solicitudUuidEqualTo(uuid).deleteAll();
+    });
   }
 }

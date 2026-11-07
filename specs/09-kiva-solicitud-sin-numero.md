@@ -1,6 +1,6 @@
 # SPEC 09 — Kiva offline para solicitudes sin número
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** —
 > **Date:** 2026-11-07
 > **Objective:** Mostrar las solicitudes creadas offline con producto Kiva, todavía sin sincronizar, dentro de la lista Kiva offline con los tags "Sin número" y "Kiva pendiente"/"Kiva llenado", en lugar del botón flotante actual, y corregir los bugs de datos vacíos y crashes de ese flujo.
@@ -79,18 +79,18 @@ class KivaSolicitudModel {
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos.
-- [ ] `OfflineFormKivaScreen` ya no tiene el FAB "Crear nueva solicitud KIVA".
-- [ ] Una solicitud nueva, asalariado o represtamo creada offline con producto Kiva y terminada aparece arriba en `OfflineFormKivaScreen` con "Sin número" y "Kiva pendiente".
-- [ ] Una solicitud ya sincronizada (`hasVerified == true`) no aparece en esa lista.
-- [ ] Una solicitud sin producto Kiva no aparece.
-- [ ] Al llenar el Kiva y volver, la misma fila muestra "Kiva llenado" sin salir de la pantalla.
-- [ ] El formulario Kiva guardado desde una solicitud sin número tiene la cédula y el tipo de la solicitud local, no vacíos.
-- [ ] Tocar "Kiva llenado" no abre el formulario: muestra el diálogo. "Eliminar y llenar de nuevo" borra el formulario y sus imágenes locales y abre uno vacío.
-- [ ] Al sincronizar la solicitud con conexión, el Kiva llenado se envía con el número real (comportamiento actual, sin regresión).
-- [ ] Un `SolicitudesPendientes` con `nombre` o `nombreFormulario` null no crashea la lista ni el tap.
-- [ ] Funciona igual en Nicaragua y Costa Rica.
-- [ ] Verificación manual en QA NI.
+- [X] `flutter analyze` no reporta issues nuevos.
+- [X] `OfflineFormKivaScreen` ya no tiene el FAB "Crear nueva solicitud KIVA".
+- [X] Una solicitud nueva, asalariado o represtamo creada offline con producto Kiva y terminada aparece arriba en `OfflineFormKivaScreen` con "Sin número" y "Kiva pendiente".
+- [X] Una solicitud ya sincronizada (`hasVerified == true`) no aparece en esa lista.
+- [X] Una solicitud sin producto Kiva no aparece.
+- [X] Al llenar el Kiva y volver, la misma fila muestra "Kiva llenado" sin salir de la pantalla.
+- [X] El formulario Kiva guardado desde una solicitud sin número tiene la cédula y el tipo de la solicitud local, no vacíos.
+- [X] Tocar "Kiva llenado" no abre el formulario: muestra el diálogo. "Eliminar y llenar de nuevo" borra el formulario y sus imágenes locales y abre uno vacío.
+- [X] Al sincronizar la solicitud con conexión, el Kiva llenado se envía con el número real (comportamiento actual, sin regresión).
+- [X] Un `SolicitudesPendientes` con `nombre` o `nombreFormulario` null no crashea la lista ni el tap.
+- [X] Funciona igual en Nicaragua y Costa Rica.
+- [X] Verificación manual en QA NI.
 
 ## Decisions
 

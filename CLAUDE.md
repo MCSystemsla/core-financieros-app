@@ -158,6 +158,17 @@ NI fiadores can be captured without a connection and sent by hand later. Sending
 
 Spec: `specs/03-fiadores-ni-offline.md`.
 
+### NI/CR Kiva: solicitudes sin número
+
+`OfflineFormKivaScreen` (Cartera → Kiva without a connection) lists at the top the local NI solicitudes with a Kiva product that are finished and not synced yet (`isDone && !hasVerified`, from `ObjectBoxService.getProductosSolicitudesCredito`). Below them are the usual `SolicitudesPendientes`. There is no "Crear nueva solicitud KIVA" FAB anymore. This applies to Nicaragua and Costa Rica without a flavor guard.
+
+- Each row (`_SinNumeroKivaTile`) shows a "Sin número" tag and either "Kiva pendiente" or "Kiva llenado". `kivaLlenado` comes from `SolicitudesPendientesLocalDbCubit.tieneKivaSinNumero`, which checks whether a Kiva form exists with `solicitudCreditoId == uuid`. `SolicitudesOfflineCubit.getSolicitudesKivaSinNumero` loads the list with no delay.
+- Tapping a pending row loads `KivaRouteCubit` with the real cédula, `tipoSolicitud` (`NUEVAMENOR`/`ASAL`/`REPRESTAMO`) and `cantidadHijos`, and opens `SolicitudesCreditoKivaOfflineInterceptor`. The list reloads when the advisor comes back. Represtamo has no `cantidadHijos` locally, so it is always 0.
+- Tapping a filled row offers "Eliminar y llenar de nuevo", with a confirmation. `eliminarKivaSinNumero` deletes the form row and its `ImageModel` (`solicitudUuid == uuid`).
+- The link to the real number is still automatic by `uuid` when the solicitud syncs (`processSolicitud`). If a Kiva solicitud syncs without its form, nothing warns the advisor.
+
+Spec: `specs/09-kiva-solicitud-sin-numero.md`.
+
 ### Solicitudes by estado (paginated lists)
 
 Lists of credit requests filtered by `EstadoCredito` go through one cubit per country: `SolicitudesByEstadoHnCubit` (`bloc/solicitudes/hn/cubit/solicitudes_by_estado_hn/`) and `SolicitudesByEstadoNiCubit` (`bloc/solicitudes/ni/cubit/solicitudes_by_estado_ni/`, backed by `SolicitudesCreditoRepository.getSolicitudesByEstado` in `domain/repository/solicitudes_credito/ni/`). The NI cubit replaced the old `SolicitudNuevaByEstadoCubit`. Pattern:
