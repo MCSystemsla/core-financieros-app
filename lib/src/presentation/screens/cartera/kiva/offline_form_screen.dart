@@ -6,7 +6,9 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
-import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/solicitudes_kiva_offline/solicitudes_kiva_offline.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/datasource/solicitudes/ni/kiva/kiva_solicitud_model.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_form_spacing.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/search_bar/search_bar.dart';
@@ -63,28 +65,8 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
   }
 
   Widget _buildScaffold(BuildContext context) {
+    // SPEC 09: sin FAB. Las solicitudes sin número salen arriba en la lista.
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const SolicitudesKivaOffline(),
-            ),
-          );
-        },
-        label: const Text(
-          'Crear nueva solicitud KIVA',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.black,
-      ),
       appBar: AppBar(
         title: const Text('Solicitudes en Tramite (Offline)'),
       ),
@@ -94,8 +76,19 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
           return switch (state.status) {
             Status.inProgress =>
               const Center(child: CircularProgressIndicator()),
-            Status.done => KivaOfflineContent(
-                solicitudesPendienteResponse: state.solicitudes,
+            Status.done =>
+              BlocBuilder<SolicitudesOfflineCubit, SolicitudesOfflineState>(
+                builder: (context, sinNumeroState) {
+                  final sinNumero = switch (sinNumeroState) {
+                    OnSolicitudesKivaSinNumeroSuccess() =>
+                      sinNumeroState.solicitudes,
+                    _ => const <KivaSolicitudModel>[],
+                  };
+                  return KivaOfflineContent(
+                    solicitudesPendienteResponse: state.solicitudes,
+                    solicitudesSinNumero: sinNumero,
+                  );
+                },
               ),
             Status.error => const Text('Error inesperado'),
             _ => const SizedBox(),
@@ -109,9 +102,17 @@ class _OfflineFormKivaScreenState extends State<OfflineFormKivaScreen> {
 class KivaOfflineContent extends StatefulWidget {
   final List<SolicitudesPendientes> solicitudesPendienteResponse;
 
+  /// SPEC 09: solicitudes creadas offline con producto Kiva y sin número.
+  final List<KivaSolicitudModel> solicitudesSinNumero;
+
+  /// SPEC 09: tap en una solicitud sin número.
+  final ValueChanged<KivaSolicitudModel>? onSinNumeroTap;
+
   const KivaOfflineContent({
     super.key,
     required this.solicitudesPendienteResponse,
+    this.solicitudesSinNumero = const [],
+    this.onSinNumeroTap,
   });
 
   @override
@@ -119,25 +120,39 @@ class KivaOfflineContent extends StatefulWidget {
 }
 
 class _KivaOfflineContentState extends State<KivaOfflineContent> {
+  String _query = '';
   late List<SolicitudesPendientes> _filteredSolicitudes;
+  late List<KivaSolicitudModel> _filteredSinNumero;
 
   @override
   void initState() {
     super.initState();
-    _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
+    _applyFilter();
+  }
+
+  @override
+  void didUpdateWidget(covariant KivaOfflineContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // La lista se recarga al volver del formulario: reaplicar el filtro.
+    _applyFilter();
+  }
+
+  bool _matches(String? nombre) =>
+      _query.isEmpty || (nombre ?? '').toLowerCase().contains(_query);
+
+  void _applyFilter() {
+    _filteredSolicitudes = widget.solicitudesPendienteResponse
+        .where((solicitud) => _matches(solicitud.nombre))
+        .toList();
+    _filteredSinNumero = widget.solicitudesSinNumero
+        .where((solicitud) => _matches(solicitud.nombre))
+        .toList();
   }
 
   void _filterSolicitudes(String query) {
     setState(() {
-      if (query.trim().isEmpty) {
-        _filteredSolicitudes = List.from(widget.solicitudesPendienteResponse);
-
-        return;
-      }
-      _filteredSolicitudes = widget.solicitudesPendienteResponse
-          .where((solicitud) =>
-              solicitud.nombre!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      _query = query.trim().toLowerCase();
+      _applyFilter();
     });
   }
 
@@ -158,6 +173,24 @@ class _KivaOfflineContentState extends State<KivaOfflineContent> {
               },
             ),
           ),
+          if (_filteredSinNumero.isNotEmpty) ...[
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _filteredSinNumero.length,
+              separatorBuilder: (_, __) => const KivaFormSpacing(),
+              itemBuilder: (_, index) {
+                final solicitud = _filteredSinNumero[index];
+                return _SinNumeroKivaTile(
+                  solicitud: solicitud,
+                  onTap: widget.onSinNumeroTap == null
+                      ? null
+                      : () => widget.onSinNumeroTap!(solicitud),
+                );
+              },
+            ),
+            const KivaFormSpacing(),
+          ],
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -170,6 +203,56 @@ class _KivaOfflineContentState extends State<KivaOfflineContent> {
             },
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// SPEC 09: solicitud creada offline con producto Kiva, sin número.
+class _SinNumeroKivaTile extends StatelessWidget {
+  final KivaSolicitudModel solicitud;
+  final VoidCallback? onTap;
+
+  const _SinNumeroKivaTile({required this.solicitud, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final llenado = solicitud.kivaLlenado;
+    return ListTile(
+      onTap: onTap,
+      leading: CircleAvatar(
+        backgroundColor:
+            llenado ? RedesignColors.greenTint : RedesignColors.amberTint,
+        child: Icon(
+          Icons.wallet,
+          color: llenado ? RedesignColors.green : RedesignColors.amber,
+        ),
+      ),
+      title: Text(solicitud.nombre.capitalizeAll),
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Wrap(
+          spacing: 6,
+          runSpacing: 6,
+          children: [
+            const CardTagWidget(
+              label: 'Sin número',
+              color: RedesignColors.indigo,
+              background: RedesignColors.indigoTint,
+            ),
+            llenado
+                ? const CardTagWidget(
+                    label: 'Kiva llenado',
+                    color: RedesignColors.green,
+                    background: RedesignColors.greenTint,
+                  )
+                : const CardTagWidget(
+                    label: 'Kiva pendiente',
+                    color: RedesignColors.amber,
+                    background: RedesignColors.amberTint,
+                  ),
+          ],
+        ),
       ),
     );
   }
