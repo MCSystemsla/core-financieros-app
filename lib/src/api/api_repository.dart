@@ -100,7 +100,7 @@ class DefaultAPIRepository implements APIRepository {
     headers.addAll(endpoint.headers);
     try {
       if (endpoint.typeBody == TypeBody.formData) {
-        return _formData(endpoint: endpoint, headers: headers);
+        return await _formData(endpoint: endpoint, headers: headers);
       } else {
         Response response = await requestDistributor(endpoint, url, headers);
 
@@ -149,7 +149,7 @@ class DefaultAPIRepository implements APIRepository {
           }
         }
 
-        return _handleResponse(response, needToValidateToken);
+        return await _handleResponse(response, needToValidateToken);
       }
     } catch (e) {
       return _handlerError(e);
