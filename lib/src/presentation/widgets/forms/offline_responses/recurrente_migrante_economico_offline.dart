@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/forms/migrantes-economicos/recurrente_migrante_economico.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -7,15 +6,11 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_r
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_migrante_economico/recurrente_migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/loading/loading_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/offline_responses/shared/kiva_respuestas_offline_widgets.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class RecurrenteMigranteEconomicoOffline extends StatefulWidget {
@@ -35,18 +30,21 @@ class RecurrenteMigranteEconomicoOffline extends StatefulWidget {
 class _RecurrenteMigranteEconomicoOfflineState
     extends State<RecurrenteMigranteEconomicoOffline> {
   ImageModel? imageModel;
+  bool? _respuestasEncontradas;
   @override
   void initState() {
     super.initState();
     initFunctions();
   }
 
-  initFunctions() async {
+  Future<void> initFunctions() async {
     final solicitudesProvider =
         context.read<SolicitudesPendientesLocalDbCubit>();
-    await solicitudesProvider.getRecurrentMigranteEconomico(widget.solicitudId);
+    final respuestas = await solicitudesProvider
+        .getRecurrentMigranteEconomico(widget.solicitudId);
     imageModel = await solicitudesProvider.getImagesModel(widget.solicitudId);
-    setState(() {});
+    if (!mounted) return;
+    setState(() => _respuestasEncontradas = respuestas != null);
   }
 
   @override
@@ -98,316 +96,240 @@ class _RecurrenteMigranteEconomicoOfflineState
               //     );
               if (!context.mounted) return;
 
-              await customPopUp(
+              await mostrarKivaEnviadoDialog(
                 context: context,
-                dismissOnTouchOutside: false,
-                size: MediaQuery.sizeOf(context),
-                title: 'Formulario Kiva Enviado exitosamente!!',
-                subtitle: imagesSended
-                    ? 'Las respuestas se han enviado Exitosamente'
-                    : 'Las respuestas se enviaron, pero las imágenes no se pudieron subir. Reintente desde el historial Kiva.',
-                dialogType: DialogType.success,
-                buttonAcept: true,
-                textButtonAcept: 'Ok',
-                colorButtonAcept: AppColors.getPrimaryColor(),
-                onPressedAccept: () {
-                  widget.needGoBack
-                      ? context.pop()
-                      : context.pushReplacement('/');
-                },
+                imagenesEnviadas: imagesSended,
+                needGoBack: widget.needGoBack,
               );
             }
           },
           builder: (context, response) {
-            return switch (state.status) {
-              Status.inProgress => const LoadingWidget(),
-              Status.done => SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Gap(20),
-                      CommentaryWidget(
+            return KivaRespuestasBody(
+              encontradas: _respuestasEncontradas,
+              child: KivaRespuestasScroll(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.otrosIngresos ??
+                              false
+                          ? 'input.yes'.tr()
+                          : 'input.no'.tr(),
+                      title: '¿Tiene otros ingresos?',
+                    ),
+                    if (state.recurrenteMigranteEconomicoDbLocal
+                            ?.otrosIngresos ??
+                        false)
+                      KivaRespuestaWidget(
+                        title: 'Cuales Otros Ingresos?',
                         initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                    ?.otrosIngresos ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title: '¿Tiene otros ingresos?',
-                        readOnly: true,
-                      ),
-                      if (state.recurrenteMigranteEconomicoDbLocal
-                              ?.otrosIngresos ??
-                          false)
-                        CommentaryWidget(
-                          title: 'Cuales Otros Ingresos?',
-                          initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                  ?.otrosIngresosDescripcion ??
-                              'N/A',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'input.input_validator'.tr();
-                            }
-                            return null;
-                          },
-                          readOnly: true,
-                        ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        textInputType: TextInputType.number,
-                        title: 'Cantidad de hijos:*',
-                        initialValue: state
-                                .recurrenteMigranteEconomicoDbLocal?.numeroHijos
-                                ?.toString() ??
-                            '0',
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.edadHijos ??
-                            '0',
-                        title: '¿Qué edades tienen sus hijos?',
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.tipoEstudioHijos ??
+                                ?.otrosIngresosDescripcion ??
                             'N/A',
-                        title: '¿Qué tipo de estudios reciben sus hijos?',
-                        readOnly: true,
                       ),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                    ?.coincideRespuesta ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title:
-                            '¿Coincide la respuesta del cliente con el formato anterior?'
-                                .tr(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          return null;
-                        },
-                        readOnly: true,
-                      ),
-                      if (state.recurrenteMigranteEconomicoDbLocal
-                              ?.coincideRespuesta ??
-                          false == false)
-                        CommentaryWidget(
-                          initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                  ?.explicacionInversion ??
-                              'N/A',
-                          title:
-                              'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'input.input_validator'.tr();
-                            }
-                            return null;
-                          },
-                          readOnly: true,
-                        ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                    ?.apoyanNegocio ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
-                        title: '¿Hay alguien que le apoye en su negocio?'.tr(),
-                        readOnly: true,
-                      ),
-                      const Gap(20),
-                      if (state.recurrenteMigranteEconomicoDbLocal
-                              ?.apoyanNegocio ??
-                          false)
-                        CommentaryWidget(
-                          initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                  ?.cuantosApoyan ??
+                    KivaRespuestaWidget(
+                      title: 'Cantidad de hijos:*',
+                      initialValue: state
+                              .recurrenteMigranteEconomicoDbLocal?.numeroHijos
+                              ?.toString() ??
+                          '0',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue:
+                          state.recurrenteMigranteEconomicoDbLocal?.edadHijos ??
                               '0',
-                          title:
-                              'De ser positivo, favor responder cuántas personas.',
-                          readOnly: true,
-                        ),
-                      CommentaryWidget(
+                      title: '¿Qué edades tienen sus hijos?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                              ?.tipoEstudioHijos ??
+                          'N/A',
+                      title: '¿Qué tipo de estudios reciben sus hijos?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.coincideRespuesta ??
+                              false
+                          ? 'input.yes'.tr()
+                          : 'input.no'.tr(),
+                      title:
+                          '¿Coincide la respuesta del cliente con el formato anterior?'
+                              .tr(),
+                    ),
+                    if (state.recurrenteMigranteEconomicoDbLocal
+                            ?.coincideRespuesta ==
+                        false)
+                      KivaRespuestaWidget(
                         initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.motivoPrestamo ??
+                                ?.explicacionInversion ??
                             'N/A',
-                        readOnly: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          return null;
-                        },
-                        title: '¿Para qué solicitó este nuevo crédito?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.quienApoya ??
-                            'N/A',
-                        readOnly: true,
                         title:
-                            '¿Hay alguien que le esté apoyando en este nuevo préstamo?',
+                            'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                       ),
-                      const Gap(20),
-                      CommentaryWidget(
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.apoyanNegocio ??
+                              false
+                          ? 'input.yes'.tr()
+                          : 'input.no'.tr(),
+                      title: '¿Hay alguien que le apoye en su negocio?'.tr(),
+                    ),
+                    if (state.recurrenteMigranteEconomicoDbLocal
+                            ?.apoyanNegocio ??
+                        false)
+                      KivaRespuestaWidget(
                         initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                    ?.mejoraCondiciones ??
-                                false
-                            ? 'input.yes'.tr()
-                            : 'input.no'.tr(),
+                                ?.cuantosApoyan ??
+                            '0',
                         title:
-                            '¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida?',
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          return null;
-                        },
+                            'De ser positivo, favor responder cuántas personas.',
                       ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        hintText: '',
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.explicacionMejoraCondiciones ??
-                            'N/A',
-                        readOnly: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'input.input_validator'.tr();
-                          }
-                          return null;
-                        },
-                        title: '¿Por qué?',
-                      ),
-                      const Gap(20),
-                      CommentaryWidget(
-                        initialValue: state.recurrenteMigranteEconomicoDbLocal
-                                ?.siguienteMeta ??
-                            'N/A',
-                        readOnly: true,
-                        title:
-                            'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
-                      ),
-                      const Gap(20),
-                      BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
-                        builder: (context, imageState) {
-                          return ButtonActionsWidget(
-                            disabled: state.status == Status.inProgress ||
-                                response.status == Status.inProgress ||
-                                imageState.status == Status.inProgress,
-                            onPreviousPressed: () {
-                              context.pop();
-                            },
-                            onNextPressed: () {
-                              context
-                                  .read<RecurrenteMigrantesEconomicosCubit>()
-                                  .sendOfflineAnswers(
-                                    recurrenteMigranteEcomico:
-                                        MigrantesEconomicosRecurrente(
-                                      tipoSolicitud: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.tipoSolicitud ??
-                                          '',
-                                      database: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.database ??
-                                          '',
-                                      tieneTrabajo: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.tieneTrabajo ??
-                                          false,
-                                      trabajoNegocioDescripcion: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.trabajoNegocioDescripcion ??
-                                          '',
-                                      tiempoActividad: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.tiempoActividad ??
-                                          0,
-                                      numeroHijos: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.numeroHijos ??
-                                          0,
-                                      edadHijos: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.edadHijos ??
-                                          '',
-                                      tipoEstudioHijos: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.tipoEstudioHijos ??
-                                          '',
-                                      otrosIngresos: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.otrosIngresos ??
-                                          false,
-                                      otrosIngresosDescripcion: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.otrosIngresosDescripcion ??
-                                          '',
-                                      personasCargo: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.personasCargo ??
-                                          0,
-                                      motivoPrestamo: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.motivoPrestamo ??
-                                          '',
-                                      objSolicitudRecurrenteId: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.objSolicitudRecurrenteId ??
-                                          0,
-                                      coincideRespuesta: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.coincideRespuesta ??
-                                          false,
-                                      explicacionInversion: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.explicacionInversion ??
-                                          '',
-                                      apoyanNegocio: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.apoyanNegocio ??
-                                          false,
-                                      quienApoya: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.quienApoya ??
-                                          '',
-                                      cuantosApoyan: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.cuantosApoyan ??
-                                          '',
-                                      mejoraCondiciones: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.mejoraCondiciones ??
-                                          false,
-                                      explicacionMejoraCondiciones: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.explicacionMejoraCondiciones ??
-                                          '',
-                                      siguienteMeta: state
-                                              .recurrenteMigranteEconomicoDbLocal
-                                              ?.siguienteMeta ??
-                                          '',
-                                    ),
-                                  );
-                            },
-                            previousTitle: 'Salir'.tr(),
-                            nextTitle: 'Enviar'.tr(),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                              ?.motivoPrestamo ??
+                          'N/A',
+                      title: '¿Para qué solicitó este nuevo crédito?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state
+                              .recurrenteMigranteEconomicoDbLocal?.quienApoya ??
+                          'N/A',
+                      title:
+                          '¿Hay alguien que le esté apoyando en este nuevo préstamo?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                                  ?.mejoraCondiciones ??
+                              false
+                          ? 'input.yes'.tr()
+                          : 'input.no'.tr(),
+                      title:
+                          '¿Usted considera que esta nueva inversión le ayudará a mejorar sus condiciones de vida?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                              ?.explicacionMejoraCondiciones ??
+                          'N/A',
+                      title: '¿Por qué?',
+                    ),
+                    KivaRespuestaWidget(
+                      initialValue: state.recurrenteMigranteEconomicoDbLocal
+                              ?.siguienteMeta ??
+                          'N/A',
+                      title:
+                          'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
+                    ),
+                    BlocBuilder<UploadUserFileCubit, UploadUserFileState>(
+                      builder: (context, imageState) {
+                        return KivaEnviarActions(
+                          disabled: state.status == Status.inProgress ||
+                              response.status == Status.inProgress ||
+                              imageState.status == Status.inProgress,
+                          onPreviousPressed: () {
+                            context.pop();
+                          },
+                          onNextPressed: () {
+                            context
+                                .read<RecurrenteMigrantesEconomicosCubit>()
+                                .sendOfflineAnswers(
+                                  recurrenteMigranteEcomico:
+                                      MigrantesEconomicosRecurrente(
+                                    tipoSolicitud: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.tipoSolicitud ??
+                                        '',
+                                    database: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.database ??
+                                        '',
+                                    tieneTrabajo: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.tieneTrabajo ??
+                                        false,
+                                    trabajoNegocioDescripcion: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.trabajoNegocioDescripcion ??
+                                        '',
+                                    tiempoActividad: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.tiempoActividad ??
+                                        0,
+                                    numeroHijos: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.numeroHijos ??
+                                        0,
+                                    edadHijos: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.edadHijos ??
+                                        '',
+                                    tipoEstudioHijos: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.tipoEstudioHijos ??
+                                        '',
+                                    otrosIngresos: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.otrosIngresos ??
+                                        false,
+                                    otrosIngresosDescripcion: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.otrosIngresosDescripcion ??
+                                        '',
+                                    personasCargo: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.personasCargo ??
+                                        0,
+                                    motivoPrestamo: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.motivoPrestamo ??
+                                        '',
+                                    objSolicitudRecurrenteId: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.objSolicitudRecurrenteId ??
+                                        0,
+                                    coincideRespuesta: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.coincideRespuesta ??
+                                        false,
+                                    explicacionInversion: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.explicacionInversion ??
+                                        '',
+                                    apoyanNegocio: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.apoyanNegocio ??
+                                        false,
+                                    quienApoya: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.quienApoya ??
+                                        '',
+                                    cuantosApoyan: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.cuantosApoyan ??
+                                        '',
+                                    mejoraCondiciones: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.mejoraCondiciones ??
+                                        false,
+                                    explicacionMejoraCondiciones: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.explicacionMejoraCondiciones ??
+                                        '',
+                                    siguienteMeta: state
+                                            .recurrenteMigranteEconomicoDbLocal
+                                            ?.siguienteMeta ??
+                                        '',
+                                  ),
+                                );
+                          },
+                          previousTitle: 'Salir'.tr(),
+                          nextTitle: 'Enviar'.tr(),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              _ => const SizedBox(),
-            };
+              ),
+            );
           },
         );
       },

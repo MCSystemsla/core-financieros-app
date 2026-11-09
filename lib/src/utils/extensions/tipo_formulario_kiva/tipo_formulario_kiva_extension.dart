@@ -17,6 +17,33 @@ enum TipoFormularioKiva {
 
   final String nombreFormularioKiva;
   const TipoFormularioKiva(this.nombreFormularioKiva);
+
+  bool get esRecurrente => nombreFormularioKiva.contains('Recurrente');
+
+  /// Nombre del producto Kiva para mostrar en pantalla.
+  String get etiqueta => switch (this) {
+        scrKivaCreditoEstandar ||
+        scrKivaCreditoEstandarRecurrente =>
+          'Crédito estándar',
+        scrKivaMiCrediEstudio ||
+        scrKivaMiCrediEstudioRecurrente =>
+          'MiCrédi Estudio',
+        scrKivaMejoraVivienda ||
+        scrKivaMejoraViviendaRecurrente =>
+          'Mejora de vivienda',
+        scrKivaAguaSaneamiento ||
+        scrKivaAguaSaneamientoRecurrente =>
+          'Agua y saneamiento',
+        scrKivaEnergiaLimpia ||
+        scrKivaEnergiaLimpiaRecurrente =>
+          'Energía limpia',
+        scrKivaMujerEmprende ||
+        scrKivaMujerEmprendeRecurrente =>
+          'Mujer emprende',
+        scrKivaMigrantesEconomicos ||
+        scrKivaMigrantesEconomicosRecurrentes =>
+          'Migrantes económicos',
+      };
 }
 
 extension TipoFormularioKivaX on String {

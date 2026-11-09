@@ -87,7 +87,7 @@ Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`A
 
 Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.
 
-Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_garantia_screen.dart`, `tipos_garantia_hn_widget.dart`) and plan de inversión (`plan_inversion_screen.dart`). Garantías use the feature-specific `GarantiaItemCard` (`widgets/analisis_solicitudes/hn/garantia/garantia_item_card.dart`): a dashed "pending slot" while the garantía has no bien assigned (and is not DPF), and a solid card colored by garantía type once assigned.
+Already migrated in HN análisis: garantías (`garantia_screen.dart`, `crear_garantia_screen.dart`, `tipos_garantia_hn_widget.dart`) and plan de inversión (`plan_inversion_screen.dart`). Also migrated: `ConfirmationOfflineResponsesScreen` (review/send of local Kiva answers); its 14 forms under `widgets/forms/offline_responses/` use the shared pieces in `offline_responses/shared/kiva_respuestas_offline_widgets.dart` (`KivaRespuestaWidget`, `KivaRespuestasBody`, `KivaEnviarActions`, `mostrarKivaEnviadoDialog`) and track their own load result instead of the global `SolicitudesPendientesLocalDbCubit.status`. Garantías use the feature-specific `GarantiaItemCard` (`widgets/analisis_solicitudes/hn/garantia/garantia_item_card.dart`): a dashed "pending slot" while the garantía has no bien assigned (and is not DPF), and a solid card colored by garantía type once assigned.
 
 ### HN garantías: decimal amounts
 
