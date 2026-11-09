@@ -9,11 +9,9 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_firma_widgets.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,45 +56,36 @@ class _RecurrenteSaneamientoSignatureWidgetState
     final isConnected =
         context.watch<InternetConnectionCubit>().state.isConnected;
 
-    return Column(
-      children: [
-        const MiCreditoProgress(steps: 5, currentStep: 5),
-        _DropdownSignerSelector(
-          typeSigner: _typeSigner,
-          onChanged: (selectedType) {
-            setState(() => _typeSigner = selectedType);
-          },
-        ),
-        if (_typeSigner != TypeSigner.ninguno)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  SignatureHeaderLabels(typeSigner: _typeSigner),
-                  const Gap(20),
-                  SignatureCanvasBox(
-                    size: size,
-                    controller: _signatureController,
-                  ),
-                  const Gap(30),
-                  SubmitSignatureButton(
-                    typeSigner: _typeSigner,
-                    signatureController: _signatureController,
-                    uploadState: uploadState,
-                    isConnected: isConnected,
-                    size: size,
-                  ),
-                  const Gap(10),
-                  BackButtonSection(pageController: widget.controller),
-                  const Gap(10),
-                ],
-              ),
-            ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _DropdownSignerSelector(
+            typeSigner: _typeSigner,
+            onChanged: (selectedType) {
+              setState(() => _typeSigner = selectedType);
+            },
           ),
-      ],
+          if (_typeSigner != TypeSigner.ninguno) ...[
+            const Gap(20),
+            KivaFirmaEncabezado(
+              firmaCliente: _typeSigner == TypeSigner.cliente,
+            ),
+            const Gap(12),
+            KivaFirmaLienzo(controller: _signatureController),
+            const Gap(16),
+            SubmitSignatureButton(
+              typeSigner: _typeSigner,
+              signatureController: _signatureController,
+              uploadState: uploadState,
+              isConnected: isConnected,
+              size: size,
+              pageController: widget.controller,
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -112,10 +101,8 @@ class _DropdownSignerSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: JLuxDropdown(
-        dropdownColor: AppColors.white,
+    return KivaPreguntaCard(
+      child: KivaDropdown(
         title: 'Tiene capacidad el usuario para firma?',
         items: ['input.yes'.tr(), 'input.no'.tr()],
         onChanged: (item) {
@@ -131,93 +118,13 @@ class _DropdownSignerSelector extends StatelessWidget {
   }
 }
 
-class SignatureHeaderLabels extends StatelessWidget {
-  final TypeSigner typeSigner;
-
-  const SignatureHeaderLabels({super.key, required this.typeSigner});
-
-  @override
-  Widget build(BuildContext context) {
-    final titleText = typeSigner == TypeSigner.cliente
-        ? 'forms.firmar.title'.tr()
-        : 'Firma de Representante de Micrédito';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          titleText,
-          style: const TextStyle(
-            color: AppColors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
-        Text(
-          'forms.firmar.description'.tr(),
-          style: TextStyle(color: AppColors.greyWithOpacityV4),
-        ),
-      ],
-    );
-  }
-}
-
-class SignatureCanvasBox extends StatelessWidget {
-  final Size size;
-  final SignatureController controller;
-
-  const SignatureCanvasBox({
-    super.key,
-    required this.size,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Stack(
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.boxGrey,
-                width: .9,
-                strokeAlign: BorderSide.strokeAlignOutside,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Signature(
-                key: const Key('signature_pad'),
-                controller: controller,
-                width: size.width * .9,
-                backgroundColor: AppColors.white,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 10,
-            right: 10,
-            child: IconBorder.fromIcon(
-              color: AppColors.red,
-              icon: Icons.delete_forever,
-              onTap: () => controller.clear(),
-              size: const Size(44, 44),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class SubmitSignatureButton extends StatelessWidget {
   final TypeSigner typeSigner;
   final SignatureController signatureController;
   final UploadUserFileState uploadState;
   final bool isConnected;
   final Size size;
+  final PageController pageController;
 
   const SubmitSignatureButton({
     super.key,
@@ -226,6 +133,7 @@ class SubmitSignatureButton extends StatelessWidget {
     required this.uploadState,
     required this.isConnected,
     required this.size,
+    required this.pageController,
   });
 
   @override
@@ -234,15 +142,13 @@ class SubmitSignatureButton extends StatelessWidget {
         RecurrenteAguaYSaneamientoState>(
       listener: (context, state) => _onBlocStateChanged(context, state),
       builder: (context, state) {
-        final isProcessing = state.status == Status.inProgress;
-
-        return CustomElevatedButton(
-          icon: const Icon(Icons.edit, color: AppColors.white),
-          enabled: !isProcessing,
-          positionIcon: PositionIcon.left,
-          text: isProcessing ? 'Cargando...' : 'button.send'.tr(),
-          color: context.primaryColor(),
-          onPressed: () => _showConfirmationModal(context, state),
+        return KivaFirmaAcciones(
+          enviando: state.status == Status.inProgress,
+          onEnviar: () => _showConfirmationModal(context, state),
+          onRegresar: () => pageController.previousPage(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeIn,
+          ),
         );
       },
     );
@@ -411,27 +317,5 @@ class SubmitSignatureButton extends StatelessWidget {
           'Tu formulario ha sido guardado localmente debido a la falta de conexión.',
       header: '',
     ).showDialog(context, dialogType: DialogType.info);
-  }
-}
-
-class BackButtonSection extends StatelessWidget {
-  final PageController pageController;
-
-  const BackButtonSection({super.key, required this.pageController});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 0,
-      child: CustomElevatedButton(
-        alignment: MainAxisAlignment.center,
-        text: 'Regresar',
-        color: Colors.red,
-        onPressed: () => pageController.previousPage(
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        ),
-      ),
-    );
   }
 }

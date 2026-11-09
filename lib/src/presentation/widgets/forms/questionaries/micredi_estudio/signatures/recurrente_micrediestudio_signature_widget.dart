@@ -9,11 +9,9 @@ import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branc
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_firma_widgets.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,12 +66,19 @@ class _RecurrenteMicrediestudioSignatureWidgetState
         context.select((InternetConnectionCubit c) => c.state.isConnected);
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.all(15),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MiCreditoProgress(steps: 5, currentStep: 5),
           _buildDropdownSelector(),
           if (_typeSigner != TypeSigner.ninguno) ...[
-            _buildSignatureCanvas(size),
+            const Gap(20),
+            KivaFirmaEncabezado(
+              firmaCliente: _typeSigner == TypeSigner.cliente,
+            ),
+            const Gap(12),
+            KivaFirmaLienzo(controller: _signatureController),
+            const Gap(16),
             _buildActionButtons(size, isConnected),
           ],
         ],
@@ -82,10 +87,8 @@ class _RecurrenteMicrediestudioSignatureWidgetState
   }
 
   Widget _buildDropdownSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: JLuxDropdown(
-        dropdownColor: AppColors.white,
+    return KivaPreguntaCard(
+      child: KivaDropdown(
         title: 'Tiene capacidad el usuario para firma?',
         items: ['input.yes'.tr(), 'input.no'.tr()],
         onChanged: (item) {
@@ -101,104 +104,21 @@ class _RecurrenteMicrediestudioSignatureWidgetState
     );
   }
 
-  Widget _buildSignatureCanvas(Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Text(
-            _typeSigner == TypeSigner.cliente
-                ? 'forms.firmar.title'.tr()
-                : 'Firma de Representante de Micrédito',
-            style: const TextStyle(
-              color: AppColors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Gap(10),
-          Text(
-            'forms.firmar.description'.tr(),
-            style: TextStyle(
-              color: AppColors.greyWithOpacityV4,
-            ),
-          ),
-          const Gap(20),
-          Stack(
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.boxGrey,
-                    width: .9,
-                    strokeAlign: BorderSide.strokeAlignOutside,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Signature(
-                    key: const Key('signature'),
-                    controller: _signatureController,
-                    height: size.height * .56,
-                    width: size.width * .9,
-                    backgroundColor: AppColors.white,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 10,
-                right: 10,
-                child: IconBorder.fromIcon(
-                  color: AppColors.red,
-                  icon: Icons.delete_forever,
-                  onTap: () => _signatureController.clear(),
-                  size: const Size(44, 44),
-                ),
-              ),
-            ],
-          ),
-          const Gap(30),
-        ],
-      ),
-    );
-  }
-
   Widget _buildActionButtons(Size size, bool isConnected) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          BlocConsumer<RecurrenteMicrediEstudioCubit,
-              RecurrenteMicrediEstudioState>(
-            listener: _handleCubitListener,
-            builder: (context, state) {
-              final isInProgress = state.status == Status.inProgress;
-              return CustomElevatedButton(
-                icon: const Icon(Icons.edit, color: AppColors.white),
-                enabled: !isInProgress,
-                positionIcon: PositionIcon.left,
-                text: isInProgress ? 'Cargando...' : 'button.send'.tr(),
-                color: context.primaryColor(),
-                onPressed: () =>
-                    _showConfirmationDialog(context, size, state, isConnected),
-              );
-            },
+    return BlocConsumer<RecurrenteMicrediEstudioCubit,
+        RecurrenteMicrediEstudioState>(
+      listener: _handleCubitListener,
+      builder: (context, state) {
+        return KivaFirmaAcciones(
+          enviando: state.status == Status.inProgress,
+          onEnviar: () =>
+              _showConfirmationDialog(context, size, state, isConnected),
+          onRegresar: () => widget.controller.previousPage(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeIn,
           ),
-          const Gap(10),
-          CustomElevatedButton(
-            alignment: MainAxisAlignment.center,
-            text: 'Regresar',
-            color: Colors.red,
-            onPressed: () => widget.controller.previousPage(
-              duration: const Duration(milliseconds: 350),
-              curve: Curves.easeIn,
-            ),
-          ),
-          const Gap(10),
-        ],
-      ),
+        );
+      },
     );
   }
 

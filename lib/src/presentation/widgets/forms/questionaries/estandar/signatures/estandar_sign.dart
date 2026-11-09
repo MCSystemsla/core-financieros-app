@@ -5,13 +5,11 @@ import 'package:core_financiero_app/src/config/local_storage/local_storage.dart'
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_firma_widgets.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/icon_border.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,45 +59,35 @@ class _EstandarSignatureState extends State<EstandarSignature> {
     final size = MediaQuery.sizeOf(context);
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.all(15),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MiCreditoProgress(steps: 5, currentStep: 5),
-          const Gap(5),
           _buildDropdownSelector(),
-          if (typeSigner != TypeSigner.ninguno)
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTitleAndDescription(),
-                  const Gap(5),
-                  _SignatureCanvas(
-                    controller: _signatureController,
-                    size: size,
-                  ),
-                  const Gap(30),
-                  _ActionButtons(
-                    signatureController: _signatureController,
-                    pageController: widget.controller,
-                    typeSigner: typeSigner,
-                    size: size,
-                    onSaveOffline: saveOfflineResponses,
-                  ),
-                  const Gap(10),
-                ],
-              ),
+          if (typeSigner != TypeSigner.ninguno) ...[
+            const Gap(20),
+            KivaFirmaEncabezado(
+              firmaCliente: typeSigner == TypeSigner.cliente,
             ),
+            const Gap(12),
+            KivaFirmaLienzo(controller: _signatureController),
+            const Gap(16),
+            _ActionButtons(
+              signatureController: _signatureController,
+              pageController: widget.controller,
+              typeSigner: typeSigner,
+              size: size,
+              onSaveOffline: saveOfflineResponses,
+            ),
+          ],
         ],
       ),
     );
   }
 
   Widget _buildDropdownSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: JLuxDropdown(
-        dropdownColor: AppColors.white,
+    return KivaPreguntaCard(
+      child: KivaDropdown(
         title: 'Tiene capacidad el usuario para firma?',
         items: ['input.yes'.tr(), 'input.no'.tr()],
         onChanged: (item) {
@@ -112,28 +100,6 @@ class _EstandarSignatureState extends State<EstandarSignature> {
         toStringItem: (item) => item,
         hintText: 'input.select_option'.tr(),
       ),
-    );
-  }
-
-  Widget _buildTitleAndDescription() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          typeSigner == TypeSigner.cliente
-              ? 'forms.firmar.title'.tr()
-              : 'Firma de Representante de Micrédito',
-          style: const TextStyle(
-            color: AppColors.grey,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const Gap(10),
-        Text(
-          'forms.firmar.description'.tr(),
-          style: TextStyle(color: AppColors.greyWithOpacityV4),
-        ),
-      ],
     );
   }
 
@@ -192,54 +158,6 @@ class _EstandarSignatureState extends State<EstandarSignature> {
   }
 }
 
-class _SignatureCanvas extends StatelessWidget {
-  final SignatureController controller;
-  final Size size;
-
-  const _SignatureCanvas({
-    required this.controller,
-    required this.size,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.boxGrey,
-              width: .9,
-              strokeAlign: BorderSide.strokeAlignOutside,
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Signature(
-              key: const Key('signature'),
-              controller: controller,
-              height: size.height * .56,
-              width: size.width * .9,
-              backgroundColor: AppColors.white,
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 10,
-          right: 10,
-          child: IconBorder.fromIcon(
-            color: AppColors.red,
-            icon: Icons.delete_forever,
-            onTap: () => controller.clear(),
-            size: const Size(44, 44),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _ActionButtons extends StatelessWidget {
   final SignatureController signatureController;
   final PageController pageController;
@@ -258,35 +176,18 @@ class _ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BlocConsumer<EstandarCubit, EstandarState>(
-          listener: (context, state) =>
-              _handleNavigationAndSave(context, state),
-          builder: (context, state) {
-            return CustomElevatedButton(
-              icon: const Icon(Icons.edit, color: AppColors.white),
-              enabled: state.status != Status.inProgress,
-              positionIcon: PositionIcon.left,
-              text: state.status == Status.inProgress
-                  ? 'Cargando...'
-                  : 'button.send'.tr(),
-              color: context.primaryColor(),
-              onPressed: () => _showConfirmationDialog(context, state),
-            );
-          },
-        ),
-        const Gap(10),
-        CustomElevatedButton(
-          alignment: MainAxisAlignment.center,
-          text: 'Regresar',
-          color: Colors.red,
-          onPressed: () => pageController.previousPage(
+    return BlocConsumer<EstandarCubit, EstandarState>(
+      listener: (context, state) => _handleNavigationAndSave(context, state),
+      builder: (context, state) {
+        return KivaFirmaAcciones(
+          enviando: state.status == Status.inProgress,
+          onEnviar: () => _showConfirmationDialog(context, state),
+          onRegresar: () => pageController.previousPage(
             duration: const Duration(milliseconds: 350),
             curve: Curves.easeIn,
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 
