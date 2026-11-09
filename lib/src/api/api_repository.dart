@@ -265,16 +265,6 @@ class DefaultAPIRepository implements APIRepository {
         return map;
       }
     }
-    // try {
-    //   //si el error es por falta de token se supondra que se debe cerrar sesión
-    //   // if (decodedBody['message'] == 'Token not found') {
-    //   //   NavigationService.pushAndRemoveUntil(
-    //   //     context: AppConfig.shared.flavor.getNavigationKey().currentContext!,
-    //   //     screen: LoginScreen(),
-    //   //     routeName: LoginScreen.routeName,
-    //   //   );
-    //   // }
-    // } catch (_) {}
 
     _logger.d('Response error ${response.body}');
     await ErrorReporter.registerError(

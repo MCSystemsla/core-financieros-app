@@ -9,7 +9,6 @@ const flavor = Flavor.honduras;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.configurePrefs();
-  // await FirebaseService().initializeApp();
   await setUpGlobalLocator(flavor: flavor);
   var delegate = await LocalizationDelegate.create(
     fallbackLocale: 'es',
