@@ -44,7 +44,6 @@ dependencies:
   lottie: ^3.5.1
   shimmer: ^3.0.0
   country_code_picker: ^3.4.1
-  pinput: ^6.0.2
   animate_do: ^4.2.0
   drop_down_list: ^2.1.1
 
