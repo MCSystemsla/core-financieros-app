@@ -124,34 +124,60 @@ class FormResponses extends StatelessWidget {
 }
 
 /// Miniatura de solo lectura de una foto del cliente. Sin foto, o si el
-/// archivo ya no existe, muestra un espacio vacío.
+/// archivo ya no existe, muestra un espacio vacío. Al tocarla abre la foto
+/// en pantalla completa ([_FotoClienteViewer]).
 class _FotoClienteTile extends StatelessWidget {
   final String path;
   final String label;
   const _FotoClienteTile({required this.path, required this.label});
 
+  void _abrir(BuildContext context, String heroTag) {
+    Navigator.of(context).push(
+      PageRouteBuilder<void>(
+        opaque: false,
+        barrierColor: Colors.black,
+        transitionDuration: const Duration(milliseconds: 250),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        pageBuilder: (_, __, ___) => _FotoClienteViewer(
+          path: path,
+          label: label,
+          heroTag: heroTag,
+        ),
+        transitionsBuilder: (_, animation, __, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final vacio = path.trim().isEmpty;
+    final heroTag = 'foto-cliente-$label-$path';
 
     return Column(
       children: [
         AspectRatio(
           aspectRatio: 1,
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: RedesignColors.tagBackground,
+          child: Material(
+            color: RedesignColors.tagBackground,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: RedesignColors.border),
+              side: const BorderSide(color: RedesignColors.border),
             ),
+            clipBehavior: Clip.antiAlias,
             child: vacio
                 ? const _FotoVacia()
-                : Image.file(
-                    File(path),
-                    fit: BoxFit.cover,
-                    cacheWidth: 300,
-                    errorBuilder: (_, __, ___) => const _FotoVacia(),
+                : InkWell(
+                    onTap: () => _abrir(context, heroTag),
+                    child: Hero(
+                      tag: heroTag,
+                      child: Image.file(
+                        File(path),
+                        fit: BoxFit.cover,
+                        cacheWidth: 300,
+                        errorBuilder: (_, __, ___) => const _FotoVacia(),
+                      ),
+                    ),
                   ),
           ),
         ),
@@ -165,6 +191,115 @@ class _FotoClienteTile extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _FotoClienteViewer extends StatefulWidget {
+  final String path;
+  final String label;
+  final String heroTag;
+  const _FotoClienteViewer({
+    required this.path,
+    required this.label,
+    required this.heroTag,
+  });
+
+  @override
+  State<_FotoClienteViewer> createState() => _FotoClienteViewerState();
+}
+
+class _FotoClienteViewerState extends State<_FotoClienteViewer> {
+  static const _zoomDobleToque = 2.5;
+
+  final _transform = TransformationController();
+  TapDownDetails? _dobleToque;
+
+  @override
+  void dispose() {
+    _transform.dispose();
+    super.dispose();
+  }
+
+  /// Doble toque: acerca donde se tocó, o vuelve al tamaño normal.
+  void _onDoubleTap() {
+    if (_transform.value != Matrix4.identity()) {
+      _transform.value = Matrix4.identity();
+      return;
+    }
+    final punto = _dobleToque?.localPosition;
+    if (punto == null) return;
+    _transform.value = Matrix4.identity()
+      ..translateByDouble(
+        -punto.dx * (_zoomDobleToque - 1),
+        -punto.dy * (_zoomDobleToque - 1),
+        0,
+        1,
+      )
+      ..scaleByDouble(_zoomDobleToque, _zoomDobleToque, _zoomDobleToque, 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SizedBox.expand(
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onDoubleTapDown: (details) => _dobleToque = details,
+                onDoubleTap: _onDoubleTap,
+                child: InteractiveViewer(
+                  transformationController: _transform,
+                  minScale: 1,
+                  maxScale: 5,
+                  child: Center(
+                    child: Hero(
+                      tag: widget.heroTag,
+                      child: Image.file(
+                        File(widget.path),
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => const Text(
+                          'No se pudo abrir la foto',
+                          style: TextStyle(color: Colors.white70),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 16, 0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      tooltip: 'Cerrar',
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black45,
+                      ),
+                      icon:
+                          const Icon(Icons.close_rounded, color: Colors.white),
+                    ),
+                    const Gap(8),
+                    Text(
+                      widget.label,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
