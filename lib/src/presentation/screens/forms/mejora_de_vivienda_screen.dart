@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/impacto_social_kiva_objetivo.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_credito_descrip.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mejora_vivienda/mejora_vivienda_entorno_social.dart';
@@ -38,7 +39,7 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController();
+    final esRecurrente = isRecurrentForm ?? false;
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -68,44 +69,45 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                '${'forms.mejora_de_vivienda.title'.tr()} ${isRecurrentForm! ? 'Recurrente' : 'Nuevo'}'),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: pageController,
-              ),
-              MejoraViviendaEntornoSocial(
+        child: KivaFormScaffold(
+          title: 'forms.mejora_de_vivienda.title'.tr(),
+          isRecurrentForm: esRecurrente,
+          steps: [
+            'Fotos del cliente',
+            'Entorno social',
+            if (esRecurrente) 'Crédito anterior',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            MejoraViviendaEntornoSocial(
+              pageController: pageController,
+              isRecurrentForm: esRecurrente,
+            ),
+            if (esRecurrente)
+              MejoraViviendaCreditoDescrip(
+                isRecurrentForm: esRecurrente,
                 pageController: pageController,
-                isRecurrentForm: isRecurrentForm ?? false,
               ),
-              if (isRecurrentForm ?? false)
-                MejoraViviendaCreditoDescrip(
-                  isRecurrentForm: isRecurrentForm ?? false,
-                  pageController: pageController,
-                ),
-              ImpactoSocialKivaObjetiveWidget(
-                isRecurrentForm: isRecurrentForm ?? false,
-                controller: pageController,
-              ),
-              FormResponses(
-                controller: pageController,
-              ),
-              (isRecurrentForm ?? false)
-                  ? RecurrenteViviendaSignatureWidget(
-                      controller: pageController,
-                    )
-                  : ViviendaSignatureWidget(
-                      controller: pageController,
-                    ),
-            ],
-          ),
+            ImpactoSocialKivaObjetiveWidget(
+              isRecurrentForm: esRecurrente,
+              controller: pageController,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            esRecurrente
+                ? RecurrenteViviendaSignatureWidget(
+                    controller: pageController,
+                  )
+                : ViviendaSignatureWidget(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

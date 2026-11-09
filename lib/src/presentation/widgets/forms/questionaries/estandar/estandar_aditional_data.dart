@@ -5,11 +5,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_r
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_estandar/recurrente_estandart_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,89 +43,88 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
         ),
       false => Form(
           key: formKey,
-          child: Column(
-            children: [
-              const MiCreditoProgress(
-                steps: 5,
-                currentStep: 2,
-              ),
-              const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
-                  isContainIcon: true,
-                  validator: (value) {
-                    if (value == null) return 'input.input_validator'.tr();
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(15),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              children: [
+                KivaPreguntaCard(
+                  child: KivaDropdown(
+                    isContainIcon: true,
+                    validator: (value) {
+                      if (value == null) return 'input.input_validator'.tr();
 
-                    return null;
-                  },
-                  title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
-                  items: ['input.yes'.tr(), 'input.no'.tr()],
-                  onChanged: (item) {
-                    if (item == null) return;
-                    otrosIngresos = item;
-                    setState(() {});
-                  },
-                  toStringItem: (item) {
-                    return item;
-                  },
-                  hintText: 'input.select_option'.tr(),
+                      return null;
+                    },
+                    title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
+                    items: ['input.yes'.tr(), 'input.no'.tr()],
+                    onChanged: (item) {
+                      if (item == null) return;
+                      otrosIngresos = item;
+                      setState(() {});
+                    },
+                    toStringItem: (item) {
+                      return item;
+                    },
+                    hintText: 'input.select_option'.tr(),
+                  ),
                 ),
-              ),
-              if (otrosIngresos == 'input.yes'.tr())
-                CommentaryWidget(
-                  title: 'Cuales?',
-                  textEditingController: cualesOtrosIngrsos,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                ),
-              const Gap(20),
-              ButtonActionsWidget(
-                onPreviousPressed: () {
-                  widget.pageController.previousPage(
-                    duration: const Duration(
-                      milliseconds: 350,
-                    ),
-                    curve: Curves.easeIn,
-                  );
-                },
-                onNextPressed: () {
-                  if (formKey.currentState?.validate() ?? false) {
-                    context.read<EstandarCubit>().saveAnswers(
-                          tipoSolicitud: context
-                              .read<KivaRouteCubit>()
-                              .state
-                              .tipoSolicitud,
-                          otrosIngresos: otrosIngresos == 'input.yes'.tr(),
-                          otrosIngresosDescripcion:
-                              cualesOtrosIngrsos.text.trim(),
-                        );
-                    context.read<ResponseCubit>().addResponses(
-                      responses: [
-                        Response(
-                          index: widget.pageController.page?.toInt() ?? 0,
-                          question: '¿Tiene otros ingresos?¿Cuales?*',
-                          response: otrosIngresos ?? 'N/A',
-                        ),
-                        if (otrosIngresos == 'input.yes'.tr())
-                          Response(
-                            index: widget.pageController.page?.toInt() ?? 0,
-                            question: 'Cuales?',
-                            response: otrosIngresos ?? 'N/A',
-                          ),
-                      ],
-                    );
-                    widget.pageController.nextPage(
+                if (otrosIngresos == 'input.yes'.tr())
+                  CommentaryWidget(
+                    title: 'Cuales?',
+                    textEditingController: cualesOtrosIngrsos,
+                    validator: (value) =>
+                        ClassValidator.validateRequired(value),
+                  ),
+                const Gap(20),
+                KivaFormNavegacion(
+                  onPreviousPressed: () {
+                    widget.pageController.previousPage(
                       duration: const Duration(
                         milliseconds: 350,
                       ),
                       curve: Curves.easeIn,
                     );
-                  }
-                },
-                previousTitle: 'button.previous'.tr(),
-                nextTitle: 'button.next'.tr(),
-              ),
-            ],
+                  },
+                  onNextPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      context.read<EstandarCubit>().saveAnswers(
+                            tipoSolicitud: context
+                                .read<KivaRouteCubit>()
+                                .state
+                                .tipoSolicitud,
+                            otrosIngresos: otrosIngresos == 'input.yes'.tr(),
+                            otrosIngresosDescripcion:
+                                cualesOtrosIngrsos.text.trim(),
+                          );
+                      context.read<ResponseCubit>().addResponses(
+                        responses: [
+                          Response(
+                            index: widget.pageController.page?.toInt() ?? 0,
+                            question: '¿Tiene otros ingresos?¿Cuales?*',
+                            response: otrosIngresos ?? 'N/A',
+                          ),
+                          if (otrosIngresos == 'input.yes'.tr())
+                            Response(
+                              index: widget.pageController.page?.toInt() ?? 0,
+                              question: 'Cuales?',
+                              response: otrosIngresos ?? 'N/A',
+                            ),
+                        ],
+                      );
+                      widget.pageController.nextPage(
+                        duration: const Duration(
+                          milliseconds: 350,
+                        ),
+                        curve: Curves.easeIn,
+                      );
+                    }
+                  },
+                  previousTitle: 'button.previous'.tr(),
+                  nextTitle: 'button.next'.tr(),
+                ),
+              ],
+            ),
           ),
         ),
     };
@@ -161,16 +157,12 @@ class _RecurrentFormState extends State<_RecurrentForm>
     return Form(
       key: formKey,
       child: SingleChildScrollView(
+        padding: const EdgeInsets.all(15),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
-            const MiCreditoProgress(
-              steps: 5,
-              currentStep: 2,
-            ),
-            const Gap(20),
-            WhiteCard(
-              padding: const EdgeInsets.all(5),
-              child: JLuxDropdown(
+            KivaPreguntaCard(
+              child: KivaDropdown(
                 isContainIcon: true,
                 validator: (value) {
                   if (value == null) return 'input.input_validator'.tr();
@@ -205,7 +197,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 },
               ),
             const Gap(20),
-            ButtonActionsWidget(
+            KivaFormNavegacion(
               onPreviousPressed: () {
                 widget.pageController.previousPage(
                   duration: const Duration(

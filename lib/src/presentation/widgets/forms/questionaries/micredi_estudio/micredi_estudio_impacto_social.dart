@@ -4,11 +4,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/micredi_estudio/m
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_micredi_estudio/recurrente_micredi_estudio_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -56,11 +53,6 @@ class _ImpactoSocialCrediEstudioWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MiCreditoProgress(
-                    steps: 5,
-                    currentStep: 5,
-                  ),
-                  const Gap(20),
                   Text(
                     'forms.mejora_de_vivienda.impacto_social.title'.tr(),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -92,10 +84,9 @@ class _ImpactoSocialCrediEstudioWidgetState
                     },
                   ),
                   const Gap(10),
-                  WhiteCard(
+                  KivaPreguntaCard(
                     marginTop: 15,
-                    padding: const EdgeInsets.all(10),
-                    child: JLuxDropdown(
+                    child: KivaDropdown(
                       isContainIcon: true,
                       title: '¿Piensa optar a otro estudio superior?*'.tr(),
                       items: ['input.yes'.tr(), 'input.no'.tr()],
@@ -155,7 +146,7 @@ class _ImpactoSocialCrediEstudioWidgetState
                     textEditingController: question6Controller,
                   ),
                   const Gap(10),
-                  ButtonActionsWidget(
+                  KivaFormNavegacion(
                     onPreviousPressed: () {
                       widget.controller.previousPage(
                         duration: const Duration(
@@ -289,11 +280,6 @@ class _RecurrentFormImpactoSocialState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 5,
-                currentStep: 5,
-              ),
-              const Gap(20),
               Text(
                 'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
                     .tr(),
@@ -341,7 +327,7 @@ class _RecurrentFormImpactoSocialState
                 textEditingController: siguentePaso,
                 title: '¿Cuál sería su siguiente paso?',
               ),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.pageController.previousPage(
                     duration: const Duration(

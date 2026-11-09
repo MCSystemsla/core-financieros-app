@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_aditional_data.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_descripcion_del_negocio.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/estandar/estandar_entorno_familiar.dart';
@@ -29,7 +30,6 @@ class EstandarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isRecurrentForm =
         typeProduct.trim() == 'ScrKivaCreditoEstandarRecurrente';
-    final pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
@@ -60,46 +60,49 @@ class EstandarScreen extends StatelessWidget {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('Estandar ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: pageController,
-              ),
-              EstandarAditionalData(
-                isRecurrenteForm: isRecurrentForm,
-                pageController: pageController,
-              ),
-              EstandarEntornoFamiliar(
-                isRecurrenteForm: isRecurrentForm,
-                pageController: pageController,
-              ),
-              EstandarDescripciondelNegocio(
-                isRecurrentForm: isRecurrentForm,
-                pageController: pageController,
-              ),
-              EstandarImpactoSocial(
-                isRecurrentForm: isRecurrentForm,
-                pageController: pageController,
-              ),
-              FormResponses(
-                controller: pageController,
-              ),
-              isRecurrentForm
-                  ? RecurrentEstandarSignature(
-                      controller: pageController,
-                    )
-                  : EstandarSignature(
-                      controller: pageController,
-                    ),
-            ],
-          ),
+        child: KivaFormScaffold(
+          title: 'Estándar',
+          isRecurrentForm: isRecurrentForm,
+          steps: const [
+            'Fotos del cliente',
+            'Datos adicionales',
+            'Entorno familiar',
+            'Descripción del negocio',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            EstandarAditionalData(
+              isRecurrenteForm: isRecurrentForm,
+              pageController: pageController,
+            ),
+            EstandarEntornoFamiliar(
+              isRecurrenteForm: isRecurrentForm,
+              pageController: pageController,
+            ),
+            EstandarDescripciondelNegocio(
+              isRecurrentForm: isRecurrentForm,
+              pageController: pageController,
+            ),
+            EstandarImpactoSocial(
+              isRecurrentForm: isRecurrentForm,
+              pageController: pageController,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            isRecurrentForm
+                ? RecurrentEstandarSignature(
+                    controller: pageController,
+                  )
+                : EstandarSignature(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

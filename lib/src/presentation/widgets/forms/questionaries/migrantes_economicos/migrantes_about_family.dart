@@ -3,11 +3,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_r
 import 'package:core_financiero_app/src/presentation/bloc/kiva/migrantes_economicos/migrantes_economicos_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -46,11 +43,6 @@ class _MigrantesEconomicosAboutFamilyState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 3,
-                currentStep: 2,
-              ),
-              const Gap(20),
               Text(
                 'Háblenos sobre su familia en su país de origen'.tr(),
                 textAlign: TextAlign.justify,
@@ -71,9 +63,8 @@ class _MigrantesEconomicosAboutFamilyState
                   textEditingController: edadHijos,
                 ),
                 const Gap(20),
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
+                KivaPreguntaCard(
+                  child: KivaDropdown(
                     isContainIcon: true,
                     validator: (value) {
                       if (value == null) return 'input.input_validator'.tr();
@@ -101,9 +92,8 @@ class _MigrantesEconomicosAboutFamilyState
                 ),
               ],
               const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
+              KivaPreguntaCard(
+                child: KivaDropdown(
                   isContainIcon: true,
                   validator: (value) {
                     if (value == null) return 'input.input_validator'.tr();
@@ -136,7 +126,7 @@ class _MigrantesEconomicosAboutFamilyState
                   },
                 ),
               const Gap(20),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.controller.previousPage(
                     duration: const Duration(

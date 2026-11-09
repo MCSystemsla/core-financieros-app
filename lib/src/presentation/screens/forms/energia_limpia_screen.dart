@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_energi
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_adtional_data_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_credito_anterior.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/energia_limpia/energia_limpia_entorno_familiar.dart';
@@ -28,7 +29,6 @@ class EnergiaLimpiaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isRecurrentForm = typeProduct == 'ScrKivaEnergiaLimpiaRecurrente';
-    final pageController = PageController();
     final responseRepository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
@@ -59,43 +59,45 @@ class EnergiaLimpiaScreen extends StatelessWidget {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                'Energia Limpia ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: pageController,
-              ),
-              EnergiaLimpiaAditionalDataWidget(
+        child: KivaFormScaffold(
+          title: 'Energía Limpia',
+          isRecurrentForm: isRecurrentForm,
+          steps: [
+            'Fotos del cliente',
+            'Datos adicionales',
+            'Entorno familiar',
+            if (isRecurrentForm) 'Crédito anterior',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            EnergiaLimpiaAditionalDataWidget(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            EnergiaLimpiaEntornoFamiliar(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            if (isRecurrentForm)
+              EnergiaLimpiaCreditoAnterior(
                 pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
               ),
-              EnergiaLimpiaEntornoFamiliar(
-                pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              if (isRecurrentForm)
-                EnergiaLimpiaCreditoAnterior(
-                  pageController: pageController,
-                ),
-              EnergiaLimpiaImpactoSocial(
-                pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              FormResponses(
-                controller: pageController,
-              ),
-              isRecurrentForm
-                  ? RecurrenteEnergiaLimpiaWidget(controller: pageController)
-                  : EnergiaLimpiaSignatureWidget(controller: pageController),
-            ],
-          ),
+            EnergiaLimpiaImpactoSocial(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            isRecurrentForm
+                ? RecurrenteEnergiaLimpiaWidget(controller: pageController)
+                : EnergiaLimpiaSignatureWidget(controller: pageController),
+          ],
         ),
       ),
     );

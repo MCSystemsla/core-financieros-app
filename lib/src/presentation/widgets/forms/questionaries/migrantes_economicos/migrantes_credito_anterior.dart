@@ -2,11 +2,8 @@ import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/motivo_prestamo_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -42,11 +39,6 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 3,
-                currentStep: 2,
-              ),
-              const Gap(20),
               Text(
                 'Descripcíon del crédito anterior'.tr(),
                 textAlign: TextAlign.justify,
@@ -57,9 +49,8 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
               const Gap(20),
               const MotivoPrestamoWidget(),
               const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
+              KivaPreguntaCard(
+                child: KivaDropdown(
                   isContainIcon: true,
                   validator: (value) {
                     if (value == null) return 'input.input_validator'.tr();
@@ -94,9 +85,8 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
                       'Si la respuesta es no, explique en que invirtió y porqué hizo esa nueva inversión.',
                 ),
               const Gap(20),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
+              KivaPreguntaCard(
+                child: KivaDropdown(
                   isContainIcon: true,
                   validator: (value) {
                     if (value == null) return 'input.input_validator'.tr();
@@ -117,9 +107,8 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
               ),
               const Gap(20),
               if (apoyanNegocio == 'input.yes'.tr())
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
+                KivaPreguntaCard(
+                  child: KivaDropdown(
                     isContainIcon: true,
                     validator: (value) {
                       if (value == null) return 'input.input_validator'.tr();
@@ -144,7 +133,7 @@ class _MigrantesCreditoAnteriorState extends State<MigrantesCreditoAnterior> {
                   ),
                 ),
               const Gap(20),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.controller.previousPage(
                     duration: const Duration(

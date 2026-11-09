@@ -3,9 +3,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/mejora_vivienda/m
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_,mejora_vivienda.dart/recurrente_mejora_vivienda_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -48,11 +47,6 @@ class _ImpactoSocialKivaObjetiveWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MiCreditoProgress(
-                    steps: 4,
-                    currentStep: 4,
-                  ),
-                  const Gap(20),
                   Text(
                     'forms.mejora_de_vivienda.impacto_social.title'.tr(),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -91,7 +85,7 @@ class _ImpactoSocialKivaObjetiveWidgetState
                     textEditingController: question4Controller,
                     title: 'Otros datos relevantes e interesantes del cliente',
                   ),
-                  ButtonActionsWidget(
+                  KivaFormNavegacion(
                     onPreviousPressed: () {
                       widget.controller.previousPage(
                         duration: const Duration(
@@ -198,11 +192,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 4,
-                currentStep: 4,
-              ),
-              const Gap(20),
               Text(
                 'forms.mejora_de_vivienda.impacto_social.title'.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -258,7 +247,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     'Una vez finalizado este préstamo ¿Cuál sería su siguiente meta?',
               ),
               const Gap(20),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.pageController.previousPage(
                     duration: const Duration(

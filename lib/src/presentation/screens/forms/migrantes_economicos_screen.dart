@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_entorno_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrante_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/migrantes_economicos/migrantes_about_family.dart';
@@ -26,8 +27,6 @@ class MigrantesEconomicosScreen extends StatelessWidget {
     final isRecurrentForm =
         typeProduct == 'ScrKivaMigrantesEconomicosRecurrentes';
 
-    final pageController = PageController();
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -46,56 +45,59 @@ class MigrantesEconomicosScreen extends StatelessWidget {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                '${'forms.migrantes_economicos.title'.tr()} ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'
-                    .tr()),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
+        child: KivaFormScaffold(
+          title: 'forms.migrantes_economicos.title'.tr(),
+          isRecurrentForm: isRecurrentForm,
+          steps: [
+            'Fotos del cliente',
+            'Primer préstamo',
+            'Entorno social',
+            if (isRecurrentForm) 'Crédito anterior',
+            if (!isRecurrentForm) 'Sobre la familia',
+            if (!isRecurrentForm) 'Desarrollo del negocio',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            PrimerPrestamoWidget(
+              isRecurrentForm: isRecurrentForm,
+              controller: pageController,
+            ),
+            MigrantesEconomicosEntornoSocial(
+              isRecurrentForm: isRecurrentForm,
+              controller: pageController,
+            ),
+            if (isRecurrentForm)
+              MigrantesCreditoAnterior(
                 controller: pageController,
               ),
-              PrimerPrestamoWidget(
-                isRecurrentForm: isRecurrentForm,
+            if (!isRecurrentForm)
+              MigrantesEconomicosAboutFamily(
                 controller: pageController,
               ),
-              MigrantesEconomicosEntornoSocial(
-                isRecurrentForm: isRecurrentForm,
+            if (!isRecurrentForm)
+              MigrantesEconomicosDesarrolloDeNegocio(
                 controller: pageController,
               ),
-              if (isRecurrentForm)
-                MigrantesCreditoAnterior(
-                  controller: pageController,
-                ),
-              if (!isRecurrentForm)
-                MigrantesEconomicosAboutFamily(
-                  controller: pageController,
-                ),
-              if (!isRecurrentForm)
-                MigrantesEconomicosDesarrolloDeNegocio(
-                  controller: pageController,
-                ),
-              ImpactoSocialMigranteEconomico(
-                controller: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              FormResponses(
-                controller: pageController,
-              ),
-              isRecurrentForm
-                  ? RecurrenteMigrantesFormSignature(
-                      controller: pageController,
-                    )
-                  : MigrantesFormSignature(
-                      controller: pageController,
-                    ),
-            ],
-          ),
+            ImpactoSocialMigranteEconomico(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            isRecurrentForm
+                ? RecurrenteMigrantesFormSignature(
+                    controller: pageController,
+                  )
+                : MigrantesFormSignature(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

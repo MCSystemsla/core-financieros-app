@@ -9,11 +9,9 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_mujer_
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -82,11 +80,6 @@ class _MujerEmprendeEntornoSocialWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MiCreditoProgress(
-                    steps: 4,
-                    currentStep: 2,
-                  ),
-                  const Gap(20),
                   Text(
                     'forms.entorno_familiar.title'.tr(),
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -94,9 +87,8 @@ class _MujerEmprendeEntornoSocialWidgetState
                         ),
                   ),
                   const Gap(10),
-                  WhiteCard(
-                    padding: const EdgeInsets.all(5),
-                    child: JLuxDropdown(
+                  KivaPreguntaCard(
+                    child: KivaDropdown(
                       isContainIcon: true,
                       validator: (value) {
                         if (value == null) return 'input.input_validator'.tr();
@@ -128,10 +120,9 @@ class _MujerEmprendeEntornoSocialWidgetState
                       },
                     ),
                   const Gap(20),
-                  WhiteCard(
+                  KivaPreguntaCard(
                     marginTop: 15,
-                    padding: const EdgeInsets.all(10),
-                    child: JLuxDropdown(
+                    child: KivaDropdown(
                       validator: (value) {
                         if (value == null) {
                           return 'input.input_validator'.tr();
@@ -163,9 +154,8 @@ class _MujerEmprendeEntornoSocialWidgetState
                       textEditingController: question2,
                     ),
                     const Gap(20),
-                    WhiteCard(
-                      padding: const EdgeInsets.all(5),
-                      child: JLuxDropdown(
+                    KivaPreguntaCard(
+                      child: KivaDropdown(
                         isContainIcon: true,
                         validator: (value) {
                           if (value == null) {
@@ -195,7 +185,7 @@ class _MujerEmprendeEntornoSocialWidgetState
                     ),
                   ],
                   const Gap(20),
-                  ButtonActionsWidget(
+                  KivaFormNavegacion(
                     onPreviousPressed: () {
                       widget.pageController.previousPage(
                         duration: const Duration(
@@ -311,11 +301,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 4,
-                currentStep: 2,
-              ),
-              const Gap(20),
               Text(
                 'forms.entorno_familiar.title'.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -323,9 +308,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     ),
               ),
               const Gap(10),
-              WhiteCard(
-                padding: const EdgeInsets.all(5),
-                child: JLuxDropdown(
+              KivaPreguntaCard(
+                child: KivaDropdown(
                   isContainIcon: true,
                   validator: (value) {
                     if (value == null) return 'input.input_validator'.tr();
@@ -368,9 +352,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   title: '¿Que edades tienen sus hijos?',
                   textEditingController: edadHijos,
                 ),
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
+                KivaPreguntaCard(
+                  child: KivaDropdown(
                     isContainIcon: true,
                     title: '¿Qué tipo de estudios reciben sus hijos?'.tr(),
                     items: const [
@@ -394,7 +377,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 ),
               ],
               const Gap(20),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.pageController.previousPage(
                     duration: const Duration(

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,7 @@ class FormResponses extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: _AccionesResumen(
+              child: KivaFormNavegacion(
                 previousTitle: 'button.previous'.tr(),
                 nextTitle: 'button.signed'.tr(),
                 onPreviousPressed: () => controller.previousPage(
@@ -417,59 +418,6 @@ class _ResponseWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Botones "Anterior" / "Firmar" al final del resumen.
-class _AccionesResumen extends StatelessWidget {
-  final String previousTitle;
-  final String nextTitle;
-  final VoidCallback onPreviousPressed;
-  final VoidCallback onNextPressed;
-  const _AccionesResumen({
-    required this.previousTitle,
-    required this.nextTitle,
-    required this.onPreviousPressed,
-    required this.onNextPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(14),
-    );
-
-    return SafeArea(
-      top: false,
-      child: Row(
-        children: [
-          Expanded(
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                foregroundColor: RedesignColors.ink,
-                side: const BorderSide(color: RedesignColors.border),
-                shape: shape,
-              ),
-              onPressed: onPreviousPressed,
-              child: Text(previousTitle),
-            ),
-          ),
-          const Gap(12),
-          Expanded(
-            child: FilledButton(
-              style: FilledButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                backgroundColor: RedesignColors.teal,
-                shape: shape,
-              ),
-              onPressed: onNextPressed,
-              child: Text(nextTitle),
-            ),
-          ),
-        ],
       ),
     );
   }

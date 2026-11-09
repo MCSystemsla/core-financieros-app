@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/descripcion_y_desarrollo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/saneamiento/saneamiento_impacto_social.dart';
@@ -29,8 +30,6 @@ class SaneamientoScreen extends StatefulWidget {
 }
 
 class _SaneamientoScreenState extends State<SaneamientoScreen> {
-  final PageController _pageController = PageController();
-
   late DateTime _selectedDate;
   @override
   void initState() {
@@ -87,43 +86,44 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                '${'forms.saneamiento.appbar'.tr()} ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: _pageController,
-              ),
-              EntornoSocialWidget(
-                controller: _pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              DescripcionYDesarrolloWidget(
-                controller: _pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              ImpactoSocialKivaWidget(
-                controller: _pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              FormResponses(
-                controller: _pageController,
-              ),
-              isRecurrentForm
-                  ? RecurrenteSaneamientoSignatureWidget(
-                      controller: _pageController,
-                    )
-                  : SaneamientoSignatureWidget(
-                      controller: _pageController,
-                    ),
-            ],
-          ),
+        child: KivaFormScaffold(
+          title: 'forms.saneamiento.appbar'.tr(),
+          isRecurrentForm: isRecurrentForm,
+          steps: const [
+            'Fotos del cliente',
+            'Entorno social',
+            'Descripción del negocio',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            EntornoSocialWidget(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            DescripcionYDesarrolloWidget(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            ImpactoSocialKivaWidget(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            isRecurrentForm
+                ? RecurrenteSaneamientoSignatureWidget(
+                    controller: pageController,
+                  )
+                : SaneamientoSignatureWidget(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

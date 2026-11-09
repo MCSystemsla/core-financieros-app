@@ -1,9 +1,12 @@
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-class DatesWidget extends StatefulWidget {
+/// Pregunta de fecha de los formularios Kiva: la pregunta arriba y un campo
+/// que abre el selector al tocarlo ([onSelectedDate]).
+class DatesWidget extends StatelessWidget {
   final DateTime? initialDate;
   final String title;
   final VoidCallback onSelectedDate;
@@ -17,61 +20,48 @@ class DatesWidget extends StatefulWidget {
   });
 
   @override
-  State<DatesWidget> createState() => _DatesWidgetState();
-}
-
-class _DatesWidgetState extends State<DatesWidget> {
-  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    return WhiteCard(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            SizedBox(
-              width: size.width * .4,
-              child: Text(
-                widget.title,
-                style: const TextStyle(
-                  color: AppColors.grey,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+    return KivaPreguntaCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          KivaPreguntaTitulo(title),
+          const Gap(10),
+          Material(
+            color: RedesignColors.background,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: RedesignColors.border),
             ),
-            const Spacer(),
-            InkWell(
-              onTap: () => widget.onSelectedDate(),
-              child: Container(
-                width: 130,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: onSelectedDate,
+              child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                    color: AppColors.greyWithOpacityV4,
-                  ),
-                ),
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
                 child: Row(
                   children: [
-                    Text(
-                      DateFormat('dd/MM/yyyy').format(widget.selectedDate),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: AppColors.grey,
-                          ),
+                    Expanded(
+                      child: Text(
+                        DateFormat('dd/MM/yyyy').format(selectedDate),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: RedesignColors.ink,
+                        ),
+                      ),
                     ),
-                    const Spacer(),
-                    Icon(
+                    const Icon(
                       Icons.calendar_month_outlined,
-                      color: AppColors.getPrimaryColor(),
-                    )
+                      size: 20,
+                      color: RedesignColors.teal,
+                    ),
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

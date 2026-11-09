@@ -4,9 +4,8 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_r
 import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y_saniamiento/recurrente_agua_y_saneamiento_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -48,11 +47,6 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const MiCreditoProgress(
-                      steps: 4,
-                      currentStep: 4,
-                    ),
-                    const Gap(20),
                     Text(
                       'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
                           .tr(),
@@ -115,7 +109,7 @@ class _ImpactoSocialKivaWidgetState extends State<ImpactoSocialKivaWidget>
                       textEditingController: otrosDatosCliente,
                     ),
                     const Gap(20),
-                    ButtonActionsWidget(
+                    KivaFormNavegacion(
                       onPreviousPressed: () {
                         widget.controller.previousPage(
                           duration: const Duration(
@@ -236,11 +230,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 4,
-                currentStep: 4,
-              ),
-              const Gap(20),
               Text(
                 'Impacto Social de Kiva ( Uso específico, objetivos, metas del préstamo)'
                     .tr(),
@@ -306,7 +295,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 textEditingController: explicacionAlcanzaraMeta,
               ),
               const Gap(20),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.controller.previousPage(
                     duration: const Duration(

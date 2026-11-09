@@ -10,13 +10,13 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/descripcion_academica.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/micredi_estudio_credito_anterior_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/micredi_estudio_entorno_social_form.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/micredi_estudio_impacto_social.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/signatures/micrediestudio_signature_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/micredi_estudio/signatures/recurrente_micrediestudio_signature_widget.dart';
-import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MiCreditoEstudioScreen extends StatelessWidget {
@@ -26,7 +26,6 @@ class MiCreditoEstudioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isRecurrentForm = typeProduct == 'ScrKivaMiCrediEstudioRecurrente';
-    final PageController pageController = PageController();
     final repository = ResponsesRepositoryImpl();
     return MultiBlocProvider(
       providers: [
@@ -57,46 +56,47 @@ class MiCreditoEstudioScreen extends StatelessWidget {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                'MiCredi Estudio  ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'
-                    .tr()),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: pageController,
-              ),
-              MiCrediEstudioEntornoSocialForm(
-                controller: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              DescripcionAcademica(
+        child: KivaFormScaffold(
+          title: 'MiCredi Estudio',
+          isRecurrentForm: isRecurrentForm,
+          steps: [
+            'Fotos del cliente',
+            'Entorno social',
+            'Descripción académica',
+            if (isRecurrentForm) 'Crédito anterior',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            MiCrediEstudioEntornoSocialForm(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            DescripcionAcademica(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            if (isRecurrentForm)
+              MicreditoCreditoAnterior(
                 pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
               ),
-              if (isRecurrentForm)
-                MicreditoCreditoAnterior(
-                  pageController: pageController,
-                ),
-              MiCrediEstudioImpactoSocialWidget(
-                controller: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              FormResponses(controller: pageController),
-              isRecurrentForm
-                  ? RecurrenteMicrediestudioSignatureWidget(
-                      controller: pageController,
-                    )
-                  : MicrediestudioSignatureWidget(
-                      controller: pageController,
-                    ),
-            ],
-          ),
+            MiCrediEstudioImpactoSocialWidget(
+              controller: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            FormResponses(controller: pageController),
+            isRecurrentForm
+                ? RecurrenteMicrediestudioSignatureWidget(
+                    controller: pageController,
+                  )
+                : MicrediestudioSignatureWidget(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/re
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/add_kiva_images_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/form_responses.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/descripcion_y_desarrollo_del_negocio_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_entorno_social_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/questionaries/mujer_emprende/mujer_emprende_impacto_social_widget.dart';
@@ -25,7 +26,6 @@ class MujerEmprenderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final repository = ResponsesRepositoryImpl();
     final isRecurrentForm = typeProduct == 'ScrKivaMujerEmprendeRecurrente';
-    final pageController = PageController();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -55,43 +55,44 @@ class MujerEmprenderScreen extends StatelessWidget {
       ],
       child: PopScope(
         canPop: false,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(
-                'Mujer Emprende ${isRecurrentForm ? 'Recurrente' : 'Nuevo'}'),
-          ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: pageController,
-            children: [
-              AddKivaImagesWidget(
-                controller: pageController,
-              ),
-              MujerEmprendeEntornoSocialWidget(
-                pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              DescripcionYDesarrolloDelNegocioWidget(
-                pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              MujerEmprendeImpactoSocial(
-                pageController: pageController,
-                isRecurrentForm: isRecurrentForm,
-              ),
-              FormResponses(
-                controller: pageController,
-              ),
-              isRecurrentForm
-                  ? RecurrenteMujerEmprendeSignatureWidget(
-                      controller: pageController,
-                    )
-                  : MujerEmprendeSignatureWidget(
-                      controller: pageController,
-                    ),
-            ],
-          ),
+        child: KivaFormScaffold(
+          title: 'Mujer Emprende',
+          isRecurrentForm: isRecurrentForm,
+          steps: const [
+            'Fotos del cliente',
+            'Entorno social',
+            'Descripción del negocio',
+            'Impacto social',
+            'Resumen',
+            'Firma',
+          ],
+          pagesBuilder: (pageController) => [
+            AddKivaImagesWidget(
+              controller: pageController,
+            ),
+            MujerEmprendeEntornoSocialWidget(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            DescripcionYDesarrolloDelNegocioWidget(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            MujerEmprendeImpactoSocial(
+              pageController: pageController,
+              isRecurrentForm: isRecurrentForm,
+            ),
+            FormResponses(
+              controller: pageController,
+            ),
+            isRecurrentForm
+                ? RecurrenteMujerEmprendeSignatureWidget(
+                    controller: pageController,
+                  )
+                : MujerEmprendeSignatureWidget(
+                    controller: pageController,
+                  ),
+          ],
         ),
       ),
     );

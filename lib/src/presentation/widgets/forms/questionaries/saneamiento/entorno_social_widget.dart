@@ -9,11 +9,9 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/recurrente_agua_y
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/progress/micredito_progress.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -79,11 +77,6 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const MiCreditoProgress(
-                      steps: 4,
-                      currentStep: 2,
-                    ),
-                    const Gap(20),
                     Text(
                       'forms.entorno_familiar.title'.tr(),
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -91,10 +84,9 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                           ),
                     ),
                     const Gap(10),
-                    WhiteCard(
+                    KivaPreguntaCard(
                       marginTop: 15,
-                      padding: const EdgeInsets.all(10),
-                      child: JLuxDropdown(
+                      child: KivaDropdown(
                         isContainIcon: true,
                         title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                         items: ['input.yes'.tr(), 'input.no'.tr()],
@@ -125,10 +117,9 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         textEditingController: otrosIngresosDescripcion,
                       ),
                     const Gap(10),
-                    WhiteCard(
+                    KivaPreguntaCard(
                       marginTop: 15,
-                      padding: const EdgeInsets.all(10),
-                      child: JLuxDropdown(
+                      child: KivaDropdown(
                         isContainIcon: true,
                         // isLoading: state.status == Status.inProgress,
                         title: 'forms.entorno_familiar.person_origin'.tr(),
@@ -160,9 +151,8 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                         textEditingController: question2Controller,
                       ),
                       const Gap(10),
-                      WhiteCard(
-                        padding: const EdgeInsets.all(5),
-                        child: JLuxDropdown(
+                      KivaPreguntaCard(
+                        child: KivaDropdown(
                           isContainIcon: true,
                           validator: (value) {
                             if (value == null) {
@@ -193,7 +183,7 @@ class _EntornoSocialWidgetState extends State<EntornoSocialWidget>
                       ),
                     ],
                     const Gap(15),
-                    ButtonActionsWidget(
+                    KivaFormNavegacion(
                       onPreviousPressed: () {
                         widget.controller.previousPage(
                           duration: const Duration(
@@ -323,11 +313,6 @@ class _RecurrentFormState extends State<_RecurrentForm>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const MiCreditoProgress(
-                steps: 4,
-                currentStep: 2,
-              ),
-              const Gap(20),
               Text(
                 'forms.entorno_familiar.title'.tr(),
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -335,10 +320,9 @@ class _RecurrentFormState extends State<_RecurrentForm>
                     ),
               ),
               const Gap(10),
-              WhiteCard(
+              KivaPreguntaCard(
                 marginTop: 15,
-                padding: const EdgeInsets.all(10),
-                child: JLuxDropdown(
+                child: KivaDropdown(
                   isContainIcon: true,
                   title: '¿Tiene otros ingresos?¿Cuales?*'.tr(),
                   items: ['input.yes'.tr(), 'input.no'.tr()],
@@ -381,9 +365,8 @@ class _RecurrentFormState extends State<_RecurrentForm>
                   textEditingController: edadHijos,
                 ),
                 const Gap(10),
-                WhiteCard(
-                  padding: const EdgeInsets.all(5),
-                  child: JLuxDropdown(
+                KivaPreguntaCard(
+                  child: KivaDropdown(
                     isContainIcon: true,
                     validator: (value) {
                       if (value == null) return 'input.input_validator'.tr();
@@ -411,7 +394,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                 ),
               ],
               const Gap(15),
-              ButtonActionsWidget(
+              KivaFormNavegacion(
                 onPreviousPressed: () {
                   widget.controller.previousPage(
                     duration: const Duration(
