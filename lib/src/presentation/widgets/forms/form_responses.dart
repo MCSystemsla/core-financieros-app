@@ -1,99 +1,120 @@
-import 'package:camera/camera.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'dart:io';
+
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class FormResponses extends StatefulWidget {
+/// Resumen de las respuestas de un formulario Kiva online, antes de la firma
+/// (rediseño 2026). Muestra las fotos del cliente y cada respuesta; tocar una
+/// respuesta lleva a la página del formulario donde se contestó.
+class FormResponses extends StatelessWidget {
   final PageController controller;
   const FormResponses({
     super.key,
     required this.controller,
   });
 
-  @override
-  State<FormResponses> createState() => _FormResponsesState();
-}
+  static const _duracion = Duration(milliseconds: 350);
 
-class _FormResponsesState extends State<FormResponses> {
   @override
   Widget build(BuildContext context) {
-    final imageCliente = context.watch<UploadUserFileCubit>().state;
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(15),
+    // Record: compara por valor, así solo reconstruye si cambia una ruta.
+    final (imagen1, imagen2, imagen3) =
+        context.select<UploadUserFileCubit, (String, String, String)>(
+      (cubit) => (
+        cubit.state.imagen1,
+        cubit.state.imagen2,
+        cubit.state.imagen3,
+      ),
+    );
+    final responses = context.select<ResponseCubit, List<Response>>(
+      (cubit) => cubit.state.responses,
+    );
+
+    return ColoredBox(
+      color: RedesignColors.background,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'input.form_response'.tr(),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'input.form_response'.tr(),
+                    style: const TextStyle(
+                      fontSize: 22,
+                      height: 1.2,
+                      fontWeight: FontWeight.w700,
+                      color: RedesignColors.ink,
+                    ),
                   ),
-            ),
-            const Gap(15),
-            UploadImageWidget(
-              selectedImage: XFile(imageCliente.imagen1),
-              title: '1- Imagen Cliente 1',
-              onPressed: () {},
-            ),
-            const Gap(15),
-            UploadImageWidget(
-              selectedImage: XFile(imageCliente.imagen2),
-              title: '1- Imagen Cliente 2',
-              onPressed: () {},
-            ),
-            const Gap(15),
-            UploadImageWidget(
-              selectedImage: XFile(imageCliente.imagen3),
-              title: '1- Imagen Cliente 3',
-              onPressed: () {},
-            ),
-            const Gap(15),
-            BlocBuilder<ResponseCubit, ResponseState>(
-              builder: (context, state) {
-                return ListView.separated(
-                  itemCount: state.responses.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Gap(20);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return _ResponseWidget(
-                      response: state.responses[index],
-                      controller: widget.controller,
-                    );
-                  },
-                );
-              },
-            ),
-            const Gap(20),
-            ButtonActionsWidget(
-              onPreviousPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(
-                    milliseconds: 350,
+                  const Gap(6),
+                  const Text(
+                    'Revisa las respuestas antes de firmar. '
+                    'Toca una para corregirla.',
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      height: 1.4,
+                      color: RedesignColors.inkMuted,
+                    ),
                   ),
+                ],
+              ),
+            ),
+            SectionBlockWidget(
+              label: 'FOTOS DEL CLIENTE',
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: _FotoClienteTile(path: imagen1, label: 'Foto 1'),
+                    ),
+                    const Gap(10),
+                    Expanded(
+                      child: _FotoClienteTile(path: imagen2, label: 'Foto 2'),
+                    ),
+                    const Gap(10),
+                    Expanded(
+                      child: _FotoClienteTile(path: imagen3, label: 'Foto 3'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SectionBlockWidget(
+              label: 'RESPUESTAS (${responses.length})',
+              children: [
+                for (final response in responses)
+                  _ResponseWidget(
+                    response: response,
+                    controller: controller,
+                  ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              child: _AccionesResumen(
+                previousTitle: 'button.previous'.tr(),
+                nextTitle: 'button.signed'.tr(),
+                onPreviousPressed: () => controller.previousPage(
+                  duration: _duracion,
                   curve: Curves.easeIn,
-                );
-              },
-              onNextPressed: () {
-                widget.controller.nextPage(
-                  duration: const Duration(
-                    milliseconds: 350,
-                  ),
+                ),
+                onNextPressed: () => controller.nextPage(
+                  duration: _duracion,
                   curve: Curves.easeIn,
-                );
-              },
-              previousTitle: 'button.previous'.tr(),
-              nextTitle: 'button.signed'.tr(),
+                ),
+              ),
             ),
           ],
         ),
@@ -102,6 +123,69 @@ class _FormResponsesState extends State<FormResponses> {
   }
 }
 
+/// Miniatura de solo lectura de una foto del cliente. Sin foto, o si el
+/// archivo ya no existe, muestra un espacio vacío.
+class _FotoClienteTile extends StatelessWidget {
+  final String path;
+  final String label;
+  const _FotoClienteTile({required this.path, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final vacio = path.trim().isEmpty;
+
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: RedesignColors.tagBackground,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: RedesignColors.border),
+            ),
+            child: vacio
+                ? const _FotoVacia()
+                : Image.file(
+                    File(path),
+                    fit: BoxFit.cover,
+                    cacheWidth: 300,
+                    errorBuilder: (_, __, ___) => const _FotoVacia(),
+                  ),
+          ),
+        ),
+        const Gap(6),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: RedesignColors.inkMuted,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FotoVacia extends StatelessWidget {
+  const _FotoVacia();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Icon(
+        Icons.image_not_supported_outlined,
+        color: RedesignColors.chevron,
+        size: 26,
+      ),
+    );
+  }
+}
+
+/// Respuesta de solo lectura. Tocarla lleva a la página del formulario donde
+/// se respondió, para corregirla allí.
 class _ResponseWidget extends StatelessWidget {
   final PageController controller;
   final Response response;
@@ -129,42 +213,125 @@ class _ResponseWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final primary = AppColors.getPrimaryColor();
     final valor = _normalizar(response.response);
+    final pregunta =
+        response.question.trim().replaceAll(RegExp(r'\s*\*+$'), '');
 
-    return WhiteCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Material(
+      color: RedesignColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: RedesignColors.border),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: _irAPregunta,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 12, 14),
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Text(
-                  response.question,
-                  style: textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w400,
-                    height: 1.3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      pregunta,
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        height: 1.35,
+                        fontWeight: FontWeight.w500,
+                        color: RedesignColors.inkMuted,
+                      ),
+                    ),
+                    const Gap(6),
+                    Text(
+                      valor ?? 'Sin respuesta',
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.4,
+                        fontWeight:
+                            valor == null ? FontWeight.w400 : FontWeight.w600,
+                        fontStyle:
+                            valor == null ? FontStyle.italic : FontStyle.normal,
+                        color: valor == null
+                            ? RedesignColors.chevron
+                            : RedesignColors.ink,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(10),
+              Tooltip(
+                message: 'Editar respuesta',
+                child: Container(
+                  height: 34,
+                  width: 34,
+                  decoration: BoxDecoration(
+                    color: RedesignColors.tealTint,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.edit_outlined,
+                    size: 18,
+                    color: RedesignColors.teal,
                   ),
                 ),
               ),
-              const Gap(8),
-              IconButton(
-                tooltip: 'Editar respuesta',
-                visualDensity: VisualDensity.compact,
-                onPressed: _irAPregunta,
-                icon: Icon(Icons.edit_outlined, color: primary),
-              ),
             ],
           ),
-          const Gap(10),
-          Text(
-            valor ?? 'Sin respuesta',
-            style: textTheme.bodyMedium?.copyWith(
-              fontWeight: valor == null ? FontWeight.w400 : FontWeight.w600,
-              fontStyle: valor == null ? FontStyle.italic : FontStyle.normal,
-              color: valor == null ? Colors.grey : null,
+        ),
+      ),
+    );
+  }
+}
+
+/// Botones "Anterior" / "Firmar" al final del resumen.
+class _AccionesResumen extends StatelessWidget {
+  final String previousTitle;
+  final String nextTitle;
+  final VoidCallback onPreviousPressed;
+  final VoidCallback onNextPressed;
+  const _AccionesResumen({
+    required this.previousTitle,
+    required this.nextTitle,
+    required this.onPreviousPressed,
+    required this.onNextPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(14),
+    );
+
+    return SafeArea(
+      top: false,
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                foregroundColor: RedesignColors.ink,
+                side: const BorderSide(color: RedesignColors.border),
+                shape: shape,
+              ),
+              onPressed: onPreviousPressed,
+              child: Text(previousTitle),
+            ),
+          ),
+          const Gap(12),
+          Expanded(
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                backgroundColor: RedesignColors.teal,
+                shape: shape,
+              ),
+              onPressed: onNextPressed,
+              child: Text(nextTitle),
             ),
           ),
         ],
