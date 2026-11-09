@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/datasource/local_db/solicitudes_pendientes.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
@@ -22,7 +25,7 @@ import 'package:go_router/go_router.dart';
 ///
 /// Requiere en el árbol [UploadUserFileCubit], [NoImagesKivasOnHistoryCubit],
 /// [SolicitudesPendientesLocalDbCubit] y [KivaRouteCubit].
-class SolicitudesUploadedWidget extends StatelessWidget {
+class SolicitudesUploadedWidget extends StatefulWidget {
   final List<SolicitudesPendientes> solicitudes;
 
   const SolicitudesUploadedWidget({
@@ -31,7 +34,23 @@ class SolicitudesUploadedWidget extends StatelessWidget {
   });
 
   @override
+  State<SolicitudesUploadedWidget> createState() =>
+      _SolicitudesUploadedWidgetState();
+}
+
+class _SolicitudesUploadedWidgetState extends State<SolicitudesUploadedWidget> {
+  /// `solicitudId` de la fila que está enviando imágenes. Se comparte entre
+  /// todas las filas para que solo haya un envío a la vez: se marca antes de
+  /// buscar las imágenes, cuando UploadUserFileCubit aún no está inProgress.
+  ///
+  /// No se hace `dispose`: la fila que envía lo libera en su `finally` aunque
+  /// ya no esté montada (scroll o salida de la pantalla durante la subida), y
+  /// escribir en un notifier liberado lanza. Sin listeners, el GC lo recoge.
+  final _enviandoSolicitudId = ValueNotifier<String?>(null);
+
+  @override
   Widget build(BuildContext context) {
+    final solicitudes = widget.solicitudes;
     if (solicitudes.isEmpty) return const _EmptySolicitudes();
 
     return BlocListener<UploadUserFileCubit, UploadUserFileState>(
@@ -57,8 +76,12 @@ class SolicitudesUploadedWidget extends StatelessWidget {
         builder: (context, noImagesState) {
           final numerosPendientes = switch (noImagesState) {
             OnNoImagesKivasOnHistoryHaveRequestPending(:final data) =>
-              (data.data ?? []).map((req) => req.numero).toSet(),
-            _ => const <String?>{},
+              (data.data ?? [])
+                  .map((req) => req.numero)
+                  .whereType<String>()
+                  .where((numero) => numero.isNotEmpty)
+                  .toSet(),
+            _ => const <String>{},
           };
           return ListView.separated(
             padding: const EdgeInsets.only(top: 10, bottom: 24),
@@ -71,6 +94,7 @@ class SolicitudesUploadedWidget extends StatelessWidget {
                 solicitud: solicitud,
                 imagenesPendientes:
                     numerosPendientes.contains(solicitud.numero),
+                enviandoSolicitudId: _enviandoSolicitudId,
               );
             },
           );
@@ -108,11 +132,13 @@ class _EmptySolicitudes extends StatelessWidget {
 class _SolicitudTile extends StatelessWidget {
   final SolicitudesPendientes solicitud;
   final bool imagenesPendientes;
+  final ValueNotifier<String?> enviandoSolicitudId;
 
   const _SolicitudTile({
     super.key,
     required this.solicitud,
     required this.imagenesPendientes,
+    required this.enviandoSolicitudId,
   });
 
   @override
@@ -128,7 +154,10 @@ class _SolicitudTile extends StatelessWidget {
         children: [
           _SolicitudDetalles(solicitud: solicitud),
           const Gap(16),
-          _SolicitudAcciones(solicitud: solicitud),
+          _SolicitudAcciones(
+            solicitud: solicitud,
+            enviandoSolicitudId: enviandoSolicitudId,
+          ),
         ],
       ),
     );
@@ -277,17 +306,20 @@ class _DetalleRow extends StatelessWidget {
 
 class _SolicitudAcciones extends StatefulWidget {
   final SolicitudesPendientes solicitud;
+  final ValueNotifier<String?> enviandoSolicitudId;
 
-  const _SolicitudAcciones({required this.solicitud});
+  const _SolicitudAcciones({
+    required this.solicitud,
+    required this.enviandoSolicitudId,
+  });
 
   @override
   State<_SolicitudAcciones> createState() => _SolicitudAccionesState();
 }
 
 class _SolicitudAccionesState extends State<_SolicitudAcciones> {
-  bool _enviandoImagenes = false;
-
   SolicitudesPendientes get _solicitud => widget.solicitud;
+  ValueNotifier<String?> get _enviando => widget.enviandoSolicitudId;
 
   void _setKivaRoute() {
     context.read<KivaRouteCubit>().setCurrentRouteProduct(
@@ -319,53 +351,88 @@ class _SolicitudAccionesState extends State<_SolicitudAcciones> {
     );
   }
 
+  void _mostrarAviso(String titulo, {String subtitulo = ''}) {
+    CustomAlertDialog(
+      context: context,
+      title: titulo,
+      subtitle: subtitulo,
+      onDone: () => context.pop(),
+    ).showDialog(context, dialogType: DialogType.warning);
+  }
+
+  /// Nombres de las fotos cuya ruta falta o cuyo archivo ya no existe.
+  Future<List<String>> _fotosFaltantes(ImageModel imagenes) async {
+    final fotos = {
+      'Foto 1': imagenes.imagen1,
+      'Foto 2': imagenes.imagen2,
+      'Foto 3': imagenes.imagen3,
+      'Firma': imagenes.imagenFirma,
+    };
+    final faltantes = <String>[];
+    for (final MapEntry(key: nombre, value: ruta) in fotos.entries) {
+      if (ruta == null || ruta.isEmpty || !await File(ruta).exists()) {
+        faltantes.add(nombre);
+      }
+    }
+    return faltantes;
+  }
+
   Future<void> _enviarImagenes() async {
+    // Se marca de inmediato (sincrónico) para bloquear las demás filas.
+    if (_enviando.value != null) return;
+    _enviando.value = _solicitud.solicitudId ?? '';
+
     final localDb = context.read<SolicitudesPendientesLocalDbCubit>();
     final uploadCubit = context.read<UploadUserFileCubit>();
     final noImagesCubit = context.read<NoImagesKivasOnHistoryCubit>();
     final solicitudId = int.tryParse(_solicitud.solicitudId ?? '') ?? 0;
 
-    setState(() => _enviandoImagenes = true);
-    final imagenes = await localDb.findImagesModel(solicitudId);
-    if (!mounted) return;
+    try {
+      final imagenes = await localDb.findImagesModel(solicitudId);
+      if (!mounted) return;
+      if (imagenes == null) {
+        _mostrarAviso(
+          'Esta solicitud no tiene imágenes guardadas en el teléfono',
+        );
+        return;
+      }
 
-    if (imagenes == null) {
-      setState(() => _enviandoImagenes = false);
-      CustomAlertDialog(
-        context: context,
-        title: 'Esta solicitud no tiene imágenes guardadas en el teléfono',
-        onDone: () => context.pop(),
-      ).showDialog(context, dialogType: DialogType.warning);
-      return;
-    }
+      final faltantes = await _fotosFaltantes(imagenes);
+      if (!mounted) return;
+      if (faltantes.isNotEmpty) {
+        _mostrarAviso(
+          'Faltan imágenes en el teléfono',
+          subtitulo: 'No se encontraron: ${faltantes.join(', ')}.',
+        );
+        return;
+      }
 
-    final enviadas = await uploadCubit.uploadUserFilesOffline(
-      fotoFirma: imagenes.imagenFirma ?? 'NO PATH',
-      solicitudId: solicitudId,
-      formularioKiva: _solicitud.nombreFormulario ?? '',
-      tipoSolicitud: _solicitud.tipoSolicitud ?? '',
-      numero: _solicitud.numero ?? '',
-      cedula: _solicitud.cedula ?? '',
-      imagen1: imagenes.imagen1 ?? 'NO PATH',
-      imagen2: imagenes.imagen2 ?? 'NO PATH',
-      imagen3: imagenes.imagen3 ?? 'NO PATH',
-      typeSigner: imagenes.typeSigner ?? '',
-    );
-    if (enviadas) {
-      await localDb.updateIsImagesSendedOnSolicitud(
-        solicitudId: _solicitud.solicitudId ?? '',
+      final enviadas = await uploadCubit.uploadUserFilesOffline(
+        fotoFirma: imagenes.imagenFirma!,
+        solicitudId: solicitudId,
+        formularioKiva: _solicitud.nombreFormulario ?? '',
+        tipoSolicitud: _solicitud.tipoSolicitud ?? '',
+        numero: _solicitud.numero ?? '',
+        cedula: _solicitud.cedula ?? '',
+        imagen1: imagenes.imagen1!,
+        imagen2: imagenes.imagen2!,
+        imagen3: imagenes.imagen3!,
+        typeSigner: imagenes.typeSigner ?? '',
       );
-      // Refresca el tag "Imágenes pendientes".
-      noImagesCubit.getNoImagesKivasOnHistory();
+      if (enviadas) {
+        await localDb.updateIsImagesSendedOnSolicitud(
+          solicitudId: _solicitud.solicitudId ?? '',
+        );
+        // Refresca el tag "Imágenes pendientes".
+        noImagesCubit.getNoImagesKivasOnHistory();
+      }
+    } finally {
+      _enviando.value = null;
     }
-    if (mounted) setState(() => _enviandoImagenes = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final subiendoAlguna = context.select<UploadUserFileCubit, bool>(
-      (cubit) => cubit.state.status == Status.inProgress,
-    );
     return Column(
       children: [
         CustomElevatedButton(
@@ -374,13 +441,20 @@ class _SolicitudAccionesState extends State<_SolicitudAcciones> {
           color: AppColors.getSecondaryColor(),
         ),
         const Gap(12),
-        CustomElevatedButton(
-          enabled: !subiendoAlguna && !_enviandoImagenes,
-          onPressed: _enviarImagenes,
-          text: _enviandoImagenes
-              ? 'Enviando imágenes...'
-              : 'Enviar imágenes Kiva',
-          color: AppColors.getPrimaryColor(),
+        ValueListenableBuilder<String?>(
+          valueListenable: _enviando,
+          builder: (context, enviandoId, _) {
+            final enviandoEsta = enviandoId != null &&
+                enviandoId == (_solicitud.solicitudId ?? '');
+            return CustomElevatedButton(
+              enabled: enviandoId == null,
+              onPressed: _enviarImagenes,
+              text: enviandoEsta
+                  ? 'Enviando imágenes...'
+                  : 'Enviar imágenes Kiva',
+              color: AppColors.getPrimaryColor(),
+            );
+          },
         ),
       ],
     );

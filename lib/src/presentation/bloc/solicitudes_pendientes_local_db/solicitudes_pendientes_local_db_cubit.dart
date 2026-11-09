@@ -213,17 +213,21 @@ class SolicitudesPendientesLocalDbCubit
         .solicitudIdEqualTo(solicitudId)
         .findFirst();
 
-    final solicitudDb = await state.isar?.solicitudesPendientes
-        .filter()
-        .solicitudIdEqualTo(solicitud.solicitudId)
-        .findFirst();
+    // Puede haber más de una fila por solicitudId: se borran todas para que
+    // no quede ninguna huérfana en el historial.
+    final solicitudesDb = await state.isar?.solicitudesPendientes
+            .filter()
+            .solicitudIdEqualTo(solicitud.solicitudId)
+            .findAll() ??
+        [];
 
     if (image != null) {
       await state.isar?.imageModels.delete(image.id);
     }
 
-    if (solicitudDb != null) {
-      await state.isar?.solicitudesPendientes.delete(solicitudDb.id);
+    if (solicitudesDb.isNotEmpty) {
+      await state.isar?.solicitudesPendientes
+          .deleteAll(solicitudesDb.map((s) => s.id).toList());
     }
 
     log('Solicitud eliminada: ${solicitud.solicitudId}');
@@ -247,21 +251,49 @@ class SolicitudesPendientesLocalDbCubit
 
   Future<void> getSolicitudesUploaded() async {
     emit(state.copyWith(status: Status.inProgress));
-    await removeSolicitudWhenDateSendedIsMoreThanDateCreated();
-    await Future.delayed(const Duration(seconds: 2));
     try {
-      final solicitudes = await state.isar?.solicitudesPendientes
-          .filter()
-          .isSendedEqualTo(true)
-          .findAll();
-
+      final solicitudes = await fetchSolicitudesUploaded();
       emit(state.copyWith(
         solicitudes: solicitudes,
         status: Status.done,
       ));
     } catch (e) {
       _logger.e(e);
+      emit(state.copyWith(status: Status.error));
     }
+  }
+
+  /// Solicitudes Kiva ya enviadas, una por `solicitudId`, sin emitir estado.
+  ///
+  /// Lo usa el historial Kiva: este cubit es global y otras pantallas (los
+  /// formularios offline) cambian su `status`, así que el historial guarda su
+  /// propia lista. Lanza si la base local no está lista o falla la consulta.
+  Future<List<SolicitudesPendientes>> fetchSolicitudesUploaded() async {
+    final isar = state.isar;
+    if (isar == null) throw StateError('La base de datos local no está lista');
+    await removeSolicitudWhenDateSendedIsMoreThanDateCreated();
+    final solicitudes =
+        await isar.solicitudesPendientes.filter().isSendedEqualTo(true).findAll();
+    return _unaPorSolicitudId(solicitudes);
+  }
+
+  /// Deja una fila por `solicitudId` (la más reciente). Las filas sin
+  /// `solicitudId` se conservan tal cual.
+  List<SolicitudesPendientes> _unaPorSolicitudId(
+    List<SolicitudesPendientes> solicitudes,
+  ) {
+    final porId = <String, SolicitudesPendientes>{};
+    final sinId = <SolicitudesPendientes>[];
+    for (final solicitud in solicitudes) {
+      final id = solicitud.solicitudId;
+      if (id == null || id.isEmpty) {
+        sinId.add(solicitud);
+        continue;
+      }
+      final actual = porId[id];
+      if (actual == null || solicitud.id > actual.id) porId[id] = solicitud;
+    }
+    return [...porId.values, ...sinId];
   }
 
   Future<void> getSolicitudesFailed() async {
