@@ -3,10 +3,8 @@ import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses.dart';
 import 'package:core_financiero_app/src/presentation/bloc/kiva/response_cubit/response_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/commentary_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/cards/white_card/white_card.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
@@ -104,103 +102,72 @@ class _FormResponsesState extends State<FormResponses> {
   }
 }
 
-class _ResponseWidget extends StatefulWidget {
+class _ResponseWidget extends StatelessWidget {
   final PageController controller;
   final Response response;
   const _ResponseWidget({required this.response, required this.controller});
 
-  @override
-  State<_ResponseWidget> createState() => _ResponseWidgetState();
-}
+  static String? _normalizar(String value) {
+    final texto = value.trim();
+    final lower = texto.toLowerCase();
+    if (texto.isEmpty || lower == 'null' || lower == 'n/a') return null;
+    return switch (lower) {
+      'true' => 'Sí',
+      'false' => 'No',
+      _ => texto,
+    };
+  }
 
-class _ResponseWidgetState extends State<_ResponseWidget> {
-  bool onEditAnswer = false;
-  final answerController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  String? responseEditedAnswer;
+  void _irAPregunta() {
+    if (!controller.hasClients) return;
+    controller.animateToPage(
+      response.index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final primary = AppColors.getPrimaryColor();
+    final valor = _normalizar(response.response);
+
     return WhiteCard(
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 250,
-                  ),
-                  child: Text(
-                    widget.response.question,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.w400),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  response.question,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    height: 1.3,
                   ),
                 ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    // onEditAnswer = !onEditAnswer;
-                    widget.controller.animateToPage(
-                      widget.response.index,
-                      duration: const Duration(milliseconds: 700),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: AppColors.getPrimaryColor(),
-                  ),
-                ),
-              ],
-            ),
-            const Gap(20),
-            Text(
-              widget.response.response,
-              style: Theme.of(context).textTheme.bodyMedium!,
-            ),
-            if (onEditAnswer)
-              CommentaryWidget(
-                marginTop: 2,
-                initialValue: widget.response.response,
-                title: '',
-                // textEditingController: answerController,
-                onChange: (value) {
-                  responseEditedAnswer = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'input.input_validator'.tr();
-                  }
-                  return null;
-                },
               ),
-            if (onEditAnswer)
-              CustomElevatedButton(
-                text: 'Guardar',
-                color: AppColors.getPrimaryColor(),
-                onPressed: () {
-                  context.read<ResponseCubit>().addResponses(
-                    responses: [
-                      Response(
-                        question: widget.response.question,
-                        response: responseEditedAnswer!,
-                        index: 1,
-                      ),
-                    ],
-                  );
-                  onEditAnswer = !onEditAnswer;
-                  setState(() {});
-                },
+              const Gap(8),
+              IconButton(
+                tooltip: 'Editar respuesta',
+                visualDensity: VisualDensity.compact,
+                onPressed: _irAPregunta,
+                icon: Icon(Icons.edit_outlined, color: primary),
               ),
-          ],
-        ),
+            ],
+          ),
+          const Gap(10),
+          Text(
+            valor ?? 'Sin respuesta',
+            style: textTheme.bodyMedium?.copyWith(
+              fontWeight: valor == null ? FontWeight.w400 : FontWeight.w600,
+              fontStyle: valor == null ? FontStyle.italic : FontStyle.normal,
+              color: valor == null ? Colors.grey : null,
+            ),
+          ),
+        ],
       ),
     );
   }
