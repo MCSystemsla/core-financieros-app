@@ -1,8 +1,10 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_on_history/no_images_kivas_on_history_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/kiva_history_request.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class NoImagesKivasOnHistoryAlert extends StatelessWidget {
@@ -89,7 +91,14 @@ class NoImagesKivasOnHistoryAlert extends StatelessWidget {
                         },
                         text: 'Ir a KIVA Historico',
                         color: AppColors.getFourthgColor(),
-                      )
+                      ),
+                      const Gap(8),
+                      TextButton(
+                        onPressed: () => context
+                            .read<NoImagesKivasOnHistoryCubit>()
+                            .dismiss(),
+                        child: const Text('Lo haré después'),
+                      ),
                     ],
                   ),
                 ),

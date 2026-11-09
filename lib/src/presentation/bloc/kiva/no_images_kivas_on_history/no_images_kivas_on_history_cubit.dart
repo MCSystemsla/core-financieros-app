@@ -26,4 +26,6 @@ class NoImagesKivasOnHistoryCubit extends Cubit<NoImagesKivasOnHistoryState> {
       emit(OnNoImagesKivasOnHistoryError(errorMsg: e.toString()));
     }
   }
+
+  void dismiss() => emit(OnNoImagesKivasOnHistoryNoHaveRequestPending());
 }
