@@ -64,7 +64,6 @@ class _KivaFormsFaildedScreenState extends State<KivaFormsFaildedScreen> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SolicitudesUploadedWidget(
                   solicitudes: state.solicitudes,
-                  imageModel: state.imageModel,
                 ),
               _ => const SizedBox(),
             };

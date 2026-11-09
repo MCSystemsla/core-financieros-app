@@ -67,7 +67,6 @@ class _KivaHistoryRequestScreenState extends State<KivaHistoryRequestScreen> {
               Status.inProgress => const LoadingWidget(),
               Status.done => SolicitudesUploadedWidget(
                   solicitudes: state.solicitudes,
-                  imageModel: state.imageModel,
                 ),
               _ => const SizedBox(),
             };

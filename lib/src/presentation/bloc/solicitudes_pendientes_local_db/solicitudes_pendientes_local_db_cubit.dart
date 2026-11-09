@@ -393,6 +393,21 @@ class SolicitudesPendientesLocalDbCubit
     }
   }
 
+  /// Igual que [getImagesModel] pero sin emitir estado: lo usan las listas que
+  /// dependen de este cubit y no deben reconstruirse ni pasar a error por
+  /// buscar las imágenes de una fila.
+  Future<ImageModel?> findImagesModel(int solicitudId) async {
+    try {
+      return await state.isar?.imageModels
+          .filter()
+          .solicitudIdEqualTo(solicitudId)
+          .findFirst();
+    } catch (e) {
+      _logger.e(e);
+      return null;
+    }
+  }
+
   Future<RecurrenteMiCrediEstudioDbLocal?> getRecurrentMiCrediEstudio(
       int solicitudRecurrenteId) async {
     emit(state.copyWith(status: Status.inProgress));
