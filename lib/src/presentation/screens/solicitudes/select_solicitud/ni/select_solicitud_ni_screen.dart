@@ -15,12 +15,12 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/auto
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/rechazar_solicitud/rechazar_solicitud_screen_ni.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/success_clay_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_entry_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/sending_progress_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -93,9 +93,12 @@ class SelectSolicitudScreenNi extends StatelessWidget {
             builder: (context, state) {
               return switch (state) {
                 OnEnviarSolicitudWhenIsdoneLoading() =>
-                  const DownloadCatalogoLoading(
+                  const SendingProgressView(
                     lottieAsset: ImageAsset.enviarSolicitudOfflines,
-                    text: 'Enviando Solicitudes Offline al Servidor',
+                    title: 'Enviando solicitudes',
+                    message: 'Estamos subiendo al servidor las solicitudes que '
+                        'guardaste sin conexión, con sus cédulas y formularios '
+                        'Kiva.',
                   ),
                 OnEnviarSolicitudWhenIsdoneSuccess() => SuccessClayWidget(
                     onDownloadComplete: () {

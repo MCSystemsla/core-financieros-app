@@ -83,6 +83,7 @@ Two visual systems coexist. The legacy one is `config/theme/app_colors.dart` (`A
 - `SolicitudClienteHeader` + `InfoRowWidget` — read-only request/client data (step 1 of the supervisiones forms). Use these instead of `OutlineTextfieldWidget(readOnly: true)`.
 - `FormStepHeaderWidget` — header for multi-step forms driven by a `PageController`: current/next step label, "Paso X de N" and a segmented progress bar. `steps` must follow the same order as the `PageView` children. Used by the HN supervisiones forms, offline nueva solicitud, asalariado and nueva menor.
 - `SectionBlockWidget`, `HeaderBackButton`, `ConnectionPillWidget` (reads `InternetConnectionCubit`), `SendingStatusView` (Lottie-driven send/progress screens).
+- `SendingProgressView` — "in progress" state for a send/sync (Lottie in a tinted circle, title, message, indeterminate bar, footer hint). Pair of `SendingStatusView`; use it instead of `DownloadCatalogoLoading` in migrated screens.
 - `CelebrationBurst` — one-shot confetti burst with a haptic, drawn with a `CustomPainter` (no assets), ignores touches. `SendingStatusView` fires it through `celebrate`; when that is null, it fires on success, which it detects from `artTint == RedesignColors.greenTint`. When system animations are off, it only fires the haptic.
 
 Screens are being migrated incrementally (the `rebranding_ui_app` branch). When redesigning or adding a screen, compose these widgets and take colors from `RedesignColors` instead of `AppColors`; do not restyle screens that have not been migrated yet.
