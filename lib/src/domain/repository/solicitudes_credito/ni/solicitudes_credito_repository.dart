@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
+import 'package:core_financiero_app/src/api/endpoint.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
 import 'package:core_financiero_app/src/config/helpers/estado_credito/estado_credito.dart';
@@ -27,15 +28,28 @@ import 'package:http_parser/http_parser.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 
+/// Resultado de crear una solicitud NI:
+/// (isOk, mensaje, numeroSolicitud, solicitudId, tipoSolicitudId, status).
+/// `status` distingue un error de red (`noConnection`, `timeOutError`,
+/// `serverError`) de un rechazo del backend, para que el envío offline
+/// sepa si puede reintentar.
+typedef CrearSolicitudNiResult = (
+  bool,
+  String,
+  String?,
+  String?,
+  int?,
+  ErrorNetworkCode,
+);
+
 abstract class SolicitudesCreditoRepository {
-  Future<(bool, String, String?, String?, int?)>
-      createSolicitudCreditoNuevaMenor({
+  Future<CrearSolicitudNiResult> createSolicitudCreditoNuevaMenor({
     required SolicitudNuevaMenor solicitudNuevaMenor,
   });
-  Future<(bool, String, String?, String?, int?)> createSolicitudReprestamo({
+  Future<CrearSolicitudNiResult> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
   });
-  Future<(bool, String, String?, String?, int?)> createSolicitudAsalariado({
+  Future<CrearSolicitudNiResult> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
   });
   Future<CatalogoValor> getCatalogoByCodigo({required String codigo});
@@ -145,37 +159,19 @@ abstract class SolicitudesCreditoRepository {
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   final _api = global<APIRepository>();
   final _logger = Logger();
-  @override
-  Future<(bool, String, String?, String?, int?)>
-      createSolicitudCreditoNuevaMenor({
-    required SolicitudNuevaMenor solicitudNuevaMenor,
-  }) async {
-    final endpoint = SolicitudesCreditoNuevaMenorEndpoint(
-      solicitudNuevaMenor: solicitudNuevaMenor,
-    );
+  /// POST común de las tres solicitudes NI (nueva menor, represtamo,
+  /// asalariado). Espera `201`.
+  Future<CrearSolicitudNiResult> _crearSolicitud(Endpoint endpoint) async {
     try {
       final resp = await _api.request(endpoint: endpoint);
 
       if (resp['statusCode'] != 201) {
         _logger.i(endpoint.body);
-        String errorMsg;
-
-        try {
-          final (msg, _) = getErrorMessage(resp);
-          errorMsg = msg;
-        } catch (_) {
-          final validationError =
-              resp['errors']?[0]?['message'] ?? 'Error de validación';
-          final validationPath = resp['errors']?[0]?['path'] ?? '';
-          errorMsg = 'Advertencia antes de continuar verifica: '
-              '$validationError $validationPath';
-        }
-
-        return (false, errorMsg, null, null, null);
+        final (errorMsg, status) = getErrorMessage(resp);
+        return (false, errorMsg, null, null, null, status);
       }
 
       _logger.i(resp);
-      _logger.i(endpoint.body);
 
       return (
         true,
@@ -183,12 +179,33 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         resp['data']['NumeroSolicitud'] as String,
         resp['data']['ID'] as String,
         resp['data']['objTipoSolicitudID'] as int,
+        ErrorNetworkCode.noError,
       );
     } catch (e) {
+      // Llega aquí si el 201 no se pudo leer: la solicitud puede existir en
+      // el servidor, así que se reporta como unknownError (no reintentable).
       _logger.e(e);
       _logger.i(endpoint.body);
-      return (false, e.toString(), null, null, null);
+      return (
+        false,
+        e.toString(),
+        null,
+        null,
+        null,
+        ErrorNetworkCode.unknownError,
+      );
     }
+  }
+
+  @override
+  Future<CrearSolicitudNiResult> createSolicitudCreditoNuevaMenor({
+    required SolicitudNuevaMenor solicitudNuevaMenor,
+  }) {
+    return _crearSolicitud(
+      SolicitudesCreditoNuevaMenorEndpoint(
+        solicitudNuevaMenor: solicitudNuevaMenor,
+      ),
+    );
   }
 
   @override
@@ -283,46 +300,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String, String?, String?, int?)> createSolicitudReprestamo({
+  Future<CrearSolicitudNiResult> createSolicitudReprestamo({
     required SolicitudReprestamo solicitudReprestamo,
-  }) async {
-    final endpoint = SolicitudReprestamoEndpoint(
-      solicitudReprestamo: solicitudReprestamo,
+  }) {
+    return _crearSolicitud(
+      SolicitudReprestamoEndpoint(solicitudReprestamo: solicitudReprestamo),
     );
-    try {
-      final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) {
-        _logger.i(endpoint.body);
-        String errorMsg;
-
-        try {
-          final (msg, _) = getErrorMessage(resp);
-          errorMsg = msg;
-        } catch (_) {
-          final validationError =
-              resp['errors']?[0]?['message'] ?? 'Error de validación';
-          final validationPath = resp['errors']?[0]?['path'] ?? '';
-          errorMsg = 'Advertencia antes de continuar verifica: '
-              '$validationError $validationPath';
-        }
-
-        return (false, errorMsg, null, null, null);
-      }
-
-      _logger.i(resp);
-
-      return (
-        true,
-        resp['message'] as String,
-        resp['data']['NumeroSolicitud'] as String,
-        resp['data']['ID'] as String,
-        resp['data']['objTipoSolicitudID'] as int,
-      );
-    } catch (e) {
-      _logger.e(e);
-      _logger.i(endpoint.body);
-      return (false, e.toString(), null, null, null);
-    }
   }
 
   @override
@@ -345,47 +328,12 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   }
 
   @override
-  Future<(bool, String, String?, String?, int?)> createSolicitudAsalariado({
+  Future<CrearSolicitudNiResult> createSolicitudAsalariado({
     required SolicitudAsalariado solicitudAsalariado,
-  }) async {
-    final endpoint = SolicitudAsalariadoEndpoint(
-      solicitudAsalariado: solicitudAsalariado,
+  }) {
+    return _crearSolicitud(
+      SolicitudAsalariadoEndpoint(solicitudAsalariado: solicitudAsalariado),
     );
-    try {
-      final resp = await _api.request(endpoint: endpoint);
-      if (resp['statusCode'] != 201) {
-        _logger.i(endpoint.body);
-        String errorMsg;
-
-        try {
-          final (msg, _) = getErrorMessage(resp);
-          errorMsg = msg;
-        } catch (_) {
-          final validationError =
-              resp['errors']?[0]?['message'] ?? 'Error de validación';
-          final validationPath = resp['errors']?[0]?['path'] ?? '';
-          errorMsg = 'Advertencia antes de continuar verifica: '
-              '$validationError $validationPath';
-        }
-
-        return (false, errorMsg, null, null, null);
-      }
-      _logger.i(resp);
-      _logger.i(endpoint.body);
-
-      return (
-        true,
-        resp['message'] as String,
-        resp['data']['NumeroSolicitud'] as String,
-        resp['data']['ID'] as String,
-        resp['data']['objTipoSolicitudID'] as int,
-      );
-    } catch (e) {
-      _logger.e(e);
-      _logger.i(endpoint.body);
-
-      return (false, e.toString(), null, null, null);
-    }
   }
 
   @override

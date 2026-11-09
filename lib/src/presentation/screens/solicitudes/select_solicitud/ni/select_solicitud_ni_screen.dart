@@ -39,42 +39,49 @@ class SelectSolicitudScreenNi extends StatelessWidget {
     final localDbProvider = global<ObjectBoxService>();
     final repository = SolicitudCreditoRepositoryImpl();
     final kivaRepository = ResponsesRepositoryImpl();
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final kivaProvider = context.read<SolicitudesPendientesLocalDbCubit>();
+
+    Future<bool> enviarKiva({
+      required String solicitudId,
+      required String numeroSolicitud,
+      required String uuid,
+      required String tipoProducto,
+      required String nombreFomularioKiva,
+      required String cedula,
+      required int tipoSolicitudId,
+      required String nombreCliente,
+    }) {
+      return processSolicitud(
+        uuid: uuid,
+        numeroSolicitud: numeroSolicitud,
+        solicitudId: solicitudId,
+        tipoProducto: tipoProducto,
+        tipoSolicitudId: tipoSolicitudId,
+        nombreFomularioKiva: nombreFomularioKiva,
+        cedula: cedula,
+        kivaRepository: kivaRepository,
+        kivaProvider: kivaProvider,
+        nombreCliente: nombreCliente,
+      );
+    }
+
+    // La conexión se lee en cada intento, no una sola vez al construir.
+    void sincronizar(EnviarSolicitudWhenIsdoneCubit cubit) {
+      cubit.sendSolicitudWhenIsDone(
+        isConnected: context.read<InternetConnectionCubit>().state.isConnected,
+        onSolicitudCreditoIsKivaFn: enviarKiva,
+      );
+    }
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
-            localDbProvider,
-            repository,
-          )..sendSolicitudWhenIsDone(
-              isConnected: isConnected,
-              onSolicitudCreditoIsKivaFn: ({
-                required String solicitudId,
-                required String numeroSolicitud,
-                required String uuid,
-                required String tipoProducto,
-                required String nombreFomularioKiva,
-                required String cedula,
-                required int tipoSolicitudId,
-                required String nombreCliente,
-              }) async {
-                return await processSolicitud(
-                  uuid: uuid,
-                  numeroSolicitud: numeroSolicitud,
-                  solicitudId: solicitudId,
-                  tipoProducto: tipoProducto,
-                  tipoSolicitudId: tipoSolicitudId,
-                  nombreFomularioKiva: nombreFomularioKiva,
-                  cedula: cedula,
-                  kivaRepository: kivaRepository,
-                  kivaProvider: kivaProvider,
-                  nombreCliente: nombreCliente,
-                );
-              },
-            ),
+          create: (ctx) {
+            final cubit =
+                EnviarSolicitudWhenIsdoneCubit(localDbProvider, repository);
+            sincronizar(cubit);
+            return cubit;
+          },
         ),
       ],
       child: Scaffold(
@@ -104,36 +111,9 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   ),
                 OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                     errorMsg: state.msgError,
-                    onPressed: () {
-                      context
-                          .read<EnviarSolicitudWhenIsdoneCubit>()
-                          .sendSolicitudWhenIsDone(
-                            isConnected: isConnected,
-                            onSolicitudCreditoIsKivaFn: ({
-                              required String solicitudId,
-                              required String numeroSolicitud,
-                              required String uuid,
-                              required String tipoProducto,
-                              required String nombreFomularioKiva,
-                              required String cedula,
-                              required int tipoSolicitudId,
-                              required String nombreCliente,
-                            }) async {
-                              return await processSolicitud(
-                                uuid: uuid,
-                                numeroSolicitud: numeroSolicitud,
-                                solicitudId: solicitudId,
-                                tipoProducto: tipoProducto,
-                                tipoSolicitudId: tipoSolicitudId,
-                                nombreFomularioKiva: nombreFomularioKiva,
-                                cedula: cedula,
-                                kivaRepository: kivaRepository,
-                                kivaProvider: kivaProvider,
-                                nombreCliente: nombreCliente,
-                              );
-                            },
-                          );
-                    },
+                    onPressed: () => sincronizar(
+                      context.read<EnviarSolicitudWhenIsdoneCubit>(),
+                    ),
                   ),
                 OnEnviarSolicitudWhenIsdonePendingVerification() =>
                   OnErrorWidget(
