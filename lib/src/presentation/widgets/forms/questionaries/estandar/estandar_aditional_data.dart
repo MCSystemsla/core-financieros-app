@@ -108,7 +108,7 @@ class _EstandarAditionalDataState extends State<EstandarAditionalData>
                             Response(
                               index: widget.pageController.page?.toInt() ?? 0,
                               question: 'Cuales?',
-                              response: otrosIngresos ?? 'N/A',
+                              response: cualesOtrosIngrsos.text.trim(),
                             ),
                         ],
                       );
@@ -226,7 +226,7 @@ class _RecurrentFormState extends State<_RecurrentForm>
                         Response(
                           index: widget.pageController.page?.toInt() ?? 0,
                           question: 'Cuales?',
-                          response: otrosIngresos ?? 'N/A',
+                          response: cualesOtrosIngrsos.text.trim(),
                         ),
                     ],
                   );
