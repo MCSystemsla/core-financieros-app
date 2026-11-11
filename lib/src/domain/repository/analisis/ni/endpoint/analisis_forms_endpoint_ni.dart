@@ -6,6 +6,31 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_nueva_ma
 import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represtamo_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/ni/fiadores/analisis_fiador_ni.dart';
 
+/// Campos que el backend de Nicaragua ya no acepta en los análisis.
+///
+/// Los modelos son los de Honduras (compartidos), así que se quitan aquí, al
+/// armar el body, para no tocar lo que envía Honduras.
+const _camposEliminadosNi = <String>{
+  'Salud',
+  'PermisoOperacionNumero',
+  'PermisoOperacionNombreInstitucion',
+  'PermisoOperacionFechaEmision',
+  'PermisoOperacionFechaVencimiento',
+  'NombreReferencia3',
+  'CedulaReferencia3',
+  'DireccionReferencia3',
+  'TelefonoReferencia3',
+  'LugarTrabajoReferencia3',
+  'AniosConocerReferido3',
+  'ParentescoReferenciaCodigo3',
+  'FechaVerificacion3',
+  'ResultadoVerificacion3',
+  'objEmpleadoVerificaReferenciaID3',
+};
+
+Map<String, dynamic> _sinCamposEliminados(Map<String, dynamic> body) =>
+    Map.of(body)..removeWhere((key, _) => _camposEliminadosNi.contains(key));
+
 class CreateAnalisisNuevaMayorMilNiEndpoint extends Endpoint {
   final AnalisisNuevaMayorMilHn analisisSolicitudNuevaMenor;
   CreateAnalisisNuevaMayorMilNiEndpoint({
@@ -21,7 +46,8 @@ class CreateAnalisisNuevaMayorMilNiEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get body => analisisSolicitudNuevaMenor.toJson();
+  Map<String, dynamic> get body =>
+      _sinCamposEliminados(analisisSolicitudNuevaMenor.toJson());
 }
 
 class CreateAnalisisAsalariadoNiEndpoint extends Endpoint {
@@ -39,7 +65,8 @@ class CreateAnalisisAsalariadoNiEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get body => analisisSolicitudAsalariado.toJson();
+  Map<String, dynamic> get body =>
+      _sinCamposEliminados(analisisSolicitudAsalariado.toJson());
 }
 
 class CreateAnalisisReprestamoNiEndpoint extends Endpoint {
@@ -57,7 +84,8 @@ class CreateAnalisisReprestamoNiEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get body => analisisSolicitudReprestamo.toJson();
+  Map<String, dynamic> get body =>
+      _sinCamposEliminados(analisisSolicitudReprestamo.toJson());
 }
 
 class CrearAnalisisMenorMilNuevaNiEndpoint extends Endpoint {
@@ -77,7 +105,7 @@ class CrearAnalisisMenorMilNuevaNiEndpoint extends Endpoint {
       };
   @override
   Map<String, dynamic> get body => {
-        ...analisisSolicitudMenorMil.toJson(),
+        ..._sinCamposEliminados(analisisSolicitudMenorMil.toJson()),
         'database': LocalStorage().database,
       };
 }
@@ -98,7 +126,8 @@ class CrearAnalisisMenorMilReprestamoNiEndpoint extends Endpoint {
         'Authorization': 'Bearer ${LocalStorage().jwt}',
       };
   @override
-  Map<String, dynamic> get body => analisisSolicitudMenorMil.toJson();
+  Map<String, dynamic> get body =>
+      _sinCamposEliminados(analisisSolicitudMenorMil.toJson());
 }
 
 class CreateAnalisisFiadorEndpointNi extends Endpoint {

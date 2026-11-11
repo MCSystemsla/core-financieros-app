@@ -595,24 +595,6 @@ class AnalisisReprestamoNiCubit extends Cubit<AnalisisReprestamoNiState> {
     autoSaveHelper.trigger();
   }
 
-  /// Limpia la referencia adicional cuando el asesor la quita, para que no se
-  /// envíe ni quede en el borrador.
-  void quitarReferencia3() {
-    onFieldChanged(
-      () => state.copyWith(
-        nombreReferencia3: '',
-        cedulaReferencia3: '',
-        direccionReferencia3: '',
-        telefonoReferencia3: '',
-        lugarTrabajoReferencia3: '',
-        aniosConocerReferido3: 0,
-        parentescoReferenciaCodigo3: '',
-        resultadoVerificacion3: '',
-        objEmpleadoVerificaReferenciaID3: '',
-        fechaVerificacion3: '',
-      ),
-    );
-  }
 
   void initCicloVentasMensuales(int numeroSolicitud) {
     final localDbProvider = global<AnalisisBoxServiceHn>();

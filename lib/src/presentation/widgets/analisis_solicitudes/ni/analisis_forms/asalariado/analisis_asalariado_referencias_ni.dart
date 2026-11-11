@@ -6,7 +6,6 @@ import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitude
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/ni/analisis_forms/asalariado/sending_analisis_asalariado_form_ni.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/cards/add_item_card/add_item_custom_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/search_dropdown_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
@@ -31,15 +30,13 @@ class AnalisisAsalariadoReferenciasNi extends StatefulWidget {
 
 class _AnalisisAsalariadoReferenciasHnState
     extends State<AnalisisAsalariadoReferenciasNi> {
-  bool isAddReferenciaAditionalClicked = false;
   late DateTime fechaVerificacion;
   late DateTime fechaVerificacion2;
-  DateTime? fechaVerificacion3;
 
   @override
   void initState() {
     super.initState();
-    // Al reabrir un borrador, mostrar las fechas y la referencia 3 guardadas.
+    // Al reabrir un borrador, mostrar las fechas guardadas.
     final state = context.read<AnalisisAsalariadoNiCubit>().state;
     fechaVerificacion =
         DateTime.tryParse(state.fechaVerificacion1)?.toLocal() ??
@@ -47,9 +44,6 @@ class _AnalisisAsalariadoReferenciasHnState
     fechaVerificacion2 =
         DateTime.tryParse(state.fechaVerificacion2)?.toLocal() ??
             DateTime.now();
-    fechaVerificacion3 = DateTime.tryParse(state.fechaVerificacion3)?.toLocal();
-    isAddReferenciaAditionalClicked =
-        state.nombreReferencia3.isNotEmpty || fechaVerificacion3 != null;
   }
 
   final formKey = GlobalKey<FormState>();
@@ -93,49 +87,6 @@ class _AnalisisAsalariadoReferenciasHnState
       );
       setState(() {});
     }
-  }
-
-  Future<void> selectFechaVerificacion3(BuildContext context) async {
-    final cubit = context.read<AnalisisAsalariadoNiCubit>();
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: fechaVerificacion3,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-    );
-    if (picked != null && picked != fechaVerificacion3) {
-      fechaVerificacion3 = picked;
-      cubit.onFieldChanged(
-        () => cubit.state.copyWith(
-          fechaVerificacion3: fechaVerificacion3?.toUtc().toIso8601String(),
-        ),
-      );
-      setState(() {});
-    }
-  }
-
-  void toggleReferenciaAdicional() {
-    final cubit = context.read<AnalisisAsalariadoNiCubit>();
-    if (isAddReferenciaAditionalClicked) {
-      cubit.quitarReferencia3();
-      setState(() {
-        isAddReferenciaAditionalClicked = false;
-        fechaVerificacion3 = null;
-      });
-      return;
-    }
-    final hoy = DateTime.now();
-    cubit.onFieldChanged(
-      () => cubit.state.copyWith(
-        fechaVerificacion3: hoy.toUtc().toIso8601String(),
-      ),
-    );
-    setState(() {
-      isAddReferenciaAditionalClicked = true;
-      fechaVerificacion3 = hoy;
-    });
   }
 
   @override
@@ -508,189 +459,6 @@ class _AnalisisAsalariadoReferenciasHnState
                     readOnly: true,
                     onChange: (value) {},
                   ),
-                  const Gap(20),
-                  AddItemCustomCard(
-                    title: !isAddReferenciaAditionalClicked
-                        ? 'Añadir Referencia Adicional'
-                        : 'Quitar referencia adicional',
-                    onTap: toggleReferenciaAdicional,
-                  ),
-                  if (isAddReferenciaAditionalClicked) ...[
-                    const Gap(20),
-                    Container(
-                      margin: const EdgeInsets.all(18),
-                      child: Text(
-                        'Referencia 3',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.nombreReferencia3,
-                      title: 'Nombres y apellidos:',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      icon: const Icon(Icons.person),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(nombreReferencia3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    SearchDropdownWidget(
-                      selectedItem: Item(
-                        name: state.parentescoReferenciaCodigo3,
-                        value: state.parentescoReferenciaCodigo3,
-                      ),
-                      codigo: 'PARENTESCO',
-                      title: 'Tipo Parentesco',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            parentescoReferenciaCodigo3: value?.value,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.direccionReferencia3,
-                      title: 'Direccion:',
-                      icon: const Icon(Icons.person),
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(direccionReferencia3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.lugarTrabajoReferencia3,
-                      title: 'Centro laboral:',
-                      icon: const Icon(Icons.person),
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(lugarTrabajoReferencia3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.cedulaReferencia3,
-                      title: 'Número de cédula:',
-                      textInputType: TextInputType.text,
-                      inputFormatters: [UpperCaseTextFormatter()],
-                      // validator: (value) =>
-                      // ClassValidator.validateRequired(value),
-                      icon: const Icon(Icons.person),
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(cedulaReferencia3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.telefonoReferencia3,
-                      title: 'Teléfono Referencia 3:',
-                      textInputType: TextInputType.number,
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      icon: const Icon(Icons.person),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(telefonoReferencia3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.aniosConocerReferido3
-                          .toString()
-                          .toNullIfEmptyOrZero(),
-                      title: 'Años de conocer referido 3:',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      textInputType: TextInputType.number,
-                      icon: const Icon(Icons.person),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(2),
-                      ],
-                      onChange: (value) {
-                        final newValue = toNumericString(value);
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                              aniosConocerReferido3:
-                                  int.tryParse(newValue) ?? 0),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      initialValue: state.resultadoVerificacion3,
-                      title: 'Resultado Verificacion 3',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value),
-                      icon: const Icon(Icons.person),
-                      inputFormatters: [
-                        UpperCaseTextFormatter(),
-                      ],
-                      onChange: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(resultadoVerificacion3: value),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    SearchDropdownWidget(
-                      selectedItem: Item(
-                        name: state.objEmpleadoVerificaReferenciaID3,
-                        value: state.objEmpleadoVerificaReferenciaID3,
-                      ),
-                      codigo: 'EMPLEADOS',
-                      title: 'Empleado que verifica 3',
-                      validator: (value) =>
-                          ClassValidator.validateRequired(value?.value),
-                      onChanged: (value) {
-                        cubit.onFieldChanged(
-                          () => state.copyWith(
-                            objEmpleadoVerificaReferenciaID3: value?.value,
-                          ),
-                        );
-                      },
-                    ),
-                    const Gap(20),
-                    OutlineTextfieldWidget(
-                      hintText: fechaVerificacion3?.selectorFormat(),
-                      title: 'Fecha de verificación 3',
-                      onTap: () => selectFechaVerificacion3(context),
-                      icon: const Icon(Icons.date_range),
-                      readOnly: true,
-                      onChange: (value) {},
-                    ),
-                  ],
                   const Gap(20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),

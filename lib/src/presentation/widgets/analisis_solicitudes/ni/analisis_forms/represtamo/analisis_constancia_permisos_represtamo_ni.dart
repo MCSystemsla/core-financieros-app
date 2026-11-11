@@ -24,8 +24,6 @@ class AnalisisConstanciaPermisosReprestamoNI extends StatefulWidget {
 
 class _AnalisisConstanciaPermisosReprestamoHNState
     extends State<AnalisisConstanciaPermisosReprestamoNI> {
-  DateTime? fechaEmisionPermiso;
-  DateTime? fechaVencimientoPermiso;
   DateTime? fechaEmisionLicencia;
   DateTime? fechaVencimientoLicencia;
   final formKey = GlobalKey<FormState>();
@@ -34,58 +32,10 @@ class _AnalisisConstanciaPermisosReprestamoHNState
     super.initState();
     final cubit = context.read<AnalisisReprestamoNiCubit>();
     // Al reabrir un borrador, mostrar las fechas guardadas.
-    fechaEmisionPermiso =
-        DateTime.tryParse(cubit.state.permisoOperacionFechaEmision)?.toLocal();
-    fechaVencimientoPermiso =
-        DateTime.tryParse(cubit.state.permisoOperacionFechaVencimiento)
-            ?.toLocal();
     fechaEmisionLicencia =
         DateTime.tryParse(cubit.state.fechaEmisionLicencia)?.toLocal();
     fechaVencimientoLicencia =
         DateTime.tryParse(cubit.state.fechaVencimientoLicencia)?.toLocal();
-  }
-
-  Future<void> selectDateFechaEmision(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoNiCubit>();
-
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: fechaEmisionPermiso,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-    );
-    if (picked != null && picked != fechaEmisionPermiso) {
-      fechaEmisionPermiso = picked;
-      cubit.onFieldChanged(
-        () => cubit.state.copyWith(
-          permisoOperacionFechaEmision:
-              fechaEmisionPermiso!.toUtc().toIso8601String(),
-        ),
-      );
-      setState(() {});
-    }
-  }
-
-  Future<void> selectDateFechaVencimiento(BuildContext context) async {
-    final cubit = context.read<AnalisisReprestamoNiCubit>();
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: fechaVencimientoPermiso,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2101),
-      locale: Locale(context.read<LangCubit>().state.currentLang.languageCode),
-    );
-    if (picked != null && picked != fechaVencimientoPermiso) {
-      fechaVencimientoPermiso = picked;
-      cubit.onFieldChanged(
-        () => cubit.state.copyWith(
-          permisoOperacionFechaVencimiento:
-              fechaVencimientoPermiso!.toUtc().toIso8601String(),
-        ),
-      );
-      setState(() {});
-    }
   }
 
   Future<void> selectDateFechaEmisionLicencia(BuildContext context) async {
@@ -143,71 +93,6 @@ class _AnalisisConstanciaPermisosReprestamoHNState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Gap(20),
-                Container(
-                  margin: const EdgeInsets.all(18),
-                  child: Text(
-                    'Permiso de operación',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                ),
-                OutlineTextfieldWidget(
-                  initialValue: state.permisoOperacionNumero,
-                  textAlign: TextAlign.end,
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  title: 'Número de permiso de operación',
-                  icon: const Icon(Icons.document_scanner),
-                  textInputType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                        permisoOperacionNumero: value,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  initialValue: state.permisoOperacionNombreInstitucion,
-                  title: 'Nombre de institución',
-                  validator: (value) => ClassValidator.validateRequired(value),
-                  icon: const Icon(Icons.business),
-                  inputFormatters: [
-                    UpperCaseTextFormatter(),
-                  ],
-                  onChange: (value) {
-                    cubit.onFieldChanged(
-                      () => state.copyWith(
-                        permisoOperacionNombreInstitucion: value,
-                      ),
-                    );
-                  },
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  hintText: fechaEmisionPermiso?.selectorFormat() ?? '',
-                  title: 'Fecha de emisión de permiso',
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaEmisionPermiso?.selectorFormat()),
-                  onTap: () => selectDateFechaEmision(context),
-                  icon: const Icon(Icons.calendar_month),
-                  readOnly: true,
-                ),
-                const Gap(20),
-                OutlineTextfieldWidget(
-                  onTap: () => selectDateFechaVencimiento(context),
-                  validator: (value) => ClassValidator.validateRequired(
-                      fechaVencimientoPermiso?.selectorFormat()),
-                  hintText: fechaVencimientoPermiso?.selectorFormat() ?? '',
-                  title: 'Fecha de vencimiento de permiso',
-                  icon: const Icon(Icons.calendar_month),
-                  readOnly: true,
-                ),
                 const Gap(20),
                 Container(
                   margin: const EdgeInsets.all(18),
