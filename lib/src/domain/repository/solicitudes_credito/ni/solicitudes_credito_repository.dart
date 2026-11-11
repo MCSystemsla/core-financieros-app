@@ -159,6 +159,7 @@ abstract class SolicitudesCreditoRepository {
 class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
   final _api = global<APIRepository>();
   final _logger = Logger();
+
   /// POST común de las tres solicitudes NI (nueva menor, represtamo,
   /// asalariado). Espera `201`.
   Future<CrearSolicitudNiResult> _crearSolicitud(Endpoint endpoint) async {
@@ -848,7 +849,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
         );
         throw AppException(optionalMsg: errorMsg);
       }
-      final data = resp['data']['ID'] as int?;
+      final data = resp['data']?['ID'] as int?;
       return data;
     } catch (e) {
       _logger.e(e);

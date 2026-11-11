@@ -179,7 +179,7 @@ class _AutorizacionListViewState extends State<_AutorizacionListView> {
                           return SolicitudEstadoCard(
                             key: ValueKey(solicitud.id),
                             index: index,
-                            currency: 'C\$',
+                            currency: '\$',
                             nombreCliente: solicitud.nombreCompleto ?? 'N/A',
                             numeroSolicitud: solicitud.numero,
                             fecha: solicitud.fechaSolicitud,

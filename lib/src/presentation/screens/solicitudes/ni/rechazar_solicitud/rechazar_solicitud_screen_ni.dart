@@ -229,7 +229,7 @@ class _RechazarListViewState extends State<_RechazarListView> {
                             return SolicitudEstadoCard(
                               key: ValueKey(solicitud.id),
                               index: index,
-                              currency: 'C\$',
+                              currency: '\$',
                               nombreCliente: solicitud.nombreCompleto ?? 'N/A',
                               numeroSolicitud: solicitud.numero,
                               fecha: solicitud.fechaSolicitud,
