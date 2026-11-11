@@ -83,16 +83,6 @@ class _NuevaMenorHnFormState extends State<NuevaMenorHnForm> {
                           );
                     },
                   ),
-                  // RiskControlScreen(
-                  //   nombre1: userByDocumentProvider.primerNombre,
-                  //   nombre2: userByDocumentProvider.segundoNombre,
-                  //   apellido1: userByDocumentProvider.primerApellido,
-                  //   apellido2: userByDocumentProvider.segundoApellido,
-                  //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
-                  //   identificacion: userByDocumentProvider.cedula,
-                  //   tipoOrganizacion: 'PERSONANATURAL',
-                  //   pageController: pageController,
-                  // ),
                   NuevaMenorForm1(
                     controller: pageController,
                     userByDocumentHn: UserDocumentDataHN(

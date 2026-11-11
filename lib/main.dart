@@ -10,7 +10,6 @@ const flavor = Flavor.nicaragua;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorage.configurePrefs();
-  // await FirebaseService().initializeApp();
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return OnErrorWidget(
       errorMsg: details.exceptionAsString(),

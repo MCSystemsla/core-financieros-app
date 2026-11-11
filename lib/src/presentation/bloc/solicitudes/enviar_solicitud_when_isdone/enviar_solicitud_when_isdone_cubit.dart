@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/responses/asalariado_responses_local_db.dart';
@@ -14,6 +15,15 @@ import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
 
 part 'enviar_solicitud_when_isdone_state.dart';
+
+typedef _SyncData = ({
+  String? cedula,
+  String? uuid,
+  String? nombreFormularioKiva,
+  String? objProductoIdVer,
+  String nombreCliente,
+  String tipoSolicitud,
+});
 
 typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
   required String uuid,
@@ -43,19 +53,29 @@ class EnviarSolicitudWhenIsdoneCubit
     if (!isClosed) emit(state);
   }
 
-  void sendSolicitudWhenIsDone({
+  /// Errores con los que el servidor no llegó a procesar la solicitud: no se
+  /// marca como fallida y se reintenta en la próxima sincronización.
+  /// `timeOutError` es ambiguo (el servidor pudo crearla), pero perderla en
+  /// silencio es peor que un posible duplicado que el backend puede rechazar.
+  static const _erroresReintentables = {
+    ErrorNetworkCode.noConnection,
+    ErrorNetworkCode.timeOutError,
+    ErrorNetworkCode.serverError,
+  };
+
+  Future<void> sendSolicitudWhenIsDone({
     required bool isConnected,
     required OnSolicitudCreditoIsKivaFn onSolicitudCreditoIsKivaFn,
   }) async {
-    if (_isSyncing) {
+    if (_isSyncing || !isConnected) {
       _safeEmit(EnviarSolicitudWhenIsdoneInitial());
       return;
     }
 
-    List<String> errors = [];
-    List<String> solicitudesSent = [];
-    List<String> unSentCedulas = [];
-    List<String> unSentKivaForms = [];
+    final errors = <String>[];
+    final solicitudesSent = <String>[];
+    final unSentCedulas = <String>[];
+    final unSentKivaForms = <String>[];
 
     bool hasAnySent = false;
 
@@ -64,47 +84,77 @@ class EnviarSolicitudWhenIsdoneCubit
 
     try {
       final solicitudes = objectBoxService.sendSolicitudesWhenIsDone();
-      if (solicitudes.isEmpty || !isConnected) {
+      if (solicitudes.isEmpty) {
         _safeEmit(EnviarSolicitudWhenIsdoneInitial());
         return;
       }
-      for (var solicitud in solicitudes) {
-        final data = _extractSyncData(solicitud);
-
-        (bool, String, String?, String?, int?) result;
+      for (final solicitud in solicitudes) {
+        // Un registro corrupto o de un tipo no soportado no debe cortar el
+        // envío de los demás.
+        final _SyncData data;
+        final CrearSolicitudNiResult result;
         try {
+          data = _extractSyncData(solicitud);
           result = await _sendSolicitud(solicitud: solicitud);
         } catch (e, stackTrace) {
           // No sabemos si el servidor la creó: no se marca, se reintenta en
           // la próxima sincronización.
-          _logger.e('Error creando solicitud ${data.cedula}',
+          _logger.e('Error creando solicitud ${solicitud.runtimeType}',
               error: e, stackTrace: stackTrace);
-          errors.add('Solicitud con cedula ${data.cedula}: $e');
+          errors.add('Solicitud no enviada: $e');
           continue;
         }
 
-        if (!result.$1) {
+        final (
+          isOk,
+          msg,
+          numeroSolicitud,
+          solicitudId,
+          tipoSolicitudId,
+          status,
+        ) = result;
+
+        if (!isOk) {
+          if (_erroresReintentables.contains(status)) {
+            errors.add(
+              'Solicitud con cédula ${data.cedula}: $msg '
+              'Se reintentará en la próxima sincronización.',
+            );
+            // Sin conexión, las siguientes también fallarían (cada una
+            // esperando su timeout): se dejan para la próxima vez.
+            if (status == ErrorNetworkCode.noConnection) break;
+            continue;
+          }
           objectBoxService.updateWhenSolicitdIsFailed(
             solicitud: solicitud,
-            errorMsg: result.$2,
+            errorMsg: msg,
           );
-          errors.add('Solicitud con cedula ${data.cedula}: ${result.$2}');
+          errors.add('Solicitud con cédula ${data.cedula}: $msg');
           continue;
         }
 
         // La solicitud ya existe en el servidor: marcarla antes de cualquier
         // paso posterior para que un fallo en cédulas/Kiva no provoque que se
         // vuelva a crear en la próxima sincronización.
-        objectBoxService.updateWhenSolicitdIsDone(solicitud: solicitud);
+        final marcada =
+            objectBoxService.updateWhenSolicitdIsDone(solicitud: solicitud);
+        if (!marcada) {
+          errors.add(
+            'La solicitud con cédula ${data.cedula} se creó en el servidor '
+            '(No. $numeroSolicitud), pero no se pudo marcar en el teléfono. '
+            'Avisa a soporte antes de volver a sincronizar.',
+          );
+        }
         hasAnySent = true;
-        solicitudesSent
-            .add('Solicitud de credito creada con cedula ${data.cedula}');
+        solicitudesSent.add(
+          'Solicitud de crédito No. $numeroSolicitud creada con cédula ${data.cedula}',
+        );
 
         try {
           final cedulaError = await _sendCedulaImages(
             cedula: data.cedula,
             tipoSolicitud: data.tipoSolicitud,
-            numeroSolicitud: result.$3,
+            numeroSolicitud: numeroSolicitud,
           );
           if (cedulaError != null) unSentCedulas.add(cedulaError);
         } catch (e, stackTrace) {
@@ -120,13 +170,13 @@ class EnviarSolicitudWhenIsdoneCubit
 
         try {
           final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
-            solicitudId: result.$4 ?? '0',
-            numeroSolicitud: result.$3 ?? '0',
+            solicitudId: solicitudId ?? '0',
+            numeroSolicitud: numeroSolicitud ?? '0',
             uuid: data.uuid ?? '',
             tipoProducto: nombreFormularioKiva,
             nombreFomularioKiva: nombreFormularioKiva,
             cedula: data.cedula ?? '',
-            tipoSolicitudId: result.$5 ?? 0,
+            tipoSolicitudId: tipoSolicitudId ?? 0,
             nombreCliente: data.nombreCliente,
           );
           if (!isKivFormIsOk) {
@@ -212,14 +262,7 @@ class EnviarSolicitudWhenIsdoneCubit
         : 'Error al enviar la imagen de la cédula $cedula al expediente digital.';
   }
 
-  ({
-    String? cedula,
-    String? uuid,
-    String? nombreFormularioKiva,
-    String? objProductoIdVer,
-    String nombreCliente,
-    String tipoSolicitud,
-  }) _extractSyncData(dynamic solicitud) {
+  _SyncData _extractSyncData(dynamic solicitud) {
     return switch (solicitud) {
       ResponseLocalDb() => (
           cedula: solicitud.cedula,
@@ -253,7 +296,7 @@ class EnviarSolicitudWhenIsdoneCubit
     };
   }
 
-  Future<(bool, String, String?, String?, int?)> _sendSolicitud({
+  Future<CrearSolicitudNiResult> _sendSolicitud({
     required dynamic solicitud,
   }) async {
     return switch (solicitud) {

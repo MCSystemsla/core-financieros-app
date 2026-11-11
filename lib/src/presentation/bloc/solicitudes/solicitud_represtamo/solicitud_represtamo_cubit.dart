@@ -22,7 +22,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
   Future<void> createSolicitudReprestamo() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId) =
+      final (isOk, msg, numeroSolicitud, solciitudId, tipoSolicitudId, _) =
           await _solicitudesCreditoRepository.createSolicitudReprestamo(
         solicitudReprestamo: SolicitudReprestamo(
           isOffline: state.isOffline,

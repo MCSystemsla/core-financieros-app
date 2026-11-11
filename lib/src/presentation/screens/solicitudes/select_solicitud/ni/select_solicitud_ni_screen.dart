@@ -15,12 +15,12 @@ import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/auto
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/crear_solicitud_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/rechazar_solicitud/rechazar_solicitud_screen_ni.dart';
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/represtamo_add_user_cedula_screen.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/success_clay_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/error/on_error_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_entry_card.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/sending_progress_view.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/section_block_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:dismissible_page/dismissible_page.dart';
@@ -39,42 +39,49 @@ class SelectSolicitudScreenNi extends StatelessWidget {
     final localDbProvider = global<ObjectBoxService>();
     final repository = SolicitudCreditoRepositoryImpl();
     final kivaRepository = ResponsesRepositoryImpl();
-    final isConnected =
-        context.read<InternetConnectionCubit>().state.isConnected;
     final kivaProvider = context.read<SolicitudesPendientesLocalDbCubit>();
+
+    Future<bool> enviarKiva({
+      required String solicitudId,
+      required String numeroSolicitud,
+      required String uuid,
+      required String tipoProducto,
+      required String nombreFomularioKiva,
+      required String cedula,
+      required int tipoSolicitudId,
+      required String nombreCliente,
+    }) {
+      return processSolicitud(
+        uuid: uuid,
+        numeroSolicitud: numeroSolicitud,
+        solicitudId: solicitudId,
+        tipoProducto: tipoProducto,
+        tipoSolicitudId: tipoSolicitudId,
+        nombreFomularioKiva: nombreFomularioKiva,
+        cedula: cedula,
+        kivaRepository: kivaRepository,
+        kivaProvider: kivaProvider,
+        nombreCliente: nombreCliente,
+      );
+    }
+
+    // La conexión se lee en cada intento, no una sola vez al construir.
+    void sincronizar(EnviarSolicitudWhenIsdoneCubit cubit) {
+      cubit.sendSolicitudWhenIsDone(
+        isConnected: context.read<InternetConnectionCubit>().state.isConnected,
+        onSolicitudCreditoIsKivaFn: enviarKiva,
+      );
+    }
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (ctx) => EnviarSolicitudWhenIsdoneCubit(
-            localDbProvider,
-            repository,
-          )..sendSolicitudWhenIsDone(
-              isConnected: isConnected,
-              onSolicitudCreditoIsKivaFn: ({
-                required String solicitudId,
-                required String numeroSolicitud,
-                required String uuid,
-                required String tipoProducto,
-                required String nombreFomularioKiva,
-                required String cedula,
-                required int tipoSolicitudId,
-                required String nombreCliente,
-              }) async {
-                return await processSolicitud(
-                  uuid: uuid,
-                  numeroSolicitud: numeroSolicitud,
-                  solicitudId: solicitudId,
-                  tipoProducto: tipoProducto,
-                  tipoSolicitudId: tipoSolicitudId,
-                  nombreFomularioKiva: nombreFomularioKiva,
-                  cedula: cedula,
-                  kivaRepository: kivaRepository,
-                  kivaProvider: kivaProvider,
-                  nombreCliente: nombreCliente,
-                );
-              },
-            ),
+          create: (ctx) {
+            final cubit =
+                EnviarSolicitudWhenIsdoneCubit(localDbProvider, repository);
+            sincronizar(cubit);
+            return cubit;
+          },
         ),
       ],
       child: Scaffold(
@@ -86,9 +93,12 @@ class SelectSolicitudScreenNi extends StatelessWidget {
             builder: (context, state) {
               return switch (state) {
                 OnEnviarSolicitudWhenIsdoneLoading() =>
-                  const DownloadCatalogoLoading(
+                  const SendingProgressView(
                     lottieAsset: ImageAsset.enviarSolicitudOfflines,
-                    text: 'Enviando Solicitudes Offline al Servidor',
+                    title: 'Enviando solicitudes',
+                    message: 'Estamos subiendo al servidor las solicitudes que '
+                        'guardaste sin conexión, con sus cédulas y formularios '
+                        'Kiva.',
                   ),
                 OnEnviarSolicitudWhenIsdoneSuccess() => SuccessClayWidget(
                     onDownloadComplete: () {
@@ -104,36 +114,9 @@ class SelectSolicitudScreenNi extends StatelessWidget {
                   ),
                 OnEnviarSolicitudWhenIsdoneError() => OnErrorWidget(
                     errorMsg: state.msgError,
-                    onPressed: () {
-                      context
-                          .read<EnviarSolicitudWhenIsdoneCubit>()
-                          .sendSolicitudWhenIsDone(
-                            isConnected: isConnected,
-                            onSolicitudCreditoIsKivaFn: ({
-                              required String solicitudId,
-                              required String numeroSolicitud,
-                              required String uuid,
-                              required String tipoProducto,
-                              required String nombreFomularioKiva,
-                              required String cedula,
-                              required int tipoSolicitudId,
-                              required String nombreCliente,
-                            }) async {
-                              return await processSolicitud(
-                                uuid: uuid,
-                                numeroSolicitud: numeroSolicitud,
-                                solicitudId: solicitudId,
-                                tipoProducto: tipoProducto,
-                                tipoSolicitudId: tipoSolicitudId,
-                                nombreFomularioKiva: nombreFomularioKiva,
-                                cedula: cedula,
-                                kivaRepository: kivaRepository,
-                                kivaProvider: kivaProvider,
-                                nombreCliente: nombreCliente,
-                              );
-                            },
-                          );
-                    },
+                    onPressed: () => sincronizar(
+                      context.read<EnviarSolicitudWhenIsdoneCubit>(),
+                    ),
                   ),
                 OnEnviarSolicitudWhenIsdonePendingVerification() =>
                   OnErrorWidget(
@@ -298,24 +281,24 @@ class _GestionSection extends StatelessWidget {
               );
             },
           ),
-        // if (actions.contains(TypeAction.autorizacion.codigo) &&
-        // connectionStatus == ConnectionStatus.connected)
-        ModuleTileWidget(
-          icon: Icons.verified_user_outlined,
-          iconColor: RedesignColors.indigo,
-          iconBackground: RedesignColors.indigoTint,
-          title: 'Autorizacion',
-          tag: 'Solo en línea',
-          subtitle: 'Autorizar solicitudes de crédito',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: ((_) => const AutorizacionSolcitudScreen()),
-              ),
-            );
-          },
-        ),
+        if (actions.contains(TypeAction.autorizacion.codigo) &&
+            connectionStatus == ConnectionStatus.connected)
+          ModuleTileWidget(
+            icon: Icons.verified_user_outlined,
+            iconColor: RedesignColors.indigo,
+            iconBackground: RedesignColors.indigoTint,
+            title: 'Autorizacion',
+            tag: 'Solo en línea',
+            subtitle: 'Autorizar solicitudes de crédito',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((_) => const AutorizacionSolcitudScreen()),
+                ),
+              );
+            },
+          ),
         if (actions.contains(TypeAction.rechazarSolicitud.codigo) &&
             connectionStatus == ConnectionStatus.connected)
           ModuleTileWidget(

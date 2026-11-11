@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/api/api_repository.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
@@ -131,15 +130,6 @@ abstract class SolicitudesCreditoHnRepository {
   });
   Future<void> solicitudesGrupalesAutorizar({
     required SolicitudGrupalesAutorizarSolicitudToPromotor data,
-  });
-  Future<Uint8List> getRiskControlByUserInfo({
-    required String nombre1,
-    required String nombre2,
-    required String apellido1,
-    required String apellido2,
-    required String tipoIdentificacionCodigo,
-    required String identificacion,
-    required String tipoOrganizacionCodigo,
   });
 
   Future<UserHaveCedulaResponse> userHaveCedula({
@@ -889,61 +879,6 @@ class SolicitudesCreditoHnRepositoryImpl
         );
         throw AppException(optionalMsg: errorMsg);
       }
-    } catch (e) {
-      _logger.e(e);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<Uint8List> getRiskControlByUserInfo({
-    required String nombre1,
-    required String nombre2,
-    required String apellido1,
-    required String apellido2,
-    required String tipoIdentificacionCodigo,
-    required String identificacion,
-    required String tipoOrganizacionCodigo,
-  }) async {
-    const apiUrl = String.fromEnvironment('apiUrl');
-    const protocol = String.fromEnvironment('protocol');
-    final headers = {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${LocalStorage().jwt}',
-      'CF-Access-Client-Id': const String.fromEnvironment('CFAccessClientId'),
-      'CF-Access-Client-Secret':
-          const String.fromEnvironment('CFAccessClientSecret'),
-    };
-    final body = {
-      'Nombre1': nombre1,
-      'Nombre2': nombre2,
-      'Apellido1': apellido1,
-      'Apellido2': apellido2,
-      'TipoIdentificacionCodigo': tipoIdentificacionCodigo,
-      'Identificacion': identificacion,
-      'TipoOrganizacionCodigo': tipoOrganizacionCodigo,
-    };
-    try {
-      const url =
-          '$protocol://$apiUrl/pla/risk-control/busqueda-id-verification';
-      final resp = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: body,
-      );
-
-      if (resp.statusCode != 201) {
-        _logger.e(resp);
-        final (errorMsg, _) = getErrorMessage(
-          resp,
-          errorMsg:
-              'Tienes problemas de conexión. Revisa tu conexión a internet.',
-        );
-        throw AppException(optionalMsg: errorMsg);
-      }
-
-      final result = resp.bodyBytes;
-      return result;
     } catch (e) {
       _logger.e(e);
       rethrow;

@@ -24,7 +24,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
   Future<void> createSolicitudAsalariado() async {
     emit(state.copyWith(status: Status.inProgress));
     try {
-      final (isOk, msg, numeroSolicitud, solicitudId, tipoSolicitudId) =
+      final (isOk, msg, numeroSolicitud, solicitudId, tipoSolicitudId, _) =
           await _repository.createSolicitudAsalariado(
         solicitudAsalariado: SolicitudAsalariado(
           isOffline: state.isOffline,

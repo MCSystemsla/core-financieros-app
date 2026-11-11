@@ -8,13 +8,12 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes-pendientes
 import 'package:core_financiero_app/src/presentation/screens/cartera/kiva/kiva_intercerptor/kiva_interceptor.dart';
 import 'package:core_financiero_app/src/presentation/screens/forms/confirmation/confirmation_offline_responses_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_lista_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/date/date_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/string/string_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/tipo_formulario_kiva/tipo_formulario_kiva_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:gap/gap.dart';
@@ -71,7 +70,7 @@ class KivaFormScreen extends StatelessWidget {
                         _KivaFormContent(
                           solicitudes: state.solicitudesPendienteResponse,
                         ),
-                      Status.error => _KivaMensaje(
+                      Status.error => KivaListaMensaje(
                           icon: Icons.cloud_off_rounded,
                           color: RedesignColors.red,
                           background: RedesignColors.redTint,
@@ -270,7 +269,7 @@ class _KivaFormContentState extends State<_KivaFormContent> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: _SearchField(
+                child: KivaBusquedaField(
                   controller: _searchController,
                   onChanged: (value) => setState(() => _query = value),
                 ),
@@ -307,7 +306,7 @@ class _KivaFormContentState extends State<_KivaFormContent> {
           if (widget.solicitudes.isEmpty)
             const SliverFillRemaining(
               hasScrollBody: false,
-              child: _KivaMensaje(
+              child: KivaListaMensaje(
                 icon: Icons.task_alt_rounded,
                 color: RedesignColors.green,
                 background: RedesignColors.greenTint,
@@ -318,7 +317,7 @@ class _KivaFormContentState extends State<_KivaFormContent> {
           else if (filtradas.isEmpty)
             const SliverFillRemaining(
               hasScrollBody: false,
-              child: _KivaMensaje(
+              child: KivaListaMensaje(
                 icon: Icons.search_off_rounded,
                 color: RedesignColors.inkMuted,
                 background: RedesignColors.tagBackground,
@@ -348,61 +347,6 @@ class _KivaFormContentState extends State<_KivaFormContent> {
   }
 }
 
-class _SearchField extends StatelessWidget {
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-  const _SearchField({required this.controller, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(color: RedesignColors.border),
-    );
-
-    return TextField(
-      controller: controller,
-      onChanged: onChanged,
-      textInputAction: TextInputAction.search,
-      style: const TextStyle(fontSize: 14.5, color: RedesignColors.ink),
-      decoration: InputDecoration(
-        hintText: 'Buscar por nombre, número o cédula',
-        hintStyle: const TextStyle(
-          fontSize: 14,
-          color: RedesignColors.chevron,
-        ),
-        prefixIcon: const Icon(
-          Icons.search_rounded,
-          color: RedesignColors.inkMuted,
-        ),
-        suffixIcon: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: controller,
-          builder: (context, value, _) => value.text.isEmpty
-              ? const SizedBox.shrink()
-              : IconButton(
-                  icon: const Icon(
-                    Icons.close_rounded,
-                    color: RedesignColors.inkMuted,
-                  ),
-                  onPressed: () {
-                    controller.clear();
-                    onChanged('');
-                  },
-                ),
-        ),
-        filled: true,
-        fillColor: RedesignColors.surface,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
-        border: border,
-        enabledBorder: border,
-        focusedBorder: border.copyWith(
-          borderSide: const BorderSide(color: RedesignColors.teal, width: 1.4),
-        ),
-      ),
-    );
-  }
-}
-
 class _KivaSolicitudCard extends StatelessWidget {
   final Solicitud solicitud;
   final bool llenado;
@@ -420,196 +364,45 @@ class _KivaSolicitudCard extends StatelessWidget {
     final producto = formulario?.etiqueta ?? solicitud.producto;
     final monto = solicitud.monto.toString().toCurrencyString();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      child: Material(
-        color: RedesignColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onTap == null
-              ? null
-              : () {
-                  HapticFeedback.selectionClick();
-                  onTap!();
-                },
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: RedesignColors.border),
-            ),
-            child: Row(
-              children: [
-                ModuleIconTile(
-                  icon: llenado
-                      ? Icons.fact_check_outlined
-                      : Icons.edit_note_rounded,
-                  // Los asesores reconocen el amarillo como "llenado offline".
-                  color: llenado ? RedesignColors.amber : RedesignColors.green,
-                  background: llenado
-                      ? RedesignColors.amberTint
-                      : RedesignColors.greenTint,
-                ),
-                const Gap(13),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        solicitud.nombre.capitalizeAll,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: -0.15,
-                          color: RedesignColors.ink,
-                        ),
-                      ),
-                      const Gap(3),
-                      Text(
-                        'Solicitud N. ${solicitud.numero} · ${solicitud.fecha.formatDateV2()}',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          height: 1.35,
-                          color: RedesignColors.inkMuted,
-                        ),
-                      ),
-                      const Gap(8),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          CardTagWidget(
-                            label: llenado ? 'Lista para enviar' : 'Por llenar',
-                            color: llenado
-                                ? RedesignColors.amber
-                                : RedesignColors.green,
-                            background: llenado
-                                ? RedesignColors.amberTint
-                                : RedesignColors.greenTint,
-                          ),
-                          CardTagWidget(
-                            label: '$monto ${solicitud.moneda}'.trim(),
-                            color: RedesignColors.ink,
-                            background: RedesignColors.tagBackground,
-                          ),
-                          CardTagWidget(
-                            label: producto,
-                            color: RedesignColors.indigo,
-                            background: RedesignColors.indigoTint,
-                          ),
-                          if (formulario?.esRecurrente ?? false)
-                            const CardTagWidget(
-                              label: 'Recurrente',
-                              color: RedesignColors.purple,
-                              background: RedesignColors.purpleTint,
-                            ),
-                          if (solicitud.estado.trim().isNotEmpty)
-                            CardTagWidget(
-                              label: solicitud.estado,
-                              color: RedesignColors.inkMuted,
-                              background: RedesignColors.tagBackground,
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(10),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  size: 20,
-                  color: RedesignColors.chevron,
-                ),
-              ],
-            ),
+    return KivaSolicitudTile(
+      icon: llenado ? Icons.fact_check_outlined : Icons.edit_note_rounded,
+      // Los asesores reconocen el amarillo como "llenado offline".
+      color: llenado ? RedesignColors.amber : RedesignColors.green,
+      background: llenado ? RedesignColors.amberTint : RedesignColors.greenTint,
+      titulo: solicitud.nombre.capitalizeAll,
+      subtitulo:
+          'Solicitud N. ${solicitud.numero} · ${solicitud.fecha.formatDateV2()}',
+      onTap: onTap,
+      tags: [
+        CardTagWidget(
+          label: llenado ? 'Lista para enviar' : 'Por llenar',
+          color: llenado ? RedesignColors.amber : RedesignColors.green,
+          background:
+              llenado ? RedesignColors.amberTint : RedesignColors.greenTint,
+        ),
+        CardTagWidget(
+          label: '$monto ${solicitud.moneda}'.trim(),
+          color: RedesignColors.ink,
+          background: RedesignColors.tagBackground,
+        ),
+        CardTagWidget(
+          label: producto,
+          color: RedesignColors.indigo,
+          background: RedesignColors.indigoTint,
+        ),
+        if (formulario?.esRecurrente ?? false)
+          const CardTagWidget(
+            label: 'Recurrente',
+            color: RedesignColors.purple,
+            background: RedesignColors.purpleTint,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _KivaMensaje extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final Color background;
-  final String titulo;
-  final String mensaje;
-  final String? accion;
-  final VoidCallback? onAccion;
-  const _KivaMensaje({
-    required this.icon,
-    required this.color,
-    required this.background,
-    required this.titulo,
-    required this.mensaje,
-    this.accion,
-    this.onAccion,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 64,
-              width: 64,
-              decoration: BoxDecoration(
-                color: background,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Icon(icon, color: color, size: 30),
-            ),
-            const Gap(18),
-            Text(
-              titulo,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: RedesignColors.ink,
-              ),
-            ),
-            if (mensaje.trim().isNotEmpty) ...[
-              const Gap(8),
-              Text(
-                mensaje,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 13.5,
-                  height: 1.45,
-                  color: RedesignColors.inkMuted,
-                ),
-              ),
-            ],
-            if (accion != null) ...[
-              const Gap(20),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: RedesignColors.teal,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: onAccion,
-                child: Text(accion!),
-              ),
-            ],
-          ],
-        ),
-      ),
+        if (solicitud.estado.trim().isNotEmpty)
+          CardTagWidget(
+            label: solicitud.estado,
+            color: RedesignColors.inkMuted,
+            background: RedesignColors.tagBackground,
+          ),
+      ],
     );
   }
 }

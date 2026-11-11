@@ -432,9 +432,6 @@ class _ModalSheetGrupales extends StatelessWidget {
                   subtitle: 'Aprobar comité grupal',
                   onTap: () => {
                     context.pushTransparentRoute(
-                      // ComiteGrupalScreenHn(
-                      //   grupoActivoData: grupoActivoData,
-                      // ),
                       V2ComiteGrupalScreenHn(
                         grupoActivoData: grupoActivoData,
                       ),

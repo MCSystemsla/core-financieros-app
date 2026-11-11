@@ -130,16 +130,6 @@ class _AsalariadoHnFormState extends State<AsalariadoHnForm> {
                             );
                       },
                     ),
-                  // RiskControlScreen(
-                  //   nombre1: userByDocumentProvider.primerNombre,
-                  //   nombre2: userByDocumentProvider.segundoNombre,
-                  //   apellido1: userByDocumentProvider.primerApellido,
-                  //   apellido2: userByDocumentProvider.segundoApellido,
-                  //   tipoIdentificacion: userByDocumentProvider.tipoDocumento,
-                  //   identificacion: userByDocumentProvider.cedula,
-                  //   tipoOrganizacion: 'PERSONANATURAL',
-                  //   pageController: pageController,
-                  // ),
                   AsalariadoHnForm1(
                     controller: pageController,
                     userByDocumentHnData: UserDocumentDataHN(
