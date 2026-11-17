@@ -16,6 +16,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/analisis_represta
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_search_client_by_document.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/crear_fiadores_response_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_solicitud_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiadores_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores_checks_response.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/garantias/analisis_actualizar_garantia.dart';
@@ -116,6 +117,13 @@ abstract class AnalisisRepositoryHn {
   });
   Future<PlanInversionResponse> getPlanInversionAnalisis({
     required int numeroSolicitud,
+  });
+  Future<List<FiadorSolicitudHn>> getFiadoresSolicitud({
+    required int numeroSolicitud,
+  });
+  Future<FiadorSolicitudHn> getFiadorSolicitudByCedula({
+    required int numeroSolicitud,
+    required String cedula,
   });
 
   Future<(bool, String)> createAnalisisFotoNegocio({
@@ -614,6 +622,62 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
 
       final data = FiadoresResponse.fromJson(resp);
       return data;
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<FiadorSolicitudHn>> getFiadoresSolicitud({
+    required int numeroSolicitud,
+  }) async {
+    final endpoint = GetFiadoresSolicitudHNEndpoint(
+      numeroSolicitud: numeroSolicitud,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = resp['data'];
+      if (data is! List) {
+        throw AppException(
+          optionalMsg: 'Respuesta inesperada al obtener los fiadores',
+        );
+      }
+      return data
+          .map((e) => FiadorSolicitudHn.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<FiadorSolicitudHn> getFiadorSolicitudByCedula({
+    required int numeroSolicitud,
+    required String cedula,
+  }) async {
+    final endpoint = GetFiadoresSolicitudHNEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      cedula: cedula,
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200) {
+        final (errorMsg, _) = getErrorMessage(resp);
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final data = resp['data'];
+      if (data is! Map<String, dynamic>) {
+        throw AppException(
+          optionalMsg: 'Respuesta inesperada al obtener el fiador',
+        );
+      }
+      return FiadorSolicitudHn.fromJson(data);
     } catch (e) {
       _logger.e(e);
       rethrow;
