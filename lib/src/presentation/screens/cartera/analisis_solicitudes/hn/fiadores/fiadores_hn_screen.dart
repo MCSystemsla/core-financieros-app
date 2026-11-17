@@ -15,6 +15,7 @@ import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_so
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_pendientes_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_search_by_document_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/desvincular_fiador_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiadores_registrados_section.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
@@ -133,6 +134,35 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(error!)),
+    );
+  }
+
+  /// Desvincula un fiador registrado (SPEC 11). [context] debe estar debajo
+  /// del `BlocProvider` de [AnalisisFiadorAvalCubit].
+  Future<void> _desvincular(
+    BuildContext context,
+    FiadorSolicitudHn fiador,
+  ) async {
+    final avalCubit = context.read<AnalisisFiadorAvalCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+    final mensaje = await DesvincularFiadorDialog.show(
+      context,
+      fiador: fiador,
+      numeroSolicitud: widget.numeroSolicitud,
+    );
+    if (mensaje == null || !mounted) return;
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(mensaje),
+        backgroundColor: RedesignColors.green,
+      ),
+    );
+    _loadRegistrados();
+    // Actualiza las etiquetas "Registrado" y el bloqueo de Cónyuge.
+    avalCubit.checkFiadorAval(
+      numeroSolicitud: widget.numeroSolicitud,
+      tipoSolicitud: widget.tipoSolicitud,
     );
   }
 
@@ -280,6 +310,8 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
                             FiadoresRegistradosSection(
                               onRetry: _loadRegistrados,
                               onTap: _verRegistrado,
+                              onDesvincular: (fiador) =>
+                                  _desvincular(context, fiador),
                             ),
                           ],
                         ],
