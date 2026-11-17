@@ -1,6 +1,6 @@
 # SPEC 11 — Desvincular un fiador HN de la solicitud
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 10
 > **Date:** 2026-11-17
 > **Objective:** Permitir que el asesor de Honduras desvincule un fiador registrado de la solicitud desde el menú de su tarjeta en "Registrados en el sistema", con un motivo obligatorio, llamando `PATCH /cartera/analisis-fiador/desvincular`.
@@ -33,7 +33,7 @@ El backend decide si el desvínculo procede (por ejemplo, con el análisis cerra
 - Endpoint `DesvincularFiadorHNEndpoint` (`PATCH /cartera/analisis-fiador/desvincular`) con body `NumeroSolicitud`, `FiadorId` y `Motivo`.
 - Método `desvincularFiador` en `AnalisisRepositoryHn` / `AnalisisRepositoryHNImpl`, que devuelve el `message` del backend.
 - Cubit nuevo `DesvincularFiadorHnCubit`, provisto por el diálogo.
-- Menú de tres puntos (`PopupMenuButton`) en cada tarjeta de `FiadoresRegistradosSection`, con una sola opción "Desvincular" en rojo. Tocar la tarjeta sigue abriendo "Ver fiador" (SPEC 10).
+- Botón de tres puntos en cada tarjeta de `FiadoresRegistradosSection`. Abre un modal bottom sheet con el nombre y la cédula del fiador y una sola acción, "Desvincular" (en rojo). Tocar la tarjeta sigue abriendo "Ver fiador" (SPEC 10).
 - Diálogo `DesvincularFiadorDialog`:
   - Muestra el nombre completo y la cédula del fiador.
   - Campo "Motivo" multilínea, obligatorio, de 10 a 250 caracteres (se valida sin espacios al inicio y al final).
@@ -132,34 +132,36 @@ Conventions:
 1. **Endpoint y repositorio.** Crear `DesvincularFiadorHNEndpoint` en `analisis_endpoint_hn.dart` y agregar `desvincularFiador` a `AnalisisRepositoryHn` y `AnalisisRepositoryHNImpl`. Verificar con `flutter analyze`.
 2. **Cubit.** Crear `DesvincularFiadorHnCubit` + state en `presentation/bloc/analisis/hn/desvincular_fiador/`, con `desvincular(...)` que pasa por `inProgress` y termina en `done` (con `mensaje`) o `error` (con `errorMsg`).
 3. **Diálogo.** Crear `DesvincularFiadorDialog` en `widgets/analisis_solicitudes/hn/fiadores/registrados/`. Provee su propio `DesvincularFiadorHnCubit`, valida el motivo, bloquea el cierre mientras envía (`PopScope`, `barrierDismissible: false`), muestra el error dentro y hace `pop(mensaje)` al terminar bien. Todavía no se abre desde ningún lado.
-4. **Menú en la tarjeta.** Agregar `onDesvincular` a `FiadoresRegistradosSection` y un `PopupMenuButton` con "Desvincular" en `_FiadorRegistradoCard` (reemplaza el chevron cuando `onDesvincular` no es null). Con `onDesvincular` null, la tarjeta se ve igual que hoy.
+4. **Menú en la tarjeta.** Agregar `onDesvincular` a `FiadoresRegistradosSection` y un botón de tres puntos en `_FiadorRegistradoCard` que abre un modal bottom sheet con "Desvincular"; la acción corre después de cerrar el sheet (reemplaza el chevron cuando `onDesvincular` no es null). Con `onDesvincular` null, la tarjeta se ve igual que hoy.
 5. **Conexión en `FiadoresHnScreen`.** Pasar `onDesvincular`, que abre `DesvincularFiadorDialog.show`. Si devuelve un mensaje: snackbar de éxito, `FiadoresSolicitudHnCubit.load` y `checkFiadorAval` con los mismos parámetros que al entrar.
 6. **Docs.** Agregar en `CLAUDE.md`, dentro de "HN análisis: fiadores registrados", un párrafo corto con el endpoint, el menú, el diálogo y qué se refresca.
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Cada tarjeta de "Registrados en el sistema" tiene un menú de tres puntos con "Desvincular".
-- [ ] Tocar la tarjeta (fuera del menú) sigue abriendo "Ver fiador".
-- [ ] "Desvincular" abre un diálogo con el nombre y la cédula del fiador y el campo "Motivo".
-- [ ] Con el motivo vacío o con menos de 10 caracteres (sin contar espacios al inicio y al final), "Desvincular" no llama al backend y muestra el error de validación.
-- [ ] El campo no acepta más de 250 caracteres.
-- [ ] "Cancelar" cierra el diálogo sin llamadas HTTP.
-- [ ] En `BitacoraService`, desvincular llama `PATCH /cartera/analisis-fiador/desvincular` con `NumeroSolicitud`, `FiadorId` (el `IdFiador` de la tarjeta) y `Motivo`.
-- [ ] Mientras envía, el botón muestra un loader y el diálogo no se cierra con atrás ni tocando fuera.
-- [ ] Si el backend responde error, el diálogo sigue abierto con su mensaje y el motivo escrito.
-- [ ] Si responde `200` con `ok: true`, el diálogo se cierra y se muestra un snackbar con el `message` del backend.
-- [ ] Después del éxito, el fiador ya no aparece en "Registrados en el sistema".
-- [ ] Después del éxito, la etiqueta "Registrado" de su tipo se actualiza según `checkFiadorAval` (por ejemplo, Cónyuge se desbloquea si era el único cónyuge).
-- [ ] Sin conexión o con `numeroSolicitud < 0`, la sección no aparece, así que tampoco el menú.
-- [ ] "Ver fiador", crear un fiador (en línea y sin conexión) y "Pendientes en el teléfono (N)" funcionan igual que antes.
-- [ ] Nicaragua y Costa Rica no cambian.
-- [ ] Verificación manual en QA HN desvinculando un fiador de una solicitud con al menos dos fiadores.
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] Cada tarjeta de "Registrados en el sistema" tiene un botón de tres puntos que abre un modal bottom sheet con el nombre, la cédula y "Desvincular".
+- [X] Al elegir "Desvincular", el sheet se cierra y se abre el diálogo del motivo.
+- [X] Tocar la tarjeta (fuera del menú) sigue abriendo "Ver fiador".
+- [X] "Desvincular" abre un diálogo con el nombre y la cédula del fiador y el campo "Motivo".
+- [X] Con el motivo vacío o con menos de 10 caracteres (sin contar espacios al inicio y al final), "Desvincular" no llama al backend y muestra el error de validación.
+- [X] El campo no acepta más de 250 caracteres.
+- [X] "Cancelar" cierra el diálogo sin llamadas HTTP.
+- [X] En `BitacoraService`, desvincular llama `PATCH /cartera/analisis-fiador/desvincular` con `NumeroSolicitud`, `FiadorId` (el `IdFiador` de la tarjeta) y `Motivo`.
+- [X] Mientras envía, el botón muestra un loader y el diálogo no se cierra con atrás ni tocando fuera.
+- [X] Si el backend responde error, el diálogo sigue abierto con su mensaje y el motivo escrito.
+- [X] Si responde `200` con `ok: true`, el diálogo se cierra y se muestra un snackbar con el `message` del backend.
+- [X] Después del éxito, el fiador ya no aparece en "Registrados en el sistema".
+- [X] Después del éxito, la etiqueta "Registrado" de su tipo se actualiza según `checkFiadorAval` (por ejemplo, Cónyuge se desbloquea si era el único cónyuge).
+- [X] Sin conexión o con `numeroSolicitud < 0`, la sección no aparece, así que tampoco el menú.
+- [X] "Ver fiador", crear un fiador (en línea y sin conexión) y "Pendientes en el teléfono (N)" funcionan igual que antes.
+- [X] Nicaragua y Costa Rica no cambian.
+- [X] Verificación manual en QA HN desvinculando un fiador de una solicitud con al menos dos fiadores.
 
 ## Decisions
 
 - **Sí:** solo Honduras. Lo eligió el usuario. Es el único país con listado de registrados (SPEC 10).
 - **Sí:** menú de tres puntos en la tarjeta. Lo eligió el usuario. Deja espacio para futuras acciones (editar).
+- **Sí:** el menú es un modal bottom sheet, no un `PopupMenuButton`. Lo pidió el usuario durante la implementación. Muestra a qué fiador se aplica la acción y sigue el estilo de los sheets de análisis (`ModuleTileWidget`).
 - **No:** botón dentro de "Ver fiador". Lo descartó el usuario a favor del menú.
 - **No:** ícono directo en la tarjeta. Es fácil tocarlo sin querer y no escala a más acciones.
 - **Sí:** motivo de texto libre, obligatorio, de 10 a 250 caracteres. Lo eligió el usuario.
@@ -168,6 +170,7 @@ Conventions:
 - **Sí:** el diálogo se queda abierto al enviar y al fallar. Lo eligió el usuario. El asesor no pierde el motivo escrito.
 - **Sí:** éxito es `200` con `ok: true`, y el snackbar usa el `message` del backend. Lo dio el usuario con la respuesta de ejemplo.
 - **Sí:** sin restricciones en la app; valida el backend. Lo eligió el usuario.
+- **No:** mandar `database` (ni en el body ni como query param), aunque otros PATCH de análisis HN lo mandan. Lo eligió el usuario durante la implementación: el body va exactamente como el curl del backend.
 - **Sí:** un cubit propio provisto por el diálogo, no más campos en `FiadoresSolicitudHnCubit`. El estado del envío vive solo mientras el diálogo está abierto y no se mezcla con la carga de la lista y el detalle.
 - **No:** quitar el fiador de la lista en memoria sin recargar. La recarga confirma con el backend que el vínculo ya no está activo.
 - **No:** modo offline. Desvincular sin conexión no tiene sentido sin la lista, que es solo en línea.
