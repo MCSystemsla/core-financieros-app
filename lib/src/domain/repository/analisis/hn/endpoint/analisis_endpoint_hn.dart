@@ -490,6 +490,34 @@ class GetFiadoresByNumeroSolicitudHNEndpoint extends Endpoint {
       };
 }
 
+/// Fiadores con vínculo activo de una solicitud (SPEC 10). Sin [cedula], `data`
+/// es un arreglo; con [cedula], es un objeto que además trae
+/// `HistorialCredito`.
+class GetFiadoresSolicitudHNEndpoint extends Endpoint {
+  final int numeroSolicitud;
+  final String cedula;
+
+  GetFiadoresSolicitudHNEndpoint({
+    required this.numeroSolicitud,
+    this.cedula = '',
+  });
+  @override
+  Method get method => Method.get;
+
+  @override
+  String get path => '/cartera/analisis-fiador/fiador-solicitud';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get queryParameters => {
+        'database': LocalStorage().database,
+        'NumeroSolicitud': numeroSolicitud.toString(),
+        if (cedula.isNotEmpty) 'Cedula': cedula,
+      };
+}
+
 class GetPlanInversionAnalisisHNEndpoint extends Endpoint {
   final int numeroSolicitud;
 
