@@ -11,15 +11,18 @@ import 'package:gap/gap.dart';
 /// fiadores con vínculo activo de la solicitud según el backend.
 ///
 /// Lee [FiadoresSolicitudHnCubit] del contexto. [onTap] es null mientras la
-/// tarjeta no navega.
+/// tarjeta no navega. Con [onDesvincular], cada tarjeta muestra un menú de
+/// tres puntos con "Desvincular" (SPEC 11); con null, no hay menú.
 class FiadoresRegistradosSection extends StatelessWidget {
   final VoidCallback onRetry;
   final ValueChanged<FiadorSolicitudHn>? onTap;
+  final ValueChanged<FiadorSolicitudHn>? onDesvincular;
 
   const FiadoresRegistradosSection({
     super.key,
     required this.onRetry,
     this.onTap,
+    this.onDesvincular,
   });
 
   @override
@@ -96,6 +99,9 @@ class FiadoresRegistradosSection extends StatelessWidget {
               fiador: fiador,
               cargando: state.cargandoCedula == fiador.fiador.cedula,
               onTap: onTap == null ? null : () => onTap!(fiador),
+              onDesvincular: onDesvincular == null
+                  ? null
+                  : () => onDesvincular!(fiador),
             ),
             const Gap(10),
           ],
@@ -108,11 +114,13 @@ class _FiadorRegistradoCard extends StatelessWidget {
   final FiadorSolicitudHn fiador;
   final bool cargando;
   final VoidCallback? onTap;
+  final VoidCallback? onDesvincular;
 
   const _FiadorRegistradoCard({
     required this.fiador,
     required this.cargando,
     required this.onTap,
+    required this.onDesvincular,
   });
 
   /// Mismos colores que las filas Cónyuge/Aval/Codeudor de la pantalla.
@@ -179,6 +187,8 @@ class _FiadorRegistradoCard extends StatelessWidget {
                   color: RedesignColors.green,
                 ),
               )
+            else if (onDesvincular != null)
+              _AccionesMenu(onDesvincular: onDesvincular!)
             else
               const Icon(
                 Icons.chevron_right_rounded,
@@ -187,6 +197,62 @@ class _FiadorRegistradoCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+enum _AccionFiador { desvincular }
+
+/// Menú de tres puntos de la tarjeta. Mientras la tarjeta carga su detalle se
+/// muestra el loader en su lugar, así que no se puede abrir.
+class _AccionesMenu extends StatelessWidget {
+  final VoidCallback onDesvincular;
+
+  const _AccionesMenu({required this.onDesvincular});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 28,
+      child: PopupMenuButton<_AccionFiador>(
+        padding: EdgeInsets.zero,
+        tooltip: 'Acciones',
+        color: RedesignColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        icon: const Icon(
+          Icons.more_vert_rounded,
+          size: 20,
+          color: RedesignColors.chevron,
+        ),
+        onSelected: (accion) => switch (accion) {
+          _AccionFiador.desvincular => onDesvincular(),
+        },
+        itemBuilder: (_) => const [
+          PopupMenuItem(
+            value: _AccionFiador.desvincular,
+            child: Row(
+              children: [
+                Icon(
+                  Icons.link_off_rounded,
+                  size: 20,
+                  color: RedesignColors.red,
+                ),
+                Gap(10),
+                Text(
+                  'Desvincular',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: RedesignColors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
