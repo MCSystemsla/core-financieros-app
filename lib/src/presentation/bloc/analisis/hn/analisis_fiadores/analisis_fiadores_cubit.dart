@@ -263,10 +263,15 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
     ));
   }
 
+  /// Fiador cargado con [cargarFiadorRegistrado]. Las páginas en solo lectura
+  /// leen de aquí los `...Nombre` de los catálogos, que el estado no guarda.
+  FiadorSolicitudHn? fiadorRegistrado;
+
   /// Llena el estado con un fiador ya registrado en el backend, para verlo en
   /// el formulario en modo solo lectura (SPEC 10). No toca `database`, las
   /// rutas de la cédula ni la firma, que el GET no devuelve.
   void cargarFiadorRegistrado(FiadorSolicitudHn registrado) {
+    fiadorRegistrado = registrado;
     final f = registrado.fiador;
     String fecha(DateTime? value) => value?.toIso8601String() ?? '';
 
