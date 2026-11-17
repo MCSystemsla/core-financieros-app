@@ -1,6 +1,6 @@
 # SPEC 11 — Desvincular un fiador HN de la solicitud
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 10
 > **Date:** 2026-11-17
 > **Objective:** Permitir que el asesor de Honduras desvincule un fiador registrado de la solicitud desde el menú de su tarjeta en "Registrados en el sistema", con un motivo obligatorio, llamando `PATCH /cartera/analisis-fiador/desvincular`.
