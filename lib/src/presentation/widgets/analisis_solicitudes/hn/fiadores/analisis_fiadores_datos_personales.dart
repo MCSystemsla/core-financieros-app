@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiador_registrado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -17,9 +18,14 @@ class AnalisisFiadoresDatosPersonales extends StatefulWidget {
   const AnalisisFiadoresDatosPersonales({
     super.key,
     required this.pageController,
+    this.readOnly = false,
   });
 
   final PageController pageController;
+
+  /// Fiador ya registrado (SPEC 10): muestra los valores del cubit sin dejar
+  /// cambiarlos, y "Siguiente" no valida.
+  final bool readOnly;
 
   @override
   State<AnalisisFiadoresDatosPersonales> createState() =>
@@ -34,6 +40,7 @@ class _AnalisisFiadoresDatosPersonalesState
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<AnalisisFiadoresCubit>();
+    final ro = widget.readOnly;
 
     return BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
       builder: (context, state) {
@@ -58,6 +65,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'PAIS',
                   hintText: 'input.select_option'.tr(),
                   title: 'País:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Pais', state.paisCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   onChanged: (value) {
@@ -73,6 +84,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'DEP',
                   hintText: 'input.select_option'.tr(),
                   title: 'Departamento:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Departamento', state.departamentoCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   where: state.paisCodigo,
@@ -89,6 +104,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'MUN',
                   hintText: 'input.select_option'.tr(),
                   title: 'Municipio:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Municipio', state.municipioCodigo)
+                      : null,
                   where: state.departamentoCodigo,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
@@ -106,6 +125,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   where: state.municipioCodigo,
                   hintText: 'input.select_option'.tr(),
                   title: 'Aldea:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Aldea', state.aldeaCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   onChanged: (value) {
@@ -119,6 +142,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Caserío',
+                  initialValue: ro ? state.caserioCasa : null,
+                  readOnly: ro,
                   icon: const Icon(Icons.person),
                   // validator: (value) => ClassValidator.validateRequired(value),
                   inputFormatters: [
@@ -135,6 +160,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Barrio',
+                  initialValue: ro ? state.barrioCasa : null,
+                  readOnly: ro,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -151,6 +178,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Direccion y Referencia',
+                  initialValue: ro ? state.direccion : null,
+                  readOnly: ro,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -168,6 +197,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'PAIS',
                   hintText: 'input.select_option'.tr(),
                   title: 'Nacionalidad:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Nacionalidad1', state.nacionalidad1Codigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
                   onChanged: (value) {
@@ -182,6 +215,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'PAIS',
                   hintText: 'input.select_option'.tr(),
                   title: 'Nacionalidad 2:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Nacionalidad2', state.nacionalidad2Codigo)
+                      : null,
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -194,6 +231,10 @@ class _AnalisisFiadoresDatosPersonalesState
                   codigo: 'PAIS',
                   hintText: 'input.select_option'.tr(),
                   title: 'Nacionalidad 3:',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('Nacionalidad3', state.nacionalidad3Codigo)
+                      : null,
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -205,6 +246,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Teléfono',
+                  initialValue: ro ? state.telefono : null,
+                  readOnly: ro,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -221,6 +264,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Celular',
+                  initialValue: ro ? state.celular : null,
+                  readOnly: ro,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -238,6 +283,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 OutlineTextfieldWidget(
                   validator: (value) => ClassValidator.validateEmail(value),
                   title: 'Correo Electrónico',
+                  initialValue: ro ? state.email : null,
+                  readOnly: ro,
                   icon: const Icon(Icons.person),
                   textInputType: TextInputType.emailAddress,
                   textCapitalization: TextCapitalization.none,
@@ -253,6 +300,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 SearchDropdownWidget(
                   codigo: 'ESCOLARIDAD',
                   title: 'Escolaridad',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('Escolaridad', state.escolaridadCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
@@ -267,6 +318,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 SearchDropdownWidget(
                   codigo: 'PROFESION',
                   title: 'Profesion',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('Profesion', state.profesionCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
@@ -281,6 +336,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 SearchDropdownWidget(
                   codigo: 'OCUPACION',
                   title: 'Ocupación',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('Ocupacion', state.ocupacionCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
@@ -294,6 +353,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Numero de dependientes',
+                  initialValue: ro ? state.cantidadDependientes.toString() : null,
+                  readOnly: ro,
                   icon: const Icon(Icons.person),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -310,6 +371,8 @@ class _AnalisisFiadoresDatosPersonalesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Numero de hijos',
+                  initialValue: ro ? state.cantidadHijos.toString() : null,
+                  readOnly: ro,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -329,6 +392,10 @@ class _AnalisisFiadoresDatosPersonalesState
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'TIPOPERSONACNBS',
                   title: 'Tipo persona CNBS',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('TipoPersonaCNBS', state.tipoPersonaCnbsCodigo)
+                      : null,
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -343,6 +410,10 @@ class _AnalisisFiadoresDatosPersonalesState
                       ClassValidator.validateRequired(value?.value),
                   codigo: 'ESTATUSCLIENTE',
                   title: 'Estatus',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('Estatus', state.estatusCodigo)
+                      : null,
                   onChanged: (value) {
                     cubit.onFieldChanged(
                       () => state.copyWith(
@@ -355,6 +426,10 @@ class _AnalisisFiadoresDatosPersonalesState
                 SearchDropdownWidget(
                   codigo: 'TIPOCLIENTE',
                   title: 'Tipo de cliente',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('TipoCliente', state.tipoClienteCodigo)
+                      : null,
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
                   onChanged: (value) {
@@ -370,7 +445,7 @@ class _AnalisisFiadoresDatosPersonalesState
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomElevatedButton(
                     onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
+                      if (!ro && !formKey.currentState!.validate()) return;
 
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 500),

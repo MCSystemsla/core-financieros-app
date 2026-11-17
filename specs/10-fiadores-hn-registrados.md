@@ -1,6 +1,6 @@
 # SPEC 10 — Fiadores HN registrados en la solicitud
 
-> **Status:** Approved
+> **Status:** Implemented
 > **Depends on:** SPEC 05
 > **Date:** 2026-11-17
 > **Objective:** Listar en `FiadoresHnScreen` los fiadores que la solicitud HN ya tiene en el backend (`GET /cartera/analisis-fiador/fiador-solicitud`) y, al tocar uno, abrir `FiadoresHnFormScreen` precargado en modo solo lectura con sus datos y su historial crediticio.
@@ -132,24 +132,24 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Con conexión, `FiadoresHnScreen` de una solicitud con fiadores muestra "Registrados en el sistema" con una tarjeta por fiador activo (nombre, cédula, tipo).
-- [ ] En `BitacoraService`, el listado llama `GET /cartera/analisis-fiador/fiador-solicitud` con `database` y `NumeroSolicitud`, sin `Cedula`.
-- [ ] Una solicitud sin fiadores muestra "Esta solicitud aún no tiene fiadores registrados".
-- [ ] Si el listado falla, se ve el mensaje del backend y "Reintentar" vuelve a llamar el endpoint.
-- [ ] Sin conexión, o con `numeroSolicitud < 0`, la sección no aparece y no hay llamada HTTP al endpoint.
-- [ ] Al crear un fiador en línea y volver a `FiadoresHnScreen`, el nuevo fiador aparece en la sección.
-- [ ] Tocar una tarjeta muestra un loader en ella, llama el endpoint con `Cedula` y abre "Ver fiador".
-- [ ] "Ver fiador" empieza en Datos generales, sin las páginas de fotos ni de firma.
-- [ ] En las 5 páginas, los campos muestran los valores del fiador (catálogos con su nombre) y no se pueden cambiar.
-- [ ] "Siguiente" avanza aunque haya campos requeridos vacíos.
-- [ ] El historial crediticio muestra los registros de `HistorialCredito` (entidad, monto, moneda, frecuencia, estado), sin botones de agregar, editar ni eliminar.
-- [ ] El último paso muestra "Cerrar" en vez de "Enviar" y vuelve a `FiadoresHnScreen` sin llamadas HTTP de creación.
-- [ ] Si el detalle falla, se muestra un snackbar con el error y no se abre el formulario.
-- [ ] Crear un fiador (en línea y sin conexión) funciona igual que antes: 7 páginas, validación y "Enviar".
-- [ ] Las etiquetas "Registrado", el bloqueo de Cónyuge y la fila "Pendientes en el teléfono (N)" no cambian.
-- [ ] Nicaragua y Costa Rica no cambian.
-- [ ] Verificación manual en QA HN con una solicitud con al menos dos fiadores de tipos distintos.
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] Con conexión, `FiadoresHnScreen` de una solicitud con fiadores muestra "Registrados en el sistema" con una tarjeta por fiador activo (nombre, cédula, tipo).
+- [X] En `BitacoraService`, el listado llama `GET /cartera/analisis-fiador/fiador-solicitud` con `database` y `NumeroSolicitud`, sin `Cedula`.
+- [X] Una solicitud sin fiadores muestra "Esta solicitud aún no tiene fiadores registrados".
+- [X] Si el listado falla, se ve el mensaje del backend y "Reintentar" vuelve a llamar el endpoint.
+- [X] Sin conexión, o con `numeroSolicitud < 0`, la sección no aparece y no hay llamada HTTP al endpoint.
+- [X] Al crear un fiador en línea y volver a `FiadoresHnScreen`, el nuevo fiador aparece en la sección.
+- [X] Tocar una tarjeta muestra un loader en ella, llama el endpoint con `Cedula` y abre "Ver fiador".
+- [X] "Ver fiador" empieza en Datos generales, sin las páginas de fotos ni de firma.
+- [X] En las 5 páginas, los campos muestran los valores del fiador (catálogos con su nombre) y no se pueden cambiar.
+- [X] "Siguiente" avanza aunque haya campos requeridos vacíos.
+- [X] El historial crediticio muestra los registros de `HistorialCredito` (entidad, monto, moneda, frecuencia, estado), sin botones de agregar, editar ni eliminar.
+- [X] El último paso muestra "Cerrar" en vez de "Enviar" y vuelve a `FiadoresHnScreen` sin llamadas HTTP de creación.
+- [X] Si el detalle falla, se muestra un snackbar con el error y no se abre el formulario.
+- [X] Crear un fiador (en línea y sin conexión) funciona igual que antes: 7 páginas, validación y "Enviar".
+- [X] Las etiquetas "Registrado", el bloqueo de Cónyuge y la fila "Pendientes en el teléfono (N)" no cambian.
+- [X] Nicaragua y Costa Rica no cambian.
+- [X] Verificación manual en QA HN con una solicitud con al menos dos fiadores de tipos distintos.
 
 ## Decisions
 
@@ -169,6 +169,7 @@ Conventions:
 - **Sí:** tarjeta con nombre, cédula y tipo. Lo eligió el usuario.
 - **Sí:** pedir el detalle (con `Cedula`) al tocar, no reusar la fila del listado. El listado no trae `HistorialCredito`.
 - **No:** guardar el listado en local. La sección es solo en línea.
+- **Sí:** los helpers de `AnalisisFiadoresHn.fromJson` y `HistorialCredito.fromJson` aceptan números como texto, textos como número, `0`/`1` como booleano y fechas inválidas (`tryParse`). Se decidió durante la implementación: el GET de QA HN mandaba un campo numérico como texto y la lista fallaba con `type 'String' is not a subtype of type 'num?'`. Los pendientes de SPEC 05 se siguen leyendo igual.
 
 ## Risks
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
 
@@ -210,15 +211,16 @@ class AnalisisFiadoresHn {
   /// Inverso de [toJson], para reconstruir un fiador pendiente guardado en
   /// local. [toJson] descarta `null` y `''`, así que las llaves ausentes toman
   /// `''`/`0`/`false`/`null`/`[]`.
+  ///
+  /// También lee la respuesta de `GET /cartera/analisis-fiador/fiador-solicitud`
+  /// (SPEC 10). El backend puede mandar números como texto (`"2222.00"`) o
+  /// textos como número, así que los helpers aceptan ambos y nunca lanzan.
   factory AnalisisFiadoresHn.fromJson(Map<String, dynamic> json) {
-    String str(String key) => json[key] as String? ?? '';
-    int integer(String key) => (json[key] as num?)?.toInt() ?? 0;
-    double dbl(String key) => (json[key] as num?)?.toDouble() ?? 0;
-    bool boolean(String key) => json[key] as bool? ?? false;
-    DateTime? date(String key) {
-      final value = json[key] as String?;
-      return value == null ? null : DateTime.parse(value);
-    }
+    String str(String key) => json[key]?.toString() ?? '';
+    int integer(String key) => parseNum(json[key])?.toInt() ?? 0;
+    double dbl(String key) => parseNum(json[key])?.toDouble() ?? 0;
+    bool boolean(String key) => parseBool(json[key]) ?? false;
+    DateTime? date(String key) => parseDate(json[key]);
 
     return AnalisisFiadoresHn(
       database: str('database'),

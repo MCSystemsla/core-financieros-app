@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/config/helpers/error_reporter/error_repo
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/services/pdf/images_to_pdf_service.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_solicitud_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/local_db/analisis_fiador_hn_local_db.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
@@ -259,6 +260,120 @@ class AnalisisFiadoresCubit extends Cubit<AnalisisFiadoresState> {
     emit(state.copyWith(
       tipoFiadorCodigo: tipoFiadorCodigo,
       numeroSolicitud: numeroSolicitud,
+    ));
+  }
+
+  /// Fiador cargado con [cargarFiadorRegistrado]. Las páginas en solo lectura
+  /// leen de aquí los `...Nombre` de los catálogos, que el estado no guarda.
+  FiadorSolicitudHn? fiadorRegistrado;
+
+  /// Llena el estado con un fiador ya registrado en el backend, para verlo en
+  /// el formulario en modo solo lectura (SPEC 10). No toca `database`, las
+  /// rutas de la cédula ni la firma, que el GET no devuelve.
+  void cargarFiadorRegistrado(FiadorSolicitudHn registrado) {
+    fiadorRegistrado = registrado;
+    final f = registrado.fiador;
+    String fecha(DateTime? value) => value?.toIso8601String() ?? '';
+
+    emit(state.copyWith(
+      fiadorId: registrado.idFiador.toString(),
+      numeroSolicitud: f.numeroSolicitud,
+      nombre1: f.nombre1,
+      nombre2: f.nombre2,
+      apellido1: f.apellido1,
+      apellido2: f.apellido2,
+      fechaNacimiento: fecha(f.fechaNacimiento),
+      cedula: f.cedula,
+      telefono: f.telefono,
+      celular: f.celular,
+      direccion: f.direccion,
+      barrioCasa: f.barrioCasa,
+      municipioCodigo: f.municipioCodigo,
+      departamentoCodigo: f.departamentoCodigo,
+      paisCodigo: f.paisCodigo,
+      email: f.email,
+      sexoCodigo: f.sexoCodigo,
+      estadoCivilCodigo: f.estadoCivilCodigo,
+      relacionClienteCodigo: f.relacionClienteCodigo,
+      esAsalariado: f.esAsalariado,
+      empresa: f.empresa,
+      cargo: f.cargo,
+      tiempoLaborar: f.tiempoLaborar,
+      esEmpresario: f.esEmpresario,
+      actividadCodigo: f.actividadCodigo,
+      tiempoActividad: f.tiempoActividad,
+      direccionTrabajo: f.direccionTrabajo,
+      barrioTrabajo: f.barrioTrabajo,
+      telefonoTrabajo: f.telefonoTrabajo,
+      lugarTrabajoAnterior: f.lugarTrabajoAnterior,
+      personasACargo: f.personasACargo,
+      cantidadDependientes: f.cantidadDependientes,
+      tieneDocumentosDomicilio: f.tieneDocumentosDomicilio,
+      tipoDomicilioCodigo: f.tipoDomicilioCodigo,
+      duenoVivienda: f.duenoVivienda,
+      pagoAlquiler: f.pagoAlquiler,
+      profesion: f.profesion,
+      anosVivirDomicilio: f.anosVivirDomicilio,
+      nombreFamiliarCercano: f.nombreFamiliarCercano,
+      parentescoFamiliarCercanoCodigo: f.parentescoFamiliarCercanoCodigo,
+      direccionFamiliarCercano: f.direccionFamiliarCercano,
+      telefonoFamiliarCercano: f.telefonoFamiliarCercano,
+      salarioNetoCordoba: f.salarioNetoCordoba,
+      otrosIngresosCordoba: f.otrosIngresosCordoba,
+      totalIngresosFamiliares: f.totalIngresosFamiliares,
+      ventaNegocio: f.ventaNegocio,
+      costoVenta: f.costoVenta,
+      gastosOperativos: f.gastosOperativos,
+      gananciaNegocio: f.gananciaNegocio,
+      otrosIngresos: f.otrosIngresos,
+      fuenteOtrosIngresos: f.fuenteOtrosIngresos,
+      consumoFamiliar: f.consumoFamiliar,
+      saldoDisponible: f.saldoDisponible,
+      activo: f.activo,
+      sucursal: f.sucursal,
+      usuarioCreacion: f.usuarioCreacion,
+      maquinaCreacion: f.maquinaCreacion,
+      tipoDocumentoCodigo: f.tipoDocumentoCodigo,
+      esFirmaDigitalFiador: f.esFirmaDigitalFiador,
+      rtn: f.rtn,
+      aldeaCodigo: f.aldeaCodigo,
+      caserioCasa: f.caserioCasa,
+      tipoFiadorCodigo: f.tipoFiadorCodigo,
+      escolaridadCodigo: f.escolaridadCodigo,
+      ocupacionCodigo: f.ocupacionCodigo,
+      profesionCodigo: f.profesionCodigo,
+      paisNacimientoCodigo: f.paisNacimientoCodigo,
+      fechaEmisionCedula: fecha(f.fechaEmisionCedula),
+      fechaVencimientoCedula: fecha(f.fechaVencimientoCedula),
+      nacionalidad1Codigo: f.nacionalidad1Codigo,
+      nacionalidad2Codigo: f.nacionalidad2Codigo,
+      nacionalidad3Codigo: f.nacionalidad3Codigo,
+      cantidadHijos: f.cantidadHijos,
+      tipoViviendaCodigo: f.tipoViviendaCodigo,
+      tipoPersonaCnbsCodigo: f.tipoPersonaCnbsCodigo,
+      estatusCodigo: f.estatusCodigo,
+      tipoClienteCodigo: f.tipoClienteCodigo,
+      actividadEconomicaCnbs1Codigo: f.actividadEconomicaCnbs1Codigo,
+      actividadEconomicaDescripcion1: f.actividadEconomicaDescripcion1,
+      actividadEconomicaCnbs2Codigo: f.actividadEconomicaCnbs2Codigo,
+      actividadEconomicaDescripcion2: f.actividadEconomicaDescripcion2,
+      actividadEconomicaCnbs3Codigo: f.actividadEconomicaCnbs3Codigo,
+      actividadEconomicaDescripcion3: f.actividadEconomicaDescripcion3,
+      ejerceApnfd: f.ejerceApnfd,
+      nombreNegocio: f.nombreNegocio,
+      tiempoNegocio: f.tiempoNegocio,
+      nivelAproximadoIngresosCodigo: f.nivelAproximadoIngresosCodigo,
+      puesto: f.puesto,
+      condicionLocalCodigo: f.condicionLocalCodigo,
+      horarioVisita: f.horarioVisita,
+      horarioTrabajo: f.horarioTrabajo,
+      paisOcupacionCodigo: f.paisOcupacionCodigo,
+      departamentoOcupacionCodigo: f.departamentoOcupacionCodigo,
+      municipioOcupacionCodigo: f.municipioOcupacionCodigo,
+      aldeaOcupacionCodigo: f.aldeaOcupacionCodigo,
+      caserioOcupacion: f.caserioOcupacion,
+      celularOcupacion: f.celularOcupacion,
+      historialCredito: f.historialCredito,
     ));
   }
 

@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:uuid/uuid.dart';
 
 class HistorialCredito {
@@ -32,23 +33,31 @@ class HistorialCredito {
   });
 
   /// Inverso de [toJson]. Genera un `uuid` nuevo porque [toJson] no lo manda.
+  ///
+  /// También lee el historial de `GET /cartera/analisis-fiador/fiador-solicitud`
+  /// (SPEC 10), que usa `MonedaCodigo`/`FrecuenciaCodigo` y trae los nombres.
   factory HistorialCredito.fromJson(Map<String, dynamic> json) {
-    int integer(String key) => (json[key] as num?)?.toInt() ?? 0;
-    final fechaDesembolso = json['FechaDesembolso'] as String?;
+    int integer(String key) => parseNum(json[key])?.toInt() ?? 0;
+    String str(String key) => json[key]?.toString() ?? '';
 
     return HistorialCredito(
-      id: (json['ID'] as num?)?.toInt(),
+      id: parseNum(json['ID'])?.toInt(),
       uuid: const Uuid().v4(),
-      entidad: json['Entidad'] as String? ?? '',
+      entidad: str('Entidad'),
       monto: integer('Monto'),
-      tipoMonedaCodigo: json['TipoMonedaCodigo'] as String? ?? '',
-      tipoFrecuenciaCodigo: json['TipoFrecuenciaCodigo'] as String? ?? '',
+      tipoMonedaCodigo: json['TipoMonedaCodigo'] != null
+          ? str('TipoMonedaCodigo')
+          : str('MonedaCodigo'),
+      tipoFrecuenciaCodigo: json['TipoFrecuenciaCodigo'] != null
+          ? str('TipoFrecuenciaCodigo')
+          : str('FrecuenciaCodigo'),
       cuota: integer('Cuota'),
       saldo: integer('Saldo'),
-      estadoCodigo: json['EstadoCodigo'] as String? ?? '',
-      fechaDesembolso: fechaDesembolso == null
-          ? DateTime.now()
-          : DateTime.parse(fechaDesembolso),
+      estadoCodigo: str('EstadoCodigo'),
+      monedaNombre: str('MonedaNombre'),
+      frecuenciaNombre: str('FrecuenciaNombre'),
+      estadoNombre: str('EstadoNombre'),
+      fechaDesembolso: parseDate(json['FechaDesembolso']) ?? DateTime.now(),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/as
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/catalogo/catalogo_local_db.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/lang/lang_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiador_registrado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
@@ -38,9 +39,14 @@ class AnalisisFiadoresDatosGenerales extends StatefulWidget {
   final DateTime? fechaExpira;
   final String? tipoDocumento;
   final PageController pageController;
+
+  /// Fiador ya registrado (SPEC 10): muestra los valores del cubit sin dejar
+  /// cambiarlos, y "Siguiente" no valida.
+  final bool readOnly;
   const AnalisisFiadoresDatosGenerales({
     super.key,
     required this.pageController,
+    this.readOnly = false,
     this.cedula,
     this.primerNombre,
     this.segundoNombre,
@@ -81,10 +87,18 @@ class _AnalisisFiadoresDatosGeneralesState
         .getParametroByName(nombre: ParametroType.edadMinimaCliente.codigo);
     edadMaxima = global<SolicitudesHnBoxService>()
         .getParametroByName(nombre: ParametroType.edadMaximaCliente.codigo);
+    final cubit = context.read<AnalisisFiadoresCubit>();
+    if (widget.readOnly) {
+      // El estado ya viene lleno con `cargarFiadorRegistrado`; no se escribe.
+      fechaEmisionCedula = DateTime.tryParse(cubit.state.fechaEmisionCedula);
+      fechaVencimientoCedula =
+          DateTime.tryParse(cubit.state.fechaVencimientoCedula);
+      fechaNacimiento = DateTime.tryParse(cubit.state.fechaNacimiento);
+      return;
+    }
     fechaEmisionCedula = widget.fechaEmision;
     fechaVencimientoCedula = widget.fechaExpira;
     fechaNacimiento = widget.fechaNacimiento;
-    final cubit = context.read<AnalisisFiadoresCubit>();
     cubit.onFieldChanged(
       () => cubit.state.copyWith(
         fechaEmisionCedula: fechaEmisionCedula?.toUtc().toIso8601String(),
@@ -213,6 +227,7 @@ class _AnalisisFiadoresDatosGeneralesState
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<AnalisisFiadoresCubit>();
+    final ro = widget.readOnly;
     return BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -250,6 +265,7 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: widget.primerNombre,
+                  readOnly: ro,
                   title: 'Primer Nombre:',
                   icon: const Icon(Icons.document_scanner),
                   inputFormatters: [
@@ -267,6 +283,7 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: widget.segundoNombre,
+                  readOnly: ro,
                   title: 'Segundo Nombre:',
                   icon: const Icon(Icons.document_scanner),
                   inputFormatters: [
@@ -283,6 +300,7 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: widget.primerApellido,
+                  readOnly: ro,
                   title: 'Primer Apellido:',
                   icon: const Icon(Icons.document_scanner),
                   inputFormatters: [
@@ -300,6 +318,7 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 OutlineTextfieldWidget(
                   initialValue: widget.segundoApellido,
+                  readOnly: ro,
                   title: 'Segundo Apellido:',
                   icon: const Icon(Icons.document_scanner),
                   inputFormatters: [
@@ -316,10 +335,14 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 SearchDropdownWidget(
                   codigo: 'TIPODOCUMENTOPERSONA',
-                  selectedItem: Item(
-                    name: widget.tipoDocumento ?? '',
-                    value: widget.tipoDocumento ?? '',
-                  ),
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado(
+                          'TipoDocumento', state.tipoDocumentoCodigo)
+                      : Item(
+                          name: widget.tipoDocumento ?? '',
+                          value: widget.tipoDocumento ?? '',
+                        ),
                   title: 'Tipo de Documento:',
                   onChanged: (value) {
                     cubit.onFieldChanged(
@@ -337,11 +360,13 @@ class _AnalisisFiadoresDatosGeneralesState
                   readOnly: true,
                   validator: (value) => ClassValidator.validateRequired(
                       fechaNacimiento?.selectorFormat()),
-                  onTap: () => selectFechaNacimiento(context),
+                  onTap: ro ? null : () => selectFechaNacimiento(context),
                   onChange: (value) {},
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  initialValue: ro ? state.personasACargo.toString() : null,
+                  readOnly: ro,
                   title: 'Personas a su cargo:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -359,6 +384,11 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 CatalogoValorNacionalidad(
                   codigo: 'PAIS',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada(
+                          'PaisNacimiento', state.paisNacimientoCodigo)
+                      : null,
                   title: 'País de nacimiento:',
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
@@ -381,7 +411,7 @@ class _AnalisisFiadoresDatosGeneralesState
                     validator: (value) => ClassValidator.validateRequired(
                         fechaEmisionCedula?.selectorFormat()),
                     onChange: (value) {},
-                    onTap: () => selectEmisionFecha(context),
+                    onTap: ro ? null : () => selectEmisionFecha(context),
                   ),
                 ],
                 const Gap(20),
@@ -392,14 +422,17 @@ class _AnalisisFiadoresDatosGeneralesState
                   validator: (value) => ClassValidator.validateRequired(
                       fechaVencimientoCedula?.selectorFormat()),
                   readOnly: true,
-                  onTap: () => selectDate(context),
+                  onTap: ro ? null : () => selectDate(context),
                 ),
                 const Gap(20),
                 SearchDropdownWidget(
-                  selectedItem: Item(
-                    name: widget.sexo ?? '',
-                    value: widget.sexo ?? '',
-                  ),
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado('Sexo', state.sexoCodigo)
+                      : Item(
+                          name: widget.sexo ?? '',
+                          value: widget.sexo ?? '',
+                        ),
                   codigo: 'SEXO',
                   title: 'Sexo:',
                   validator: (value) =>
@@ -415,6 +448,11 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 SearchDropdownWidget(
                   codigo: 'ESTADOCIVIL',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado(
+                          'EstadoCivil', state.estadoCivilCodigo)
+                      : null,
                   title: 'Estado civil:',
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -429,6 +467,11 @@ class _AnalisisFiadoresDatosGeneralesState
                 const Gap(20),
                 SearchDropdownWidget(
                   codigo: 'RELACIONPERSONAS',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.itemRegistrado(
+                          'RelacionCliente', state.relacionClienteCodigo)
+                      : null,
                   title: 'Relación con el cliente:',
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.value),
@@ -442,6 +485,8 @@ class _AnalisisFiadoresDatosGeneralesState
                 ),
                 const Gap(20),
                 OutlineTextfieldWidget(
+                  initialValue: ro ? state.rtn : null,
+                  readOnly: ro,
                   title: 'RTN:',
                   icon: const Icon(Icons.document_scanner),
                   textInputType: TextInputType.number,
@@ -463,7 +508,7 @@ class _AnalisisFiadoresDatosGeneralesState
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomElevatedButton(
                     onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
+                      if (!ro && !formKey.currentState!.validate()) return;
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,

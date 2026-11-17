@@ -119,6 +119,18 @@ HN fiadores (`FiadoresHnScreen` → `FiadoresSearchByDocumentScreen` → `Fiador
 
 Spec: `specs/05-fiadores-hn-offline.md`.
 
+### HN análisis: fiadores registrados
+
+`FiadoresHnScreen` lists, under Cónyuge/Aval/Codeudor, the fiadores the request already has in the backend ("Registrados en el sistema"). It is online only: without a connection or with `numeroSolicitud < 0` the section is hidden and nothing is called.
+
+- `GET /cartera/analisis-fiador/fiador-solicitud` (`GetFiadoresSolicitudHNEndpoint`) returns only fiadores with an active link. Without `Cedula`, `data` is a list (`AnalisisRepositoryHn.getFiadoresSolicitud`); with `Cedula`, it is one object that also has `HistorialCredito` (`getFiadorSolicitudByCedula`).
+- `FiadorSolicitudHn` (`datasource/analisis/hn/fiadores/`) wraps `AnalisisFiadoresHn.fromJson`, because the fields use the same names as the create body. It also keeps `IdFiador` and the raw JSON, and reads the `...Nombre` of each catalog with `nombre('<Campo>')` (e.g. `nombre('Municipio')`). `HistorialCredito.fromJson` also accepts `MonedaCodigo`/`FrecuenciaCodigo`.
+- `FiadoresSolicitudHnCubit` (`bloc/analisis/hn/fiadores_solicitud/`) loads the list and the detail. The section is `FiadoresRegistradosSection` (`widgets/analisis_solicitudes/hn/fiadores/registrados/`). The list reloads when the create flow (`_goToSearch`) returns.
+- Tapping a card loads the detail and opens `FiadoresHnFormScreen(fiadorRegistrado: ...)` read-only ("Ver fiador"). That mode skips the cédula photos and signature pages, does not use `AnalisisSearchByDocumentCubit`, does not validate "Siguiente", shows the historial without add/edit/delete, and shows "Cerrar" instead of "Enviar". `AnalisisFiadoresCubit.cargarFiadorRegistrado` fills the state, and the 5 pages (plus `FiadoresHistorialCredito`) take a `readOnly` flag (default `false`). Catalogs show the `...Nombre` from `fiador_registrado_items.dart` and fall back to the code.
+- There is no update endpoint yet, so registered fiadores cannot be edited. `checkFiadorAval`, the "Registrado" tags and the Cónyuge block are unchanged.
+
+Spec: `specs/10-fiadores-hn-registrados.md`.
+
 ### HN análisis: solicitudes sin número
 
 In Honduras, the advisor can fill in the análisis, plan de inversión, fiadores, imágenes and ubicación of a solicitud created offline that has no number yet (not sent, or not authorized). When the AUT solicitud arrives, the data can be moved to it. Sending is never automatic.
