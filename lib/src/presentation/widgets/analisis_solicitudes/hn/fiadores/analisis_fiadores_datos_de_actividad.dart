@@ -2,6 +2,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiador_registrado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -20,9 +21,14 @@ class AnalisisDatosDeActividad extends StatefulWidget {
   const AnalisisDatosDeActividad({
     super.key,
     required this.pageController,
+    this.readOnly = false,
   });
 
   final PageController pageController;
+
+  /// Fiador ya registrado (SPEC 10): muestra los valores del cubit sin dejar
+  /// cambiarlos, y "Siguiente" no valida.
+  final bool readOnly;
 
   @override
   State<AnalisisDatosDeActividad> createState() =>
@@ -36,9 +42,19 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    if (!widget.readOnly) return;
+    final state = context.read<AnalisisFiadoresCubit>().state;
+    esAsalariado = state.esAsalariado;
+    esEmpresario = state.esEmpresario;
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<AnalisisFiadoresCubit>();
+    final ro = widget.readOnly;
     return BlocBuilder<AnalisisFiadoresCubit, AnalisisFiadoresState>(
       builder: (context, state) {
         return SingleChildScrollView(
@@ -62,6 +78,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   title: 'Es Asalariado?',
                   subtitle: 'El fiador es Asalariado?',
                   value: esAsalariado,
+                  enabled: !ro,
                   onChanged: (value) {
                     setState(() {
                       esAsalariado = value;
@@ -79,6 +96,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Empresa que labora',
+                    initialValue: ro ? state.empresa : null,
+                    readOnly: ro,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
@@ -96,6 +115,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Cargo',
+                    initialValue: ro ? state.cargo : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -113,6 +134,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Tiempo Laborar',
+                    initialValue: ro ? state.tiempoLaborar : null,
+                    readOnly: ro,
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
                     icon: const Icon(Icons.person),
@@ -132,6 +155,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Direccion y referencia',
+                    initialValue: ro ? state.direccionTrabajo : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -149,6 +174,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Lugar de trabajo anterior',
+                    initialValue: ro ? state.lugarTrabajoAnterior : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     inputFormatters: [
                       UpperCaseTextFormatter(),
@@ -166,6 +193,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Teléfono',
+                    initialValue: ro ? state.telefonoTrabajo : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -187,6 +216,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   title: 'Es Empresario?',
                   subtitle: 'El fiador es Empresario?',
                   value: esEmpresario,
+                  enabled: !ro,
                   onChanged: (value) {
                     setState(() {
                       esEmpresario = value;
@@ -204,6 +234,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Nombre del negocio',
+                    initialValue: ro ? state.nombreNegocio : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -221,6 +253,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Años de funcionamiento',
+                    initialValue: ro ? state.tiempoNegocio.toString() : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -240,6 +274,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   SearchDropdownWidget(
                     codigo: 'NIVELAPROXIMADOINGRESOS',
+                    enabled: !ro,
+                    selectedItem: ro
+                        ? cubit.itemRegistrado('NivelAproximadoIngresos',
+                            state.nivelAproximadoIngresosCodigo)
+                        : null,
                     title: 'Nivel de aproximado en ingresos',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
@@ -254,6 +293,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Puesto que desempeña',
+                    initialValue: ro ? state.puesto : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -271,6 +312,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   const Gap(20),
                   SearchDropdownWidget(
                     codigo: 'TIPOVIVIENDA',
+                    enabled: !ro,
+                    selectedItem: ro
+                        ? cubit.itemRegistrado(
+                            'CondicionLocal', state.condicionLocalCodigo)
+                        : null,
                     title: 'Condición local del negocio',
                     validator: (value) =>
                         ClassValidator.validateRequired(value?.value),
@@ -293,22 +339,24 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                       UpperCaseTextFormatter(),
                     ],
                     readOnly: true,
-                    onTap: () => {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => TimePickerBottomSheet(
-                          initial: DateTime.now(),
-                          use24hFormat: false,
-                          onSelected: (time) {
-                            cubit.onFieldChanged(
-                              () => state.copyWith(
-                                horarioVisita: time,
+                    onTap: ro
+                        ? null
+                        : () => {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (_) => TimePickerBottomSheet(
+                                  initial: DateTime.now(),
+                                  use24hFormat: false,
+                                  onSelected: (time) {
+                                    cubit.onFieldChanged(
+                                      () => state.copyWith(
+                                        horarioVisita: time,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    },
+                            },
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
@@ -318,26 +366,30 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                     validator: (value) =>
                         ClassValidator.validateRequired(state.horarioTrabajo),
                     readOnly: true,
-                    onTap: () => {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (_) => TimePickerBottomSheet(
-                          initial: DateTime.now(),
-                          use24hFormat: false,
-                          onSelected: (time) {
-                            cubit.onFieldChanged(
-                              () => state.copyWith(
-                                horarioTrabajo: time,
+                    onTap: ro
+                        ? null
+                        : () => {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (_) => TimePickerBottomSheet(
+                                  initial: DateTime.now(),
+                                  use24hFormat: false,
+                                  onSelected: (time) {
+                                    cubit.onFieldChanged(
+                                      () => state.copyWith(
+                                        horarioTrabajo: time,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    },
+                            },
                   ),
                   const Gap(20),
                   OutlineTextfieldWidget(
                     title: 'Años de experiencia',
+                    initialValue: ro ? state.tiempoActividad : null,
+                    readOnly: ro,
                     icon: const Icon(Icons.person),
                     validator: (value) =>
                         ClassValidator.validateRequired(value),
@@ -369,6 +421,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 CatalogoValorNacionalidad(
                   codigo: 'PAIS',
                   title: 'País',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada(
+                          'PaisOcupacion', state.paisOcupacionCodigo)
+                      : null,
                   hintText: 'input.select_option'.tr(),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
@@ -384,6 +441,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 CatalogoValorNacionalidad(
                   codigo: 'DEP',
                   title: 'Departamento',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada('DepartamentoOcupacion',
+                          state.departamentoOcupacionCodigo)
+                      : null,
                   hintText: 'input.select_option'.tr(),
                   validator: (value) =>
                       ClassValidator.validateRequired(value?.valor),
@@ -400,6 +462,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 CatalogoValorNacionalidad(
                   codigo: 'MUN',
                   title: 'Municipio',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada(
+                          'MunicipioOcupacion', state.municipioOcupacionCodigo)
+                      : null,
                   hintText: 'input.select_option'.tr(),
                   where: state.departamentoOcupacionCodigo,
                   validator: (value) =>
@@ -416,6 +483,11 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 CatalogoValorNacionalidad(
                   codigo: 'ALD',
                   title: 'Aldea',
+                  enabled: !ro,
+                  selectedItem: ro
+                      ? cubit.nacionalidadRegistrada(
+                          'AldeaOcupacion', state.aldeaOcupacionCodigo)
+                      : null,
                   where: state.municipioOcupacionCodigo,
                   hintText: 'input.select_option'.tr(),
                   validator: (value) =>
@@ -431,6 +503,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Caserio',
+                  initialValue: ro ? state.caserioOcupacion : null,
+                  readOnly: ro,
                   hintText: 'input.select_option'.tr(),
                   icon: const Icon(Icons.person),
                   // validator: (value) => ClassValidator.validateRequired(value),
@@ -448,6 +522,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Barrio',
+                  initialValue: ro ? state.barrioTrabajo : null,
+                  readOnly: ro,
                   validator: (value) => ClassValidator.validateRequired(value),
                   icon: const Icon(Icons.person),
                   inputFormatters: [
@@ -464,6 +540,8 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                 const Gap(20),
                 OutlineTextfieldWidget(
                   title: 'Celular',
+                  initialValue: ro ? state.celularOcupacion : null,
+                  readOnly: ro,
                   icon: const Icon(Icons.person),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -481,7 +559,7 @@ class _AnalisisDatosDeActividadState extends State<AnalisisDatosDeActividad>
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomElevatedButton(
                     onPressed: () {
-                      if (!formKey.currentState!.validate()) return;
+                      if (!ro && !formKey.currentState!.validate()) return;
                       widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,

@@ -4,6 +4,7 @@ import 'package:core_financiero_app/src/config/helpers/class_validator/class_val
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiadores/analisis_fiadores_cubit.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiador_registrado_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
@@ -18,9 +19,14 @@ class AnalisisFiadoresActividades extends StatefulWidget {
   const AnalisisFiadoresActividades({
     super.key,
     required this.pageController,
+    this.readOnly = false,
   });
 
   final PageController pageController;
+
+  /// Fiador ya registrado (SPEC 10): muestra los valores del cubit sin dejar
+  /// cambiarlos, y "Siguiente" no valida.
+  final bool readOnly;
 
   @override
   State<AnalisisFiadoresActividades> createState() =>
@@ -37,10 +43,26 @@ class _AnalisisFiadoresActividadesState
   bool isApnfd = false;
   bool isApnfd2 = false;
   bool isApnfd3 = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.readOnly) return;
+    // Con el estado lleno por `cargarFiadorRegistrado`, se muestran las
+    // descripciones de las actividades que el fiador tiene.
+    final state = context.read<AnalisisFiadoresCubit>().state;
+    String? codigo(String value) => value.isEmpty ? null : value;
+    actividadEconomica1 = codigo(state.actividadEconomicaCnbs1Codigo);
+    actividadEconomica2 = codigo(state.actividadEconomicaCnbs2Codigo);
+    actividadEconomica3 = codigo(state.actividadEconomicaCnbs3Codigo);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final cubit = context.read<AnalisisFiadoresCubit>();
+    final ro = widget.readOnly;
+    final state = cubit.state;
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Form(
@@ -50,7 +72,11 @@ class _AnalisisFiadoresActividadesState
             const Gap(30),
             CatalogoActividadesCNBSDropdown(
               isRequired: true,
-              enabled: true,
+              enabled: !ro,
+              selectedItem: ro
+                  ? cubit.actividadRegistrada('ActividadEconomicaCNBS1',
+                      state.actividadEconomicaCnbs1Codigo)
+                  : null,
               validator: (value) =>
                   ClassValidator.validateRequired(value?.valor),
               hintText: 'selecciona actividad económica',
@@ -76,6 +102,8 @@ class _AnalisisFiadoresActividadesState
                   UpperCaseTextFormatter(),
                 ],
                 validator: (value) => ClassValidator.validateRequired(value),
+                initialValue: ro ? state.actividadEconomicaDescripcion1 : null,
+                readOnly: ro,
                 hintText: 'ingresa descripcion actividad económica',
                 icon:
                     Icon(Icons.description, color: AppColors.getPrimaryColor()),
@@ -108,7 +136,11 @@ class _AnalisisFiadoresActividadesState
               hintText: 'selecciona actividad económica',
               title: 'Actividad Económica CNBS 2',
               isRequired: true,
-              enabled: true,
+              enabled: !ro,
+              selectedItem: ro
+                  ? cubit.actividadRegistrada('ActividadEconomicaCNBS2',
+                      state.actividadEconomicaCnbs2Codigo)
+                  : null,
             ),
             if (actividadEconomica2 != null) ...[
               const Gap(30),
@@ -124,6 +156,8 @@ class _AnalisisFiadoresActividadesState
                 textInputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 title: 'Descripción de la Actividad Económica',
+                initialValue: ro ? state.actividadEconomicaDescripcion2 : null,
+                readOnly: ro,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
@@ -150,7 +184,11 @@ class _AnalisisFiadoresActividadesState
               },
               title: 'Actividad Económica CNBS 3',
               isRequired: true,
-              enabled: true,
+              enabled: !ro,
+              selectedItem: ro
+                  ? cubit.actividadRegistrada('ActividadEconomicaCNBS3',
+                      state.actividadEconomicaCnbs3Codigo)
+                  : null,
             ),
             if (actividadEconomica3 != null) ...[
               const Gap(30),
@@ -166,6 +204,8 @@ class _AnalisisFiadoresActividadesState
                 textInputType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
                 title: 'Descripción de la Actividad Económica',
+                initialValue: ro ? state.actividadEconomicaDescripcion3 : null,
+                readOnly: ro,
                 onChange: (value) {
                   cubit.onFieldChanged(
                     () => cubit.state.copyWith(
@@ -175,13 +215,23 @@ class _AnalisisFiadoresActividadesState
                 },
               ),
             ],
-            if (isApnfd || isApnfd2 || isApnfd3) ...[
+            // En solo lectura no se sabe si las actividades son APNFD, así que
+            // siempre se muestra lo que el fiador tiene guardado.
+            if (ro || isApnfd || isApnfd2 || isApnfd3) ...[
               const Gap(30),
               SheetSearchDropdown(
                 isRequired: true,
                 validator: (value) =>
                     ClassValidator.validateRequired(value?.value),
-                enabled: true,
+                enabled: !ro,
+                selectedItem: ro
+                    ? Item(
+                        name: state.ejerceApnfd
+                            ? 'input.yes'.tr()
+                            : 'input.no'.tr(),
+                        value: state.ejerceApnfd,
+                      )
+                    : null,
                 items: [
                   Item(name: 'input.yes'.tr(), value: 'input.yes'.tr()),
                   Item(name: 'input.no'.tr(), value: 'input.no'.tr()),
@@ -205,7 +255,7 @@ class _AnalisisFiadoresActividadesState
                 text: 'Siguiente',
                 color: AppColors.greenLatern.withOpacity(0.4),
                 onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
+                  if (!ro && !formKey.currentState!.validate()) return;
 
                   widget.pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
