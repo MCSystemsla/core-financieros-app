@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_solicitud_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
@@ -137,6 +138,9 @@ class _DesvincularFiadorDialogState extends State<DesvincularFiadorDialog> {
                     ),
                     const Gap(16),
                     TextFormField(
+                      inputFormatters: [
+                        UpperCaseTextFormatter(),
+                      ],
                       controller: _motivoController,
                       enabled: !enviando,
                       minLines: 3,

@@ -33,7 +33,7 @@ El backend decide si el desvínculo procede (por ejemplo, con el análisis cerra
 - Endpoint `DesvincularFiadorHNEndpoint` (`PATCH /cartera/analisis-fiador/desvincular`) con body `NumeroSolicitud`, `FiadorId` y `Motivo`.
 - Método `desvincularFiador` en `AnalisisRepositoryHn` / `AnalisisRepositoryHNImpl`, que devuelve el `message` del backend.
 - Cubit nuevo `DesvincularFiadorHnCubit`, provisto por el diálogo.
-- Menú de tres puntos (`PopupMenuButton`) en cada tarjeta de `FiadoresRegistradosSection`, con una sola opción "Desvincular" en rojo. Tocar la tarjeta sigue abriendo "Ver fiador" (SPEC 10).
+- Botón de tres puntos en cada tarjeta de `FiadoresRegistradosSection`. Abre un modal bottom sheet con el nombre y la cédula del fiador y una sola acción, "Desvincular" (en rojo). Tocar la tarjeta sigue abriendo "Ver fiador" (SPEC 10).
 - Diálogo `DesvincularFiadorDialog`:
   - Muestra el nombre completo y la cédula del fiador.
   - Campo "Motivo" multilínea, obligatorio, de 10 a 250 caracteres (se valida sin espacios al inicio y al final).
@@ -132,14 +132,15 @@ Conventions:
 1. **Endpoint y repositorio.** Crear `DesvincularFiadorHNEndpoint` en `analisis_endpoint_hn.dart` y agregar `desvincularFiador` a `AnalisisRepositoryHn` y `AnalisisRepositoryHNImpl`. Verificar con `flutter analyze`.
 2. **Cubit.** Crear `DesvincularFiadorHnCubit` + state en `presentation/bloc/analisis/hn/desvincular_fiador/`, con `desvincular(...)` que pasa por `inProgress` y termina en `done` (con `mensaje`) o `error` (con `errorMsg`).
 3. **Diálogo.** Crear `DesvincularFiadorDialog` en `widgets/analisis_solicitudes/hn/fiadores/registrados/`. Provee su propio `DesvincularFiadorHnCubit`, valida el motivo, bloquea el cierre mientras envía (`PopScope`, `barrierDismissible: false`), muestra el error dentro y hace `pop(mensaje)` al terminar bien. Todavía no se abre desde ningún lado.
-4. **Menú en la tarjeta.** Agregar `onDesvincular` a `FiadoresRegistradosSection` y un `PopupMenuButton` con "Desvincular" en `_FiadorRegistradoCard` (reemplaza el chevron cuando `onDesvincular` no es null). Con `onDesvincular` null, la tarjeta se ve igual que hoy.
+4. **Menú en la tarjeta.** Agregar `onDesvincular` a `FiadoresRegistradosSection` y un botón de tres puntos en `_FiadorRegistradoCard` que abre un modal bottom sheet con "Desvincular"; la acción corre después de cerrar el sheet (reemplaza el chevron cuando `onDesvincular` no es null). Con `onDesvincular` null, la tarjeta se ve igual que hoy.
 5. **Conexión en `FiadoresHnScreen`.** Pasar `onDesvincular`, que abre `DesvincularFiadorDialog.show`. Si devuelve un mensaje: snackbar de éxito, `FiadoresSolicitudHnCubit.load` y `checkFiadorAval` con los mismos parámetros que al entrar.
 6. **Docs.** Agregar en `CLAUDE.md`, dentro de "HN análisis: fiadores registrados", un párrafo corto con el endpoint, el menú, el diálogo y qué se refresca.
 
 ## Acceptance criteria
 
 - [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Cada tarjeta de "Registrados en el sistema" tiene un menú de tres puntos con "Desvincular".
+- [ ] Cada tarjeta de "Registrados en el sistema" tiene un botón de tres puntos que abre un modal bottom sheet con el nombre, la cédula y "Desvincular".
+- [ ] Al elegir "Desvincular", el sheet se cierra y se abre el diálogo del motivo.
 - [ ] Tocar la tarjeta (fuera del menú) sigue abriendo "Ver fiador".
 - [ ] "Desvincular" abre un diálogo con el nombre y la cédula del fiador y el campo "Motivo".
 - [ ] Con el motivo vacío o con menos de 10 caracteres (sin contar espacios al inicio y al final), "Desvincular" no llama al backend y muestra el error de validación.
@@ -160,6 +161,7 @@ Conventions:
 
 - **Sí:** solo Honduras. Lo eligió el usuario. Es el único país con listado de registrados (SPEC 10).
 - **Sí:** menú de tres puntos en la tarjeta. Lo eligió el usuario. Deja espacio para futuras acciones (editar).
+- **Sí:** el menú es un modal bottom sheet, no un `PopupMenuButton`. Lo pidió el usuario durante la implementación. Muestra a qué fiador se aplica la acción y sigue el estilo de los sheets de análisis (`ModuleTileWidget`).
 - **No:** botón dentro de "Ver fiador". Lo descartó el usuario a favor del menú.
 - **No:** ícono directo en la tarjeta. Es fácil tocarlo sin querer y no escala a más acciones.
 - **Sí:** motivo de texto libre, obligatorio, de 10 a 250 caracteres. Lo eligió el usuario.

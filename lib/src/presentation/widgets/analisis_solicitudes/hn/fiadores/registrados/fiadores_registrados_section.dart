@@ -3,6 +3,7 @@ import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_s
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_solicitud/fiadores_solicitud_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -99,9 +100,8 @@ class FiadoresRegistradosSection extends StatelessWidget {
               fiador: fiador,
               cargando: state.cargandoCedula == fiador.fiador.cedula,
               onTap: onTap == null ? null : () => onTap!(fiador),
-              onDesvincular: onDesvincular == null
-                  ? null
-                  : () => onDesvincular!(fiador),
+              onDesvincular:
+                  onDesvincular == null ? null : () => onDesvincular!(fiador),
             ),
             const Gap(10),
           ],
@@ -188,7 +188,7 @@ class _FiadorRegistradoCard extends StatelessWidget {
                 ),
               )
             else if (onDesvincular != null)
-              _AccionesMenu(onDesvincular: onDesvincular!)
+              _AccionesMenu(fiador: fiador, onDesvincular: onDesvincular!)
             else
               const Icon(
                 Icons.chevron_right_rounded,
@@ -204,55 +204,96 @@ class _FiadorRegistradoCard extends StatelessWidget {
 
 enum _AccionFiador { desvincular }
 
-/// Menú de tres puntos de la tarjeta. Mientras la tarjeta carga su detalle se
-/// muestra el loader en su lugar, así que no se puede abrir.
+/// Botón de tres puntos de la tarjeta: abre un modal sheet con las acciones
+/// del fiador. Mientras la tarjeta carga su detalle se muestra el loader en
+/// su lugar, así que no se puede abrir.
 class _AccionesMenu extends StatelessWidget {
+  final FiadorSolicitudHn fiador;
   final VoidCallback onDesvincular;
 
-  const _AccionesMenu({required this.onDesvincular});
+  const _AccionesMenu({required this.fiador, required this.onDesvincular});
+
+  Future<void> _abrir(BuildContext context) async {
+    final accion = await showModalBottomSheet<_AccionFiador>(
+      context: context,
+      backgroundColor: RedesignColors.surface,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => _AccionesSheet(fiador: fiador),
+    );
+    // La acción corre con el sheet ya cerrado, para que el diálogo de
+    // desvincular no quede encima de él.
+    switch (accion) {
+      case _AccionFiador.desvincular:
+        onDesvincular();
+      case null:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 28,
       height: 28,
-      child: PopupMenuButton<_AccionFiador>(
+      child: IconButton(
         padding: EdgeInsets.zero,
         tooltip: 'Acciones',
-        color: RedesignColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        onPressed: () => _abrir(context),
         icon: const Icon(
           Icons.more_vert_rounded,
           size: 20,
           color: RedesignColors.chevron,
         ),
-        onSelected: (accion) => switch (accion) {
-          _AccionFiador.desvincular => onDesvincular(),
-        },
-        itemBuilder: (_) => const [
-          PopupMenuItem(
-            value: _AccionFiador.desvincular,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.link_off_rounded,
-                  size: 20,
-                  color: RedesignColors.red,
-                ),
-                Gap(10),
-                Text(
-                  'Desvincular',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: RedesignColors.red,
-                  ),
-                ),
-              ],
+      ),
+    );
+  }
+}
+
+class _AccionesSheet extends StatelessWidget {
+  final FiadorSolicitudHn fiador;
+
+  const _AccionesSheet({required this.fiador});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              fiador.nombreCompleto,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: RedesignColors.ink,
+              ),
             ),
-          ),
-        ],
+            const Gap(3),
+            Text(
+              fiador.fiador.cedula,
+              style: const TextStyle(
+                fontSize: 13,
+                color: RedesignColors.inkMuted,
+              ),
+            ),
+            const Gap(16),
+            ModuleTileWidget(
+              icon: Icons.link_off_rounded,
+              iconColor: RedesignColors.red,
+              iconBackground: RedesignColors.redTint,
+              title: 'Desvincular',
+              subtitle: 'Quitar este fiador de la solicitud',
+              onPressed: () =>
+                  Navigator.of(context).pop(_AccionFiador.desvincular),
+            ),
+          ],
+        ),
       ),
     );
   }

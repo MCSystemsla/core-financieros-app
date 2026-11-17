@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_solicitud_hn.dart';
@@ -144,7 +145,6 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
     FiadorSolicitudHn fiador,
   ) async {
     final avalCubit = context.read<AnalisisFiadorAvalCubit>();
-    final messenger = ScaffoldMessenger.of(context);
     final mensaje = await DesvincularFiadorDialog.show(
       context,
       fiador: fiador,
@@ -152,11 +152,11 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
     );
     if (mensaje == null || !mounted) return;
 
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(mensaje),
-        backgroundColor: RedesignColors.green,
-      ),
+    showV2CustomSnackbar(
+      this.context,
+      title: 'Fiador desvinculado',
+      message: mensaje,
+      type: SnackbarType.success,
     );
     _loadRegistrados();
     // Actualiza las etiquetas "Registrado" y el bloqueo de Cónyuge.
