@@ -24,36 +24,52 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
 class FiadoresHistorialCredito extends StatelessWidget {
-  const FiadoresHistorialCredito({super.key});
+  /// Fiador ya registrado (SPEC 10): solo muestra los créditos, sin agregar,
+  /// editar ni eliminar.
+  final bool readOnly;
+
+  const FiadoresHistorialCredito({super.key, this.readOnly = false});
+
+  /// Entidad más moneda, frecuencia y estado, los que vengan.
+  String _detalle(HistorialCredito e) => [
+        e.entidad,
+        e.monedaNombre.isNotEmpty ? e.monedaNombre : e.tipoMonedaCodigo,
+        e.frecuenciaNombre.isNotEmpty
+            ? e.frecuenciaNombre
+            : e.tipoFrecuenciaCodigo,
+        e.estadoNombre.isNotEmpty ? e.estadoNombre : e.estadoCodigo,
+      ].where((v) => v.trim().isNotEmpty).join(' · ');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showModalBottomSheet(
-            isScrollControlled: true,
-            context: context,
-            builder: (ctx) => _CompraSemanalHN(
-              cubit: context.read<AnalisisFiadoresCubit>(),
-              // numeroSolicitud: numeroSolicitud,
+      floatingActionButton: readOnly
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (ctx) => _CompraSemanalHN(
+                    cubit: context.read<AnalisisFiadoresCubit>(),
+                    // numeroSolicitud: numeroSolicitud,
+                  ),
+                );
+              },
+              label: const Row(
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    'Historial crediticio',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+              backgroundColor: Colors.black,
             ),
-          );
-        },
-        label: const Row(
-          children: [
-            Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-            Text(
-              'Historial crediticio',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.black,
-      ),
       appBar: AppBar(
         title: const Text('Historial crediticio'),
       ),
@@ -73,6 +89,14 @@ class FiadoresHistorialCredito extends StatelessWidget {
                   itemCount: state.historialCredito.length,
                   itemBuilder: (context, index) {
                     final e = state.historialCredito[index];
+                    if (readOnly) {
+                      return AnalisisCardVentasDay(
+                        description: e.monto.toCurrencyString(),
+                        subtitle: _detalle(e),
+                        title: e.cuota.toCurrencyString(),
+                        onTap: () {},
+                      );
+                    }
                     return AnalisisCardVentasDay(
                       description: e.monto.toCurrencyString(),
                       subtitle: e.entidad,
