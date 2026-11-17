@@ -138,24 +138,24 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
-- [ ] Cada tarjeta de "Registrados en el sistema" tiene un botón de tres puntos que abre un modal bottom sheet con el nombre, la cédula y "Desvincular".
-- [ ] Al elegir "Desvincular", el sheet se cierra y se abre el diálogo del motivo.
-- [ ] Tocar la tarjeta (fuera del menú) sigue abriendo "Ver fiador".
-- [ ] "Desvincular" abre un diálogo con el nombre y la cédula del fiador y el campo "Motivo".
-- [ ] Con el motivo vacío o con menos de 10 caracteres (sin contar espacios al inicio y al final), "Desvincular" no llama al backend y muestra el error de validación.
-- [ ] El campo no acepta más de 250 caracteres.
-- [ ] "Cancelar" cierra el diálogo sin llamadas HTTP.
-- [ ] En `BitacoraService`, desvincular llama `PATCH /cartera/analisis-fiador/desvincular` con `NumeroSolicitud`, `FiadorId` (el `IdFiador` de la tarjeta) y `Motivo`.
-- [ ] Mientras envía, el botón muestra un loader y el diálogo no se cierra con atrás ni tocando fuera.
-- [ ] Si el backend responde error, el diálogo sigue abierto con su mensaje y el motivo escrito.
-- [ ] Si responde `200` con `ok: true`, el diálogo se cierra y se muestra un snackbar con el `message` del backend.
-- [ ] Después del éxito, el fiador ya no aparece en "Registrados en el sistema".
-- [ ] Después del éxito, la etiqueta "Registrado" de su tipo se actualiza según `checkFiadorAval` (por ejemplo, Cónyuge se desbloquea si era el único cónyuge).
-- [ ] Sin conexión o con `numeroSolicitud < 0`, la sección no aparece, así que tampoco el menú.
-- [ ] "Ver fiador", crear un fiador (en línea y sin conexión) y "Pendientes en el teléfono (N)" funcionan igual que antes.
-- [ ] Nicaragua y Costa Rica no cambian.
-- [ ] Verificación manual en QA HN desvinculando un fiador de una solicitud con al menos dos fiadores.
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] Cada tarjeta de "Registrados en el sistema" tiene un botón de tres puntos que abre un modal bottom sheet con el nombre, la cédula y "Desvincular".
+- [X] Al elegir "Desvincular", el sheet se cierra y se abre el diálogo del motivo.
+- [X] Tocar la tarjeta (fuera del menú) sigue abriendo "Ver fiador".
+- [X] "Desvincular" abre un diálogo con el nombre y la cédula del fiador y el campo "Motivo".
+- [X] Con el motivo vacío o con menos de 10 caracteres (sin contar espacios al inicio y al final), "Desvincular" no llama al backend y muestra el error de validación.
+- [X] El campo no acepta más de 250 caracteres.
+- [X] "Cancelar" cierra el diálogo sin llamadas HTTP.
+- [X] En `BitacoraService`, desvincular llama `PATCH /cartera/analisis-fiador/desvincular` con `NumeroSolicitud`, `FiadorId` (el `IdFiador` de la tarjeta) y `Motivo`.
+- [X] Mientras envía, el botón muestra un loader y el diálogo no se cierra con atrás ni tocando fuera.
+- [X] Si el backend responde error, el diálogo sigue abierto con su mensaje y el motivo escrito.
+- [X] Si responde `200` con `ok: true`, el diálogo se cierra y se muestra un snackbar con el `message` del backend.
+- [X] Después del éxito, el fiador ya no aparece en "Registrados en el sistema".
+- [X] Después del éxito, la etiqueta "Registrado" de su tipo se actualiza según `checkFiadorAval` (por ejemplo, Cónyuge se desbloquea si era el único cónyuge).
+- [X] Sin conexión o con `numeroSolicitud < 0`, la sección no aparece, así que tampoco el menú.
+- [X] "Ver fiador", crear un fiador (en línea y sin conexión) y "Pendientes en el teléfono (N)" funcionan igual que antes.
+- [X] Nicaragua y Costa Rica no cambian.
+- [X] Verificación manual en QA HN desvinculando un fiador de una solicitud con al menos dos fiadores.
 
 ## Decisions
 
