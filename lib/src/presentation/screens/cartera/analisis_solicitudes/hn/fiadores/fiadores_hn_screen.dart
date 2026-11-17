@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
+import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/fiador_solicitud_hn.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiador_aval/analisis_fiador_aval_cubit.dart';
@@ -101,6 +102,40 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
     if (mounted && _consultaBackend) _loadRegistrados();
   }
 
+  void _verRegistrado(FiadorSolicitudHn fiador) {
+    _registradosCubit.verDetalle(
+      numeroSolicitud: widget.numeroSolicitud,
+      cedula: fiador.fiador.cedula,
+    );
+  }
+
+  /// Abre el detalle cargado en solo lectura, o muestra el error (SPEC 10).
+  void _onDetalle(BuildContext context, FiadoresSolicitudHnState state) {
+    final detalle = state.detalle;
+    final error = state.detalleError;
+    if (detalle == null && error == null) return;
+    _registradosCubit.limpiarDetalle();
+
+    if (detalle != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => FiadoresHnFormScreen(
+            type: FiadoresHnFormType.fromCodigo(
+              detalle.fiador.tipoFiadorCodigo,
+            ),
+            numeroSolicitud: widget.numeroSolicitud,
+            fiadorRegistrado: detalle,
+          ),
+        ),
+      );
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(error!)),
+    );
+  }
+
   void _goToPendientes() {
     FiadoresHnPendientesScreen.open(
       context,
@@ -133,116 +168,127 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
         ),
         BlocProvider.value(value: _registradosCubit),
       ],
-      child: Scaffold(
-        backgroundColor: RedesignColors.background,
-        body: SafeArea(
-          bottom: false,
-          child: BlocBuilder<AnalisisFiadorAvalCubit, AnalisisFiadorAvalState>(
-            builder: (context, state) {
-              final isLoading = state.status == Status.inProgress;
-              String? registradoTag(bool tieneFiador) =>
-                  isConnected && !isLoading && tieneFiador
-                      ? 'Registrado'
-                      : null;
+      child: BlocListener<FiadoresSolicitudHnCubit, FiadoresSolicitudHnState>(
+        listenWhen: (previous, current) =>
+            previous.detalle != current.detalle ||
+            previous.detalleError != current.detalleError,
+        listener: _onDetalle,
+        child: Scaffold(
+          backgroundColor: RedesignColors.background,
+          body: SafeArea(
+            bottom: false,
+            child:
+                BlocBuilder<AnalisisFiadorAvalCubit, AnalisisFiadorAvalState>(
+              builder: (context, state) {
+                final isLoading = state.status == Status.inProgress;
+                String? registradoTag(bool tieneFiador) =>
+                    isConnected && !isLoading && tieneFiador
+                        ? 'Registrado'
+                        : null;
 
-              return ListView(
-                padding: const EdgeInsets.only(bottom: 24),
-                children: [
-                  ScreenHeaderWidget(
-                    title: 'Fiadores',
-                    subtitle:
-                        'Elige el tipo de fiador para la solicitud ${numeroSolicitudLabel(numeroSolicitud)}. Luego buscarás a la persona por su documento.',
-                    onBack: () => Navigator.pop(context),
-                  ),
-                  const Gap(24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        if (isLoading) ...[
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: const LinearProgressIndicator(
-                              minHeight: 3,
-                              color: RedesignColors.green,
-                              backgroundColor: RedesignColors.greenTint,
+                return ListView(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  children: [
+                    ScreenHeaderWidget(
+                      title: 'Fiadores',
+                      subtitle:
+                          'Elige el tipo de fiador para la solicitud ${numeroSolicitudLabel(numeroSolicitud)}. Luego buscarás a la persona por su documento.',
+                      onBack: () => Navigator.pop(context),
+                    ),
+                    const Gap(24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          if (isLoading) ...[
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: const LinearProgressIndicator(
+                                minHeight: 3,
+                                color: RedesignColors.green,
+                                backgroundColor: RedesignColors.greenTint,
+                              ),
                             ),
-                          ),
-                          const Gap(14),
-                        ],
-                        if (_pendientes > 0) ...[
+                            const Gap(14),
+                          ],
+                          if (_pendientes > 0) ...[
+                            ModuleTileWidget(
+                              icon: Icons.cloud_upload_outlined,
+                              iconColor: RedesignColors.amber,
+                              iconBackground: RedesignColors.amberTint,
+                              title: 'Pendientes en el teléfono ($_pendientes)',
+                              subtitle: 'Fiadores guardados sin conexión. '
+                                  'Envíalos cuando tengas conexión',
+                              onPressed: _goToPendientes,
+                            ),
+                            const Gap(10),
+                          ],
                           ModuleTileWidget(
-                            icon: Icons.cloud_upload_outlined,
-                            iconColor: RedesignColors.amber,
-                            iconBackground: RedesignColors.amberTint,
-                            title: 'Pendientes en el teléfono ($_pendientes)',
-                            subtitle: 'Fiadores guardados sin conexión. '
-                                'Envíalos cuando tengas conexión',
-                            onPressed: _goToPendientes,
+                            icon: Icons.favorite_border_rounded,
+                            iconColor: RedesignColors.purple,
+                            iconBackground: RedesignColors.purpleTint,
+                            title: 'Cónyuge',
+                            subtitle:
+                                'Crear fiador cónyuge. Solo se permite uno',
+                            tag: registradoTag(state.tieneConyugue),
+                            onPressed: () {
+                              final tieneConyugePendiente =
+                                  _localDb.existsConyugeHnPendiente(
+                                numeroSolicitud: numeroSolicitud,
+                                userId: LocalStorage().userId,
+                              );
+                              if (state.tieneConyugue ||
+                                  tieneConyugePendiente) {
+                                CustomAlertDialog(
+                                  onDone: () => context.pop(),
+                                  context: context,
+                                  title:
+                                      'No se puede crear mas de un fiador cónyuge',
+                                ).showDialog(
+                                  context,
+                                  dialogType: DialogType.infoReverse,
+                                );
+                                return;
+                              }
+                              _goToSearch(FiadoresHnFormType.conyugue);
+                            },
                           ),
                           const Gap(10),
-                        ],
-                        ModuleTileWidget(
-                          icon: Icons.favorite_border_rounded,
-                          iconColor: RedesignColors.purple,
-                          iconBackground: RedesignColors.purpleTint,
-                          title: 'Cónyuge',
-                          subtitle: 'Crear fiador cónyuge. Solo se permite uno',
-                          tag: registradoTag(state.tieneConyugue),
-                          onPressed: () {
-                            final tieneConyugePendiente =
-                                _localDb.existsConyugeHnPendiente(
-                              numeroSolicitud: numeroSolicitud,
-                              userId: LocalStorage().userId,
-                            );
-                            if (state.tieneConyugue || tieneConyugePendiente) {
-                              CustomAlertDialog(
-                                onDone: () => context.pop(),
-                                context: context,
-                                title:
-                                    'No se puede crear mas de un fiador cónyuge',
-                              ).showDialog(
-                                context,
-                                dialogType: DialogType.infoReverse,
-                              );
-                              return;
-                            }
-                            _goToSearch(FiadoresHnFormType.conyugue);
-                          },
-                        ),
-                        const Gap(10),
-                        ModuleTileWidget(
-                          icon: Icons.verified_user_outlined,
-                          iconColor: RedesignColors.indigo,
-                          iconBackground: RedesignColors.indigoTint,
-                          title: 'Aval',
-                          subtitle: 'Crear fiador aval',
-                          tag: registradoTag(state.tieneAval),
-                          onPressed: () => _goToSearch(FiadoresHnFormType.aval),
-                        ),
-                        const Gap(10),
-                        ModuleTileWidget(
-                          icon: Icons.group_add_outlined,
-                          iconColor: RedesignColors.teal,
-                          iconBackground: RedesignColors.tealTint,
-                          title: 'Codeudor',
-                          subtitle: 'Crear fiador codeudor',
-                          tag: registradoTag(state.tieneCodeudor),
-                          onPressed: () =>
-                              _goToSearch(FiadoresHnFormType.codeudor),
-                        ),
-                        if (_consultaBackend) ...[
-                          const Gap(24),
-                          FiadoresRegistradosSection(
-                            onRetry: _loadRegistrados,
+                          ModuleTileWidget(
+                            icon: Icons.verified_user_outlined,
+                            iconColor: RedesignColors.indigo,
+                            iconBackground: RedesignColors.indigoTint,
+                            title: 'Aval',
+                            subtitle: 'Crear fiador aval',
+                            tag: registradoTag(state.tieneAval),
+                            onPressed: () =>
+                                _goToSearch(FiadoresHnFormType.aval),
                           ),
+                          const Gap(10),
+                          ModuleTileWidget(
+                            icon: Icons.group_add_outlined,
+                            iconColor: RedesignColors.teal,
+                            iconBackground: RedesignColors.tealTint,
+                            title: 'Codeudor',
+                            subtitle: 'Crear fiador codeudor',
+                            tag: registradoTag(state.tieneCodeudor),
+                            onPressed: () =>
+                                _goToSearch(FiadoresHnFormType.codeudor),
+                          ),
+                          if (_consultaBackend) ...[
+                            const Gap(24),
+                            FiadoresRegistradosSection(
+                              onRetry: _loadRegistrados,
+                              onTap: _verRegistrado,
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
