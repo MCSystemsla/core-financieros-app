@@ -124,6 +124,11 @@ abstract class AnalisisRepositoryHn {
     required int numeroSolicitud,
     required String cedula,
   });
+  Future<String> desvincularFiador({
+    required int numeroSolicitud,
+    required int fiadorId,
+    required String motivo,
+  });
 
   Future<(bool, String)> createAnalisisFotoNegocio({
     required int numeroSolicitud,
@@ -677,6 +682,35 @@ class AnalisisRepositoryHNImpl extends AnalisisRepositoryHn {
         );
       }
       return FiadorSolicitudHn.fromJson(data);
+    } catch (e) {
+      _logger.e(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> desvincularFiador({
+    required int numeroSolicitud,
+    required int fiadorId,
+    required String motivo,
+  }) async {
+    final endpoint = DesvincularFiadorHNEndpoint(
+      numeroSolicitud: numeroSolicitud,
+      fiadorId: fiadorId,
+      motivo: motivo.trim(),
+    );
+    try {
+      final resp = await _api.request(endpoint: endpoint);
+      if (resp['statusCode'] != 200 || resp['ok'] != true) {
+        // El mensaje por defecto habla de "guardado localmente"; aquí no aplica.
+        final (errorMsg, _) = getErrorMessage(
+          resp,
+          errorMsg: 'el fiador no se desvinculó.',
+        );
+        throw AppException(optionalMsg: errorMsg.toString());
+      }
+      final message = resp['message']?.toString().trim() ?? '';
+      return message.isEmpty ? 'Fiador desvinculado' : message;
     } catch (e) {
       _logger.e(e);
       rethrow;

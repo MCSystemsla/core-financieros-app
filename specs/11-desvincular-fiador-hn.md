@@ -168,6 +168,7 @@ Conventions:
 - **Sí:** el diálogo se queda abierto al enviar y al fallar. Lo eligió el usuario. El asesor no pierde el motivo escrito.
 - **Sí:** éxito es `200` con `ok: true`, y el snackbar usa el `message` del backend. Lo dio el usuario con la respuesta de ejemplo.
 - **Sí:** sin restricciones en la app; valida el backend. Lo eligió el usuario.
+- **No:** mandar `database` (ni en el body ni como query param), aunque otros PATCH de análisis HN lo mandan. Lo eligió el usuario durante la implementación: el body va exactamente como el curl del backend.
 - **Sí:** un cubit propio provisto por el diálogo, no más campos en `FiadoresSolicitudHnCubit`. El estado del envío vive solo mientras el diálogo está abierto y no se mezcla con la carga de la lista y el detalle.
 - **No:** quitar el fiador de la lista en memoria sin recargar. La recarga confirma con el backend que el vínculo ya no está activo.
 - **No:** modo offline. Desvincular sin conexión no tiene sentido sin la lista, que es solo en línea.

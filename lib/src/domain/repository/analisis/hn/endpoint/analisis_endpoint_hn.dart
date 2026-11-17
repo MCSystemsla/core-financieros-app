@@ -518,6 +518,33 @@ class GetFiadoresSolicitudHNEndpoint extends Endpoint {
       };
 }
 
+class DesvincularFiadorHNEndpoint extends Endpoint {
+  final int numeroSolicitud;
+  final int fiadorId;
+  final String motivo;
+
+  DesvincularFiadorHNEndpoint({
+    required this.numeroSolicitud,
+    required this.fiadorId,
+    required this.motivo,
+  });
+  @override
+  Method get method => Method.patch;
+
+  @override
+  String get path => '/cartera/analisis-fiador/desvincular';
+  @override
+  Map<String, String> get headers => {
+        'Authorization': 'Bearer ${LocalStorage().jwt}',
+      };
+  @override
+  Map<String, dynamic> get body => {
+        'NumeroSolicitud': numeroSolicitud,
+        'FiadorId': fiadorId,
+        'Motivo': motivo,
+      };
+}
+
 class GetPlanInversionAnalisisHNEndpoint extends Endpoint {
   final int numeroSolicitud;
 
