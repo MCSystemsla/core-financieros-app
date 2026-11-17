@@ -7,12 +7,14 @@ import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/local_db/services/analisis_box_service_hn.dart';
 import 'package:core_financiero_app/src/domain/repository/analisis/hn/analisis_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/analisis_fiador_aval/analisis_fiador_aval_cubit.dart';
+import 'package:core_financiero_app/src/presentation/bloc/analisis/hn/fiadores_solicitud/fiadores_solicitud_hn_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_form_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_hn_pendientes_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/cartera/analisis_solicitudes/hn/fiadores/fiadores_search_by_document_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/borrador_sin_numero/sin_numero_notice_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/analisis_solicitudes/hn/fiadores/registrados/fiadores_registrados_section.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_tile_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
@@ -38,10 +40,17 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
   final _localDb = global<AnalisisBoxServiceHn>();
   int _pendientes = 0;
   StreamSubscription<void>? _pendientesSub;
+  final _registradosCubit =
+      FiadoresSolicitudHnCubit(AnalisisRepositoryHNImpl());
+  late final bool _consultaBackend;
 
   @override
   void initState() {
     super.initState();
+    _consultaBackend =
+        context.read<InternetConnectionCubit>().state.isConnected &&
+            widget.numeroSolicitud >= 0;
+    if (_consultaBackend) _loadRegistrados();
     _pendientes = _getPendientesCount();
     // La lista de pendientes también se abre desde la pantalla de envío
     // (al guardar sin conexión), así que el conteo escucha los cambios del
@@ -55,7 +64,12 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
   @override
   void dispose() {
     _pendientesSub?.cancel();
+    _registradosCubit.close();
     super.dispose();
+  }
+
+  void _loadRegistrados() {
+    _registradosCubit.load(numeroSolicitud: widget.numeroSolicitud);
   }
 
   int _getPendientesCount() {
@@ -73,8 +87,8 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
     if (count != _pendientes) setState(() => _pendientes = count);
   }
 
-  void _goToSearch(FiadoresHnFormType typeForm) {
-    Navigator.push(
+  Future<void> _goToSearch(FiadoresHnFormType typeForm) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) => FiadoresSearchByDocumentScreen(
@@ -83,6 +97,8 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
         ),
       ),
     );
+    // Un fiador recién creado en línea aparece en "Registrados en el sistema".
+    if (mounted && _consultaBackend) _loadRegistrados();
   }
 
   void _goToPendientes() {
@@ -101,17 +117,22 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
         context.read<InternetConnectionCubit>().state.isConnected &&
             numeroSolicitud >= 0;
 
-    return BlocProvider(
-      create: (ctx) {
-        final cubit = AnalisisFiadorAvalCubit(AnalisisRepositoryHNImpl());
-        if (isConnected) {
-          cubit.checkFiadorAval(
-            numeroSolicitud: numeroSolicitud,
-            tipoSolicitud: widget.tipoSolicitud,
-          );
-        }
-        return cubit;
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (ctx) {
+            final cubit = AnalisisFiadorAvalCubit(AnalisisRepositoryHNImpl());
+            if (isConnected) {
+              cubit.checkFiadorAval(
+                numeroSolicitud: numeroSolicitud,
+                tipoSolicitud: widget.tipoSolicitud,
+              );
+            }
+            return cubit;
+          },
+        ),
+        BlocProvider.value(value: _registradosCubit),
+      ],
       child: Scaffold(
         backgroundColor: RedesignColors.background,
         body: SafeArea(
@@ -197,8 +218,7 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
                           title: 'Aval',
                           subtitle: 'Crear fiador aval',
                           tag: registradoTag(state.tieneAval),
-                          onPressed: () =>
-                              _goToSearch(FiadoresHnFormType.aval),
+                          onPressed: () => _goToSearch(FiadoresHnFormType.aval),
                         ),
                         const Gap(10),
                         ModuleTileWidget(
@@ -211,6 +231,12 @@ class _FiadoresHnScreenState extends State<FiadoresHnScreen> {
                           onPressed: () =>
                               _goToSearch(FiadoresHnFormType.codeudor),
                         ),
+                        if (_consultaBackend) ...[
+                          const Gap(24),
+                          FiadoresRegistradosSection(
+                            onRetry: _loadRegistrados,
+                          ),
+                        ],
                       ],
                     ),
                   ),
