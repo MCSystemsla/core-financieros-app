@@ -26,12 +26,18 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'src/domain/repository/solicitudes_credito/ni/solicitudes_credito_repository.dart';
 import 'src/presentation/bloc/lang/lang_cubit.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final Flavor flavor;
   const App({super.key, required this.flavor});
 
   @override
-  Widget build(BuildContext context) {
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -40,7 +46,10 @@ class App extends StatelessWidget {
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
+  }
 
+  @override
+  Widget build(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
     return MultiBlocProvider(
       providers: [

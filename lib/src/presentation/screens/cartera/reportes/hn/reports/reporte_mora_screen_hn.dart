@@ -1,14 +1,13 @@
-import 'dart:typed_data';
-
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/reporteria/hn/reporteria_repository_hn.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custom_outline_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/card_tag_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/screen_header_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -20,10 +19,41 @@ import '../../../../../bloc/reportes/hn/reporte_mora/reporte_mora_cubit.dart';
 
 const _pdfSourceName = 'reporte_mora.pdf';
 
+/// Ancho del panel lateral (encabezado + acciones) en landscape.
+const _sidePanelWidth = 300.0;
+
+final _buttonShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(14),
+);
+
 /// Reporte de mora (Honduras). Genera el PDF al entrar y lo muestra embebido,
 /// con opción de verlo a pantalla completa.
-class ReporteMoraScreenHn extends StatelessWidget {
+///
+/// La app está bloqueada en portrait (`app.dart`); esta pantalla habilita
+/// landscape mientras está abierta (incluida la vista a pantalla completa) y
+/// restaura portrait al salir.
+class ReporteMoraScreenHn extends StatefulWidget {
   const ReporteMoraScreenHn({super.key});
+
+  @override
+  State<ReporteMoraScreenHn> createState() => _ReporteMoraScreenHnState();
+}
+
+class _ReporteMoraScreenHnState extends State<ReporteMoraScreenHn> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,70 +68,95 @@ class ReporteMoraScreenHn extends StatelessWidget {
 
 int _currentUserId() => int.tryParse(LocalStorage().userId) ?? 0;
 
+void _openFullScreen(BuildContext context, Uint8List pdfData) {
+  context.pushTransparentRoute(
+    ReporteMoraFullScreenView(pdfData: pdfData),
+  );
+}
+
 class _ReporteMoraView extends StatelessWidget {
   const _ReporteMoraView();
 
-  void _openFullScreen(BuildContext context, Uint8List pdfData) {
-    context.pushTransparentRoute(
-      ReporteMoraFullScreenView(pdfData: pdfData),
+  @override
+  Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
+    return Scaffold(
+      backgroundColor: RedesignColors.background,
+      body: SafeArea(
+        child: isLandscape ? const _LandscapeLayout() : const _PortraitLayout(),
+      ),
     );
   }
+}
+
+class _PortraitLayout extends StatelessWidget {
+  const _PortraitLayout();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reporte de Mora'),
-        actions: [
-          BlocBuilder<ReporteMoraCubit, ReporteMoraState>(
-            builder: (context, state) {
-              final pdfData = state.filePath;
-              if (state.status != Status.done || pdfData == null) {
-                return const SizedBox.shrink();
-              }
-
-              return IconButton(
-                tooltip: 'Pantalla completa',
-                icon: const Icon(Icons.fullscreen),
-                onPressed: () => _openFullScreen(context, pdfData),
-              );
-            },
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _ReporteMoraHeader(),
+        Gap(16),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: _ReporteMoraContent(),
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const _ReporteMoraHeader(),
-            Expanded(
-              child: BlocBuilder<ReporteMoraCubit, ReporteMoraState>(
-                builder: (context, state) {
-                  final pdfData = state.filePath;
-
-                  return switch (state.status) {
-                    Status.inProgress => const _PdfSkeleton(),
-                    Status.done when pdfData != null => _PdfPreviewCard(
-                        pdfData: pdfData,
-                        onExpand: () => _openFullScreen(context, pdfData),
-                      ),
-                    Status.done => const _ReporteMoraError(
-                        message: 'El reporte llegó vacío.',
-                      ),
-                    Status.error => _ReporteMoraError(
-                        message: state.errorMsg.isEmpty
-                            ? 'No se pudo generar el reporte de mora.'
-                            : state.errorMsg,
-                      ),
-                    _ => const SizedBox.shrink(),
-                  };
-                },
-              ),
-            ),
-          ],
         ),
-      ),
-      bottomNavigationBar: const _ReporteMoraActions(),
+        Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
+          child: _ReporteMoraActions(),
+        ),
+      ],
+    );
+  }
+}
+
+/// Landscape: encabezado y acciones en un panel a la izquierda, el PDF ocupa
+/// el resto del ancho y todo el alto.
+class _LandscapeLayout extends StatelessWidget {
+  const _LandscapeLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          width: _sidePanelWidth,
+          // Con poca altura el subtítulo puede no caber: el panel hace
+          // scroll en vez de desbordarse, y las acciones quedan abajo.
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _ReporteMoraHeader(),
+                    Gap(16),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20, 0, 8, 12),
+                      child: _ReporteMoraActions(vertical: true),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 12, 16, 12),
+            child: _ReporteMoraContent(),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -111,31 +166,108 @@ class _ReporteMoraHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final fecha = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+    return ScreenHeaderWidget(
+      title: 'Reporte de mora',
+      subtitle: 'Cartera en mora de tus clientes al $fecha. '
+          'Puedes acercar el documento o abrirlo en pantalla completa.',
+      onBack: () => context.pop(),
+    );
+  }
+}
+
+/// Estado del reporte: skeleton, PDF o error.
+class _ReporteMoraContent extends StatelessWidget {
+  const _ReporteMoraContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ReporteMoraCubit, ReporteMoraState>(
+      builder: (context, state) {
+        final pdfData = state.filePath;
+
+        return switch (state.status) {
+          Status.inProgress => const _PdfSkeleton(),
+          Status.done when pdfData != null => _PdfPreviewCard(pdfData: pdfData),
+          Status.done => const _ReporteMoraError(
+              message: 'El reporte llegó vacío.',
+            ),
+          Status.error => _ReporteMoraError(
+              message: state.errorMsg.isEmpty
+                  ? 'No se pudo generar el reporte de mora.'
+                  : state.errorMsg,
+            ),
+          _ => const SizedBox.shrink(),
+        };
+      },
+    );
+  }
+}
+
+/// Tarjeta blanca con borde del rediseño, contenedor común del PDF, el
+/// skeleton y el error.
+class _ReporteCard extends StatelessWidget {
+  final Widget child;
+  const _ReporteCard({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: RedesignColors.border),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(19),
+        child: child,
+      ),
+    );
+  }
+}
+
+/// Barra superior de la tarjeta: ícono, nombre del documento y etiqueta.
+class _ReporteCardBar extends StatelessWidget {
+  final Widget trailing;
+  const _ReporteCardBar({required this.trailing});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: RedesignColors.border)),
+      ),
       child: Row(
         children: [
-          Icon(
-            Icons.trending_down_rounded,
-            color: AppColors.getPrimaryColor(),
-            size: 22,
+          Container(
+            height: 34,
+            width: 34,
+            decoration: BoxDecoration(
+              color: RedesignColors.redTint,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.trending_down_rounded,
+              size: 19,
+              color: RedesignColors.red,
+            ),
           ),
           const Gap(10),
-          Expanded(
+          const Expanded(
             child: Text(
               'Cartera en mora',
-              style: theme.textTheme.titleMedium?.copyWith(
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14.5,
                 fontWeight: FontWeight.w600,
+                color: RedesignColors.ink,
               ),
             ),
           ),
-          Text(
-            fecha,
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.grey),
-          ),
+          trailing,
         ],
       ),
     );
@@ -144,34 +276,26 @@ class _ReporteMoraHeader extends StatelessWidget {
 
 class _PdfPreviewCard extends StatelessWidget {
   final Uint8List pdfData;
-  final VoidCallback onExpand;
-  const _PdfPreviewCard({
-    required this.pdfData,
-    required this.onExpand,
-  });
+  const _PdfPreviewCard({required this.pdfData});
 
   @override
   Widget build(BuildContext context) {
     return FadeIn(
       duration: const Duration(milliseconds: 400),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-        decoration: BoxDecoration(
-          color: AppColors.lightGray,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: .1),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+      child: _ReporteCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const _ReporteCardBar(
+              trailing: CardTagWidget(
+                label: 'PDF',
+                color: RedesignColors.green,
+                background: RedesignColors.greenTint,
+              ),
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              Positioned.fill(
+            Expanded(
+              child: ColoredBox(
+                color: RedesignColors.tagBackground,
                 child: PdfViewer.data(
                   pdfData,
                   sourceName: _pdfSourceName,
@@ -187,38 +311,8 @@ class _PdfPreviewCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                right: 10,
-                bottom: 10,
-                child: _ExpandFab(onPressed: onExpand),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ExpandFab extends StatelessWidget {
-  final VoidCallback onPressed;
-  const _ExpandFab({required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.getFourthgColorWithOpacity(),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onPressed,
-        child: const Padding(
-          padding: EdgeInsets.all(12),
-          child: Icon(
-            Icons.open_in_full_rounded,
-            color: Colors.white,
-            size: 20,
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -231,43 +325,51 @@ class _PdfSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return _ReporteCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const _ReporteCardBar(
+            trailing: CardTagWidget(
+              label: 'Generando...',
+              color: RedesignColors.amber,
+              background: RedesignColors.amberTint,
+            ),
+          ),
+          Expanded(
+            child: Shimmer.fromColors(
+              baseColor: RedesignColors.tagBackground,
+              highlightColor: RedesignColors.surface,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Título (18 + 18) y cada línea (12 + 12): en landscape
+                    // caben menos, así que se calculan según el alto.
+                    final lineas = ((constraints.maxHeight - 36) / 24)
+                        .floor()
+                        .clamp(0, 12);
 
-    return Column(
-      children: [
-        Expanded(
-          child: Shimmer.fromColors(
-            baseColor: AppColors.lightGray,
-            highlightColor: Colors.white,
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              decoration: BoxDecoration(
-                color: AppColors.lightGray,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _skeletonLine(widthFactor: .5, height: 18),
-                  const Gap(18),
-                  for (var i = 0; i < 9; i++) ...[
-                    _skeletonLine(widthFactor: i.isEven ? 1 : .8),
-                    const Gap(12),
-                  ],
-                ],
+                    return ClipRect(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _skeletonLine(widthFactor: .5, height: 18),
+                          const Gap(18),
+                          for (var i = 0; i < lineas; i++) ...[
+                            _skeletonLine(widthFactor: i.isEven ? 1 : .8),
+                            const Gap(12),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            'Generando el reporte...',
-            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.grey),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -278,7 +380,7 @@ class _PdfSkeleton extends StatelessWidget {
       child: Container(
         height: height,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: RedesignColors.tagBackground,
           borderRadius: BorderRadius.circular(6),
         ),
       ),
@@ -292,97 +394,120 @@ class _ReporteMoraError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: AppColors.red.withValues(alpha: .1),
-                shape: BoxShape.circle,
+    return _ReporteCard(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 64,
+                width: 64,
+                decoration: BoxDecoration(
+                  color: RedesignColors.redTint,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.description_outlined,
+                  size: 30,
+                  color: RedesignColors.red,
+                ),
               ),
-              child: Icon(
-                Icons.description_outlined,
-                size: 38,
-                color: AppColors.red,
+              const Gap(16),
+              const Text(
+                'No pudimos generar el reporte',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: RedesignColors.ink,
+                ),
               ),
-            ),
-            const Gap(16),
-            Text(
-              'No pudimos generar el reporte',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+              const Gap(6),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 13.5,
+                  height: 1.45,
+                  color: RedesignColors.inkMuted,
+                ),
               ),
-            ),
-            const Gap(8),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(color: AppColors.grey),
-            ),
-            const Gap(20),
-            CustomOutLineButton(
-              text: 'Reintentar',
-              icon: Icon(Icons.refresh, color: AppColors.getPrimaryColor()),
-              onPressed: () => context
-                  .read<ReporteMoraCubit>()
-                  .getReporteMora(userId: _currentUserId()),
-            ),
-          ],
+              const Gap(20),
+              OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(160, 46),
+                  foregroundColor: RedesignColors.ink,
+                  side: const BorderSide(color: RedesignColors.border),
+                  shape: _buttonShape,
+                ),
+                onPressed: () => context
+                    .read<ReporteMoraCubit>()
+                    .getReporteMora(userId: _currentUserId()),
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: const Text('Reintentar'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
+/// "Salir" y "Pantalla completa". En portrait van lado a lado; en el panel
+/// lateral de landscape, apiladas.
 class _ReporteMoraActions extends StatelessWidget {
-  const _ReporteMoraActions();
+  final bool vertical;
+  const _ReporteMoraActions({this.vertical = false});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-      child: BlocBuilder<ReporteMoraCubit, ReporteMoraState>(
-        builder: (context, state) {
-          final pdfData = state.filePath;
-          final canOpen = state.status == Status.done && pdfData != null;
+    return BlocBuilder<ReporteMoraCubit, ReporteMoraState>(
+      builder: (context, state) {
+        final pdfData = state.filePath;
+        final canOpen = state.status == Status.done && pdfData != null;
 
+        final salir = OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(50),
+            foregroundColor: RedesignColors.ink,
+            side: const BorderSide(color: RedesignColors.border),
+            shape: _buttonShape,
+          ),
+          onPressed: () => context.pop(),
+          child: const Text('Salir'),
+        );
+
+        final pantallaCompleta = FilledButton.icon(
+          style: FilledButton.styleFrom(
+            minimumSize: const Size.fromHeight(50),
+            backgroundColor: RedesignColors.teal,
+            disabledBackgroundColor: RedesignColors.tagBackground,
+            shape: _buttonShape,
+          ),
+          onPressed: canOpen ? () => _openFullScreen(context, pdfData) : null,
+          icon: const Icon(Icons.open_in_full_rounded, size: 18),
+          label: const Text('Pantalla completa'),
+        );
+
+        if (vertical) {
           return Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              if (canOpen) ...[
-                SizedBox(
-                  width: double.infinity,
-                  child: CustomElevatedButton(
-                    text: 'Ver en pantalla completa',
-                    color: AppColors.getPrimaryColor(),
-                    icon: const Icon(Icons.fullscreen, color: Colors.white),
-                    onPressed: () => context.pushTransparentRoute(
-                      ReporteMoraFullScreenView(pdfData: pdfData),
-                    ),
-                  ),
-                ),
-                const Gap(12),
-              ],
-              SizedBox(
-                width: double.infinity,
-                child: CustomOutLineButton(
-                  onPressed: () => context.pop(),
-                  text: 'Salir',
-                  textColor: AppColors.red,
-                  color: AppColors.red,
-                ),
-              ),
-            ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [pantallaCompleta, const Gap(10), salir],
           );
-        },
-      ),
+        }
+
+        return Row(
+          children: [
+            Expanded(flex: 2, child: salir),
+            const Gap(12),
+            Expanded(flex: 3, child: pantallaCompleta),
+          ],
+        );
+      },
     );
   }
 }
@@ -397,19 +522,23 @@ class ReporteMoraFullScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withValues(alpha: .92),
+      backgroundColor: RedesignColors.ink.withValues(alpha: .94),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         leading: IconButton(
           tooltip: 'Cerrar',
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.close_rounded),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
-          'Reporte de Mora',
-          style: TextStyle(color: Colors.white),
+          'Reporte de mora',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: SafeArea(
