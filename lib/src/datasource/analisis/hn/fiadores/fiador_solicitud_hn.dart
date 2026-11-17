@@ -1,3 +1,4 @@
+import 'package:core_financiero_app/src/config/helpers/parsers/parse_format.dart';
 import 'package:core_financiero_app/src/datasource/analisis/hn/fiadores/analisis_fiadores_hn.dart';
 
 /// Fiador con vínculo activo en una solicitud HN, tal como lo devuelve
@@ -20,7 +21,7 @@ class FiadorSolicitudHn {
 
   factory FiadorSolicitudHn.fromJson(Map<String, dynamic> json) {
     return FiadorSolicitudHn(
-      idFiador: (json['IdFiador'] as num?)?.toInt() ?? 0,
+      idFiador: parseNum(json['IdFiador'])?.toInt() ?? 0,
       fiador: AnalisisFiadoresHn.fromJson(json),
       raw: json,
     );

@@ -132,7 +132,7 @@ Conventions:
 
 ## Acceptance criteria
 
-- [ ] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
+- [X] `flutter analyze` no reporta issues nuevos en los archivos creados o modificados.
 - [ ] Con conexión, `FiadoresHnScreen` de una solicitud con fiadores muestra "Registrados en el sistema" con una tarjeta por fiador activo (nombre, cédula, tipo).
 - [ ] En `BitacoraService`, el listado llama `GET /cartera/analisis-fiador/fiador-solicitud` con `database` y `NumeroSolicitud`, sin `Cedula`.
 - [ ] Una solicitud sin fiadores muestra "Esta solicitud aún no tiene fiadores registrados".
@@ -169,6 +169,7 @@ Conventions:
 - **Sí:** tarjeta con nombre, cédula y tipo. Lo eligió el usuario.
 - **Sí:** pedir el detalle (con `Cedula`) al tocar, no reusar la fila del listado. El listado no trae `HistorialCredito`.
 - **No:** guardar el listado en local. La sección es solo en línea.
+- **Sí:** los helpers de `AnalisisFiadoresHn.fromJson` y `HistorialCredito.fromJson` aceptan números como texto, textos como número, `0`/`1` como booleano y fechas inválidas (`tryParse`). Se decidió durante la implementación: el GET de QA HN mandaba un campo numérico como texto y la lista fallaba con `type 'String' is not a subtype of type 'num?'`. Los pendientes de SPEC 05 se siguen leyendo igual.
 
 ## Risks
 
