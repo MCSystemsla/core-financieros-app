@@ -141,6 +141,16 @@ class _Tarjeta extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.9),
                         ),
                       ),
+                      const Gap(8),
+                      Text(
+                        'Atte. MCSystems',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
                     ],
                   ),
                 ),
