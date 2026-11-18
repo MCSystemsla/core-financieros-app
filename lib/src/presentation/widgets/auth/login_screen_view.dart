@@ -3,7 +3,7 @@ import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/auth/auth_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/auth_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
@@ -11,12 +11,12 @@ import 'package:core_financiero_app/src/presentation/bloc/autoupdate/autoupdate_
 import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/change_password/change_password_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/auth/login/login_field_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/debug/debug_panel_trigger.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/custon_elevated_button.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/inputs/input_simple.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/search/search_branch_sheet_delegate.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/connection_pill_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/version/version_control_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/logo/logo_extension.dart';
@@ -88,33 +88,105 @@ class _LoginScreenViewState extends State<LoginScreenView>
             canPop: false,
             child: FadeIn(
               child: CustomBackground(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SafeArea(
-                          child: DebugPanelTrigger(
-                            child: Image(
-                              height: 180,
-                              image: AssetImage(flavor.toLogoExtension),
-                            ),
-                          ),
-                        ),
-                        const Gap(5),
-                        const LoginFormWidget(),
-                        const Gap(20),
-                      ],
+                child: Stack(
+                  children: [
+                    const Positioned.fill(
+                      child: LoginBackgroundDecoration(),
                     ),
-                  ),
+                    SafeArea(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: constraints.maxHeight - 32,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [ConnectionPillWidget()],
+                                      ),
+                                      const Gap(22),
+                                      Center(
+                                        child: DebugPanelTrigger(
+                                          child: Image(
+                                            width: 228,
+                                            image: AssetImage(
+                                              flavor.toLogoExtension,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const Gap(26),
+                                      const _LoginGreeting(),
+                                      const Gap(20),
+                                      const LoginFormWidget(),
+                                    ],
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 24),
+                                    child: VersionControlWidget(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _LoginGreeting extends StatelessWidget {
+  const _LoginGreeting();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'auth.welcome_title'.tr(),
+            style: const TextStyle(
+              fontSize: 28,
+              height: 34 / 28,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -.4,
+              color: RedesignColors.ink,
+            ),
+          ),
+          const Gap(6),
+          Text(
+            'auth.welcome_subtitle'.tr(),
+            style: const TextStyle(
+              fontSize: 15,
+              height: 22 / 15,
+              color: Color(0xff1D3B36),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -133,7 +205,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   String? branchTeam;
   bool isPasswordVisible = false;
   String? turnstileToken;
-  bool isOffline = false;
   final localStorage = LocalStorage();
 
   final _formKey = GlobalKey<FormState>();
@@ -166,57 +237,96 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     );
   }
 
+  void _enterOfflineMode() {
+    context.read<InternetConnectionCubit>().makeToOfflineMode();
+    context.pushReplacement('/');
+    showV2CustomSnackbar(
+      context,
+      title: 'Modo offline Activado',
+      type: SnackbarType.success,
+      message:
+          'Has entrado al modo offline, puedes gestionar tus datos sin conexión a internet.',
+    );
+  }
+
+  void _login() {
+    FocusScope.of(context).unfocus();
+
+    final isValid = _formKey.currentState?.validate() ?? false;
+    final dbName = branchTeam;
+    if (!isValid || dbName == null) return;
+
+    context.read<AuthCubit>().login(
+          userName: _usernameController.text.trim(),
+          password: _passwordController.text.trim(),
+          dbName: dbName,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final hasSavedSession = localStorage.currentUserName.isNotEmpty &&
+        localStorage.jwt.isNotEmpty;
+
     return Container(
-      padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(17),
+        color: RedesignColors.surface,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: RedesignColors.ink.withValues(alpha: .22),
+            blurRadius: 48,
+            spreadRadius: -12,
+            offset: const Offset(0, 24),
+          ),
+          BoxShadow(
+            color: RedesignColors.ink.withValues(alpha: .06),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Form(
         key: _formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Gap(20),
-            InputSimple(
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-              ],
-              icon: const Icon(
-                Icons.person_2,
-                size: 20,
-              ),
-              title: 'auth.user'.tr(),
+            LoginTextField(
+              label: 'auth.user'.tr(),
+              hintText: 'Ej.: BGODOY',
+              icon: Icons.person_outline_rounded,
               controller: _usernameController,
-              activeColor: true,
-              hintText: 'Ejem: BGODOY',
-              enabled: true,
-              textFieldSettings: TextFieldSettings(
-                keyboardType: TextInputType.name,
-                textCapitalization: TextCapitalization.characters,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'auth.errors.username'.tr();
-                  }
-                  return null;
-                },
-              ),
+              inputFormatters: [UpperCaseTextFormatter()],
+              keyboardType: TextInputType.name,
+              textCapitalization: TextCapitalization.characters,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'auth.errors.username'.tr();
+                }
+                return null;
+              },
             ),
-            const Gap(25),
-            InputSimple(
-              title: 'auth.password'.tr(),
-              icon: const Icon(
-                Icons.security_outlined,
-                size: 20,
-              ),
+            const Gap(16),
+            LoginTextField(
+              label: 'auth.password'.tr(),
+              hintText: 'auth.password_hint'.tr(),
+              icon: Icons.lock_outline_rounded,
+              controller: _passwordController,
+              obscureText: !isPasswordVisible,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
               suffixIcon: IconButton(
+                tooltip: isPasswordVisible
+                    ? 'Ocultar contraseña'
+                    : 'Mostrar contraseña',
                 icon: Icon(
                   isPasswordVisible
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
-                  color: AppColors.grey,
+                  size: 20,
+                  color: RedesignColors.inkMuted,
                 ),
                 onPressed: () {
                   setState(() {
@@ -224,22 +334,14 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   });
                 },
               ),
-              activeColor: true,
-              hintText: '****',
-              controller: _passwordController,
-              isPasswordField: !isPasswordVisible,
-              enabled: true,
-              textFieldSettings: TextFieldSettings(
-                keyboardType: TextInputType.text,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'auth.errors.password'.tr();
-                  }
-                  return null;
-                },
-              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'auth.errors.password'.tr();
+                }
+                return null;
+              },
             ),
-            const Gap(25),
+            const Gap(16),
             BlocBuilder<BranchteamCubit, BranchteamState>(
               builder: (context, state) {
                 return SearchBranchSheetDelegate(
@@ -264,32 +366,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 );
               },
             ),
-            const VersionControlWidget(),
-            if (localStorage.currentUserName.isNotEmpty &&
-                localStorage.jwt.isNotEmpty)
-              SwitchListTile(
-                title: const Text('Entrar al modo offline:'),
-                subtitle: Text(localStorage.currentUserName),
-                value: isOffline,
-                onChanged: (e) async {
-                  if (e == isOffline) return;
-                  setState(() => isOffline = e);
-                  await Future.delayed(const Duration(milliseconds: 500));
-                  if (!context.mounted) return;
-                  if (isOffline) {
-                    context.read<InternetConnectionCubit>().makeToOfflineMode();
-                    context.pushReplacement('/');
-                    showV2CustomSnackbar(
-                      context,
-                      title: 'Modo offline Activado',
-                      type: SnackbarType.success,
-                      message:
-                          'Has entrado al modo offline, puedes gestionar tus datos sin conexión a internet.',
-                    );
-                  }
-                },
-              ),
-            const Gap(14),
+            const Gap(22),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) async {
                 final status = state.status;
@@ -327,27 +404,26 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 }
               },
               builder: (context, state) {
-                return CustomElevatedButton(
-                  enabled: state.status != AuthStatus.authenticating,
+                return LoginSubmitButton(
                   text: 'button.login'.tr(),
-                  color: Colors.black,
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-
-                    final isValid = _formKey.currentState?.validate() ?? false;
-                    final dbName = branchTeam;
-                    if (!isValid || dbName == null) return;
-
-                    context.read<AuthCubit>().login(
-                          userName: _usernameController.text.trim(),
-                          password: _passwordController.text.trim(),
-                          dbName: dbName,
-                        );
-                  },
+                  loadingText: 'auth.signing_in'.tr(),
+                  isLoading: state.status == AuthStatus.authenticating,
+                  onPressed: _login,
                 );
               },
             ),
-            const Gap(5),
+            if (hasSavedSession) ...[
+              const Gap(18),
+              LoginOfflineTile(
+                dividerText: 'auth.offline_divider'.tr(),
+                title: 'auth.offline_title'.tr(),
+                subtitle: 'auth.offline_subtitle'.tr(
+                  args: {'user': localStorage.currentUserName},
+                ),
+                userName: localStorage.currentUserName,
+                onTap: _enterOfflineMode,
+              ),
+            ],
           ],
         ),
       ),

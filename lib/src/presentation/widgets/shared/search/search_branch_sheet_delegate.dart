@@ -1,9 +1,11 @@
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/entities/responses/branch_team_response.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/auth/login/login_field_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:drop_down_list/drop_down_list.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class SearchBranchSheetDelegate extends StatefulWidget {
   final String title;
@@ -35,37 +37,56 @@ class SearchBranchSheetDelegate extends StatefulWidget {
 
 class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
   Branch? selectedItem;
+  final _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     selectedItem = widget.selectedItem;
+    _controller.text = selectedItem?.nombre ?? '';
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.isLoading
-        ? const Center(
-            child: SizedBox.square(
-              dimension: 25,
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : OutlineTextfieldWidget(
-            suffixIcon: const Icon(
-              Icons.keyboard_arrow_down,
-              size: 30,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            // icon: const Icon(Icons.work),
-            readOnly: true,
-            title: widget.title,
-            hintText: (selectedItem?.nombre.isNotEmpty ?? false)
-                ? selectedItem!.nombre
-                : widget.hintText,
-            validator: (_) {
-              return widget.validator?.call(selectedItem);
-            },
-            onTap: !widget.enabled
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LoginFieldLabel(widget.title),
+        const Gap(8),
+        TextFormField(
+          controller: _controller,
+          readOnly: true,
+          enabled: widget.enabled || widget.isLoading,
+          style: const TextStyle(fontSize: 16, color: RedesignColors.ink),
+          decoration: loginInputDecoration(
+            hintText: widget.hintText,
+            icon: Icons.storefront_outlined,
+            suffixIcon: widget.isLoading
+                ? const Padding(
+                    padding: EdgeInsets.all(15),
+                    child: SizedBox.square(
+                      dimension: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: loginAccent,
+                      ),
+                    ),
+                  )
+                : const Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: RedesignColors.chevron,
+                  ),
+          ),
+          validator: (_) {
+            return widget.validator?.call(selectedItem);
+          },
+          onTap: !widget.enabled
                 ? null
                 : () {
                     DropDownState<Branch>(
@@ -147,6 +168,7 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                           for (var item in selectedItems) {
                             setState(() {
                               selectedItem = item.data;
+                              _controller.text = item.data.nombre;
                             });
                             widget.onChanged.call(item.data);
                           }
@@ -154,6 +176,8 @@ class _SearchBranchSheetDelegateState extends State<SearchBranchSheetDelegate> {
                       ),
                     ).showModal(context);
                   },
-          );
+        ),
+      ],
+    );
   }
 }
