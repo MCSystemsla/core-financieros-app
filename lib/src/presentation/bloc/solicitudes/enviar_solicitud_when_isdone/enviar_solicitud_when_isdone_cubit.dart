@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:core_financiero_app/src/config/helpers/kiva/kiva_proccess_solicitud/kiva_proccess_solicitud.dart';
 import 'package:core_financiero_app/src/config/helpers/error_handler/http_error_handler.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/asalariado/solicitud_asalariado.dart';
 import 'package:core_financiero_app/src/datasource/solicitudes/ni/historial_crediticio/historial_crediticio.dart';
@@ -25,7 +26,7 @@ typedef _SyncData = ({
   String tipoSolicitud,
 });
 
-typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
+typedef OnSolicitudCreditoIsKivaFn = Future<KivaSyncResultado> Function({
   required String uuid,
   required String numeroSolicitud,
   required String solicitudId,
@@ -35,6 +36,10 @@ typedef OnSolicitudCreditoIsKivaFn = Future<bool> Function({
   required int tipoSolicitudId,
   required String nombreCliente,
 });
+
+/// Reenvía los Kivas cuyo formulario falló en una sincronización anterior.
+/// Devuelve un mensaje por cada uno que sigue pendiente.
+typedef OnReintentarKivasPendientesFn = Future<List<String>> Function();
 
 class EnviarSolicitudWhenIsdoneCubit
     extends Cubit<EnviarSolicitudWhenIsdoneState> {
@@ -66,6 +71,7 @@ class EnviarSolicitudWhenIsdoneCubit
   Future<void> sendSolicitudWhenIsDone({
     required bool isConnected,
     required OnSolicitudCreditoIsKivaFn onSolicitudCreditoIsKivaFn,
+    OnReintentarKivasPendientesFn? onReintentarKivasPendientesFn,
   }) async {
     if (_isSyncing || !isConnected) {
       _safeEmit(EnviarSolicitudWhenIsdoneInitial());
@@ -83,9 +89,31 @@ class EnviarSolicitudWhenIsdoneCubit
     _safeEmit(OnEnviarSolicitudWhenIsdoneLoading());
 
     try {
+      // Primero los Kivas que fallaron en una sincronización anterior: sus
+      // solicitudes ya están en el servidor y no vuelven a pasar por el ciclo.
+      if (onReintentarKivasPendientesFn != null) {
+        try {
+          unSentKivaForms.addAll(await onReintentarKivasPendientesFn());
+        } catch (e, stackTrace) {
+          _logger.e('Error reintentando Kivas pendientes',
+              error: e, stackTrace: stackTrace);
+        }
+      }
+
       final solicitudes = objectBoxService.sendSolicitudesWhenIsDone();
       if (solicitudes.isEmpty) {
-        _safeEmit(EnviarSolicitudWhenIsdoneInitial());
+        _safeEmit(
+          unSentKivaForms.isEmpty
+              ? EnviarSolicitudWhenIsdoneInitial()
+              : OnEnviarSolicitudWhenIsdonePendingVerification(
+                  unsentCedulas: unSentCedulas,
+                  solicitudesSent: solicitudesSent,
+                  unsentKivaForms: unSentKivaForms,
+                  errors: errors,
+                  msgError:
+                      'Algunos formularios Kiva no se pudieron enviar.',
+                ),
+        );
         return;
       }
       for (final solicitud in solicitudes) {
@@ -169,7 +197,7 @@ class EnviarSolicitudWhenIsdoneCubit
         if (nombreFormularioKiva.isEmpty) continue;
 
         try {
-          final isKivFormIsOk = await onSolicitudCreditoIsKivaFn(
+          final resultadoKiva = await onSolicitudCreditoIsKivaFn(
             solicitudId: solicitudId ?? '0',
             numeroSolicitud: numeroSolicitud ?? '0',
             uuid: data.uuid ?? '',
@@ -179,14 +207,31 @@ class EnviarSolicitudWhenIsdoneCubit
             tipoSolicitudId: tipoSolicitudId ?? 0,
             nombreCliente: data.nombreCliente,
           );
-          if (!isKivFormIsOk) {
-            unSentKivaForms.add(
-              'Error al enviar formulario Kiva: ${data.objProductoIdVer}',
-            );
-          } else {
-            solicitudesSent.add(
-              'Historia Kiva de Cedula a sido creada: ${data.cedula} ${data.objProductoIdVer}',
-            );
+          final etiqueta =
+              'solicitud No. $numeroSolicitud (cédula ${data.cedula})';
+          switch (resultadoKiva) {
+            case KivaSyncResultado.enviado:
+              solicitudesSent.add(
+                'Historia Kiva de Cedula a sido creada: ${data.cedula} ${data.objProductoIdVer}',
+              );
+            case KivaSyncResultado.enviadoSinImagenes:
+              solicitudesSent.add(
+                'Historia Kiva de Cedula a sido creada: ${data.cedula} ${data.objProductoIdVer}',
+              );
+              unSentKivaForms.add(
+                'Las imágenes Kiva de la $etiqueta no se subieron. '
+                'Reintenta desde Historial Kiva.',
+              );
+            case KivaSyncResultado.sinFormulario:
+              unSentKivaForms.add(
+                'La $etiqueta es Kiva pero no tiene formulario llenado. '
+                'Llénalo desde Cartera → Kiva con conexión.',
+              );
+            case KivaSyncResultado.fallido:
+              unSentKivaForms.add(
+                'El formulario Kiva de la $etiqueta no se envió. Quedó en '
+                'Historial Kiva y se reintentará en la próxima sincronización.',
+              );
           }
         } catch (e, stackTrace) {
           _logger.e('Error enviando formulario Kiva ${data.cedula}',

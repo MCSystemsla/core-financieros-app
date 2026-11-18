@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' show max;
 
 import 'package:bloc/bloc.dart';
 import 'package:core_financiero_app/src/config/helpers/error_reporter/error_reporter.dart';
@@ -139,12 +140,71 @@ class SolicitudesPendientesLocalDbCubit
         if (existing != null) {
           existing.isSended = true;
           existing.dateSended = DateTime.now();
+          // Firmado no es enviado: queda pendiente hasta que el backend lo
+          // acepte (marcarFormularioEnviado).
+          if (existing.formSended != true) existing.formSended = false;
           await state.isar?.solicitudesPendientes.put(existing);
         }
       });
     } catch (e) {
       _logger.e(e);
     }
+  }
+
+  /// Marca que el backend aceptó el formulario Kiva de [solicitudId]. Llamar
+  /// solo después de una respuesta exitosa del envío de respuestas.
+  Future<void> marcarFormularioEnviado({required String solicitudId}) async {
+    try {
+      await state.isar?.writeTxn(() async {
+        final existing = await state.isar?.solicitudesPendientes
+                .filter()
+                .solicitudIdEqualTo(solicitudId)
+                .findAll() ??
+            [];
+        final ahora = DateTime.now();
+        for (final solicitud in existing) {
+          solicitud.formSended = true;
+          solicitud.formSendedAt = ahora;
+        }
+        await state.isar?.solicitudesPendientes.putAll(existing);
+      });
+    } catch (e) {
+      _logger.e(e);
+    }
+  }
+
+  /// Guarda el resultado del Kiva enviado por la sincronización automática.
+  /// Actualiza la fila de [solicitud.solicitudId] si ya existe (reintento) en
+  /// vez de crear otra.
+  Future<void> guardarResultadoKivaSync({
+    required SolicitudesPendientes solicitud,
+  }) async {
+    final isar = state.isar;
+    if (isar == null) throw StateError('La base de datos local no está lista');
+    await isar.writeTxn(() async {
+      final existentes = await isar.solicitudesPendientes
+          .filter()
+          .solicitudIdEqualTo(solicitud.solicitudId)
+          .findAll();
+      if (existentes.isNotEmpty) {
+        solicitud.id = existentes.map((s) => s.id).reduce(max);
+      }
+      await isar.solicitudesPendientes.put(solicitud);
+    });
+  }
+
+  /// Kivas de la sincronización automática cuyo formulario no llegó al
+  /// backend. Solo las filas que guardó la sincronización (tienen uuid).
+  Future<List<SolicitudesPendientes>> getKivasSyncPendientes() async {
+    final isar = state.isar;
+    if (isar == null) return [];
+    final filas = await isar.solicitudesPendientes
+        .filter()
+        .formSendedEqualTo(false)
+        .and()
+        .solicitudCreditoUuidIsNotNull()
+        .findAll();
+    return _unaPorSolicitudId(filas);
   }
 
   Future<void> updateIsImagesSendedOnSolicitud({
@@ -189,11 +249,16 @@ class SolicitudesPendientesLocalDbCubit
   /// servidor: si se borra el ImageModel antes, se pierden las rutas de las
   /// fotos y ya no hay forma de reintentar la subida.
   Future<List<SolicitudesPendientes>> _getSolicitudesEnviadas() {
+    // formSended == null son filas anteriores a ese campo: se purgan como
+    // antes. Con false (formulario sin enviar) nunca se purgan.
     return state.isar!.solicitudesPendientes
         .filter()
         .isSendedEqualTo(true)
         .and()
         .imagesSendedEqualTo(true)
+        .and()
+        .not()
+        .formSendedEqualTo(false)
         .findAll();
   }
 
@@ -300,11 +365,15 @@ class SolicitudesPendientesLocalDbCubit
     emit(state.copyWith(status: Status.inProgress));
     await Future.delayed(const Duration(seconds: 2));
     try {
+      // Fallidos: imágenes sin subir o formulario sin enviar.
       final solicitudes = await state.isar?.solicitudesPendientes
           .filter()
-          .imagesSendedEqualTo(false)
-          .and()
           .isSendedEqualTo(true)
+          .and()
+          .group((q) => q
+              .imagesSendedEqualTo(false)
+              .or()
+              .formSendedEqualTo(false))
           .findAll();
 
       emit(state.copyWith(

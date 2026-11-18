@@ -103,6 +103,13 @@ class _MujerEmprendeSignatureWidgetState
         }
 
         if (state.status == Status.done) {
+          // El backend aceptó las respuestas del formulario Kiva.
+          await context
+              .read<SolicitudesPendientesLocalDbCubit>()
+              .marcarFormularioEnviado(
+                solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+              );
+          if (!context.mounted) return;
           await _handleFormSubmittedSuccessfully(context, size);
         }
       },

@@ -189,6 +189,13 @@ class _ViviendaSignatureWidgettState extends State<ViviendaSignatureWidget> {
     }
 
     if (state.status == Status.done) {
+      // El backend aceptó las respuestas del formulario Kiva.
+      await context
+          .read<SolicitudesPendientesLocalDbCubit>()
+          .marcarFormularioEnviado(
+            solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+          );
+      if (!context.mounted) return;
       final signatureImage = await _signatureController.toPngBytes();
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/signature.png');

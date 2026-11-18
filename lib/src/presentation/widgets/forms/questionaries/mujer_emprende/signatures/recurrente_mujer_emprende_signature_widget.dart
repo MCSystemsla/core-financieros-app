@@ -133,6 +133,13 @@ class _SignatureActionButtons extends StatelessWidget {
           _showErrorDialog(context, state.errorMsg);
         }
         if (state.status == Status.done) {
+          // El backend aceptó las respuestas del formulario Kiva.
+          await context
+              .read<SolicitudesPendientesLocalDbCubit>()
+              .marcarFormularioEnviado(
+                solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+              );
+          if (!context.mounted) return;
           await _handleSuccessSubmission(context, kivaRoute, uploadCubit);
         }
       },

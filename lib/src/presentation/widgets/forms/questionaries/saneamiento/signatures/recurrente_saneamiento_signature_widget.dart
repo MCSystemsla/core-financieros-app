@@ -207,6 +207,13 @@ class SubmitSignatureButton extends StatelessWidget {
     }
 
     if (state.status == Status.done) {
+      // El backend aceptó las respuestas del formulario Kiva.
+      await context
+          .read<SolicitudesPendientesLocalDbCubit>()
+          .marcarFormularioEnviado(
+            solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+          );
+      if (!context.mounted) return;
       final routeCubit = context.read<KivaRouteCubit>();
       final uploadCubit = context.read<UploadUserFileCubit>();
 

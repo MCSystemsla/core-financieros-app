@@ -88,6 +88,13 @@ class _MigrantesFormSignatureState extends State<MigrantesFormSignature> {
                   ).showDialog(context, dialogType: DialogType.error);
                 }
                 if (state.status == Status.done) {
+                  // El backend aceptó las respuestas del formulario Kiva.
+                  await context
+                      .read<SolicitudesPendientesLocalDbCubit>()
+                      .marcarFormularioEnviado(
+                        solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+                      );
+                  if (!context.mounted) return;
                   final signatureImage = await controller.toPngBytes();
                   final directory = await getApplicationDocumentsDirectory();
                   final filePath = '${directory.path}/signature.png';
@@ -349,6 +356,13 @@ class _RecurrenteMigrantesFormSignatureState
                   ).showDialog(context, dialogType: DialogType.error);
                 }
                 if (state.status == Status.done) {
+                  // El backend aceptó las respuestas del formulario Kiva.
+                  await context
+                      .read<SolicitudesPendientesLocalDbCubit>()
+                      .marcarFormularioEnviado(
+                        solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
+                      );
+                  if (!context.mounted) return;
                   final signatureImage = await controller.toPngBytes();
                   final directory = await getApplicationDocumentsDirectory();
                   final filePath = '${directory.path}/signature.png';

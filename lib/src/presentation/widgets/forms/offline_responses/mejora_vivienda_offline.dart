@@ -65,6 +65,13 @@ class _ViviendaNuevaOfflineResponseState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
+              // El backend aceptó las respuestas: se marca antes de subir imágenes.
+              await context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .marcarFormularioEnviado(
+                    solicitudId: widget.solicitudId.toString(),
+                  );
+              if (!context.mounted) return;
               final imagesSended = await context
                   .read<UploadUserFileCubit>()
                   .uploadUserFilesOffline(
@@ -302,6 +309,13 @@ class _RecurrenteViviendaOfflineResponseState
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (status.status == Status.done) {
+              // El backend aceptó las respuestas: se marca antes de subir imágenes.
+              await context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .marcarFormularioEnviado(
+                    solicitudId: widget.solicitudId.toString(),
+                  );
+              if (!context.mounted) return;
               final imagesSended = await context
                   .read<UploadUserFileCubit>()
                   .uploadUserFilesOffline(

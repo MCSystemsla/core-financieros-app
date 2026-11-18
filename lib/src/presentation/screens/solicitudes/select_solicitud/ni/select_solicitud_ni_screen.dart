@@ -41,7 +41,7 @@ class SelectSolicitudScreenNi extends StatelessWidget {
     final kivaRepository = ResponsesRepositoryImpl();
     final kivaProvider = context.read<SolicitudesPendientesLocalDbCubit>();
 
-    Future<bool> enviarKiva({
+    Future<KivaSyncResultado> enviarKiva({
       required String solicitudId,
       required String numeroSolicitud,
       required String uuid,
@@ -70,6 +70,10 @@ class SelectSolicitudScreenNi extends StatelessWidget {
       cubit.sendSolicitudWhenIsDone(
         isConnected: context.read<InternetConnectionCubit>().state.isConnected,
         onSolicitudCreditoIsKivaFn: enviarKiva,
+        onReintentarKivasPendientesFn: () => reintentarKivasSyncPendientes(
+          kivaRepository: kivaRepository,
+          kivaProvider: kivaProvider,
+        ),
       );
     }
 

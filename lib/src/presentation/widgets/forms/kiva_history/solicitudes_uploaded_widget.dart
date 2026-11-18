@@ -197,9 +197,13 @@ class _SolicitudTileTitle extends StatelessWidget {
                 'N° ${solicitud.numero ?? '—'}',
                 style: textTheme.bodyMedium?.copyWith(color: Colors.grey[700]),
               ),
+              if (solicitud.formSended == false) ...[
+                const Gap(6),
+                const _PendienteTag(texto: 'Formulario pendiente'),
+              ],
               if (imagenesPendientes) ...[
                 const Gap(6),
-                const _ImagenesPendientesTag(),
+                const _PendienteTag(texto: 'Imágenes pendientes'),
               ],
             ],
           ),
@@ -209,8 +213,10 @@ class _SolicitudTileTitle extends StatelessWidget {
   }
 }
 
-class _ImagenesPendientesTag extends StatelessWidget {
-  const _ImagenesPendientesTag();
+class _PendienteTag extends StatelessWidget {
+  final String texto;
+
+  const _PendienteTag({required this.texto});
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +238,7 @@ class _ImagenesPendientesTag extends StatelessWidget {
           ),
           const Gap(6),
           Text(
-            'Imágenes pendientes',
+            texto,
             style: TextStyle(
               color: Colors.red[700],
               fontSize: 12,
@@ -433,13 +439,31 @@ class _SolicitudAccionesState extends State<_SolicitudAcciones> {
 
   @override
   Widget build(BuildContext context) {
+    // Con el formulario ya aceptado por el backend no se ofrece reenviarlo
+    // (evita duplicados). null = fila anterior a formSended: como antes.
+    final formularioEnviado = _solicitud.formSended == true;
     return Column(
       children: [
-        CustomElevatedButton(
-          onPressed: _abrirFormulario,
-          text: 'Enviar formulario Kiva',
-          color: AppColors.getSecondaryColor(),
-        ),
+        if (formularioEnviado)
+          Row(
+            children: [
+              Icon(Icons.check_circle, color: Colors.green[700], size: 18),
+              const Gap(6),
+              Text(
+                'Formulario Kiva enviado',
+                style: TextStyle(
+                  color: Colors.green[700],
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          )
+        else
+          CustomElevatedButton(
+            onPressed: _abrirFormulario,
+            text: 'Enviar formulario Kiva',
+            color: AppColors.getSecondaryColor(),
+          ),
         const Gap(12),
         ValueListenableBuilder<String?>(
           valueListenable: _enviando,

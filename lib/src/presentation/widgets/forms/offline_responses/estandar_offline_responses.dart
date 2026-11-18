@@ -65,6 +65,13 @@ class _EstandarOfflineFormState extends State<EstandarOfflineForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (state.status == Status.done) {
+              // El backend aceptó las respuestas: se marca antes de subir imágenes.
+              await context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .marcarFormularioEnviado(
+                    solicitudId: widget.solicitudId.toString(),
+                  );
+              if (!context.mounted) return;
               final imagesSended = await context
                   .read<UploadUserFileCubit>()
                   .uploadUserFilesOffline(
@@ -365,6 +372,13 @@ class _EstandarFormState extends State<EstandarForm> {
               ).showDialog(context, dialogType: DialogType.error);
             }
             if (stateEstandar.status == Status.done) {
+              // El backend aceptó las respuestas: se marca antes de subir imágenes.
+              await context
+                  .read<SolicitudesPendientesLocalDbCubit>()
+                  .marcarFormularioEnviado(
+                    solicitudId: widget.solicitudId.toString(),
+                  );
+              if (!context.mounted) return;
               final imagesSended = await context
                   .read<UploadUserFileCubit>()
                   .uploadUserFilesOffline(
