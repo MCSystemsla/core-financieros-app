@@ -21,6 +21,7 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/version/vers
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/logo/logo_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -34,16 +35,134 @@ class LoginScreenView extends StatefulWidget {
 
 class _LoginScreenViewState extends State<LoginScreenView>
     with WidgetsBindingObserver {
+  final _formWidgetKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
+  }
+
+  Widget _buildLogo(String logo, {required double width}) {
+    return Center(
+      child: DebugPanelTrigger(
+        child: Image(width: width, image: AssetImage(logo)),
+      ),
+    );
+  }
+
+  Widget _buildPortrait(BoxConstraints constraints, String logo) {
+    return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [ConnectionPillWidget()],
+                ),
+                const Gap(22),
+                _buildLogo(logo, width: 228),
+                const Gap(26),
+                const _LoginGreeting(),
+                const Gap(20),
+                LoginFormWidget(key: _formWidgetKey),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 24),
+              child: VersionControlWidget(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLandscape(String logo) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Panel izquierdo: marca, saludo y versión.
+          Expanded(
+            flex: 5,
+            child: LayoutBuilder(
+              builder: (context, side) {
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: side.maxHeight - 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildLogo(logo, width: 180),
+                            const Gap(20),
+                            const _LoginGreeting(),
+                          ],
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 16),
+                          child: VersionControlWidget(),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const Gap(24),
+          // Panel derecho: conexión y formulario.
+          Expanded(
+            flex: 6,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              padding: const EdgeInsets.only(top: 12, bottom: 20),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 480),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [ConnectionPillWidget()],
+                      ),
+                      const Gap(12),
+                      LoginFormWidget(key: _formWidgetKey),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -96,53 +215,12 @@ class _LoginScreenViewState extends State<LoginScreenView>
                     SafeArea(
                       child: LayoutBuilder(
                         builder: (context, constraints) {
-                          return SingleChildScrollView(
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minHeight: constraints.maxHeight - 32,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      const Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [ConnectionPillWidget()],
-                                      ),
-                                      const Gap(22),
-                                      Center(
-                                        child: DebugPanelTrigger(
-                                          child: Image(
-                                            width: 228,
-                                            image: AssetImage(
-                                              flavor.toLogoExtension,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const Gap(26),
-                                      const _LoginGreeting(),
-                                      const Gap(20),
-                                      const LoginFormWidget(),
-                                    ],
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(top: 24),
-                                    child: VersionControlWidget(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          final logo = flavor.toLogoExtension;
+                          final isLandscape =
+                              constraints.maxWidth > constraints.maxHeight;
+                          return isLandscape
+                              ? _buildLandscape(logo)
+                              : _buildPortrait(constraints, logo);
                         },
                       ),
                     ),
@@ -265,8 +343,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final hasSavedSession = localStorage.currentUserName.isNotEmpty &&
-        localStorage.jwt.isNotEmpty;
+    final hasSavedSession =
+        localStorage.currentUserName.isNotEmpty && localStorage.jwt.isNotEmpty;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
