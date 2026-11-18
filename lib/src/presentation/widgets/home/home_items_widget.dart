@@ -10,6 +10,7 @@ import 'package:core_financiero_app/src/presentation/bloc/internet_connection/in
 import 'package:core_financiero_app/src/presentation/screens/cartera/cartera_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/otp/otp_screen.dart';
 import 'package:core_financiero_app/src/presentation/screens/tutorials/tutorials_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/home/navidad/tarjeta_saludo_festivo_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/no_data/empty_list_widget.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/push_with_sync_check/push_with_sync_check.dart';
@@ -100,6 +101,7 @@ class HomeItemsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _GreetingsWidget(),
+          const TarjetaSaludoFestivoWidget(),
           const Padding(
             padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 12),
             child: Text(

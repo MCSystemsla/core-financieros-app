@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.da
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/auth/change_password/change_password_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/auth/login/login_field_widgets.dart';
+import 'package:core_financiero_app/src/presentation/widgets/auth/navidad/logo_navideno_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/update_app_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/background/custom_background.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/debug/debug_panel_trigger.dart';
@@ -57,7 +58,7 @@ class _LoginScreenViewState extends State<LoginScreenView>
   Widget _buildLogo(String logo, {required double width}) {
     return Center(
       child: DebugPanelTrigger(
-        child: Image(width: width, image: AssetImage(logo)),
+        child: LogoNavidenoWidget(logo: logo, width: width),
       ),
     );
   }

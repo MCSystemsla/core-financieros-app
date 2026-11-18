@@ -102,4 +102,19 @@ class LocalStorage {
   Future<void> setRolUser(String rolUser) async {
     await prefs.setString('rolUser', rolUser);
   }
+
+  /// Claves de los saludos festivos que el asesor ya cerró en el Inicio
+  /// (ver `TemporadaNavidena.claveSaludo`).
+  List<String> get saludosFestivosCerrados {
+    return prefs.getStringList('saludosFestivosCerrados') ?? [];
+  }
+
+  Future<void> addSaludoFestivoCerrado(String clave) async {
+    final cerrados = saludosFestivosCerrados;
+    if (cerrados.contains(clave)) return;
+    await prefs.setStringList(
+      'saludosFestivosCerrados',
+      [...cerrados, clave],
+    );
+  }
 }

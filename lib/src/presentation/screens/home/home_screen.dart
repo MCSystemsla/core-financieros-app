@@ -11,6 +11,7 @@ import 'package:core_financiero_app/src/presentation/bloc/kiva/no_images_kivas_o
 import 'package:core_financiero_app/src/presentation/widgets/home/home_banner_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/home_items_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/home/low_storage_warning/low_storage_warning_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/home/navidad/nevada_navidena_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/alert/no_images_kivas_on_history_alert.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/download_catalogos_dialog_hn.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/downsloading_catalogos_widget.dart';
@@ -155,15 +156,20 @@ class _HomeScreenView extends StatelessWidget {
                   NoImagesKivasOnHistoryAlert(
                     solicitudesKivaPending: state.data.data!.length,
                   ),
-                _ => FadeIn(
-                    child: const Column(
-                      children: [
-                        HomeBannerWidget(),
-                        Expanded(
-                          child: HomeItemsWidget(),
+                _ => Stack(
+                    children: [
+                      FadeIn(
+                        child: const Column(
+                          children: [
+                            HomeBannerWidget(),
+                            Expanded(
+                              child: HomeItemsWidget(),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      const Positioned.fill(child: NevadaNavidenaWidget()),
+                    ],
                   ),
               };
             },
