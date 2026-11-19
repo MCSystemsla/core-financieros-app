@@ -145,6 +145,10 @@ class AsalariadoResponsesLocalDb {
   bool isDone = false;
   bool isOffline = false;
   bool hasVerified = false;
+
+  /// Número que devolvió el servidor al crear la solicitud. Habilita
+  /// "Reenviar fotos cédula" en las solicitudes finalizadas.
+  String? numeroSolicitud;
   DateTime? fechaDesembolso;
   double? tasaInteres;
   int? montoMinimo;
@@ -304,6 +308,7 @@ class AsalariadoResponsesLocalDb {
     this.isDone = false,
     this.isOffline = false,
     this.hasVerified = false,
+    this.numeroSolicitud,
     this.fechaDesembolso,
     this.tasaInteres,
     this.montoMinimo,

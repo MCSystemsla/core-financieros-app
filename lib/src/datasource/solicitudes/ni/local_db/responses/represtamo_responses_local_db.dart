@@ -80,6 +80,10 @@ class ReprestamoResponsesLocalDb {
   bool isDone = false;
   String? errorMsg;
   bool hasVerified = false;
+
+  /// Número que devolvió el servidor al crear la solicitud. Habilita
+  /// "Reenviar fotos cédula" en las solicitudes finalizadas.
+  String? numeroSolicitud;
   bool isOffline = false;
   String? objOrigenSolicitudIdVer;
   String? objFrecuenciaIdVer2;
@@ -176,6 +180,7 @@ class ReprestamoResponsesLocalDb {
     this.isDone = false,
     this.errorMsg = '',
     this.hasVerified = false,
+    this.numeroSolicitud,
     this.nombreCompletoCliente,
     this.montoMinimo,
     this.montoMaximo,

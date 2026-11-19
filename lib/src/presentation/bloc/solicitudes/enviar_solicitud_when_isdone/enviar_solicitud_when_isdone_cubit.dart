@@ -165,7 +165,10 @@ class EnviarSolicitudWhenIsdoneCubit
         // paso posterior para que un fallo en cédulas/Kiva no provoque que se
         // vuelva a crear en la próxima sincronización.
         final marcada =
-            objectBoxService.updateWhenSolicitdIsDone(solicitud: solicitud);
+            objectBoxService.updateWhenSolicitdIsDone(
+          solicitud: solicitud,
+          numeroSolicitud: numeroSolicitud,
+        );
         if (!marcada) {
           errors.add(
             'La solicitud con cédula ${data.cedula} se creó en el servidor '

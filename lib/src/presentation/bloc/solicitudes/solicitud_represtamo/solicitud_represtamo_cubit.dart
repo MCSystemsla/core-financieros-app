@@ -213,6 +213,7 @@ class SolicitudReprestamoCubit extends Cubit<SolicitudReprestamoState> {
       fechaDesembolso:
           _preferDate(state.fechaDesembolso, prev?.fechaDesembolso),
       hasVerified: boolPrefer(state.hasVerified, prev?.hasVerified),
+      numeroSolicitud: _prefer(state.numeroSolicitud, prev?.numeroSolicitud),
       isDone: boolPrefer(state.isDone, prev?.isDone),
       prestamoInteres: state.tasaInteres == 0
           ? (prev?.prestamoInteres ?? 0)

@@ -274,6 +274,7 @@ class SolicitudAsalariadoCubit extends Cubit<SolicitudAsalariadoState> {
           state.montoMaximo == 0 ? (prev?.montoMaximo ?? 0) : state.montoMaximo,
       hasVerified:
           !state.hasVerified ? (prev?.hasVerified ?? false) : state.hasVerified,
+      numeroSolicitud: _prefer(state.numeroSolicitud, prev?.numeroSolicitud),
       isOffline: prev?.isOffline ?? false,
       objOrigenSolicitudId:
           _prefer(state.objOrigenSolicitudId, prev?.objOrigenSolicitudId),

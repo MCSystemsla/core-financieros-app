@@ -20,6 +20,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asal
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_5.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_6.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/asalariado/offline/asalariado_offline_7.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/reenviar_fotos_cedula/reenviar_fotos_cedula_ni_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -84,31 +85,43 @@ class AsalariadoOfflineView extends StatelessWidget {
                       Hero(
                         transitionOnUserGestures: true,
                         tag: 'cedulaFrontal',
-                        child: PhotoCedulaClientWidget(
-                          controller: controller,
-                          onNextPressed: () {},
-                          fotoCedulaFrontal:
-                              XFile(imagesCedula?.imageFrontCedula ?? ''),
-                          fotoCedulaTrasera:
-                              XFile(imagesCedula?.imageBackCedula ?? ''),
-                          onCedulaFrontalPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageFrontCedula ?? '',
-                                ),
+                        child: Column(
+                          children: [
+                            ReenviarFotosCedulaNiButton(
+                              numeroSolicitud:
+                                  asalariadoResponsesLocalDb.numeroSolicitud,
+                              cedula: asalariadoResponsesLocalDb.cedula,
+                              tipoSolicitud: 'ASALARIADO',
+                            ),
+                            Expanded(
+                              child: PhotoCedulaClientWidget(
+                                controller: controller,
+                                onNextPressed: () {},
+                                fotoCedulaFrontal:
+                                    XFile(imagesCedula?.imageFrontCedula ?? ''),
+                                fotoCedulaTrasera:
+                                    XFile(imagesCedula?.imageBackCedula ?? ''),
+                                onCedulaFrontalPressed: () {
+                                  context.pushTransparentRoute(
+                                    PhotoCedulaImagePreview(
+                                      imagesCedula: File(
+                                        imagesCedula?.imageFrontCedula ?? '',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onCedulaTraseraPressed: () {
+                                  context.pushTransparentRoute(
+                                    PhotoCedulaImagePreview(
+                                      imagesCedula: File(
+                                        imagesCedula?.imageBackCedula ?? '',
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                          onCedulaTraseraPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageBackCedula ?? '',
-                                ),
-                              ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                       ),
                       AsalariadoOffline1(

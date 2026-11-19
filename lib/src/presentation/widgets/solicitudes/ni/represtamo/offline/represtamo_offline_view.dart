@@ -12,6 +12,7 @@ import 'package:core_financiero_app/src/presentation/bloc/solicitudes/solicitud_
 import 'package:core_financiero_app/src/presentation/screens/solicitudes/ni/offline/crear_solicitud_offline_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/navbar/navbar.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_historial_credito_offline.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/reenviar_fotos_cedula/reenviar_fotos_cedula_ni_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_offline_form1.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/represtamo/offline/represtamo_offline_form2.dart';
@@ -71,31 +72,43 @@ class ReprestamoOfflineView extends StatelessWidget {
                     Hero(
                       transitionOnUserGestures: true,
                       tag: 'cedulaFrontal',
-                      child: PhotoCedulaClientWidget(
-                        controller: controller,
-                        onNextPressed: () {},
-                        fotoCedulaFrontal:
-                            XFile(imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                        fotoCedulaTrasera:
-                            XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                        onCedulaFrontalPressed: () {
-                          context.pushTransparentRoute(
-                            PhotoCedulaImagePreview(
-                              imagesCedula: File(
-                                imagesCedula?.imageFrontCedula ?? '',
-                              ),
+                      child: Column(
+                        children: [
+                          ReenviarFotosCedulaNiButton(
+                            numeroSolicitud:
+                                solicitudReprestamoOffline.numeroSolicitud,
+                            cedula: solicitudReprestamoOffline.cedula,
+                            tipoSolicitud: 'REPRESTAMO',
+                          ),
+                          Expanded(
+                            child: PhotoCedulaClientWidget(
+                              controller: controller,
+                              onNextPressed: () {},
+                              fotoCedulaFrontal: XFile(
+                                  imagesCedula?.imageFrontCedula ?? 'NO PATH'),
+                              fotoCedulaTrasera: XFile(
+                                  imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                              onCedulaFrontalPressed: () {
+                                context.pushTransparentRoute(
+                                  PhotoCedulaImagePreview(
+                                    imagesCedula: File(
+                                      imagesCedula?.imageFrontCedula ?? '',
+                                    ),
+                                  ),
+                                );
+                              },
+                              onCedulaTraseraPressed: () {
+                                context.pushTransparentRoute(
+                                  PhotoCedulaImagePreview(
+                                    imagesCedula: File(
+                                      imagesCedula?.imageBackCedula ?? '',
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
-                        onCedulaTraseraPressed: () {
-                          context.pushTransparentRoute(
-                            PhotoCedulaImagePreview(
-                              imagesCedula: File(
-                                imagesCedula?.imageBackCedula ?? '',
-                              ),
-                            ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
                     ReprestamoOfflineForm1(

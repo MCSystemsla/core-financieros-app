@@ -637,14 +637,25 @@ class ObjectBoxService {
     return _markSolicitudVerified(solicitud: solicitud, errorMsg: errorMsg);
   }
 
-  bool updateWhenSolicitdIsDone({required dynamic solicitud}) {
-    return _markSolicitudVerified(solicitud: solicitud);
+  bool updateWhenSolicitdIsDone({
+    required dynamic solicitud,
+    String? numeroSolicitud,
+  }) {
+    return _markSolicitudVerified(
+      solicitud: solicitud,
+      numeroSolicitud: numeroSolicitud,
+    );
   }
 
   bool _markSolicitudVerified({
     required dynamic solicitud,
     String? errorMsg,
+    String? numeroSolicitud,
   }) {
+    final numero =
+        numeroSolicitud != null && numeroSolicitud.isNotEmpty
+            ? numeroSolicitud
+            : null;
     try {
       switch (solicitud) {
         case ResponseLocalDb():
@@ -652,6 +663,7 @@ class ObjectBoxService {
           if (current == null) return false;
           current.hasVerified = true;
           current.errorMsg = errorMsg;
+          if (numero != null) current.numeroSolicitud = numero;
           solicitudesResponsesBox.put(current, mode: PutMode.update);
           return true;
         case ReprestamoResponsesLocalDb():
@@ -659,6 +671,7 @@ class ObjectBoxService {
           if (current == null) return false;
           current.hasVerified = true;
           current.errorMsg = errorMsg;
+          if (numero != null) current.numeroSolicitud = numero;
           solicitudesReprestamoResponsesBox.put(current, mode: PutMode.update);
           return true;
         case AsalariadoResponsesLocalDb():
@@ -666,6 +679,7 @@ class ObjectBoxService {
           if (current == null) return false;
           current.hasVerified = true;
           current.errorMsg = errorMsg;
+          if (numero != null) current.numeroSolicitud = numero;
           solicitudesAsalariadoResponsesBox.put(current, mode: PutMode.update);
           return true;
         default:

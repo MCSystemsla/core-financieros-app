@@ -144,6 +144,10 @@ class ResponseLocalDb {
   bool isDone = false;
   String? errorMsg;
   bool hasVerified = false;
+
+  /// Número que devolvió el servidor al crear la solicitud. Habilita
+  /// "Reenviar fotos cédula" en las solicitudes finalizadas.
+  String? numeroSolicitud;
   int? montoMinimo;
   int? montoMaximo;
   String? frecuenciaPagoMeses;
@@ -295,6 +299,7 @@ class ResponseLocalDb {
     this.createdAt,
     this.isDone = false,
     this.hasVerified = false,
+    this.numeroSolicitud,
     this.errorMsg,
     this.frecuenciaPagoMeses,
     this.isOffline = false,

@@ -19,6 +19,7 @@ import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nuev
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline6_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offline7_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/nueva_menor/offline/nueva_menor_offlne4_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/solicitudes/ni/reenviar_fotos_cedula/reenviar_fotos_cedula_ni_button.dart';
 import 'package:core_financiero_app/src/presentation/widgets/solicitudes/photo_cedula_client_widget.dart';
 import 'package:dismissible_page/dismissible_page.dart';
 import 'package:flutter/material.dart';
@@ -81,31 +82,43 @@ class CrearSolicitudOfflineScreen extends StatelessWidget {
                       Hero(
                         transitionOnUserGestures: true,
                         tag: 'cedulaFrontal',
-                        child: PhotoCedulaClientWidget(
-                          onNextPressed: () {},
-                          controller: pageController,
-                          fotoCedulaFrontal: XFile(
-                              imagesCedula?.imageFrontCedula ?? 'NO PATH'),
-                          fotoCedulaTrasera:
-                              XFile(imagesCedula?.imageBackCedula ?? 'NO PATH'),
-                          onCedulaFrontalPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageFrontCedula ?? '',
-                                ),
+                        child: Column(
+                          children: [
+                            ReenviarFotosCedulaNiButton(
+                              numeroSolicitud: responseLocalDb.numeroSolicitud,
+                              cedula: responseLocalDb.cedula,
+                              tipoSolicitud: 'NUEVA_MENOR',
+                            ),
+                            Expanded(
+                              child: PhotoCedulaClientWidget(
+                                onNextPressed: () {},
+                                controller: pageController,
+                                fotoCedulaFrontal: XFile(
+                                    imagesCedula?.imageFrontCedula ??
+                                        'NO PATH'),
+                                fotoCedulaTrasera: XFile(
+                                    imagesCedula?.imageBackCedula ?? 'NO PATH'),
+                                onCedulaFrontalPressed: () {
+                                  context.pushTransparentRoute(
+                                    PhotoCedulaImagePreview(
+                                      imagesCedula: File(
+                                        imagesCedula?.imageFrontCedula ?? '',
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onCedulaTraseraPressed: () {
+                                  context.pushTransparentRoute(
+                                    PhotoCedulaImagePreview(
+                                      imagesCedula: File(
+                                        imagesCedula?.imageBackCedula ?? '',
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                          onCedulaTraseraPressed: () {
-                            context.pushTransparentRoute(
-                              PhotoCedulaImagePreview(
-                                imagesCedula: File(
-                                  imagesCedula?.imageBackCedula ?? '',
-                                ),
-                              ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
                       ),
                       NuevaMenorOffline1(

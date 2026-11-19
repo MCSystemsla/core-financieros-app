@@ -191,6 +191,7 @@ class SolicitudNuevaMenorCubit extends Cubit<SolicitudNuevaMenorState> {
       montoMinimo:
           state.montoMinimo == 0 ? prev?.montoMinimo : state.montoMinimo,
       hasVerified: boolPrefer(state.hasVerified, prev?.hasVerified),
+      numeroSolicitud: _prefer(state.numeroSolicitud, prev?.numeroSolicitud),
       errorMsg: _prefer(state.errorMsg, prev?.errorMsg),
       isDone: boolPrefer(state.isDone, prev?.isDone),
       createdAt: prev?.createdAt ?? DateTime.now(),
