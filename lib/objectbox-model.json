@@ -204,7 +204,7 @@
     },
     {
       "id": "10:5156059507673561033",
-      "lastPropertyId": "148:5756922527214864594",
+      "lastPropertyId": "149:4181966280186630704",
       "name": "ResponseLocalDb",
       "properties": [
         {
@@ -942,13 +942,18 @@
           "id": "147:1434527191702913174",
           "name": "nombreFormularioKiva",
           "type": 9
+        },
+        {
+          "id": "149:4181966280186630704",
+          "name": "numeroSolicitud",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "11:4280151073531314887",
-      "lastPropertyId": "88:454189084863864254",
+      "lastPropertyId": "89:2762934350798093214",
       "name": "ReprestamoResponsesLocalDb",
       "properties": [
         {
@@ -1386,13 +1391,18 @@
           "id": "88:454189084863864254",
           "name": "nombreFormularioKiva",
           "type": 9
+        },
+        {
+          "id": "89:2762934350798093214",
+          "name": "numeroSolicitud",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "12:4888282068940134747",
-      "lastPropertyId": "156:5945438603063566861",
+      "lastPropertyId": "157:8163274813764153824",
       "name": "AsalariadoResponsesLocalDb",
       "properties": [
         {
@@ -2174,6 +2184,11 @@
         {
           "id": "156:5945438603063566861",
           "name": "nombreFormularioKiva",
+          "type": 9
+        },
+        {
+          "id": "157:8163274813764153824",
+          "name": "numeroSolicitud",
           "type": 9
         }
       ],
