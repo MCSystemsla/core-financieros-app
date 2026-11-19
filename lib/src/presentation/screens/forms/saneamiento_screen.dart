@@ -84,47 +84,44 @@ class _SaneamientoScreenState extends State<SaneamientoScreen> {
             ),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'forms.saneamiento.appbar'.tr(),
-          isRecurrentForm: isRecurrentForm,
-          steps: const [
-            'Fotos del cliente',
-            'Entorno social',
-            'Descripción del negocio',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            EntornoSocialWidget(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            DescripcionYDesarrolloWidget(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            ImpactoSocialKivaWidget(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            isRecurrentForm
-                ? RecurrenteSaneamientoSignatureWidget(
-                    controller: pageController,
-                  )
-                : SaneamientoSignatureWidget(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+      child: KivaFormScaffold(
+        title: 'forms.saneamiento.appbar'.tr(),
+        isRecurrentForm: isRecurrentForm,
+        steps: const [
+          'Fotos del cliente',
+          'Entorno social',
+          'Descripción del negocio',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          EntornoSocialWidget(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          DescripcionYDesarrolloWidget(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          ImpactoSocialKivaWidget(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          isRecurrentForm
+              ? RecurrenteSaneamientoSignatureWidget(
+                  controller: pageController,
+                )
+              : SaneamientoSignatureWidget(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }

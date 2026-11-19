@@ -57,48 +57,45 @@ class EnergiaLimpiaScreen extends StatelessWidget {
           create: (ctx) => RecurrenteEnergiaLimpiaCubit(responseRepository),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'Energía Limpia',
-          isRecurrentForm: isRecurrentForm,
-          steps: [
-            'Fotos del cliente',
-            'Datos adicionales',
-            'Entorno familiar',
-            if (isRecurrentForm) 'Crédito anterior',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            EnergiaLimpiaAditionalDataWidget(
+      child: KivaFormScaffold(
+        title: 'Energía Limpia',
+        isRecurrentForm: isRecurrentForm,
+        steps: [
+          'Fotos del cliente',
+          'Datos adicionales',
+          'Entorno familiar',
+          if (isRecurrentForm) 'Crédito anterior',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          EnergiaLimpiaAditionalDataWidget(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          EnergiaLimpiaEntornoFamiliar(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          if (isRecurrentForm)
+            EnergiaLimpiaCreditoAnterior(
               pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
             ),
-            EnergiaLimpiaEntornoFamiliar(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            if (isRecurrentForm)
-              EnergiaLimpiaCreditoAnterior(
-                pageController: pageController,
-              ),
-            EnergiaLimpiaImpactoSocial(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            isRecurrentForm
-                ? RecurrenteEnergiaLimpiaWidget(controller: pageController)
-                : EnergiaLimpiaSignatureWidget(controller: pageController),
-          ],
-        ),
+          EnergiaLimpiaImpactoSocial(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          isRecurrentForm
+              ? RecurrenteEnergiaLimpiaWidget(controller: pageController)
+              : EnergiaLimpiaSignatureWidget(controller: pageController),
+        ],
       ),
     );
   }

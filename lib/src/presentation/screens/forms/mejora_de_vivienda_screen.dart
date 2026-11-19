@@ -67,48 +67,45 @@ class _MejoraDeViviendaScreenState extends State<MejoraDeViviendaScreen> {
             ),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'forms.mejora_de_vivienda.title'.tr(),
-          isRecurrentForm: esRecurrente,
-          steps: [
-            'Fotos del cliente',
-            'Entorno social',
-            if (esRecurrente) 'Crédito anterior',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            MejoraViviendaEntornoSocial(
+      child: KivaFormScaffold(
+        title: 'forms.mejora_de_vivienda.title'.tr(),
+        isRecurrentForm: esRecurrente,
+        steps: [
+          'Fotos del cliente',
+          'Entorno social',
+          if (esRecurrente) 'Crédito anterior',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          MejoraViviendaEntornoSocial(
+            pageController: pageController,
+            isRecurrentForm: esRecurrente,
+          ),
+          if (esRecurrente)
+            MejoraViviendaCreditoDescrip(
+              isRecurrentForm: esRecurrente,
               pageController: pageController,
-              isRecurrentForm: esRecurrente,
             ),
-            if (esRecurrente)
-              MejoraViviendaCreditoDescrip(
-                isRecurrentForm: esRecurrente,
-                pageController: pageController,
-              ),
-            ImpactoSocialKivaObjetiveWidget(
-              isRecurrentForm: esRecurrente,
-              controller: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            esRecurrente
-                ? RecurrenteViviendaSignatureWidget(
-                    controller: pageController,
-                  )
-                : ViviendaSignatureWidget(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+          ImpactoSocialKivaObjetiveWidget(
+            isRecurrentForm: esRecurrente,
+            controller: pageController,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          esRecurrente
+              ? RecurrenteViviendaSignatureWidget(
+                  controller: pageController,
+                )
+              : ViviendaSignatureWidget(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }

@@ -53,47 +53,44 @@ class MujerEmprenderScreen extends StatelessWidget {
             ),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'Mujer Emprende',
-          isRecurrentForm: isRecurrentForm,
-          steps: const [
-            'Fotos del cliente',
-            'Entorno social',
-            'Descripción del negocio',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            MujerEmprendeEntornoSocialWidget(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            DescripcionYDesarrolloDelNegocioWidget(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            MujerEmprendeImpactoSocial(
-              pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            isRecurrentForm
-                ? RecurrenteMujerEmprendeSignatureWidget(
-                    controller: pageController,
-                  )
-                : MujerEmprendeSignatureWidget(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+      child: KivaFormScaffold(
+        title: 'Mujer Emprende',
+        isRecurrentForm: isRecurrentForm,
+        steps: const [
+          'Fotos del cliente',
+          'Entorno social',
+          'Descripción del negocio',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          MujerEmprendeEntornoSocialWidget(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          DescripcionYDesarrolloDelNegocioWidget(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          MujerEmprendeImpactoSocial(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          isRecurrentForm
+              ? RecurrenteMujerEmprendeSignatureWidget(
+                  controller: pageController,
+                )
+              : MujerEmprendeSignatureWidget(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }

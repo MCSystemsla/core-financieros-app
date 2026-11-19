@@ -14,6 +14,13 @@ import 'package:gap/gap.dart';
 /// Es dueño del [PageController] (lo crea una vez y lo libera), así no se
 /// recrea si la pantalla se reconstruye. [steps] debe tener el mismo orden y
 /// la misma cantidad que las páginas que devuelve [pagesBuilder].
+///
+/// También controla la salida: el botón atrás del encabezado, el gesto/botón
+/// atrás del sistema y [KivaFormScaffold.salir] piden confirmación si el
+/// formulario ya tiene datos (pasó del primer paso o se marcó con
+/// [KivaFormScaffold.marcarCambios]), y no dejan salir mientras se envía
+/// ([KivaFormScaffold.marcarEnviando]). Los `pop` del código (al terminar el
+/// envío) no pasan por aquí.
 class KivaFormScaffold extends StatefulWidget {
   final String title;
   final bool isRecurrentForm;
@@ -27,6 +34,28 @@ class KivaFormScaffold extends StatefulWidget {
     required this.pagesBuilder,
   });
 
+  static _KivaFormScaffoldState? _of(BuildContext context) =>
+      context.findAncestorStateOfType<_KivaFormScaffoldState>();
+
+  /// Marca que el formulario ya tiene datos que se perderían al salir (por
+  /// ejemplo, una foto tomada en el primer paso).
+  static void marcarCambios(BuildContext context) =>
+      _of(context)?._tieneCambios = true;
+
+  /// Indica si hay un envío en curso. Mientras dure no se puede salir.
+  static void marcarEnviando(BuildContext context, bool enviando) =>
+      _of(context)?._enviando = enviando;
+
+  /// Sale del formulario, pidiendo confirmación si hay datos sin guardar.
+  static Future<void> salir(BuildContext context) async {
+    final state = _of(context);
+    if (state == null) {
+      await Navigator.of(context).maybePop();
+      return;
+    }
+    await state._intentarSalir();
+  }
+
   @override
   State<KivaFormScaffold> createState() => _KivaFormScaffoldState();
 }
@@ -34,10 +63,49 @@ class KivaFormScaffold extends StatefulWidget {
 class _KivaFormScaffoldState extends State<KivaFormScaffold> {
   final _controller = PageController();
 
+  // Campos simples (sin setState): solo se leen al intentar salir.
+  bool _tieneCambios = false;
+  bool _enviando = false;
+  bool _confirmando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onPaginaCambio);
+  }
+
   @override
   void dispose() {
+    _controller.removeListener(_onPaginaCambio);
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onPaginaCambio() {
+    if ((_controller.page ?? 0) > 0.5) _tieneCambios = true;
+  }
+
+  Future<void> _intentarSalir() async {
+    if (_confirmando) return;
+    if (_enviando) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text('Espera a que termine el envío del formulario.'),
+          ),
+        );
+      return;
+    }
+    if (!_tieneCambios) {
+      Navigator.of(context).pop();
+      return;
+    }
+
+    _confirmando = true;
+    final salir = await _confirmarSalidaKiva(context);
+    _confirmando = false;
+    if (salir == true && mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -49,31 +117,120 @@ class _KivaFormScaffoldState extends State<KivaFormScaffold> {
       '${widget.steps.length} pasos.',
     );
 
-    return Scaffold(
-      backgroundColor: RedesignColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            FormStepHeaderWidget(
-              title: widget.title,
-              tag:
-                  widget.isRecurrentForm ? 'Kiva · Recurrente' : 'Kiva · Nuevo',
-              subtitle: 'Completa las preguntas junto al cliente',
-              controller: _controller,
-              steps: widget.steps,
-            ),
-            Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _intentarSalir();
+      },
+      child: Scaffold(
+        backgroundColor: RedesignColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              FormStepHeaderWidget(
+                title: widget.title,
+                tag: widget.isRecurrentForm
+                    ? 'Kiva · Recurrente'
+                    : 'Kiva · Nuevo',
+                subtitle: 'Completa las preguntas junto al cliente',
                 controller: _controller,
-                children: pages,
+                steps: widget.steps,
+                onBack: _intentarSalir,
+              ),
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _controller,
+                  children: pages,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Pregunta si se sale del formulario Kiva perdiendo lo llenado. Devuelve
+/// `true` solo si el asesor elige "Salir sin guardar".
+Future<bool?> _confirmarSalidaKiva(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => Dialog(
+      backgroundColor: RedesignColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(22, 24, 22, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 56,
+              width: 56,
+              decoration: BoxDecoration(
+                color: RedesignColors.amberTint,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: const Icon(
+                Icons.warning_amber_rounded,
+                color: RedesignColors.amber,
+                size: 28,
+              ),
+            ),
+            const Gap(16),
+            const Text(
+              '¿Salir del formulario?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: RedesignColors.ink,
+              ),
+            ),
+            const Gap(8),
+            const Text(
+              'Las fotos y respuestas de este formulario Kiva se perderán. '
+              'Para conservarlas, termínalo y envíalo.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13.5,
+                height: 1.45,
+                color: RedesignColors.inkMuted,
+              ),
+            ),
+            const Gap(22),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(48),
+                  backgroundColor: RedesignColors.teal,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: const Text('Seguir llenando'),
+              ),
+            ),
+            const Gap(6),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  minimumSize: const Size.fromHeight(44),
+                  foregroundColor: RedesignColors.red,
+                ),
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: const Text('Salir sin guardar'),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 /// Tarjeta de una pregunta: superficie blanca con borde, ancho completo.

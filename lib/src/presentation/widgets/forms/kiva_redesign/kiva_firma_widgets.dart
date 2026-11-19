@@ -132,6 +132,9 @@ class KivaFirmaAcciones extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Mientras se envía, KivaFormScaffold no deja salir del formulario.
+    KivaFormScaffold.marcarEnviando(context, enviando);
+
     final shape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(14),
     );

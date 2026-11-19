@@ -1,6 +1,7 @@
 import 'package:core_financiero_app/src/presentation/bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import 'package:core_financiero_app/src/presentation/bloc/upload_user_file/upload_user_file_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/camera/camera_capture_screen.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/upload_image_widget.dart';
 import 'package:core_financiero_app/src/presentation/widgets/pop_up/images_required_popup_dialog.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/buttons/button_actions_widget.dart';
@@ -73,6 +74,7 @@ class _AddKivaImagesWidgetState extends State<AddKivaImagesWidget>
               onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
                 numeroSoicitud: solicitudCliente.numero,
                 onImageSelected: (image, path) {
+                  KivaFormScaffold.marcarCambios(context);
                   setState(() {
                     selectedImage = image;
                     selectedImage1Path = path;
@@ -87,6 +89,7 @@ class _AddKivaImagesWidgetState extends State<AddKivaImagesWidget>
               onPressed: () => context.pushTransparentRoute(CameraCaptureScreen(
                 numeroSoicitud: solicitudCliente.numero,
                 onImageSelected: (image, path) {
+                  KivaFormScaffold.marcarCambios(context);
                   setState(() {
                     selectedImage2 = image;
                     selectedImage2Path = path;
@@ -102,6 +105,7 @@ class _AddKivaImagesWidgetState extends State<AddKivaImagesWidget>
                 CameraCaptureScreen(
                   numeroSoicitud: solicitudCliente.numero,
                   onImageSelected: (image, path) {
+                    KivaFormScaffold.marcarCambios(context);
                     setState(() {
                       selectedImage3 = image;
                       selectedImage3Path = path;
@@ -112,7 +116,7 @@ class _AddKivaImagesWidgetState extends State<AddKivaImagesWidget>
             ),
             const Gap(20),
             ButtonActionsWidget(
-              onPreviousPressed: () => context.pop(),
+              onPreviousPressed: () => KivaFormScaffold.salir(context),
               onNextPressed: () {
                 if (selectedImage == null ||
                     selectedImage2 == null ||

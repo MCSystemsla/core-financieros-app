@@ -43,62 +43,59 @@ class MigrantesEconomicosScreen extends StatelessWidget {
           create: (ctx) => UploadUserFileCubit(ResponsesRepositoryImpl()),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'forms.migrantes_economicos.title'.tr(),
-          isRecurrentForm: isRecurrentForm,
-          steps: [
-            'Fotos del cliente',
-            'Primer préstamo',
-            'Entorno social',
-            if (isRecurrentForm) 'Crédito anterior',
-            if (!isRecurrentForm) 'Sobre la familia',
-            if (!isRecurrentForm) 'Desarrollo del negocio',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
+      child: KivaFormScaffold(
+        title: 'forms.migrantes_economicos.title'.tr(),
+        isRecurrentForm: isRecurrentForm,
+        steps: [
+          'Fotos del cliente',
+          'Primer préstamo',
+          'Entorno social',
+          if (isRecurrentForm) 'Crédito anterior',
+          if (!isRecurrentForm) 'Sobre la familia',
+          if (!isRecurrentForm) 'Desarrollo del negocio',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          PrimerPrestamoWidget(
+            isRecurrentForm: isRecurrentForm,
+            controller: pageController,
+          ),
+          MigrantesEconomicosEntornoSocial(
+            isRecurrentForm: isRecurrentForm,
+            controller: pageController,
+          ),
+          if (isRecurrentForm)
+            MigrantesCreditoAnterior(
               controller: pageController,
             ),
-            PrimerPrestamoWidget(
-              isRecurrentForm: isRecurrentForm,
+          if (!isRecurrentForm)
+            MigrantesEconomicosAboutFamily(
               controller: pageController,
             ),
-            MigrantesEconomicosEntornoSocial(
-              isRecurrentForm: isRecurrentForm,
+          if (!isRecurrentForm)
+            MigrantesEconomicosDesarrolloDeNegocio(
               controller: pageController,
             ),
-            if (isRecurrentForm)
-              MigrantesCreditoAnterior(
-                controller: pageController,
-              ),
-            if (!isRecurrentForm)
-              MigrantesEconomicosAboutFamily(
-                controller: pageController,
-              ),
-            if (!isRecurrentForm)
-              MigrantesEconomicosDesarrolloDeNegocio(
-                controller: pageController,
-              ),
-            ImpactoSocialMigranteEconomico(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            isRecurrentForm
-                ? RecurrenteMigrantesFormSignature(
-                    controller: pageController,
-                  )
-                : MigrantesFormSignature(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+          ImpactoSocialMigranteEconomico(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          isRecurrentForm
+              ? RecurrenteMigrantesFormSignature(
+                  controller: pageController,
+                )
+              : MigrantesFormSignature(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }

@@ -54,50 +54,47 @@ class MiCreditoEstudioScreen extends StatelessWidget {
             ),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'MiCredi Estudio',
-          isRecurrentForm: isRecurrentForm,
-          steps: [
-            'Fotos del cliente',
-            'Entorno social',
-            'Descripción académica',
-            if (isRecurrentForm) 'Crédito anterior',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            MiCrediEstudioEntornoSocialForm(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            DescripcionAcademica(
+      child: KivaFormScaffold(
+        title: 'MiCredi Estudio',
+        isRecurrentForm: isRecurrentForm,
+        steps: [
+          'Fotos del cliente',
+          'Entorno social',
+          'Descripción académica',
+          if (isRecurrentForm) 'Crédito anterior',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          MiCrediEstudioEntornoSocialForm(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          DescripcionAcademica(
+            pageController: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          if (isRecurrentForm)
+            MicreditoCreditoAnterior(
               pageController: pageController,
-              isRecurrentForm: isRecurrentForm,
             ),
-            if (isRecurrentForm)
-              MicreditoCreditoAnterior(
-                pageController: pageController,
-              ),
-            MiCrediEstudioImpactoSocialWidget(
-              controller: pageController,
-              isRecurrentForm: isRecurrentForm,
-            ),
-            FormResponses(controller: pageController),
-            isRecurrentForm
-                ? RecurrenteMicrediestudioSignatureWidget(
-                    controller: pageController,
-                  )
-                : MicrediestudioSignatureWidget(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+          MiCrediEstudioImpactoSocialWidget(
+            controller: pageController,
+            isRecurrentForm: isRecurrentForm,
+          ),
+          FormResponses(controller: pageController),
+          isRecurrentForm
+              ? RecurrenteMicrediestudioSignatureWidget(
+                  controller: pageController,
+                )
+              : MicrediestudioSignatureWidget(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }

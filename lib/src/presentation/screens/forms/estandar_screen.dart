@@ -58,52 +58,49 @@ class EstandarScreen extends StatelessWidget {
           create: (ctx) => UploadUserFileCubit(repository),
         ),
       ],
-      child: PopScope(
-        canPop: false,
-        child: KivaFormScaffold(
-          title: 'Estándar',
-          isRecurrentForm: isRecurrentForm,
-          steps: const [
-            'Fotos del cliente',
-            'Datos adicionales',
-            'Entorno familiar',
-            'Descripción del negocio',
-            'Impacto social',
-            'Resumen',
-            'Firma',
-          ],
-          pagesBuilder: (pageController) => [
-            AddKivaImagesWidget(
-              controller: pageController,
-            ),
-            EstandarAditionalData(
-              isRecurrenteForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            EstandarEntornoFamiliar(
-              isRecurrenteForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            EstandarDescripciondelNegocio(
-              isRecurrentForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            EstandarImpactoSocial(
-              isRecurrentForm: isRecurrentForm,
-              pageController: pageController,
-            ),
-            FormResponses(
-              controller: pageController,
-            ),
-            isRecurrentForm
-                ? RecurrentEstandarSignature(
-                    controller: pageController,
-                  )
-                : EstandarSignature(
-                    controller: pageController,
-                  ),
-          ],
-        ),
+      child: KivaFormScaffold(
+        title: 'Estándar',
+        isRecurrentForm: isRecurrentForm,
+        steps: const [
+          'Fotos del cliente',
+          'Datos adicionales',
+          'Entorno familiar',
+          'Descripción del negocio',
+          'Impacto social',
+          'Resumen',
+          'Firma',
+        ],
+        pagesBuilder: (pageController) => [
+          AddKivaImagesWidget(
+            controller: pageController,
+          ),
+          EstandarAditionalData(
+            isRecurrenteForm: isRecurrentForm,
+            pageController: pageController,
+          ),
+          EstandarEntornoFamiliar(
+            isRecurrenteForm: isRecurrentForm,
+            pageController: pageController,
+          ),
+          EstandarDescripciondelNegocio(
+            isRecurrentForm: isRecurrentForm,
+            pageController: pageController,
+          ),
+          EstandarImpactoSocial(
+            isRecurrentForm: isRecurrentForm,
+            pageController: pageController,
+          ),
+          FormResponses(
+            controller: pageController,
+          ),
+          isRecurrentForm
+              ? RecurrentEstandarSignature(
+                  controller: pageController,
+                )
+              : EstandarSignature(
+                  controller: pageController,
+                ),
+        ],
       ),
     );
   }
