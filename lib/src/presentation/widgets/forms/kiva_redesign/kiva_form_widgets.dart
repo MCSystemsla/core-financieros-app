@@ -6,7 +6,8 @@ import 'package:gap/gap.dart';
 
 /// Piezas del rediseño 2026 para los formularios Kiva online (estándar,
 /// saneamiento, mujer emprende, migrantes, estudio, energía limpia y mejora
-/// de vivienda). Las páginas de fotos y firma todavía no están migradas.
+/// de vivienda). La firma usa `kiva_firma_widgets.dart`; en la página de fotos
+/// los recuadros siguen siendo `UploadImageWidget`.
 
 /// Contenedor de un formulario Kiva: encabezado con pasos
 /// ([FormStepHeaderWidget]) y el `PageView` de las páginas.
