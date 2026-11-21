@@ -264,8 +264,8 @@ class SolicitudNuevaMenorHn {
     Map<String, dynamic> data = {
       'database': LocalStorage().database,
       'OrigenSolicitudCodigo': 'APPMOVIL',
-      'Nombre1': nombre1,
-      'Apellido1': apellido1,
+      'Nombre1': nombre1.trim(),
+      'Apellido1': apellido1.trim(),
       'Cedula': cedula,
       'PaisEmisorCedulaCodigo': paisEmisorCedulaCodigo,
       'FechaEmisionCedula': fechaEmisionCedula?.toUtc().toIso8601String() ??
@@ -339,8 +339,8 @@ class SolicitudNuevaMenorHn {
           fechaPrimerPagoSolicitud.toUtc().toIso8601String(),
       'IsOffline': isOffline,
       'CodigoUSA': codigoUsa,
-      'Nombre3': nombre3,
-      'Apellido3': apellido3,
+      'Nombre3': nombre3.trim(),
+      'Apellido3': apellido3.trim(),
       'RTN': rtn,
       'TelefonoNegocio': telefonoNegocio,
       'CelularNegocio': celularNegocio,
@@ -378,8 +378,8 @@ class SolicitudNuevaMenorHn {
       'BarrioDestino': barrioDestino,
       'DescripcionDestino': descripcionDestino,
       'IngresosNetos': ingresosNetos,
-      'Nombre2': nombre2,
-      'Apellido2': apellido2,
+      'Nombre2': nombre2.trim(),
+      'Apellido2': apellido2.trim(),
       'Email': email,
       'TipoDocumentoConyugeCodigo': tipoDocumentoConyugeCodigo,
       'historialCredito':
