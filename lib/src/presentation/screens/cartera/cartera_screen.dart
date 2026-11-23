@@ -19,10 +19,42 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+/// Ancho del panel lateral (encabezado) en landscape.
+const _sidePanelWidth = 300.0;
+
+/// Ancho máximo de la lista de módulos en landscape, para que las filas no
+/// se estiren de borde a borde en pantallas anchas.
+const _contentMaxWidth = 640.0;
+
+const _portrait = [
+  DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+];
+
+/// Navega a otra pantalla (o al Home) bloqueando portrait mientras esté
+/// encima, porque esas pantallas no están adaptadas a landscape. Al volver a
+/// Cartera (si sigue montada) se habilita landscape otra vez.
+Future<void> _abrirEnPortrait(
+  BuildContext context,
+  Future<Object?> Function() navegar,
+) async {
+  await SystemChrome.setPreferredOrientations(_portrait);
+  await navegar();
+  if (context.mounted) {
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+  }
+}
+
+/// Menú de Cartera.
+///
+/// La app está bloqueada en portrait (`app.dart`); esta pantalla habilita
+/// landscape mientras está visible y restaura portrait al salir o al abrir
+/// cualquier módulo (ver [_abrirEnPortrait]).
 class CarteraScreen extends StatefulWidget {
   const CarteraScreen({super.key});
 
@@ -32,45 +64,119 @@ class CarteraScreen extends StatefulWidget {
 
 class _CarteraScreenState extends State<CarteraScreen> {
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations(_portrait);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
     return PopScope(
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) {
           context.push('/');
         }
       },
-      child: const Scaffold(
+      child: Scaffold(
         backgroundColor: RedesignColors.background,
         body: SafeArea(
           bottom: false,
-          child: _CarteraContentWidget(),
+          child: isLandscape
+              ? const _CarteraLandscapeLayout()
+              : const _CarteraPortraitLayout(),
         ),
       ),
     );
   }
 }
 
-class _CarteraContentWidget extends StatelessWidget {
-  const _CarteraContentWidget();
+class _CarteraHeader extends StatelessWidget {
+  const _CarteraHeader();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ScreenHeaderWidget(
+      title: 'home.item5'.tr(),
+      subtitle: 'cartera.description'.tr(),
+      onBack: () => _abrirEnPortrait(context, () => context.push('/')),
+    );
+  }
+}
+
+class _CarteraSections extends StatelessWidget {
+  const _CarteraSections();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SolicitudesAnalisisSection(),
+        _KivaSection(),
+        _SeguimientoSection(),
+      ],
+    );
+  }
+}
+
+class _CarteraPortraitLayout extends StatelessWidget {
+  const _CarteraPortraitLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ScreenHeaderWidget(
-            title: 'home.item5'.tr(),
-            subtitle: 'cartera.description'.tr(),
-            onBack: () => context.push('/'),
-          ),
-          const Gap(24),
-          const _SolicitudesAnalisisSection(),
-          const _KivaSection(),
-          const _SeguimientoSection(),
-          const Gap(28),
+          _CarteraHeader(),
+          Gap(24),
+          _CarteraSections(),
+          Gap(28),
         ],
       ),
+    );
+  }
+}
+
+/// Landscape: encabezado en un panel a la izquierda y los módulos a la
+/// derecha, cada lado con su propio scroll.
+class _CarteraLandscapeLayout extends StatelessWidget {
+  const _CarteraLandscapeLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(
+          width: _sidePanelWidth,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 16),
+            child: _CarteraHeader(),
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 16, bottom: 28),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: _contentMaxWidth),
+                child: const _CarteraSections(),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -96,7 +202,7 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
               title: 'Solicitudes',
               subtitle: 'Comercial, asalariado, grupal y asignaciones',
               onPressed: () {
-                context.push('/solicitudes');
+                _abrirEnPortrait(context, () => context.push('/solicitudes'));
               },
             ),
             // if (flavor == Flavor.honduras)
@@ -107,25 +213,25 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
               title: 'Análisis',
               subtitle: 'Capacidad de pago, fiadores y garantías',
               onPressed: () {
-                state.connectionStatus == ConnectionStatus.connected
-                    ? Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const AnalisisInterceptorByFlavor(),
-                        ),
-                      )
-                    : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => switch (flavor) {
-                            Flavor.nicaragua =>
-                              const AnalisisSolicitudesNiOfflineScreen(),
-                            Flavor.honduras =>
-                              const AnalisisSolicitudesHnOfflineScreen(),
-                            _ => const SizedBox(),
-                          },
-                        ),
-                      );
+                final isConnected =
+                    state.connectionStatus == ConnectionStatus.connected;
+                _abrirEnPortrait(
+                  context,
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => isConnected
+                          ? const AnalisisInterceptorByFlavor()
+                          : switch (flavor) {
+                              Flavor.nicaragua =>
+                                const AnalisisSolicitudesNiOfflineScreen(),
+                              Flavor.honduras =>
+                                const AnalisisSolicitudesHnOfflineScreen(),
+                              _ => const SizedBox(),
+                            },
+                    ),
+                  ),
+                );
               },
             ),
             if (flavor == Flavor.honduras &&
@@ -139,10 +245,13 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
                 subtitle: 'Crédito, riesgo y regional',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  Navigator.push(
+                  _abrirEnPortrait(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const SelectTipoSupervisionHnScreen(),
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SelectTipoSupervisionHnScreen(),
+                      ),
                     ),
                   );
                 },
@@ -179,9 +288,11 @@ class _KivaSection extends StatelessWidget {
                 title: 'cartera.kiva'.tr(),
                 subtitle: 'cartera.kiva_description'.tr(),
                 onPressed: () {
-                  state.connectionStatus == ConnectionStatus.connected
-                      ? context.push('/cartera/formulario-kiva')
-                      : context.push('/cartera/kiva-offline');
+                  final ruta =
+                      state.connectionStatus == ConnectionStatus.connected
+                          ? '/cartera/formulario-kiva'
+                          : '/cartera/kiva-offline';
+                  _abrirEnPortrait(context, () => context.push(ruta));
                 },
               ),
             if (state.connectionStatus == ConnectionStatus.connected &&
@@ -194,10 +305,13 @@ class _KivaSection extends StatelessWidget {
                 subtitle: 'Solicitudes Kiva ya enviadas',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  Navigator.push(
+                  _abrirEnPortrait(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const KivaHistoryRequestScreen(),
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const KivaHistoryRequestScreen(),
+                      ),
                     ),
                   );
                 },
@@ -233,10 +347,13 @@ class _SeguimientoSection extends StatelessWidget {
                 subtitle: 'Resoluciones individuales y grupales',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  Navigator.push(
+                  _abrirEnPortrait(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const ComiteScreenHn(),
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ComiteScreenHn(),
+                      ),
                     ),
                   );
                 },
@@ -269,10 +386,13 @@ class _SeguimientoSection extends StatelessWidget {
                 subtitle: 'Reportes de cartera y colocación',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  Navigator.push(
+                  _abrirEnPortrait(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const ReportesScreenHn(),
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ReportesScreenHn(),
+                      ),
                     ),
                   );
                 },
