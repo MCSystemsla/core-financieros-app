@@ -26,6 +26,7 @@ class ConnectionPillWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(11),
           ),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 height: 6,
