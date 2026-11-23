@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:core_financiero_app/src/config/helpers/orientacion/orientacion_pantalla.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/domain/repository/reporteria/hn/reporteria_repository_hn.dart';
@@ -39,22 +40,8 @@ class ReporteMoraScreenHn extends StatefulWidget {
   State<ReporteMoraScreenHn> createState() => _ReporteMoraScreenHnState();
 }
 
-class _ReporteMoraScreenHnState extends State<ReporteMoraScreenHn> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    super.dispose();
-  }
-
+class _ReporteMoraScreenHnState extends State<ReporteMoraScreenHn>
+    with PermiteLandscapeMixin {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

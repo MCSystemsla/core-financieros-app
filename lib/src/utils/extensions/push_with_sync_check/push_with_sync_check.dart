@@ -4,10 +4,11 @@ import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert
 import 'package:flutter/material.dart';
 
 extension NavigationSyncExt on BuildContext {
-  void pushWithSyncCheck({
+  /// Se completa cuando [destination] se cierra (o enseguida si no se abrió).
+  Future<void> pushWithSyncCheck({
     required Widget destination,
     required ConnectionStatus connectionStatus,
-  }) {
+  }) async {
     if (!mounted) return;
 
     if (CatalogoSync.needToSync() &&
@@ -20,7 +21,7 @@ extension NavigationSyncExt on BuildContext {
       return;
     }
 
-    Navigator.of(this).push(
+    await Navigator.of(this).push(
       MaterialPageRoute(builder: (_) => destination),
     );
   }

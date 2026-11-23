@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/greeting/greeting.dart';
+import 'package:core_financiero_app/src/config/helpers/orientacion/orientacion_pantalla.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
@@ -60,9 +61,11 @@ class HomeItemsWidget extends StatelessWidget {
         ),
         color: const Color(0xff7A3FD4),
         gradientColor: const Color(0xff6A2FC4),
-        onTap: () => context.pushWithSyncCheck(
-          connectionStatus: connection.connectionStatus,
-          destination: const OtpScreen(),
+        onTap: () => OrientacionPantalla.abrirEnPortrait(
+          () => context.pushWithSyncCheck(
+            connectionStatus: connection.connectionStatus,
+            destination: const OtpScreen(),
+          ),
         ),
       ),
       HomeItemCard(
@@ -77,17 +80,35 @@ class HomeItemsWidget extends StatelessWidget {
         ),
         color: const Color(0xff4C5DD1),
         gradientColor: const Color(0xff3B49B0),
-        onTap: () {
-          Navigator.push(
+        onTap: () => OrientacionPantalla.abrirEnPortrait(
+          () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => const TutorialsScreen(),
             ),
-          );
-        },
+          ),
+        ),
       ),
     ];
     final visibleItems = homeItemData.where((e) => e.visible).toList();
+
+    // En landscape las tarjetas verticales de 2 columnas no caben en el alto:
+    // se usan más columnas y tarjetas más anchas que altas.
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+    final SliverGridDelegate gridDelegate = isLandscape
+        ? const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 240,
+            crossAxisSpacing: 14,
+            mainAxisSpacing: 14,
+            childAspectRatio: 1.2,
+          )
+        : const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 14,
+            mainAxisSpacing: 14,
+            childAspectRatio: 0.86,
+          );
 
     if (visibleItems.isEmpty) {
       return const EmptyListWidget(
@@ -120,12 +141,7 @@ class HomeItemsWidget extends StatelessWidget {
               padding: EdgeInsets.zero,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-                childAspectRatio: 0.86,
-              ),
+              gridDelegate: gridDelegate,
               itemCount: visibleItems.length,
               itemBuilder: (BuildContext context, int index) => _ItemWidget(
                 homeItemCard: visibleItems[index],

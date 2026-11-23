@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/config/helpers/catalogo_sync/catalogo_sync.dart';
+import 'package:core_financiero_app/src/config/helpers/orientacion/orientacion_pantalla.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/biometric/biometric_cubit.dart';
@@ -130,18 +131,22 @@ class _HomeScreenView extends StatelessWidget {
                           ],
                         ),
                         onPressed: () {
-                          context.pushTransparentRoute(
-                            saveCatalogoByFlavor(
-                              context,
-                              flavor: flavor,
-                              onDownloadComplete: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const HomeScreen(),
-                                  ),
-                                );
-                              },
+                          // La pantalla de sincronización no está adaptada a
+                          // landscape.
+                          OrientacionPantalla.abrirEnPortrait(
+                            () => context.pushTransparentRoute(
+                              saveCatalogoByFlavor(
+                                context,
+                                flavor: flavor,
+                                onDownloadComplete: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const HomeScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           );
                         },
@@ -156,26 +161,68 @@ class _HomeScreenView extends StatelessWidget {
                   NoImagesKivasOnHistoryAlert(
                     solicitudesKivaPending: state.data.data!.length,
                   ),
-                _ => Stack(
-                    children: [
-                      FadeIn(
-                        child: const Column(
-                          children: [
-                            HomeBannerWidget(),
-                            Expanded(
-                              child: HomeItemsWidget(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Positioned.fill(child: NevadaNavidenaWidget()),
-                    ],
-                  ),
+                _ => const _HomeContenido(),
               };
             },
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Ancho del banner como panel lateral en landscape.
+const _bannerLateralWidth = 300.0;
+
+/// Banner + módulos. Es lo único del Home que permite landscape: la carga, la
+/// sincronización, el aviso de almacenamiento y la alerta de Kivas sin
+/// imágenes siguen en portrait.
+class _HomeContenido extends StatefulWidget {
+  const _HomeContenido();
+
+  @override
+  State<_HomeContenido> createState() => _HomeContenidoState();
+}
+
+class _HomeContenidoState extends State<_HomeContenido>
+    with PermiteLandscapeMixin {
+  @override
+  Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
+    return Stack(
+      children: [
+        FadeIn(
+          child: isLandscape
+              // Landscape: banner como panel a la izquierda y los módulos a
+              // la derecha con su propio scroll.
+              ? const Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      width: _bannerLateralWidth,
+                      child: HomeBannerWidget(lateral: true),
+                    ),
+                    Expanded(
+                      child: SafeArea(
+                        left: false,
+                        child: HomeItemsWidget(),
+                      ),
+                    ),
+                  ],
+                )
+              : const Column(
+                  children: [
+                    HomeBannerWidget(),
+                    Expanded(
+                      child: HomeItemsWidget(),
+                    ),
+                  ],
+                ),
+        ),
+        const Positioned.fill(child: NevadaNavidenaWidget()),
+      ],
     );
   }
 }

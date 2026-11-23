@@ -15,8 +15,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class HomeBannerWidget extends StatelessWidget {
+  /// En landscape el banner es un panel a la izquierda de todo el alto:
+  /// redondea el borde derecho en vez del inferior y hace scroll si no cabe.
+  final bool lateral;
+
   const HomeBannerWidget({
     super.key,
+    this.lateral = false,
   });
 
   String _countryName(Flavor flavor) => switch (flavor) {
@@ -29,66 +34,74 @@ class HomeBannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final flavor = global<FlavorCubit>().state.flavor;
 
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: RedesignColors.tealTint,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(6, 0, 6, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final contenido = Padding(
+      padding: const EdgeInsets.fromLTRB(6, 0, 6, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ChangeLangWidget.withCustomColor(
-                    color: RedesignColors.surface,
-                    child: HomeScreen(),
-                  ),
-                  LogOutWidget(),
-                ],
+              ChangeLangWidget.withCustomColor(
+                color: RedesignColors.surface,
+                child: HomeScreen(),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'MiCrédito',
-                      style: TextStyle(
-                        fontSize: 28,
-                        height: 1.05,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.8,
-                        color: RedesignColors.ink,
-                      ),
-                    ),
-                    const Gap(4),
-                    Text(
-                      _countryName(flavor),
-                      style: const TextStyle(
-                        fontSize: 13.5,
-                        color: RedesignColors.inkMuted,
-                      ),
-                    ),
-                    const Gap(16),
-                    const Row(
-                      children: [
-                        ConnectionPillWidget(),
-                        Gap(8),
-                        _LastSyncPill(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              LogOutWidget(),
             ],
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'MiCrédito',
+                  style: TextStyle(
+                    fontSize: 28,
+                    height: 1.05,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.8,
+                    color: RedesignColors.ink,
+                  ),
+                ),
+                const Gap(4),
+                Text(
+                  _countryName(flavor),
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    color: RedesignColors.inkMuted,
+                  ),
+                ),
+                const Gap(16),
+                const Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ConnectionPillWidget(),
+                    _LastSyncPill(),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: RedesignColors.tealTint,
+        borderRadius: lateral
+            ? const BorderRadius.horizontal(right: Radius.circular(28))
+            : const BorderRadius.vertical(bottom: Radius.circular(28)),
+      ),
+      child: SafeArea(
+        bottom: lateral,
+        right: !lateral,
+        child: lateral
+            ? SingleChildScrollView(child: contenido)
+            : contenido,
       ),
     );
   }

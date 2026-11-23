@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/orientacion/orientacion_pantalla.dart';
 import 'package:core_financiero_app/src/config/helpers/snackbar/custom_snackbar.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
@@ -22,7 +23,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/version/vers
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/logo/logo_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -35,23 +35,18 @@ class LoginScreenView extends StatefulWidget {
 }
 
 class _LoginScreenViewState extends State<LoginScreenView>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, PermiteLandscapeMixin {
   final _formWidgetKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     super.dispose();
   }
 
@@ -296,13 +291,15 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   }
 
   Future<void> _openChangePassword() async {
-    final changed = await Navigator.push<bool>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ChangePasswordScreen(
-          username: _usernameController.text.trim(),
-          database: branchTeam ?? '',
-          currentPassword: _passwordController.text.trim(),
+    final changed = await OrientacionPantalla.abrirEnPortrait(
+      () => Navigator.push<bool>(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChangePasswordScreen(
+            username: _usernameController.text.trim(),
+            database: branchTeam ?? '',
+            currentPassword: _passwordController.text.trim(),
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:core_financiero_app/global_locator.dart';
+import 'package:core_financiero_app/src/config/helpers/orientacion/orientacion_pantalla.dart';
 import 'package:core_financiero_app/src/config/local_storage/local_storage.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
@@ -19,7 +20,6 @@ import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:core_financiero_app/src/utils/extensions/type_action/type_action.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -31,30 +31,10 @@ const _sidePanelWidth = 300.0;
 /// se estiren de borde a borde en pantallas anchas.
 const _contentMaxWidth = 640.0;
 
-const _portrait = [
-  DeviceOrientation.portraitUp,
-  DeviceOrientation.portraitDown,
-];
-
-/// Navega a otra pantalla (o al Home) bloqueando portrait mientras esté
-/// encima, porque esas pantallas no están adaptadas a landscape. Al volver a
-/// Cartera (si sigue montada) se habilita landscape otra vez.
-Future<void> _abrirEnPortrait(
-  BuildContext context,
-  Future<Object?> Function() navegar,
-) async {
-  await SystemChrome.setPreferredOrientations(_portrait);
-  await navegar();
-  if (context.mounted) {
-    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-  }
-}
-
 /// Menú de Cartera.
 ///
-/// La app está bloqueada en portrait (`app.dart`); esta pantalla habilita
-/// landscape mientras está visible y restaura portrait al salir o al abrir
-/// cualquier módulo (ver [_abrirEnPortrait]).
+/// Permite landscape ([PermiteLandscapeMixin]). Los módulos que abre no están
+/// adaptados, así que se abren con [OrientacionPantalla.abrirEnPortrait].
 class CarteraScreen extends StatefulWidget {
   const CarteraScreen({super.key});
 
@@ -62,19 +42,8 @@ class CarteraScreen extends StatefulWidget {
   State<CarteraScreen> createState() => _CarteraScreenState();
 }
 
-class _CarteraScreenState extends State<CarteraScreen> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations(_portrait);
-    super.dispose();
-  }
-
+class _CarteraScreenState extends State<CarteraScreen>
+    with PermiteLandscapeMixin {
   @override
   Widget build(BuildContext context) {
     final isLandscape =
@@ -107,7 +76,7 @@ class _CarteraHeader extends StatelessWidget {
     return ScreenHeaderWidget(
       title: 'home.item5'.tr(),
       subtitle: 'cartera.description'.tr(),
-      onBack: () => _abrirEnPortrait(context, () => context.push('/')),
+      onBack: () => context.push('/'),
     );
   }
 }
@@ -202,7 +171,9 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
               title: 'Solicitudes',
               subtitle: 'Comercial, asalariado, grupal y asignaciones',
               onPressed: () {
-                _abrirEnPortrait(context, () => context.push('/solicitudes'));
+                OrientacionPantalla.abrirEnPortrait(
+                  () => context.push('/solicitudes'),
+                );
               },
             ),
             // if (flavor == Flavor.honduras)
@@ -215,8 +186,7 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
               onPressed: () {
                 final isConnected =
                     state.connectionStatus == ConnectionStatus.connected;
-                _abrirEnPortrait(
-                  context,
+                OrientacionPantalla.abrirEnPortrait(
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -245,8 +215,7 @@ class _SolicitudesAnalisisSection extends StatelessWidget {
                 subtitle: 'Crédito, riesgo y regional',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  _abrirEnPortrait(
-                    context,
+                  OrientacionPantalla.abrirEnPortrait(
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -292,7 +261,7 @@ class _KivaSection extends StatelessWidget {
                       state.connectionStatus == ConnectionStatus.connected
                           ? '/cartera/formulario-kiva'
                           : '/cartera/kiva-offline';
-                  _abrirEnPortrait(context, () => context.push(ruta));
+                  OrientacionPantalla.abrirEnPortrait(() => context.push(ruta));
                 },
               ),
             if (state.connectionStatus == ConnectionStatus.connected &&
@@ -305,8 +274,7 @@ class _KivaSection extends StatelessWidget {
                 subtitle: 'Solicitudes Kiva ya enviadas',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  _abrirEnPortrait(
-                    context,
+                  OrientacionPantalla.abrirEnPortrait(
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -347,8 +315,7 @@ class _SeguimientoSection extends StatelessWidget {
                 subtitle: 'Resoluciones individuales y grupales',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  _abrirEnPortrait(
-                    context,
+                  OrientacionPantalla.abrirEnPortrait(
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -386,8 +353,7 @@ class _SeguimientoSection extends StatelessWidget {
                 subtitle: 'Reportes de cartera y colocación',
                 tag: 'Solo en línea',
                 onPressed: () {
-                  _abrirEnPortrait(
-                    context,
+                  OrientacionPantalla.abrirEnPortrait(
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
