@@ -101,7 +101,8 @@ AnalisisSolicitudesInterceptorType getTipoSolicitud({
   final montoInt = double.tryParse(monto) ?? 0;
   final nuevaMenorMil =
       global<SolicitudesHnBoxService>().getParametroByName(nombre: 'MENORMIL');
-  final nuevaMenorMilMonto = double.tryParse(nuevaMenorMil!.valor) ?? 0;
+  final nuevaMenorMilMonto =
+      double.tryParse((nuevaMenorMil?.valor) ?? '0') ?? 0;
   if (esGrupal) {
     return AnalisisSolicitudesInterceptorType.grupal;
   }
