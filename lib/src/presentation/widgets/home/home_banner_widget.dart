@@ -9,6 +9,7 @@ import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.da
 import 'package:core_financiero_app/src/presentation/bloc/internet_connection/internet_connection_cubit.dart';
 import 'package:core_financiero_app/src/presentation/screens/home/home_screen.dart';
 import 'package:core_financiero_app/src/presentation/widgets/lang/change_lang_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/debug/explorador_catalogos_trigger.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/connection_pill_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,11 +66,13 @@ class HomeBannerWidget extends StatelessWidget {
                   ),
                 ),
                 const Gap(4),
-                Text(
-                  _countryName(flavor),
-                  style: const TextStyle(
-                    fontSize: 13.5,
-                    color: RedesignColors.inkMuted,
+                ExploradorCatalogosTrigger(
+                  child: Text(
+                    _countryName(flavor),
+                    style: const TextStyle(
+                      fontSize: 13.5,
+                      color: RedesignColors.inkMuted,
+                    ),
                   ),
                 ),
                 const Gap(16),
