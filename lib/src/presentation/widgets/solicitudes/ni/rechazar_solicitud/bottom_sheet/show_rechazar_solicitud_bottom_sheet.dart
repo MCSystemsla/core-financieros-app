@@ -1,18 +1,27 @@
 import 'package:core_financiero_app/src/config/helpers/class_validator/class_validator.dart';
 import 'package:core_financiero_app/src/config/helpers/uppercase_text/uppercase_text_formatter.dart';
 import 'package:core_financiero_app/src/config/theme/app_colors.dart';
+import 'package:core_financiero_app/src/config/theme/redesign_colors.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/v2_redesign/module_icon_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 /// Hoja inferior para capturar el motivo de rechazo de una solicitud de
 /// crédito en Nicaragua. Mismo diseño que el de Honduras
 /// (`openMotivoRechazoSheet`). Devuelve el motivo escrito o `null` si se
-/// cancela.
+/// cancela. Con [numeroSolicitud] o [nombreCliente] muestra la solicitud
+/// seleccionada sobre el campo del motivo.
 Future<String?> openMotivoRechazoSolicitudSheetNi(
   BuildContext context, {
   String buttonText = 'Rechazar Solicitud',
+  String? numeroSolicitud,
+  String? nombreCliente,
 }) {
+  final nombre = nombreCliente?.trim() ?? '';
+  final numero = numeroSolicitud?.trim() ?? '';
+  final mostrarSolicitud = nombre.isNotEmpty || numero.isNotEmpty;
+
   final controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -75,7 +84,7 @@ Future<String?> openMotivoRechazoSolicitudSheetNi(
                     const Gap(6),
 
                     const Text(
-                      'Ingrese el el motivo del rechazo',
+                      'Ingrese el motivo del rechazo',
                       style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey,
@@ -83,7 +92,13 @@ Future<String?> openMotivoRechazoSolicitudSheetNi(
                       textAlign: TextAlign.center,
                     ),
 
-                    const Gap(24),
+                    const Gap(20),
+
+                    if (mostrarSolicitud) ...[
+                      _SolicitudSeleccionada(nombre: nombre, numero: numero),
+                      const Gap(20),
+                    ] else
+                      const Gap(4),
 
                     /// Motivo del rechazo
                     OutlineTextfieldWidget(
@@ -134,4 +149,66 @@ Future<String?> openMotivoRechazoSolicitudSheetNi(
       );
     },
   );
+}
+
+/// Solicitud que se va a rechazar: nombre del cliente y número.
+class _SolicitudSeleccionada extends StatelessWidget {
+  final String nombre;
+  final String numero;
+
+  const _SolicitudSeleccionada({required this.nombre, required this.numero});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: RedesignColors.background,
+        border: Border.all(color: RedesignColors.border),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          const ModuleIconTile(
+            icon: Icons.person_outline_rounded,
+            color: RedesignColors.red,
+            background: RedesignColors.redTint,
+            size: 40,
+          ),
+          const Gap(12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  nombre.isNotEmpty ? nombre : 'Cliente sin nombre',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3,
+                    color: nombre.isNotEmpty
+                        ? RedesignColors.ink
+                        : RedesignColors.chevron,
+                  ),
+                ),
+                if (numero.isNotEmpty) ...[
+                  const Gap(2),
+                  Text(
+                    'Solicitud N.º $numero',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: RedesignColors.inkMuted,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

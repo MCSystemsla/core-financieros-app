@@ -115,6 +115,8 @@ class _RechazarListViewState extends State<_RechazarListView> {
     final motivoRechazo = await openMotivoRechazoSolicitudSheetNi(
       context,
       buttonText: 'Rechazar Solicitud',
+      numeroSolicitud: solicitud.numero,
+      nombreCliente: solicitud.nombreCompleto,
     );
 
     if (motivoRechazo == null) return;
