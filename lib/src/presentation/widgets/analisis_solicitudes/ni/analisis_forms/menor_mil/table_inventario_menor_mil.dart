@@ -258,18 +258,10 @@ class _CompraSemanalHNState extends State<_CompraSemanalHN> {
                       title: 'Precio venta',
                       icon: const Icon(Icons.wallet),
                       textInputType: TextInputType.number,
-                      validator: (value) {
-                        final requerido =
-                            ClassValidator.validateRequired(value);
-                        if (requerido != null) return requerido;
-                        final precio = double.tryParse(
-                              value?.replaceAll(RegExp(r'[^0-9]'), '') ?? '',
-                            ) ??
-                            0;
-                        return precio <= 0
-                            ? 'El precio de venta debe ser mayor a 0'
-                            : null;
-                      },
+                      // Igual que el sistema .NET: el precio de venta acepta 0.
+                      // costoVentaPorcentaje ya contempla precioVenta == 0.
+                      validator: (value) =>
+                          ClassValidator.validateRequired(value),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9,\.]')),
                         CurrencyInputFormatter(
