@@ -10,8 +10,10 @@ class SolicitudesByEstadoNiState extends Equatable {
   final bool hasMore;
   final String numeroSolicitud;
   final String cedulaCliente;
+  final String nombreCompleto;
   final bool isNumeroSolicitudFilter;
   final bool isCedulaSolicitudFilter;
+  final bool isNombreCompletoFilter;
   final int pagina;
   final bool isLoadingMore;
   const SolicitudesByEstadoNiState({
@@ -23,8 +25,10 @@ class SolicitudesByEstadoNiState extends Equatable {
     this.hasMore = false,
     this.isNumeroSolicitudFilter = false,
     this.isCedulaSolicitudFilter = false,
+    this.isNombreCompletoFilter = false,
     this.numeroSolicitud = '',
     this.cedulaCliente = '',
+    this.nombreCompleto = '',
     this.pagina = 1,
     this.isLoadingMore = false,
   });
@@ -39,8 +43,10 @@ class SolicitudesByEstadoNiState extends Equatable {
         hasMore,
         isNumeroSolicitudFilter,
         isCedulaSolicitudFilter,
+        isNombreCompletoFilter,
         numeroSolicitud,
         cedulaCliente,
+        nombreCompleto,
         pagina,
         isLoadingMore,
       ];
@@ -54,8 +60,10 @@ class SolicitudesByEstadoNiState extends Equatable {
     bool? hasMore,
     String? numeroSolicitud,
     String? cedulaCliente,
+    String? nombreCompleto,
     bool? isNumeroSolicitudFilter,
     bool? isCedulaSolicitudFilter,
+    bool? isNombreCompletoFilter,
     int? pagina,
     bool? isLoadingMore,
   }) {
@@ -69,10 +77,13 @@ class SolicitudesByEstadoNiState extends Equatable {
       hasMore: hasMore ?? this.hasMore,
       numeroSolicitud: numeroSolicitud ?? this.numeroSolicitud,
       cedulaCliente: cedulaCliente ?? this.cedulaCliente,
+      nombreCompleto: nombreCompleto ?? this.nombreCompleto,
       isNumeroSolicitudFilter:
           isNumeroSolicitudFilter ?? this.isNumeroSolicitudFilter,
       isCedulaSolicitudFilter:
           isCedulaSolicitudFilter ?? this.isCedulaSolicitudFilter,
+      isNombreCompletoFilter:
+          isNombreCompletoFilter ?? this.isNombreCompletoFilter,
       pagina: pagina ?? this.pagina,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );

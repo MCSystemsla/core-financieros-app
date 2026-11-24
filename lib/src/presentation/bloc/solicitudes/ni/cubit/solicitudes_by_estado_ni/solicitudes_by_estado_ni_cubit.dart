@@ -40,6 +40,7 @@ class SolicitudesByEstadoNiCubit extends Cubit<SolicitudesByEstadoNiState> {
         isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
         numeroSolicitud: state.numeroSolicitud,
         cedulaCliente: state.cedulaCliente,
+        nombreCompleto: state.nombreCompleto,
         pagina: state.pagina,
         isCustomEstadoCredito: isCustomEstadoCredito,
         filterEstadosCredito: filterEstadosCredito,
@@ -81,8 +82,10 @@ class SolicitudesByEstadoNiCubit extends Cubit<SolicitudesByEstadoNiState> {
       isAsignadaToAsesorCredito: true,
       isNumeroSolicitudFilter: false,
       isCedulaSolicitudFilter: false,
+      isNombreCompletoFilter: false,
       numeroSolicitud: '',
       cedulaCliente: '',
+      nombreCompleto: '',
       solicitudes: [],
       isLoadingMore: false,
     ));

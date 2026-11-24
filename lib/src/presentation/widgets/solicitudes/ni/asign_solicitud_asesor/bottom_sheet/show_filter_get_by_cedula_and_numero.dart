@@ -17,6 +17,8 @@ void showFilterGetByCedualAndNumeroSolicitud(
   String numeroSolicitud,
   bool isCedulaSolicitudFilter,
   String cedulaCliente,
+  bool isNombreCompletoFilter,
+  String nombreCompleto,
   SolicitudesByEstadoNiCubit cubit,
 ) {
   final bottomInset = MediaQuery.of(context).viewInsets.bottom;
@@ -67,7 +69,7 @@ void showFilterGetByCedualAndNumeroSolicitud(
                       ),
                       const Gap(10),
                       Text(
-                        'Filtra las solicitudes por Cedula Cliente y Numero Solciitud',
+                        'Filtra las solicitudes por Número Solicitud, Cédula o Nombre del Cliente',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -135,14 +137,47 @@ void showFilterGetByCedualAndNumeroSolicitud(
                           ),
                         ),
                       const Gap(20),
+                      SwitchListTile(
+                        value: isNombreCompletoFilter,
+                        onChanged: (value) {
+                          setState(() {
+                            isNombreCompletoFilter = value;
+                          });
+                        },
+                        title: const Text('Nombre del Cliente'),
+                        subtitle: const Text(
+                          'Filtra las solicitudes por nombre del cliente',
+                        ),
+                      ),
+                      if (isNombreCompletoFilter)
+                        FadeIn(
+                          child: OutlineTextfieldWidget(
+                            initialValue: nombreCompleto,
+                            validator: (value) =>
+                                ClassValidator.validateRequired(value),
+                            title: 'Ingresa el nombre del cliente',
+                            hintText: 'Ej: BRYAN GODOY',
+                            icon: const Icon(Icons.badge_outlined),
+                            textInputType: TextInputType.name,
+                            onChange: (value) {
+                              nombreCompleto = value;
+                            },
+                            inputFormatters: [
+                              UpperCaseTextFormatter(),
+                            ],
+                          ),
+                        ),
+                      const Gap(20),
                       CustomElevatedButton(
                         onPressed: () {
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               isNumeroSolicitudFilter: false,
                               isCedulaSolicitudFilter: false,
+                              isNombreCompletoFilter: false,
                               numeroSolicitud: '',
                               cedulaCliente: '',
+                              nombreCompleto: '',
                             ),
                           );
                           cubit.getSolicitudesByEstado(
@@ -161,18 +196,22 @@ void showFilterGetByCedualAndNumeroSolicitud(
                       ),
                       const Gap(20),
                       CustomElevatedButton(
-                        enabled:
-                            isNumeroSolicitudFilter || isCedulaSolicitudFilter,
+                        enabled: isNumeroSolicitudFilter ||
+                            isCedulaSolicitudFilter ||
+                            isNombreCompletoFilter,
                         onPressed: () {
                           if (!formKey.currentState!.validate()) return;
                           cubit.onFieldChanged(
                             () => cubit.state.copyWith(
                               isNumeroSolicitudFilter: isNumeroSolicitudFilter,
                               isCedulaSolicitudFilter: isCedulaSolicitudFilter,
+                              isNombreCompletoFilter: isNombreCompletoFilter,
                               numeroSolicitud:
                                   isNumeroSolicitudFilter ? numeroSolicitud : '',
                               cedulaCliente:
                                   isCedulaSolicitudFilter ? cedulaCliente : '',
+                              nombreCompleto:
+                                  isNombreCompletoFilter ? nombreCompleto : '',
                             ),
                           );
                           cubit.getSolicitudesByEstado(

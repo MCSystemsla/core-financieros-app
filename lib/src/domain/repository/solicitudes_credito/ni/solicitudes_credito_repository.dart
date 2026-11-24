@@ -125,6 +125,7 @@ abstract class SolicitudesCreditoRepository {
     required String? cedulaCliente,
     required int pagina,
     required bool isCustomEstadoCredito,
+    String? nombreCompleto,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
     List<EstadoCredito> estadosCredito = const [
       EstadoCredito.registrada,
@@ -796,6 +797,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
     required String? cedulaCliente,
     required int pagina,
     required bool isCustomEstadoCredito,
+    String? nombreCompleto,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
     List<EstadoCredito> estadosCredito = const [
       EstadoCredito.registrada,
@@ -810,6 +812,7 @@ class SolicitudCreditoRepositoryImpl implements SolicitudesCreditoRepository {
       isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
       numeroSolicitud: numeroSolicitud,
       cedulaCliente: cedulaCliente,
+      nombreCompleto: nombreCompleto,
       pagina: pagina,
       usuarioId: rolId,
       isCustomEstadoCredito: isCustomEstadoCredito,
