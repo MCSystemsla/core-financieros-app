@@ -157,7 +157,7 @@ class _FilterModalState extends State<_FilterModal> {
                       ),
                       const Gap(10),
                       Text(
-                        'Filtra las solicitudes por Cédula Cliente y Número Solicitud',
+                        'Filtra las solicitudes por Número Solicitud, Cédula o Nombre del Cliente',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -214,24 +214,32 @@ class _FilterModalState extends State<_FilterModal> {
                                 ClassValidator.validateRequired(value),
                           ),
                         ),
+                      const Gap(20),
+
+                      // Filtro Nombre
+                      SwitchListTile(
+                        value: state.isNombreCompletoFilter,
+                        title: const Text('Nombre del Cliente'),
+                        subtitle: const Text('Filtra por nombre del cliente'),
+                        onChanged: (val) => widget.cubit.onFieldChanged(
+                            () => state.copyWith(isNombreCompletoFilter: val)),
+                      ),
+                      if (state.isNombreCompletoFilter)
+                        FadeIn(
+                          child: OutlineTextfieldWidget(
+                            initialValue: state.nombreCompleto,
+                            title: 'Ingresa el nombre del cliente',
+                            hintText: 'Ej: BRYAN GODOY',
+                            icon: const Icon(Icons.badge_outlined),
+                            textInputType: TextInputType.name,
+                            inputFormatters: [UpperCaseTextFormatter()],
+                            onChange: (val) => widget.cubit.onFieldChanged(
+                                () => state.copyWith(nombreCompleto: val)),
+                            validator: (value) =>
+                                ClassValidator.validateRequired(value),
+                          ),
+                        ),
                       const Gap(30),
-                      // if (state.isNumeroSolicitudFilter)
-                      // FadeIn(
-                      //   child: OutlineTextfieldWidget(
-                      //     initialValue: state.numeroSolicitud,
-                      //     onChange: (value) {},
-                      //     validator: (value) =>
-                      //         ClassValidator.validateRequired(value),
-                      //     title: 'Ingresa el nombre del cliente',
-                      //     hintText: 'Ej: Dery Galeas',
-                      //     icon: const Icon(Icons.request_page),
-                      //     textInputType: TextInputType.number,
-                      //     inputFormatters: [
-                      //       FilteringTextInputFormatter.digitsOnly,
-                      //     ],
-                      //   ),
-                      // ),
-                      // const Gap(20),
 
                       // Botón Limpiar
                       CustomElevatedButton(
@@ -256,7 +264,8 @@ class _FilterModalState extends State<_FilterModal> {
                       CustomElevatedButton(
                         text: 'Guardar Cambios',
                         enabled: state.isNumeroSolicitudFilter ||
-                            state.isCedulaSolicitudFilter,
+                            state.isCedulaSolicitudFilter ||
+                            state.isNombreCompletoFilter,
                         color: AppColors.getSecondaryColor(),
                         icon: const Icon(Icons.save, color: Colors.white),
                         onPressed: () {
@@ -269,6 +278,9 @@ class _FilterModalState extends State<_FilterModal> {
                                 cedulaCliente: state.isCedulaSolicitudFilter
                                     ? state.cedulaCliente
                                     : null,
+                                nombreCompleto: state.isNombreCompletoFilter
+                                    ? state.nombreCompleto
+                                    : '',
                               ));
 
                           widget.cubit.getSolicitudesByEstado(

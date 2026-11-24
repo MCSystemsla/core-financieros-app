@@ -12,6 +12,7 @@ class SolicitudesByEstadoHnState extends Equatable {
   final String nombreCompleto;
   final bool isNumeroSolicitudFilter;
   final bool isCedulaSolicitudFilter;
+  final bool isNombreCompletoFilter;
   final int pagina;
   final bool isLoadingMore;
   const SolicitudesByEstadoHnState({
@@ -22,6 +23,7 @@ class SolicitudesByEstadoHnState extends Equatable {
     this.hasMore = false,
     this.isNumeroSolicitudFilter = false,
     this.isCedulaSolicitudFilter = false,
+    this.isNombreCompletoFilter = false,
     this.numeroSolicitud = '',
     this.cedulaCliente = '',
     this.nombreCompleto = '',
@@ -38,6 +40,7 @@ class SolicitudesByEstadoHnState extends Equatable {
         hasMore,
         isNumeroSolicitudFilter,
         isCedulaSolicitudFilter,
+        isNombreCompletoFilter,
         numeroSolicitud,
         cedulaCliente,
         nombreCompleto,
@@ -56,6 +59,7 @@ class SolicitudesByEstadoHnState extends Equatable {
     String? nombreCompleto,
     bool? isNumeroSolicitudFilter,
     bool? isCedulaSolicitudFilter,
+    bool? isNombreCompletoFilter,
     int? pagina,
     bool? isLoadingMore,
   }) {
@@ -73,6 +77,8 @@ class SolicitudesByEstadoHnState extends Equatable {
           isNumeroSolicitudFilter ?? this.isNumeroSolicitudFilter,
       isCedulaSolicitudFilter:
           isCedulaSolicitudFilter ?? this.isCedulaSolicitudFilter,
+      isNombreCompletoFilter:
+          isNombreCompletoFilter ?? this.isNombreCompletoFilter,
       pagina: pagina ?? this.pagina,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );

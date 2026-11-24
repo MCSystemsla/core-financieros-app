@@ -51,7 +51,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       final hasUserAppliedFilter =
           state.isNumeroSolicitudFilter ||
               state.isCedulaSolicitudFilter ||
-              state.nombreCompleto.trim().isNotEmpty;
+              state.isNombreCompletoFilter;
       emit(state.copyWith(
         status: Status.done,
         solicitudes: hasUserAppliedFilter
@@ -88,6 +88,7 @@ class SolicitudesByEstadoHnCubit extends Cubit<SolicitudesByEstadoHnState> {
       isAsignadaToAsesorCredito: true,
       isNumeroSolicitudFilter: false,
       isCedulaSolicitudFilter: false,
+      isNombreCompletoFilter: false,
       numeroSolicitud: '',
       cedulaCliente: '',
       nombreCompleto: '',
