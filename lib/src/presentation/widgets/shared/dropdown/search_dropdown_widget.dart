@@ -1,16 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:core_financiero_app/global_locator.dart';
 import 'package:core_financiero_app/src/datasource/flavor/flavor.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/hn/solicitudes/asalariado/local_db/solicitudes_hn_box_service.dart';
-import 'package:core_financiero_app/src/datasource/solicitudes/ni/local_db/solicitudes_db_service.dart';
-import 'package:core_financiero_app/src/presentation/bloc/flavor/flavor_cubit.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/outline_textfield_widget.dart';
+import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/catalogo_items.dart';
 import 'package:core_financiero_app/src/presentation/widgets/shared/dropdown/jlux_dropdown.dart';
 import 'package:drop_down_list/model/selected_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:drop_down_list/drop_down_list.dart';
-import 'package:uuid/uuid.dart';
 
 class SearchDropdownWidget extends StatefulWidget {
   final String codigo;
@@ -50,49 +46,7 @@ class _SearchDropdownWidgetState extends State<SearchDropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final flavor = global<FlavorCubit>().state.flavor;
-    final uuid = const Uuid().v4();
-    final localDbProvider = global<ObjectBoxService>();
-    final localDbProviderHN = global<SolicitudesHnBoxService>();
-    final items = switch (flavor) {
-      Flavor.nicaragua =>
-        localDbProvider.findParentescosByNombre(type: widget.codigo).map((e) {
-          return Item(
-            id: uuid,
-            value: e.valor,
-            name: e.nombre,
-            interes: e.interes ?? 0,
-            montoMaximo: e.montoMaximo ?? 0,
-            montoMinimo: e.montoMinimo ?? 0,
-            isApnfd: e.isAPNFD,
-          );
-        }).toList(),
-      Flavor.costaRica =>
-        localDbProvider.findParentescosByNombre(type: widget.codigo).map((e) {
-          return Item(
-            id: uuid,
-            value: e.valor,
-            name: e.nombre,
-            interes: e.interes ?? 0,
-            montoMaximo: e.montoMaximo ?? 0,
-            montoMinimo: e.montoMinimo ?? 0,
-            isApnfd: e.isAPNFD,
-          );
-        }).toList(),
-      Flavor.honduras =>
-        localDbProviderHN.findCatalogoByCodigo(codigo: widget.codigo).map((e) {
-          return Item(
-            id: uuid,
-            value: e.valor,
-            name: e.nombre,
-            interes: e.interes ?? 0,
-            montoMaximo: e.montoMaximo ?? 0,
-            montoMinimo: e.montoMinimo ?? 0,
-            isApnfd: e.isAPNFD,
-          );
-        }).toList(),
-      _ => [],
-    };
+    final items = itemsDeCatalogo(widget.codigo);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),

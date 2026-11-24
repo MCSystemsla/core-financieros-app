@@ -7,6 +7,10 @@ abstract class RedesignColors {
   static const ink = Color(0xff131714);
   static const inkMuted = Color(0xff5C6660);
   static const chevron = Color(0xff9BA39D);
+
+  /// Hints y textos deshabilitados: más claro que [inkMuted], pero con
+  /// contraste suficiente sobre [surface] (a diferencia de [chevron]).
+  static const inkSubtle = Color(0xff6E7771);
   static const tagBackground = Color(0xffF1F2EE);
   static const onlineDot = Color(0xff5EB837);
 
