@@ -79,6 +79,7 @@ abstract class SolicitudesCreditoHnRepository {
     required int pagina,
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
+    String? nombreCompleto,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
     List<EstadoCredito> estadosCredito = const [
       EstadoCredito.registrada,
@@ -558,6 +559,7 @@ class SolicitudesCreditoHnRepositoryImpl
     required int pagina,
     required int? codigoGrupo,
     required bool isCustomEstadoCredito,
+    String? nombreCompleto,
     FilterEstadosCredito filterEstadosCredito = FilterEstadosCredito.all,
     List<EstadoCredito> estadosCredito = const [
       EstadoCredito.registrada,
@@ -572,6 +574,7 @@ class SolicitudesCreditoHnRepositoryImpl
       isAsignadaToAsesorCredito: isAsignadaToAsesorCredito,
       numeroSolicitud: numeroSolicitud,
       cedulaCliente: cedulaCliente,
+      nombreCompleto: nombreCompleto,
       pagina: pagina,
       codigoGrupo: codigoGrupo,
       usuarioId: rolId,

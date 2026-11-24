@@ -248,6 +248,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
   final bool isAsignadaToAsesorCredito;
   final String? numeroSolicitud;
   final String? cedulaCliente;
+  final String? nombreCompleto;
   final int? pagina;
   final int? codigoGrupo;
   final int? usuarioId;
@@ -259,6 +260,7 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
     required this.isAsignadaToAsesorCredito,
     this.numeroSolicitud,
     this.cedulaCliente,
+    this.nombreCompleto,
     this.pagina,
     this.codigoGrupo,
     this.usuarioId,
@@ -292,6 +294,8 @@ class GetSolicitudesByEstadoEndpoint extends Endpoint {
           'Numero': numeroSolicitud,
         if (cedulaCliente != null && cedulaCliente!.isNotEmpty)
           'Cedula': cedulaCliente,
+        if (nombreCompleto != null && nombreCompleto!.trim().isNotEmpty)
+          'NombreCompleto': nombreCompleto!.trim(),
         if (pagina != null) 'Pagina': pagina.toString(),
         if (codigoGrupo != null) 'GrupoCodigo': codigoGrupo.toString(),
         if (usuarioId != null) 'OficialCreditoCodigo': usuarioId.toString(),
