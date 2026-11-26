@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
-enum SendingStepState { pending, active, done }
+enum SendingStepState { pending, active, done, failed }
 
 class SendingStep {
   final String label;
@@ -177,19 +177,25 @@ class _StepRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDone = step.state == SendingStepState.done;
     final isActive = step.state == SendingStepState.active;
+    final isFailed = step.state == SendingStepState.failed;
 
     final indicator = Container(
       height: 20,
       width: 20,
       margin: const EdgeInsets.only(top: 1),
       decoration: BoxDecoration(
-        color: isDone ? RedesignColors.green : Colors.transparent,
+        color: switch (step.state) {
+          SendingStepState.done => RedesignColors.green,
+          SendingStepState.failed => RedesignColors.red,
+          _ => Colors.transparent,
+        },
         shape: BoxShape.circle,
         border: Border.all(
           color: switch (step.state) {
             SendingStepState.done => RedesignColors.green,
             SendingStepState.active => RedesignColors.amber,
             SendingStepState.pending => RedesignColors.border,
+            SendingStepState.failed => RedesignColors.red,
           },
           width: 1.6,
         ),
@@ -198,6 +204,11 @@ class _StepRow extends StatelessWidget {
       child: switch (step.state) {
         SendingStepState.done => const Icon(
             Icons.check_rounded,
+            size: 13,
+            color: RedesignColors.surface,
+          ),
+        SendingStepState.failed => const Icon(
+            Icons.close_rounded,
             size: 13,
             color: RedesignColors.surface,
           ),
@@ -231,10 +242,13 @@ class _StepRow extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               height: 1.35,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              color: isDone || isActive
-                  ? RedesignColors.ink
-                  : RedesignColors.inkMuted,
+              fontWeight:
+                  isActive || isFailed ? FontWeight.w600 : FontWeight.w400,
+              color: isFailed
+                  ? RedesignColors.red
+                  : isDone || isActive
+                      ? RedesignColors.ink
+                      : RedesignColors.inkMuted,
             ),
           ),
         ),

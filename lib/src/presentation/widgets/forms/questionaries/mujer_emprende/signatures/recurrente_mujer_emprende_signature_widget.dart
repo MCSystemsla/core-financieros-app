@@ -1,26 +1,17 @@
-import 'dart:io';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:core_financiero_app/src/config/helpers/kiva/kiva_file.dart';
-import 'package:core_financiero_app/src/config/theme/app_colors.dart';
 import 'package:core_financiero_app/src/datasource/local_db/forms/mujer_emprende/recurrente_mujer_emprende_db_local.dart';
 import 'package:core_financiero_app/src/datasource/local_db/image_model.dart';
 import 'package:core_financiero_app/src/domain/repository/kiva/responses/responses_repository.dart';
 import 'package:core_financiero_app/src/presentation/bloc/auth/branch_team/branchteam_cubit.dart';
-import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_image_sending/kiva_image_sending.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/custom_alert_dialog.dart';
-import 'package:core_financiero_app/src/presentation/widgets/pop_up/no_internet_popup_onkiva.dart';
+import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_envio_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_firma_widgets.dart';
 import 'package:core_financiero_app/src/presentation/widgets/forms/kiva_redesign/kiva_form_widgets.dart';
-import 'package:core_financiero_app/src/presentation/widgets/shared/dialogs/custom_pop_up.dart';
 import 'package:core_financiero_app/src/utils/extensions/lang/lang_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:signature/signature.dart';
 
-import '../../../../../bloc/internet_connection/internet_connection_cubit.dart';
 import '../../../../../bloc/kiva/kiva_route/kiva_route_cubit.dart';
 import '../../../../../bloc/kiva/recurrente_mujer_emprende/recurrente_mujer_emprende_cubit.dart';
 import '../../../../../bloc/solicitudes_pendientes_local_db/solicitudes_pendientes_local_db_cubit.dart';
@@ -69,8 +60,6 @@ class _RecurrenteMujerEmprendeSignatureWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -97,7 +86,6 @@ class _RecurrenteMujerEmprendeSignatureWidgetState
               signatureController: _signatureController,
               typeSigner: _typeSigner,
               pageController: widget.controller,
-              size: size,
             ),
           ],
         ],
@@ -110,45 +98,26 @@ class _SignatureActionButtons extends StatelessWidget {
   final SignatureController signatureController;
   final TypeSigner typeSigner;
   final PageController pageController;
-  final Size size;
 
   const _SignatureActionButtons({
     required this.signatureController,
     required this.typeSigner,
     required this.pageController,
-    required this.size,
   });
 
   @override
   Widget build(BuildContext context) {
     final kivaRoute = context.read<KivaRouteCubit>().state;
-    final uploadCubit = context.read<UploadUserFileCubit>();
     final pendingDbCubit = context.read<SolicitudesPendientesLocalDbCubit>();
     final mujerEmprendeCubit = context.read<RecurrenteMujerEmprendeCubit>();
 
-    return BlocConsumer<RecurrenteMujerEmprendeCubit,
+    return BlocBuilder<RecurrenteMujerEmprendeCubit,
         RecurrenteMujerEmprendeState>(
-      listener: (context, state) async {
-        if (state.status == Status.error) {
-          _showErrorDialog(context, state.errorMsg);
-        }
-        if (state.status == Status.done) {
-          // El backend aceptó las respuestas del formulario Kiva.
-          await context
-              .read<SolicitudesPendientesLocalDbCubit>()
-              .marcarFormularioEnviado(
-                solicitudId: context.read<KivaRouteCubit>().state.solicitudId,
-              );
-          if (!context.mounted) return;
-          await _handleSuccessSubmission(context, kivaRoute, uploadCubit);
-        }
-      },
       builder: (context, state) {
         return KivaFirmaAcciones(
           enviando: state.status == Status.inProgress,
-          onEnviar: () => _showConfirmationPopUp(
+          onEnviar: () => _enviar(
             context,
-            state,
             kivaRoute,
             pendingDbCubit,
             mujerEmprendeCubit,
@@ -162,129 +131,62 @@ class _SignatureActionButtons extends StatelessWidget {
     );
   }
 
-  void _showErrorDialog(BuildContext context, String message) {
-    CustomAlertDialog(
-      context: context,
-      title: message,
-      onDone: () => context.pop(),
-    ).showDialog(context, dialogType: DialogType.error);
-  }
-
-  Future<void> _handleSuccessSubmission(
+  /// Confirmación, copia local y pantalla de envío (`iniciarEnvioKiva`).
+  Future<void> _enviar(
     BuildContext context,
-    KivaRouteState kivaRoute,
-    UploadUserFileCubit uploadCubit,
-  ) async {
-    final signatureImage = await signatureController.toPngBytes();
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/signature.png';
-
-    final file = File(filePath);
-    await file.writeAsBytes(signatureImage!);
-
-    if (!context.mounted) return;
-
-    await customPopUp(
-      context: context,
-      dismissOnTouchOutside: false,
-      size: size,
-      title: 'Formulario Kiva Enviado exitosamente!!',
-      subtitle: 'Las respuestas se han enviado Exitosamente',
-      dialogType: DialogType.success,
-      buttonAcept: true,
-      textButtonAcept: 'Ok',
-      colorButtonAcept: AppColors.getPrimaryColor(),
-      onPressedAccept: () =>
-          _navigateToSendingScreen(context, kivaRoute, uploadCubit, file.path),
-    );
-  }
-
-  void _navigateToSendingScreen(
-    BuildContext context,
-    KivaRouteState kivaRoute,
-    UploadUserFileCubit uploadCubit,
-    String filePath,
-  ) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (ctx) => BlocProvider.value(
-          value: uploadCubit,
-          child: KivaImageSending(
-            solicitudId: kivaRoute.solicitudId,
-            onRetry: () {
-              uploadCubit.uploadUserFiles(
-                typeSigner: typeSigner,
-                cedula: kivaRoute.cedula,
-                numero: kivaRoute.numero,
-                tipoSolicitud: kivaRoute.tipoSolicitud,
-                fotoFirma: filePath,
-                solicitudId: int.parse(kivaRoute.solicitudId),
-                formularioKiva: kivaRoute.nombreFormularioKiva,
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showConfirmationPopUp(
-    BuildContext context,
-    RecurrenteMujerEmprendeState state,
     KivaRouteState kivaRoute,
     SolicitudesPendientesLocalDbCubit pendingDbCubit,
     RecurrenteMujerEmprendeCubit mujerEmprendeCubit,
   ) {
-    customPopUp(
+    return iniciarEnvioKiva<RecurrenteMujerEmprendeCubit,
+        RecurrenteMujerEmprendeState>(
       context: context,
-      size: size,
-      title: 'Confirmas que has leido y confirmado el Formulario Kiva?',
-      dialogType: DialogType.warning,
-      buttonAcept: true,
-      buttonCancel: true,
-      colorButtonCancel: AppColors.red,
-      textButtonAcept: 'Aceptar',
-      textButtonCancel: 'Cancelar',
-      colorButtonAcept: AppColors.getPrimaryColor(),
-      onPressedAccept: () async {
-        pendingDbCubit.updateIsSendedOnSolicitud(
-            solicitudId: kivaRoute.solicitudId);
-
-        final localPath = await KivaFile.saveImageSignature(
-          controller: signatureController,
-          numeroSoicitud: kivaRoute.numero,
-        );
-
-        if (!context.mounted) return;
-
-        final imageProvider = context.read<UploadUserFileCubit>().state;
-        final imageModel = ImageModel()
-          ..typeSigner = typeSigner.name
-          ..imagenFirma = localPath
-          ..imagen1 = imageProvider.imagen1
-          ..imagen2 = imageProvider.imagen2
-          ..imagen3 = imageProvider.imagen3
-          ..solicitudUuid = kivaRoute.solicitudCreditoId
-          ..solicitudId = int.tryParse(kivaRoute.solicitudId);
-
-        _processLocalPersistence(context, state, kivaRoute.solicitudCreditoId,
-            imageModel, pendingDbCubit);
-
-        if (!context.mounted) return;
-        final isConnected =
-            context.read<InternetConnectionCubit>().state.isConnected;
-        if (isConnected) {
-          mujerEmprendeCubit.sendAnswers();
-        }
-        context.pop();
-      },
-      onPressedCancel: () => context.pop(),
+      firma: signatureController,
+      typeSigner: typeSigner,
+      formCubit: mujerEmprendeCubit,
+      estadoDe: (state) => state.status,
+      errorDe: (state) => state.errorMsg,
+      enviarRespuestas: mujerEmprendeCubit.sendAnswers,
+      guardarEnTelefono: () => _guardarEnTelefono(
+        context,
+        mujerEmprendeCubit.state,
+        kivaRoute,
+        pendingDbCubit,
+      ),
     );
   }
 
-  void _processLocalPersistence(
+  Future<void> _guardarEnTelefono(
     BuildContext context,
+    RecurrenteMujerEmprendeState state,
+    KivaRouteState kivaRoute,
+    SolicitudesPendientesLocalDbCubit pendingDbCubit,
+  ) async {
+    pendingDbCubit.updateIsSendedOnSolicitud(
+        solicitudId: kivaRoute.solicitudId);
+
+    final localPath = await KivaFile.saveImageSignature(
+      controller: signatureController,
+      numeroSoicitud: kivaRoute.numero,
+    );
+
+    if (!context.mounted) return;
+
+    final imageProvider = context.read<UploadUserFileCubit>().state;
+    final imageModel = ImageModel()
+      ..typeSigner = typeSigner.name
+      ..imagenFirma = localPath
+      ..imagen1 = imageProvider.imagen1
+      ..imagen2 = imageProvider.imagen2
+      ..imagen3 = imageProvider.imagen3
+      ..solicitudUuid = kivaRoute.solicitudCreditoId
+      ..solicitudId = int.tryParse(kivaRoute.solicitudId);
+
+    _processLocalPersistence(
+        state, kivaRoute.solicitudCreditoId, imageModel, pendingDbCubit);
+  }
+
+  void _processLocalPersistence(
     RecurrenteMujerEmprendeState state,
     String solicitudCreditoId,
     ImageModel imageModel,
@@ -295,20 +197,7 @@ class _SignatureActionButtons extends StatelessWidget {
     pendingDbCubit.saveRecurrenteMujerEmprendeForm(
       recurrenteMujerEmprendeDbLocal: state.toDbLocal(solicitudCreditoId),
     );
-    final statusConnection =
-        context.read<InternetConnectionCubit>().state.connectionStatus;
-    final isOffline = statusConnection == ConnectionStatus.disconnected ||
-        statusConnection == ConnectionStatus.handleOfflineActivation;
-    if (isOffline) {
-      if (!context.mounted) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!context.mounted) return;
-        NoInternetPopUpOnKiva(
-          context: context,
-          header: '',
-        ).showDialog(context, dialogType: DialogType.info);
-      });
-    }
+    // Sin conexión, `KivaEnvioScreen` muestra "Guardado en el teléfono".
   }
 }
 
